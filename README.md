@@ -1,0 +1,87 @@
+# OUAQT — Marketing Site
+
+A minimalist, "quiet luxury" marketing site for OUAQT. Built with Next.js 14
+(App Router), TypeScript, Tailwind CSS, and Framer Motion.
+
+## Getting started
+
+```bash
+npm install
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000).
+
+```bash
+npm run build   # production build
+npm run start   # serve the production build
+npm run lint    # eslint
+```
+
+## Project structure
+
+```
+app/
+  layout.tsx                root layout: fonts, theme provider, navbar, footer
+  page.tsx                  home
+  about/page.tsx            about + team + values
+  contact/page.tsx          contact form + details
+  projects/page.tsx         projects index with category filter
+  projects/[slug]/page.tsx  project detail (statically generated per project)
+  not-found.tsx             404
+components/
+  ui/                       Button, Card, Container, Section
+  motion/                   FadeIn, PageTransition, GradientMesh
+  home/                     Hero, TrustBar, Pillars, FeaturedProjects, AboutTeaser
+  projects/                 ProjectCard, ProjectsGrid
+  about/                    TeamGrid
+  contact/                  ContactForm
+  navbar.tsx, footer.tsx, theme-provider.tsx, theme-toggle.tsx
+lib/
+  utils.ts                  `cn()` class merge helper
+  data/projects.ts          project case studies (typed)
+  data/team.ts              team members (typed)
+```
+
+## Customizing
+
+Everything you'll want to change is marked with a `TODO(customize)` comment.
+Run `grep -rn "TODO(customize)" app components lib` to find them all.
+
+**Colors.** The accent is defined once in `tailwind.config.ts` (currently
+`#C9A961`, a muted champagne gold). Two alternates are suggested in a comment
+there: deep emerald `#10B981` and electric lime `#C4F042`. Light/dark base
+colors live as CSS variables at the top of `app/globals.css`.
+
+**Fonts.** `app/layout.tsx` loads Inter via `next/font/google`. To switch to
+Geist or General Sans, replace that import and update the `--font-inter`
+variable reference in `tailwind.config.ts`.
+
+**Content.** Project case studies live in `lib/data/projects.ts` and team bios
+in `lib/data/team.ts` — both fully typed, so the pages update automatically
+when you edit the data.
+
+**Images.** Project cards, detail heroes, galleries, and team photos currently
+render abstract gradient placeholders rather than stock photos. Each has a
+`TODO(customize)` noting where to swap in a real `next/image`. Drop files into
+`public/images/projects/<slug>/` and `public/images/team/`.
+
+## Dark mode
+
+Handled by `next-themes` with `attribute="class"`. Defaults to dark; the toggle
+lives in the navbar. Change `defaultTheme` in `app/layout.tsx` to `"light"`, or
+set `enableSystem` to `true` to follow the OS setting.
+
+## Environment variables
+
+Copy `.env.example` to `.env.local` and fill in values. `.env.local` is
+gitignored — never commit real secrets.
+
+The contact form (`components/contact/contact-form.tsx`) validates client-side
+and shows a success state, but has **no backend**. Wire it to an API route or
+form service when you're ready.
+
+## Deploying
+
+Deploy-ready for Vercel: import the repo, accept the defaults, and add any
+environment variables from `.env.example` in the project settings.

@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  TODO(customize): This is the single source of truth for OUAQT's color system.
+  Flip --background / --foreground to change the "quiet luxury" base palette,
+  or edit the `accent` color in tailwind.config.ts to rebrand.
+*/
+:root {
+  --background: #fafafa;
+  --foreground: #0a0a0a;
+  --muted: #f0f0ee;
+  --muted-foreground: #6b6b68;
+  --border: #e5e5e2;
+  --surface: #ffffff;
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #fafafa;
+  --muted: #131313;
+  --muted-foreground: #9a9a97;
+  --border: #1f1f1e;
+  --surface: #101010;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+::selection {
+  background: #c9a961;
+  color: #0a0a0a;
+}
+
+/* Subtle grain overlay for the "quiet luxury" texture instead of stock imagery */
+.bg-noise {
+  position: relative;
+}
+
+.bg-noise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/noise.svg");
+  background-size: 220px;
+  opacity: 0.035;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+}
+
+.dark .bg-noise::before {
+  opacity: 0.06;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .container-px {
+    @apply px-6 sm:px-8 lg:px-12;
+  }
+}
