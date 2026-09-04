@@ -31,9 +31,6 @@ const config: Config = {
       maxWidth: {
         container: "1200px",
       },
-      backgroundImage: {
-        noise: "url('/noise.svg')",
-      },
       keyframes: {
         "fade-up": {
           "0%": { opacity: "0", transform: "translateY(16px)" },

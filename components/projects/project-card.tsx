@@ -7,10 +7,12 @@ import Link from "next/link";
 // TODO(customize): once real project imagery exists, replace the gradient
 // div below with a Next.js <Image src={project.coverImage} /> and delete
 // the `hue` placeholder logic.
+// One accent hue at three intensities keeps the cards a cohesive family
+// rather than three unrelated treatments.
 const hues: Record<string, string> = {
   Product: "from-accent/40 via-accent/10 to-transparent",
-  Platform: "from-foreground/30 via-foreground/5 to-transparent",
-  Research: "from-accent/25 via-foreground/10 to-transparent",
+  Platform: "from-accent/25 via-accent/5 to-transparent",
+  Research: "from-accent/15 via-accent/5 to-transparent",
 };
 
 export function ProjectCard({ project }: { project: Project }) {
@@ -20,8 +22,8 @@ export function ProjectCard({ project }: { project: Project }) {
         <div
           className={`bg-noise relative flex aspect-[4/3] items-center justify-center bg-gradient-to-br ${hues[project.category]} bg-muted`}
         >
-          <span className="text-4xl font-semibold tracking-tight text-foreground/20">
-            {project.title.slice(0, 2).toUpperCase()}
+          <span className="text-5xl font-semibold tracking-tight text-foreground/20">
+            {project.title.charAt(0).toUpperCase()}
           </span>
         </div>
 
