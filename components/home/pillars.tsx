@@ -1,41 +1,26 @@
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
+import type { Dictionary } from "@/lib/i18n";
 import { Blocks, Bot, DatabaseZap } from "lucide-react";
 
 // The three principles behind every OUAQT build, from the pitch deck.
-const pillars = [
-  {
-    icon: Blocks,
-    title: "Built around the real workflow, not a template",
-    description:
-      "Every system is designed from how your team actually works, including the language they work in. The GMM mining system runs French, Arabic, and English because that is how field crews log data.",
-  },
-  {
-    icon: Bot,
-    title: "Automation handles the repetition, people handle the exceptions",
-    description:
-      "The pharmacy system fills medicine records from past entries instead of asking staff to retype them. What is left is the work that genuinely needs a person.",
-  },
-  {
-    icon: DatabaseZap,
-    title: "Full migration, isolated per client",
-    description:
-      "Years of paper and spreadsheet history come across with you, so nobody starts from a blank system. And no client's data ever touches another's.",
-  },
-];
+export function Pillars({ dict }: { dict: Dictionary }) {
+  const pillars = [
+    { icon: Blocks, ...dict.pillars.workflow },
+    { icon: Bot, ...dict.pillars.automation },
+    { icon: DatabaseZap, ...dict.pillars.migration },
+  ];
 
-export function Pillars() {
   return (
     <Section className="border-t border-border">
       <Container>
         <FadeIn className="max-w-3xl">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            The solution
+            {dict.pillars.eyebrow}
           </p>
           <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Custom digital systems, built around how each business actually
-            works.
+            {dict.pillars.heading}
           </h2>
         </FadeIn>
 
@@ -47,7 +32,7 @@ export function Pillars() {
                 {pillar.title}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                {pillar.description}
+                {pillar.body}
               </p>
             </FadeIn>
           ))}

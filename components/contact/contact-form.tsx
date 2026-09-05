@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/lib/i18n";
 import { CheckCircle2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
@@ -15,32 +16,34 @@ type Errors = Partial<Record<keyof FormState, string>>;
 
 const initialState: FormState = { name: "", email: "", message: "" };
 
-function validate(values: FormState): Errors {
+function validate(values: FormState, dict: Dictionary): Errors {
   const errors: Errors = {};
+  const f = dict.contact.form;
 
   if (!values.name.trim()) {
-    errors.name = "Please enter your name.";
+    errors.name = f.errorName;
   }
 
   if (!values.email.trim()) {
-    errors.email = "Please enter your email.";
+    errors.email = f.errorEmailEmpty;
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-    errors.email = "Please enter a valid email address.";
+    errors.email = f.errorEmailInvalid;
   }
 
   if (!values.message.trim()) {
-    errors.message = "Tell us a bit about your business.";
+    errors.message = f.errorMessageEmpty;
   } else if (values.message.trim().length < 20) {
-    errors.message = "A few more details would help (20+ characters).";
+    errors.message = f.errorMessageShort;
   }
 
   return errors;
 }
 
-export function ContactForm() {
+export function ContactForm({ dict }: { dict: Dictionary }) {
   const [values, setValues] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Errors>({});
   const [submitted, setSubmitted] = useState(false);
+  const f = dict.contact.form;
 
   function handleChange(field: keyof FormState, value: string) {
     setValues((prev) => ({ ...prev, [field]: value }));
@@ -48,12 +51,12 @@ export function ContactForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const validationErrors = validate(values);
+    const validationErrors = validate(values, dict);
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      // TODO(customize): wire this up to a real endpoint (e.g. an API route,
-      // Resend, or a form service) once backend logic is ready.
+      // TODO(adel): wire this to a real endpoint (an API route, Resend, or a
+      // form service) once backend logic is ready.
       setSubmitted(true);
       setValues(initialState);
     }
@@ -64,10 +67,10 @@ export function ContactForm() {
       <div className="flex flex-col items-start gap-3 rounded-2xl border border-border p-8">
         <CheckCircle2 className="h-6 w-6 text-accent" />
         <h3 className="text-lg font-medium tracking-tight text-foreground">
-          Message received.
+          {f.successTitle}
         </h3>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Thanks for reaching out. We usually reply within one business day.
+          {f.successBody}
         </p>
         <Button
           type="button"
@@ -75,11 +78,17 @@ export function ContactForm() {
           onClick={() => setSubmitted(false)}
           className="mt-2"
         >
-          Send another message
+          {f.sendAnother}
         </Button>
       </div>
     );
   }
+
+  const fieldClass = (hasError: boolean) =>
+    cn(
+      "mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-accent",
+      hasError ? "border-red-500" : "border-border"
+    );
 
   return (
     <form noValidate onSubmit={handleSubmit} className="space-y-6">
@@ -88,18 +97,15 @@ export function ContactForm() {
           htmlFor="name"
           className="text-sm font-medium tracking-tight text-foreground"
         >
-          Name
+          {f.name}
         </label>
         <input
           id="name"
           type="text"
           value={values.name}
           onChange={(event) => handleChange("name", event.target.value)}
-          className={cn(
-            "mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-accent",
-            errors.name ? "border-red-500" : "border-border"
-          )}
-          placeholder="Jane Doe"
+          className={fieldClass(Boolean(errors.name))}
+          placeholder={f.namePlaceholder}
         />
         {errors.name && (
           <p className="mt-2 text-xs text-red-500">{errors.name}</p>
@@ -111,18 +117,16 @@ export function ContactForm() {
           htmlFor="email"
           className="text-sm font-medium tracking-tight text-foreground"
         >
-          Email
+          {f.email}
         </label>
         <input
           id="email"
           type="email"
+          dir="ltr"
           value={values.email}
           onChange={(event) => handleChange("email", event.target.value)}
-          className={cn(
-            "mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-accent",
-            errors.email ? "border-red-500" : "border-border"
-          )}
-          placeholder="jane@company.com"
+          className={fieldClass(Boolean(errors.email))}
+          placeholder={f.emailPlaceholder}
         />
         {errors.email && (
           <p className="mt-2 text-xs text-red-500">{errors.email}</p>
@@ -134,18 +138,15 @@ export function ContactForm() {
           htmlFor="message"
           className="text-sm font-medium tracking-tight text-foreground"
         >
-          Message
+          {f.message}
         </label>
         <textarea
           id="message"
           rows={5}
           value={values.message}
           onChange={(event) => handleChange("message", event.target.value)}
-          className={cn(
-            "mt-2 w-full resize-none rounded-xl border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-accent",
-            errors.message ? "border-red-500" : "border-border"
-          )}
-          placeholder="What does your business run on today? Paper, spreadsheets, WhatsApp? Tell us where it slows you down."
+          className={cn(fieldClass(Boolean(errors.message)), "resize-none")}
+          placeholder={f.messagePlaceholder}
         />
         {errors.message && (
           <p className="mt-2 text-xs text-red-500">{errors.message}</p>
@@ -153,7 +154,7 @@ export function ContactForm() {
       </div>
 
       <Button type="submit" variant="accent" className="w-full sm:w-auto">
-        Send message
+        {f.submit}
       </Button>
     </form>
   );

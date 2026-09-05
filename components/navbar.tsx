@@ -4,24 +4,27 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LanguageSwitcher } from "@/components/language-switcher";
 import { cn } from "@/lib/utils";
+import type { Dictionary } from "@/lib/i18n";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const links = [
-  { href: "/", label: "Home" },
-  { href: "/projects", label: "Systems" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
-
-export function Navbar() {
+export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
+
+  const links = [
+    { href: "/", label: dict.nav.home },
+    { href: "/projects", label: dict.nav.projects },
+    { href: "/about", label: dict.nav.about },
+    { href: "/contact", label: dict.nav.contact },
+  ];
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -44,7 +47,11 @@ export function Navbar() {
       )}
     >
       <Container className="flex h-16 items-center justify-between sm:h-20">
-        <Link href="/" aria-label="OUAQT home" className="shrink-0">
+        <Link
+          href={localeHref(lang, "/")}
+          aria-label={dict.nav.homeAria}
+          className="shrink-0"
+        >
           <Logo priority className="h-6 sm:h-7" />
         </Link>
 
@@ -52,10 +59,10 @@ export function Navbar() {
           {links.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              href={localeHref(lang, link.href)}
               className={cn(
                 "text-sm font-medium tracking-tight transition-colors",
-                pathname === link.href
+                pathname === localeHref(lang, link.href)
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
               )}
@@ -66,20 +73,28 @@ export function Navbar() {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <ThemeToggle />
-          <Button href="/contact" variant="accent" className="text-sm">
-            Start a project
+          <LanguageSwitcher locale={lang} label={dict.nav.language} />
+          <ThemeToggle label={dict.nav.toggleTheme} />
+          <Button
+            href={localeHref(lang, "/contact")}
+            variant="accent"
+            className="text-sm"
+          >
+            {dict.nav.cta}
           </Button>
         </div>
 
-        <button
-          type="button"
-          className="flex h-9 w-9 items-center justify-center text-foreground md:hidden"
-          onClick={() => setMenuOpen((open) => !open)}
-          aria-label="Toggle menu"
-        >
-          {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-2 md:hidden">
+          <LanguageSwitcher locale={lang} label={dict.nav.language} />
+          <button
+            type="button"
+            className="flex h-9 w-9 items-center justify-center text-foreground"
+            onClick={() => setMenuOpen((open) => !open)}
+            aria-label={menuOpen ? dict.nav.closeMenu : dict.nav.openMenu}
+          >
+            {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </Container>
 
       <AnimatePresence>
@@ -95,10 +110,10 @@ export function Navbar() {
               {links.map((link) => (
                 <Link
                   key={link.href}
-                  href={link.href}
+                  href={localeHref(lang, link.href)}
                   className={cn(
                     "rounded-lg px-3 py-3 text-sm font-medium tracking-tight transition-colors",
-                    pathname === link.href
+                    pathname === localeHref(lang, link.href)
                       ? "bg-muted text-foreground"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   )}
@@ -107,9 +122,13 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="mt-2 flex items-center justify-between px-3">
-                <ThemeToggle />
-                <Button href="/contact" variant="accent" className="text-sm">
-                  Start a project
+                <ThemeToggle label={dict.nav.toggleTheme} />
+                <Button
+                  href={localeHref(lang, "/contact")}
+                  variant="accent"
+                  className="text-sm"
+                >
+                  {dict.nav.cta}
                 </Button>
               </div>
             </Container>

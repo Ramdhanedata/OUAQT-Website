@@ -3,12 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { GradientMesh } from "@/components/motion/gradient-mesh";
+import type { Dictionary } from "@/lib/i18n";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-// TODO(adel): headline and sub-copy come from the pitch deck.
-// Edit here to adjust the site's core positioning.
-export function Hero() {
+export function Hero({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   return (
     <section className="relative overflow-hidden">
       <GradientMesh />
@@ -19,7 +19,7 @@ export function Hero() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-sm font-medium tracking-tight text-accent"
         >
-          OUAQT · Custom business systems
+          {dict.hero.eyebrow}
         </motion.p>
 
         <motion.h1
@@ -28,8 +28,7 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
           className="mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-6xl md:text-7xl"
         >
-          Replacing paper, Excel, and WhatsApp with systems that actually run
-          your business.
+          {dict.hero.heading}
         </motion.h1>
 
         <motion.p
@@ -38,9 +37,7 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
           className="mt-8 max-w-2xl text-balance text-lg leading-relaxed text-muted-foreground"
         >
-          Most businesses don&rsquo;t need more software. They need one system
-          built around how they already work. That is what we build, one
-          client at a time.
+          {dict.hero.body}
         </motion.p>
 
         <motion.div
@@ -49,12 +46,12 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
           className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
         >
-          <Button href="/contact" variant="accent">
-            Discuss your workflow
-            <ArrowRight className="h-4 w-4" />
+          <Button href={localeHref(lang, "/contact")} variant="accent">
+            {dict.hero.primaryCta}
+            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </Button>
-          <Button href="/projects" variant="outline">
-            See the systems
+          <Button href={localeHref(lang, "/projects")} variant="outline">
+            {dict.hero.secondaryCta}
           </Button>
         </motion.div>
       </Container>

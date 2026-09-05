@@ -3,50 +3,58 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
 import { getProjectBySlug, projects } from "@/lib/data/projects";
+import { getDictionary } from "@/lib/i18n";
+import { locales, localeHref, type Locale } from "@/lib/i18n/config";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
 type Props = {
-  params: { slug: string };
+  params: { lang: Locale; slug: string };
 };
 
 export function generateStaticParams() {
-  return projects.map((project) => ({ slug: project.slug }));
+  return locales.flatMap((lang) =>
+    projects.map((project) => ({ lang, slug: project.slug }))
+  );
 }
 
 export function generateMetadata({ params }: Props): Metadata {
   const project = getProjectBySlug(params.slug);
   if (!project) return {};
+
+  const dict = getDictionary(params.lang);
+  const copy = dict.projects[project.slug];
+
   return {
-    title: `${project.title} | OUAQT`,
-    description: project.summary,
+    title: `${copy.title} | OUAQT`,
+    description: copy.summary,
   };
 }
 
 export default function ProjectDetailPage({ params }: Props) {
   const project = getProjectBySlug(params.slug);
+  if (!project) notFound();
 
-  if (!project) {
-    notFound();
-  }
+  const dict = getDictionary(params.lang);
+  const copy = dict.projects[project.slug];
 
   return (
     <>
       {/* Title band. Deliberately does NOT use the screenshot as a full-bleed
-          background, because a dense UI screenshot cropped to a letterbox and dimmed
-          behind a scrim is unreadable. The screenshot gets its own frame below,
-          shown whole at its native aspect ratio. */}
+          background, because a dense UI screenshot cropped to a letterbox and
+          dimmed behind a scrim is unreadable. The screenshot gets its own
+          frame below, shown whole at its native aspect ratio. */}
       <div className="relative flex min-h-[38vh] items-end overflow-hidden bg-muted py-16">
         <div className="bg-noise absolute inset-0 bg-gradient-to-br from-accent/25 via-muted to-background" />
         <Container className="relative">
           <FadeIn>
             <p className="text-sm font-medium tracking-tight text-accent">
-              {project.category} · {project.year}
+              {dict.sectors[project.category]} · {project.year}
             </p>
             <h1 className="mt-4 max-w-3xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-6xl">
-              {project.title}
+              {copy.title}
             </h1>
           </FadeIn>
         </Container>
@@ -59,7 +67,7 @@ export default function ProjectDetailPage({ params }: Props) {
             <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl shadow-black/20">
               <Image
                 src={project.coverImage}
-                alt={`${project.title} product screenshot`}
+                alt={`${copy.title} ${dict.projectDetail.screenshotAlt}`}
                 width={1600}
                 height={1000}
                 priority
@@ -74,40 +82,40 @@ export default function ProjectDetailPage({ params }: Props) {
       <Section>
         <Container>
           <FadeIn>
-            <Button href="/projects" variant="ghost">
-              <ArrowLeft className="h-4 w-4" />
-              All projects
+            <Button href={localeHref(params.lang, "/projects")} variant="ghost">
+              <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+              {dict.projectDetail.back}
             </Button>
           </FadeIn>
 
           <div className="mt-10 grid grid-cols-1 gap-16 lg:grid-cols-3">
             <FadeIn className="lg:col-span-2">
               <h2 className="text-xl font-medium tracking-tight text-foreground">
-                Overview
+                {dict.projectDetail.overview}
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                {project.description}
+                {copy.description}
               </p>
 
               <h2 className="mt-12 text-xl font-medium tracking-tight text-foreground">
-                The problem
+                {dict.projectDetail.problem}
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                {project.problem}
+                {copy.problem}
               </p>
 
               <h2 className="mt-12 text-xl font-medium tracking-tight text-foreground">
-                The solution
+                {dict.projectDetail.solution}
               </h2>
               <p className="mt-4 leading-relaxed text-muted-foreground">
-                {project.solution}
+                {copy.solution}
               </p>
 
               <h2 className="mt-12 text-xl font-medium tracking-tight text-foreground">
-                Results
+                {dict.projectDetail.results}
               </h2>
               <ul className="mt-4 space-y-3">
-                {project.results.map((result) => (
+                {copy.results.map((result) => (
                   <li
                     key={result}
                     className="flex items-start gap-3 leading-relaxed text-muted-foreground"
@@ -118,11 +126,8 @@ export default function ProjectDetailPage({ params }: Props) {
                 ))}
               </ul>
 
-              {/* Gallery. Only rendered once real screenshots are added to
-                  `gallery` in lib/data/projects.ts. An empty gallery shows
-                  nothing rather than empty grey boxes.
-                  TODO(adel): drop files into
-                  /public/images/projects/<slug>/ and list them there. */}
+              {/* Gallery only renders once real screenshots exist, so an empty
+                  gallery shows nothing rather than empty grey boxes. */}
               {project.gallery && project.gallery.length > 0 && (
                 <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
                   {project.gallery.map((src) => (
@@ -132,7 +137,7 @@ export default function ProjectDetailPage({ params }: Props) {
                     >
                       <Image
                         src={src}
-                        alt={`${project.title} screenshot`}
+                        alt={`${copy.title} ${dict.projectDetail.screenshotAlt}`}
                         fill
                         sizes="(max-width: 640px) 100vw, 50vw"
                         className="object-cover"
@@ -147,22 +152,22 @@ export default function ProjectDetailPage({ params }: Props) {
               <div className="space-y-8 rounded-2xl border border-border p-6">
                 <div>
                   <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-                    Client
+                    {dict.projectDetail.client}
                   </p>
-                  <p className="mt-2 text-sm text-foreground">{project.client}</p>
+                  <p className="mt-2 text-sm text-foreground">{copy.client}</p>
                 </div>
                 <div>
                   <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-                    Role
+                    {dict.projectDetail.role}
                   </p>
-                  <p className="mt-2 text-sm text-foreground">{project.role}</p>
+                  <p className="mt-2 text-sm text-foreground">{copy.role}</p>
                 </div>
                 <div>
                   <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
-                    Tools
+                    {dict.projectDetail.tools}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-2">
-                    {project.tools.map((tool) => (
+                    {copy.tools.map((tool) => (
                       <span
                         key={tool}
                         className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"

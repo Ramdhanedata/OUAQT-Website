@@ -3,17 +3,23 @@
 import { ProjectCard } from "@/components/projects/project-card";
 import { FadeIn } from "@/components/motion/fade-in";
 import { cn } from "@/lib/utils";
-import { Project } from "@/lib/data/projects";
+import { Project, Sector } from "@/lib/data/projects";
+import type { Dictionary } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n/config";
 import { useMemo, useState } from "react";
 
 export function ProjectsGrid({
   projects,
   categories,
+  dict,
+  lang,
 }: {
   projects: Project[];
-  categories: string[];
+  categories: Sector[];
+  dict: Dictionary;
+  lang: Locale;
 }) {
-  const [active, setActive] = useState<string>("All");
+  const [active, setActive] = useState<Sector | "All">("All");
 
   const filtered = useMemo(
     () =>
@@ -23,10 +29,12 @@ export function ProjectsGrid({
     [active, projects]
   );
 
+  const filters: (Sector | "All")[] = ["All", ...categories];
+
   return (
     <div>
       <div className="flex flex-wrap gap-2">
-        {["All", ...categories].map((category) => (
+        {filters.map((category) => (
           <button
             key={category}
             type="button"
@@ -38,7 +46,9 @@ export function ProjectsGrid({
                 : "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
             )}
           >
-            {category}
+            {category === "All"
+              ? dict.projectsPage.all
+              : dict.sectors[category]}
           </button>
         ))}
       </div>
@@ -46,7 +56,7 @@ export function ProjectsGrid({
       <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
         {filtered.map((project, index) => (
           <FadeIn key={project.slug} delay={(index % 3) * 0.08}>
-            <ProjectCard project={project} />
+            <ProjectCard project={project} dict={dict} lang={lang} />
           </FadeIn>
         ))}
       </div>

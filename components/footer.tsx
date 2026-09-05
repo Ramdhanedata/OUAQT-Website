@@ -3,23 +3,24 @@ import { Logo } from "@/components/logo";
 import Link from "next/link";
 
 import { organization, socialLinks } from "@/lib/data/contact";
+import type { Dictionary } from "@/lib/i18n";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 
-const nav = [
-  { href: "/", label: "Home" },
-  { href: "/projects", label: "Systems" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
-];
+export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
+  const nav = [
+    { href: "/", label: dict.nav.home },
+    { href: "/projects", label: dict.nav.projects },
+    { href: "/about", label: dict.nav.about },
+    { href: "/contact", label: dict.nav.contact },
+  ];
 
-export function Footer() {
   return (
     <footer className="border-t border-border">
       <Container className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-3">
         <div>
           <Logo className="h-6" />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            Custom systems for businesses still running on paper, Excel, and
-            WhatsApp.
+            {dict.footer.tagline}
           </p>
           <p className="mt-4 text-sm text-muted-foreground">
             {organization.location}
@@ -27,12 +28,14 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="text-sm font-medium text-foreground">Navigate</p>
+          <p className="text-sm font-medium text-foreground">
+            {dict.footer.navigate}
+          </p>
           <ul className="mt-4 space-y-3">
             {nav.map((item) => (
               <li key={item.href}>
                 <Link
-                  href={item.href}
+                  href={localeHref(lang, item.href)}
                   className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
                   {item.label}
@@ -43,7 +46,9 @@ export function Footer() {
         </div>
 
         <div>
-          <p className="text-sm font-medium text-foreground">Connect</p>
+          <p className="text-sm font-medium text-foreground">
+            {dict.footer.connect}
+          </p>
           <ul className="mt-4 space-y-3">
             {socialLinks.map((item) => (
               <li key={item.href}>
@@ -70,8 +75,10 @@ export function Footer() {
       </Container>
 
       <Container className="flex flex-col gap-4 border-t border-border py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>© {new Date().getFullYear()} OUAQT. All rights reserved.</p>
-        <p>Built in Nouakchott.</p>
+        <p>
+          © {new Date().getFullYear()} OUAQT. {dict.footer.rights}
+        </p>
+        <p>{dict.footer.builtIn}</p>
       </Container>
     </footer>
   );

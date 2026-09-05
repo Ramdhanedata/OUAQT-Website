@@ -27,6 +27,9 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        // Applied on <html> when the locale is Arabic. Inter has no Arabic
+        // glyphs, so without this Arabic falls back to a system font.
+        arabic: ["var(--font-arabic)", "var(--font-inter)", "sans-serif"],
       },
       maxWidth: {
         container: "1200px",

@@ -2,9 +2,11 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
-import { credentials, founder } from "@/lib/data/founder";
-import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { founder } from "@/lib/data/founder";
 import { LinkedInIcon } from "@/components/ui/social-icons";
+import { getDictionary } from "@/lib/i18n";
+import { localeHref, type Locale } from "@/lib/i18n/config";
+import { ArrowRight, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import type { Metadata } from "next";
 import fs from "node:fs";
@@ -29,27 +31,18 @@ function findFounderPhoto(): string | undefined {
   return undefined;
 }
 
-export const metadata: Metadata = {
-  title: "About OUAQT",
-  description:
-    "OUAQT builds custom systems for businesses running on paper, Excel, and WhatsApp. Founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
-};
+type Props = { params: { lang: Locale } };
 
-// Market context from the pitch deck: why this is a structural gap rather
-// than a one industry problem.
-const marketStats = [
-  {
-    value: "~30%",
-    label: "of Mauritania's GDP runs through the informal sector",
-  },
-  { value: "56%", label: "of the workforce is in informal employment" },
-  {
-    value: "2025",
-    label: "Investment Code now explicitly prioritizes SME support",
-  },
-];
+export function generateMetadata({ params }: Props): Metadata {
+  const dict = getDictionary(params.lang);
+  return {
+    title: dict.meta.aboutTitle,
+    description: dict.meta.aboutDescription,
+  };
+}
 
-export default function AboutPage() {
+export default function AboutPage({ params }: Props) {
+  const dict = getDictionary(params.lang);
   const photo = findFounderPhoto();
   const initials = founder.name
     .split(" ")
@@ -57,39 +50,45 @@ export default function AboutPage() {
     .join("")
     .slice(0, 2);
 
+  const marketStats = [
+    { value: "~30%", label: dict.about.stat1 },
+    { value: "56%", label: dict.about.stat2 },
+    { value: "2025", label: dict.about.stat3 },
+  ];
+
+  const credentials = [
+    dict.about.credentials.analytics,
+    dict.about.credentials.snim,
+    dict.about.credentials.undp,
+    dict.about.credentials.sectors,
+  ];
+
   return (
     <>
       <Section className="pt-32 sm:pt-40">
         <Container>
           <FadeIn className="max-w-3xl">
             <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              About OUAQT
+              {dict.about.eyebrow}
             </p>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              A structural gap, not a single industry problem.
+              {dict.about.heading}
             </h1>
             <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-              Across mining, pharmacy, hospitality, transport, and food
-              service, the same pattern keeps appearing. Capable businesses
-              running critical operations on paper, spreadsheets, and group
-              chats. Not because it works, but because nobody has ever built
-              software for how they actually operate.
+              {dict.about.body1}
             </p>
             <p className="mt-6 leading-relaxed text-muted-foreground">
-              OUAQT exists to close that gap one business at a time, with a
-              system designed around a single client&rsquo;s real workflow,
-              their real history, and the languages their team actually uses.
+              {dict.about.body2}
             </p>
           </FadeIn>
         </Container>
       </Section>
 
-      {/* Market context */}
       <Section className="border-t border-border">
         <Container>
           <FadeIn>
             <h2 className="max-w-2xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              The gap is measurable.
+              {dict.about.marketHeading}
             </h2>
           </FadeIn>
           <div className="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-3">
@@ -106,15 +105,12 @@ export default function AboutPage() {
           </div>
           <FadeIn delay={0.3}>
             <p className="mt-12 max-w-2xl leading-relaxed text-muted-foreground">
-              The World Bank and IFC are actively funding SME access to finance
-              and digital tools across the region. That is the same gap OUAQT
-              is built to close.
+              {dict.about.marketNote}
             </p>
           </FadeIn>
         </Container>
       </Section>
 
-      {/* Founder */}
       <Section className="border-t border-border">
         <Container>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
@@ -127,8 +123,7 @@ export default function AboutPage() {
                   height={1137}
                   sizes="(max-width: 1024px) 100vw, 33vw"
                   /* 4:5 rather than a square: the source is a tall portrait,
-                     and a square crop clipped the top of the head. object-top
-                     keeps the face high in the frame. */
+                     and a square crop clipped the top of the head. */
                   className="aspect-[4/5] w-full rounded-2xl object-cover object-top"
                 />
               ) : (
@@ -142,21 +137,19 @@ export default function AboutPage() {
 
             <FadeIn delay={0.1} className="lg:col-span-2">
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                Founder
+                {dict.about.founderEyebrow}
               </p>
               <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
                 {founder.name}
               </h2>
-              <p className="mt-2 text-accent">{founder.role}</p>
+              <p className="mt-2 text-accent">{dict.about.founderRole}</p>
 
-              {founder.bio.map((paragraph) => (
-                <p
-                  key={paragraph}
-                  className="mt-6 leading-relaxed text-muted-foreground"
-                >
-                  {paragraph}
-                </p>
-              ))}
+              <p className="mt-6 leading-relaxed text-muted-foreground">
+                {dict.about.founderBio1}
+              </p>
+              <p className="mt-6 leading-relaxed text-muted-foreground">
+                {dict.about.founderBio2}
+              </p>
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8">
                 <a
@@ -205,16 +198,15 @@ export default function AboutPage() {
         <Container>
           <FadeIn className="mx-auto max-w-2xl text-center">
             <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              Tell us what slows your business down.
+              {dict.about.ctaHeading}
             </h2>
             <p className="mt-6 leading-relaxed text-muted-foreground">
-              If any part of your day still runs on a spreadsheet nobody
-              trusts, that is usually where the first system goes.
+              {dict.about.ctaBody}
             </p>
             <div className="mt-8 flex justify-center">
-              <Button href="/contact" variant="accent">
-                Start the conversation
-                <ArrowRight className="h-4 w-4" />
+              <Button href={localeHref(params.lang, "/contact")} variant="accent">
+                {dict.about.ctaButton}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </div>
           </FadeIn>

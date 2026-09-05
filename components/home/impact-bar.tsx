@@ -1,17 +1,18 @@
 import { Container } from "@/components/ui/container";
 import { FadeIn } from "@/components/motion/fade-in";
+import type { Dictionary } from "@/lib/i18n";
 
-// Real, deck-sourced numbers. The 90% / 4hrs->25min figures are the GMM
-// mining result, confirmed by that client.
+// Real, deck-sourced numbers. The 90% figure is the GMM mining result,
+// confirmed by that client.
 // TODO(adel): update the live-system count as you take on new clients.
-const stats = [
-  { value: "5", label: "Live systems in production" },
-  { value: "5", label: "Sectors served" },
-  { value: "90%", label: "Less reconciliation time at GMM" },
-  { value: "24-48h", label: "From brief to working build" },
-];
+export function ImpactBar({ dict }: { dict: Dictionary }) {
+  const stats = [
+    { value: "5", label: dict.impact.liveSystems },
+    { value: "5", label: dict.impact.sectors },
+    { value: "90%", label: dict.impact.reduction },
+    { value: "24-48h", label: dict.impact.buildTime },
+  ];
 
-export function ImpactBar() {
   return (
     <Container className="pb-8">
       <FadeIn>

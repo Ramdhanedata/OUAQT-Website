@@ -2,28 +2,34 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
+import type { Dictionary } from "@/lib/i18n";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { ArrowRight } from "lucide-react";
 
-export function CallToAction() {
+export function CallToAction({
+  dict,
+  lang,
+}: {
+  dict: Dictionary;
+  lang: Locale;
+}) {
   return (
     <Section className="border-t border-border">
       <Container>
         <FadeIn className="mx-auto max-w-2xl text-center">
           <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            Every system starts with a conversation.
+            {dict.homeCta.heading}
           </h2>
           <p className="mt-6 text-balance leading-relaxed text-muted-foreground">
-            Tell us how your business runs today. The paper, the spreadsheets,
-            the group chats. That is where we start, and it usually takes one
-            call to see where the first system belongs.
+            {dict.homeCta.body}
           </p>
           <div className="mt-8 flex flex-col justify-center gap-4 sm:flex-row">
-            <Button href="/contact" variant="accent">
-              Get in touch
-              <ArrowRight className="h-4 w-4" />
+            <Button href={localeHref(lang, "/contact")} variant="accent">
+              {dict.homeCta.primary}
+              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
             </Button>
-            <Button href="/about" variant="outline">
-              About OUAQT
+            <Button href={localeHref(lang, "/about")} variant="outline">
+              {dict.homeCta.secondary}
             </Button>
           </div>
         </FadeIn>
