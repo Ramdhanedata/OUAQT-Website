@@ -11,7 +11,7 @@ const nav = [
   { href: "/contact", label: "Contact" },
 ];
 
-// TODO(adel): replace with your actual LinkedIn profile URL — the deck links
+// TODO(adel): replace with your actual LinkedIn profile URL. The deck links
 // to LinkedIn but doesn't include the handle.
 const social = [
   { href: "https://www.linkedin.com/", label: "LinkedIn" },

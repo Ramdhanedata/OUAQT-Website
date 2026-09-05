@@ -4,42 +4,48 @@ export type Credential = {
 };
 
 /*
- * Founder details, sourced from the OUAQT pitch deck.
- * TODO(adel): drop a headshot into /public/images/founder.jpg and set `photo`
- * below — until then the site renders an initials monogram instead.
+ * Founder details for the About page.
+ *
+ * Note on scope: this covers background and credentials only. How the work
+ * gets delivered internally (team size, tooling, build process) is
+ * deliberately not published.
  */
 export const founder = {
   name: "Elboumby Aumar Ramdhane",
   role: "Founder & AI Product Engineer",
   location: "Nouakchott, Mauritania",
   email: "adelramdhane1@gmail.com",
-  // TODO(adel): set to "/images/founder.jpg" once the file is in place.
+  /*
+   * TODO(adel): save your photo to public/images/founder.jpg, then change the
+   * line below to:  photo: "/images/founder.jpg" as string | undefined,
+   * A square crop works best. Until then the page shows an initials monogram.
+   */
   photo: undefined as string | undefined,
   bio: [
-    "I build the systems myself — the SQL data modeling, the per-client deployments, and the full historical migrations behind all five live products.",
-    "I've trained myself to run complete end-to-end builds in 24 to 48 hours, using AI tools for execution while I handle the planning and the architecture. That's what makes a system built for one business affordable for that business.",
+    "I started OUAQT after watching capable businesses lose hours every day to work their software should have been handling for them. Not complicated work. Just counting, copying, and checking numbers by hand because nothing they had been sold fit the way they actually operated.",
+    "My background is in data analytics and product engineering. I stay close to every project, from the first conversation about how a business really runs to the system that finally replaces the spreadsheet.",
   ],
 };
 
 export const credentials: Credential[] = [
   {
-    title: "Five live systems, architected end to end",
-    detail:
-      "SQL data modeling, per-client deployments, and full historical migrations across mining, pharmacy, hospitality, transport, and restaurant clients.",
-  },
-  {
     title: "Data analytics at Deloitte and MyAiPathways",
     detail:
-      "Plus a workflow automation project at SNIM that cut a three-day process down to eight hours.",
+      "Consulting and product work on how organizations collect, model, and actually use their data.",
+  },
+  {
+    title: "Workflow automation at SNIM",
+    detail:
+      "Rebuilt a three day process so it finished in eight hours, on one of Mauritania's largest industrial operations.",
   },
   {
     title: "UNDP Knowledge Future Skills Academy winner, 2025",
     detail:
-      "Keynote speaker at the Knowledge Summit in Dubai the same year.",
+      "Selected from the regional cohort, and keynote speaker at the Knowledge Summit in Dubai the same year.",
   },
   {
-    title: "Builds in 24–48 hours, not quarters",
+    title: "Systems live across five sectors",
     detail:
-      "AI handles execution; architecture and planning stay human. That speed is what makes genuinely custom software viable for an SME.",
+      "Mining, pharmacy, hospitality, transport, and food service, each running on its own dedicated deployment.",
   },
 ];

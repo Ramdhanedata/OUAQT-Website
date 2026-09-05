@@ -6,7 +6,7 @@ import { GradientMesh } from "@/components/motion/gradient-mesh";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
-// TODO(adel): headline and sub-copy come straight from the pitch deck.
+// TODO(adel): headline and sub-copy come from the pitch deck.
 // Edit here to adjust the site's core positioning.
 export function Hero() {
   return (
@@ -19,7 +19,7 @@ export function Hero() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-sm font-medium tracking-tight text-accent"
         >
-          OUAQT — Custom business systems
+          OUAQT · Custom business systems
         </motion.p>
 
         <motion.h1
@@ -39,8 +39,8 @@ export function Hero() {
           className="mt-8 max-w-2xl text-balance text-lg leading-relaxed text-muted-foreground"
         >
           Most businesses don&rsquo;t need more software. They need one system
-          built around how they already work. OUAQT builds it — custom, per
-          client, in days rather than quarters.
+          built around how they already work. That is what we build, one
+          client at a time.
         </motion.p>
 
         <motion.div

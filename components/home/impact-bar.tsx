@@ -8,7 +8,7 @@ const stats = [
   { value: "5", label: "Live systems in production" },
   { value: "5", label: "Sectors served" },
   { value: "90%", label: "Less reconciliation time at GMM" },
-  { value: "24–48h", label: "From brief to working build" },
+  { value: "24-48h", label: "From brief to working build" },
 ];
 
 export function ImpactBar() {

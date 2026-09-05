@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
  * white-stroke variant (red preserved) for dark ones.
  *
  * Both are rendered and toggled with `dark:` classes rather than reading the
- * theme in JS — that keeps it a server component and avoids a flash on load.
+ * theme in JS, which keeps it a server component and avoids a load flash.
  *
  * TODO(adel): the source is public/logo-ouaqt-*.png, generated from
  * "OUAQT without Background.png". If you update the mark, regenerate both.

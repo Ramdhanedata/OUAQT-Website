@@ -7,7 +7,7 @@ import { Mail, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Contact — OUAQT",
+  title: "Contact | OUAQT",
   description:
     "Tell OUAQT how your business runs today, and where a custom system would save the most time.",
 };
@@ -25,7 +25,7 @@ export default function ContactPage() {
               What part of your day still runs on a spreadsheet?
             </h1>
             <p className="mt-6 leading-relaxed text-muted-foreground">
-              Tell me how your business actually operates today — the paper,
+              Tell us how your business actually operates today. The paper,
               the spreadsheets, the group chats. That conversation is where
               every OUAQT system starts.
             </p>

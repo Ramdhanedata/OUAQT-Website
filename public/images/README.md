@@ -1,7 +1,7 @@
 # Where to put your project photos
 
 The site renders real photos as soon as you add them. Until then it shows a
-labelled gradient placeholder — no broken images, no stock photos.
+neutral placeholder. No broken images, no stock photos.
 
 ## Project screenshots
 
@@ -29,7 +29,7 @@ Then open `lib/data/projects.ts` and set the paths on that project:
 }
 ```
 
-Paths start with `/images/...` (not `public/`) — that's how Next.js serves them.
+Paths start with `/images/...` and not `public/`. That is how Next.js serves them.
 
 **Cover images** appear on the project card and the detail page hero.
 Landscape works best, roughly 4:3 or wider, at least 1200px on the long edge.
@@ -50,6 +50,6 @@ Square crop. Until you set it, the About page shows an initials monogram.
 
 ## A note on screenshots
 
-If your systems show real client data, blur or replace it before publishing —
-names, prices, patient records, and stock levels are the client's, not yours.
-Mocked-up demo data usually photographs better anyway.
+If your systems show real client data, blur or replace it before publishing.
+Names, prices, patient records, and stock levels belong to the client, not to
+you. Mocked-up demo data usually photographs better anyway.

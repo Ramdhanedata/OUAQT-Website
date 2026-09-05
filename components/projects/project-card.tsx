@@ -24,14 +24,14 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.coverImage ? (
             <Image
               src={project.coverImage}
-              alt={`${project.title} — screenshot`}
+              alt={`${project.title} screenshot`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
             />
           ) : (
             /* Placeholder until a real screenshot exists. Deliberately has no
-               text — the sector is already labelled directly below the image.
+               text, since the sector is already labelled below the image.
                TODO(adel): add a screenshot to /public/images/projects/<slug>/
                and set `coverImage` in lib/data/projects.ts to replace this. */
             <div

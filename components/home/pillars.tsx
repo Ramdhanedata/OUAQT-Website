@@ -9,19 +9,19 @@ const pillars = [
     icon: Blocks,
     title: "Built around the real workflow, not a template",
     description:
-      "Every system is designed from how your team actually works — including the language they work in. The GMM mining system runs French, Arabic, and English because that's how field crews log data.",
+      "Every system is designed from how your team actually works, including the language they work in. The GMM mining system runs French, Arabic, and English because that is how field crews log data.",
   },
   {
     icon: Bot,
-    title: "AI does the repetitive work, people make the judgment calls",
+    title: "Automation handles the repetition, people handle the exceptions",
     description:
-      "The pharmacy tool auto-fills medicine records from historical entries. Automation absorbs the repetition; your staff handle the exceptions — the part that actually needs a person.",
+      "The pharmacy system fills medicine records from past entries instead of asking staff to retype them. What is left is the work that genuinely needs a person.",
   },
   {
     icon: DatabaseZap,
     title: "Full migration, isolated per client",
     description:
-      "Years of paper and spreadsheet history are migrated in, so nobody starts from a blank system. And no client's data ever touches another's.",
+      "Years of paper and spreadsheet history come across with you, so nobody starts from a blank system. And no client's data ever touches another's.",
   },
 ];
 

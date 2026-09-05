@@ -4,16 +4,17 @@ import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
 import { credentials, founder } from "@/lib/data/founder";
 import { ArrowRight, Mail, MapPin } from "lucide-react";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About — OUAQT",
+  title: "About OUAQT",
   description:
     "OUAQT builds custom systems for businesses running on paper, Excel, and WhatsApp. Founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
 };
 
-// The market context from the pitch deck — why this is a structural gap
-// rather than a one-off service business.
+// Market context from the pitch deck: why this is a structural gap rather
+// than a one industry problem.
 const marketStats = [
   {
     value: "~30%",
@@ -42,17 +43,17 @@ export default function AboutPage() {
               About OUAQT
             </p>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              A structural gap, not a single-industry problem.
+              A structural gap, not a single industry problem.
             </h1>
             <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
               Across mining, pharmacy, hospitality, transport, and food
-              service, the same pattern keeps appearing: capable businesses
+              service, the same pattern keeps appearing. Capable businesses
               running critical operations on paper, spreadsheets, and group
               chats. Not because it works, but because nobody has ever built
               software for how they actually operate.
             </p>
             <p className="mt-6 leading-relaxed text-muted-foreground">
-              OUAQT exists to close that gap one business at a time — with a
+              OUAQT exists to close that gap one business at a time, with a
               system designed around a single client&rsquo;s real workflow,
               their real history, and the languages their team actually uses.
             </p>
@@ -83,8 +84,8 @@ export default function AboutPage() {
           <FadeIn delay={0.3}>
             <p className="mt-12 max-w-2xl leading-relaxed text-muted-foreground">
               The World Bank and IFC are actively funding SME access to finance
-              and digital tools across the region — the same gap OUAQT is built
-              to close.
+              and digital tools across the region. That is the same gap OUAQT
+              is built to close.
             </p>
           </FadeIn>
         </Container>
@@ -95,16 +96,18 @@ export default function AboutPage() {
         <Container>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
             <FadeIn>
-              {/* TODO(adel): set `photo` in lib/data/founder.ts to swap this
-                  monogram for a real headshot. */}
               {founder.photo ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={founder.photo}
                   alt={founder.name}
+                  width={800}
+                  height={800}
+                  sizes="(max-width: 1024px) 100vw, 33vw"
                   className="aspect-square w-full rounded-2xl object-cover"
                 />
               ) : (
+                /* TODO(adel): save your photo to public/images/founder.jpg and
+                   set `photo` in lib/data/founder.ts to swap this monogram. */
                 <div className="bg-noise flex aspect-square w-full items-center justify-center rounded-2xl bg-gradient-to-br from-accent/25 via-muted to-background">
                   <span className="text-4xl font-semibold tracking-tight text-foreground/25">
                     {initials}
@@ -115,7 +118,7 @@ export default function AboutPage() {
 
             <FadeIn delay={0.1} className="lg:col-span-2">
               <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-                Who builds it
+                Founder
               </p>
               <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
                 {founder.name}
@@ -169,11 +172,11 @@ export default function AboutPage() {
         <Container>
           <FadeIn className="mx-auto max-w-2xl text-center">
             <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              Tell me what slows your business down.
+              Tell us what slows your business down.
             </h2>
             <p className="mt-6 leading-relaxed text-muted-foreground">
               If any part of your day still runs on a spreadsheet nobody
-              trusts, that&rsquo;s usually where the first system goes.
+              trusts, that is usually where the first system goes.
             </p>
             <div className="mt-8 flex justify-center">
               <Button href="/contact" variant="accent">

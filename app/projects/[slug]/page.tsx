@@ -20,7 +20,7 @@ export function generateMetadata({ params }: Props): Metadata {
   const project = getProjectBySlug(params.slug);
   if (!project) return {};
   return {
-    title: `${project.title} — OUAQT`,
+    title: `${project.title} | OUAQT`,
     description: project.summary,
   };
 }
@@ -35,7 +35,7 @@ export default function ProjectDetailPage({ params }: Props) {
   return (
     <>
       {/* Title band. Deliberately does NOT use the screenshot as a full-bleed
-          background — a dense UI screenshot cropped to a letterbox and dimmed
+          background, because a dense UI screenshot cropped to a letterbox and dimmed
           behind a scrim is unreadable. The screenshot gets its own frame below,
           shown whole at its native aspect ratio. */}
       <div className="relative flex min-h-[38vh] items-end overflow-hidden bg-muted py-16">
@@ -59,7 +59,7 @@ export default function ProjectDetailPage({ params }: Props) {
             <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl shadow-black/20">
               <Image
                 src={project.coverImage}
-                alt={`${project.title} — product screenshot`}
+                alt={`${project.title} product screenshot`}
                 width={1600}
                 height={1000}
                 priority
@@ -119,7 +119,7 @@ export default function ProjectDetailPage({ params }: Props) {
               </ul>
 
               {/* Gallery. Only rendered once real screenshots are added to
-                  `gallery` in lib/data/projects.ts — an empty gallery shows
+                  `gallery` in lib/data/projects.ts. An empty gallery shows
                   nothing rather than empty grey boxes.
                   TODO(adel): drop files into
                   /public/images/projects/<slug>/ and list them there. */}
@@ -132,7 +132,7 @@ export default function ProjectDetailPage({ params }: Props) {
                     >
                       <Image
                         src={src}
-                        alt={`${project.title} — screenshot`}
+                        alt={`${project.title} screenshot`}
                         fill
                         sizes="(max-width: 640px) 100vw, 50vw"
                         className="object-cover"

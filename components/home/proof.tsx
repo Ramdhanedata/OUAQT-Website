@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
 import { ArrowRight } from "lucide-react";
 
-// The GMM mining result — the strongest proof point OUAQT has, and the only
-// one with a client-confirmed number. Keep it that way: don't add figures
-// here that a client hasn't signed off on.
+// The GMM mining result. It is the strongest proof point OUAQT has, and the
+// only one with a client-confirmed number. Keep it that way: don't add
+// figures here that a client hasn't signed off on.
 export function Proof() {
   return (
     <Section className="border-t border-border">
@@ -21,7 +21,7 @@ export function Proof() {
             </h2>
             <p className="mt-6 leading-relaxed text-muted-foreground">
               GMM&rsquo;s field teams were reconciling bloc movement by hand,
-              four hours a day, across three languages. The system OUAQT built
+              four hours a day, across three languages. The system we built
               for them does it in twenty-five minutes.
             </p>
             <div className="mt-8">
@@ -66,7 +66,7 @@ export function Proof() {
                   90% reduction
                 </p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  In reconciliation time — confirmed by the client.
+                  In reconciliation time, confirmed by the client.
                 </p>
               </div>
             </div>

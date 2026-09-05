@@ -3,7 +3,7 @@ import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
 
 // The four real client problems from the pitch deck. These are the specific
-// pains OUAQT was hired to fix — not generic marketing copy.
+// pains OUAQT was hired to fix, not generic marketing copy.
 const problems = [
   {
     sector: "Mining",
@@ -15,7 +15,7 @@ const problems = [
   },
   {
     sector: "Hospitality",
-    pain: "Tax and commission math across services — a common source of billing errors.",
+    pain: "Tax and commission math across services, a common source of billing errors.",
   },
   {
     sector: "Transport",
@@ -35,7 +35,7 @@ export function Problem() {
             Most businesses still run on paper, Excel, and WhatsApp.
           </h2>
           <p className="mt-6 text-balance text-lg leading-relaxed text-muted-foreground">
-            Not because it works — but because they&rsquo;ve never had software
+            Not because it works, but because they&rsquo;ve never had software
             built for how they actually operate.
           </p>
         </FadeIn>

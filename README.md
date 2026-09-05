@@ -1,16 +1,16 @@
-# OUAQT — Marketing Site
+# OUAQT Marketing Site
 
 Marketing site for OUAQT: custom business systems for companies still running
 on paper, Excel, and WhatsApp. Built with Next.js 14 (App Router), TypeScript,
 Tailwind CSS, and Framer Motion.
 
-Content is sourced from the OUAQT pitch deck — five live systems across mining,
+Content is sourced from the OUAQT pitch deck. Five live systems across mining,
 pharmacy, hospitality, transport, and food service.
 
-**On metrics:** only the GMM mining figures (4 hrs → 25 min, 90% reduction) are
+**On metrics:** only the GMM mining figures (4 hrs to 25 min, 90% reduction) are
 client-confirmed. The other four projects deliberately carry no hard numbers.
 `TODO(adel)` markers in `lib/data/projects.ts` show where to add real measured
-results once you have them — please don't publish estimates as facts.
+results once you have them. Please don't publish estimates as facts.
 
 ## Getting started
 
@@ -75,23 +75,22 @@ Geist or General Sans, replace that import and update the `--font-inter`
 variable reference in `tailwind.config.ts`.
 
 **Content.** The five systems live in `lib/data/projects.ts` and founder details
-in `lib/data/founder.ts` — both fully typed, so pages update automatically when
-you edit the data. Home-page copy lives in the `components/home/` sections.
+in `lib/data/founder.ts`. Both are fully typed, so pages update automatically
+when you edit the data. Home page copy lives in the `components/home/` sections.
 
-**Images.** Real photo support is already wired up via `next/image`; projects
-without a `coverImage` fall back to a labelled gradient. See
-`public/images/README.md`.
+**Images.** Real photo support is wired up via `next/image`. Projects without a
+`coverImage` fall back to a neutral placeholder. See `public/images/README.md`.
 
 ## Dark mode
 
-Handled by `next-themes` with `attribute="class"`. Defaults to dark; the toggle
-lives in the navbar. Change `defaultTheme` in `app/layout.tsx` to `"light"`, or
-set `enableSystem` to `true` to follow the OS setting.
+Handled by `next-themes` with `attribute="class"`. Defaults to dark, and the
+toggle lives in the navbar. Change `defaultTheme` in `app/layout.tsx` to
+`"light"`, or set `enableSystem` to `true` to follow the OS setting.
 
 ## Environment variables
 
 Copy `.env.example` to `.env.local` and fill in values. `.env.local` is
-gitignored — never commit real secrets.
+gitignored, so never commit real secrets there.
 
 The contact form (`components/contact/contact-form.tsx`) validates client-side
 and shows a success state, but has **no backend**. Wire it to an API route or

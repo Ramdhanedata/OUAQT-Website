@@ -12,7 +12,7 @@ type FadeInProps = {
 };
 
 // Subtle scroll-reveal used throughout the site. Keep durations short and
-// easing gentle — motion here should feel like a nudge, not an animation.
+// easing gentle. Motion here should feel like a nudge, not an animation.
 export function FadeIn({
   children,
   className,

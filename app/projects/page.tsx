@@ -6,7 +6,7 @@ import { getAllCategories, projects } from "@/lib/data/projects";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Systems — OUAQT",
+  title: "Systems | OUAQT",
   description:
     "Five live systems built for mining, pharmacy, hospitality, transport, and food service clients.",
 };
@@ -25,9 +25,10 @@ export default function ProjectsPage() {
             Five live systems, each built for one business.
           </h1>
           <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
-            Mining, pharmacy, hospitality, transport, and food service. Same
-            approach every time: start from the real workflow, migrate the real
-            history, and hand over something the team actually uses.
+            Mining, pharmacy, hospitality, transport, and food service. The
+            approach is the same every time. We start from how the business
+            already works, bring their existing records across, and hand over
+            something the team will actually use.
           </p>
         </FadeIn>
 

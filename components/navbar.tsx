@@ -44,7 +44,7 @@ export function Navbar() {
       )}
     >
       <Container className="flex h-16 items-center justify-between sm:h-20">
-        <Link href="/" aria-label="OUAQT — home" className="shrink-0">
+        <Link href="/" aria-label="OUAQT home" className="shrink-0">
           <Logo priority className="h-6 sm:h-7" />
         </Link>
 
