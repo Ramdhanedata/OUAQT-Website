@@ -3,7 +3,6 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
 import { credentials, founder } from "@/lib/data/founder";
-import { organization } from "@/lib/data/contact";
 import { ArrowRight, Mail, MapPin } from "lucide-react";
 import { LinkedInIcon } from "@/components/ui/social-icons";
 import Image from "next/image";
@@ -169,11 +168,11 @@ export default function AboutPage() {
                   LinkedIn
                 </a>
                 <a
-                  href={`mailto:${organization.email}`}
+                  href={`mailto:${founder.email}`}
                   className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
                 >
                   <Mail className="h-4 w-4 text-accent" />
-                  {organization.email}
+                  {founder.email}
                 </a>
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4 text-accent" />

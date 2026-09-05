@@ -14,6 +14,14 @@ export const founder = {
   name: "Elboumby Aumar Ramdhane",
   role: "Founder & AI Product Engineer",
   location: "Nouakchott, Mauritania",
+
+  /*
+   * Personal contact, shown only on the founder card in About.
+   * The company details (ouaqt.mrt@gmail.com, WhatsApp, the OUAQT LinkedIn
+   * and Facebook pages) live in lib/data/contact.ts and are what the contact
+   * page and footer use. These two are deliberately kept separate.
+   */
+  email: "adelramdhane1@gmail.com",
   linkedin:
     "https://www.linkedin.com/in/ramdhane-mohamed-ahmed-90653a1a1/",
   /*
