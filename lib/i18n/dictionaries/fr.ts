@@ -197,6 +197,9 @@ export const fr: Dictionary = {
       messagePlaceholder:
         "Sur quoi tourne votre entreprise aujourd'hui ? Papier, tableurs, WhatsApp ? Dites-nous où cela vous ralentit.",
       submit: "Envoyer le message",
+      sending: "Envoi…",
+      errorSend:
+        "L'envoi a échoué. Réessayez, ou écrivez-nous directement à",
       successTitle: "Message bien reçu.",
       successBody:
         "Merci de nous avoir écrit. Nous répondons généralement sous un jour ouvré.",

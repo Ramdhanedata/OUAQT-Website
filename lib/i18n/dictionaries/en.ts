@@ -195,6 +195,9 @@ export const en = {
       messagePlaceholder:
         "What does your business run on today? Paper, spreadsheets, WhatsApp? Tell us where it slows you down.",
       submit: "Send message",
+      sending: "Sending…",
+      errorSend:
+        "That didn't send. Please try again, or email us directly at",
       successTitle: "Message received.",
       successBody: "Thanks for reaching out. We usually reply within one business day.",
       sendAnother: "Send another message",
