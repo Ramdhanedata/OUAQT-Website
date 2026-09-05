@@ -3,6 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n";
+import type { Locale } from "@/lib/i18n/config";
+import { organization } from "@/lib/data/contact";
 import { CheckCircle2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
@@ -39,30 +41,50 @@ function validate(values: FormState, dict: Dictionary): Errors {
   return errors;
 }
 
-export function ContactForm({ dict }: { dict: Dictionary }) {
+export function ContactForm({
+  dict,
+  lang,
+}: {
+  dict: Dictionary;
+  lang: Locale;
+}) {
   const [values, setValues] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<Errors>({});
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">(
+    "idle"
+  );
+  // Honeypot. Hidden from people, filled in by bots.
+  const [company, setCompany] = useState("");
   const f = dict.contact.form;
 
   function handleChange(field: keyof FormState, value: string) {
     setValues((prev) => ({ ...prev, [field]: value }));
+    if (status === "failed") setStatus("idle");
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const validationErrors = validate(values, dict);
     setErrors(validationErrors);
+    if (Object.keys(validationErrors).length > 0) return;
 
-    if (Object.keys(validationErrors).length === 0) {
-      // TODO(adel): wire this to a real endpoint (an API route, Resend, or a
-      // form service) once backend logic is ready.
-      setSubmitted(true);
+    setStatus("sending");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...values, company, locale: lang }),
+      });
+      // Only claim success when the server actually accepted it.
+      if (!res.ok) throw new Error(String(res.status));
+      setStatus("sent");
       setValues(initialState);
+    } catch {
+      setStatus("failed");
     }
   }
 
-  if (submitted) {
+  if (status === "sent") {
     return (
       <div className="flex flex-col items-start gap-3 rounded-2xl border border-border p-8">
         <CheckCircle2 className="h-6 w-6 text-accent" />
@@ -75,7 +97,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
         <Button
           type="button"
           variant="outline"
-          onClick={() => setSubmitted(false)}
+          onClick={() => setStatus("idle")}
           className="mt-2"
         >
           {f.sendAnother}
@@ -84,9 +106,11 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
     );
   }
 
+  const sending = status === "sending";
+
   const fieldClass = (hasError: boolean) =>
     cn(
-      "mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-accent",
+      "mt-2 w-full rounded-xl border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-accent disabled:opacity-60",
       hasError ? "border-red-500" : "border-border"
     );
 
@@ -102,6 +126,8 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
         <input
           id="name"
           type="text"
+          autoComplete="name"
+          disabled={sending}
           value={values.name}
           onChange={(event) => handleChange("name", event.target.value)}
           className={fieldClass(Boolean(errors.name))}
@@ -123,6 +149,8 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
           id="email"
           type="email"
           dir="ltr"
+          autoComplete="email"
+          disabled={sending}
           value={values.email}
           onChange={(event) => handleChange("email", event.target.value)}
           className={fieldClass(Boolean(errors.email))}
@@ -143,6 +171,7 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
         <textarea
           id="message"
           rows={5}
+          disabled={sending}
           value={values.message}
           onChange={(event) => handleChange("message", event.target.value)}
           className={cn(fieldClass(Boolean(errors.message)), "resize-none")}
@@ -153,8 +182,38 @@ export function ContactForm({ dict }: { dict: Dictionary }) {
         )}
       </div>
 
-      <Button type="submit" variant="accent" className="w-full sm:w-auto">
-        {f.submit}
+      {/* Honeypot: off-screen and skipped by tab order, so only bots reach it. */}
+      <div aria-hidden className="pointer-events-none absolute -left-[9999px]">
+        <label htmlFor="company">Company</label>
+        <input
+          id="company"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={company}
+          onChange={(event) => setCompany(event.target.value)}
+        />
+      </div>
+
+      {status === "failed" && (
+        <p className="text-sm leading-relaxed text-red-500" role="alert">
+          {f.errorSend}{" "}
+          <a
+            href={`mailto:${organization.email}`}
+            className="underline underline-offset-2"
+          >
+            {organization.email}
+          </a>
+        </p>
+      )}
+
+      <Button
+        type="submit"
+        variant="accent"
+        disabled={sending}
+        className="w-full sm:w-auto"
+      >
+        {sending ? f.sending : f.submit}
       </Button>
     </form>
   );

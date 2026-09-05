@@ -91,7 +91,7 @@ export default function ContactPage({ params }: Props) {
           </FadeIn>
 
           <FadeIn delay={0.1} className="lg:col-span-3">
-            <ContactForm dict={dict} />
+            <ContactForm dict={dict} lang={params.lang} />
           </FadeIn>
         </div>
       </Container>
