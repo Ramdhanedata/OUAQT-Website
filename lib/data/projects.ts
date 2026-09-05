@@ -41,10 +41,7 @@ export const projects: Project[] = [
     slug: "gmm-mining",
     category: "Mining",
     year: "2025",
-    // TODO(adel): install the GMM screenshot with
-    //   ./scripts/use-project-cover.sh gmm-mining <path-to-image>
-    // then uncomment the line below.
-    // coverImage: "/images/projects/gmm-mining/cover.png",
+    coverImage: "/images/projects/gmm-mining/cover.png",
   },
   {
     slug: "pharmacy-pos",
