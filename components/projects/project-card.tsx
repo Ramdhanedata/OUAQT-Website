@@ -18,7 +18,9 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link href={`/projects/${project.slug}`} className="group block h-full">
       <Card className="flex h-full flex-col overflow-hidden">
-        <div className="relative aspect-[4/3] overflow-hidden bg-muted">
+        {/* 16:10 matches the native ratio of the product screenshots, so
+            object-cover crops almost nothing. */}
+        <div className="relative aspect-[16/10] overflow-hidden bg-muted">
           {project.coverImage ? (
             <Image
               src={project.coverImage}

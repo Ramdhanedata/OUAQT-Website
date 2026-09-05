@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { Logo } from "@/components/logo";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
@@ -43,11 +44,8 @@ export function Navbar() {
       )}
     >
       <Container className="flex h-16 items-center justify-between sm:h-20">
-        <Link
-          href="/"
-          className="text-base font-semibold tracking-tight text-foreground"
-        >
-          OUAQT
+        <Link href="/" aria-label="OUAQT — home" className="shrink-0">
+          <Logo priority className="h-6 sm:h-7" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

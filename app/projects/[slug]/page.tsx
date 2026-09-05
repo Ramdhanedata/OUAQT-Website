@@ -34,27 +34,13 @@ export default function ProjectDetailPage({ params }: Props) {
 
   return (
     <>
-      {/* Hero. Renders the real cover screenshot when one is set in
-          lib/data/projects.ts, otherwise an accent gradient. */}
-      <div className="relative flex h-[50vh] min-h-[360px] items-end overflow-hidden bg-muted">
-        {project.coverImage ? (
-          <>
-            <Image
-              src={project.coverImage}
-              alt={`${project.title} — cover`}
-              fill
-              priority
-              sizes="100vw"
-              className="object-cover"
-            />
-            {/* Scrim keeps the headline readable over any screenshot */}
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
-          </>
-        ) : (
-          <div className="bg-noise absolute inset-0 bg-gradient-to-br from-accent/25 via-muted to-background" />
-        )}
-
-        <Container className="relative pb-12">
+      {/* Title band. Deliberately does NOT use the screenshot as a full-bleed
+          background — a dense UI screenshot cropped to a letterbox and dimmed
+          behind a scrim is unreadable. The screenshot gets its own frame below,
+          shown whole at its native aspect ratio. */}
+      <div className="relative flex min-h-[38vh] items-end overflow-hidden bg-muted py-16">
+        <div className="bg-noise absolute inset-0 bg-gradient-to-br from-accent/25 via-muted to-background" />
+        <Container className="relative">
           <FadeIn>
             <p className="text-sm font-medium tracking-tight text-accent">
               {project.category} · {project.year}
@@ -65,6 +51,25 @@ export default function ProjectDetailPage({ params }: Props) {
           </FadeIn>
         </Container>
       </div>
+
+      {/* The actual product shot, framed and legible. */}
+      {project.coverImage && (
+        <Container className="-mt-8 sm:-mt-12">
+          <FadeIn>
+            <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl shadow-black/20">
+              <Image
+                src={project.coverImage}
+                alt={`${project.title} — product screenshot`}
+                width={1600}
+                height={1000}
+                priority
+                sizes="(max-width: 1200px) 100vw, 1200px"
+                className="h-auto w-full"
+              />
+            </div>
+          </FadeIn>
+        </Container>
+      )}
 
       <Section>
         <Container>

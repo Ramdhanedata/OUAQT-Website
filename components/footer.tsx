@@ -1,4 +1,5 @@
 import { Container } from "@/components/ui/container";
+import { Logo } from "@/components/logo";
 import Link from "next/link";
 
 import { founder } from "@/lib/data/founder";
@@ -21,10 +22,8 @@ export function Footer() {
     <footer className="border-t border-border">
       <Container className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-3">
         <div>
-          <p className="text-base font-semibold tracking-tight text-foreground">
-            OUAQT
-          </p>
-          <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
+          <Logo className="h-6" />
+          <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">
             Custom systems for businesses still running on paper, Excel, and
             WhatsApp.
           </p>

@@ -98,6 +98,7 @@ export const projects: Project[] = [
       "Repetitive data entry reduced to exception handling",
       // TODO(adel): add the measured time saved per day once confirmed.
     ],
+    coverImage: "/images/projects/pharmacy-pos/cover.png",
   },
   {
     slug: "hotel-operations",
@@ -126,6 +127,7 @@ export const projects: Project[] = [
       "Manual billing calculation removed from daily front-desk work",
       // TODO(adel): add the measured reduction in billing errors once confirmed.
     ],
+    coverImage: "/images/projects/hotel-operations/cover.png",
   },
   {
     slug: "transport-manifests",
@@ -154,6 +156,7 @@ export const projects: Project[] = [
       "Pre-departure prep reduced to a review step",
       // TODO(adel): add the measured prep time saved per trip once confirmed.
     ],
+    coverImage: "/images/projects/transport-manifests/cover.png",
   },
   {
     slug: "restaurant-pos",
@@ -182,6 +185,7 @@ export const projects: Project[] = [
       "Adapted per site, including bakery counter service",
       // TODO(adel): add the measured closing/reconciliation time saved.
     ],
+    coverImage: "/images/projects/restaurant-pos/cover.png",
   },
 ];
 
