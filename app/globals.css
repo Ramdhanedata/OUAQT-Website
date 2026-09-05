@@ -73,3 +73,25 @@ body {
     @apply px-6 sm:px-8 lg:px-12;
   }
 }
+
+/*
+ * Arabic line-height.
+ *
+ * Noto Naskh has far taller ascenders and deeper descenders than the Latin
+ * serif, and Arabic marks (hamza, shadda, tanwin) sit above the line. The
+ * Latin-tuned leading on large headings makes consecutive lines collide, so
+ * Arabic gets its own, looser values.
+ */
+html[lang="ar"] h1 {
+  line-height: 1.5;
+}
+
+html[lang="ar"] h2,
+html[lang="ar"] h3 {
+  line-height: 1.55;
+}
+
+html[lang="ar"] p,
+html[lang="ar"] li {
+  line-height: 1.9;
+}
