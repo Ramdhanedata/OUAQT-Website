@@ -109,8 +109,8 @@ export const en = {
 
   projectsPage: {
     eyebrow: "Projects",
-    heading: "Five live systems, each built for one business.",
-    body: "Mining, pharmacy, hospitality, transport, and food service. The approach is the same every time. We start from how the business already works, bring their existing records across, and hand over something the team will actually use.",
+    heading: "Five businesses, five systems, no templates.",
+    body: "Every build starts with how the business already runs, not with a product we had sitting on a shelf. We map the daily workflow, model the data behind it, migrate years of paper and spreadsheet history, and run each system on its own isolated deployment. Mining, pharmacy, hospitality, transport and food service so far.",
     all: "All",
   },
 
@@ -183,8 +183,8 @@ export const en = {
 
   contact: {
     eyebrow: "Contact",
-    heading: "What part of your day still runs on a spreadsheet?",
-    body: "Tell us how your business actually operates today. The paper, the spreadsheets, the group chats. That conversation is where every OUAQT system starts.",
+    heading: "Start with whatever wastes the most time.",
+    body: "Tell us how the day actually runs. What gets written on paper, what gets typed in twice, where the numbers stop agreeing. We map the workflow first, then build the smallest system that takes the most manual work off your team.",
     whatsapp: "WhatsApp",
     form: {
       name: "Name",

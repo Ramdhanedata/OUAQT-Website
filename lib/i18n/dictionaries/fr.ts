@@ -111,8 +111,8 @@ export const fr: Dictionary = {
 
   projectsPage: {
     eyebrow: "Projets",
-    heading: "Cinq systèmes en production, chacun conçu pour une entreprise.",
-    body: "Mines, pharmacie, hôtellerie, transport et restauration. La démarche est la même à chaque fois. Nous partons du fonctionnement réel de l'entreprise, nous reprenons son historique, et nous livrons un outil que l'équipe utilisera vraiment.",
+    heading: "Cinq entreprises, cinq systèmes, aucun modèle générique.",
+    body: "Chaque projet part du fonctionnement réel de l'entreprise, pas d'un produit déjà prêt sur l'étagère. Nous cartographions le travail quotidien, modélisons les données qui le sous-tendent, migrons des années d'historique papier et tableur, et déployons chaque système sur son propre environnement isolé. Mines, pharmacie, hôtellerie, transport et restauration à ce jour.",
     all: "Tous",
   },
 
@@ -185,8 +185,8 @@ export const fr: Dictionary = {
 
   contact: {
     eyebrow: "Contact",
-    heading: "Quelle partie de votre journée repose encore sur un tableur ?",
-    body: "Expliquez-nous comment votre entreprise fonctionne réellement aujourd'hui. Le papier, les tableurs, les groupes de discussion. C'est de cette conversation que part chaque système OUAQT.",
+    heading: "Commençons par ce qui vous coûte le plus de temps.",
+    body: "Racontez-nous comment se déroule vraiment la journée. Ce qui s'écrit sur papier, ce qui se saisit deux fois, l'endroit où les chiffres cessent de concorder. Nous cartographions d'abord le processus, puis nous construisons le plus petit système qui retire le plus de travail manuel à votre équipe.",
     whatsapp: "WhatsApp",
     form: {
       name: "Nom",
