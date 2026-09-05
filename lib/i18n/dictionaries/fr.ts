@@ -32,9 +32,9 @@ export const fr: Dictionary = {
   hero: {
     eyebrow: "OUAQT · Systèmes d'entreprise sur mesure",
     heading:
-      "Remplacer le papier, Excel et WhatsApp par des systèmes qui font vraiment tourner votre entreprise.",
-    body: "La plupart des entreprises n'ont pas besoin de plus de logiciels. Elles ont besoin d'un seul système conçu autour de leur façon de travailler. C'est ce que nous construisons, un client à la fois.",
-    primaryCta: "Parlons de vos processus",
+      "Nous identifions ce qui ralentit votre entreprise, puis nous construisons le système qui le corrige.",
+    body: "Chaque entreprise a des tâches qui prennent plus de temps qu'elles ne devraient. Nous apprenons comment la vôtre fonctionne réellement, puis nous construisons un système unique qui supprime le travail manuel et rend à votre équipe le temps qu'elle y perd.",
+    primaryCta: "Dites-nous ce qui vous ralentit",
     secondaryCta: "Voir nos projets",
   },
 

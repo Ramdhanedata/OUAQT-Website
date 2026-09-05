@@ -34,9 +34,9 @@ export const en = {
   hero: {
     eyebrow: "OUAQT · Custom business systems",
     heading:
-      "Replacing paper, Excel, and WhatsApp with systems that actually run your business.",
-    body: "Most businesses don't need more software. They need one system built around how they already work. That is what we build, one client at a time.",
-    primaryCta: "Discuss your workflow",
+      "We find what slows your business down, then build the system that fixes it.",
+    body: "Every business has work that takes longer than it should. We learn how yours really operates, then build one system around it that removes the manual effort and gives your team its time back.",
+    primaryCta: "Tell us what's slowing you down",
     secondaryCta: "See our projects",
   },
 
