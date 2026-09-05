@@ -123,15 +123,16 @@ export default function AboutPage() {
                 <Image
                   src={photo}
                   alt={founder.name}
-                  width={900}
-                  height={900}
+                  width={598}
+                  height={1137}
                   sizes="(max-width: 1024px) 100vw, 33vw"
-                  /* object-top keeps the face in frame when a portrait photo
-                     is cropped to a square. */
-                  className="aspect-square w-full rounded-2xl object-cover object-top"
+                  /* 4:5 rather than a square: the source is a tall portrait,
+                     and a square crop clipped the top of the head. object-top
+                     keeps the face high in the frame. */
+                  className="aspect-[4/5] w-full rounded-2xl object-cover object-top"
                 />
               ) : (
-                <div className="bg-noise flex aspect-square w-full items-center justify-center rounded-2xl bg-gradient-to-br from-accent/25 via-muted to-background">
+                <div className="bg-noise flex aspect-[4/5] w-full items-center justify-center rounded-2xl bg-gradient-to-br from-accent/25 via-muted to-background">
                   <span className="text-4xl font-semibold tracking-tight text-foreground/25">
                     {initials}
                   </span>
