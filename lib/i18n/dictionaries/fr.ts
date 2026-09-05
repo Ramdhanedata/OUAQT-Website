@@ -216,8 +216,8 @@ export const fr: Dictionary = {
       "Des systèmes sur mesure pour les entreprises qui fonctionnent encore au papier, à Excel et à WhatsApp.",
     navigate: "Navigation",
     connect: "Nous suivre",
+    brand: "OUAQT",
     rights: "Tous droits réservés.",
-    builtIn: "Conçu à Nouakchott.",
   },
 
   notFound: {

@@ -76,9 +76,8 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
 
       <Container className="flex flex-col gap-4 border-t border-border py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <p>
-          © {new Date().getFullYear()} OUAQT. {dict.footer.rights}
+          © {new Date().getFullYear()} {dict.footer.brand}. {dict.footer.rights}
         </p>
-        <p>{dict.footer.builtIn}</p>
       </Container>
     </footer>
   );

@@ -212,8 +212,8 @@ export const en = {
       "Custom systems for businesses still running on paper, Excel, and WhatsApp.",
     navigate: "Navigate",
     connect: "Connect",
+    brand: "OUAQT",
     rights: "All rights reserved.",
-    builtIn: "Built in Nouakchott.",
   },
 
   notFound: {

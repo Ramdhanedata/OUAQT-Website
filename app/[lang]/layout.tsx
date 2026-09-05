@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Source_Serif_4, Noto_Naskh_Arabic } from "next/font/google";
+import { Source_Serif_4, Cairo } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
@@ -24,10 +24,16 @@ const serif = Source_Serif_4({
   display: "swap",
 });
 
-// Source Serif has no Arabic glyphs. Noto Naskh is the serif-companion Naskh
-// face, so Arabic keeps the same bookish feel rather than dropping to a
-// geometric sans.
-const arabicSerif = Noto_Naskh_Arabic({
+/*
+ * Arabic uses Cairo, a modern geometric Arabic sans, rather than a Naskh
+ * serif. Pairing a Latin serif with an Arabic sans is deliberate: Naskh reads
+ * as traditional and formal, while Cairo matches how contemporary brands in
+ * the region actually set Arabic.
+ *
+ * TODO(adel): Tajawal and Almarai are near-identical alternatives. Changing
+ * the import name here is the only edit needed to try one.
+ */
+const arabic = Cairo({
   subsets: ["arabic"],
   variable: "--font-arabic",
   display: "swap",
@@ -77,10 +83,14 @@ export default function RootLayout({ children, params }: Props) {
       lang={lang}
       dir={rtl ? "rtl" : "ltr"}
       suppressHydrationWarning
-      className={rtl ? "font-arabic" : undefined}
+      /* The font variables must live on <html>, not <body>. CSS custom
+         properties inherit downward only, so declaring them on <body> left
+         var(--font-arabic) empty for any rule targeting <html> and Arabic
+         silently fell back to the Latin serif. */
+      className={`${serif.variable} ${arabic.variable}`}
     >
       <body
-        className={`${serif.variable} ${arabicSerif.variable} font-serif antialiased`}
+        className={`${rtl ? "font-arabic" : "font-serif"} antialiased`}
       >
         <ThemeProvider
           attribute="class"
