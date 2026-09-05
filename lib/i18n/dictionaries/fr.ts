@@ -24,7 +24,6 @@ export const fr: Dictionary = {
     cta: "Démarrer un projet",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
-    toggleTheme: "Changer de thème",
     language: "Langue",
     homeAria: "OUAQT accueil",
   },

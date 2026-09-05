@@ -16,15 +16,6 @@
   --surface: #ffffff;
 }
 
-.dark {
-  --background: #0a0a0a;
-  --foreground: #fafafa;
-  --muted: #131313;
-  --muted-foreground: #9a9a97;
-  --border: #1f1f1e;
-  --surface: #101010;
-}
-
 * {
   border-color: var(--border);
 }
@@ -36,7 +27,6 @@ html {
 body {
   color: var(--foreground);
   background: var(--background);
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 ::selection {
@@ -58,10 +48,6 @@ body {
   opacity: 0.035;
   pointer-events: none;
   mix-blend-mode: overlay;
-}
-
-.dark .bg-noise::before {
-  opacity: 0.06;
 }
 
 @layer utilities {

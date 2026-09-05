@@ -26,7 +26,6 @@ export const en = {
     cta: "Start a project",
     openMenu: "Open menu",
     closeMenu: "Close menu",
-    toggleTheme: "Toggle theme",
     language: "Language",
     homeAria: "OUAQT home",
   },

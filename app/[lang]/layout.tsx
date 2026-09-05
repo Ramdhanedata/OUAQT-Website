@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Source_Serif_4, Cairo } from "next/font/google";
 import "../globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { PageTransition } from "@/components/motion/page-transition";
@@ -92,18 +91,11 @@ export default function RootLayout({ children, params }: Props) {
       <body
         className={`${rtl ? "font-arabic" : "font-serif"} antialiased`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem={false}
-          disableTransitionOnChange
-        >
-          <Navbar dict={dict} lang={lang} />
-          <main className="min-h-screen pt-16 sm:pt-20">
-            <PageTransition>{children}</PageTransition>
-          </main>
-          <Footer dict={dict} lang={lang} />
-        </ThemeProvider>
+        <Navbar dict={dict} lang={lang} />
+        <main className="min-h-screen pt-16 sm:pt-20">
+          <PageTransition>{children}</PageTransition>
+        </main>
+        <Footer dict={dict} lang={lang} />
       </body>
     </html>
   );
