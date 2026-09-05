@@ -10,7 +10,7 @@ export function ImpactBar({ dict }: { dict: Dictionary }) {
     { value: "5", label: dict.impact.liveSystems },
     { value: "5", label: dict.impact.sectors },
     { value: "90%", label: dict.impact.reduction },
-    { value: "24-48h", label: dict.impact.buildTime },
+    { value: dict.impact.buildTimeValue, label: dict.impact.buildTime },
   ];
 
   return (

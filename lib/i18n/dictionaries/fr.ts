@@ -40,9 +40,10 @@ export const fr: Dictionary = {
 
   impact: {
     liveSystems: "Systèmes en production",
-    sectors: "Secteurs couverts",
+    sectors: "Secteurs couverts, et d'autres à venir",
     reduction: "De temps de rapprochement en moins chez GMM",
     buildTime: "Du cahier des charges au système fonctionnel",
+    buildTimeValue: "48-96 h",
   },
 
   problem: {

@@ -42,9 +42,10 @@ export const en = {
 
   impact: {
     liveSystems: "Live systems in production",
-    sectors: "Sectors served",
+    sectors: "Sectors served, with more on the way",
     reduction: "Less reconciliation time at GMM",
     buildTime: "From brief to working build",
+    buildTimeValue: "48-96h",
   },
 
   problem: {

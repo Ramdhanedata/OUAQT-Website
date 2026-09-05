@@ -45,9 +45,10 @@ export const ar: Dictionary = {
 
   impact: {
     liveSystems: "أنظمة قيد التشغيل",
-    sectors: "قطاعات نخدمها",
+    sectors: "قطاعات نخدمها، وغيرها في الطريق",
     reduction: "انخفاض في وقت التسوية لدى GMM",
     buildTime: "من الفكرة إلى نظام جاهز",
+    buildTimeValue: "٤٨-٩٦ ساعة",
   },
 
   problem: {
