@@ -1,74 +1,163 @@
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
+import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
-import { TeamGrid } from "@/components/about/team-grid";
+import { credentials, founder } from "@/lib/data/founder";
+import { ArrowRight, Mail, MapPin } from "lucide-react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "About — OUAQT",
-  description: "Our mission, our team, and how we work.",
+  description:
+    "OUAQT builds custom systems for businesses running on paper, Excel, and WhatsApp. Founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
 };
 
-const values = [
+// The market context from the pitch deck — why this is a structural gap
+// rather than a one-off service business.
+const marketStats = [
   {
-    title: "Say less, ship more",
-    description:
-      "We’d rather demonstrate an idea in working software than pitch it in a deck.",
+    value: "~30%",
+    label: "of Mauritania's GDP runs through the informal sector",
   },
+  { value: "56%", label: "of the workforce is in informal employment" },
   {
-    title: "Depth over breadth",
-    description:
-      "We take on fewer projects so each one gets senior attention from start to finish.",
-  },
-  {
-    title: "Own the outcome",
-    description:
-      "We measure our work by what it changes for the people using it, not what it looks like in a portfolio.",
+    value: "2025",
+    label: "Investment Code now explicitly prioritizes SME support",
   },
 ];
 
 export default function AboutPage() {
+  const initials = founder.name
+    .split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2);
+
   return (
     <>
       <Section className="pt-32 sm:pt-40">
         <Container>
-          <FadeIn className="max-w-2xl">
-            <p className="text-sm font-medium tracking-tight text-accent">
+          <FadeIn className="max-w-3xl">
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
               About OUAQT
             </p>
-            <h1 className="mt-4 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-              We build the software we wished someone had built for us.
+            <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+              A structural gap, not a single-industry problem.
             </h1>
-            {/* TODO(customize): replace with OUAQT's real founding story */}
+            <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
+              Across mining, pharmacy, hospitality, transport, and food
+              service, the same pattern keeps appearing: capable businesses
+              running critical operations on paper, spreadsheets, and group
+              chats. Not because it works, but because nobody has ever built
+              software for how they actually operate.
+            </p>
             <p className="mt-6 leading-relaxed text-muted-foreground">
-              OUAQT started as a small team of engineers and designers tired
-              of watching good ideas get buried under bloated software. We
-              set out to build a studio that treats every product like it&rsquo;s
-              the only one we&rsquo;re working on — because most of the time,
-              it nearly is.
+              OUAQT exists to close that gap one business at a time — with a
+              system designed around a single client&rsquo;s real workflow,
+              their real history, and the languages their team actually uses.
             </p>
           </FadeIn>
         </Container>
       </Section>
 
+      {/* Market context */}
       <Section className="border-t border-border">
         <Container>
           <FadeIn>
-            <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              How we work
+            <h2 className="max-w-2xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              The gap is measurable.
             </h2>
           </FadeIn>
           <div className="mt-14 grid grid-cols-1 gap-10 sm:grid-cols-3">
-            {values.map((value, index) => (
-              <FadeIn key={value.title} delay={index * 0.1}>
-                <p className="text-5xl font-semibold tracking-tight text-accent/30">
+            {marketStats.map((stat, index) => (
+              <FadeIn key={stat.label} delay={index * 0.1}>
+                <p className="text-4xl font-semibold tracking-tight text-accent sm:text-5xl">
+                  {stat.value}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  {stat.label}
+                </p>
+              </FadeIn>
+            ))}
+          </div>
+          <FadeIn delay={0.3}>
+            <p className="mt-12 max-w-2xl leading-relaxed text-muted-foreground">
+              The World Bank and IFC are actively funding SME access to finance
+              and digital tools across the region — the same gap OUAQT is built
+              to close.
+            </p>
+          </FadeIn>
+        </Container>
+      </Section>
+
+      {/* Founder */}
+      <Section className="border-t border-border">
+        <Container>
+          <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
+            <FadeIn>
+              {/* TODO(adel): set `photo` in lib/data/founder.ts to swap this
+                  monogram for a real headshot. */}
+              {founder.photo ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={founder.photo}
+                  alt={founder.name}
+                  className="aspect-square w-full rounded-2xl object-cover"
+                />
+              ) : (
+                <div className="bg-noise flex aspect-square w-full items-center justify-center rounded-2xl bg-gradient-to-br from-accent/25 via-muted to-background">
+                  <span className="text-4xl font-semibold tracking-tight text-foreground/25">
+                    {initials}
+                  </span>
+                </div>
+              )}
+            </FadeIn>
+
+            <FadeIn delay={0.1} className="lg:col-span-2">
+              <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+                Who builds it
+              </p>
+              <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+                {founder.name}
+              </h2>
+              <p className="mt-2 text-accent">{founder.role}</p>
+
+              {founder.bio.map((paragraph) => (
+                <p
+                  key={paragraph}
+                  className="mt-6 leading-relaxed text-muted-foreground"
+                >
+                  {paragraph}
+                </p>
+              ))}
+
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-8">
+                <a
+                  href={`mailto:${founder.email}`}
+                  className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
+                >
+                  <Mail className="h-4 w-4 text-accent" />
+                  {founder.email}
+                </a>
+                <div className="flex items-center gap-3 text-sm text-muted-foreground">
+                  <MapPin className="h-4 w-4 text-accent" />
+                  {founder.location}
+                </div>
+              </div>
+            </FadeIn>
+          </div>
+
+          <div className="mt-20 grid grid-cols-1 gap-10 sm:grid-cols-2">
+            {credentials.map((item, index) => (
+              <FadeIn key={item.title} delay={(index % 2) * 0.08}>
+                <p className="text-4xl font-semibold tracking-tight text-accent/25">
                   {String(index + 1).padStart(2, "0")}
                 </p>
-                <h3 className="mt-4 text-lg font-medium tracking-tight text-foreground">
-                  {value.title}
+                <h3 className="mt-4 text-balance text-lg font-medium leading-snug tracking-tight text-foreground">
+                  {item.title}
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                  {value.description}
+                  {item.detail}
                 </p>
               </FadeIn>
             ))}
@@ -78,19 +167,21 @@ export default function AboutPage() {
 
       <Section className="border-t border-border">
         <Container>
-          <FadeIn>
-            <h2 className="text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              The team
+          <FadeIn className="mx-auto max-w-2xl text-center">
+            <h2 className="text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              Tell me what slows your business down.
             </h2>
-            <p className="mt-4 max-w-lg text-muted-foreground">
-              {/* TODO(customize): update headcount / hiring status */}
-              A small, senior team — currently four people, growing slowly
-              and deliberately.
+            <p className="mt-6 leading-relaxed text-muted-foreground">
+              If any part of your day still runs on a spreadsheet nobody
+              trusts, that&rsquo;s usually where the first system goes.
             </p>
+            <div className="mt-8 flex justify-center">
+              <Button href="/contact" variant="accent">
+                Start the conversation
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </div>
           </FadeIn>
-          <div className="mt-14">
-            <TeamGrid />
-          </div>
         </Container>
       </Section>
     </>

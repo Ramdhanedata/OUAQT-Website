@@ -15,14 +15,15 @@ export function FeaturedProjects() {
         <FadeIn className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
           <div>
             <h2 className="max-w-lg text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-              Selected work
+              Systems in production
             </h2>
             <p className="mt-4 max-w-md text-muted-foreground">
-              A few of the products we&rsquo;ve designed, built, and shipped.
+              Five live products, each built for one business and the way it
+              actually runs.
             </p>
           </div>
           <Button href="/projects" variant="ghost">
-            View all projects
+            View all systems
             <ArrowRight className="h-4 w-4" />
           </Button>
         </FadeIn>

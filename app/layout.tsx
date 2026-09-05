@@ -14,15 +14,16 @@ const inter = Inter({
   display: "swap",
 });
 
+const description =
+  "OUAQT builds custom systems for businesses still running on paper, Excel, and WhatsApp — five live products across mining, pharmacy, hospitality, transport, and food service.";
+
 export const metadata: Metadata = {
-  title: "OUAQT — Quiet, deliberate software",
-  description:
-    "OUAQT designs and builds focused software products for teams who value clarity over noise.",
+  title: "OUAQT — Custom systems for real business workflows",
+  description,
   metadataBase: new URL("https://ouaqt.com"),
   openGraph: {
-    title: "OUAQT",
-    description:
-      "OUAQT designs and builds focused software products for teams who value clarity over noise.",
+    title: "OUAQT — Custom systems for real business workflows",
+    description,
     url: "https://ouaqt.com",
     siteName: "OUAQT",
     type: "website",

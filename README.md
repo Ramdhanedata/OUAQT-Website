@@ -1,7 +1,16 @@
 # OUAQT — Marketing Site
 
-A minimalist, "quiet luxury" marketing site for OUAQT. Built with Next.js 14
-(App Router), TypeScript, Tailwind CSS, and Framer Motion.
+Marketing site for OUAQT: custom business systems for companies still running
+on paper, Excel, and WhatsApp. Built with Next.js 14 (App Router), TypeScript,
+Tailwind CSS, and Framer Motion.
+
+Content is sourced from the OUAQT pitch deck — five live systems across mining,
+pharmacy, hospitality, transport, and food service.
+
+**On metrics:** only the GMM mining figures (4 hrs → 25 min, 90% reduction) are
+client-confirmed. The other four projects deliberately carry no hard numbers.
+`TODO(adel)` markers in `lib/data/projects.ts` show where to add real measured
+results once you have them — please don't publish estimates as facts.
 
 ## Getting started
 
@@ -32,16 +41,24 @@ app/
 components/
   ui/                       Button, Card, Container, Section
   motion/                   FadeIn, PageTransition, GradientMesh
-  home/                     Hero, TrustBar, Pillars, FeaturedProjects, AboutTeaser
+  home/                     Hero, ImpactBar, Problem, Pillars, Proof,
+                            FeaturedProjects, AboutTeaser
   projects/                 ProjectCard, ProjectsGrid
-  about/                    TeamGrid
   contact/                  ContactForm
   navbar.tsx, footer.tsx, theme-provider.tsx, theme-toggle.tsx
 lib/
   utils.ts                  `cn()` class merge helper
-  data/projects.ts          project case studies (typed)
-  data/team.ts              team members (typed)
+  data/projects.ts          the five live systems (typed)
+  data/founder.ts           founder bio, credentials, contact details
+public/images/README.md     where to drop project photos and the headshot
 ```
+
+## Adding project photos
+
+See [`public/images/README.md`](public/images/README.md). Short version: drop
+files into `public/images/projects/<slug>/`, then set `coverImage` and
+`gallery` on that project in `lib/data/projects.ts`. Cards and detail pages
+switch from gradient placeholders to real photos automatically.
 
 ## Customizing
 
@@ -57,14 +74,13 @@ colors live as CSS variables at the top of `app/globals.css`.
 Geist or General Sans, replace that import and update the `--font-inter`
 variable reference in `tailwind.config.ts`.
 
-**Content.** Project case studies live in `lib/data/projects.ts` and team bios
-in `lib/data/team.ts` — both fully typed, so the pages update automatically
-when you edit the data.
+**Content.** The five systems live in `lib/data/projects.ts` and founder details
+in `lib/data/founder.ts` — both fully typed, so pages update automatically when
+you edit the data. Home-page copy lives in the `components/home/` sections.
 
-**Images.** Project cards, detail heroes, galleries, and team photos currently
-render abstract gradient placeholders rather than stock photos. Each has a
-`TODO(customize)` noting where to swap in a real `next/image`. Drop files into
-`public/images/projects/<slug>/` and `public/images/team/`.
+**Images.** Real photo support is already wired up via `next/image`; projects
+without a `coverImage` fall back to a labelled gradient. See
+`public/images/README.md`.
 
 ## Dark mode
 

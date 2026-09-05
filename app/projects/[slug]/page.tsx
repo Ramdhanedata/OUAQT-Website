@@ -5,6 +5,7 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { getProjectBySlug, projects } from "@/lib/data/projects";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
 
 type Props = {
@@ -33,9 +34,27 @@ export default function ProjectDetailPage({ params }: Props) {
 
   return (
     <>
-      {/* Hero — TODO(customize): replace with a real <Image src={project.coverImage} /> */}
-      <div className="bg-noise relative flex h-[50vh] min-h-[360px] items-end overflow-hidden bg-gradient-to-br from-accent/25 via-muted to-background">
-        <Container className="pb-12">
+      {/* Hero. Renders the real cover screenshot when one is set in
+          lib/data/projects.ts, otherwise an accent gradient. */}
+      <div className="relative flex h-[50vh] min-h-[360px] items-end overflow-hidden bg-muted">
+        {project.coverImage ? (
+          <>
+            <Image
+              src={project.coverImage}
+              alt={`${project.title} — cover`}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+            {/* Scrim keeps the headline readable over any screenshot */}
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/20" />
+          </>
+        ) : (
+          <div className="bg-noise absolute inset-0 bg-gradient-to-br from-accent/25 via-muted to-background" />
+        )}
+
+        <Container className="relative pb-12">
           <FadeIn>
             <p className="text-sm font-medium tracking-tight text-accent">
               {project.category} · {project.year}
@@ -94,15 +113,29 @@ export default function ProjectDetailPage({ params }: Props) {
                 ))}
               </ul>
 
-              {/* TODO(customize): swap for real gallery images from project.gallery */}
-              <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
-                {project.gallery.map((_, index) => (
-                  <div
-                    key={index}
-                    className="bg-noise aspect-video rounded-2xl bg-gradient-to-br from-muted to-border"
-                  />
-                ))}
-              </div>
+              {/* Gallery. Only rendered once real screenshots are added to
+                  `gallery` in lib/data/projects.ts — an empty gallery shows
+                  nothing rather than empty grey boxes.
+                  TODO(adel): drop files into
+                  /public/images/projects/<slug>/ and list them there. */}
+              {project.gallery && project.gallery.length > 0 && (
+                <div className="mt-12 grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  {project.gallery.map((src) => (
+                    <div
+                      key={src}
+                      className="relative aspect-video overflow-hidden rounded-2xl bg-muted"
+                    >
+                      <Image
+                        src={src}
+                        alt={`${project.title} — screenshot`}
+                        fill
+                        sizes="(max-width: 640px) 100vw, 50vw"
+                        className="object-cover"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </FadeIn>
 
             <FadeIn delay={0.1}>

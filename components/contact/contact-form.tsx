@@ -29,7 +29,7 @@ function validate(values: FormState): Errors {
   }
 
   if (!values.message.trim()) {
-    errors.message = "Tell us a bit about your project.";
+    errors.message = "Tell me a bit about your business.";
   } else if (values.message.trim().length < 20) {
     errors.message = "A few more details would help (20+ characters).";
   }
@@ -67,8 +67,7 @@ export function ContactForm() {
           Message received.
         </h3>
         <p className="text-sm leading-relaxed text-muted-foreground">
-          Thanks for reaching out — we typically reply within one business
-          day.
+          Thanks for reaching out — I usually reply within one business day.
         </p>
         <Button
           type="button"
@@ -146,7 +145,7 @@ export function ContactForm() {
             "mt-2 w-full resize-none rounded-xl border bg-background px-4 py-3 text-sm text-foreground outline-none transition-colors focus:border-accent",
             errors.message ? "border-red-500" : "border-border"
           )}
-          placeholder="Tell us about what you're building..."
+          placeholder="What does your business run on today — paper, spreadsheets, WhatsApp? Where does it slow you down?"
         />
         {errors.message && (
           <p className="mt-2 text-xs text-red-500">{errors.message}</p>

@@ -6,8 +6,9 @@ import { getAllCategories, projects } from "@/lib/data/projects";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Projects — OUAQT",
-  description: "Selected work from the OUAQT studio.",
+  title: "Systems — OUAQT",
+  description:
+    "Five live systems built for mining, pharmacy, hospitality, transport, and food service clients.",
 };
 
 export default function ProjectsPage() {
@@ -17,16 +18,16 @@ export default function ProjectsPage() {
     <Section className="pt-32 sm:pt-40">
       <Container>
         <FadeIn>
-          <p className="text-sm font-medium tracking-tight text-accent">
-            Projects
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            Systems
           </p>
-          <h1 className="mt-4 max-w-2xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-            Products we&rsquo;ve designed, built, and shipped.
+          <h1 className="mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
+            Five live systems, each built for one business.
           </h1>
-          <p className="mt-6 max-w-xl text-muted-foreground">
-            {/* TODO(customize): update with real project count / focus areas */}
-            A running record of the work we take on — from production
-            platforms to early-stage research.
+          <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
+            Mining, pharmacy, hospitality, transport, and food service. Same
+            approach every time: start from the real workflow, migrate the real
+            history, and hand over something the team actually uses.
           </p>
         </FadeIn>
 

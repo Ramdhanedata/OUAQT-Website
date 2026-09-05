@@ -6,6 +6,8 @@ import { GradientMesh } from "@/components/motion/gradient-mesh";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 
+// TODO(adel): headline and sub-copy come straight from the pitch deck.
+// Edit here to adjust the site's core positioning.
 export function Hero() {
   return (
     <section className="relative overflow-hidden">
@@ -17,26 +19,28 @@ export function Hero() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
           className="text-sm font-medium tracking-tight text-accent"
         >
-          OUAQT — Studio &amp; product lab
+          OUAQT — Custom business systems
         </motion.p>
 
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-3xl text-balance text-5xl font-semibold tracking-tight text-foreground sm:text-6xl md:text-7xl"
+          className="mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-6xl md:text-7xl"
         >
-          Software with nothing left to remove.
+          Replacing paper, Excel, and WhatsApp with systems that actually run
+          your business.
         </motion.h1>
 
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-muted-foreground"
+          className="mt-8 max-w-2xl text-balance text-lg leading-relaxed text-muted-foreground"
         >
-          We design and build focused products for teams who&rsquo;d rather
-          ship the right thing slowly than the wrong thing fast.
+          Most businesses don&rsquo;t need more software. They need one system
+          built around how they already work. OUAQT builds it — custom, per
+          client, in days rather than quarters.
         </motion.p>
 
         <motion.div
@@ -46,11 +50,11 @@ export function Hero() {
           className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
         >
           <Button href="/contact" variant="accent">
-            Start a project
+            Discuss your workflow
             <ArrowRight className="h-4 w-4" />
           </Button>
           <Button href="/projects" variant="outline">
-            View our work
+            See the systems
           </Button>
         </motion.div>
       </Container>

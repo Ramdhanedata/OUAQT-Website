@@ -1,9 +1,17 @@
+export type Sector =
+  | "Mining"
+  | "Pharmacy"
+  | "Hospitality"
+  | "Transport"
+  | "Restaurant";
+
 export type Project = {
   slug: string;
   title: string;
+  /** The client's industry — doubles as the filter category on /projects. */
+  category: Sector;
   summary: string;
   description: string;
-  category: "Product" | "Platform" | "Research";
   tags: string[];
   year: string;
   client: string;
@@ -12,94 +20,167 @@ export type Project = {
   solution: string;
   tools: string[];
   results: string[];
-  // TODO(customize): replace with real screenshots/renders in /public/images/projects
-  coverImage: string;
-  gallery: string[];
+  /**
+   * Real screenshots. Drop files into /public/images/projects/<slug>/ and set
+   * the paths here. While these are undefined the site renders a labelled
+   * gradient placeholder instead — no broken images, no fake stock photos.
+   */
+  coverImage?: string;
+  gallery?: string[];
 };
 
-// TODO(customize): Replace with OUAQT's real project case studies.
-// Each `coverImage` / `gallery` path should point to an image dropped into
-// /public/images/projects/<slug>/ — using gradient placeholders until then.
+/*
+ * Real OUAQT client work, sourced from the OUAQT pitch deck.
+ *
+ * IMPORTANT — on metrics: only the GMM mining numbers (4 hrs -> 25 min, 90%)
+ * are client-confirmed in the deck, so only that project carries hard numbers.
+ * The other four describe what the system does without inventing results.
+ * TODO(adel): add real measured numbers to the `results` arrays below as you
+ * confirm them with each client. Do not publish estimates as facts.
+ *
+ * TODO(adel): confirm the exact tech stack per project — `tools` currently
+ * reflects the capabilities described in the deck (SQL modeling, per-client
+ * deployment, historical migration) rather than named frameworks.
+ */
 export const projects: Project[] = [
   {
-    slug: "meridian",
-    title: "Meridian",
-    summary: "A real-time operations console for distributed logistics teams.",
+    slug: "gmm-mining",
+    title: "GMM — Bloc Tracking & Reconciliation",
+    category: "Mining",
+    summary:
+      "A trilingual bloc-tracking system that cut daily reconciliation from four hours to twenty-five minutes.",
     description:
-      "Meridian replaced a patchwork of spreadsheets and status calls with a single live view of fleet, inventory, and delivery risk — built for dispatchers who need answers in seconds, not minutes.",
-    category: "Product",
-    tags: ["Dashboard", "Real-time", "B2B"],
+      "GMM's daily reconciliation was a four-hour manual process. OUAQT replaced it with a bloc-tracking system built around how the field crews already work — including the three languages they already work in.",
+    tags: ["Reconciliation", "Bilingual FR/AR/EN", "Data migration"],
     year: "2025",
-    client: "Confidential logistics network",
-    role: "Product design, frontend architecture, systems integration",
+    client: "GMM · Mining",
+    role: "Data modeling, system architecture, historical migration, deployment",
     problem:
-      "Dispatch teams were reconciling data across four disconnected tools, losing 20+ minutes per shift to manual status checks and missing early signals on delivery delays.",
+      "Reconciling daily bloc movement took four hours a day, done by hand across paper logs and spreadsheets. Field teams recorded data in French, Arabic, or English depending on who was on shift, so nothing lined up cleanly at the end of the day.",
     solution:
-      "We designed a unified console that streams fleet telemetry, inventory levels, and route risk into one interface, with alerting tuned to what dispatchers actually act on.",
-    tools: ["Next.js", "TypeScript", "WebSockets", "PostgreSQL", "Mapbox"],
-    results: [
-      "42% reduction in average dispatcher response time",
-      "Rolled out to 6 regional hubs within one quarter",
-      "Cut manual status-check calls by roughly two-thirds",
+      "A bloc-tracking and reconciliation system designed around the crew's real workflow rather than a template — trilingual by default, because that is how field teams already log data. Years of historical records were migrated in, so the team started with their full history instead of an empty database.",
+    tools: [
+      "SQL data modeling",
+      "Historical data migration",
+      "Trilingual UI (FR / AR / EN)",
+      "Dedicated per-client deployment",
     ],
-    coverImage: "/images/projects/meridian/cover.jpg",
-    gallery: [
-      "/images/projects/meridian/gallery-1.jpg",
-      "/images/projects/meridian/gallery-2.jpg",
+    results: [
+      "Daily reconciliation cut from 4 hours to 25 minutes",
+      "90% reduction in reconciliation time, confirmed by the client",
+      "Runs in French, Arabic, and English for mixed field crews",
     ],
   },
   {
-    slug: "northlight",
-    title: "Northlight",
-    summary: "A design-to-code pipeline that keeps engineering and design in sync.",
+    slug: "pharmacy-pos",
+    title: "Pharmacy POS & Medicine Records",
+    category: "Pharmacy",
+    summary:
+      "A pharmacy point-of-sale that auto-fills medicine records instead of making staff retype them.",
     description:
-      "Northlight bridges the gap between design files and production code, generating type-safe components directly from a design system so nothing drifts out of sync.",
-    category: "Platform",
-    tags: ["Developer Tools", "Design Systems"],
-    year: "2024",
-    client: "Internal product",
-    role: "Founding engineering, product strategy",
+      "Medicine record-keeping was hours of repetitive typing every day. The system now fills records from the pharmacy's own history, leaving staff to handle the exceptions.",
+    tags: ["Point of sale", "Records automation", "Inventory"],
+    year: "2025",
+    client: "Independent pharmacy",
+    role: "Data modeling, system architecture, historical migration, deployment",
     problem:
-      "Growing product teams kept shipping UI that quietly diverged from the design system, creating rework and inconsistent experiences across surfaces.",
+      "Staff spent hours a day on manual data entry for medicine records — retyping the same product details repeatedly, with every entry another chance to introduce an error into a record that has to be right.",
     solution:
-      "We built a pipeline that reads design tokens and component specs directly from the design tool and emits typed, tested React components — with drift detection in CI.",
-    tools: ["TypeScript", "React", "Figma API", "Turborepo"],
-    results: [
-      "Adopted across 3 product teams in the first month",
-      "Design-to-code review time cut from days to hours",
-      "Zero token drift incidents since rollout",
+      "A pharmacy POS that auto-fills medicine records from historical entries. Automation absorbs the repetition; staff handle the exceptions and the judgment calls, which is the part that actually needs a person.",
+    tools: [
+      "SQL data modeling",
+      "Historical data migration",
+      "Automated record completion",
+      "Dedicated per-client deployment",
     ],
-    coverImage: "/images/projects/northlight/cover.jpg",
-    gallery: [
-      "/images/projects/northlight/gallery-1.jpg",
-      "/images/projects/northlight/gallery-2.jpg",
+    results: [
+      "Medicine records auto-filled from the pharmacy's own history",
+      "Repetitive data entry reduced to exception handling",
+      // TODO(adel): add the measured time saved per day once confirmed.
     ],
   },
   {
-    slug: "atlas-index",
-    title: "Atlas Index",
-    summary: "An exploratory research tool for mapping emerging market signals.",
+    slug: "hotel-operations",
+    title: "Hotel Billing & Operations",
+    category: "Hospitality",
+    summary:
+      "Service billing with tax and commission math handled by the system rather than by hand.",
     description:
-      "Atlas Index is an internal research initiative exploring how weak, noisy signals across public data sources can be combined into an early-warning index for market shifts.",
-    category: "Research",
-    tags: ["Data", "Research", "Prototype"],
-    year: "2024",
-    client: "R&D initiative",
-    role: "Research, data pipeline, prototype interface",
+      "Tax and commission calculations across services were a recurring source of billing errors. The system encodes the property's real rules so the math is applied the same way every time.",
+    tags: ["Billing", "Tax & commission", "Operations"],
+    year: "2025",
+    client: "Hotel · Hospitality",
+    role: "Data modeling, system architecture, historical migration, deployment",
     problem:
-      "Existing market-signal tools were either too slow (quarterly reports) or too noisy (raw social sentiment) to be actionable for early decision-making.",
+      "Tax and commission calculations across multiple services were worked out manually. It is fiddly, repetitive math applied to every line of every bill — and a common source of billing errors.",
     solution:
-      "We prototyped a scoring model that blends structured and unstructured public data, then built a lightweight interface for analysts to interrogate and validate the signal.",
-    tools: ["Python", "Next.js", "PostgreSQL", "D3.js"],
-    results: [
-      "Prototype validated against 18 months of historical data",
-      "Informed two internal go/no-go decisions",
-      "Now being scoped as a standalone product",
+      "A billing and operations system that encodes the property's actual tax and commission rules, so the calculation is applied consistently on every service line instead of being re-derived by whoever is on the desk.",
+    tools: [
+      "SQL data modeling",
+      "Rules-based billing engine",
+      "Historical data migration",
+      "Dedicated per-client deployment",
     ],
-    coverImage: "/images/projects/atlas-index/cover.jpg",
-    gallery: [
-      "/images/projects/atlas-index/gallery-1.jpg",
-      "/images/projects/atlas-index/gallery-2.jpg",
+    results: [
+      "Tax and commission math applied consistently across every service line",
+      "Manual billing calculation removed from daily front-desk work",
+      // TODO(adel): add the measured reduction in billing errors once confirmed.
+    ],
+  },
+  {
+    slug: "transport-manifests",
+    title: "Transport Manifests & Checkpoints",
+    category: "Transport",
+    summary:
+      "Checkpoint manifests generated from trip data, replacing an hour of manual prep before every departure.",
+    description:
+      "Every trip needed about an hour of paperwork before the vehicle could leave. The system builds those manifests from data the business already holds.",
+    tags: ["Compliance", "Manifests", "Logistics"],
+    year: "2025",
+    client: "Transport operator",
+    role: "Data modeling, system architecture, historical migration, deployment",
+    problem:
+      "Every trip required roughly an hour of manual preparation to assemble checkpoint manifests — paperwork that has to be correct before a vehicle is allowed to leave, rebuilt by hand each time.",
+    solution:
+      "A system that generates checkpoint manifests from the trip and cargo data already captured, turning departure prep into a review step rather than a rebuild from scratch.",
+    tools: [
+      "SQL data modeling",
+      "Document generation",
+      "Historical data migration",
+      "Dedicated per-client deployment",
+    ],
+    results: [
+      "Checkpoint manifests generated from existing trip and cargo data",
+      "Pre-departure prep reduced to a review step",
+      // TODO(adel): add the measured prep time saved per trip once confirmed.
+    ],
+  },
+  {
+    slug: "restaurant-pos",
+    title: "Restaurant & Café POS",
+    category: "Restaurant",
+    summary:
+      "A point-of-sale built around how the floor actually runs — table service and bakery counter alike.",
+    description:
+      "Orders, kitchen flow, and daily takings lived in three different places. The POS puts them in one, and adapts to the pace of each site.",
+    tags: ["Point of sale", "Kitchen flow", "Daily reporting"],
+    year: "2025",
+    client: "Restaurant, café & bakery",
+    role: "Data modeling, system architecture, historical migration, deployment",
+    problem:
+      "Orders, the kitchen, and the day's takings lived in separate places — paper tickets, a cash drawer, and a spreadsheet reconciled at closing. Nothing agreed with anything else until someone made it agree.",
+    solution:
+      "A custom POS covering ordering, kitchen flow, and daily reporting, adapted per site — including bakery counter service, where the product mix and the pace are nothing like table service.",
+    tools: [
+      "SQL data modeling",
+      "Point-of-sale interface",
+      "Daily reporting",
+      "Dedicated per-client deployment",
+    ],
+    results: [
+      "Ordering, kitchen flow, and daily takings unified in one system",
+      "Adapted per site, including bakery counter service",
+      // TODO(adel): add the measured closing/reconciliation time saved.
     ],
   },
 ];
@@ -108,6 +189,6 @@ export function getProjectBySlug(slug: string) {
   return projects.find((project) => project.slug === slug);
 }
 
-export function getAllCategories() {
+export function getAllCategories(): Sector[] {
   return Array.from(new Set(projects.map((project) => project.category)));
 }

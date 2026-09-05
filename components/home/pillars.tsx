@@ -1,47 +1,49 @@
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
-import { Compass, Layers, Zap } from "lucide-react";
+import { Blocks, Bot, DatabaseZap } from "lucide-react";
 
+// The three principles behind every OUAQT build, from the pitch deck.
 const pillars = [
   {
-    icon: Compass,
-    title: "Clarity first",
+    icon: Blocks,
+    title: "Built around the real workflow, not a template",
     description:
-      "We start every engagement by cutting scope to the smallest thing that proves the idea works.",
+      "Every system is designed from how your team actually works — including the language they work in. The GMM mining system runs French, Arabic, and English because that's how field crews log data.",
   },
   {
-    icon: Layers,
-    title: "Systems, not screens",
+    icon: Bot,
+    title: "AI does the repetitive work, people make the judgment calls",
     description:
-      "We design the underlying model before the interface, so what we ship holds up under real use.",
+      "The pharmacy tool auto-fills medicine records from historical entries. Automation absorbs the repetition; your staff handle the exceptions — the part that actually needs a person.",
   },
   {
-    icon: Zap,
-    title: "Built to last",
+    icon: DatabaseZap,
+    title: "Full migration, isolated per client",
     description:
-      "No throwaway prototypes. Everything we build is production-grade from the first commit.",
+      "Years of paper and spreadsheet history are migrated in, so nobody starts from a blank system. And no client's data ever touches another's.",
   },
 ];
 
 export function Pillars() {
   return (
-    <Section>
+    <Section className="border-t border-border">
       <Container>
-        <FadeIn>
-          <h2 className="max-w-lg text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            What we do
+        <FadeIn className="max-w-3xl">
+          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            The solution
+          </p>
+          <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+            Custom digital systems, built around how each business actually
+            works.
           </h2>
         </FadeIn>
 
-        <div className="mt-16 grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-8">
+        <div className="mt-16 grid grid-cols-1 gap-12 sm:grid-cols-3 sm:gap-10">
           {pillars.map((pillar, index) => (
             <FadeIn key={pillar.title} delay={index * 0.1}>
-              <pillar.icon
-                className="h-6 w-6 text-accent"
-                strokeWidth={1.5}
-              />
-              <h3 className="mt-5 text-lg font-medium tracking-tight text-foreground">
+              <pillar.icon className="h-6 w-6 text-accent" strokeWidth={1.5} />
+              <h3 className="mt-5 text-balance text-lg font-medium leading-snug tracking-tight text-foreground">
                 {pillar.title}
               </h3>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">

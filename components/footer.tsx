@@ -1,18 +1,19 @@
 import { Container } from "@/components/ui/container";
 import Link from "next/link";
 
+import { founder } from "@/lib/data/founder";
+
 const nav = [
   { href: "/", label: "Home" },
-  { href: "/projects", label: "Projects" },
+  { href: "/projects", label: "Systems" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
 
-// TODO(customize): swap in OUAQT's real social links
+// TODO(adel): replace with your actual LinkedIn profile URL — the deck links
+// to LinkedIn but doesn't include the handle.
 const social = [
-  { href: "https://twitter.com/ouaqt", label: "X / Twitter" },
-  { href: "https://linkedin.com/company/ouaqt", label: "LinkedIn" },
-  { href: "https://github.com/ouaqt", label: "GitHub" },
+  { href: "https://www.linkedin.com/", label: "LinkedIn" },
 ];
 
 export function Footer() {
@@ -24,8 +25,11 @@ export function Footer() {
             OUAQT
           </p>
           <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
-            We build quiet, deliberate software for teams who&rsquo;d rather
-            ship than explain.
+            Custom systems for businesses still running on paper, Excel, and
+            WhatsApp.
+          </p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            {founder.location}
           </p>
         </div>
 
@@ -61,12 +65,11 @@ export function Footer() {
               </li>
             ))}
             <li>
-              {/* TODO(customize): update contact email */}
               <a
-                href="mailto:hello@ouaqt.com"
+                href={`mailto:${founder.email}`}
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
-                hello@ouaqt.com
+                {founder.email}
               </a>
             </li>
           </ul>
@@ -74,8 +77,8 @@ export function Footer() {
       </Container>
 
       <Container className="flex flex-col gap-4 border-t border-border py-6 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>© {new Date().getFullYear()} OUAQT, Inc. All rights reserved.</p>
-        <p>Built with quiet ambition.</p>
+        <p>© {new Date().getFullYear()} OUAQT. All rights reserved.</p>
+        <p>Built in Nouakchott.</p>
       </Container>
     </footer>
   );
