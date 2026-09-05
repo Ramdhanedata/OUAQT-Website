@@ -5,7 +5,6 @@ import type { Config } from "tailwindcss";
 //   - Deep emerald:  { DEFAULT: "#10B981", foreground: "#04140F" }
 //   - Electric lime: { DEFAULT: "#C4F042", foreground: "#101400" }
 const config: Config = {
-  darkMode: "class",
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",

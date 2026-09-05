@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/logo";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n";
@@ -74,7 +73,6 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
 
         <div className="hidden items-center gap-3 md:flex">
           <LanguageSwitcher locale={lang} label={dict.nav.language} />
-          <ThemeToggle label={dict.nav.toggleTheme} />
           <Button
             href={localeHref(lang, "/contact")}
             variant="accent"
@@ -121,12 +119,11 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
                   {link.label}
                 </Link>
               ))}
-              <div className="mt-2 flex items-center justify-between px-3">
-                <ThemeToggle label={dict.nav.toggleTheme} />
+              <div className="mt-2 px-3">
                 <Button
                   href={localeHref(lang, "/contact")}
                   variant="accent"
-                  className="text-sm"
+                  className="w-full justify-center text-sm"
                 >
                   {dict.nav.cta}
                 </Button>

@@ -30,7 +30,6 @@ export const ar: Dictionary = {
     cta: "ابدأ مشروعاً",
     openMenu: "فتح القائمة",
     closeMenu: "إغلاق القائمة",
-    toggleTheme: "تغيير المظهر",
     language: "اللغة",
     homeAria: "«وقت» ـ الصفحة الرئيسية",
   },
