@@ -41,31 +41,31 @@ export const projects: Project[] = [
     slug: "gmm-mining",
     category: "Mining",
     year: "2025",
-    coverImage: "/images/projects/gmm-mining/cover.png",
+    coverImage: "/images/projects/gmm-mining/cover.webp",
   },
   {
     slug: "pharmacy-pos",
     category: "Pharmacy",
     year: "2025",
-    coverImage: "/images/projects/pharmacy-pos/cover.png",
+    coverImage: "/images/projects/pharmacy-pos/cover.webp",
   },
   {
     slug: "hotel-operations",
     category: "Hospitality",
     year: "2025",
-    coverImage: "/images/projects/hotel-operations/cover.png",
+    coverImage: "/images/projects/hotel-operations/cover.webp",
   },
   {
     slug: "transport-manifests",
     category: "Transport",
     year: "2025",
-    coverImage: "/images/projects/transport-manifests/cover.png",
+    coverImage: "/images/projects/transport-manifests/cover.webp",
   },
   {
     slug: "restaurant-pos",
     category: "Restaurant",
     year: "2025",
-    coverImage: "/images/projects/restaurant-pos/cover.png",
+    coverImage: "/images/projects/restaurant-pos/cover.webp",
   },
 ];
 

@@ -39,11 +39,11 @@ best. Leave `gallery` off entirely and the section simply won't render.
 
 ## Founder photo
 
-Drop a headshot at `public/images/founder.jpg`, then set `photo` in
+Drop a headshot at `public/images/founder.webp`, then set `photo` in
 `lib/data/founder.ts`:
 
 ```ts
-photo: "/images/founder.jpg",
+photo: "/images/founder.webp",
 ```
 
 Square crop. Until you set it, the About page shows an initials monogram.
