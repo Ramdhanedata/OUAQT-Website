@@ -3,9 +3,32 @@ import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
 import { credentials, founder } from "@/lib/data/founder";
+import { organization } from "@/lib/data/contact";
 import { ArrowRight, Mail, MapPin } from "lucide-react";
+import { LinkedInIcon } from "@/components/ui/social-icons";
 import Image from "next/image";
 import type { Metadata } from "next";
+import fs from "node:fs";
+import path from "node:path";
+
+/*
+ * Looks for the founder photo on disk at build time. Saving the file into
+ * public/images/ is enough to make it appear, with no code change. Falls back
+ * to an initials monogram when nothing is there, so the page never shows a
+ * broken image.
+ */
+function findFounderPhoto(): string | undefined {
+  const dir = path.join(process.cwd(), "public", "images");
+  for (const name of [
+    "founder.jpg",
+    "founder.jpeg",
+    "founder.png",
+    "founder.webp",
+  ]) {
+    if (fs.existsSync(path.join(dir, name))) return `/images/${name}`;
+  }
+  return undefined;
+}
 
 export const metadata: Metadata = {
   title: "About OUAQT",
@@ -28,6 +51,7 @@ const marketStats = [
 ];
 
 export default function AboutPage() {
+  const photo = findFounderPhoto();
   const initials = founder.name
     .split(" ")
     .map((part) => part[0])
@@ -96,18 +120,18 @@ export default function AboutPage() {
         <Container>
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-3 lg:gap-16">
             <FadeIn>
-              {founder.photo ? (
+              {photo ? (
                 <Image
-                  src={founder.photo}
+                  src={photo}
                   alt={founder.name}
-                  width={800}
-                  height={800}
+                  width={900}
+                  height={900}
                   sizes="(max-width: 1024px) 100vw, 33vw"
-                  className="aspect-square w-full rounded-2xl object-cover"
+                  /* object-top keeps the face in frame when a portrait photo
+                     is cropped to a square. */
+                  className="aspect-square w-full rounded-2xl object-cover object-top"
                 />
               ) : (
-                /* TODO(adel): save your photo to public/images/founder.jpg and
-                   set `photo` in lib/data/founder.ts to swap this monogram. */
                 <div className="bg-noise flex aspect-square w-full items-center justify-center rounded-2xl bg-gradient-to-br from-accent/25 via-muted to-background">
                   <span className="text-4xl font-semibold tracking-tight text-foreground/25">
                     {initials}
@@ -134,13 +158,22 @@ export default function AboutPage() {
                 </p>
               ))}
 
-              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-8">
+              <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-x-8">
                 <a
-                  href={`mailto:${founder.email}`}
+                  href={founder.linkedin}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
+                >
+                  <LinkedInIcon className="h-4 w-4 text-accent" />
+                  LinkedIn
+                </a>
+                <a
+                  href={`mailto:${organization.email}`}
                   className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
                 >
                   <Mail className="h-4 w-4 text-accent" />
-                  {founder.email}
+                  {organization.email}
                 </a>
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4 text-accent" />

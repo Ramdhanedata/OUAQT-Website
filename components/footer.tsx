@@ -2,19 +2,13 @@ import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/logo";
 import Link from "next/link";
 
-import { founder } from "@/lib/data/founder";
+import { organization, socialLinks } from "@/lib/data/contact";
 
 const nav = [
   { href: "/", label: "Home" },
   { href: "/projects", label: "Systems" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
-];
-
-// TODO(adel): replace with your actual LinkedIn profile URL. The deck links
-// to LinkedIn but doesn't include the handle.
-const social = [
-  { href: "https://www.linkedin.com/", label: "LinkedIn" },
 ];
 
 export function Footer() {
@@ -28,7 +22,7 @@ export function Footer() {
             WhatsApp.
           </p>
           <p className="mt-4 text-sm text-muted-foreground">
-            {founder.location}
+            {organization.location}
           </p>
         </div>
 
@@ -51,7 +45,7 @@ export function Footer() {
         <div>
           <p className="text-sm font-medium text-foreground">Connect</p>
           <ul className="mt-4 space-y-3">
-            {social.map((item) => (
+            {socialLinks.map((item) => (
               <li key={item.href}>
                 <a
                   href={item.href}
@@ -65,10 +59,10 @@ export function Footer() {
             ))}
             <li>
               <a
-                href={`mailto:${founder.email}`}
+                href={`mailto:${organization.email}`}
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
-                {founder.email}
+                {organization.email}
               </a>
             </li>
           </ul>

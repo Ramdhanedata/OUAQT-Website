@@ -2,8 +2,13 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
 import { ContactForm } from "@/components/contact/contact-form";
-import { founder } from "@/lib/data/founder";
+import { organization } from "@/lib/data/contact";
 import { Mail, MapPin } from "lucide-react";
+import {
+  FacebookIcon,
+  LinkedInIcon,
+  WhatsAppIcon,
+} from "@/components/ui/social-icons";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -32,15 +37,47 @@ export default function ContactPage() {
 
             <div className="mt-10 space-y-4">
               <a
-                href={`mailto:${founder.email}`}
+                href={organization.whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
                 className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
               >
-                <Mail className="h-4 w-4 text-accent" />
-                {founder.email}
+                <WhatsAppIcon className="h-4 w-4 shrink-0 text-accent" />
+                {organization.phoneDisplay}
+                <span className="text-xs text-muted-foreground">WhatsApp</span>
               </a>
+
+              <a
+                href={`mailto:${organization.email}`}
+                className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
+              >
+                <Mail className="h-4 w-4 shrink-0 text-accent" />
+                {organization.email}
+              </a>
+
+              <a
+                href={organization.linkedin}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
+              >
+                <LinkedInIcon className="h-4 w-4 shrink-0 text-accent" />
+                LinkedIn
+              </a>
+
+              <a
+                href={organization.facebook}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
+              >
+                <FacebookIcon className="h-4 w-4 shrink-0 text-accent" />
+                Facebook
+              </a>
+
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
-                <MapPin className="h-4 w-4 text-accent" />
-                {founder.location}
+                <MapPin className="h-4 w-4 shrink-0 text-accent" />
+                {organization.location}
               </div>
             </div>
           </FadeIn>
