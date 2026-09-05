@@ -26,10 +26,17 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        // Applied on <html> when the locale is Arabic. Inter has no Arabic
-        // glyphs, so without this Arabic falls back to a system font.
-        arabic: ["var(--font-arabic)", "var(--font-inter)", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],
+        // Applied on <html> when the locale is Arabic. Source Serif has no
+        // Arabic glyphs, so without this Arabic falls back to a system font.
+        arabic: ["var(--font-arabic)", "var(--font-serif)", "serif"],
+      },
+      letterSpacing: {
+        // Tailwind's default tracking-tight (-0.025em) is tuned for a
+        // geometric sans and crushes a serif at display sizes. Every heading
+        // already uses tracking-tight, so retuning it here fixes them all at
+        // once rather than editing twenty files.
+        tight: "-0.011em",
       },
       maxWidth: {
         container: "1200px",

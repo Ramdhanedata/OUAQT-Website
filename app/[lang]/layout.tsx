@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Noto_Kufi_Arabic } from "next/font/google";
+import { Source_Serif_4, Noto_Naskh_Arabic } from "next/font/google";
 import "../globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Navbar } from "@/components/navbar";
@@ -9,17 +9,25 @@ import { getDictionary } from "@/lib/i18n";
 import { isRtl, locales, type Locale } from "@/lib/i18n/config";
 import { notFound } from "next/navigation";
 
-// TODO(customize): swap for Geist (npm i geist) or General Sans via next/font/local
-// for an even more distinctive headline typeface once you have a license/package.
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
+/*
+ * Source Serif 4 stands in for the transitional serif on Anthropic's site
+ * (Copernicus / Tiempos). Those are commercially licensed and cannot be
+ * redistributed, so this is the closest freely licensed match: same
+ * transitional structure, moderate contrast, and a full variable weight axis.
+ *
+ * TODO(adel): if you buy a licence for Tiempos or similar, swap this for
+ * next/font/local and point it at the woff2 files. Nothing else changes.
+ */
+const serif = Source_Serif_4({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-serif",
   display: "swap",
 });
 
-// Inter has no Arabic glyphs, so Arabic would fall back to a system font and
-// look inconsistent. Noto Kufi Arabic keeps the same geometric feel.
-const notoKufi = Noto_Kufi_Arabic({
+// Source Serif has no Arabic glyphs. Noto Naskh is the serif-companion Naskh
+// face, so Arabic keeps the same bookish feel rather than dropping to a
+// geometric sans.
+const arabicSerif = Noto_Naskh_Arabic({
   subsets: ["arabic"],
   variable: "--font-arabic",
   display: "swap",
@@ -71,7 +79,9 @@ export default function RootLayout({ children, params }: Props) {
       suppressHydrationWarning
       className={rtl ? "font-arabic" : undefined}
     >
-      <body className={`${inter.variable} ${notoKufi.variable} font-sans antialiased`}>
+      <body
+        className={`${serif.variable} ${arabicSerif.variable} font-serif antialiased`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
