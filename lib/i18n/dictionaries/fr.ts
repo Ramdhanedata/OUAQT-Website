@@ -4,10 +4,10 @@ export const fr: Dictionary = {
   meta: {
     siteTitle: "OUAQT | Des systèmes sur mesure pour vos processus réels",
     siteDescription:
-      "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent encore au papier, à Excel et à WhatsApp. Cinq produits en production dans les mines, la pharmacie, l'hôtellerie, le transport et la restauration.",
+      "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent encore au papier, à Excel et à WhatsApp. Six produits en production dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
     projectsTitle: "Projets | OUAQT",
     projectsDescription:
-      "Cinq systèmes en production, conçus pour des clients dans les mines, la pharmacie, l'hôtellerie, le transport et la restauration.",
+      "Six systèmes en production, conçus pour des clients dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
     aboutTitle: "À propos d'OUAQT",
     aboutDescription:
       "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent au papier, à Excel et à WhatsApp. Fondée par Elboumby Aumar Ramdhane à Nouakchott, Mauritanie.",
@@ -98,7 +98,7 @@ export const fr: Dictionary = {
 
   featured: {
     heading: "Projets en production",
-    body: "Cinq produits en production, chacun conçu pour une entreprise et sa façon réelle de fonctionner.",
+    body: "Six produits en production, chacun conçu pour une entreprise et sa façon réelle de fonctionner.",
     cta: "Voir tous les projets",
   },
 
@@ -111,8 +111,8 @@ export const fr: Dictionary = {
 
   projectsPage: {
     eyebrow: "Projets",
-    heading: "Cinq entreprises, cinq systèmes, aucun modèle générique.",
-    body: "Chaque projet part du fonctionnement réel de l'entreprise, pas d'un produit déjà prêt sur l'étagère. Nous cartographions le travail quotidien, modélisons les données qui le sous-tendent, migrons des années d'historique papier et tableur, et déployons chaque système sur son propre environnement isolé. Mines, pharmacie, hôtellerie, transport et restauration à ce jour.",
+    heading: "Six entreprises, six systèmes, aucun modèle générique.",
+    body: "Chaque projet part du fonctionnement réel de l'entreprise, pas d'un produit déjà prêt sur l'étagère. Nous cartographions le travail quotidien, modélisons les données qui le sous-tendent, migrons des années d'historique papier et tableur, et déployons chaque système sur son propre environnement isolé. Mines, pharmacie, hôtellerie, transport, restauration et éducation à ce jour.",
     all: "Tous",
   },
 
@@ -134,13 +134,14 @@ export const fr: Dictionary = {
     Hospitality: "Hôtellerie",
     Transport: "Transport",
     Restaurant: "Restauration",
+    Education: "Éducation",
   },
 
   about: {
     eyebrow: "À propos d'OUAQT",
     heading: "Un manque structurel, pas le problème d'un seul secteur.",
     body1:
-      "Dans les mines, la pharmacie, l'hôtellerie, le transport et la restauration, le même schéma revient. Des entreprises compétentes qui pilotent des opérations critiques au papier, au tableur et par messagerie de groupe. Non pas parce que cela fonctionne, mais parce que personne ne leur a jamais conçu de logiciel adapté à leur façon réelle de travailler.",
+      "Dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation, le même schéma revient. Des entreprises compétentes qui pilotent des opérations critiques au papier, au tableur et par messagerie de groupe. Non pas parce que cela fonctionne, mais parce que personne ne leur a jamais conçu de logiciel adapté à leur façon réelle de travailler.",
     body2:
       "OUAQT existe pour combler ce manque, une entreprise à la fois, avec un système conçu autour du processus réel d'un seul client, de son historique réel et des langues que son équipe utilise vraiment.",
     marketHeading: "Ce manque se mesure.",
@@ -172,9 +173,9 @@ export const fr: Dictionary = {
           "Sélectionné parmi la promotion régionale, et conférencier principal au Knowledge Summit de Dubaï la même année.",
       },
       sectors: {
-        title: "Des systèmes en production dans cinq secteurs",
+        title: "Des systèmes en production dans six secteurs",
         detail:
-          "Mines, pharmacie, hôtellerie, transport et restauration, chacun sur son propre déploiement dédié.",
+          "Mines, pharmacie, hôtellerie, transport, restauration et éducation, chacun sur son propre déploiement dédié.",
       },
     },
     ctaHeading: "Dites-nous ce qui ralentit votre entreprise.",
@@ -324,6 +325,30 @@ export const fr: Dictionary = {
       results: [
         "Manifestes de contrôle générés à partir des données de voyage et de cargaison existantes",
         "Préparation avant départ réduite à une simple relecture",
+      ],
+    },
+    "school-operations": {
+      title: "SchoolOS, dossiers élèves et scolarité",
+      summary:
+        "Un seul système pour les élèves, les enseignants, la scolarité, les présences et la caisse de l'établissement, fonctionnant hors ligne sur les postes de l'école.",
+      description:
+        "Un groupe scolaire privé suivait les inscriptions, les frais, les présences et les recettes de la boutique dans des registres et des tableurs séparés. SchoolOS réunit le tout au même endroit, sur les postes que le personnel utilise déjà.",
+      client: "Écoles Al-Baraka · Éducation",
+      role: "Modélisation des données, architecture système, migration de l'historique, déploiement",
+      problem:
+        "Les dossiers élèves, la scolarité, les présences et la caisse de la boutique vivaient chacun ailleurs. Répondre à une question aussi simple que « quelles familles doivent encore des frais » exigeait de recouper plusieurs registres à la main, et les présences n'étaient à jour que jusqu'à la dernière recopie.",
+      solution:
+        "Un système unique couvrant les élèves, les enseignants, la scolarité, les présences, les finances et la caisse. C'est une application de bureau avec sa propre base de données locale, elle continue donc de fonctionner quand la connexion, elle, s'arrête, ce qui compte sur un campus qui ne peut pas compter sur internet.",
+      tags: ["Dossiers élèves", "Scolarité & frais", "Présences"],
+      tools: [
+        "Application de bureau Electron",
+        "Base de données SQLite locale",
+        "Fonctionne hors ligne, sans connexion",
+        "Déploiement dédié par client",
+      ],
+      results: [
+        "Élèves, enseignants, scolarité et présences dans un seul système",
+        "Fonctionne hors ligne sur les postes de l'école",
       ],
     },
     "restaurant-pos": {

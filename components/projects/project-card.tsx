@@ -6,14 +6,15 @@ import { ArrowUpRight, Image as ImageIcon } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-// One accent hue at varying intensity keeps the five sectors reading as a
-// family rather than five unrelated treatments.
+// One accent hue at varying intensity keeps the six sectors reading as a
+// family rather than six unrelated treatments.
 const hues: Record<Project["category"], string> = {
   Mining: "from-accent/40 via-accent/10 to-transparent",
   Pharmacy: "from-accent/30 via-accent/8 to-transparent",
   Hospitality: "from-accent/25 via-accent/5 to-transparent",
   Transport: "from-accent/20 via-accent/5 to-transparent",
   Restaurant: "from-accent/15 via-accent/5 to-transparent",
+  Education: "from-accent/35 via-accent/8 to-transparent",
 };
 
 export function ProjectCard({

@@ -7,8 +7,8 @@ import type { Dictionary } from "@/lib/i18n";
 // TODO(adel): update the live-system count as you take on new clients.
 export function ImpactBar({ dict }: { dict: Dictionary }) {
   const stats = [
-    { value: "5", label: dict.impact.liveSystems },
-    { value: "5", label: dict.impact.sectors },
+    { value: "6", label: dict.impact.liveSystems },
+    { value: "6", label: dict.impact.sectors },
     { value: "90%", label: dict.impact.reduction },
     { value: dict.impact.buildTimeValue, label: dict.impact.buildTime },
   ];
