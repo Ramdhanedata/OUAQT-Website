@@ -2,7 +2,7 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
 import type { Dictionary } from "@/lib/i18n";
-import { Armchair, Ear, Hammer, LifeBuoy } from "lucide-react";
+import { Ear, Hammer, LifeBuoy } from "lucide-react";
 
 /*
  * How an engagement actually runs. Numbered here on purpose: unlike the three
@@ -10,7 +10,6 @@ import { Armchair, Ear, Hammer, LifeBuoy } from "lucide-react";
  */
 export function Process({ dict }: { dict: Dictionary }) {
   const steps = [
-    { icon: Armchair, ...dict.process.steps.sit },
     { icon: Ear, ...dict.process.steps.listen },
     { icon: Hammer, ...dict.process.steps.build },
     { icon: LifeBuoy, ...dict.process.steps.stay },
@@ -31,7 +30,7 @@ export function Process({ dict }: { dict: Dictionary }) {
           </p>
         </FadeIn>
 
-        <ol className="mt-16 grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
+        <ol className="mt-16 grid grid-cols-1 gap-10 sm:grid-cols-3 sm:gap-8">
           {steps.map((step, index) => (
             <FadeIn key={step.title} delay={index * 0.08}>
               <li className="list-none">

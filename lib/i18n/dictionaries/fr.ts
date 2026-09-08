@@ -152,13 +152,9 @@ export const fr: Dictionary = {
     heading: "Nous commençons par nous asseoir avec vous.",
     body: "Aucun formulaire à remplir, aucun cahier des charges à rédiger. Nous venons chez vous, et le travail part de ce que nous voyons.",
     steps: {
-      sit: {
-        title: "Nous venons observer la journée",
-        body: "Nous passons du temps dans votre entreprise avec votre équipe, pour voir la journée telle qu'elle se déroule vraiment, pas telle qu'elle devrait se dérouler.",
-      },
       listen: {
-        title: "Nous parlons de ce qui coince",
-        body: "Là où les choses dérapent, ce qui se fait deux fois, les chiffres auxquels personne ne se fie tout à fait. Vous connaissez votre métier mieux que nous, alors surtout nous écoutons.",
+        title: "Nous nous asseyons avec vous et nous écoutons",
+        body: "Nous venons chez vous et passons du temps avec votre équipe, pour voir la journée telle qu'elle se déroule vraiment et non telle qu'elle devrait. Là où les choses dérapent, ce qui se fait deux fois, les chiffres auxquels personne ne se fie tout à fait. Vous connaissez votre métier mieux que nous, alors surtout nous écoutons.",
       },
       build: {
         title: "Nous construisons autour de votre processus",
@@ -177,7 +173,7 @@ export const fr: Dictionary = {
     items: {
       duration: {
         q: "Combien de temps cela prend-il ?",
-        a: "Une fois votre processus compris, la plupart des systèmes fonctionnent en quelques jours. Les plus gros prennent davantage, et nous vous le disons franchement avant tout engagement.",
+        a: "Nous passons la première journée avec vous, à comprendre comment le travail se déroule vraiment. Ensuite, la plupart des systèmes sont prêts en 48 à 72 heures. Si le vôtre est plus grand et demande davantage, nous vous le disons avant tout engagement.",
       },
       offline: {
         q: "Et si internet tombe ?",
