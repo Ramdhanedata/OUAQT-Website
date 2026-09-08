@@ -2,7 +2,10 @@ export const locales = ["en", "fr", "ar"] as const;
 
 export type Locale = (typeof locales)[number];
 
-export const defaultLocale: Locale = "en";
+// French is the default: OUAQT sells in Mauritania, where business runs in
+// French and Arabic. A visitor whose browser states no preference should not
+// land on English.
+export const defaultLocale: Locale = "fr";
 
 /** Short code shown inside the navbar switcher. */
 export const localeShortNames: Record<Locale, string> = {

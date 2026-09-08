@@ -5,6 +5,7 @@ import { ProjectsGrid } from "@/components/projects/projects-grid";
 import { getAllCategories, projects } from "@/lib/data/projects";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
+import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 
 type Props = { params: { lang: Locale } };
@@ -14,6 +15,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title: dict.meta.projectsTitle,
     description: dict.meta.projectsDescription,
+    alternates: alternatesFor(params.lang, "/projects"),
   };
 }
 

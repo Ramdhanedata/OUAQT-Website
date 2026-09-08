@@ -8,6 +8,7 @@ import { getDictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
 import { ArrowRight, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
+import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 import fs from "node:fs";
 import path from "node:path";
@@ -38,6 +39,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title: dict.meta.aboutTitle,
     description: dict.meta.aboutDescription,
+    alternates: alternatesFor(params.lang, "/about"),
   };
 }
 

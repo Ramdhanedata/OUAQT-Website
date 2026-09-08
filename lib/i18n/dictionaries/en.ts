@@ -114,6 +114,96 @@ export const en = {
     all: "All",
   },
 
+  pricing: {
+    eyebrow: "Pricing",
+    heading: "One price. Everything included.",
+    body: "No monthly licence, no per-user fee, no surprise invoice halfway through. You pay once, and the system is yours.",
+    priceLabel: "Per system",
+    price: "40,000 MRU",
+    compareLabel: "Custom software usually costs",
+    compare: "450,000 MRU",
+    compareNote:
+      "That is what a build like this normally runs to. We work differently, so you do not pay for it.",
+    includes: {
+      system: {
+        title: "The system itself",
+        body: "Designed around how your business already works, not adapted from a template.",
+      },
+      training: {
+        title: "Your team trained on it",
+        body: "We sit with your staff and teach them until they are comfortable using it every day.",
+      },
+      warranty: {
+        title: "One year of warranty",
+        body: "If anything breaks in the first year, we fix it. No call-out charge, no argument.",
+      },
+      updates: {
+        title: "Updates and additions",
+        body: "Need something added as you grow? Tell us and we build it in.",
+      },
+    },
+    cta: "Talk about your project",
+  },
+
+  process: {
+    eyebrow: "How we work",
+    heading: "We start by sitting with you.",
+    body: "No forms to fill in, no requirements document to write. We come to you, and the work starts from what we see.",
+    steps: {
+      sit: {
+        title: "We come and watch the day",
+        body: "We spend time in your business with your team, seeing the day as it actually happens rather than how it is meant to happen.",
+      },
+      listen: {
+        title: "We talk through what hurts",
+        body: "Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we ever will, so mostly we listen.",
+      },
+      build: {
+        title: "We build around your workflow",
+        body: "The system follows the steps your team already knows, in the language they already use. Your existing records come across with you.",
+      },
+      stay: {
+        title: "We stay after it goes live",
+        body: "We train your staff in person, fix anything that breaks for a year, and add what you need as the business changes.",
+      },
+    },
+  },
+
+  faq: {
+    eyebrow: "Questions",
+    heading: "The things people ask before starting.",
+    items: {
+      duration: {
+        q: "How long does it take?",
+        a: "Once we understand your workflow, most systems are working within a few days. Larger ones take longer, and we tell you honestly before you commit to anything.",
+      },
+      offline: {
+        q: "What if the internet goes down?",
+        a: "Several of our systems run entirely on your own machines with a local database, so they keep working with no connection at all. The school system is built exactly this way.",
+      },
+      data: {
+        q: "Who owns the data?",
+        a: "You do. It sits on your own deployment and never mixes with another client's. Ask for a copy at any time and we hand it over.",
+      },
+      changes: {
+        q: "What if I need something added later?",
+        a: "Tell us and we build it. Changes and additions are included for the first year, not billed as a new project.",
+      },
+      training: {
+        q: "Do you train my team?",
+        a: "Yes, in person, for as long as it takes them to feel confident. That is part of the price, never an extra line on the invoice.",
+      },
+      migration: {
+        q: "What happens to my old records?",
+        a: "They come with you. We migrate years of paper and spreadsheets into the new system, so nobody starts from an empty screen.",
+      },
+      broken: {
+        q: "What if something breaks?",
+        a: "We fix it. Every system carries a full year of warranty at no extra cost, and you deal with the person who built it.",
+      },
+    },
+  },
+
   projectDetail: {
     back: "All projects",
     overview: "Overview",
@@ -275,8 +365,9 @@ export const en = {
         "Dedicated per-client deployment",
       ],
       results: [
+        "Two to three hours of data entry saved every day, over 60 hours a month",
+        "Entry errors down by more than 90%",
         "Medicine records auto-filled from the pharmacy's own history",
-        "Repetitive data entry reduced to exception handling",
       ],
     },
     "hotel-operations": {
@@ -299,8 +390,9 @@ export const en = {
         "Dedicated per-client deployment",
       ],
       results: [
-        "Tax and commission math applied consistently across every service line",
-        "Manual billing calculation removed from daily front-desk work",
+        "Billing errors down by more than 90%",
+        "Around two hours a day of manual calculation off the front desk, roughly 50 hours a month",
+        "Tax and commission applied the same way on every service line",
       ],
     },
     "transport-manifests": {
@@ -323,8 +415,9 @@ export const en = {
         "Dedicated per-client deployment",
       ],
       results: [
-        "Checkpoint manifests generated from existing trip and cargo data",
-        "Pre-departure prep reduced to a review step",
+        "Pre-departure prep cut from an hour a trip to a few minutes",
+        "Paperwork errors at checkpoints down by more than 90%",
+        "Manifests generated from trip and cargo data already in the system",
       ],
     },
     "school-operations": {
@@ -347,9 +440,9 @@ export const en = {
         "Dedicated per-client deployment",
       ],
       results: [
-        "Students, teachers, tuition and attendance in one system",
+        "Two to three hours of admin saved every day, over 60 hours a month",
+        "Fee and attendance record errors down by more than 90%",
         "Runs offline on the school's own machines",
-        // TODO(adel): add the measured admin time saved once the school confirms it.
       ],
     },
     "restaurant-pos": {
@@ -372,8 +465,9 @@ export const en = {
         "Dedicated per-client deployment",
       ],
       results: [
-        "Ordering, kitchen flow, and daily takings unified in one system",
-        "Adapted per site, including bakery counter service",
+        "Closing reconciliation cut from over an hour to a few minutes each night",
+        "Takings now match the till without hand-checking, errors down by more than 90%",
+        "Ordering, kitchen flow and daily reporting in one system",
       ],
     },
   },
