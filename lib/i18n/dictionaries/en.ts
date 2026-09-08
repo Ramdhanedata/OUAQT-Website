@@ -150,13 +150,9 @@ export const en = {
     heading: "We start by sitting with you.",
     body: "No forms to fill in, no requirements document to write. We come to you, and the work starts from what we see.",
     steps: {
-      sit: {
-        title: "We come and watch the day",
-        body: "We spend time in your business with your team, seeing the day as it actually happens rather than how it is meant to happen.",
-      },
       listen: {
-        title: "We talk through what hurts",
-        body: "Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we ever will, so mostly we listen.",
+        title: "We sit with you and listen",
+        body: "We come to you and spend time with your team, watching the day as it actually happens rather than how it is meant to. Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we ever will, so mostly we listen.",
       },
       build: {
         title: "We build around your workflow",
@@ -175,7 +171,7 @@ export const en = {
     items: {
       duration: {
         q: "How long does it take?",
-        a: "Once we understand your workflow, most systems are working within a few days. Larger ones take longer, and we tell you honestly before you commit to anything.",
+        a: "We spend the first day with you, understanding how the work actually runs. After that, most systems are ready in 48 to 72 hours. If yours is larger and needs longer, we say so before you commit to anything.",
       },
       offline: {
         q: "What if the internet goes down?",
