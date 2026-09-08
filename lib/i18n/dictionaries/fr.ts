@@ -4,10 +4,10 @@ export const fr: Dictionary = {
   meta: {
     siteTitle: "OUAQT | Des systèmes sur mesure pour vos processus réels",
     siteDescription:
-      "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent encore au papier, à Excel et à WhatsApp. Six produits en production dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
+      "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent encore au papier, à Excel et à WhatsApp. 22 systèmes en production dans six secteurs, des mines et de la pharmacie à l'hôtellerie, au transport, à la restauration et à l'éducation.",
     projectsTitle: "Projets | OUAQT",
     projectsDescription:
-      "Six systèmes en production, conçus pour des clients dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
+      "22 systèmes en production dans six secteurs, conçus pour des clients dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
     aboutTitle: "À propos d'OUAQT",
     aboutDescription:
       "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent au papier, à Excel et à WhatsApp. Fondée par Elboumby Aumar Ramdhane à Nouakchott, Mauritanie.",
@@ -104,7 +104,7 @@ export const fr: Dictionary = {
 
   featured: {
     heading: "Projets en production",
-    body: "Six produits en production, chacun conçu pour une entreprise et sa façon réelle de fonctionner.",
+    body: "22 systèmes en production, chacun conçu pour une entreprise et sa façon réelle de fonctionner.",
     cta: "Voir tous les projets",
   },
 
@@ -117,8 +117,8 @@ export const fr: Dictionary = {
 
   projectsPage: {
     eyebrow: "Projets",
-    heading: "Six entreprises, six systèmes, aucun modèle générique.",
-    body: "Chaque projet part du fonctionnement réel de l'entreprise, pas d'un produit déjà prêt sur l'étagère. Nous cartographions le travail quotidien, modélisons les données qui le sous-tendent, migrons des années d'historique papier et tableur, et déployons chaque système sur son propre environnement isolé. Mines, pharmacie, hôtellerie, transport, restauration et éducation à ce jour.",
+    heading: "22 systèmes en production, aucun modèle générique.",
+    body: "Chaque projet part du fonctionnement réel de l'entreprise, pas d'un produit déjà prêt sur l'étagère. Nous cartographions le travail quotidien, modélisons les données qui le sous-tendent, migrons des années d'historique papier et tableur, et déployons chaque système sur son propre environnement isolé. Mines, pharmacie, hôtellerie, transport, restauration et éducation à ce jour, dont une sélection ci-dessous.",
     all: "Tous",
   },
 

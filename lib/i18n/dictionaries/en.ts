@@ -6,10 +6,10 @@ export const en = {
   meta: {
     siteTitle: "OUAQT | Custom systems for real business workflows",
     siteDescription:
-      "OUAQT builds custom systems for businesses still running on paper, Excel, and WhatsApp. Six live products across mining, pharmacy, hospitality, transport, food service, and education.",
+      "OUAQT builds custom systems for businesses still running on paper, Excel, and WhatsApp. 22 live systems across six sectors, from mining and pharmacy to hospitality, transport, food service, and education.",
     projectsTitle: "Projects | OUAQT",
     projectsDescription:
-      "Six live systems built for mining, pharmacy, hospitality, transport, food service, and education clients.",
+      "22 live systems across six sectors, built for clients in mining, pharmacy, hospitality, transport, food service, and education.",
     aboutTitle: "About OUAQT",
     aboutDescription:
       "OUAQT builds custom systems for businesses running on paper, Excel, and WhatsApp. Founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
@@ -102,7 +102,7 @@ export const en = {
 
   featured: {
     heading: "Projects in production",
-    body: "Six live products, each built for one business and the way it actually runs.",
+    body: "22 live systems, each built for one business and the way it actually runs.",
     cta: "View all projects",
   },
 
@@ -115,8 +115,8 @@ export const en = {
 
   projectsPage: {
     eyebrow: "Projects",
-    heading: "Six businesses, six systems, no templates.",
-    body: "Every build starts with how the business already runs, not with a product we had sitting on a shelf. We map the daily workflow, model the data behind it, migrate years of paper and spreadsheet history, and run each system on its own isolated deployment. Mining, pharmacy, hospitality, transport, food service and education so far.",
+    heading: "22 systems in production, no templates.",
+    body: "Every build starts with how the business already runs, not with a product we had sitting on a shelf. We map the daily workflow, model the data behind it, migrate years of paper and spreadsheet history, and run each system on its own isolated deployment. Mining, pharmacy, hospitality, transport, food service and education so far, with a selection of the work below.",
     all: "All",
   },
 
