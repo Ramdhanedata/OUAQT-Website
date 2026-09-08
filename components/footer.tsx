@@ -14,6 +14,11 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
     { href: "/contact", label: dict.nav.contact },
   ];
 
+  const legal = [
+    { href: "/terms", label: dict.footer.terms },
+    { href: "/privacy", label: dict.footer.privacy },
+  ];
+
   return (
     <footer className="border-t border-border">
       <Container className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-3">
@@ -78,6 +83,18 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
         <p>
           © {new Date().getFullYear()} {dict.footer.brand}. {dict.footer.rights}
         </p>
+        <ul className="flex flex-wrap gap-x-6 gap-y-2">
+          {legal.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={localeHref(lang, item.href)}
+                className="transition-colors hover:text-foreground"
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
       </Container>
     </footer>
   );

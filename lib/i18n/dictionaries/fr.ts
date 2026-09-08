@@ -14,6 +14,12 @@ export const fr: Dictionary = {
     contactTitle: "Contact | OUAQT",
     contactDescription:
       "Expliquez-nous comment votre entreprise fonctionne aujourd'hui, et où un système sur mesure ferait gagner le plus de temps.",
+    termsTitle: "Licence et conditions d'utilisation | OUAQT",
+    termsDescription:
+      "À qui appartient un système OUAQT, ce que votre licence autorise, et les conditions de garantie, d'assistance et de données qui l'accompagnent.",
+    privacyTitle: "Politique de confidentialité | OUAQT",
+    privacyDescription:
+      "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
   },
 
   nav: {
@@ -119,7 +125,7 @@ export const fr: Dictionary = {
   pricing: {
     eyebrow: "Tarifs",
     heading: "Un seul prix. Tout compris.",
-    body: "Pas de licence mensuelle, pas de frais par utilisateur, pas de facture surprise en cours de route. Vous payez une fois, et le système est à vous.",
+    body: "Pas de licence mensuelle, pas de frais par utilisateur, pas de facture surprise en cours de route. Vous payez une fois, et le système tourne aussi longtemps que vous en avez besoin.",
     priceLabel: "Par système",
     price: "40 000 MRU",
     compareLabel: "Prix habituel",
@@ -198,6 +204,89 @@ export const fr: Dictionary = {
       broken: {
         q: "Et si quelque chose casse ?",
         a: "Nous le réparons. Chaque système est garanti un an sans frais supplémentaires, et vous parlez directement à la personne qui l'a construit.",
+      },
+    },
+  },
+
+  legal: {
+    updated: "Dernière mise à jour",
+    updatedDate: "Septembre 2026",
+    terms: {
+      title: "Licence et conditions d'utilisation",
+      intro:
+        "Ces conditions couvrent les logiciels qu'OUAQT conçoit et déploie pour vous. Elles accompagnent le contrat écrit de votre projet. En cas de divergence, votre contrat prévaut.",
+      ownership: {
+        h: "Le logiciel nous appartient",
+        b: "OUAQT est propriétaire du système, de son code source, de sa conception et de sa documentation, ainsi que de tout ce qui y sera ajouté par la suite. Le paiement d'un projet ne transfère pas cette propriété.",
+      },
+      licence: {
+        h: "Vous disposez d'une licence d'utilisation",
+        b: "Vous recevez une licence permanente et non exclusive pour exploiter le système au sein de votre entreprise, sur les sites et pour les employés convenus dans votre projet. Rien ne se renouvelle et aucun frais récurrent ne s'applique.",
+      },
+      restrictions: {
+        h: "Ce que la licence n'autorise pas",
+        b: "La licence est réservée à votre entreprise. À ce titre, vous ne pouvez pas :",
+        items: [
+          "vendre, louer, prêter ou céder le système à un tiers",
+          "en donner l'accès à une autre entreprise, y compris une société liée, sans notre accord écrit",
+          "copier le logiciel ou l'installer au-delà des sites couverts par votre projet",
+          "le décomposer, le décompiler ou tenter d'en récupérer le code source",
+          "retirer ou modifier une mention ou un nom OUAQT qu'il contient",
+          "l'utiliser pour créer ou aider un produit concurrent",
+        ],
+      },
+      yourData: {
+        h: "Vos données restent les vôtres",
+        b: "Tout ce que votre entreprise saisit dans le système, et tout ce que nous y migrons, vous appartient. Nous ne le vendons pas, ne l'utilisons que pour faire fonctionner et soutenir votre système, et ne le mélangeons jamais aux données d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
+      },
+      warranty: {
+        h: "Garantie",
+        b: "Chaque système est garanti un an à compter de sa mise en service. Si quelque chose casse en usage normal durant cette année, nous le réparons sans frais. La garantie ne couvre pas les modifications faites par un tiers, ni les pannes de matériel ou de réseau extérieures au système.",
+      },
+      support: {
+        h: "Assistance, formation et mises à jour",
+        b: "La formation de vos employés est comprise, tout comme les mises à jour et les ajouts demandés durant la première année. Au-delà, tout travail supplémentaire fait l'objet d'un accord distinct, et vous n'êtes jamais tenu de l'acheter.",
+      },
+      termination: {
+        h: "Fin de la licence",
+        b: "La licence ne prend fin que si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement. Le cas échéant, vous devez cesser d'utiliser le système, et nous vous remettons malgré tout une copie complète de vos données.",
+      },
+      law: {
+        h: "Droit applicable",
+        b: "Ces conditions relèvent du droit de la République Islamique de Mauritanie, et tout litige est porté devant les tribunaux de Nouakchott.",
+      },
+    },
+    privacy: {
+      title: "Politique de confidentialité",
+      intro:
+        "Ce qu'OUAQT fait des informations personnelles, sur ce site comme dans les systèmes que nous construisons.",
+      collect: {
+        h: "Ce que ce site collecte",
+        b: "Uniquement ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail, votre message et la langue que vous lisiez. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
+      },
+      why: {
+        h: "Pourquoi nous le collectons",
+        b: "Pour lire votre demande et y répondre. Rien d'autre. Vous n'êtes inscrit à aucune liste de diffusion.",
+      },
+      sharing: {
+        h: "Qui d'autre y a accès",
+        b: "Votre message transite par le service qui achemine nos e-mails afin d'arriver dans notre boîte, et ce site est hébergé par Vercel. Ni l'un ni l'autre n'est autorisé à utiliser vos informations à ses propres fins. Nous ne les vendons jamais et ne les transmettons à personne.",
+      },
+      retention: {
+        h: "Combien de temps nous le gardons",
+        b: "Votre message reste dans notre messagerie tant que l'échange est utile. Demandez-nous de le supprimer et nous le ferons.",
+      },
+      clientSystems: {
+        h: "Les données dans les systèmes que nous construisons",
+        b: "Quand nous construisons un système pour votre entreprise, les données qu'il contient sont les vôtres, pas les nôtres. Elles résident sur votre propre déploiement, séparées de celles de tout autre client. Nous ne les consultons que si vous nous le demandez pour une assistance, jamais pour autre chose.",
+      },
+      rights: {
+        h: "Vos droits",
+        b: "Demandez ce que nous détenons à votre sujet, demandez-en une copie, ou demandez-nous de le supprimer. Écrivez à l'adresse ci-dessous et nous donnons suite.",
+      },
+      contact: {
+        h: "Nous écrire",
+        b: "Toute question sur cette politique, ou sur ce que nous détenons, à ouaqt.mrt@gmail.com.",
       },
     },
   },
@@ -307,6 +396,9 @@ export const fr: Dictionary = {
     connect: "Nous suivre",
     brand: "OUAQT",
     rights: "Tous droits réservés.",
+    legal: "Mentions légales",
+    terms: "Licence et conditions",
+    privacy: "Politique de confidentialité",
   },
 
   notFound: {

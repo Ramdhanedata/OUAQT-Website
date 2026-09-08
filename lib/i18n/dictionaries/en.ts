@@ -16,6 +16,12 @@ export const en = {
     contactTitle: "Contact | OUAQT",
     contactDescription:
       "Tell OUAQT how your business runs today, and where a custom system would save the most time.",
+    termsTitle: "Licence and terms of use | OUAQT",
+    termsDescription:
+      "Who owns an OUAQT system, what your licence allows, and the warranty, support and data terms that come with it.",
+    privacyTitle: "Privacy policy | OUAQT",
+    privacyDescription:
+      "What OUAQT does with personal information, on this website and inside the systems we build.",
   },
 
   nav: {
@@ -117,7 +123,7 @@ export const en = {
   pricing: {
     eyebrow: "Pricing",
     heading: "One price. Everything included.",
-    body: "No monthly licence, no per-user fee, no surprise invoice halfway through. You pay once, and the system is yours.",
+    body: "No monthly licence, no per-user fee, no surprise invoice halfway through. You pay once, and it runs for as long as you need it.",
     priceLabel: "Per system",
     price: "40,000 MRU",
     compareLabel: "Regular price",
@@ -196,6 +202,89 @@ export const en = {
       broken: {
         q: "What if something breaks?",
         a: "We fix it. Every system carries a full year of warranty at no extra cost, and you deal with the person who built it.",
+      },
+    },
+  },
+
+  legal: {
+    updated: "Last updated",
+    updatedDate: "September 2026",
+    terms: {
+      title: "Licence and terms of use",
+      intro:
+        "These terms cover software OUAQT builds and deploys for you. They sit alongside the written agreement for your project. Where the two differ, your agreement wins.",
+      ownership: {
+        h: "We own the software",
+        b: "OUAQT owns the system, its source code, its design and its documentation, along with anything added to it later. Paying for a project does not transfer that ownership.",
+      },
+      licence: {
+        h: "You hold a licence to use it",
+        b: "You receive a permanent, non-exclusive licence to run the system inside your own business, at the sites and for the staff agreed in your project. Nothing renews and there is no recurring fee.",
+      },
+      restrictions: {
+        h: "What the licence does not allow",
+        b: "The licence is for your business alone. Under it you may not:",
+        items: [
+          "sell, rent, lend or otherwise pass the system to anyone else",
+          "give access to another business, including a related company, without our written agreement",
+          "copy the software, or install it beyond the sites covered by your project",
+          "take it apart, decompile it, or attempt to recover the source code",
+          "remove or alter any OUAQT name or notice inside it",
+          "use it to build or assist a competing product",
+        ],
+      },
+      yourData: {
+        h: "Your data stays yours",
+        b: "Everything your business puts into the system, and everything we migrate into it, belongs to you. We do not sell it, do not use it for anything beyond running and supporting your system, and never mix it with another client's. Ask for a copy at any time and we hand it over.",
+      },
+      warranty: {
+        h: "Warranty",
+        b: "Every system carries one year of warranty from the day it goes live. If something breaks in normal use during that year, we fix it at no charge. The warranty does not cover changes made by someone else, or hardware and network faults outside the system.",
+      },
+      support: {
+        h: "Support, training and updates",
+        b: "Training your staff is included. So are updates and additions you ask for during the first year. After that we agree any further work separately, and you are never obliged to buy it.",
+      },
+      termination: {
+        h: "If the licence ends",
+        b: "The licence ends only if these terms are broken in a serious way and the problem is not put right after we raise it. If that happens you must stop using the system, and we will still give you a complete copy of your own data.",
+      },
+      law: {
+        h: "Governing law",
+        b: "These terms are governed by the law of the Islamic Republic of Mauritania, and any dispute is heard by the courts of Nouakchott.",
+      },
+    },
+    privacy: {
+      title: "Privacy policy",
+      intro:
+        "What OUAQT does with personal information, both on this website and inside the systems we build.",
+      collect: {
+        h: "What this website collects",
+        b: "Only what you type into the contact form: your name, your email address, your message, and which language you were reading in. There are no advertising trackers and no third-party analytics on this site.",
+      },
+      why: {
+        h: "Why we collect it",
+        b: "To read your enquiry and reply to it. Nothing else. You are not added to any mailing list.",
+      },
+      sharing: {
+        h: "Who else sees it",
+        b: "Your message passes through the service that delivers our email so it can reach our inbox, and this site is hosted by Vercel. Neither is permitted to use your information for their own purposes. We never sell it and never pass it to anyone else.",
+      },
+      retention: {
+        h: "How long we keep it",
+        b: "Your message stays in our email for as long as the conversation is useful. Ask us to delete it and we will.",
+      },
+      clientSystems: {
+        h: "Data inside the systems we build",
+        b: "When we build a system for your business, the records inside it are yours, not ours. They sit on your own deployment, separate from every other client. We look at them only when you ask us to for support, and never for anything else.",
+      },
+      rights: {
+        h: "Your rights",
+        b: "Ask what we hold about you, ask for a copy, or ask us to delete it. Write to the address below and we act on it.",
+      },
+      contact: {
+        h: "Getting in touch",
+        b: "Questions about this policy, or about anything we hold, go to ouaqt.mrt@gmail.com.",
       },
     },
   },
@@ -303,6 +392,9 @@ export const en = {
     connect: "Connect",
     brand: "OUAQT",
     rights: "All rights reserved.",
+    legal: "Legal",
+    terms: "Licence and terms",
+    privacy: "Privacy policy",
   },
 
   notFound: {
