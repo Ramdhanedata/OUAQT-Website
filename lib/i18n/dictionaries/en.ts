@@ -6,10 +6,10 @@ export const en = {
   meta: {
     siteTitle: "OUAQT | Custom systems for real business workflows",
     siteDescription:
-      "OUAQT builds custom systems for businesses still running on paper, Excel, and WhatsApp. Five live products across mining, pharmacy, hospitality, transport, and food service.",
+      "OUAQT builds custom systems for businesses still running on paper, Excel, and WhatsApp. Six live products across mining, pharmacy, hospitality, transport, food service, and education.",
     projectsTitle: "Projects | OUAQT",
     projectsDescription:
-      "Five live systems built for mining, pharmacy, hospitality, transport, and food service clients.",
+      "Six live systems built for mining, pharmacy, hospitality, transport, food service, and education clients.",
     aboutTitle: "About OUAQT",
     aboutDescription:
       "OUAQT builds custom systems for businesses running on paper, Excel, and WhatsApp. Founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
@@ -96,7 +96,7 @@ export const en = {
 
   featured: {
     heading: "Projects in production",
-    body: "Five live products, each built for one business and the way it actually runs.",
+    body: "Six live products, each built for one business and the way it actually runs.",
     cta: "View all projects",
   },
 
@@ -109,8 +109,8 @@ export const en = {
 
   projectsPage: {
     eyebrow: "Projects",
-    heading: "Five businesses, five systems, no templates.",
-    body: "Every build starts with how the business already runs, not with a product we had sitting on a shelf. We map the daily workflow, model the data behind it, migrate years of paper and spreadsheet history, and run each system on its own isolated deployment. Mining, pharmacy, hospitality, transport and food service so far.",
+    heading: "Six businesses, six systems, no templates.",
+    body: "Every build starts with how the business already runs, not with a product we had sitting on a shelf. We map the daily workflow, model the data behind it, migrate years of paper and spreadsheet history, and run each system on its own isolated deployment. Mining, pharmacy, hospitality, transport, food service and education so far.",
     all: "All",
   },
 
@@ -132,13 +132,14 @@ export const en = {
     Hospitality: "Hospitality",
     Transport: "Transport",
     Restaurant: "Restaurant",
+    Education: "Education",
   },
 
   about: {
     eyebrow: "About OUAQT",
     heading: "A structural gap, not a single industry problem.",
     body1:
-      "Across mining, pharmacy, hospitality, transport, and food service, the same pattern keeps appearing. Capable businesses running critical operations on paper, spreadsheets, and group chats. Not because it works, but because nobody has ever built software for how they actually operate.",
+      "Across mining, pharmacy, hospitality, transport, food service and education, the same pattern keeps appearing. Capable businesses running critical operations on paper, spreadsheets, and group chats. Not because it works, but because nobody has ever built software for how they actually operate.",
     body2:
       "OUAQT exists to close that gap one business at a time, with a system designed around a single client's real workflow, their real history, and the languages their team actually uses.",
     marketHeading: "The gap is measurable.",
@@ -170,9 +171,9 @@ export const en = {
           "Selected from the regional cohort, and keynote speaker at the Knowledge Summit in Dubai the same year.",
       },
       sectors: {
-        title: "Systems live across five sectors",
+        title: "Systems live across six sectors",
         detail:
-          "Mining, pharmacy, hospitality, transport, and food service, each running on its own dedicated deployment.",
+          "Mining, pharmacy, hospitality, transport, food service, and education, each running on its own dedicated deployment.",
       },
     },
     ctaHeading: "Tell us what slows your business down.",
@@ -324,6 +325,31 @@ export const en = {
       results: [
         "Checkpoint manifests generated from existing trip and cargo data",
         "Pre-departure prep reduced to a review step",
+      ],
+    },
+    "school-operations": {
+      title: "SchoolOS Student Records & Tuition",
+      summary:
+        "One system for students, teachers, tuition, attendance and the campus till, running offline on the school's own machines.",
+      description:
+        "A private school group was tracking enrolment, fees, attendance and shop takings in separate books and spreadsheets. SchoolOS puts all of it in one place, on the desks the staff already use.",
+      client: "Écoles Al-Baraka · Education",
+      role: "Data modeling, system architecture, historical migration, deployment",
+      problem:
+        "Student records, tuition, attendance and the campus shop till each lived somewhere different. Answering something as simple as which families still owed fees meant cross-checking several books by hand, and attendance was only as current as the last person to copy it up.",
+      solution:
+        "One system covering students, teachers, tuition, attendance, finances and the shop till. It is a desktop application with its own local database, so it keeps working when the connection does not, which matters on a campus that cannot depend on the internet.",
+      tags: ["Student records", "Tuition & fees", "Attendance"],
+      tools: [
+        "Electron desktop application",
+        "Local SQLite database",
+        "Works offline, no connection required",
+        "Dedicated per-client deployment",
+      ],
+      results: [
+        "Students, teachers, tuition and attendance in one system",
+        "Runs offline on the school's own machines",
+        // TODO(adel): add the measured admin time saved once the school confirms it.
       ],
     },
     "restaurant-pos": {

@@ -3,14 +3,16 @@ export type Sector =
   | "Pharmacy"
   | "Hospitality"
   | "Transport"
-  | "Restaurant";
+  | "Restaurant"
+  | "Education";
 
 export type ProjectSlug =
   | "gmm-mining"
   | "pharmacy-pos"
   | "hotel-operations"
   | "transport-manifests"
-  | "restaurant-pos";
+  | "restaurant-pos"
+  | "school-operations";
 
 /*
  * Structural data only. Everything readable (title, summary, problem,
@@ -18,7 +20,7 @@ export type ProjectSlug =
  * `projects`, keyed by this slug, so each language carries its own copy.
  *
  * On metrics: only the GMM numbers (4 hrs -> 25 min, 90%) are client
- * confirmed. The other four carry qualitative results on purpose.
+ * confirmed. The other five carry qualitative results on purpose.
  * TODO(adel): add real measured numbers to the `results` arrays in the
  * dictionaries as you confirm them. Do not publish estimates as facts.
  */
@@ -66,6 +68,12 @@ export const projects: Project[] = [
     category: "Restaurant",
     year: "2025",
     coverImage: "/images/projects/restaurant-pos/cover.webp",
+  },
+  {
+    slug: "school-operations",
+    category: "Education",
+    year: "2026",
+    coverImage: "/images/projects/school-operations/cover.webp",
   },
 ];
 
