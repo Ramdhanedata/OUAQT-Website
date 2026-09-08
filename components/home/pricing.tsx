@@ -40,7 +40,7 @@ export function Pricing({ dict, lang }: { dict: Dictionary; lang: Locale }) {
                 {p.price}
               </p>
 
-              {/* A market comparison, not a struck-through former price. */}
+              {/* Genuine former price: 45,000 down to 40,000. */}
               <div className="mt-6 border-t border-border pt-5">
                 <p className="text-sm text-muted-foreground">
                   {p.compareLabel}

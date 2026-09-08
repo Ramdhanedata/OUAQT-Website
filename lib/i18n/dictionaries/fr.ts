@@ -122,10 +122,10 @@ export const fr: Dictionary = {
     body: "Pas de licence mensuelle, pas de frais par utilisateur, pas de facture surprise en cours de route. Vous payez une fois, et le système est à vous.",
     priceLabel: "Par système",
     price: "40 000 MRU",
-    compareLabel: "Un logiciel sur mesure coûte habituellement",
-    compare: "450 000 MRU",
+    compareLabel: "Prix habituel",
+    compare: "45 000 MRU",
     compareNote:
-      "C'est le prix courant pour un travail de ce type. Nous travaillons autrement, vous ne le payez donc pas.",
+      "Même système, même formation, même garantie. Rien n'est retiré pour atteindre ce prix.",
     includes: {
       system: {
         title: "Le système lui-même",

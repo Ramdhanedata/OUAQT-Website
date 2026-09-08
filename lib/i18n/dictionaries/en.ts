@@ -120,10 +120,10 @@ export const en = {
     body: "No monthly licence, no per-user fee, no surprise invoice halfway through. You pay once, and the system is yours.",
     priceLabel: "Per system",
     price: "40,000 MRU",
-    compareLabel: "Custom software usually costs",
-    compare: "450,000 MRU",
+    compareLabel: "Regular price",
+    compare: "45,000 MRU",
     compareNote:
-      "That is what a build like this normally runs to. We work differently, so you do not pay for it.",
+      "Same system, same training, same warranty. Nothing is trimmed to reach the lower price.",
     includes: {
       system: {
         title: "The system itself",
