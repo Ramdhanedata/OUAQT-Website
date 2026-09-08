@@ -6,6 +6,7 @@ import { getProjectBySlug, projects } from "@/lib/data/projects";
 import { getDictionary } from "@/lib/i18n";
 import { locales, localeHref, type Locale } from "@/lib/i18n/config";
 import { ArrowLeft } from "lucide-react";
+import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -30,6 +31,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title: `${copy.title} | OUAQT`,
     description: copy.summary,
+    alternates: alternatesFor(params.lang, `/projects/${project.slug}`),
   };
 }
 

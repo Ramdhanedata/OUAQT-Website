@@ -6,6 +6,7 @@ import { Footer } from "@/components/footer";
 import { PageTransition } from "@/components/motion/page-transition";
 import { getDictionary } from "@/lib/i18n";
 import { isRtl, locales, type Locale } from "@/lib/i18n/config";
+import { alternatesFor, siteUrl } from "@/lib/i18n/metadata";
 import { notFound } from "next/navigation";
 
 /*
@@ -36,6 +37,9 @@ const arabic = Cairo({
   subsets: ["arabic"],
   variable: "--font-arabic",
   display: "swap",
+  // Not preloaded: Arabic subsets are heavy and English and French visitors
+  // never render a single glyph from this face. It loads on demand on /ar.
+  preload: false,
 });
 
 type Props = {
@@ -54,15 +58,12 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title: dict.meta.siteTitle,
     description: dict.meta.siteDescription,
-    metadataBase: new URL("https://ouaqt.com"),
-    alternates: {
-      canonical: `/${lang}`,
-      languages: Object.fromEntries(locales.map((l) => [l, `/${l}`])),
-    },
+    metadataBase: new URL(siteUrl()),
+    alternates: alternatesFor(lang, "/"),
     openGraph: {
       title: dict.meta.siteTitle,
       description: dict.meta.siteDescription,
-      url: `https://ouaqt.com/${lang}`,
+      url: `${siteUrl()}/${lang}`,
       siteName: "OUAQT",
       locale: lang,
       type: "website",

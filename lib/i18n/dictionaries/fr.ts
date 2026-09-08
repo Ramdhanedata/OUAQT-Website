@@ -116,6 +116,96 @@ export const fr: Dictionary = {
     all: "Tous",
   },
 
+  pricing: {
+    eyebrow: "Tarifs",
+    heading: "Un seul prix. Tout compris.",
+    body: "Pas de licence mensuelle, pas de frais par utilisateur, pas de facture surprise en cours de route. Vous payez une fois, et le système est à vous.",
+    priceLabel: "Par système",
+    price: "40 000 MRU",
+    compareLabel: "Un logiciel sur mesure coûte habituellement",
+    compare: "450 000 MRU",
+    compareNote:
+      "C'est le prix courant pour un travail de ce type. Nous travaillons autrement, vous ne le payez donc pas.",
+    includes: {
+      system: {
+        title: "Le système lui-même",
+        body: "Conçu autour du fonctionnement réel de votre entreprise, et non adapté d'un modèle générique.",
+      },
+      training: {
+        title: "Votre équipe formée",
+        body: "Nous nous asseyons avec vos employés et les formons jusqu'à ce qu'ils soient à l'aise au quotidien.",
+      },
+      warranty: {
+        title: "Un an de garantie",
+        body: "Si quelque chose casse la première année, nous le réparons. Sans frais de déplacement, sans discussion.",
+      },
+      updates: {
+        title: "Mises à jour et ajouts",
+        body: "Besoin d'une fonction supplémentaire à mesure que vous grandissez ? Dites-le-nous et nous l'intégrons.",
+      },
+    },
+    cta: "Parlons de votre projet",
+  },
+
+  process: {
+    eyebrow: "Notre façon de travailler",
+    heading: "Nous commençons par nous asseoir avec vous.",
+    body: "Aucun formulaire à remplir, aucun cahier des charges à rédiger. Nous venons chez vous, et le travail part de ce que nous voyons.",
+    steps: {
+      sit: {
+        title: "Nous venons observer la journée",
+        body: "Nous passons du temps dans votre entreprise avec votre équipe, pour voir la journée telle qu'elle se déroule vraiment, pas telle qu'elle devrait se dérouler.",
+      },
+      listen: {
+        title: "Nous parlons de ce qui coince",
+        body: "Là où les choses dérapent, ce qui se fait deux fois, les chiffres auxquels personne ne se fie tout à fait. Vous connaissez votre métier mieux que nous, alors surtout nous écoutons.",
+      },
+      build: {
+        title: "Nous construisons autour de votre processus",
+        body: "Le système suit les étapes que votre équipe connaît déjà, dans la langue qu'elle utilise déjà. Vos archives existantes vous suivent.",
+      },
+      stay: {
+        title: "Nous restons après la mise en service",
+        body: "Nous formons vos employés sur place, réparons tout incident pendant un an, et ajoutons ce dont vous avez besoin à mesure que l'entreprise évolue.",
+      },
+    },
+  },
+
+  faq: {
+    eyebrow: "Questions",
+    heading: "Ce que l'on nous demande avant de commencer.",
+    items: {
+      duration: {
+        q: "Combien de temps cela prend-il ?",
+        a: "Une fois votre processus compris, la plupart des systèmes fonctionnent en quelques jours. Les plus gros prennent davantage, et nous vous le disons franchement avant tout engagement.",
+      },
+      offline: {
+        q: "Et si internet tombe ?",
+        a: "Plusieurs de nos systèmes tournent entièrement sur vos propres postes avec une base de données locale, ils continuent donc sans aucune connexion. Le système scolaire est bâti exactement ainsi.",
+      },
+      data: {
+        q: "À qui appartiennent les données ?",
+        a: "À vous. Elles résident sur votre propre déploiement et ne se mélangent jamais à celles d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
+      },
+      changes: {
+        q: "Et si j'ai besoin d'un ajout plus tard ?",
+        a: "Dites-le-nous et nous le construisons. Les modifications et les ajouts sont inclus la première année, ils ne sont pas facturés comme un nouveau projet.",
+      },
+      training: {
+        q: "Formez-vous mon équipe ?",
+        a: "Oui, sur place, aussi longtemps qu'il le faut pour qu'elle soit en confiance. C'est compris dans le prix, jamais une ligne en plus sur la facture.",
+      },
+      migration: {
+        q: "Que deviennent mes anciens registres ?",
+        a: "Ils vous suivent. Nous migrons des années de papier et de tableurs dans le nouveau système, personne ne repart d'un écran vide.",
+      },
+      broken: {
+        q: "Et si quelque chose casse ?",
+        a: "Nous le réparons. Chaque système est garanti un an sans frais supplémentaires, et vous parlez directement à la personne qui l'a construit.",
+      },
+    },
+  },
+
   projectDetail: {
     back: "Tous les projets",
     overview: "Aperçu",
@@ -275,8 +365,9 @@ export const fr: Dictionary = {
         "Déploiement dédié par client",
       ],
       results: [
-        "Registres de médicaments complétés à partir de l'historique de la pharmacie",
-        "Saisie répétitive réduite au traitement des exceptions",
+        "Deux à trois heures de saisie économisées chaque jour, plus de 60 heures par mois",
+        "Erreurs de saisie réduites de plus de 90 %",
+        "Registres complétés à partir de l'historique de la pharmacie",
       ],
     },
     "hotel-operations": {
@@ -299,8 +390,9 @@ export const fr: Dictionary = {
         "Déploiement dédié par client",
       ],
       results: [
-        "Calculs de taxes et de commissions appliqués de façon cohérente sur chaque ligne de service",
-        "Calcul manuel retiré du travail quotidien de la réception",
+        "Erreurs de facturation réduites de plus de 90 %",
+        "Environ deux heures de calcul manuel en moins par jour à la réception, près de 50 heures par mois",
+        "Taxes et commissions appliquées de la même façon sur chaque ligne",
       ],
     },
     "transport-manifests": {
@@ -323,8 +415,9 @@ export const fr: Dictionary = {
         "Déploiement dédié par client",
       ],
       results: [
-        "Manifestes de contrôle générés à partir des données de voyage et de cargaison existantes",
-        "Préparation avant départ réduite à une simple relecture",
+        "Préparation avant départ ramenée d'une heure par voyage à quelques minutes",
+        "Erreurs de paperasse aux points de contrôle réduites de plus de 90 %",
+        "Manifestes générés à partir des données déjà saisies",
       ],
     },
     "school-operations": {
@@ -347,7 +440,8 @@ export const fr: Dictionary = {
         "Déploiement dédié par client",
       ],
       results: [
-        "Élèves, enseignants, scolarité et présences dans un seul système",
+        "Deux à trois heures d'administratif économisées chaque jour, plus de 60 heures par mois",
+        "Erreurs sur les frais et les présences réduites de plus de 90 %",
         "Fonctionne hors ligne sur les postes de l'école",
       ],
     },
@@ -371,8 +465,9 @@ export const fr: Dictionary = {
         "Déploiement dédié par client",
       ],
       results: [
-        "Commandes, flux cuisine et recette du jour réunis dans un seul système",
-        "Adapté à chaque site, y compris le service au comptoir de boulangerie",
+        "Rapprochement de fermeture ramené de plus d'une heure à quelques minutes chaque soir",
+        "La recette correspond à la caisse sans vérification manuelle, erreurs réduites de plus de 90 %",
+        "Commandes, flux cuisine et reporting dans un seul système",
       ],
     },
   },

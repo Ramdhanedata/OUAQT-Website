@@ -81,11 +81,6 @@ export async function POST(request: Request) {
   }
 
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    // Never pretend a message was delivered when it was not.
-    console.error("RESEND_API_KEY is not set; contact form cannot send.");
-    return NextResponse.json({ error: "not_configured" }, { status: 503 });
-  }
 
   const html = `
     <h2 style="font:600 18px system-ui;margin:0 0 16px">New enquiry from the OUAQT website</h2>
@@ -95,6 +90,44 @@ export async function POST(request: Request) {
     <p style="font:14px system-ui;margin:0 0 6px"><strong>Message:</strong></p>
     <p style="font:14px/1.6 system-ui;white-space:pre-wrap;margin:0">${escapeHtml(message)}</p>
   `;
+
+  /*
+   * No Resend key yet? Fall back to FormSubmit, which needs no account and no
+   * key: it posts to an address and relays the mail. The first message sends a
+   * one-time confirmation to CONTACT_TO_EMAIL that has to be clicked once.
+   *
+   * This exists so the form works the day it ships rather than waiting on
+   * setup. Adding RESEND_API_KEY switches it over automatically, and that is
+   * the better path: mail then goes direct, with nothing in between.
+   */
+  if (!apiKey) {
+    try {
+      const res = await fetch(
+        `https://formsubmit.co/ajax/${encodeURIComponent(TO)}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            _subject: `OUAQT enquiry from ${name}`,
+            _template: "table",
+            _captcha: "false",
+            Name: name,
+            Email: email,
+            Language: locale,
+            Message: message,
+          }),
+        }
+      );
+      if (!res.ok) {
+        console.error("FormSubmit rejected the message:", res.status, await res.text());
+        return NextResponse.json({ error: "send_failed" }, { status: 502 });
+      }
+      return NextResponse.json({ ok: true, via: "formsubmit" });
+    } catch (error) {
+      console.error("Could not reach FormSubmit:", error);
+      return NextResponse.json({ error: "send_failed" }, { status: 502 });
+    }
+  }
 
   try {
     const res = await fetch("https://api.resend.com/emails", {
