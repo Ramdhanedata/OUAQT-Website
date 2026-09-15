@@ -159,11 +159,12 @@ export const ar: Dictionary = {
       "إذا تأخر دفع التجديد، يتوقف إدخال بيانات جديدة إلى أن يتم الدفع. أما الاطلاع على بياناتك وتصديرها فلا يُمنع أبداً.",
     contact: "تواصل معنا",
     whatsapp: "واتساب",
-    products: "تغطي هذه الأسعار اليوم {pharmacy} و{hotel} و{transport}.",
+    products: "تشمل الأسعار الحالية أنظمة {pharmacy} و{hotel} و{transport} و{restaurant} والمخابز، إضافة إلى أنظمة إدارة الورش والمستودعات.",
     productNames: {
-      pharmacy: "فارماسيس",
-      hotel: "النظام الفندقي",
-      transport: "نظام النقل",
+      pharmacy: "الصيدليات",
+      hotel: "الفنادق",
+      transport: "النقل",
+      restaurant: "المقاهي والمطاعم",
     },
     bespoke: {
       eyebrow: "حسب الطلب",

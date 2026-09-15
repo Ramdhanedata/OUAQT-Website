@@ -164,11 +164,12 @@ export const en = {
       "If a renewal is paid late, entering new data is paused until it is paid. Reading and exporting the data you already have is never blocked.",
     contact: "Contact us",
     whatsapp: "WhatsApp",
-    products: "Today these prices cover {pharmacy}, {hotel} and {transport}.",
+    products: "Current pricing covers systems for {pharmacy}, {hotel}, {transport}, {restaurant}, bakeries, as well as workshop and warehouse management systems.",
     productNames: {
-      pharmacy: "PharmaSys",
-      hotel: "the hotel system",
-      transport: "the transport system",
+      pharmacy: "pharmacies",
+      hotel: "hotels",
+      transport: "transportation",
+      restaurant: "cafés and restaurants",
     },
     bespoke: {
       eyebrow: "Bespoke",

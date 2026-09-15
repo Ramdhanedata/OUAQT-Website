@@ -155,12 +155,12 @@ export const fr: Dictionary = {
       "Si le renouvellement est payé en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués.",
     contact: "Nous contacter",
     whatsapp: "WhatsApp",
-    products:
-      "Ces tarifs couvrent aujourd'hui {pharmacy}, {hotel} et {transport}.",
+    products: "Les tarifs actuels couvrent les systèmes pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, ainsi que les systèmes de gestion d'atelier et d'entrepôt.",
     productNames: {
-      pharmacy: "PharmaSys",
-      hotel: "le système hôtelier",
-      transport: "le système de transport",
+      pharmacy: "les pharmacies",
+      hotel: "les hôtels",
+      transport: "le transport",
+      restaurant: "les cafés et restaurants",
     },
     bespoke: {
       eyebrow: "Sur mesure",

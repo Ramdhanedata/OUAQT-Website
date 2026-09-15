@@ -42,9 +42,12 @@ type PriceBook = {
     maintenancePercent: number;
     maintenanceFromMonth: number;
   };
-  /** Packaged products the price book covers today, linked to their case studies. */
+  /**
+   * Sectors named in the "current pricing covers" line that have a case study,
+   * so the name links to it. Sectors without one appear as plain text.
+   */
   coveredProducts: readonly {
-    key: "pharmacy" | "hotel" | "transport";
+    key: "pharmacy" | "hotel" | "transport" | "restaurant";
     slug: string;
   }[];
 };
@@ -70,6 +73,7 @@ export const pricing: PriceBook = {
     { key: "pharmacy", slug: "pharmacy-pos" },
     { key: "hotel", slug: "hotel-operations" },
     { key: "transport", slug: "transport-manifests" },
+    { key: "restaurant", slug: "restaurant-pos" },
   ],
 };
 
