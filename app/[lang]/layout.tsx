@@ -12,8 +12,8 @@ import { founder } from "@/lib/data/founder";
 import { notFound } from "next/navigation";
 
 /*
- * Source Serif 4 stands in for the transitional serif on Anthropic's site
- * (Copernicus / Tiempos). Those are commercially licensed and cannot be
+ * Source Serif 4 stands in for a transitional serif in the style of
+ * Copernicus or Tiempos. Those are commercially licensed and cannot be
  * redistributed, so this is the closest freely licensed match: same
  * transitional structure, moderate contrast, and a full variable weight axis.
  *
