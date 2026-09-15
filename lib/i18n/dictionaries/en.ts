@@ -30,6 +30,7 @@ export const en = {
   nav: {
     home: "Home",
     projects: "Projects",
+    pricing: "Pricing",
     about: "About",
     contact: "Contact",
     cta: "Start a project",

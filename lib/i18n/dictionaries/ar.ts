@@ -43,6 +43,7 @@ export const ar: Dictionary = {
   nav: {
     home: "الرئيسية",
     projects: "المشاريع",
+    pricing: "الأسعار",
     about: "من نحن",
     contact: "اتصل بنا",
     cta: "ابدأ مشروعاً",

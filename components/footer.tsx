@@ -10,6 +10,7 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const nav = [
     { href: "/", label: dict.nav.home },
     { href: "/projects", label: dict.nav.projects },
+    { href: "/pricing", label: dict.nav.pricing },
     { href: "/about", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];

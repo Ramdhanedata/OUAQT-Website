@@ -21,6 +21,7 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const links = [
     { href: "/", label: dict.nav.home },
     { href: "/projects", label: dict.nav.projects },
+    { href: "/pricing", label: dict.nav.pricing },
     { href: "/about", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];
@@ -54,13 +55,13 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           <Logo priority className="h-6 sm:h-7" />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
+        <nav className="hidden items-center gap-8 lg:flex">
           {links.map((link) => (
             <Link
               key={link.href}
               href={localeHref(lang, link.href)}
               className={cn(
-                "text-sm font-medium tracking-tight transition-colors",
+                "whitespace-nowrap text-sm font-medium tracking-tight transition-colors",
                 pathname === localeHref(lang, link.href)
                   ? "text-foreground"
                   : "text-muted-foreground hover:text-foreground"
@@ -71,18 +72,18 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           ))}
         </nav>
 
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
           <LanguageSwitcher locale={lang} label={dict.nav.language} />
           <Button
             href={localeHref(lang, "/contact")}
             variant="accent"
-            className="text-sm"
+            className="whitespace-nowrap text-sm"
           >
             {dict.nav.cta}
           </Button>
         </div>
 
-        <div className="flex items-center gap-2 md:hidden">
+        <div className="flex items-center gap-2 lg:hidden">
           <LanguageSwitcher locale={lang} label={dict.nav.language} />
           <button
             type="button"
@@ -102,7 +103,7 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-b border-border bg-background md:hidden"
+            className="overflow-hidden border-b border-border bg-background lg:hidden"
           >
             <Container className="flex flex-col gap-1 py-4">
               {links.map((link) => (

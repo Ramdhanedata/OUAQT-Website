@@ -28,6 +28,7 @@ export const fr: Dictionary = {
   nav: {
     home: "Accueil",
     projects: "Projets",
+    pricing: "Tarifs",
     about: "À propos",
     contact: "Contact",
     cta: "Démarrer un projet",
