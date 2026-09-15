@@ -60,6 +60,10 @@ export function generateMetadata({ params }: Props): Metadata {
     description: dict.meta.siteDescription,
     metadataBase: new URL(siteUrl()),
     alternates: alternatesFor(lang, "/"),
+    /*
+     * Link previews on WhatsApp, Facebook and X use a picture per language,
+     * built by scripts/make-share-images.mjs from the dictionaries.
+     */
     openGraph: {
       title: dict.meta.siteTitle,
       description: dict.meta.siteDescription,
@@ -67,6 +71,20 @@ export function generateMetadata({ params }: Props): Metadata {
       siteName: dict.common.brand,
       locale: lang,
       type: "website",
+      images: [
+        {
+          url: `/og/${lang}.png`,
+          width: 1200,
+          height: 630,
+          alt: dict.meta.shareAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: dict.meta.siteTitle,
+      description: dict.meta.siteDescription,
+      images: [`/og/${lang}.png`],
     },
   };
 }

@@ -19,6 +19,8 @@ export const fr: Dictionary = {
     pricingTitle: "Tarifs | OUAQT",
     pricingDescription:
       "Une installation payée une fois, puis une licence annuelle, aux mêmes tarifs pour tous les logiciels OUAQT. Le logiciel tourne sur vos ordinateurs, sans internet pour le travail de tous les jours.",
+    shareLine: "22 systèmes utilisés au quotidien dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
+    shareAlt: "OUAQT : nous repérons ce qui ralentit votre entreprise, et nous construisons le logiciel qui règle le problème.",
   },
 
   common: {

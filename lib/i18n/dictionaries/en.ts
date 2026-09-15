@@ -21,6 +21,8 @@ export const en = {
     pricingTitle: "Pricing | OUAQT",
     pricingDescription:
       "An installation fee paid once, then an annual licence, at the same prices for every OUAQT product. The software runs on your own computers with no internet needed for daily work.",
+    shareLine: "22 systems in daily use across mining, pharmacy, hospitality, transport, food service and education.",
+    shareAlt: "OUAQT: we find what slows your business down, and build the software that fixes it.",
   },
 
   /*
