@@ -20,6 +20,9 @@ export const fr: Dictionary = {
     privacyTitle: "Politique de confidentialité | OUAQT",
     privacyDescription:
       "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
+    pricingTitle: "Tarifs | OUAQT",
+    pricingDescription:
+      "Une installation payée une fois, puis une licence annuelle, aux mêmes tarifs pour tous les logiciels OUAQT. Le logiciel tourne sur vos ordinateurs, sans internet pour le travail de tous les jours.",
   },
 
   nav: {
@@ -151,6 +154,127 @@ export const fr: Dictionary = {
       },
     },
     cta: "Parlons de votre projet",
+  },
+
+  pricingPage: {
+    eyebrow: "Tarifs",
+    heading: "Une installation, puis une licence chaque année.",
+    intro:
+      "L'installation paie nos journées de travail chez vous, la formation de votre équipe et la reprise de vos anciennes données. Ensuite, le logiciel tourne sur vos propres ordinateurs et n'a pas besoin d'internet pour le travail de tous les jours.",
+    scope:
+      "Ces tarifs sont les mêmes pour tous les logiciels OUAQT prêts à installer.",
+    launchScope:
+      "Le tarif de lancement est réservé à nos {clients} premiers clients. Le montant barré est le tarif standard, celui que paieront tous les clients suivants.",
+    standardLabel: "Tarif standard",
+    launchLabel: "Tarif de lancement",
+    installation: {
+      label: "Installation, formation et reprise des données",
+      cadence: "Payée une fois",
+    },
+    annual: {
+      label: "Licence annuelle",
+      cadence: "Par an",
+      freeze:
+        "Au tarif de lancement, ce montant reste bloqué pendant {years} ans, et la licence reste résiliable chaque année.",
+    },
+    yearOne: {
+      label: "Première année",
+      cadence: "Installation et licence annuelle",
+    },
+    extraDevice: {
+      label: "Poste supplémentaire au-delà des {devices} inclus",
+      cadence: "Par an",
+    },
+    renewal:
+      "La licence se renouvelle chaque année par tacite reconduction. Vous pouvez la résilier avant la date de renouvellement.",
+    lateRenewal:
+      "Si le renouvellement est payé en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués.",
+    contact: "Nous contacter",
+    whatsapp: "WhatsApp",
+    products:
+      "Ces tarifs couvrent aujourd'hui {pharmacy}, {hotel} et {transport}.",
+    productNames: {
+      pharmacy: "PharmaSys",
+      hotel: "le système hôtelier",
+      transport: "le système de transport",
+    },
+    bespoke: {
+      eyebrow: "Sur mesure",
+      heading: "Un système construit pour votre seule entreprise",
+      body: "Pour une mine, un rapprochement ou un transport qui dépasse le système standard, nous construisons sur commande et chiffrons les jours de travail sur devis.",
+      maintenance:
+        "La maintenance annuelle représente {rate} de la valeur du développement et commence au {month}e mois.",
+      cta: "Demander un devis",
+    },
+    perpetual: {
+      eyebrow: "Licence perpétuelle",
+      heading: "Pour ceux qui préfèrent ne pas payer chaque année",
+      cadence: "Payée une fois, installation comprise",
+      body: "Ce montant comprend les mises à jour, le catalogue produits, la sauvegarde hors site, l'assistance et les modifications pendant {months} mois seulement. Passé ce délai, le logiciel continue de fonctionner sans rien payer de plus, et sans aucun service.",
+      cta: "Nous contacter",
+    },
+    included: {
+      heading: "Compris dans la licence",
+      lead: "Tant que la licence est renouvelée, elle couvre tout ce qui suit, mais pas les nouveaux modules.",
+      items: [
+        "L'installation sur {devices} postes au maximum, sur le même site",
+        "Le transfert du logiciel sur une machine de remplacement après une panne, un vol ou un changement de matériel, sans frais tant que le total ne dépasse pas {devices} postes",
+        "Les mises à jour",
+        "Le catalogue produits, pour les logiciels qui en ont un",
+        "La sauvegarde hors site",
+        "L'assistance",
+        "Les modifications de l'existant sur demande, comme un champ de formulaire, la mise en page d'un ticket ou d'une étiquette, une colonne de rapport, un ordre de tri, un format d'impression, un libellé, un rôle utilisateur ou un taux de taxe",
+        "La correction de tout ce qui est faux ou lent dans ce que nous avons livré",
+      ],
+    },
+    quoted: {
+      heading: "Sur devis séparé",
+      lead: "Un nouveau module est un écran ou un processus qui n'existe pas encore, et il fait toujours l'objet d'un devis séparé.",
+      items: [
+        "La comptabilité",
+        "La paie",
+        "Une deuxième agence",
+        "Les livraisons",
+        "Une application mobile",
+        "La connexion à un autre système",
+      ],
+    },
+    decides:
+      "Quand vous nous demandez quelque chose, nous vous disons avant de commencer s'il s'agit d'une modification ou d'un nouveau module.",
+    faq: {
+      eyebrow: "Questions",
+      heading: "Ce que l'on nous demande avant de signer.",
+      items: [
+        {
+          q: "Le logiciel a-t-il besoin d'une connexion internet ?",
+          a: "Non. Il tourne sur vos propres ordinateurs, et le travail de tous les jours se fait sans connexion.",
+        },
+        {
+          q: "Sur combien d'ordinateurs puis-je l'installer, et que se passe-t-il si une machine tombe en panne ou est remplacée ?",
+          a: "Sur {devices} postes au maximum, sur le même site, et chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
+        },
+        {
+          q: "Où sont stockées mes données ?",
+          a: "Sur vos propres ordinateurs, dans vos locaux. La licence comprend aussi une sauvegarde hors site, pour que vos données ne dépendent pas d'une seule machine.",
+        },
+        {
+          q: "Que se passe-t-il si je ne renouvelle pas ?",
+          a: "La saisie de nouvelles données est suspendue, et les mises à jour, la sauvegarde et l'assistance s'arrêtent. Vous pouvez toujours consulter et exporter tout ce qui est déjà enregistré.",
+        },
+        {
+          q: "Puis-je payer en plusieurs fois ?",
+          a: "Oui pour l'installation, en deux versements, le premier à la signature et le second à la mise en service. La licence, annuelle ou perpétuelle, se règle en une fois.",
+        },
+        {
+          q: "Quelle est la différence entre une modification et un nouveau module ?",
+          a: "Une modification change ce qui existe déjà, un format d'impression ou un taux de taxe par exemple, et la licence la couvre. Un nouveau module ajoute un écran ou un processus qui n'existe pas encore, et il fait l'objet d'un devis. Nous vous disons lequel des deux avant de commencer.",
+        },
+        {
+          q: "Puis-je passer de la licence annuelle à la licence perpétuelle ?",
+          a: "Oui, à tout moment. Nous déduisons du prix de la licence perpétuelle les frais d'installation déjà payés, mais pas les années de licence déjà réglées.",
+        },
+      ],
+    },
   },
 
   process: {

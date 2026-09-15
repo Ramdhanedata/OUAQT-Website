@@ -22,6 +22,9 @@ export const en = {
     privacyTitle: "Privacy policy | OUAQT",
     privacyDescription:
       "What OUAQT does with personal information, on this website and inside the systems we build.",
+    pricingTitle: "Pricing | OUAQT",
+    pricingDescription:
+      "An installation fee paid once, then an annual licence, at the same prices for every OUAQT product. The software runs on your own computers with no internet needed for daily work.",
   },
 
   nav: {
@@ -149,6 +152,129 @@ export const en = {
       },
     },
     cta: "Talk about your project",
+  },
+
+  /*
+   * The pricing page. Figures are never typed here: {placeholders} are filled
+   * from lib/data/pricing.ts, and prices render from the same file.
+   */
+  pricingPage: {
+    eyebrow: "Pricing",
+    heading: "Installation once, then a licence each year.",
+    intro:
+      "Installation pays for our days of work at your site, training your team and bringing your old records across. After that the software runs on your own computers and needs no internet connection for daily work.",
+    scope: "These prices are the same for every ready-to-install OUAQT product.",
+    launchScope:
+      "Launch pricing is for our first {clients} clients. The struck-through figure is the standard price, and it is what every client after them pays.",
+    standardLabel: "Standard price",
+    launchLabel: "Launch price",
+    installation: {
+      label: "Installation, training and data migration",
+      cadence: "Paid once",
+    },
+    annual: {
+      label: "Annual licence",
+      cadence: "Per year",
+      freeze:
+        "At launch pricing this figure stays fixed for {years} years, and you can still cancel the licence each year.",
+    },
+    yearOne: {
+      label: "First year",
+      cadence: "Installation and annual licence",
+    },
+    extraDevice: {
+      label: "Each device beyond the {devices} included",
+      cadence: "Per year",
+    },
+    renewal:
+      "The licence renews automatically each year unless you cancel it before the renewal date.",
+    lateRenewal:
+      "If a renewal is paid late, entering new data is paused until it is paid. Reading and exporting the data you already have is never blocked.",
+    contact: "Contact us",
+    whatsapp: "WhatsApp",
+    products: "Today these prices cover {pharmacy}, {hotel} and {transport}.",
+    productNames: {
+      pharmacy: "PharmaSys",
+      hotel: "the hotel system",
+      transport: "the transport system",
+    },
+    bespoke: {
+      eyebrow: "Bespoke",
+      heading: "A system built for your business alone",
+      body: "For a mine, a reconciliation process or transport work that goes beyond the standard system, we build to order and quote on the days of work involved.",
+      maintenance:
+        "Annual maintenance is {rate} of the build value, starting in month {month}.",
+      cta: "Request a quote",
+    },
+    perpetual: {
+      eyebrow: "Perpetual licence",
+      heading: "For buyers who would rather not pay every year",
+      cadence: "Paid once, installation included",
+      body: "That covers updates, the product catalogue, off-site backup, support and modifications for {months} months only. After that the software keeps running with nothing more to pay and no further service.",
+      cta: "Contact us",
+    },
+    included: {
+      heading: "Included in the licence",
+      lead: "For as long as the licence is renewed it covers everything below, and new modules are not part of it.",
+      items: [
+        "Installation on up to {devices} devices at the same site",
+        "Moving the software to a replacement machine after a breakdown, a theft or an upgrade, at no charge while the total stays within {devices}",
+        "Updates",
+        "The product catalogue, where the product has one",
+        "Off-site backup",
+        "Support",
+        "Changes to what already exists, on request, such as a form field, a receipt or label layout, a report column, a sort order, a print format, wording, a user role or a tax rate",
+        "Correcting anything wrong or slow in what we delivered",
+      ],
+    },
+    quoted: {
+      heading: "Quoted separately",
+      lead: "A new module is a screen or a process that does not exist yet, and it is always quoted separately.",
+      items: [
+        "Accounting",
+        "Payroll",
+        "A second branch",
+        "Deliveries",
+        "A mobile app",
+        "A connection to another system",
+      ],
+    },
+    decides:
+      "When you ask for something, we tell you before starting whether it is a modification or a new module.",
+    faq: {
+      eyebrow: "Questions",
+      heading: "What buyers ask before signing.",
+      items: [
+        {
+          q: "Does the software need an internet connection?",
+          a: "No. It runs on your own computers, and daily work happens without a connection.",
+        },
+        {
+          q: "On how many computers can I install it, and what happens if a machine breaks or is replaced?",
+          a: "Up to {devices} at the same site, and each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
+        },
+        {
+          q: "Where is my data stored?",
+          a: "On your own computers, at your premises. The licence also includes an off-site backup, so your records do not depend on a single machine.",
+        },
+        {
+          q: "What happens if I do not renew?",
+          a: "Entering new data is suspended, and updates, backup and support stop. You can always read and export everything already recorded.",
+        },
+        {
+          q: "Can I pay in instalments?",
+          a: "Yes for installation, in two payments, the first at signature and the second when the software goes live. The licence, annual or perpetual, is paid in one go.",
+        },
+        {
+          q: "What is the difference between a modification and a new module?",
+          a: "A modification changes something that already exists, a print format or a tax rate for example, and the licence covers it. A new module adds a screen or a process that does not exist yet and is quoted separately. We tell you which one it is before we start.",
+        },
+        {
+          q: "Can I switch from the annual licence to the perpetual one?",
+          a: "Yes, at any time. We deduct the installation fee you already paid from the perpetual price, but not the licence years already paid.",
+        },
+      ],
+    },
   },
 
   process: {
