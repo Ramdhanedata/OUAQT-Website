@@ -50,14 +50,15 @@ export const fr: Dictionary = {
     body: "Saisir deux fois la même information. Rester tard parce que la caisse et le cahier ne tombent pas juste. Nous venons chez vous et nous regardons comment le travail se fait vraiment. Ensuite, nous construisons le logiciel autour, pour que votre équipe récupère ces heures.",
     primaryCta: "Dites-nous ce qui vous ralentit",
     secondaryCta: "Voir nos réalisations",
+    freeVisit: "La première visite est gratuite et sans engagement.",
   },
 
   impact: {
     liveSystems: "Systèmes utilisés au quotidien",
     sectors: "Secteurs où nous travaillons",
     reduction: "Temps de rapprochement en moins chez GMM",
-    buildTime: "De notre première visite au logiciel en marche",
-    buildTimeValue: "48-96 h",
+    buildTime: "Pour un logiciel en marche, après notre première visite",
+    buildTimeValue: "48-72 h",
   },
 
   problem: {
@@ -129,6 +130,7 @@ export const fr: Dictionary = {
     heading: "Une installation, puis une licence chaque année.",
     intro:
       "L'installation paie nos journées de travail chez vous, la formation de votre équipe et la reprise de vos anciennes données. Ensuite, le logiciel tourne sur vos propres ordinateurs et n'a pas besoin d'internet pour le travail de tous les jours.",
+    freeVisit: "Avant tout engagement, notre première visite pour comprendre votre fonctionnement est gratuite.",
     scope:
       "Ces tarifs sont les mêmes pour tous les logiciels OUAQT prêts à installer.",
     launchScope:
@@ -248,7 +250,7 @@ export const fr: Dictionary = {
     steps: {
       listen: {
         title: "Nous nous asseyons avec votre équipe et nous écoutons",
-        body: "Nous passons du temps avec les personnes qui font le travail, et nous observons une journée ordinaire telle qu'elle se passe vraiment. Là où ça coince, ce qui se fait deux fois, les chiffres dont personne n'est tout à fait sûr. Vous connaissez votre métier mieux que nous, alors nous écoutons surtout.",
+        body: "Nous passons du temps avec les personnes qui font le travail, et nous observons une journée ordinaire telle qu'elle se passe vraiment. Là où ça coince, ce qui se fait deux fois, les chiffres dont personne n'est tout à fait sûr. Vous connaissez votre métier mieux que nous, alors nous écoutons surtout. Cette première visite est gratuite.",
       },
       build: {
         title: "Nous construisons autour de votre routine",
@@ -265,6 +267,10 @@ export const fr: Dictionary = {
     eyebrow: "Questions",
     heading: "Les questions qu'on nous pose avant de commencer.",
     items: {
+      visit: {
+        q: "La première visite est-elle payante ?",
+        a: "Non. Nous venons voir comment votre entreprise fonctionne, puis nous vous disons ce que nous construirions et ce que cela coûterait. Vous décidez ensuite, sans aucun engagement.",
+      },
       duration: {
         q: "Combien de temps cela prend-il ?",
         a: "Nous passons la première journée avec vous, à comprendre comment le travail se déroule vraiment. Ensuite, la plupart des systèmes sont prêts en 48 à 72 heures. Si le vôtre est plus grand et demande davantage, nous vous le disons avant tout engagement.",
@@ -439,7 +445,7 @@ export const fr: Dictionary = {
   contact: {
     eyebrow: "Contact",
     heading: "Dites-nous ce qui prend trop de temps à votre équipe.",
-    body: "Pas besoin des bons mots ni d'un plan. Racontez-nous avec vos mots où la journée se bloque : nous regardons ça avec vous et nous vous proposons le plus petit système qui fait gagner le plus de temps.",
+    body: "Pas besoin des bons mots ni d'un plan. Racontez-nous avec vos mots où la journée se bloque : nous regardons ça avec vous et nous vous proposons le plus petit système qui fait gagner le plus de temps. La première visite est gratuite.",
     whatsapp: "WhatsApp",
     form: {
       name: "Nom",

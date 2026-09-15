@@ -48,6 +48,9 @@ export default function PricingPage({ params }: Props) {
             <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
               {p.intro}
             </p>
+            <p className="mt-4 max-w-2xl text-sm font-medium text-foreground">
+              {p.freeVisit}
+            </p>
           </FadeIn>
         </Container>
       </Section>

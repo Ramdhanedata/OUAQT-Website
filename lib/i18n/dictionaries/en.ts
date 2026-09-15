@@ -56,14 +56,15 @@ export const en = {
     body: "Typing the same record twice. Staying late because the till and the notebook don't match. We come to your business and watch how the work really gets done. Then we build software around it, so your team gets those hours back.",
     primaryCta: "Tell us what's slowing you down",
     secondaryCta: "See what we've built",
+    freeVisit: "Your first visit is free, with no commitment.",
   },
 
   impact: {
     liveSystems: "Systems in daily use",
     sectors: "Sectors we work in",
     reduction: "Less time spent reconciling at GMM",
-    buildTime: "From our first visit to working software",
-    buildTimeValue: "48-96h",
+    buildTime: "To working software, after our first visit",
+    buildTimeValue: "48-72h",
   },
 
   problem: {
@@ -139,6 +140,7 @@ export const en = {
     heading: "Installation once, then a licence each year.",
     intro:
       "Installation pays for our days of work at your site, training your team and bringing your old records across. After that the software runs on your own computers and needs no internet connection for daily work.",
+    freeVisit: "Before anything is agreed, our first visit to understand how you work is free.",
     scope: "These prices are the same for every ready-to-install OUAQT product.",
     launchScope:
       "Launch pricing is for our first {clients} clients. The struck-through figure is the standard price, and it is what every client after them pays.",
@@ -257,7 +259,7 @@ export const en = {
     steps: {
       listen: {
         title: "We sit with your team and listen",
-        body: "We spend time with the people doing the work and watch an ordinary day as it really goes. Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we do, so mostly we listen.",
+        body: "We spend time with the people doing the work and watch an ordinary day as it really goes. Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we do, so mostly we listen. This first visit is free.",
       },
       build: {
         title: "We build it around your routine",
@@ -274,6 +276,10 @@ export const en = {
     eyebrow: "Questions",
     heading: "Questions people ask us before starting.",
     items: {
+      visit: {
+        q: "Do you charge for the first visit?",
+        a: "No. We come to see how your business runs and tell you what we would build and what it would cost. You decide afterwards, with no commitment.",
+      },
       duration: {
         q: "How long does it take?",
         a: "We spend the first day with you, understanding how the work actually runs. After that, most systems are ready in 48 to 72 hours. If yours is larger and needs longer, we say so before you commit to anything.",
@@ -448,7 +454,7 @@ export const en = {
   contact: {
     eyebrow: "Contact",
     heading: "Tell us what takes your team too long.",
-    body: "You don't need the right words or a plan. Tell us in your own words where the day gets stuck, and we'll look at it with you and suggest the smallest system that saves the most time.",
+    body: "You don't need the right words or a plan. Tell us in your own words where the day gets stuck, and we'll look at it with you and suggest the smallest system that saves the most time. The first visit is free.",
     whatsapp: "WhatsApp",
     form: {
       name: "Name",

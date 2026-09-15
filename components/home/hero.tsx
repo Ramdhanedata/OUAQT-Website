@@ -54,6 +54,15 @@ export function Hero({ dict, lang }: { dict: Dictionary; lang: Locale }) {
             {dict.hero.secondaryCta}
           </Button>
         </motion.div>
+
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          className="mt-5 text-sm text-muted-foreground"
+        >
+          {dict.hero.freeVisit}
+        </motion.p>
       </Container>
     </section>
   );

@@ -33,6 +33,7 @@ export default function Home({ params }: { params: { lang: Locale } }) {
         eyebrow={dict.faq.eyebrow}
         heading={dict.faq.heading}
         items={[
+          dict.faq.items.visit,
           dict.faq.items.duration,
           dict.faq.items.training,
           dict.faq.items.changes,
