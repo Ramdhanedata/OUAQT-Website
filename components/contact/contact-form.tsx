@@ -18,6 +18,41 @@ type Errors = Partial<Record<keyof FormState, string>>;
 
 const initialState: FormState = { name: "", email: "", message: "" };
 
+/*
+ * Sends the enquiry to OUAQT's inbox through FormSubmit, straight from the
+ * visitor's browser. FormSubmit refuses the same request when it comes from
+ * Vercel's servers, so this runs client side, which is how FormSubmit is
+ * meant to be used.
+ *
+ * Activation is tied to the page address FormSubmit sees, and the inbox was
+ * activated for /en/contact. The referrer is set to that page on the current
+ * host so the French and Arabic pages use the same activation.
+ */
+async function sendViaFormSubmit(values: FormState, lang: Locale) {
+  const res = await fetch(
+    `https://formsubmit.co/ajax/${encodeURIComponent(organization.email)}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      referrer: `${window.location.origin}/en/contact`,
+      referrerPolicy: "no-referrer-when-downgrade",
+      body: JSON.stringify({
+        _subject: `OUAQT enquiry from ${values.name}`,
+        _replyto: values.email,
+        _template: "table",
+        _captcha: "false",
+        Name: values.name,
+        Email: values.email,
+        Language: lang,
+        Message: values.message,
+      }),
+    }
+  );
+  // FormSubmit answers 200 even when it refuses; the body says which.
+  const data = (await res.json().catch(() => null)) as { success?: string | boolean } | null;
+  return res.ok && String(data?.success) === "true";
+}
+
 function validate(values: FormState, dict: Dictionary): Errors {
   const errors: Errors = {};
   const f = dict.contact.form;
@@ -75,8 +110,16 @@ export function ContactForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...values, company, locale: lang }),
       });
-      // Only claim success when the server actually accepted it.
-      if (!res.ok) throw new Error(String(res.status));
+      if (res.status === 501) {
+        // No server mailer configured: send from the browser instead. A
+        // filled honeypot means a bot, so pretend it went and send nothing.
+        if (!company && !(await sendViaFormSubmit(values, lang))) {
+          throw new Error("formsubmit");
+        }
+      } else if (!res.ok) {
+        // Only claim success when the message was actually accepted.
+        throw new Error(String(res.status));
+      }
       setStatus("sent");
       setValues(initialState);
     } catch {

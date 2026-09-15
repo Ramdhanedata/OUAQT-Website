@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { siteUrl } from "@/lib/i18n/metadata";
 
 /*
  * Contact form endpoint. Delivers submissions to OUAQT's inbox.
@@ -93,68 +92,14 @@ export async function POST(request: Request) {
   `;
 
   /*
-   * No Resend key yet? Fall back to FormSubmit, which needs no account and no
-   * key: it posts to an address and relays the mail. The first message sends a
-   * one-time confirmation to CONTACT_TO_EMAIL that has to be clicked once.
-   *
-   * This exists so the form works the day it ships rather than waiting on
-   * setup. Adding RESEND_API_KEY switches it over automatically, and that is
-   * the better path: mail then goes direct, with nothing in between.
+   * No Resend key: tell the browser to send through FormSubmit itself.
+   * FormSubmit refuses requests from Vercel's servers (the same call works
+   * from a browser or a home connection), so a server-side fallback cannot
+   * deliver. Adding RESEND_API_KEY in Vercel switches delivery back to this
+   * route automatically, and that is the better path: mail goes direct.
    */
   if (!apiKey) {
-    /*
-     * FormSubmit is built to be called from a browser and refuses requests
-     * that do not say which page the form lives on. A server-side fetch sends
-     * no Referer on its own, so we send one.
-     *
-     * Activation is tied to that page address, and the form was activated
-     * from /en/contact. Every language reports that one page, so French and
-     * Arabic visitors do not each need a separate activation. The host comes
-     * from the visitor's own request, so a future custom domain still works
-     * after one activation there.
-     *
-     * It also answers HTTP 200 when it refuses, including the one-time
-     * "needs activation" reply, with success: "false" in the body. Checking
-     * res.ok alone told visitors their message had gone when it had not.
-     */
-    const visitorPage = request.headers.get("referer");
-    const origin = visitorPage ? new URL(visitorPage).origin : siteUrl();
-    const referer = `${origin}/en/contact`;
-    try {
-      const res = await fetch(
-        `https://formsubmit.co/ajax/${encodeURIComponent(TO)}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-            Origin: origin,
-            Referer: referer,
-          },
-          body: JSON.stringify({
-            _subject: `OUAQT enquiry from ${name}`,
-            _replyto: email,
-            _template: "table",
-            _captcha: "false",
-            Name: name,
-            Email: email,
-            Language: locale,
-            Message: message,
-          }),
-        }
-      );
-      const data = (await res.json().catch(() => null)) as
-        | { success?: string | boolean; message?: string }
-        | null;
-      if (!res.ok || String(data?.success) !== "true") {
-        console.error("FormSubmit did not deliver:", res.status, data?.message);
-        return NextResponse.json({ error: "send_failed" }, { status: 502 });
-      }
-      return NextResponse.json({ ok: true, via: "formsubmit" });
-    } catch (error) {
-      console.error("Could not reach FormSubmit:", error);
-      return NextResponse.json({ error: "send_failed" }, { status: 502 });
-    }
+    return NextResponse.json({ error: "no_server_mailer" }, { status: 501 });
   }
 
   try {
