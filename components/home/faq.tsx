@@ -1,34 +1,34 @@
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
-import type { Dictionary } from "@/lib/i18n";
 import { Plus } from "lucide-react";
+
+type FaqItem = { q: string; a: string };
 
 /*
  * Native <details> rather than JS state: it stays open without hydration,
  * works with keyboard and screen readers for free, and the answers are in the
  * HTML for search engines even while collapsed.
  */
-export function Faq({ dict }: { dict: Dictionary }) {
-  const items = [
-    dict.faq.items.duration,
-    dict.faq.items.training,
-    dict.faq.items.changes,
-    dict.faq.items.broken,
-    dict.faq.items.offline,
-    dict.faq.items.data,
-    dict.faq.items.migration,
-  ];
+export function Faq({
+  eyebrow,
+  heading,
+  items,
+}: {
+  eyebrow: string;
+  heading: string;
+  items: readonly FaqItem[];
+}) {
 
   return (
     <Section className="border-t border-border">
       <Container>
         <FadeIn className="max-w-2xl">
           <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
-            {dict.faq.eyebrow}
+            {eyebrow}
           </p>
           <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-            {dict.faq.heading}
+            {heading}
           </h2>
         </FadeIn>
 

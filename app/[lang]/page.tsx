@@ -30,7 +30,19 @@ export default function Home({ params }: { params: { lang: Locale } }) {
       <FeaturedProjects dict={dict} lang={params.lang} />
       <Process dict={dict} />
       <Pricing dict={dict} lang={params.lang} />
-      <Faq dict={dict} />
+      <Faq
+        eyebrow={dict.faq.eyebrow}
+        heading={dict.faq.heading}
+        items={[
+          dict.faq.items.duration,
+          dict.faq.items.training,
+          dict.faq.items.changes,
+          dict.faq.items.broken,
+          dict.faq.items.offline,
+          dict.faq.items.data,
+          dict.faq.items.migration,
+        ]}
+      />
       <CallToAction dict={dict} lang={params.lang} />
     </>
   );
