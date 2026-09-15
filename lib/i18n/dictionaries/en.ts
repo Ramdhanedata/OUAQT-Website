@@ -124,15 +124,6 @@ export const en = {
     all: "All",
   },
 
-  pricing: {
-    eyebrow: "Pricing",
-    heading: "One set of prices for every product we install.",
-    body: "Installation is paid once and the licence each year. The software runs on your own computers, with no internet needed for daily work.",
-    yearOneLabel: "First year, installation included",
-    launchNote: "Launch pricing for our first {clients} clients.",
-    cta: "See pricing",
-  },
-
   /*
    * The pricing page. Figures are never typed here: {placeholders} are filled
    * from lib/data/pricing.ts, and prices render from the same file.

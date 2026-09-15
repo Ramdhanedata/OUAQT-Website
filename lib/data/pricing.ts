@@ -73,12 +73,6 @@ export const pricing: PriceBook = {
   ],
 };
 
-/** Installation plus the first licence year: the figure a buyer compares. */
-export const yearOne: PriceLine = {
-  standard: pricing.installation.standard + pricing.annualLicence.standard,
-  launch: pricing.installation.launch + pricing.annualLicence.launch,
-};
-
 /** The figure a client pays today for a line. */
 export function currentPrice(line: PriceLine): number {
   return pricing.launchOffer.active ? line.launch : line.standard;

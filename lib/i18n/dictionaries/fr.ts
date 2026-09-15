@@ -126,15 +126,6 @@ export const fr: Dictionary = {
     all: "Tous",
   },
 
-  pricing: {
-    eyebrow: "Tarifs",
-    heading: "Les mêmes tarifs pour tous nos logiciels prêts à installer.",
-    body: "L'installation se paie une fois, la licence chaque année. Le logiciel tourne sur vos propres ordinateurs, sans internet pour le travail de tous les jours.",
-    yearOneLabel: "Première année, installation comprise",
-    launchNote: "Tarif de lancement réservé à nos {clients} premiers clients.",
-    cta: "Voir les tarifs",
-  },
-
   pricingPage: {
     eyebrow: "Tarifs",
     heading: "Une installation, puis une licence chaque année.",
