@@ -7,8 +7,7 @@ export const en = {
     siteTitle: "OUAQT | Software built around the way your business works",
     siteDescription: "OUAQT builds software for businesses that still run on paper, Excel and WhatsApp. We come to you, see where the hours go, and build a system your team will use every day. 22 systems in daily use across six sectors.",
     projectsTitle: "Projects | OUAQT",
-    projectsDescription:
-      "22 live systems across six sectors, built for clients in mining, pharmacy, hospitality, transport, food service, and education.",
+    projectsDescription: "22 systems in daily use at mines, pharmacies, hotels, transport companies, restaurants and schools. See what each one fixed.",
     aboutTitle: "About OUAQT",
     aboutDescription: "Why OUAQT exists and who is behind it. OUAQT builds software for businesses that still run on paper, Excel and WhatsApp, founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
     contactTitle: "Contact | OUAQT",
@@ -112,8 +111,8 @@ export const en = {
 
   projectsPage: {
     eyebrow: "Projects",
-    heading: "22 systems in production, no templates.",
-    body: "Every build starts with how the business already runs, not with a product we had sitting on a shelf. We map the daily workflow, model the data behind it, migrate years of paper and spreadsheet history, and run each system on its own isolated deployment. Mining, pharmacy, hospitality, transport, food service and education so far, with a selection of the work below.",
+    heading: "22 systems, in use every day.",
+    body: "Every project starts with a visit. We learn how the business runs, bring its old records across, and set the software up for that client alone. So far that has meant mines, pharmacies, hotels, transport companies, restaurants and schools. Here is a selection.",
     all: "All",
   },
 
@@ -378,11 +377,11 @@ export const en = {
     back: "All projects",
     overview: "Overview",
     problem: "The problem",
-    solution: "The solution",
+    solution: "What we built",
     results: "Results",
     client: "Client",
-    role: "Role",
-    tools: "Tools",
+    role: "What we did",
+    tools: "What's in it",
     screenshotAlt: "product screenshot",
   },
 
@@ -483,152 +482,152 @@ export const en = {
   projects: {
     "gmm-mining": {
       title: "GMM Bloc Tracking & Reconciliation",
-      summary:
-        "A trilingual bloc-tracking system that cut daily reconciliation from four hours to twenty-five minutes.",
-      description:
-        "GMM's daily reconciliation was a four-hour manual process. OUAQT replaced it with a bloc-tracking system built around how the field crews already work, including the three languages they already work in.",
+      summary: "Bloc tracking in three languages that cut daily reconciliation from four hours to twenty-five minutes.",
+      description: "Every day, GMM spent four hours reconciling bloc movements by hand. We replaced that with a system built around how the field crews already work, in the three languages they use.",
       client: "GMM · Mining",
-      role: "Data modeling, system architecture, historical migration, deployment",
-      problem:
-        "Reconciling daily bloc movement took four hours a day, done by hand across paper logs and spreadsheets. Field teams recorded data in French, Arabic, or English depending on who was on shift, so nothing lined up cleanly at the end of the day.",
-      solution:
-        "A bloc-tracking and reconciliation system designed around the crew's real workflow rather than a template. It is trilingual by default, because that is how field teams already log data. Years of historical records were migrated in, so the team started with their full history instead of an empty database.",
-      tags: ["Reconciliation", "Trilingual FR/AR/EN", "Data migration"],
+      role: "Studying the work on site, building the software, bringing in old records, installation",
+      problem: "Reconciling the day's bloc movements took four hours, by hand, across paper logs and spreadsheets. Crews wrote in French, Arabic or English depending on who was on shift, so nothing matched cleanly at the end of the day.",
+      solution: "A tracking and reconciliation system built around the crews' real routine. It works in all three languages from day one, because that is how the teams already record their data. We brought years of old records in, so the team started with its full history instead of an empty system.",
+      tags: [
+        "Reconciliation",
+        "French, Arabic, English",
+        "Old records brought in",
+      ],
       tools: [
-        "SQL data modeling",
-        "Historical data migration",
-        "Trilingual UI (FR / AR / EN)",
-        "Dedicated per-client deployment",
+        "Organised around GMM's own bloc records",
+        "Years of history brought in",
+        "Screens in French, Arabic and English",
+        "Set up for GMM alone",
       ],
       results: [
         "Daily reconciliation cut from 4 hours to 25 minutes",
-        "90% reduction in reconciliation time, confirmed by the client",
-        "Runs in French, Arabic, and English for mixed field crews",
+        "90% less time spent reconciling, confirmed by GMM",
+        "Mixed crews use it in French, Arabic and English",
       ],
     },
     "pharmacy-pos": {
-      title: "Pharmacy POS & Medicine Records",
-      summary:
-        "A pharmacy point-of-sale that auto-fills medicine records instead of making staff retype them.",
-      description:
-        "Medicine record-keeping was hours of repetitive typing every day. The system now fills records from the pharmacy's own history, leaving staff to handle the exceptions.",
+      title: "Pharmacy Till & Medicine Records",
+      summary: "A pharmacy till that fills in medicine records by itself, so staff stop retyping them.",
+      description: "Keeping medicine records meant hours of the same typing every day. Now the system fills them in from the pharmacy's own history, and staff only deal with the unusual cases.",
       client: "Independent pharmacy",
-      role: "Data modeling, system architecture, historical migration, deployment",
-      problem:
-        "Staff spent hours a day on manual data entry for medicine records, retyping the same product details over and over. Every entry was another chance to put a wrong number into a record that has to be right.",
-      solution:
-        "A pharmacy POS that auto-fills medicine records from historical entries. Automation absorbs the repetition; staff handle the exceptions and the judgment calls, which is the part that actually needs a person.",
-      tags: ["Point of sale", "Records automation", "Inventory"],
+      role: "Studying the work on site, building the software, bringing in old records, installation",
+      problem: "Staff spent hours every day typing medicine records by hand, entering the same product details again and again. Each entry was one more chance to put a wrong number into a record that has to be right.",
+      solution: "A till that fills in medicine records from past entries. The software handles the repetition, and staff handle the exceptions and the decisions, the part that really needs a person.",
+      tags: [
+        "Till",
+        "Records filled in automatically",
+        "Stock",
+      ],
       tools: [
-        "SQL data modeling",
-        "Historical data migration",
-        "Automated record completion",
-        "Dedicated per-client deployment",
+        "Organised around the pharmacy's own records",
+        "Years of history brought in",
+        "Records filled in from past entries",
+        "Set up for this pharmacy alone",
       ],
       results: [
-        "Two to three hours of data entry saved every day, over 60 hours a month",
-        "Entry errors down by more than 90%",
-        "Medicine records auto-filled from the pharmacy's own history",
+        "Two to three hours of typing saved every day, more than 60 hours a month",
+        "More than 90% fewer entry errors",
+        "Medicine records filled in from the pharmacy's own history",
       ],
     },
     "hotel-operations": {
       title: "Hotel Billing & Operations",
-      summary:
-        "Service billing with tax and commission math handled by the system rather than by hand.",
-      description:
-        "Tax and commission calculations across services were a recurring source of billing errors. The system encodes the property's real rules so the math is applied the same way every time.",
+      summary: "Hotel billing where the software works out taxes and commissions on every bill.",
+      description: "Working out taxes and commissions by hand kept causing billing mistakes. The system applies the hotel's own rules, the same way, on every bill.",
       client: "Hotel · Hospitality",
-      role: "Data modeling, system architecture, historical migration, deployment",
-      problem:
-        "Tax and commission calculations across multiple services were worked out manually. It is fiddly, repetitive math applied to every line of every bill, and a common source of billing errors.",
-      solution:
-        "A billing and operations system that encodes the property's actual tax and commission rules, so the calculation is applied consistently on every service line instead of being re-derived by whoever is on the desk.",
-      tags: ["Billing", "Tax & commission", "Operations"],
+      role: "Studying the work on site, building the software, bringing in old records, installation",
+      problem: "Taxes and commissions across several services were calculated by hand. Fiddly, repetitive sums on every line of every bill, and a regular source of mistakes.",
+      solution: "A billing and operations system that follows the hotel's actual tax and commission rules, so every service line is calculated the same way, whoever is on the front desk.",
+      tags: [
+        "Billing",
+        "Taxes & commissions",
+        "Daily operations",
+      ],
       tools: [
-        "SQL data modeling",
-        "Rules-based billing engine",
-        "Historical data migration",
-        "Dedicated per-client deployment",
+        "Organised around the hotel's own records",
+        "Billing that follows the hotel's rules",
+        "Years of history brought in",
+        "Set up for this hotel alone",
       ],
       results: [
-        "Billing errors down by more than 90%",
-        "Around two hours a day of manual calculation off the front desk, roughly 50 hours a month",
-        "Tax and commission applied the same way on every service line",
+        "More than 90% fewer billing errors",
+        "About two hours of calculation a day taken off the front desk, roughly 50 hours a month",
+        "Taxes and commissions applied the same way on every line",
       ],
     },
     "transport-manifests": {
       title: "Transport Manifests & Checkpoints",
-      summary:
-        "Checkpoint manifests generated from trip data, replacing an hour of manual prep before every departure.",
-      description:
-        "Every trip needed about an hour of paperwork before the vehicle could leave. The system builds those manifests from data the business already holds.",
+      summary: "Checkpoint papers prepared from trip data, instead of an hour of paperwork before every departure.",
+      description: "Each trip needed about an hour of paperwork before the vehicle could leave. Now the system prepares those documents from information the company already has.",
       client: "Transport operator",
-      role: "Data modeling, system architecture, historical migration, deployment",
-      problem:
-        "Every trip required roughly an hour of manual preparation to assemble checkpoint manifests. That paperwork has to be correct before a vehicle is allowed to leave, and it was rebuilt by hand every time.",
-      solution:
-        "A system that generates checkpoint manifests from the trip and cargo data already captured, turning departure prep into a review step rather than a rebuild from scratch.",
-      tags: ["Compliance", "Manifests", "Logistics"],
+      role: "Studying the work on site, building the software, bringing in old records, installation",
+      problem: "Every trip took around an hour of manual work to put the checkpoint manifests together. The papers must be correct before a vehicle can leave, and they were rebuilt by hand each time.",
+      solution: "A system that prepares checkpoint manifests from the trip and cargo details already entered. Before departure, staff check the documents instead of writing them from scratch.",
+      tags: [
+        "Checkpoints",
+        "Manifests",
+        "Trips",
+      ],
       tools: [
-        "SQL data modeling",
-        "Document generation",
-        "Historical data migration",
-        "Dedicated per-client deployment",
+        "Organised around the company's trip records",
+        "Manifests prepared automatically",
+        "Years of history brought in",
+        "Set up for this company alone",
       ],
       results: [
-        "Pre-departure prep cut from an hour a trip to a few minutes",
-        "Paperwork errors at checkpoints down by more than 90%",
-        "Manifests generated from trip and cargo data already in the system",
+        "Departure paperwork cut from an hour a trip to a few minutes",
+        "More than 90% fewer paperwork errors at checkpoints",
+        "Manifests built from trip and cargo details already in the system",
       ],
     },
     "school-operations": {
       title: "SchoolOS Student Records & Tuition",
-      summary:
-        "One system for students, teachers, tuition, attendance and the campus till, running offline on the school's own machines.",
-      description:
-        "A private school group was tracking enrolment, fees, attendance and shop takings in separate books and spreadsheets. SchoolOS puts all of it in one place, on the desks the staff already use.",
+      summary: "One system for students, teachers, fees, attendance and the school shop, working without internet on the school's own computers.",
+      description: "A private school group kept enrolments, fees, attendance and shop sales in separate books and spreadsheets. SchoolOS brings it all together, on the computers the staff already use.",
       client: "Écoles Al-Baraka · Education",
-      role: "Data modeling, system architecture, historical migration, deployment",
-      problem:
-        "Student records, tuition, attendance and the campus shop till each lived somewhere different. Answering something as simple as which families still owed fees meant cross-checking several books by hand, and attendance was only as current as the last person to copy it up.",
-      solution:
-        "One system covering students, teachers, tuition, attendance, finances and the shop till. It is a desktop application with its own local database, so it keeps working when the connection does not, which matters on a campus that cannot depend on the internet.",
-      tags: ["Student records", "Tuition & fees", "Attendance"],
+      role: "Studying the work on site, building the software, bringing in old records, installation",
+      problem: "Student files, fees, attendance and the shop till were each kept somewhere different. Answering a simple question, like which families still owed fees, meant checking several books by hand. Attendance was only as up to date as the last person who copied it out.",
+      solution: "One system for students, teachers, fees, attendance, finances and the shop till. It installs on the school's computers and keeps its data there, so it carries on working when the internet drops. On a campus where the connection can't be relied on, that matters.",
+      tags: [
+        "Student records",
+        "Fees",
+        "Attendance",
+      ],
       tools: [
-        "Electron desktop application",
-        "Local SQLite database",
-        "Works offline, no connection required",
-        "Dedicated per-client deployment",
+        "Installed on the school's own computers",
+        "Data kept at the school",
+        "Works without internet",
+        "Set up for this school group alone",
       ],
       results: [
-        "Two to three hours of admin saved every day, over 60 hours a month",
-        "Fee and attendance record errors down by more than 90%",
-        "Runs offline on the school's own machines",
+        "Two to three hours of admin saved every day, more than 60 hours a month",
+        "More than 90% fewer errors in fees and attendance",
+        "Runs without internet on the school's own computers",
       ],
     },
     "restaurant-pos": {
-      title: "Restaurant & Café POS",
-      summary:
-        "A point-of-sale built around how the floor actually runs, for table service and the bakery counter alike.",
-      description:
-        "Orders, kitchen flow, and daily takings lived in three different places. The POS puts them in one, and adapts to the pace of each site.",
+      title: "Restaurant & Café Till",
+      summary: "A till built around how the room really runs, for table service and the bakery counter.",
+      description: "Orders, the kitchen and the day's takings were tracked in three different places. The till brings them together and adapts to the pace of each site.",
       client: "Restaurant, café & bakery",
-      role: "Data modeling, system architecture, historical migration, deployment",
-      problem:
-        "Orders, the kitchen, and the day's takings lived in separate places. Paper tickets, a cash drawer, and a spreadsheet reconciled at closing. Nothing agreed with anything else until someone sat down and made it agree.",
-      solution:
-        "A custom POS covering ordering, kitchen flow, and daily reporting, adapted per site, including bakery counter service, where the product mix and the pace are nothing like table service.",
-      tags: ["Point of sale", "Kitchen flow", "Daily reporting"],
+      role: "Studying the work on site, building the software, bringing in old records, installation",
+      problem: "Orders, the kitchen and the day's takings were kept apart. Paper tickets, a cash drawer, and a spreadsheet to reconcile at closing. Nothing matched until someone sat down and made it match.",
+      solution: "A till made for this business, covering orders, the kitchen and the daily report, set up for each site. That includes the bakery counter, where the products and the pace are nothing like table service.",
+      tags: [
+        "Till",
+        "Kitchen orders",
+        "Daily reports",
+      ],
       tools: [
-        "SQL data modeling",
-        "Point-of-sale interface",
-        "Daily reporting",
-        "Dedicated per-client deployment",
+        "Organised around the restaurant's own menu and sales",
+        "Till screens for staff",
+        "Daily sales report",
+        "Set up for this business alone",
       ],
       results: [
-        "Closing reconciliation cut from over an hour to a few minutes each night",
-        "Takings now match the till without hand-checking, errors down by more than 90%",
-        "Ordering, kitchen flow and daily reporting in one system",
+        "Closing count cut from over an hour to a few minutes each night",
+        "Takings match the till without checking by hand, more than 90% fewer errors",
+        "Orders, kitchen and daily reports in one system",
       ],
     },
   },

@@ -5,8 +5,7 @@ export const fr: Dictionary = {
     siteTitle: "OUAQT | Des logiciels pensés pour votre façon de travailler",
     siteDescription: "OUAQT conçoit des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp. Nous venons chez vous, nous voyons où partent les heures, et nous construisons un système que votre équipe utilisera chaque jour. 22 systèmes utilisés au quotidien dans six secteurs.",
     projectsTitle: "Projets | OUAQT",
-    projectsDescription:
-      "22 systèmes en production dans six secteurs, conçus pour des clients dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
+    projectsDescription: "22 systèmes utilisés chaque jour dans des mines, des pharmacies, des hôtels, des sociétés de transport, des restaurants et des écoles. Voyez ce que chacun a changé.",
     aboutTitle: "À propos d'OUAQT",
     aboutDescription: "Pourquoi OUAQT existe et qui est derrière. OUAQT conçoit des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp, fondée par Elboumby Aumar Ramdhane à Nouakchott, en Mauritanie.",
     contactTitle: "Contact | OUAQT",
@@ -110,8 +109,8 @@ export const fr: Dictionary = {
 
   projectsPage: {
     eyebrow: "Projets",
-    heading: "22 systèmes en production, aucun modèle générique.",
-    body: "Chaque projet part du fonctionnement réel de l'entreprise, pas d'un produit déjà prêt sur l'étagère. Nous cartographions le travail quotidien, modélisons les données qui le sous-tendent, migrons des années d'historique papier et tableur, et déployons chaque système sur son propre environnement isolé. Mines, pharmacie, hôtellerie, transport, restauration et éducation à ce jour, dont une sélection ci-dessous.",
+    heading: "22 systèmes, utilisés chaque jour.",
+    body: "Chaque projet commence par une visite. Nous apprenons comment l'entreprise fonctionne, nous reprenons ses anciens registres, et nous installons le logiciel pour ce client seul. À ce jour, cela concerne des mines, des pharmacies, des hôtels, des sociétés de transport, des restaurants et des écoles. En voici une sélection.",
     all: "Tous",
   },
 
@@ -374,11 +373,11 @@ export const fr: Dictionary = {
     back: "Tous les projets",
     overview: "Aperçu",
     problem: "Le problème",
-    solution: "La solution",
+    solution: "Ce que nous avons construit",
     results: "Résultats",
     client: "Client",
-    role: "Rôle",
-    tools: "Outils",
+    role: "Ce que nous avons fait",
+    tools: "Ce qu'il contient",
     screenshotAlt: "capture d'écran du produit",
   },
 
@@ -475,152 +474,152 @@ export const fr: Dictionary = {
   projects: {
     "gmm-mining": {
       title: "GMM Suivi des blocs & rapprochement",
-      summary:
-        "Un système trilingue de suivi des blocs qui a ramené le rapprochement quotidien de quatre heures à vingt-cinq minutes.",
-      description:
-        "Le rapprochement quotidien de GMM était un processus manuel de quatre heures. OUAQT l'a remplacé par un système de suivi des blocs conçu autour de la façon dont les équipes de terrain travaillent déjà, y compris dans les trois langues qu'elles utilisent.",
+      summary: "Un suivi des blocs en trois langues qui a ramené le rapprochement quotidien de quatre heures à vingt-cinq minutes.",
+      description: "Chaque jour, GMM passait quatre heures à rapprocher les mouvements de blocs à la main. Nous avons remplacé ce travail par un système construit autour de la façon dont les équipes de terrain travaillent déjà, dans les trois langues qu'elles utilisent.",
       client: "GMM · Mines",
-      role: "Modélisation des données, architecture système, migration de l'historique, déploiement",
-      problem:
-        "Le rapprochement quotidien des mouvements de blocs prenait quatre heures par jour, à la main, entre registres papier et tableurs. Les équipes de terrain saisissaient en français, en arabe ou en anglais selon les personnes de service, si bien que rien ne concordait en fin de journée.",
-      solution:
-        "Un système de suivi et de rapprochement conçu autour du processus réel des équipes plutôt que sur un modèle générique. Il est trilingue par défaut, parce que c'est ainsi que les équipes de terrain saisissent déjà leurs données. Des années d'historique ont été migrées, pour que l'équipe démarre avec ses archives complètes et non une base vide.",
-      tags: ["Rapprochement", "Trilingue FR/AR/EN", "Migration de données"],
+      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
+      problem: "Rapprocher les mouvements de blocs de la journée prenait quatre heures, à la main, entre carnets papier et tableurs. Les équipes écrivaient en français, en arabe ou en anglais selon qui était de service, et rien ne concordait vraiment en fin de journée.",
+      solution: "Un système de suivi et de rapprochement construit autour de la routine réelle des équipes. Il fonctionne dans les trois langues dès le premier jour, parce que c'est ainsi que les équipes notent déjà leurs données. Nous avons repris des années de registres, pour que l'équipe démarre avec tout son historique et non avec un système vide.",
+      tags: [
+        "Rapprochement",
+        "Français, arabe, anglais",
+        "Anciens registres repris",
+      ],
       tools: [
-        "Modélisation SQL",
-        "Migration de l'historique",
-        "Interface trilingue (FR / AR / EN)",
-        "Déploiement dédié par client",
+        "Organisé autour des registres de blocs de GMM",
+        "Des années d'historique reprises",
+        "Écrans en français, en arabe et en anglais",
+        "Installé pour GMM seul",
       ],
       results: [
         "Rapprochement quotidien ramené de 4 heures à 25 minutes",
-        "90 % de réduction du temps de rapprochement, confirmé par le client",
-        "Fonctionne en français, en arabe et en anglais pour des équipes mixtes",
+        "90 % de temps de rapprochement en moins, confirmé par GMM",
+        "Utilisé en français, en arabe et en anglais par des équipes mixtes",
       ],
     },
     "pharmacy-pos": {
       title: "Caisse & registres de pharmacie",
-      summary:
-        "Un point de vente qui complète automatiquement les registres de médicaments au lieu de les faire retaper.",
-      description:
-        "La tenue des registres de médicaments représentait des heures de saisie répétitive chaque jour. Le système les complète désormais à partir de l'historique de la pharmacie, laissant au personnel les seuls cas particuliers.",
+      summary: "Une caisse de pharmacie qui remplit toute seule les registres de médicaments, pour que le personnel arrête de les retaper.",
+      description: "Tenir les registres de médicaments, c'était des heures de la même saisie chaque jour. Le système les remplit maintenant à partir de l'historique de la pharmacie, et le personnel ne s'occupe plus que des cas particuliers.",
       client: "Pharmacie indépendante",
-      role: "Modélisation des données, architecture système, migration de l'historique, déploiement",
-      problem:
-        "Le personnel passait des heures par jour à saisir manuellement les registres de médicaments, retapant sans cesse les mêmes informations produit. Chaque saisie était une occasion de plus d'inscrire un chiffre erroné dans un registre qui doit être juste.",
-      solution:
-        "Un point de vente qui complète les registres à partir des saisies passées. L'automatisation absorbe la répétition, le personnel traite les exceptions et les décisions, c'est-à-dire la partie qui exige vraiment une personne.",
-      tags: ["Point de vente", "Automatisation des registres", "Stocks"],
+      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
+      problem: "Le personnel passait des heures chaque jour à saisir les registres à la main, en retapant sans cesse les mêmes informations produit. Chaque saisie était une chance de plus d'inscrire un mauvais chiffre dans un registre qui doit être juste.",
+      solution: "Une caisse qui remplit les registres de médicaments à partir des saisies passées. Le logiciel prend en charge la répétition, et le personnel garde les cas particuliers et les décisions, la partie qui demande vraiment une personne.",
+      tags: [
+        "Caisse",
+        "Registres remplis automatiquement",
+        "Stock",
+      ],
       tools: [
-        "Modélisation SQL",
-        "Migration de l'historique",
-        "Complétion automatique des registres",
-        "Déploiement dédié par client",
+        "Organisé autour des registres de la pharmacie",
+        "Des années d'historique reprises",
+        "Registres remplis à partir des saisies passées",
+        "Installé pour cette pharmacie seule",
       ],
       results: [
-        "Deux à trois heures de saisie économisées chaque jour, plus de 60 heures par mois",
-        "Erreurs de saisie réduites de plus de 90 %",
-        "Registres complétés à partir de l'historique de la pharmacie",
+        "Deux à trois heures de saisie gagnées chaque jour, plus de 60 heures par mois",
+        "Plus de 90 % d'erreurs de saisie en moins",
+        "Registres remplis à partir de l'historique de la pharmacie",
       ],
     },
     "hotel-operations": {
       title: "Facturation & exploitation hôtelière",
-      summary:
-        "Une facturation où les calculs de taxes et de commissions sont gérés par le système et non à la main.",
-      description:
-        "Les calculs de taxes et de commissions sur les services étaient une source récurrente d'erreurs de facturation. Le système encode les règles réelles de l'établissement pour que le calcul soit appliqué de la même façon à chaque fois.",
+      summary: "Une facturation d'hôtel où le logiciel calcule les taxes et les commissions sur chaque facture.",
+      description: "Calculer les taxes et les commissions à la main causait sans cesse des erreurs de facturation. Le système applique les règles de l'hôtel, de la même façon, sur chaque facture.",
       client: "Hôtel · Hôtellerie",
-      role: "Modélisation des données, architecture système, migration de l'historique, déploiement",
-      problem:
-        "Les calculs de taxes et de commissions sur plusieurs services se faisaient manuellement. Un calcul minutieux et répétitif appliqué à chaque ligne de chaque facture, et une source fréquente d'erreurs.",
-      solution:
-        "Un système de facturation et d'exploitation qui encode les règles réelles de taxes et de commissions de l'établissement, pour que le calcul soit appliqué de façon cohérente sur chaque ligne de service au lieu d'être refait par la personne à la réception.",
-      tags: ["Facturation", "Taxes & commissions", "Exploitation"],
+      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
+      problem: "Les taxes et les commissions sur plusieurs services étaient calculées à la main. Des calculs minutieux et répétitifs sur chaque ligne de chaque facture, et une source régulière d'erreurs.",
+      solution: "Un système de facturation et d'exploitation qui suit les vraies règles de taxes et de commissions de l'hôtel, pour que chaque ligne soit calculée de la même façon, quelle que soit la personne à la réception.",
+      tags: [
+        "Facturation",
+        "Taxes & commissions",
+        "Exploitation au quotidien",
+      ],
       tools: [
-        "Modélisation SQL",
-        "Moteur de facturation à règles",
-        "Migration de l'historique",
-        "Déploiement dédié par client",
+        "Organisé autour des registres de l'hôtel",
+        "Facturation qui suit les règles de l'hôtel",
+        "Des années d'historique reprises",
+        "Installé pour cet hôtel seul",
       ],
       results: [
-        "Erreurs de facturation réduites de plus de 90 %",
-        "Environ deux heures de calcul manuel en moins par jour à la réception, près de 50 heures par mois",
+        "Plus de 90 % d'erreurs de facturation en moins",
+        "Environ deux heures de calcul en moins par jour à la réception, près de 50 heures par mois",
         "Taxes et commissions appliquées de la même façon sur chaque ligne",
       ],
     },
     "transport-manifests": {
       title: "Manifestes de transport & points de contrôle",
-      summary:
-        "Des manifestes de contrôle générés à partir des données de voyage, remplaçant une heure de préparation manuelle avant chaque départ.",
-      description:
-        "Chaque voyage demandait environ une heure de paperasse avant que le véhicule puisse partir. Le système génère ces manifestes à partir des données que l'entreprise détient déjà.",
+      summary: "Des manifestes de contrôle préparés à partir des données du voyage, au lieu d'une heure de paperasse avant chaque départ.",
+      description: "Chaque voyage demandait environ une heure de paperasse avant que le véhicule puisse partir. Le système prépare maintenant ces documents à partir des informations que la société a déjà.",
       client: "Opérateur de transport",
-      role: "Modélisation des données, architecture système, migration de l'historique, déploiement",
-      problem:
-        "Chaque voyage exigeait près d'une heure de préparation manuelle pour constituer les manifestes de contrôle. Ces documents doivent être exacts avant qu'un véhicule soit autorisé à partir, et ils étaient refaits à la main à chaque fois.",
-      solution:
-        "Un système qui génère les manifestes de contrôle à partir des données de voyage et de cargaison déjà saisies, transformant la préparation du départ en simple relecture plutôt qu'en reconstitution complète.",
-      tags: ["Conformité", "Manifestes", "Logistique"],
+      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
+      problem: "Chaque voyage demandait près d'une heure de travail à la main pour préparer les manifestes de contrôle. Ces documents doivent être exacts pour qu'un véhicule puisse partir, et ils étaient refaits à la main à chaque fois.",
+      solution: "Un système qui prépare les manifestes à partir des informations de voyage et de chargement déjà saisies. Avant le départ, le personnel vérifie les documents au lieu de les rédiger.",
+      tags: [
+        "Points de contrôle",
+        "Manifestes",
+        "Voyages",
+      ],
       tools: [
-        "Modélisation SQL",
-        "Génération de documents",
-        "Migration de l'historique",
-        "Déploiement dédié par client",
+        "Organisé autour des registres de voyages de la société",
+        "Manifestes préparés automatiquement",
+        "Des années d'historique reprises",
+        "Installé pour cette société seule",
       ],
       results: [
-        "Préparation avant départ ramenée d'une heure par voyage à quelques minutes",
-        "Erreurs de paperasse aux points de contrôle réduites de plus de 90 %",
-        "Manifestes générés à partir des données déjà saisies",
+        "Paperasse avant départ ramenée d'une heure par voyage à quelques minutes",
+        "Plus de 90 % d'erreurs de paperasse en moins aux points de contrôle",
+        "Manifestes construits à partir des informations déjà dans le système",
       ],
     },
     "school-operations": {
       title: "SchoolOS, dossiers élèves et scolarité",
-      summary:
-        "Un seul système pour les élèves, les enseignants, la scolarité, les présences et la caisse de l'établissement, fonctionnant hors ligne sur les postes de l'école.",
-      description:
-        "Un groupe scolaire privé suivait les inscriptions, les frais, les présences et les recettes de la boutique dans des registres et des tableurs séparés. SchoolOS réunit le tout au même endroit, sur les postes que le personnel utilise déjà.",
+      summary: "Un seul système pour les élèves, les enseignants, les frais, les présences et la boutique de l'école, qui fonctionne sans internet sur les ordinateurs de l'école.",
+      description: "Un groupe scolaire privé suivait les inscriptions, les frais, les présences et les ventes de la boutique dans des registres et des tableurs séparés. SchoolOS réunit tout au même endroit, sur les ordinateurs que le personnel utilise déjà.",
       client: "Écoles Al-Baraka · Éducation",
-      role: "Modélisation des données, architecture système, migration de l'historique, déploiement",
-      problem:
-        "Les dossiers élèves, la scolarité, les présences et la caisse de la boutique vivaient chacun ailleurs. Répondre à une question aussi simple que « quelles familles doivent encore des frais » exigeait de recouper plusieurs registres à la main, et les présences n'étaient à jour que jusqu'à la dernière recopie.",
-      solution:
-        "Un système unique couvrant les élèves, les enseignants, la scolarité, les présences, les finances et la caisse. C'est une application de bureau avec sa propre base de données locale, elle continue donc de fonctionner quand la connexion, elle, s'arrête, ce qui compte sur un campus qui ne peut pas compter sur internet.",
-      tags: ["Dossiers élèves", "Scolarité & frais", "Présences"],
+      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
+      problem: "Les dossiers des élèves, les frais, les présences et la caisse de la boutique étaient chacun tenus ailleurs. Pour répondre à une question simple, comme savoir quelles familles devaient encore des frais, il fallait recouper plusieurs registres à la main. Et les présences n'étaient à jour que jusqu'à la dernière recopie.",
+      solution: "Un seul système pour les élèves, les enseignants, les frais, les présences, les finances et la caisse de la boutique. Il s'installe sur les ordinateurs de l'école et y garde ses données, donc il continue de fonctionner quand internet coupe. Sur un campus où l'on ne peut pas compter sur la connexion, ça compte.",
+      tags: [
+        "Dossiers élèves",
+        "Frais de scolarité",
+        "Présences",
+      ],
       tools: [
-        "Application de bureau Electron",
-        "Base de données SQLite locale",
-        "Fonctionne hors ligne, sans connexion",
-        "Déploiement dédié par client",
+        "Installé sur les ordinateurs de l'école",
+        "Données gardées dans l'école",
+        "Fonctionne sans internet",
+        "Installé pour ce groupe scolaire seul",
       ],
       results: [
-        "Deux à trois heures d'administratif économisées chaque jour, plus de 60 heures par mois",
-        "Erreurs sur les frais et les présences réduites de plus de 90 %",
-        "Fonctionne hors ligne sur les postes de l'école",
+        "Deux à trois heures d'administratif gagnées chaque jour, plus de 60 heures par mois",
+        "Plus de 90 % d'erreurs en moins sur les frais et les présences",
+        "Fonctionne sans internet sur les ordinateurs de l'école",
       ],
     },
     "restaurant-pos": {
       title: "Caisse restaurant & café",
-      summary:
-        "Un point de vente conçu autour du rythme réel de la salle, aussi bien pour le service à table que pour le comptoir de boulangerie.",
-      description:
-        "Les commandes, le flux cuisine et la recette du jour vivaient à trois endroits différents. La caisse les réunit en un seul, et s'adapte au rythme de chaque établissement.",
+      summary: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir de la boulangerie.",
+      description: "Les commandes, la cuisine et la recette du jour étaient suivies à trois endroits différents. La caisse réunit tout et s'adapte au rythme de chaque établissement.",
       client: "Restaurant, café & boulangerie",
-      role: "Modélisation des données, architecture système, migration de l'historique, déploiement",
-      problem:
-        "Les commandes, la cuisine et la recette du jour vivaient séparément. Des tickets papier, un tiroir-caisse et un tableur rapproché à la fermeture. Rien ne concordait tant que quelqu'un ne s'asseyait pas pour tout faire concorder.",
-      solution:
-        "Une caisse sur mesure couvrant la prise de commande, le flux cuisine et le reporting quotidien, adaptée à chaque site, y compris le service au comptoir de boulangerie, où la gamme et le rythme n'ont rien à voir avec le service à table.",
-      tags: ["Point de vente", "Flux cuisine", "Reporting quotidien"],
+      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
+      problem: "Les commandes, la cuisine et la recette du jour étaient tenues séparément. Des tickets papier, un tiroir-caisse, et un tableur à faire concorder à la fermeture. Rien ne tombait juste tant que quelqu'un ne s'asseyait pas pour tout vérifier.",
+      solution: "Une caisse faite pour cette entreprise, qui couvre les commandes, la cuisine et le rapport du jour, réglée pour chaque établissement. Y compris le comptoir de la boulangerie, où les produits et le rythme n'ont rien à voir avec le service à table.",
+      tags: [
+        "Caisse",
+        "Commandes cuisine",
+        "Rapport du jour",
+      ],
       tools: [
-        "Modélisation SQL",
-        "Interface de point de vente",
-        "Reporting quotidien",
-        "Déploiement dédié par client",
+        "Organisé autour de la carte et des ventes du restaurant",
+        "Écrans de caisse pour le personnel",
+        "Rapport des ventes du jour",
+        "Installé pour cette entreprise seule",
       ],
       results: [
-        "Rapprochement de fermeture ramené de plus d'une heure à quelques minutes chaque soir",
-        "La recette correspond à la caisse sans vérification manuelle, erreurs réduites de plus de 90 %",
-        "Commandes, flux cuisine et reporting dans un seul système",
+        "Comptage de fermeture ramené de plus d'une heure à quelques minutes chaque soir",
+        "La recette correspond à la caisse sans vérification à la main, plus de 90 % d'erreurs en moins",
+        "Commandes, cuisine et rapports du jour dans un seul système",
       ],
     },
   },
