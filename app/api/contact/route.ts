@@ -105,15 +105,21 @@ export async function POST(request: Request) {
     /*
      * FormSubmit is built to be called from a browser and refuses requests
      * that do not say which page the form lives on. A server-side fetch sends
-     * no Referer on its own, so pass along the page the visitor was on (the
-     * browser sent it to us), falling back to the site's contact page.
+     * no Referer on its own, so we send one.
+     *
+     * Activation is tied to that page address, and the form was activated
+     * from /en/contact. Every language reports that one page, so French and
+     * Arabic visitors do not each need a separate activation. The host comes
+     * from the visitor's own request, so a future custom domain still works
+     * after one activation there.
      *
      * It also answers HTTP 200 when it refuses, including the one-time
      * "needs activation" reply, with success: "false" in the body. Checking
      * res.ok alone told visitors their message had gone when it had not.
      */
-    const referer = request.headers.get("referer") || `${siteUrl()}/contact`;
-    const origin = new URL(referer).origin;
+    const visitorPage = request.headers.get("referer");
+    const origin = visitorPage ? new URL(visitorPage).origin : siteUrl();
+    const referer = `${origin}/en/contact`;
     try {
       const res = await fetch(
         `https://formsubmit.co/ajax/${encodeURIComponent(TO)}`,
