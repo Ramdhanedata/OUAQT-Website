@@ -64,7 +64,7 @@ export function generateMetadata({ params }: Props): Metadata {
       title: dict.meta.siteTitle,
       description: dict.meta.siteDescription,
       url: `${siteUrl()}/${lang}`,
-      siteName: "OUAQT",
+      siteName: dict.common.brand,
       locale: lang,
       type: "website",
     },

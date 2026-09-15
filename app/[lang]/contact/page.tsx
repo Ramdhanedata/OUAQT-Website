@@ -72,7 +72,7 @@ export default function ContactPage({ params }: Props) {
                 className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
               >
                 <LinkedInIcon className="h-4 w-4 shrink-0 text-accent" />
-                LinkedIn
+                {dict.common.linkedin}
               </a>
 
               <a
@@ -82,12 +82,12 @@ export default function ContactPage({ params }: Props) {
                 className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
               >
                 <FacebookIcon className="h-4 w-4 shrink-0 text-accent" />
-                Facebook
+                {dict.common.facebook}
               </a>
 
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 shrink-0 text-accent" />
-                {organization.location}
+                {dict.common.location}
               </div>
             </div>
           </FadeIn>

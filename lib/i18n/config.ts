@@ -11,7 +11,7 @@ export const defaultLocale: Locale = "fr";
 export const localeShortNames: Record<Locale, string> = {
   en: "EN",
   fr: "FR",
-  ar: "AR",
+  ar: "عربي",
 };
 
 /** Full name, written in that language, for the switcher menu. */

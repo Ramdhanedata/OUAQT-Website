@@ -12,15 +12,17 @@ import { cn } from "@/lib/utils";
 export function Logo({
   className,
   priority = false,
+  alt = "OUAQT",
 }: {
   className?: string;
   priority?: boolean;
+  alt?: string;
 }) {
   return (
     <span className={cn("block", className)}>
       <Image
         src="/logo-ouaqt-dark-ink.png"
-        alt="OUAQT"
+        alt={alt}
         width={1395}
         height={333}
         priority={priority}

@@ -184,7 +184,7 @@ export function ContactForm({
 
       {/* Honeypot: off-screen and skipped by tab order, so only bots reach it. */}
       <div aria-hidden className="pointer-events-none absolute -left-[9999px]">
-        <label htmlFor="company">Company</label>
+        <label htmlFor="company">{dict.common.company}</label>
         <input
           id="company"
           type="text"

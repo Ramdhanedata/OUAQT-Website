@@ -21,6 +21,16 @@ export const fr: Dictionary = {
       "Une installation payée une fois, puis une licence annuelle, aux mêmes tarifs pour tous les logiciels OUAQT. Le logiciel tourne sur vos ordinateurs, sans internet pour le travail de tous les jours.",
   },
 
+  common: {
+    brand: "OUAQT",
+    founderName: "Elboumby Aumar Ramdhane",
+    location: "Nouakchott, Mauritanie",
+    linkedin: "LinkedIn",
+    facebook: "Facebook",
+    whatsapp: "WhatsApp",
+    company: "Entreprise",
+  },
+
   nav: {
     home: "Accueil",
     projects: "Projets",

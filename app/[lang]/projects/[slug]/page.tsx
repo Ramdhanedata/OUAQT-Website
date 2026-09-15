@@ -29,7 +29,7 @@ export function generateMetadata({ params }: Props): Metadata {
   const copy = dict.projects[project.slug];
 
   return {
-    title: `${copy.title} | OUAQT`,
+    title: `${copy.title} | ${dict.common.brand}`,
     description: copy.summary,
     alternates: alternatesFor(params.lang, `/projects/${project.slug}`),
   };

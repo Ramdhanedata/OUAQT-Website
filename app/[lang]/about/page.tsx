@@ -46,7 +46,7 @@ export function generateMetadata({ params }: Props): Metadata {
 export default function AboutPage({ params }: Props) {
   const dict = getDictionary(params.lang);
   const photo = findFounderPhoto();
-  const initials = founder.name
+  const initials = dict.common.founderName
     .split(" ")
     .map((part) => part[0])
     .join("")
@@ -120,7 +120,7 @@ export default function AboutPage({ params }: Props) {
               {photo ? (
                 <Image
                   src={photo}
-                  alt={founder.name}
+                  alt={dict.common.founderName}
                   width={598}
                   height={1137}
                   sizes="(max-width: 1024px) 100vw, 33vw"
@@ -142,7 +142,7 @@ export default function AboutPage({ params }: Props) {
                 {dict.about.founderEyebrow}
               </p>
               <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
-                {founder.name}
+                {dict.common.founderName}
               </h2>
               <p className="mt-2 text-accent">{dict.about.founderRole}</p>
 
@@ -161,18 +161,18 @@ export default function AboutPage({ params }: Props) {
                   className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
                 >
                   <LinkedInIcon className="h-4 w-4 text-accent" />
-                  LinkedIn
+                  {dict.common.linkedin}
                 </a>
                 <a
                   href={`mailto:${founder.email}`}
                   className="flex items-center gap-3 text-sm text-foreground transition-colors hover:text-accent"
                 >
                   <Mail className="h-4 w-4 text-accent" />
-                  {founder.email}
+                  <span dir="ltr">{founder.email}</span>
                 </a>
                 <div className="flex items-center gap-3 text-sm text-muted-foreground">
                   <MapPin className="h-4 w-4 text-accent" />
-                  {founder.location}
+                  {dict.common.location}
                 </div>
               </div>
             </FadeIn>

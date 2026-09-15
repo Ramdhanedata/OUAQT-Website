@@ -24,10 +24,11 @@ export const organization = {
   location: "Nouakchott, Mauritania",
 };
 
-export type SocialLink = { href: string; label: string };
+/* Labels come from dict.common, so each language names the network its own way. */
+export type SocialLink = { href: string; key: "linkedin" | "facebook" | "whatsapp" };
 
 export const socialLinks: SocialLink[] = [
-  { href: organization.linkedin, label: "LinkedIn" },
-  { href: organization.facebook, label: "Facebook" },
-  { href: organization.whatsappUrl, label: "WhatsApp" },
+  { href: organization.linkedin, key: "linkedin" },
+  { href: organization.facebook, key: "facebook" },
+  { href: organization.whatsappUrl, key: "whatsapp" },
 ];

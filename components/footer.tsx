@@ -24,12 +24,12 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
     <footer className="border-t border-border">
       <Container className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-3">
         <div>
-          <Logo className="h-6" />
+          <Logo className="h-6" alt={dict.common.brand} />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">
             {dict.footer.tagline}
           </p>
           <p className="mt-4 text-sm text-muted-foreground">
-            {organization.location}
+            {dict.common.location}
           </p>
         </div>
 
@@ -64,13 +64,14 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
                   rel="noreferrer"
                   className="text-sm text-muted-foreground transition-colors hover:text-foreground"
                 >
-                  {item.label}
+                  {dict.common[item.key]}
                 </a>
               </li>
             ))}
             <li>
               <a
                 href={`mailto:${organization.email}`}
+                dir="ltr"
                 className="text-sm text-muted-foreground transition-colors hover:text-foreground"
               >
                 {organization.email}

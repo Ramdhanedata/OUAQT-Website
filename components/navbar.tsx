@@ -52,7 +52,7 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           aria-label={dict.nav.homeAria}
           className="shrink-0"
         >
-          <Logo priority className="h-6 sm:h-7" />
+          <Logo priority className="h-6 sm:h-7" alt={dict.common.brand} />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">

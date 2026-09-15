@@ -14,9 +14,9 @@ const sizes = {
  * figure has a visually hidden label, so a screen reader says which price is
  * which instead of reading two numbers in a row.
  *
- * Figures sit in an LTR isolate, the treatment the Arabic pages already give
- * phone numbers and emails, so "MRU" stays after the number and the pair keeps
- * its order inside right-to-left text.
+ * Each figure sits in its own direction isolate so the number and currency
+ * never reorder against the text around them. Arabic writes the currency as
+ * words, so its isolate runs right to left: the number first, then the unit.
  */
 export function Price({
   line,
@@ -40,7 +40,7 @@ export function Price({
           className
         )}
       >
-        <bdi dir="ltr">{formatPrice(line.standard, lang)}</bdi>
+        <bdi dir={lang === "ar" ? "rtl" : "ltr"}>{formatPrice(line.standard, lang)}</bdi>
       </span>
     );
   }
@@ -59,7 +59,7 @@ export function Price({
           sizes[size].previous
         )}
       >
-        <bdi dir="ltr">{formatPrice(line.standard, lang)}</bdi>
+        <bdi dir={lang === "ar" ? "rtl" : "ltr"}>{formatPrice(line.standard, lang)}</bdi>
       </s>
       <span className="sr-only">{labels.launch}</span>
       <span
@@ -68,7 +68,7 @@ export function Price({
           sizes[size].current
         )}
       >
-        <bdi dir="ltr">{formatPrice(line.launch, lang)}</bdi>
+        <bdi dir={lang === "ar" ? "rtl" : "ltr"}>{formatPrice(line.launch, lang)}</bdi>
       </span>
     </span>
   );

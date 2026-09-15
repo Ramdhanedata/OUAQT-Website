@@ -23,6 +23,20 @@ export const en = {
       "An installation fee paid once, then an annual licence, at the same prices for every OUAQT product. The software runs on your own computers with no internet needed for daily work.",
   },
 
+  /*
+   * Names and labels that appear in components rather than prose. Kept here so
+   * each language shows its own form, including the founder's name in Arabic.
+   */
+  common: {
+    brand: "OUAQT",
+    founderName: "Elboumby Aumar Ramdhane",
+    location: "Nouakchott, Mauritania",
+    linkedin: "LinkedIn",
+    facebook: "Facebook",
+    whatsapp: "WhatsApp",
+    company: "Company",
+  },
+
   nav: {
     home: "Home",
     projects: "Projects",

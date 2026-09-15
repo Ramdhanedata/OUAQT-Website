@@ -102,8 +102,19 @@ export function formatNumber(value: number, locale: Locale): string {
   );
 }
 
+/*
+ * How the currency is written. French and English use the ISO code. Arabic
+ * spells out the new ouguiya, which is what MRU denotes, so the Arabic pages
+ * carry no Latin letters and cannot be read as the old ouguiya.
+ */
+export const currencyLabel: Record<Locale, string> = {
+  fr: pricing.currency,
+  en: pricing.currency,
+  ar: "أوقية جديدة",
+};
+
 export function formatPrice(value: number, locale: Locale): string {
-  return `${formatNumber(value, locale)}${NBSP}${pricing.currency}`;
+  return `${formatNumber(value, locale)}${NBSP}${currencyLabel[locale]}`;
 }
 
 export function formatPercent(value: number, locale: Locale): string {
