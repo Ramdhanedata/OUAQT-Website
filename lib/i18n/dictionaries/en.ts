@@ -432,8 +432,8 @@ export const en = {
     marketNote: "The World Bank and IFC are funding small businesses across the region to get finance and digital tools. OUAQT works on the digital side of that same problem.",
     founderEyebrow: "Founder",
     founderRole: "Founder & Solutions Engineer / Forward Deployed Engineer",
-    founderBio1: "I started OUAQT after watching capable businesses lose hours every day to work their software should have handled. Nothing complicated. Counting, copying and checking numbers by hand, because nothing they had been sold fit the way they worked.",
-    founderBio2: "My background is in data analytics and building software. I work the way a forward deployed engineer does: on site, next to the people who will use the system, from the first conversation until nobody needs the old spreadsheet.",
+    founderBio1: "I started OUAQT because I kept meeting capable teams who lost hours every day to work their software should have done for them. Counting stock, copying figures between files, checking the same numbers twice. The tools they'd paid for didn't match how they actually worked, so people made up the difference by hand.",
+    founderBio2: "I come from data analytics and software engineering, and I build on site with the people who'll use the system. I stay from the first conversation until nobody opens the old spreadsheet. For one client, a reconciliation that took four hours a day now takes 25 minutes. We've gone on to build systems for teams in mining, pharmacy, hospitality and transport across Mauritania.",
     credentials: {
       analytics: {
         title: "Data analytics at Deloitte and MyAiPathways",

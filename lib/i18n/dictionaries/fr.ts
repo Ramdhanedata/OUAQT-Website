@@ -423,8 +423,8 @@ export const fr: Dictionary = {
     marketNote: "La Banque mondiale et la SFI financent l'accès des petites entreprises de la région au crédit et aux outils numériques. OUAQT travaille sur le versant numérique de ce même problème.",
     founderEyebrow: "Fondateur",
     founderRole: "Fondateur & ingénieur solutions / ingénieur terrain",
-    founderBio1: "J'ai lancé OUAQT après avoir vu des entreprises solides perdre des heures chaque jour sur un travail que leurs logiciels auraient dû faire. Rien de compliqué. Compter, recopier, vérifier des chiffres à la main, parce que rien de ce qu'on leur avait vendu ne collait à leur façon de travailler.",
-    founderBio2: "Je viens de l'analyse de données et de la conception de logiciels. Je travaille en ingénieur de terrain : sur place, à côté des personnes qui utiliseront le système, de la première conversation jusqu'au jour où plus personne n'a besoin de l'ancien tableur.",
+    founderBio1: "J'ai lancé OUAQT parce que je rencontrais sans cesse des équipes compétentes qui perdaient des heures chaque jour sur un travail que leurs logiciels auraient dû faire à leur place. Compter le stock, recopier des chiffres d'un fichier à l'autre, vérifier deux fois les mêmes nombres. Les outils qu'elles avaient payés ne correspondaient pas à leur façon de travailler, alors les gens comblaient l'écart à la main.",
+    founderBio2: "Je viens de l'analyse de données et du développement logiciel, et je construis sur place, avec les personnes qui vont utiliser le système. Je reste de la première conversation jusqu'au jour où plus personne n'ouvre l'ancien tableur. Chez un client, un rapprochement qui prenait quatre heures par jour se fait aujourd'hui en 25 minutes. Depuis, nous avons construit des systèmes pour des équipes dans les mines, la pharmacie, l'hôtellerie et le transport, partout en Mauritanie.",
     credentials: {
       analytics: {
         title: "Analyse de données chez Deloitte et MyAiPathways",
