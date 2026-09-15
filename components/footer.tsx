@@ -29,7 +29,7 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
             {dict.footer.tagline}
           </p>
           <p className="mt-4 text-sm text-muted-foreground">
-            {dict.common.location}
+            {dict.common.headquarters}
           </p>
         </div>
 

@@ -2,12 +2,12 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "OUAQT | Logiciels de gestion sur mesure à Nouakchott, Mauritanie",
-    siteDescription: "OUAQT conçoit des logiciels de gestion sur mesure à Nouakchott : caisse et registres de pharmacie, facturation d'hôtel, caisse de restaurant et de boulangerie, transport, ateliers et entrepôts. Sans internet au quotidien. Première visite gratuite.",
+    siteTitle: "OUAQT | Logiciels sur mesure pour ce qui ralentit votre entreprise",
+    siteDescription: "OUAQT repère ce qui ralentit une entreprise, puis construit le logiciel qui règle le problème : caisse et registres de pharmacie, facturation d'hôtel, caisse de restaurant et de boulangerie, transport, ateliers et entrepôts. Sur place ou à distance. Première visite gratuite.",
     projectsTitle: "Projets | OUAQT",
     projectsDescription: "22 systèmes utilisés chaque jour dans des mines, des pharmacies, des hôtels, des sociétés de transport, des restaurants et des écoles. Voyez ce que chacun a changé.",
     aboutTitle: "À propos d'OUAQT",
-    aboutDescription: "Pourquoi OUAQT existe et qui est derrière. OUAQT conçoit des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp, fondée par Elboumby Aumar Ramdhane à Nouakchott, en Mauritanie.",
+    aboutDescription: "Pourquoi OUAQT existe et qui est derrière. OUAQT repère ce qui ralentit les entreprises et construit le logiciel qui règle le problème, fondée par Elboumby Aumar Ramdhane.",
     contactTitle: "Contact | OUAQT",
     contactDescription: "Dites-nous ce qui prend trop de temps à votre équipe. Nous répondons en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
@@ -21,12 +21,14 @@ export const fr: Dictionary = {
       "Une installation payée une fois, puis une licence annuelle, aux mêmes tarifs pour tous les logiciels OUAQT. Le logiciel tourne sur vos ordinateurs, sans internet pour le travail de tous les jours.",
     shareLine: "22 systèmes utilisés au quotidien dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
     shareAlt: "OUAQT : nous repérons ce qui ralentit votre entreprise, et nous construisons le logiciel qui règle le problème.",
+    shareReach: "Nous travaillons sur place ou à distance.",
   },
 
   common: {
     brand: "OUAQT",
     founderName: "Elboumby Aumar Ramdhane",
     location: "Nouakchott, Mauritanie",
+    headquarters: "Siège à Nouakchott, Mauritanie",
     linkedin: "LinkedIn",
     facebook: "Facebook",
     whatsapp: "WhatsApp",

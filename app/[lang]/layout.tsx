@@ -107,14 +107,16 @@ export default function RootLayout({ children, params }: Props) {
   const rtl = isRtl(lang);
 
   /*
-   * Structured data describing the business, so Google can show OUAQT in
-   * local results ("logiciel pharmacie Nouakchott") with its city, phone and
-   * languages. Only verified links go in sameAs.
+   * Structured data describing the business for search engines. OUAQT works
+   * with businesses across the region, on site or remotely, so this is an
+   * Organization with no address or service area that would pin it to one
+   * city. Contact details, languages and what it works on are included.
+   * Only verified links go in sameAs.
    */
   const base = siteUrl();
   const businessData = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": "Organization",
     "@id": `${base}/#business`,
     name: "OUAQT",
     alternateName: "وقت",
@@ -124,13 +126,23 @@ export default function RootLayout({ children, params }: Props) {
     description: dict.meta.siteDescription,
     email: organization.email,
     telephone: organization.whatsappUrl.replace("https://wa.me/", "+"),
-    address: {
-      "@type": "PostalAddress",
-      addressLocality: "Nouakchott",
-      addressCountry: "MR",
+    contactPoint: {
+      "@type": "ContactPoint",
+      contactType: "sales",
+      telephone: organization.whatsappUrl.replace("https://wa.me/", "+"),
+      email: organization.email,
+      availableLanguage: ["French", "Arabic", "English"],
     },
-    areaServed: { "@type": "Country", name: "Mauritania" },
     knowsLanguage: ["fr", "ar", "en"],
+    knowsAbout: [
+      "Business process bottlenecks",
+      "Custom business software",
+      "Pharmacy point of sale and records",
+      "Hotel billing",
+      "Restaurant and bakery point of sale",
+      "Transport management",
+      "Workshop and warehouse management",
+    ],
     founder: { "@type": "Person", name: founder.name },
     sameAs: [organization.linkedin],
   };

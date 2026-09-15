@@ -87,7 +87,7 @@ export default function ContactPage({ params }: Props) {
 
               <div className="flex items-center gap-3 text-sm text-muted-foreground">
                 <MapPin className="h-4 w-4 shrink-0 text-accent" />
-                {dict.common.location}
+                {dict.common.headquarters}
               </div>
             </div>
           </FadeIn>

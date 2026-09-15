@@ -4,12 +4,12 @@
  */
 export const en = {
   meta: {
-    siteTitle: "OUAQT | Custom business software in Nouakchott, Mauritania",
-    siteDescription: "OUAQT builds custom business software in Nouakchott, Mauritania: pharmacy tills and records, hotel billing, restaurant and bakery tills, transport, workshops and warehouses. Works without internet. First visit free.",
+    siteTitle: "OUAQT | Custom software for what slows your business down",
+    siteDescription: "OUAQT finds the bottlenecks that slow a business down, then builds the software that removes them: pharmacy tills and records, hotel billing, restaurant and bakery tills, transport, workshops and warehouses. On site or remotely. First visit free.",
     projectsTitle: "Projects | OUAQT",
     projectsDescription: "22 systems in daily use at mines, pharmacies, hotels, transport companies, restaurants and schools. See what each one fixed.",
     aboutTitle: "About OUAQT",
-    aboutDescription: "Why OUAQT exists and who is behind it. OUAQT builds software for businesses that still run on paper, Excel and WhatsApp, founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
+    aboutDescription: "Why OUAQT exists and who is behind it. OUAQT finds what slows businesses down and builds the software that fixes it, founded by Elboumby Aumar Ramdhane.",
     contactTitle: "Contact | OUAQT",
     contactDescription: "Tell us what takes your team too long. We usually reply within one business day, by email or on WhatsApp.",
     termsTitle: "Licence and terms of use | OUAQT",
@@ -23,6 +23,7 @@ export const en = {
       "An installation fee paid once, then an annual licence, at the same prices for every OUAQT product. The software runs on your own computers with no internet needed for daily work.",
     shareLine: "22 systems in daily use across mining, pharmacy, hospitality, transport, food service and education.",
     shareAlt: "OUAQT: we find what slows your business down, and build the software that fixes it.",
+    shareReach: "We work on site or remotely.",
   },
 
   /*
@@ -33,6 +34,7 @@ export const en = {
     brand: "OUAQT",
     founderName: "Elboumby Aumar Ramdhane",
     location: "Nouakchott, Mauritania",
+    headquarters: "Headquartered in Nouakchott, Mauritania",
     linkedin: "LinkedIn",
     facebook: "Facebook",
     whatsapp: "WhatsApp",

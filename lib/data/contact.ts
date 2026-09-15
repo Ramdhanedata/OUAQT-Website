@@ -21,6 +21,7 @@ export const organization = {
    */
   facebook: "https://www.facebook.com/ngoulk.something",
 
+  // Headquarters. Shown on the site; deliberately left out of search structured data.
   location: "Nouakchott, Mauritania",
 };
 

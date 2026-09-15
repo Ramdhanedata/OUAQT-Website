@@ -77,7 +77,7 @@ h1{margin:44px 0 0;font-weight:${rtl ? 700 : 650};font-size:62px;line-height:${r
 </style></head><body><div class="frame">
 <div class="top"><img class="logo" src="${logo}"><span class="pill">${esc(dict.hero.freeVisit)}</span></div>
 <h1 id="h">${esc(dict.hero.heading)}</h1>
-<div class="bottom"><div class="rule"></div><p class="line">${esc(dict.meta.shareLine)}</p><p class="place">${esc(dict.common.location)}</p></div>
+<div class="bottom"><div class="rule"></div><p class="line">${esc(dict.meta.shareLine)}</p><p class="place">${esc(dict.meta.shareReach)}</p></div>
 </div>
 <script>
 /* Shrink the heading until everything fits in 630px. */
