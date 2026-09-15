@@ -10,11 +10,9 @@ export const en = {
     projectsDescription:
       "22 live systems across six sectors, built for clients in mining, pharmacy, hospitality, transport, food service, and education.",
     aboutTitle: "About OUAQT",
-    aboutDescription:
-      "OUAQT builds custom systems for businesses running on paper, Excel, and WhatsApp. Founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
+    aboutDescription: "Why OUAQT exists and who is behind it. OUAQT builds software for businesses that still run on paper, Excel and WhatsApp, founded by Elboumby Aumar Ramdhane in Nouakchott, Mauritania.",
     contactTitle: "Contact | OUAQT",
-    contactDescription:
-      "Tell OUAQT how your business runs today, and where a custom system would save the most time.",
+    contactDescription: "Tell us what takes your team too long. We usually reply within one business day, by email or on WhatsApp.",
     termsTitle: "Licence and terms of use | OUAQT",
     termsDescription:
       "Who owns an OUAQT system, what your licence covers, and how it renews.",
@@ -399,75 +397,65 @@ export const en = {
 
   about: {
     eyebrow: "About OUAQT",
-    heading: "A structural gap, not a single industry problem.",
-    body1:
-      "Across mining, pharmacy, hospitality, transport, food service and education, the same pattern keeps appearing. Capable businesses running critical operations on paper, spreadsheets, and group chats. Not because it works, but because nobody has ever built software for how they actually operate.",
-    body2:
-      "OUAQT exists to close that gap one business at a time, with a system designed around a single client's real workflow, their real history, and the languages their team actually uses.",
-    marketHeading: "The gap is measurable.",
+    heading: "The same problem, in every sector we visit.",
+    body1: "Mines, pharmacies, hotels, transport companies, restaurants, schools. We keep meeting capable businesses whose most important work runs on paper, spreadsheets and group chats. Usually the software they were offered never fit the way they operate.",
+    body2: "That is the problem we work on. Every system we build fits one client: their routine, their records, and the languages their staff use.",
+    marketHeading: "The numbers behind it.",
     stat1: "of Mauritania's GDP runs through the informal sector",
     stat2: "of the workforce is in informal employment",
-    stat3: "Investment Code now explicitly prioritizes SME support",
-    marketNote:
-      "The World Bank and IFC are actively funding SME access to finance and digital tools across the region. That is the same gap OUAQT is built to close.",
+    stat3: "The Investment Code now names support for small and medium businesses as a priority",
+    marketNote: "The World Bank and IFC are funding small businesses across the region to get finance and digital tools. OUAQT works on the digital side of that same problem.",
     founderEyebrow: "Founder",
     founderRole: "Founder & Solutions Engineer / Forward Deployed Engineer",
-    founderBio1:
-      "I started OUAQT after watching capable businesses lose hours every day to work their software should have been handling for them. Not complicated work. Just counting, copying, and checking numbers by hand because nothing they had been sold fit the way they actually operated.",
+    founderBio1: "I started OUAQT after watching capable businesses lose hours every day to work their software should have handled. Nothing complicated. Counting, copying and checking numbers by hand, because nothing they had been sold fit the way they worked.",
     founderBio2: "My background is in data analytics and building software. I work the way a forward deployed engineer does: on site, next to the people who will use the system, from the first conversation until nobody needs the old spreadsheet.",
     credentials: {
       analytics: {
         title: "Data analytics at Deloitte and MyAiPathways",
-        detail:
-          "Consulting and product work on how organizations collect, model, and actually use their data.",
+        detail: "Consulting and product work on how organisations collect their data and put it to use.",
       },
       snim: {
-        title: "Workflow automation at SNIM",
-        detail:
-          "Rebuilt a three day process so it finished in eight hours, on one of Mauritania's largest industrial operations.",
+        title: "Process automation at SNIM",
+        detail: "Took a process that ran for three days and got it done in eight hours, at one of Mauritania's largest industrial companies.",
       },
       undp: {
         title: "UNDP Knowledge Future Skills Academy winner, 2025",
-        detail:
-          "Selected from the regional cohort, and keynote speaker at the Knowledge Summit in Dubai the same year.",
+        detail: "Chosen from the regional group, then invited to give the keynote at the Knowledge Summit in Dubai the same year.",
       },
       sectors: {
-        title: "Systems live across six sectors",
-        detail:
-          "Mining, pharmacy, hospitality, transport, food service, and education, each running on its own dedicated deployment.",
+        title: "22 systems in use across six sectors",
+        detail: "Mining, pharmacy, hotels, transport, food service and education, each system set up for its client alone.",
       },
     },
-    ctaHeading: "Tell us what slows your business down.",
-    ctaBody:
-      "If any part of your day still runs on a spreadsheet nobody trusts, that is usually where the first system goes.",
-    ctaButton: "Start the conversation",
+    ctaHeading: "What slows your business down?",
+    ctaBody: "If part of your day still depends on a spreadsheet nobody trusts, that is usually where we start.",
+    ctaButton: "Talk to us",
   },
 
   contact: {
     eyebrow: "Contact",
-    heading: "Start with whatever wastes the most time.",
-    body: "Tell us how the day actually runs. What gets written on paper, what gets typed in twice, where the numbers stop agreeing. We map the workflow first, then build the smallest system that takes the most manual work off your team.",
+    heading: "Tell us what takes your team too long.",
+    body: "You don't need the right words or a plan. Tell us in your own words where the day gets stuck, and we'll look at it with you and suggest the smallest system that saves the most time.",
     whatsapp: "WhatsApp",
     form: {
       name: "Name",
-      namePlaceholder: "Jane Doe",
+      namePlaceholder: "Your full name",
       email: "Email",
-      emailPlaceholder: "jane@company.com",
+      emailPlaceholder: "you@yourbusiness.com",
       message: "Message",
-      messagePlaceholder:
-        "What does your business run on today? Paper, spreadsheets, WhatsApp? Tell us where it slows you down.",
+      messagePlaceholder: "For example: we write every sale in a notebook and count the till by hand every night.",
       submit: "Send message",
       sending: "Sending…",
       errorSend:
         "That didn't send. Please try again, or email us directly at",
       successTitle: "Message received.",
-      successBody: "Thanks for reaching out. We usually reply within one business day.",
+      successBody: "Thank you. We usually reply within one business day. If it's urgent, message us on WhatsApp.",
       sendAnother: "Send another message",
       errorName: "Please enter your name.",
       errorEmailEmpty: "Please enter your email.",
       errorEmailInvalid: "Please enter a valid email address.",
       errorMessageEmpty: "Tell us a bit about your business.",
-      errorMessageShort: "A few more details would help (20+ characters).",
+      errorMessageShort: "Tell us a little more, at least 20 characters.",
     },
   },
 
@@ -483,8 +471,8 @@ export const en = {
   },
 
   notFound: {
-    heading: "This page doesn't exist.",
-    body: "The page you're looking for may have been moved or removed.",
+    heading: "We couldn't find that page.",
+    body: "It may have moved. Head back to the home page, or tell us what you were looking for.",
     cta: "Back to home",
   },
 

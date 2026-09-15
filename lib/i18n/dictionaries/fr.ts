@@ -8,11 +8,9 @@ export const fr: Dictionary = {
     projectsDescription:
       "22 systèmes en production dans six secteurs, conçus pour des clients dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
     aboutTitle: "À propos d'OUAQT",
-    aboutDescription:
-      "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent au papier, à Excel et à WhatsApp. Fondée par Elboumby Aumar Ramdhane à Nouakchott, Mauritanie.",
+    aboutDescription: "Pourquoi OUAQT existe et qui est derrière. OUAQT conçoit des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp, fondée par Elboumby Aumar Ramdhane à Nouakchott, en Mauritanie.",
     contactTitle: "Contact | OUAQT",
-    contactDescription:
-      "Expliquez-nous comment votre entreprise fonctionne aujourd'hui, et où un système sur mesure ferait gagner le plus de temps.",
+    contactDescription: "Dites-nous ce qui prend trop de temps à votre équipe. Nous répondons en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
     termsDescription:
       "À qui appartient un logiciel OUAQT, ce que couvre votre licence et comment elle se renouvelle.",
@@ -395,77 +393,65 @@ export const fr: Dictionary = {
 
   about: {
     eyebrow: "À propos d'OUAQT",
-    heading: "Un manque structurel, pas le problème d'un seul secteur.",
-    body1:
-      "Dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation, le même schéma revient. Des entreprises compétentes qui pilotent des opérations critiques au papier, au tableur et par messagerie de groupe. Non pas parce que cela fonctionne, mais parce que personne ne leur a jamais conçu de logiciel adapté à leur façon réelle de travailler.",
-    body2:
-      "OUAQT existe pour combler ce manque, une entreprise à la fois, avec un système conçu autour du processus réel d'un seul client, de son historique réel et des langues que son équipe utilise vraiment.",
-    marketHeading: "Ce manque se mesure.",
+    heading: "Le même problème, dans chaque secteur où nous allons.",
+    body1: "Mines, pharmacies, hôtels, transport, restaurants, écoles. Nous rencontrons sans cesse des entreprises solides dont le travail le plus important repose sur du papier, des tableurs et des groupes de discussion. Le plus souvent, les logiciels qu'on leur a proposés ne correspondaient pas à leur façon de travailler.",
+    body2: "C'est ce problème que nous réglons. Chaque système que nous construisons est fait pour un seul client, sa routine, ses registres et les langues de son personnel.",
+    marketHeading: "Les chiffres derrière ce constat.",
     stat1: "du PIB mauritanien passe par le secteur informel",
     stat2: "de la population active occupe un emploi informel",
     stat3: "Le Code des investissements donne désormais la priorité aux PME",
-    marketNote:
-      "La Banque mondiale et la SFI financent activement l'accès des PME au financement et aux outils numériques dans la région. C'est précisément le manque qu'OUAQT vient combler.",
+    marketNote: "La Banque mondiale et la SFI financent l'accès des petites entreprises de la région au crédit et aux outils numériques. OUAQT travaille sur le versant numérique de ce même problème.",
     founderEyebrow: "Fondateur",
     founderRole: "Fondateur & Solutions Engineer / Forward Deployed Engineer",
-    founderBio1:
-      "J'ai lancé OUAQT après avoir vu des entreprises compétentes perdre des heures chaque jour à faire un travail que leurs logiciels auraient dû gérer. Rien de compliqué. Compter, recopier et vérifier des chiffres à la main, parce que rien de ce qu'on leur avait vendu ne correspondait à leur façon réelle de travailler.",
+    founderBio1: "J'ai lancé OUAQT après avoir vu des entreprises solides perdre des heures chaque jour sur un travail que leurs logiciels auraient dû faire. Rien de compliqué. Compter, recopier, vérifier des chiffres à la main, parce que rien de ce qu'on leur avait vendu ne collait à leur façon de travailler.",
     founderBio2: "Je viens de l'analyse de données et de la conception de logiciels. Je travaille comme un forward deployed engineer : sur place, à côté des personnes qui utiliseront le système, de la première conversation jusqu'au jour où plus personne n'a besoin de l'ancien tableur.",
     credentials: {
       analytics: {
         title: "Analyse de données chez Deloitte et MyAiPathways",
-        detail:
-          "Conseil et travail produit sur la façon dont les organisations collectent, modélisent et exploitent réellement leurs données.",
+        detail: "Conseil et travail produit sur la façon dont les organisations collectent leurs données et s'en servent.",
       },
       snim: {
         title: "Automatisation des processus à la SNIM",
-        detail:
-          "Un processus de trois jours ramené à huit heures, dans l'une des plus grandes opérations industrielles de Mauritanie.",
+        detail: "Un processus qui prenait trois jours, ramené à huit heures, dans l'une des plus grandes entreprises industrielles de Mauritanie.",
       },
       undp: {
         title: "Lauréat de la Knowledge Future Skills Academy du PNUD, 2025",
-        detail:
-          "Sélectionné parmi la promotion régionale, et conférencier principal au Knowledge Summit de Dubaï la même année.",
+        detail: "Sélectionné dans la cohorte régionale, puis invité comme conférencier principal au Knowledge Summit de Dubaï la même année.",
       },
       sectors: {
-        title: "Des systèmes en production dans six secteurs",
-        detail:
-          "Mines, pharmacie, hôtellerie, transport, restauration et éducation, chacun sur son propre déploiement dédié.",
+        title: "22 systèmes en service dans six secteurs",
+        detail: "Mines, pharmacie, hôtellerie, transport, restauration et éducation, chaque système installé pour son client seul.",
       },
     },
-    ctaHeading: "Dites-nous ce qui ralentit votre entreprise.",
-    ctaBody:
-      "Si une partie de votre journée repose encore sur un tableur auquel personne ne fait confiance, c'est généralement là que le premier système trouve sa place.",
-    ctaButton: "Démarrer la conversation",
+    ctaHeading: "Qu'est-ce qui ralentit votre entreprise ?",
+    ctaBody: "Si une partie de votre journée dépend encore d'un tableur dont personne n'est sûr, c'est en général par là que nous commençons.",
+    ctaButton: "Parlons-en",
   },
 
   contact: {
     eyebrow: "Contact",
-    heading: "Commençons par ce qui vous coûte le plus de temps.",
-    body: "Racontez-nous comment se déroule vraiment la journée. Ce qui s'écrit sur papier, ce qui se saisit deux fois, l'endroit où les chiffres cessent de concorder. Nous cartographions d'abord le processus, puis nous construisons le plus petit système qui retire le plus de travail manuel à votre équipe.",
+    heading: "Dites-nous ce qui prend trop de temps à votre équipe.",
+    body: "Pas besoin des bons mots ni d'un plan. Racontez-nous avec vos mots où la journée se bloque : nous regardons ça avec vous et nous vous proposons le plus petit système qui fait gagner le plus de temps.",
     whatsapp: "WhatsApp",
     form: {
       name: "Nom",
-      namePlaceholder: "Jane Doe",
+      namePlaceholder: "Votre nom complet",
       email: "E-mail",
-      emailPlaceholder: "jane@entreprise.com",
+      emailPlaceholder: "vous@votre-entreprise.com",
       message: "Message",
-      messagePlaceholder:
-        "Sur quoi tourne votre entreprise aujourd'hui ? Papier, tableurs, WhatsApp ? Dites-nous où cela vous ralentit.",
+      messagePlaceholder: "Par exemple : nous notons chaque vente dans un cahier et nous comptons la caisse à la main tous les soirs.",
       submit: "Envoyer le message",
       sending: "Envoi…",
       errorSend:
         "L'envoi a échoué. Réessayez, ou écrivez-nous directement à",
       successTitle: "Message bien reçu.",
-      successBody:
-        "Merci de nous avoir écrit. Nous répondons généralement sous un jour ouvré.",
+      successBody: "Merci. Nous répondons en général sous un jour ouvré. Si c'est urgent, écrivez-nous sur WhatsApp.",
       sendAnother: "Envoyer un autre message",
       errorName: "Veuillez saisir votre nom.",
       errorEmailEmpty: "Veuillez saisir votre e-mail.",
       errorEmailInvalid: "Veuillez saisir une adresse e-mail valide.",
       errorMessageEmpty: "Parlez-nous un peu de votre entreprise.",
-      errorMessageShort:
-        "Quelques précisions supplémentaires nous aideraient (20 caractères minimum).",
+      errorMessageShort: "Dites-nous en un peu plus, au moins 20 caractères.",
     },
   },
 
@@ -481,8 +467,8 @@ export const fr: Dictionary = {
   },
 
   notFound: {
-    heading: "Cette page n'existe pas.",
-    body: "La page que vous cherchez a peut-être été déplacée ou supprimée.",
+    heading: "Nous ne trouvons pas cette page.",
+    body: "Elle a peut-être changé d'adresse. Revenez à l'accueil, ou dites-nous ce que vous cherchiez.",
     cta: "Retour à l'accueil",
   },
 
