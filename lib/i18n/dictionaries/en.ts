@@ -126,33 +126,11 @@ export const en = {
 
   pricing: {
     eyebrow: "Pricing",
-    heading: "One price. Everything included.",
-    body: "No monthly licence, no per-user fee, no surprise invoice halfway through. You pay once, and it runs for as long as you need it.",
-    priceLabel: "Per system",
-    price: "40,000 MRU",
-    compareLabel: "Regular price",
-    compare: "45,000 MRU",
-    compareNote:
-      "Same system, same training, same warranty. Nothing is trimmed to reach the lower price.",
-    includes: {
-      system: {
-        title: "The system itself",
-        body: "Designed around how your business already works, not adapted from a template.",
-      },
-      training: {
-        title: "Your team trained on it",
-        body: "We sit with your staff and teach them until they are comfortable using it every day.",
-      },
-      warranty: {
-        title: "One year of warranty",
-        body: "If anything breaks in the first year, we fix it. No call-out charge, no argument.",
-      },
-      updates: {
-        title: "Updates and additions",
-        body: "Need something added as you grow? Tell us and we build it in.",
-      },
-    },
-    cta: "Talk about your project",
+    heading: "One set of prices for every product we install.",
+    body: "Installation is paid once and the licence each year. The software runs on your own computers, with no internet needed for daily work.",
+    yearOneLabel: "First year, installation included",
+    launchNote: "Launch pricing for our first {clients} clients.",
+    cta: "See pricing",
   },
 
   /*
@@ -293,7 +271,7 @@ export const en = {
       },
       stay: {
         title: "We stay after it goes live",
-        body: "We train your staff in person, fix anything that breaks for a year, and add what you need as the business changes.",
+        body: "We train your staff in person. After that, for as long as the licence runs, we fix what goes wrong and adjust what exists when the way you work changes.",
       },
     },
   },
@@ -308,19 +286,19 @@ export const en = {
       },
       offline: {
         q: "What if the internet goes down?",
-        a: "Several of our systems run entirely on your own machines with a local database, so they keep working with no connection at all. The school system is built exactly this way.",
+        a: "Nothing changes. Our software runs on your own computers, and daily work happens without a connection.",
       },
       data: {
         q: "Who owns the data?",
-        a: "You do. It sits on your own deployment and never mixes with another client's. Ask for a copy at any time and we hand it over.",
+        a: "You do. It stays on your own computers and never mixes with another client's. Ask for a copy at any time and we hand it over.",
       },
       changes: {
-        q: "What if I need something added later?",
-        a: "Tell us and we build it. Changes and additions are included for the first year, not billed as a new project.",
+        q: "What if I need something changed later?",
+        a: "While the licence is renewed, changes to what already exists are included. A new screen or process is a new module and is quoted separately, and we tell you which one it is before we start.",
       },
       training: {
         q: "Do you train my team?",
-        a: "Yes, in person, for as long as it takes them to feel confident. That is part of the price, never an extra line on the invoice.",
+        a: "Yes, in person, for as long as it takes them to feel confident. Training is part of the installation fee and is never billed on its own.",
       },
       migration: {
         q: "What happens to my old records?",
@@ -328,7 +306,7 @@ export const en = {
       },
       broken: {
         q: "What if something breaks?",
-        a: "We fix it. Every system carries a full year of warranty at no extra cost, and you deal with the person who built it.",
+        a: "We fix it. While the licence is renewed, anything wrong or slow in what we delivered is corrected at no charge, and you deal with the person who built it.",
       },
     },
   },

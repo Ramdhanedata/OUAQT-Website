@@ -128,33 +128,11 @@ export const fr: Dictionary = {
 
   pricing: {
     eyebrow: "Tarifs",
-    heading: "Un seul prix. Tout compris.",
-    body: "Pas de licence mensuelle, pas de frais par utilisateur, pas de facture surprise en cours de route. Vous payez une fois, et le système tourne aussi longtemps que vous en avez besoin.",
-    priceLabel: "Par système",
-    price: "40 000 MRU",
-    compareLabel: "Prix habituel",
-    compare: "45 000 MRU",
-    compareNote:
-      "Même système, même formation, même garantie. Rien n'est retiré pour atteindre ce prix.",
-    includes: {
-      system: {
-        title: "Le système lui-même",
-        body: "Conçu autour du fonctionnement réel de votre entreprise, et non adapté d'un modèle générique.",
-      },
-      training: {
-        title: "Votre équipe formée",
-        body: "Nous nous asseyons avec vos employés et les formons jusqu'à ce qu'ils soient à l'aise au quotidien.",
-      },
-      warranty: {
-        title: "Un an de garantie",
-        body: "Si quelque chose casse la première année, nous le réparons. Sans frais de déplacement, sans discussion.",
-      },
-      updates: {
-        title: "Mises à jour et ajouts",
-        body: "Besoin d'une fonction supplémentaire à mesure que vous grandissez ? Dites-le-nous et nous l'intégrons.",
-      },
-    },
-    cta: "Parlons de votre projet",
+    heading: "Les mêmes tarifs pour tous nos logiciels prêts à installer.",
+    body: "L'installation se paie une fois, la licence chaque année. Le logiciel tourne sur vos propres ordinateurs, sans internet pour le travail de tous les jours.",
+    yearOneLabel: "Première année, installation comprise",
+    launchNote: "Tarif de lancement réservé à nos {clients} premiers clients.",
+    cta: "Voir les tarifs",
   },
 
   pricingPage: {
@@ -293,7 +271,7 @@ export const fr: Dictionary = {
       },
       stay: {
         title: "Nous restons après la mise en service",
-        body: "Nous formons vos employés sur place, réparons tout incident pendant un an, et ajoutons ce dont vous avez besoin à mesure que l'entreprise évolue.",
+        body: "Nous formons vos employés sur place. Ensuite, tant que la licence court, nous corrigeons ce qui ne va pas et ajustons l'existant quand votre façon de travailler change.",
       },
     },
   },
@@ -308,19 +286,19 @@ export const fr: Dictionary = {
       },
       offline: {
         q: "Et si internet tombe ?",
-        a: "Plusieurs de nos systèmes tournent entièrement sur vos propres postes avec une base de données locale, ils continuent donc sans aucune connexion. Le système scolaire est bâti exactement ainsi.",
+        a: "Rien ne change. Nos logiciels tournent sur vos propres ordinateurs, et le travail de tous les jours se fait sans connexion.",
       },
       data: {
         q: "À qui appartiennent les données ?",
-        a: "À vous. Elles résident sur votre propre déploiement et ne se mélangent jamais à celles d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
+        a: "À vous. Elles restent sur vos propres ordinateurs et ne se mélangent jamais à celles d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
       },
       changes: {
-        q: "Et si j'ai besoin d'un ajout plus tard ?",
-        a: "Dites-le-nous et nous le construisons. Les modifications et les ajouts sont inclus la première année, ils ne sont pas facturés comme un nouveau projet.",
+        q: "Et si j'ai besoin d'un changement plus tard ?",
+        a: "Tant que la licence est renouvelée, les modifications de ce qui existe déjà sont comprises. Un écran ou un processus nouveau est un nouveau module, chiffré à part, et nous vous disons lequel des deux avant de commencer.",
       },
       training: {
         q: "Formez-vous mon équipe ?",
-        a: "Oui, sur place, aussi longtemps qu'il le faut pour qu'elle soit en confiance. C'est compris dans le prix, jamais une ligne en plus sur la facture.",
+        a: "Oui, sur place, aussi longtemps qu'il le faut pour qu'elle soit en confiance. La formation fait partie des frais d'installation et n'est jamais facturée à part.",
       },
       migration: {
         q: "Que deviennent mes anciens registres ?",
@@ -328,7 +306,7 @@ export const fr: Dictionary = {
       },
       broken: {
         q: "Et si quelque chose casse ?",
-        a: "Nous le réparons. Chaque système est garanti un an sans frais supplémentaires, et vous parlez directement à la personne qui l'a construit.",
+        a: "Nous le réparons. Tant que la licence est renouvelée, tout ce qui est faux ou lent dans ce que nous avons livré est corrigé sans frais, et vous parlez directement à la personne qui l'a construit.",
       },
     },
   },
