@@ -18,7 +18,7 @@ export const en = {
       "Tell OUAQT how your business runs today, and where a custom system would save the most time.",
     termsTitle: "Licence and terms of use | OUAQT",
     termsDescription:
-      "Who owns an OUAQT system, what your licence allows, and the warranty, support and data terms that come with it.",
+      "Who owns an OUAQT system, what your licence covers, and how it renews.",
     privacyTitle: "Privacy policy | OUAQT",
     privacyDescription:
       "What OUAQT does with personal information, on this website and inside the systems we build.",
@@ -324,7 +324,7 @@ export const en = {
       },
       licence: {
         h: "You hold a licence to use it",
-        b: "You receive a permanent, non-exclusive licence to run the system inside your own business, at the sites and for the staff agreed in your project. Nothing renews and there is no recurring fee.",
+        b: "You receive a non-exclusive licence to use the software inside your own business, on up to {devices} devices at the same site. The annual licence renews automatically each year by tacit renewal and can be cancelled before the renewal date. The perpetual licence is paid once and does not renew.",
       },
       restrictions: {
         h: "What the licence does not allow",
@@ -332,7 +332,7 @@ export const en = {
         items: [
           "sell, rent, lend or otherwise pass the system to anyone else",
           "give access to another business, including a related company, without our written agreement",
-          "copy the software, or install it beyond the sites covered by your project",
+          "copy the software, or install it on more devices than your licence covers",
           "take it apart, decompile it, or attempt to recover the source code",
           "remove or alter any OUAQT name or notice inside it",
           "use it to build or assist a competing product",
@@ -342,17 +342,17 @@ export const en = {
         h: "Your data stays yours",
         b: "Everything your business puts into the system, and everything we migrate into it, belongs to you. We do not sell it, do not use it for anything beyond running and supporting your system, and never mix it with another client's. Ask for a copy at any time and we hand it over.",
       },
-      warranty: {
-        h: "Warranty",
-        b: "Every system carries one year of warranty from the day it goes live. If something breaks in normal use during that year, we fix it at no charge. The warranty does not cover changes made by someone else, or hardware and network faults outside the system.",
+      corrections: {
+        h: "Corrections",
+        b: "While the annual licence is renewed, we correct anything wrong or slow in what we delivered at no charge. Under the perpetual licence those corrections are included for {months} months. They do not cover changes made by someone else, or hardware and network faults outside the software.",
       },
       support: {
-        h: "Support, training and updates",
-        b: "Training your staff is included. So are updates and additions you ask for during the first year. After that we agree any further work separately, and you are never obliged to buy it.",
+        h: "What the licence covers",
+        b: "Installation, staff training and data migration are paid once, through the installation fee or the perpetual licence price. The annual licence then includes updates, the product catalogue where the product has one, off-site backup, support, and modifications to existing behaviour on request, for as long as it is renewed. The perpetual licence includes the same for {months} months only, after which the software keeps running with no further payment and no further service. A new module is always quoted separately, and OUAQT tells you before starting whether a request is a modification or a new module.",
       },
       termination: {
-        h: "If the licence ends",
-        b: "The licence ends only if these terms are broken in a serious way and the problem is not put right after we raise it. If that happens you must stop using the system, and we will still give you a complete copy of your own data.",
+        h: "Late renewal and the end of the licence",
+        b: "If the annual licence is renewed late, entering new data is suspended until it is paid. Reading and exporting your data is never blocked. The licence can also end if these terms are broken in a serious way and the problem is not put right after we raise it, and in every case we give you a complete copy of your data.",
       },
       law: {
         h: "Governing law",
@@ -381,7 +381,7 @@ export const en = {
       },
       clientSystems: {
         h: "Data inside the systems we build",
-        b: "When we build a system for your business, the records inside it are yours, not ours. They sit on your own deployment, separate from every other client. We look at them only when you ask us to for support, and never for anything else.",
+        b: "When we install software for your business, the records inside it are yours, not ours. They stay on your own computers, separate from every other client, and the licence adds an off-site backup copy. We look at them only when you ask us to for support, and never for anything else.",
       },
       rights: {
         h: "Your rights",

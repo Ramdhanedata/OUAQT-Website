@@ -16,7 +16,7 @@ export const fr: Dictionary = {
       "Expliquez-nous comment votre entreprise fonctionne aujourd'hui, et où un système sur mesure ferait gagner le plus de temps.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
     termsDescription:
-      "À qui appartient un système OUAQT, ce que votre licence autorise, et les conditions de garantie, d'assistance et de données qui l'accompagnent.",
+      "À qui appartient un logiciel OUAQT, ce que couvre votre licence et comment elle se renouvelle.",
     privacyTitle: "Politique de confidentialité | OUAQT",
     privacyDescription:
       "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
@@ -324,7 +324,7 @@ export const fr: Dictionary = {
       },
       licence: {
         h: "Vous disposez d'une licence d'utilisation",
-        b: "Vous recevez une licence permanente et non exclusive pour exploiter le système au sein de votre entreprise, sur les sites et pour les employés convenus dans votre projet. Rien ne se renouvelle et aucun frais récurrent ne s'applique.",
+        b: "Vous recevez une licence non exclusive pour utiliser le logiciel au sein de votre entreprise, sur {devices} postes au maximum sur un même site. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence perpétuelle se paie une fois et ne se renouvelle pas.",
       },
       restrictions: {
         h: "Ce que la licence n'autorise pas",
@@ -332,7 +332,7 @@ export const fr: Dictionary = {
         items: [
           "vendre, louer, prêter ou céder le système à un tiers",
           "en donner l'accès à une autre entreprise, y compris une société liée, sans notre accord écrit",
-          "copier le logiciel ou l'installer au-delà des sites couverts par votre projet",
+          "copier le logiciel ou l'installer sur plus de postes que votre licence n'en couvre",
           "le décomposer, le décompiler ou tenter d'en récupérer le code source",
           "retirer ou modifier une mention ou un nom OUAQT qu'il contient",
           "l'utiliser pour créer ou aider un produit concurrent",
@@ -342,17 +342,17 @@ export const fr: Dictionary = {
         h: "Vos données restent les vôtres",
         b: "Tout ce que votre entreprise saisit dans le système, et tout ce que nous y migrons, vous appartient. Nous ne le vendons pas, ne l'utilisons que pour faire fonctionner et soutenir votre système, et ne le mélangeons jamais aux données d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
       },
-      warranty: {
-        h: "Garantie",
-        b: "Chaque système est garanti un an à compter de sa mise en service. Si quelque chose casse en usage normal durant cette année, nous le réparons sans frais. La garantie ne couvre pas les modifications faites par un tiers, ni les pannes de matériel ou de réseau extérieures au système.",
+      corrections: {
+        h: "Corrections",
+        b: "Tant que la licence annuelle est renouvelée, nous corrigeons sans frais tout ce qui est faux ou lent dans ce que nous avons livré. Avec la licence perpétuelle, ces corrections sont comprises pendant {months} mois. Elles ne couvrent pas les modifications faites par un tiers, ni les pannes de matériel ou de réseau extérieures au logiciel.",
       },
       support: {
-        h: "Assistance, formation et mises à jour",
-        b: "La formation de vos employés est comprise, tout comme les mises à jour et les ajouts demandés durant la première année. Au-delà, tout travail supplémentaire fait l'objet d'un accord distinct, et vous n'êtes jamais tenu de l'acheter.",
+        h: "Ce que couvre la licence",
+        b: "L'installation, la formation de vos employés et la reprise des données se paient une fois, par les frais d'installation ou par le prix de la licence perpétuelle. La licence annuelle comprend ensuite les mises à jour, le catalogue produits lorsque le logiciel en a un, la sauvegarde hors site, l'assistance et les modifications de l'existant sur demande, tant qu'elle est renouvelée. La licence perpétuelle comprend les mêmes services pendant {months} mois seulement, après quoi le logiciel continue de fonctionner sans autre paiement et sans aucun service. Un nouveau module fait toujours l'objet d'un devis séparé, et OUAQT indique avant de commencer si une demande est une modification ou un nouveau module.",
       },
       termination: {
-        h: "Fin de la licence",
-        b: "La licence ne prend fin que si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement. Le cas échéant, vous devez cesser d'utiliser le système, et nous vous remettons malgré tout une copie complète de vos données.",
+        h: "Retard de renouvellement et fin de la licence",
+        b: "Si la licence annuelle est renouvelée en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués. La licence peut aussi prendre fin si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement, et nous vous remettons dans tous les cas une copie complète de vos données.",
       },
       law: {
         h: "Droit applicable",
@@ -381,7 +381,7 @@ export const fr: Dictionary = {
       },
       clientSystems: {
         h: "Les données dans les systèmes que nous construisons",
-        b: "Quand nous construisons un système pour votre entreprise, les données qu'il contient sont les vôtres, pas les nôtres. Elles résident sur votre propre déploiement, séparées de celles de tout autre client. Nous ne les consultons que si vous nous le demandez pour une assistance, jamais pour autre chose.",
+        b: "Quand nous installons un logiciel pour votre entreprise, les données qu'il contient sont les vôtres, pas les nôtres. Elles restent sur vos propres ordinateurs, séparées de celles de tout autre client, et la licence y ajoute une copie de sauvegarde hors site. Nous ne les consultons que si vous nous le demandez pour une assistance, jamais pour autre chose.",
       },
       rights: {
         h: "Vos droits",
