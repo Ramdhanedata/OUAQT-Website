@@ -5,18 +5,40 @@ import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { organization } from "@/lib/data/contact";
+import { parseContact } from "@/lib/contact-channel";
 import { CheckCircle2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
 type FormState = {
   name: string;
-  email: string;
+  /** An email address or a phone / WhatsApp number. */
+  contact: string;
+  /** Optional, any length. */
   message: string;
 };
 
 type Errors = Partial<Record<keyof FormState, string>>;
 
-const initialState: FormState = { name: "", email: "", message: "" };
+const initialState: FormState = { name: "", contact: "", message: "" };
+
+/* Fields as they appear in the email OUAQT receives. */
+function formSubmitFields(values: FormState, lang: Locale) {
+  const channel = parseContact(values.contact);
+  return {
+    _subject: `OUAQT enquiry from ${values.name.trim()}`,
+    // Reply in Gmail goes straight to the visitor when they left an email.
+    ...(channel?.kind === "email" ? { _replyto: channel.value } : {}),
+    _template: "table",
+    _captcha: "false",
+    Name: values.name.trim(),
+    [channel?.kind === "email" ? "Email" : "Phone / WhatsApp"]: values.contact.trim(),
+    ...(channel?.kind === "phone" && channel.whatsappUrl
+      ? { "Open in WhatsApp": channel.whatsappUrl }
+      : {}),
+    Message: values.message.trim() || "(no message)",
+    Language: lang,
+  };
+}
 
 /*
  * Sends the enquiry to OUAQT's inbox through FormSubmit, straight from the
@@ -36,16 +58,7 @@ async function sendViaFormSubmit(values: FormState, lang: Locale) {
       headers: { "Content-Type": "application/json", Accept: "application/json" },
       referrer: `${window.location.origin}/en/contact`,
       referrerPolicy: "no-referrer-when-downgrade",
-      body: JSON.stringify({
-        _subject: `OUAQT enquiry from ${values.name}`,
-        _replyto: values.email,
-        _template: "table",
-        _captcha: "false",
-        Name: values.name,
-        Email: values.email,
-        Language: lang,
-        Message: values.message,
-      }),
+      body: JSON.stringify(formSubmitFields(values, lang)),
     }
   );
   // FormSubmit answers 200 even when it refuses; the body says which.
@@ -61,18 +74,13 @@ function validate(values: FormState, dict: Dictionary): Errors {
     errors.name = f.errorName;
   }
 
-  if (!values.email.trim()) {
-    errors.email = f.errorEmailEmpty;
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
-    errors.email = f.errorEmailInvalid;
+  if (!values.contact.trim()) {
+    errors.contact = f.errorContactEmpty;
+  } else if (!parseContact(values.contact)) {
+    errors.contact = f.errorContactInvalid;
   }
 
-  if (!values.message.trim()) {
-    errors.message = f.errorMessageEmpty;
-  } else if (values.message.trim().length < 20) {
-    errors.message = f.errorMessageShort;
-  }
-
+  // The message is optional and has no length limit.
   return errors;
 }
 
@@ -94,6 +102,8 @@ export function ContactForm({
 
   function handleChange(field: keyof FormState, value: string) {
     setValues((prev) => ({ ...prev, [field]: value }));
+    // Clear a field's error as soon as the visitor starts fixing it.
+    if (errors[field]) setErrors((prev) => ({ ...prev, [field]: undefined }));
     if (status === "failed") setStatus("idle");
   }
 
@@ -101,7 +111,11 @@ export function ContactForm({
     event.preventDefault();
     const validationErrors = validate(values, dict);
     setErrors(validationErrors);
-    if (Object.keys(validationErrors).length > 0) return;
+    const firstInvalid = (["name", "contact"] as const).find((key) => validationErrors[key]);
+    if (firstInvalid) {
+      document.getElementById(firstInvalid)?.focus();
+      return;
+    }
 
     setStatus("sending");
     try {
@@ -159,6 +173,8 @@ export function ContactForm({
 
   return (
     <form noValidate onSubmit={handleSubmit} className="space-y-6">
+      <p className="text-sm leading-relaxed text-muted-foreground">{f.hint}</p>
+
       <div>
         <label
           htmlFor="name"
@@ -175,6 +191,7 @@ export function ContactForm({
           onChange={(event) => handleChange("name", event.target.value)}
           className={fieldClass(Boolean(errors.name))}
           placeholder={f.namePlaceholder}
+          aria-invalid={Boolean(errors.name)}
         />
         {errors.name && (
           <p className="mt-2 text-xs text-red-500">{errors.name}</p>
@@ -183,24 +200,25 @@ export function ContactForm({
 
       <div>
         <label
-          htmlFor="email"
+          htmlFor="contact"
           className="text-sm font-medium tracking-tight text-foreground"
         >
-          {f.email}
+          {f.contact}
         </label>
         <input
-          id="email"
-          type="email"
+          id="contact"
+          type="text"
           dir="ltr"
           autoComplete="email"
           disabled={sending}
-          value={values.email}
-          onChange={(event) => handleChange("email", event.target.value)}
-          className={fieldClass(Boolean(errors.email))}
-          placeholder={f.emailPlaceholder}
+          value={values.contact}
+          onChange={(event) => handleChange("contact", event.target.value)}
+          className={cn(fieldClass(Boolean(errors.contact)), "rtl:text-right")}
+          placeholder={f.contactPlaceholder}
+          aria-invalid={Boolean(errors.contact)}
         />
-        {errors.email && (
-          <p className="mt-2 text-xs text-red-500">{errors.email}</p>
+        {errors.contact && (
+          <p className="mt-2 text-xs text-red-500">{errors.contact}</p>
         )}
       </div>
 
@@ -209,7 +227,8 @@ export function ContactForm({
           htmlFor="message"
           className="text-sm font-medium tracking-tight text-foreground"
         >
-          {f.message}
+          {f.message}{" "}
+          <span className="font-normal text-muted-foreground">({f.optional})</span>
         </label>
         <textarea
           id="message"
@@ -217,12 +236,9 @@ export function ContactForm({
           disabled={sending}
           value={values.message}
           onChange={(event) => handleChange("message", event.target.value)}
-          className={cn(fieldClass(Boolean(errors.message)), "resize-none")}
+          className={cn(fieldClass(false), "min-h-[8rem] resize-y")}
           placeholder={f.messagePlaceholder}
         />
-        {errors.message && (
-          <p className="mt-2 text-xs text-red-500">{errors.message}</p>
-        )}
       </div>
 
       {/* Honeypot: off-screen and skipped by tab order, so only bots reach it. */}
@@ -243,9 +259,19 @@ export function ContactForm({
           {f.errorSend}{" "}
           <a
             href={`mailto:${organization.email}`}
+            dir="ltr"
             className="underline underline-offset-2"
           >
             {organization.email}
+          </a>
+          {" · "}
+          <a
+            href={organization.whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="underline underline-offset-2"
+          >
+            {dict.common.whatsapp}
           </a>
         </p>
       )}

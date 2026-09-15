@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
+import { parseContact } from "@/lib/contact-channel";
 
 /*
  * Contact form endpoint. Delivers submissions to OUAQT's inbox.
  *
  * Sends through Resend's REST API directly, so there is no SDK dependency to
- * keep updated. The visitor's address goes in reply_to, which means replying
- * from Gmail goes straight back to them.
+ * keep updated. When the visitor leaves an email it goes in reply_to, so
+ * replying from Gmail goes straight back to them. When they leave a phone
+ * number instead, the email carries a WhatsApp link.
  *
  * Required environment variables (set these in Vercel, and in .env.local for
  * local testing):
@@ -22,7 +24,6 @@ import { NextResponse } from "next/server";
 const TO = process.env.CONTACT_TO_EMAIL || "ouaqt.mrt@gmail.com";
 const FROM = process.env.CONTACT_FROM_EMAIL || "OUAQT Website <onboarding@resend.dev>";
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 /* Coarse per-instance throttle. Serverless instances are not shared, so this
    slows a casual flood rather than stopping a determined one. Resend's own
@@ -56,7 +57,8 @@ export async function POST(request: Request) {
   }
 
   const name = String(body.name ?? "").trim();
-  const email = String(body.email ?? "").trim();
+  // An email address or a phone / WhatsApp number, in one field.
+  const contact = String(body.contact ?? "").trim();
   const message = String(body.message ?? "").trim();
   // Hidden field. Real people leave it empty; bots fill everything in.
   const company = String(body.company ?? "").trim();
@@ -67,10 +69,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  if (!name || !EMAIL_RE.test(email) || message.length < 20) {
+  // A name and a way to reach them. The message is optional, any length.
+  const channel = parseContact(contact);
+  if (!name || !channel) {
     return NextResponse.json({ error: "invalid_input" }, { status: 400 });
   }
-  if (name.length > 200 || email.length > 320 || message.length > 5000) {
+  if (name.length > 200 || contact.length > 320) {
     return NextResponse.json({ error: "too_long" }, { status: 400 });
   }
 
@@ -85,10 +89,11 @@ export async function POST(request: Request) {
   const html = `
     <h2 style="font:600 18px system-ui;margin:0 0 16px">New enquiry from the OUAQT website</h2>
     <p style="font:14px system-ui;margin:0 0 6px"><strong>Name:</strong> ${escapeHtml(name)}</p>
-    <p style="font:14px system-ui;margin:0 0 6px"><strong>Email:</strong> ${escapeHtml(email)}</p>
+    <p style="font:14px system-ui;margin:0 0 6px"><strong>${channel.kind === "email" ? "Email" : "Phone / WhatsApp"}:</strong> ${escapeHtml(contact)}</p>
+    ${channel.kind === "phone" && channel.whatsappUrl ? `<p style="font:14px system-ui;margin:0 0 6px"><a href="${channel.whatsappUrl}">Open in WhatsApp</a></p>` : ""}
     <p style="font:14px system-ui;margin:0 0 16px"><strong>Language:</strong> ${escapeHtml(locale)}</p>
     <p style="font:14px system-ui;margin:0 0 6px"><strong>Message:</strong></p>
-    <p style="font:14px/1.6 system-ui;white-space:pre-wrap;margin:0">${escapeHtml(message)}</p>
+    <p style="font:14px/1.6 system-ui;white-space:pre-wrap;margin:0">${escapeHtml(message || "(no message)")}</p>
   `;
 
   /*
@@ -112,10 +117,10 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         from: FROM,
         to: [TO],
-        reply_to: email,
+        ...(channel.kind === "email" ? { reply_to: channel.value } : {}),
         subject: `OUAQT enquiry from ${name}`,
         html,
-        text: `Name: ${name}\nEmail: ${email}\nLanguage: ${locale}\n\n${message}`,
+        text: `Name: ${name}\n${channel.kind === "email" ? "Email" : "Phone / WhatsApp"}: ${contact}\nLanguage: ${locale}\n\n${message || "(no message)"}`,
       }),
     });
 
