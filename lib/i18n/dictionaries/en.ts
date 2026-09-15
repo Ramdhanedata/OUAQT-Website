@@ -416,11 +416,10 @@ export const en = {
     marketNote:
       "The World Bank and IFC are actively funding SME access to finance and digital tools across the region. That is the same gap OUAQT is built to close.",
     founderEyebrow: "Founder",
-    founderRole: "Founder & AI Product Engineer",
+    founderRole: "Founder & Solutions Engineer / Forward Deployed Engineer",
     founderBio1:
       "I started OUAQT after watching capable businesses lose hours every day to work their software should have been handling for them. Not complicated work. Just counting, copying, and checking numbers by hand because nothing they had been sold fit the way they actually operated.",
-    founderBio2:
-      "My background is in data analytics and product engineering. I stay close to every project, from the first conversation about how a business really runs to the system that finally replaces the spreadsheet.",
+    founderBio2: "My background is in data analytics and building software. I work the way a forward deployed engineer does: on site, next to the people who will use the system, from the first conversation until nobody needs the old spreadsheet.",
     credentials: {
       analytics: {
         title: "Data analytics at Deloitte and MyAiPathways",

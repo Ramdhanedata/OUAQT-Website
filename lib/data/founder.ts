@@ -12,7 +12,7 @@ export type Credential = {
  */
 export const founder = {
   name: "Elboumby Aumar Ramdhane",
-  role: "Founder & AI Product Engineer",
+  role: "Founder & Solutions Engineer / Forward Deployed Engineer",
   location: "Nouakchott, Mauritania",
 
   /*

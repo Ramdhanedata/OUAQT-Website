@@ -416,11 +416,10 @@ export const fr: Dictionary = {
     marketNote:
       "La Banque mondiale et la SFI financent activement l'accès des PME au financement et aux outils numériques dans la région. C'est précisément le manque qu'OUAQT vient combler.",
     founderEyebrow: "Fondateur",
-    founderRole: "Fondateur & Ingénieur produit IA",
+    founderRole: "Fondateur & Solutions Engineer / Forward Deployed Engineer",
     founderBio1:
       "J'ai lancé OUAQT après avoir vu des entreprises compétentes perdre des heures chaque jour à faire un travail que leurs logiciels auraient dû gérer. Rien de compliqué. Compter, recopier et vérifier des chiffres à la main, parce que rien de ce qu'on leur avait vendu ne correspondait à leur façon réelle de travailler.",
-    founderBio2:
-      "Mon parcours est en analyse de données et en ingénierie produit. Je reste proche de chaque projet, de la première conversation sur le fonctionnement réel d'une entreprise jusqu'au système qui remplace enfin le tableur.",
+    founderBio2: "Je viens de l'analyse de données et de la conception de logiciels. Je travaille comme un forward deployed engineer : sur place, à côté des personnes qui utiliseront le système, de la première conversation jusqu'au jour où plus personne n'a besoin de l'ancien tableur.",
     credentials: {
       analytics: {
         title: "Analyse de données chez Deloitte et MyAiPathways",
