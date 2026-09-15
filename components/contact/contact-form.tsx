@@ -241,8 +241,11 @@ export function ContactForm({
         />
       </div>
 
-      {/* Honeypot: off-screen and skipped by tab order, so only bots reach it. */}
-      <div aria-hidden className="pointer-events-none absolute -left-[9999px]">
+      {/* Honeypot: invisible and skipped by tab order, so only bots reach it.
+          Clipped to a pixel rather than pushed off-screen: -9999px to the left
+          made the Arabic page 10,000px wide, because right-to-left pages can
+          scroll leftwards. */}
+      <div aria-hidden className="pointer-events-none sr-only">
         <label htmlFor="company">{dict.common.company}</label>
         <input
           id="company"
