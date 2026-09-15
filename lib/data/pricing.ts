@@ -53,7 +53,7 @@ export const pricing: PriceBook = {
   currency: "MRU",
   launchOffer: {
     active: true,
-    clients: 10,
+    clients: 100,
     freezeYears: 3,
   },
   installation: { standard: 30_000, launch: 25_000 },
