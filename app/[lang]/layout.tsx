@@ -161,6 +161,13 @@ export default function RootLayout({ children, params }: Props) {
       <body
         className={`${rtl ? "font-arabic" : "font-serif"} antialiased`}
       >
+        {/* Marks the page as scripted before anything paints, so the scroll
+            reveals only hide content when JavaScript can bring it back. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.add("js")`,
+          }}
+        />
         <script
           type="application/ld+json"
           // "<" escaped so the JSON can never close the script tag.

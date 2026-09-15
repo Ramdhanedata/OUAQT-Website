@@ -81,3 +81,79 @@ html[lang="ar"] p,
 html[lang="ar"] li {
   line-height: 1.85;
 }
+
+/* Motion -------------------------------------------------------------------
+   Reveals are transitions, not keyframes, on purpose: a transition's end state
+   is the element's ordinary style, so if the browser never gets around to
+   animating (a background tab, an unusual setting), the content simply shows
+   instead of staying stuck invisible.
+
+   Blocks are hidden only once the inline script in the layout marks the page
+   as scripted, so with JavaScript off everything stays visible. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 0.6s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  transition-delay: var(--rise-delay, 0s);
+}
+
+.js .reveal[data-shown="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* The mobile menu is mounted closed, then opened on the next frame. */
+.menu-panel {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition:
+    max-height 0.25s ease-in-out,
+    opacity 0.25s ease-in-out;
+}
+
+.menu-panel[data-open="true"] {
+  max-height: 26rem;
+  opacity: 1;
+}
+
+/* The hero is server rendered with no JavaScript, so it animates on load. */
+@keyframes ouaqt-rise {
+  from {
+    opacity: 0;
+    transform: translateY(var(--rise-from, 16px));
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.hero-enter {
+  animation: ouaqt-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--rise-delay, 0s);
+}
+
+.page-enter {
+  --rise-from: 8px;
+  animation: ouaqt-rise 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal,
+  .js .reveal[data-shown="true"],
+  .menu-panel,
+  .menu-panel[data-open="true"] {
+    opacity: 1;
+    max-height: none;
+    transform: none;
+    transition: none;
+  }
+
+  .hero-enter,
+  .page-enter {
+    animation: none;
+  }
+}

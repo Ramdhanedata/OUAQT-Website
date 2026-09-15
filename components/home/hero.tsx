@@ -1,50 +1,40 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { GradientMesh } from "@/components/motion/gradient-mesh";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
-import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import type { CSSProperties } from "react";
+
+/* Each line rises in a moment after the one above (see .hero-enter in globals.css). */
+const rise = (seconds: number) => ({ "--rise-delay": `${seconds}s` }) as CSSProperties;
 
 export function Hero({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   return (
     <section className="relative overflow-hidden">
       <GradientMesh />
       <Container className="flex min-h-[85vh] flex-col justify-center py-24 sm:py-32">
-        <motion.p
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="text-sm font-medium tracking-tight text-accent"
-        >
+        <p className="hero-enter text-sm font-medium tracking-tight text-accent">
           {dict.hero.eyebrow}
-        </motion.p>
+        </p>
 
-        <motion.h1
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-6xl md:text-7xl"
+        <h1
+          style={rise(0.05)}
+          className="hero-enter mt-6 max-w-4xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-6xl md:text-7xl"
         >
           {dict.hero.heading}
-        </motion.h1>
+        </h1>
 
-        <motion.p
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-8 max-w-2xl text-balance text-lg leading-relaxed text-muted-foreground"
+        <p
+          style={rise(0.15)}
+          className="hero-enter mt-8 max-w-2xl text-balance text-lg leading-relaxed text-muted-foreground"
         >
           {dict.hero.body}
-        </motion.p>
+        </p>
 
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
+        <div
+          style={rise(0.25)}
+          className="hero-enter mt-10 flex flex-col gap-4 sm:flex-row sm:items-center"
         >
           <Button href={localeHref(lang, "/contact")} variant="accent">
             {dict.hero.primaryCta}
@@ -53,16 +43,14 @@ export function Hero({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           <Button href={localeHref(lang, "/projects")} variant="outline">
             {dict.hero.secondaryCta}
           </Button>
-        </motion.div>
+        </div>
 
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.35 }}
-          className="mt-5 text-sm text-muted-foreground"
+        <p
+          style={rise(0.35)}
+          className="hero-enter mt-5 text-sm text-muted-foreground"
         >
           {dict.hero.freeVisit}
-        </motion.p>
+        </p>
       </Container>
     </section>
   );

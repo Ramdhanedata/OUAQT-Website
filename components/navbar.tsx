@@ -7,11 +7,10 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
-import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const [scrolled, setScrolled] = useState(false);
@@ -96,15 +95,8 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
         </div>
       </Container>
 
-      <AnimatePresence>
-        {menuOpen && (
-          <motion.nav
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.25, ease: "easeInOut" }}
-            className="overflow-hidden border-b border-border bg-background lg:hidden"
-          >
+      {menuOpen && (
+        <MobileMenu>
             <Container className="flex flex-col gap-1 py-4">
               {links.map((link) => (
                 <Link
@@ -129,10 +121,34 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
                   {dict.nav.cta}
                 </Button>
               </div>
-            </Container>
-          </motion.nav>
-        )}
-      </AnimatePresence>
+          </Container>
+        </MobileMenu>
+      )}
     </header>
+  );
+}
+
+/*
+ * Slides the mobile menu open. It mounts closed and opens right after the
+ * first paint, so the CSS transition has something to move from.
+ *
+ * The effect deliberately does not wait for an animation frame: browsers stop
+ * handing those out to tabs they are not drawing, which left the menu stuck
+ * shut. An effect always runs, so the menu is open either way.
+ */
+function MobileMenu({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(true);
+  }, []);
+
+  return (
+    <nav
+      data-open={open ? "true" : undefined}
+      className="menu-panel border-b border-border bg-background lg:hidden"
+    >
+      {children}
+    </nav>
   );
 }

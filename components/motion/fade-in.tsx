@@ -1,36 +1,56 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
-import { ReactNode } from "react";
+import { cn } from "@/lib/utils";
+import { ReactNode, useEffect, useRef, useState } from "react";
 
 type FadeInProps = {
   children: ReactNode;
   className?: string;
+  /** Seconds to wait once the block is on screen. */
   delay?: number;
-  y?: number;
-  once?: boolean;
 };
 
-// Subtle scroll-reveal used throughout the site. Keep durations short and
-// easing gentle. Motion here should feel like a nudge, not an animation.
-export function FadeIn({
-  children,
-  className,
-  delay = 0,
-  y = 16,
-  once = true,
-}: FadeInProps) {
-  const shouldReduceMotion = useReducedMotion();
+/*
+ * Subtle scroll reveal used throughout the site: the block rises into place
+ * the first time it comes near the viewport. The animation itself is CSS (see
+ * .reveal in globals.css); this only watches for the block coming into view,
+ * which is why the site needs no animation library.
+ *
+ * Nothing is hidden until the inline script in the layout marks the page as
+ * having JavaScript, so the content is always readable without it.
+ */
+export function FadeIn({ children, className, delay = 0 }: FadeInProps) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [shown, setShown] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || shown) return;
+    if (typeof IntersectionObserver === "undefined") {
+      setShown(true);
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          setShown(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: "-80px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [shown]);
 
   return (
-    <motion.div
-      className={className}
-      initial={{ opacity: 0, y: shouldReduceMotion ? 0 : y }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once, margin: "-80px" }}
-      transition={{ duration: 0.6, delay, ease: [0.22, 1, 0.36, 1] }}
+    <div
+      ref={ref}
+      className={cn("reveal", className)}
+      data-shown={shown ? "true" : undefined}
+      style={delay ? ({ "--rise-delay": `${delay}s` } as React.CSSProperties) : undefined}
     >
       {children}
-    </motion.div>
+    </div>
   );
 }

@@ -1,5 +1,3 @@
-"use client";
-
 // Abstract, restrained background element for the hero. No stock imagery.
 // Two soft accent-colored blobs drift slowly behind the copy.
 export function GradientMesh() {
