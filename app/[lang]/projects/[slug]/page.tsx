@@ -162,7 +162,7 @@ export default function ProjectDetailPage({ params }: Props) {
                   <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
                     {dict.projectDetail.role}
                   </p>
-                  <p className="mt-2 text-sm text-foreground">{copy.role}</p>
+                  <p className="mt-2 text-sm text-foreground">{dict.projectDetail.roleValue}</p>
                 </div>
                 <div>
                   <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">

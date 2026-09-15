@@ -77,11 +77,6 @@ export const pricing: PriceBook = {
   ],
 };
 
-/** The figure a client pays today for a line. */
-export function currentPrice(line: PriceLine): number {
-  return pricing.launchOffer.active ? line.launch : line.standard;
-}
-
 /*
  * Thousands separators by locale. French uses a space, English a comma, and
  * Arabic keeps Western digits with the comma the Arabic pages already use.

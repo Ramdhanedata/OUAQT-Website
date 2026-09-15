@@ -404,6 +404,8 @@ export const en = {
     solution: "What we built",
     results: "Results",
     client: "Client",
+    /* The same for every case study, so it is stored once. */
+    roleValue: "Studying the work on site, building the software, bringing in old records, installation",
     role: "What we did",
     tools: "What's in it",
     screenshotAlt: "product screenshot",
@@ -508,7 +510,6 @@ export const en = {
       summary: "Bloc tracking in three languages that cut daily reconciliation from four hours to twenty-five minutes.",
       description: "Every day, GMM spent four hours reconciling bloc movements by hand. We replaced that with a system built around how the field crews already work, in the three languages they use.",
       client: "GMM · Mining",
-      role: "Studying the work on site, building the software, bringing in old records, installation",
       problem: "Reconciling the day's bloc movements took four hours, by hand, across paper logs and spreadsheets. Crews wrote in French, Arabic or English depending on who was on shift, so nothing matched cleanly at the end of the day.",
       solution: "A tracking and reconciliation system built around the crews' real routine. It works in all three languages from day one, because that is how the teams already record their data. We brought years of old records in, so the team started with its full history instead of an empty system.",
       tags: [
@@ -533,7 +534,6 @@ export const en = {
       summary: "A pharmacy till that fills in medicine records by itself, so staff stop retyping them.",
       description: "Keeping medicine records meant hours of the same typing every day. Now the system fills them in from the pharmacy's own history, and staff only deal with the unusual cases.",
       client: "Independent pharmacy",
-      role: "Studying the work on site, building the software, bringing in old records, installation",
       problem: "Staff spent hours every day typing medicine records by hand, entering the same product details again and again. Each entry was one more chance to put a wrong number into a record that has to be right.",
       solution: "A till that fills in medicine records from past entries. The software handles the repetition, and staff handle the exceptions and the decisions, the part that really needs a person.",
       tags: [
@@ -558,7 +558,6 @@ export const en = {
       summary: "Hotel billing where the software works out taxes and commissions on every bill.",
       description: "Working out taxes and commissions by hand kept causing billing mistakes. The system applies the hotel's own rules, the same way, on every bill.",
       client: "Hotel · Hospitality",
-      role: "Studying the work on site, building the software, bringing in old records, installation",
       problem: "Taxes and commissions across several services were calculated by hand. Fiddly, repetitive sums on every line of every bill, and a regular source of mistakes.",
       solution: "A billing and operations system that follows the hotel's actual tax and commission rules, so every service line is calculated the same way, whoever is on the front desk.",
       tags: [
@@ -583,7 +582,6 @@ export const en = {
       summary: "Checkpoint papers prepared from trip data, instead of an hour of paperwork before every departure.",
       description: "Each trip needed about an hour of paperwork before the vehicle could leave. Now the system prepares those documents from information the company already has.",
       client: "Transport operator",
-      role: "Studying the work on site, building the software, bringing in old records, installation",
       problem: "Every trip took around an hour of manual work to put the checkpoint manifests together. The papers must be correct before a vehicle can leave, and they were rebuilt by hand each time.",
       solution: "A system that prepares checkpoint manifests from the trip and cargo details already entered. Before departure, staff check the documents instead of writing them from scratch.",
       tags: [
@@ -608,7 +606,6 @@ export const en = {
       summary: "One system for students, teachers, fees, attendance and the school shop, working without internet on the school's own computers.",
       description: "A private school group kept enrolments, fees, attendance and shop sales in separate books and spreadsheets. SchoolOS brings it all together, on the computers the staff already use.",
       client: "Écoles Al-Baraka · Education",
-      role: "Studying the work on site, building the software, bringing in old records, installation",
       problem: "Student files, fees, attendance and the shop till were each kept somewhere different. Answering a simple question, like which families still owed fees, meant checking several books by hand. Attendance was only as up to date as the last person who copied it out.",
       solution: "One system for students, teachers, fees, attendance, finances and the shop till. It installs on the school's computers and keeps its data there, so it carries on working when the internet drops. On a campus where the connection can't be relied on, that matters.",
       tags: [
@@ -633,7 +630,6 @@ export const en = {
       summary: "A till built around how the room really runs, for table service and the bakery counter.",
       description: "Orders, the kitchen and the day's takings were tracked in three different places. The till brings them together and adapts to the pace of each site.",
       client: "Restaurant, café & bakery",
-      role: "Studying the work on site, building the software, bringing in old records, installation",
       problem: "Orders, the kitchen and the day's takings were kept apart. Paper tickets, a cash drawer, and a spreadsheet to reconcile at closing. Nothing matched until someone sat down and made it match.",
       solution: "A till made for this business, covering orders, the kitchen and the daily report, set up for each site. That includes the bakery counter, where the products and the pace are nothing like table service.",
       tags: [

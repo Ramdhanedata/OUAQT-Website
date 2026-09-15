@@ -395,6 +395,8 @@ export const fr: Dictionary = {
     solution: "Ce que nous avons construit",
     results: "Résultats",
     client: "Client",
+    /* The same for every case study, so it is stored once. */
+    roleValue: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
     role: "Ce que nous avons fait",
     tools: "Ce qu'il contient",
     screenshotAlt: "capture d'écran du produit",
@@ -495,7 +497,6 @@ export const fr: Dictionary = {
       summary: "Un suivi des blocs en trois langues qui a ramené le rapprochement quotidien de quatre heures à vingt-cinq minutes.",
       description: "Chaque jour, GMM passait quatre heures à rapprocher les mouvements de blocs à la main. Nous avons remplacé ce travail par un système construit autour de la façon dont les équipes de terrain travaillent déjà, dans les trois langues qu'elles utilisent.",
       client: "GMM · Mines",
-      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
       problem: "Rapprocher les mouvements de blocs de la journée prenait quatre heures, à la main, entre carnets papier et tableurs. Les équipes écrivaient en français, en arabe ou en anglais selon qui était de service, et rien ne concordait vraiment en fin de journée.",
       solution: "Un système de suivi et de rapprochement construit autour de la routine réelle des équipes. Il fonctionne dans les trois langues dès le premier jour, parce que c'est ainsi que les équipes notent déjà leurs données. Nous avons repris des années de registres, pour que l'équipe démarre avec tout son historique et non avec un système vide.",
       tags: [
@@ -520,7 +521,6 @@ export const fr: Dictionary = {
       summary: "Une caisse de pharmacie qui remplit toute seule les registres de médicaments, pour que le personnel arrête de les retaper.",
       description: "Tenir les registres de médicaments, c'était des heures de la même saisie chaque jour. Le système les remplit maintenant à partir de l'historique de la pharmacie, et le personnel ne s'occupe plus que des cas particuliers.",
       client: "Pharmacie indépendante",
-      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
       problem: "Le personnel passait des heures chaque jour à saisir les registres à la main, en retapant sans cesse les mêmes informations produit. Chaque saisie était une chance de plus d'inscrire un mauvais chiffre dans un registre qui doit être juste.",
       solution: "Une caisse qui remplit les registres de médicaments à partir des saisies passées. Le logiciel prend en charge la répétition, et le personnel garde les cas particuliers et les décisions, la partie qui demande vraiment une personne.",
       tags: [
@@ -545,7 +545,6 @@ export const fr: Dictionary = {
       summary: "Une facturation d'hôtel où le logiciel calcule les taxes et les commissions sur chaque facture.",
       description: "Calculer les taxes et les commissions à la main causait sans cesse des erreurs de facturation. Le système applique les règles de l'hôtel, de la même façon, sur chaque facture.",
       client: "Hôtel · Hôtellerie",
-      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
       problem: "Les taxes et les commissions sur plusieurs services étaient calculées à la main. Des calculs minutieux et répétitifs sur chaque ligne de chaque facture, et une source régulière d'erreurs.",
       solution: "Un système de facturation et d'exploitation qui suit les vraies règles de taxes et de commissions de l'hôtel, pour que chaque ligne soit calculée de la même façon, quelle que soit la personne à la réception.",
       tags: [
@@ -570,7 +569,6 @@ export const fr: Dictionary = {
       summary: "Des manifestes de contrôle préparés à partir des données du voyage, au lieu d'une heure de paperasse avant chaque départ.",
       description: "Chaque voyage demandait environ une heure de paperasse avant que le véhicule puisse partir. Le système prépare maintenant ces documents à partir des informations que la société a déjà.",
       client: "Opérateur de transport",
-      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
       problem: "Chaque voyage demandait près d'une heure de travail à la main pour préparer les manifestes de contrôle. Ces documents doivent être exacts pour qu'un véhicule puisse partir, et ils étaient refaits à la main à chaque fois.",
       solution: "Un système qui prépare les manifestes à partir des informations de voyage et de chargement déjà saisies. Avant le départ, le personnel vérifie les documents au lieu de les rédiger.",
       tags: [
@@ -595,7 +593,6 @@ export const fr: Dictionary = {
       summary: "Un seul système pour les élèves, les enseignants, les frais, les présences et la boutique de l'école, qui fonctionne sans internet sur les ordinateurs de l'école.",
       description: "Un groupe scolaire privé suivait les inscriptions, les frais, les présences et les ventes de la boutique dans des registres et des tableurs séparés. SchoolOS réunit tout au même endroit, sur les ordinateurs que le personnel utilise déjà.",
       client: "Écoles Al-Baraka · Éducation",
-      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
       problem: "Les dossiers des élèves, les frais, les présences et la caisse de la boutique étaient chacun tenus ailleurs. Pour répondre à une question simple, comme savoir quelles familles devaient encore des frais, il fallait recouper plusieurs registres à la main. Et les présences n'étaient à jour que jusqu'à la dernière recopie.",
       solution: "Un seul système pour les élèves, les enseignants, les frais, les présences, les finances et la caisse de la boutique. Il s'installe sur les ordinateurs de l'école et y garde ses données, donc il continue de fonctionner quand internet coupe. Sur un campus où l'on ne peut pas compter sur la connexion, ça compte.",
       tags: [
@@ -620,7 +617,6 @@ export const fr: Dictionary = {
       summary: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir de la boulangerie.",
       description: "Les commandes, la cuisine et la recette du jour étaient suivies à trois endroits différents. La caisse réunit tout et s'adapte au rythme de chaque établissement.",
       client: "Restaurant, café & boulangerie",
-      role: "Étude du travail sur place, conception du logiciel, reprise des anciens registres, installation",
       problem: "Les commandes, la cuisine et la recette du jour étaient tenues séparément. Des tickets papier, un tiroir-caisse, et un tableur à faire concorder à la fermeture. Rien ne tombait juste tant que quelqu'un ne s'asseyait pas pour tout vérifier.",
       solution: "Une caisse faite pour cette entreprise, qui couvre les commandes, la cuisine et le rapport du jour, réglée pour chaque établissement. Y compris le comptoir de la boulangerie, où les produits et le rythme n'ont rien à voir avec le service à table.",
       tags: [

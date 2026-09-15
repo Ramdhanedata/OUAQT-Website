@@ -23,9 +23,12 @@ export function Logo({
       <Image
         src="/logo-ouaqt-dark-ink.png"
         alt={alt}
-        width={1395}
-        height={333}
+        width={900}
+        height={215}
         priority={priority}
+        /* The mark is never wider than ~150px on screen. Without this, phones
+           with sharp screens downloaded the full-width image for it. */
+        sizes="150px"
         className="h-full w-auto"
       />
     </span>
