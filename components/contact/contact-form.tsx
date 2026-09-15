@@ -124,10 +124,12 @@ export function ContactForm({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...values, company, locale: lang }),
       });
-      if (res.status === 501) {
-        // No server mailer configured: send from the browser instead. A
-        // filled honeypot means a bot, so pretend it went and send nothing.
-        if (!company && !(await sendViaFormSubmit(values, lang))) {
+      if (res.status === 501 || res.status === 502) {
+        // 501: no server mailer is configured. 502: Resend is configured but
+        // failed. Either way, send from the browser through FormSubmit so the
+        // enquiry is not lost. Bots never get here: the server answers them
+        // with a fake success before choosing a mailer.
+        if (!(await sendViaFormSubmit(values, lang))) {
           throw new Error("formsubmit");
         }
       } else if (!res.ok) {
