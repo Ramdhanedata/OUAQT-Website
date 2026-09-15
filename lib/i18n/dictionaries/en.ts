@@ -157,10 +157,6 @@ export const en = {
       freeze:
         "At launch pricing this figure stays fixed for {years} years, and you can still cancel the licence each year.",
     },
-    yearOne: {
-      label: "First year",
-      cadence: "Installation and annual licence",
-    },
     extraDevice: {
       label: "Each device beyond the {devices} included",
       cadence: "Per year",

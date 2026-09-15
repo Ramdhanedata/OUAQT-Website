@@ -156,10 +156,6 @@ export const fr: Dictionary = {
       freeze:
         "Au tarif de lancement, ce montant reste bloqué pendant {years} ans, et la licence reste résiliable chaque année.",
     },
-    yearOne: {
-      label: "Première année",
-      cadence: "Installation et licence annuelle",
-    },
     extraDevice: {
       label: "Poste supplémentaire au-delà des {devices} inclus",
       cadence: "Par an",

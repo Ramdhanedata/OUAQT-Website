@@ -163,10 +163,6 @@ export const ar: Dictionary = {
       freeze:
         "بسعر الإطلاق يبقى هذا المبلغ ثابتاً لمدة {years} سنوات، ويبقى بإمكانك إلغاء الترخيص كل سنة.",
     },
-    yearOne: {
-      label: "السنة الأولى",
-      cadence: "التثبيت والترخيص السنوي",
-    },
     extraDevice: {
       label: "كل جهاز يزيد على {devices} أجهزة",
       cadence: "في السنة",

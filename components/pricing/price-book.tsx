@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Price } from "@/components/pricing/price";
 import { organization } from "@/lib/data/contact";
-import { pricing, pricingTerms, yearOne, type PriceLine } from "@/lib/data/pricing";
+import { pricing, pricingTerms, type PriceLine } from "@/lib/data/pricing";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
 import { fill } from "@/lib/utils";
@@ -17,13 +17,11 @@ type Row = {
   cadence: string;
   note?: string;
   line: PriceLine;
-  emphasis?: boolean;
 };
 
 /*
- * Installation and the annual licence together, with the year-one total: the
- * figure a buyer actually compares. The same prices apply to every packaged
- * product, so this block is rendered once and never per product.
+ * Installation and the annual licence together. The same prices apply to every
+ * packaged product, so this block is rendered once and never per product.
  */
 export function PriceBook({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const p = dict.pricingPage;
@@ -42,12 +40,6 @@ export function PriceBook({ dict, lang }: { dict: Dictionary; lang: Locale }) {
       cadence: p.annual.cadence,
       note: launch ? fill(p.annual.freeze, terms) : undefined,
       line: pricing.annualLicence,
-    },
-    {
-      label: p.yearOne.label,
-      cadence: p.yearOne.cadence,
-      line: yearOne,
-      emphasis: true,
     },
   ];
 
@@ -69,20 +61,10 @@ export function PriceBook({ dict, lang }: { dict: Dictionary; lang: Locale }) {
               {rows.map((row) => (
                 <div
                   key={row.label}
-                  className={
-                    row.emphasis
-                      ? "flex flex-col gap-3 bg-muted/60 px-6 py-7 sm:flex-row sm:items-center sm:justify-between sm:gap-8 sm:px-8"
-                      : "flex flex-col gap-3 px-6 py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:px-8"
-                  }
+                  className="flex flex-col gap-3 px-6 py-6 sm:flex-row sm:items-start sm:justify-between sm:gap-8 sm:px-8"
                 >
                   <dt className="max-w-md">
-                    <span
-                      className={
-                        row.emphasis
-                          ? "block text-lg font-semibold tracking-tight text-foreground"
-                          : "block text-base font-medium tracking-tight text-foreground"
-                      }
-                    >
+                    <span className="block text-base font-medium tracking-tight text-foreground">
                       {row.label}
                     </span>
                     <span className="mt-1 block text-sm text-muted-foreground">
@@ -95,12 +77,7 @@ export function PriceBook({ dict, lang }: { dict: Dictionary; lang: Locale }) {
                     ) : null}
                   </dt>
                   <dd className="shrink-0 sm:text-end">
-                    <Price
-                      line={row.line}
-                      lang={lang}
-                      labels={labels}
-                      size={row.emphasis ? "lg" : "md"}
-                    />
+                    <Price line={row.line} lang={lang} labels={labels} />
                   </dd>
                 </div>
               ))}
