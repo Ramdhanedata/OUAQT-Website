@@ -7,6 +7,8 @@ import { PageTransition } from "@/components/motion/page-transition";
 import { getDictionary } from "@/lib/i18n";
 import { isRtl, locales, type Locale } from "@/lib/i18n/config";
 import { alternatesFor, siteUrl } from "@/lib/i18n/metadata";
+import { organization } from "@/lib/data/contact";
+import { founder } from "@/lib/data/founder";
 import { notFound } from "next/navigation";
 
 /*
@@ -59,6 +61,14 @@ export function generateMetadata({ params }: Props): Metadata {
     title: dict.meta.siteTitle,
     description: dict.meta.siteDescription,
     metadataBase: new URL(siteUrl()),
+    /*
+     * Google Search Console ownership check. Set GOOGLE_SITE_VERIFICATION in
+     * Vercel to the content value of the HTML tag Search Console gives you,
+     * then redeploy. The value is public by design; it is not a secret.
+     */
+    verification: process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : undefined,
     alternates: alternatesFor(lang, "/"),
     /*
      * Link previews on WhatsApp, Facebook and X use a picture per language,
@@ -96,6 +106,35 @@ export default function RootLayout({ children, params }: Props) {
   const dict = getDictionary(lang);
   const rtl = isRtl(lang);
 
+  /*
+   * Structured data describing the business, so Google can show OUAQT in
+   * local results ("logiciel pharmacie Nouakchott") with its city, phone and
+   * languages. Only verified links go in sameAs.
+   */
+  const base = siteUrl();
+  const businessData = {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": `${base}/#business`,
+    name: "OUAQT",
+    alternateName: "وقت",
+    url: `${base}/${lang}`,
+    logo: `${base}/logo-ouaqt-dark-ink.png`,
+    image: `${base}/og/${lang}.png`,
+    description: dict.meta.siteDescription,
+    email: organization.email,
+    telephone: organization.whatsappUrl.replace("https://wa.me/", "+"),
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Nouakchott",
+      addressCountry: "MR",
+    },
+    areaServed: { "@type": "Country", name: "Mauritania" },
+    knowsLanguage: ["fr", "ar", "en"],
+    founder: { "@type": "Person", name: founder.name },
+    sameAs: [organization.linkedin],
+  };
+
   return (
     <html
       lang={lang}
@@ -110,6 +149,13 @@ export default function RootLayout({ children, params }: Props) {
       <body
         className={`${rtl ? "font-arabic" : "font-serif"} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          // "<" escaped so the JSON can never close the script tag.
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(businessData).replace(/</g, "\\u003c"),
+          }}
+        />
         <Navbar dict={dict} lang={lang} />
         <main className="min-h-screen pt-16 sm:pt-20">
           <PageTransition>{children}</PageTransition>

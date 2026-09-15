@@ -2,8 +2,8 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "OUAQT | Des logiciels pensés pour votre façon de travailler",
-    siteDescription: "OUAQT conçoit des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp. Nous venons chez vous, nous voyons où partent les heures, et nous construisons un système que votre équipe utilisera chaque jour. 22 systèmes utilisés au quotidien dans six secteurs.",
+    siteTitle: "OUAQT | Logiciels de gestion sur mesure à Nouakchott, Mauritanie",
+    siteDescription: "OUAQT conçoit des logiciels de gestion sur mesure à Nouakchott : caisse et registres de pharmacie, facturation d'hôtel, caisse de restaurant et de boulangerie, transport, ateliers et entrepôts. Sans internet au quotidien. Première visite gratuite.",
     projectsTitle: "Projets | OUAQT",
     projectsDescription: "22 systèmes utilisés chaque jour dans des mines, des pharmacies, des hôtels, des sociétés de transport, des restaurants et des écoles. Voyez ce que chacun a changé.",
     aboutTitle: "À propos d'OUAQT",

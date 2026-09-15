@@ -4,8 +4,8 @@
  */
 export const en = {
   meta: {
-    siteTitle: "OUAQT | Software built around the way your business works",
-    siteDescription: "OUAQT builds software for businesses that still run on paper, Excel and WhatsApp. We come to you, see where the hours go, and build a system your team will use every day. 22 systems in daily use across six sectors.",
+    siteTitle: "OUAQT | Custom business software in Nouakchott, Mauritania",
+    siteDescription: "OUAQT builds custom business software in Nouakchott, Mauritania: pharmacy tills and records, hotel billing, restaurant and bakery tills, transport, workshops and warehouses. Works without internet. First visit free.",
     projectsTitle: "Projects | OUAQT",
     projectsDescription: "22 systems in daily use at mines, pharmacies, hotels, transport companies, restaurants and schools. See what each one fixed.",
     aboutTitle: "About OUAQT",
