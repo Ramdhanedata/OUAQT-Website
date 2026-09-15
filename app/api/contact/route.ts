@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { siteUrl } from "@/lib/i18n/metadata";
 
 /*
  * Contact form endpoint. Delivers submissions to OUAQT's inbox.
@@ -101,14 +102,32 @@ export async function POST(request: Request) {
    * the better path: mail then goes direct, with nothing in between.
    */
   if (!apiKey) {
+    /*
+     * FormSubmit is built to be called from a browser and refuses requests
+     * that do not say which page the form lives on. A server-side fetch sends
+     * no Referer on its own, so pass along the page the visitor was on (the
+     * browser sent it to us), falling back to the site's contact page.
+     *
+     * It also answers HTTP 200 when it refuses, including the one-time
+     * "needs activation" reply, with success: "false" in the body. Checking
+     * res.ok alone told visitors their message had gone when it had not.
+     */
+    const referer = request.headers.get("referer") || `${siteUrl()}/contact`;
+    const origin = new URL(referer).origin;
     try {
       const res = await fetch(
         `https://formsubmit.co/ajax/${encodeURIComponent(TO)}`,
         {
           method: "POST",
-          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Origin: origin,
+            Referer: referer,
+          },
           body: JSON.stringify({
             _subject: `OUAQT enquiry from ${name}`,
+            _replyto: email,
             _template: "table",
             _captcha: "false",
             Name: name,
@@ -118,8 +137,11 @@ export async function POST(request: Request) {
           }),
         }
       );
-      if (!res.ok) {
-        console.error("FormSubmit rejected the message:", res.status, await res.text());
+      const data = (await res.json().catch(() => null)) as
+        | { success?: string | boolean; message?: string }
+        | null;
+      if (!res.ok || String(data?.success) !== "true") {
+        console.error("FormSubmit did not deliver:", res.status, data?.message);
         return NextResponse.json({ error: "send_failed" }, { status: 502 });
       }
       return NextResponse.json({ ok: true, via: "formsubmit" });
