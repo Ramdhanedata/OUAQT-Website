@@ -2,9 +2,8 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "OUAQT | Des systèmes sur mesure pour vos processus réels",
-    siteDescription:
-      "OUAQT conçoit des systèmes sur mesure pour les entreprises qui fonctionnent encore au papier, à Excel et à WhatsApp. 22 systèmes en production dans six secteurs, des mines et de la pharmacie à l'hôtellerie, au transport, à la restauration et à l'éducation.",
+    siteTitle: "OUAQT | Des logiciels pensés pour votre façon de travailler",
+    siteDescription: "OUAQT conçoit des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp. Nous venons chez vous, nous voyons où partent les heures, et nous construisons un système que votre équipe utilisera chaque jour. 22 systèmes utilisés au quotidien dans six secteurs.",
     projectsTitle: "Projets | OUAQT",
     projectsDescription:
       "22 systèmes en production dans six secteurs, conçus pour des clients dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
@@ -31,7 +30,7 @@ export const fr: Dictionary = {
     pricing: "Tarifs",
     about: "À propos",
     contact: "Contact",
-    cta: "Démarrer un projet",
+    cta: "Parlons-en",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
     language: "Langue",
@@ -39,63 +38,55 @@ export const fr: Dictionary = {
   },
 
   hero: {
-    eyebrow: "OUAQT · Systèmes d'entreprise sur mesure",
-    heading:
-      "Nous identifions ce qui ralentit votre entreprise, puis nous construisons le système qui le corrige.",
-    body: "Chaque entreprise a des tâches qui prennent plus de temps qu'elles ne devraient. Nous apprenons comment la vôtre fonctionne réellement, puis nous construisons un système unique qui supprime le travail manuel et rend à votre équipe le temps qu'elle y perd.",
+    eyebrow: "OUAQT · Logiciels sur mesure pour entreprises",
+    heading: "Nous repérons ce qui ralentit votre entreprise, et nous construisons le logiciel qui règle le problème.",
+    body: "Saisir deux fois la même information. Rester tard parce que la caisse et le cahier ne tombent pas juste. Nous venons chez vous et nous regardons comment le travail se fait vraiment. Ensuite, nous construisons le logiciel autour, pour que votre équipe récupère ces heures.",
     primaryCta: "Dites-nous ce qui vous ralentit",
-    secondaryCta: "Voir nos projets",
+    secondaryCta: "Voir nos réalisations",
   },
 
   impact: {
-    liveSystems: "Systèmes en production",
-    sectors: "Secteurs couverts, et d'autres à venir",
+    liveSystems: "Systèmes utilisés au quotidien",
+    sectors: "Secteurs où nous travaillons",
     reduction: "De temps de rapprochement en moins chez GMM",
-    buildTime: "Du cahier des charges au système fonctionnel",
+    buildTime: "De notre première visite au logiciel en marche",
     buildTimeValue: "48-96 h",
   },
 
   problem: {
-    eyebrow: "Le problème",
-    heading:
-      "La plupart des entreprises fonctionnent encore au papier, à Excel et à WhatsApp.",
-    body: "Non pas parce que cela fonctionne, mais parce qu'on ne leur a jamais conçu de logiciel adapté à leur façon réelle de travailler.",
+    eyebrow: "Ça vous parle ?",
+    heading: "La plupart des entreprises tournent encore au papier, à Excel et à WhatsApp.",
+    body: "Le plus souvent, c'est parce que les logiciels qu'on leur a proposés ne collaient pas à leur façon de travailler. Alors le cahier est resté.",
     items: {
-      mining:
-        "Un rapprochement quotidien de 4 heures, effectué entièrement à la main.",
-      pharmacy:
-        "Des heures de saisie manuelle pour les registres de médicaments.",
-      hospitality:
-        "Les calculs de taxes et de commissions sur les services, source fréquente d'erreurs de facturation.",
-      transport:
-        "Une heure de préparation manuelle avant chaque voyage pour les manifestes de contrôle.",
+      mining: "Quatre heures par jour à rapprocher des chiffres à la main.",
+      pharmacy: "Des heures à recopier les registres de médicaments, ligne par ligne.",
+      hospitality: "Des taxes et des commissions calculées à la main sur chaque facture, avec les erreurs qui vont avec.",
+      transport: "Une heure de paperasse avant que chaque voyage puisse partir.",
     },
   },
 
   pillars: {
-    eyebrow: "La solution",
-    heading:
-      "Des systèmes numériques sur mesure, conçus autour du fonctionnement réel de chaque entreprise.",
+    eyebrow: "Notre réponse",
+    heading: "Nous adaptons le logiciel à votre entreprise, pour que votre équipe n'ait pas à changer sa façon de travailler.",
     workflow: {
-      title: "Conçu autour du processus réel, pas d'un modèle générique",
-      body: "Chaque système part de la façon dont votre équipe travaille vraiment, y compris la langue qu'elle utilise. Le système minier GMM fonctionne en français, en arabe et en anglais parce que c'est ainsi que les équipes de terrain saisissent leurs données.",
+      title: "Il fonctionne comme votre équipe travaille déjà",
+      body: "Nous partons de votre routine réelle, jusqu'à la langue dans laquelle votre personnel écrit. Chez GMM, les équipes de terrain notent leurs données en français, en arabe et en anglais, alors leur système parle les trois.",
     },
     automation: {
-      title:
-        "L'automatisation gère la répétition, les personnes gèrent les exceptions",
-      body: "Le système de pharmacie complète les registres de médicaments à partir des saisies passées au lieu de demander au personnel de tout retaper. Ce qui reste, c'est le travail qui exige vraiment une personne.",
+      title: "L'ordinateur s'occupe du répétitif",
+      body: "À la pharmacie, le système remplit les registres de médicaments à partir des saisies passées, et le personnel a arrêté de tout retaper. Vos équipes gardent le travail qui demande leur jugement.",
     },
     migration: {
-      title: "Migration complète, isolée par client",
-      body: "Des années d'historique papier et tableur vous suivent, personne ne repart d'un système vide. Et les données d'un client ne croisent jamais celles d'un autre.",
+      title: "Vos anciens registres vous suivent",
+      body: "Nous reprenons des années d'historique papier et tableur dans le nouveau système, personne ne repart de zéro. Vos données restent à vous, et ne sont jamais mélangées à celles d'un autre client.",
     },
   },
 
   proof: {
-    eyebrow: "La preuve",
-    heading: "Un seul chiffre suffit.",
-    body: "Les équipes de terrain de GMM rapprochaient les mouvements de blocs à la main, quatre heures par jour, en trois langues. Le système que nous avons conçu le fait en vingt-cinq minutes.",
-    cta: "Lire le cas GMM",
+    eyebrow: "Un résultat concret",
+    heading: "Quatre heures de travail par jour, faites désormais en vingt-cinq minutes.",
+    body: "Les équipes de terrain de GMM rapprochaient les mouvements de blocs à la main, entre carnets papier et trois langues. Aujourd'hui, c'est le système qui s'en charge.",
+    cta: "Voir comment nous avons fait",
     client: "GMM · Client minier",
     metric: "Rapprochement quotidien",
     before: "Avant",
@@ -103,20 +94,20 @@ export const fr: Dictionary = {
     beforeValue: "4 heures",
     afterValue: "25 min",
     reduction: "90 % de réduction",
-    reductionNote: "Sur le temps de rapprochement, confirmé par le client.",
+    reductionNote: "De temps de rapprochement en moins, chiffre confirmé par GMM.",
   },
 
   featured: {
-    heading: "Projets en production",
-    body: "22 systèmes en production, chacun conçu pour une entreprise et sa façon réelle de fonctionner.",
+    heading: "Quelques réalisations",
+    body: "22 systèmes utilisés au quotidien. Chacun a été construit pour une seule entreprise et sa façon de fonctionner.",
     cta: "Voir tous les projets",
   },
 
   homeCta: {
-    heading: "Chaque système commence par une conversation.",
-    body: "Racontez-nous comment votre entreprise fonctionne aujourd'hui. Le papier, les tableurs, les groupes de discussion. C'est de là que nous partons, et il suffit souvent d'un appel pour voir où placer le premier système.",
-    primary: "Nous contacter",
-    secondary: "À propos d'OUAQT",
+    heading: "Racontez-nous où passe votre journée.",
+    body: "Expliquez-nous comment votre entreprise tourne aujourd'hui, papier et groupes WhatsApp compris. Une conversation suffit souvent pour voir où un logiciel vous ferait gagner le plus de temps.",
+    primary: "Parlons-en",
+    secondary: "Qui sommes-nous",
   },
 
   projectsPage: {
@@ -245,27 +236,27 @@ export const fr: Dictionary = {
 
   process: {
     eyebrow: "Notre façon de travailler",
-    heading: "Nous commençons par nous asseoir avec vous.",
-    body: "Aucun formulaire à remplir, aucun cahier des charges à rédiger. Nous venons chez vous, et le travail part de ce que nous voyons.",
+    heading: "Tout commence par une visite.",
+    body: "Pas besoin de remplir un formulaire ni de rédiger un cahier des charges. Nous venons chez vous, et nous partons de ce que nous voyons.",
     steps: {
       listen: {
-        title: "Nous nous asseyons avec vous et nous écoutons",
-        body: "Nous venons chez vous et passons du temps avec votre équipe, pour voir la journée telle qu'elle se déroule vraiment et non telle qu'elle devrait. Là où les choses dérapent, ce qui se fait deux fois, les chiffres auxquels personne ne se fie tout à fait. Vous connaissez votre métier mieux que nous, alors surtout nous écoutons.",
+        title: "Nous nous asseyons avec votre équipe et nous écoutons",
+        body: "Nous passons du temps avec les personnes qui font le travail, et nous observons une journée ordinaire telle qu'elle se passe vraiment. Là où ça coince, ce qui se fait deux fois, les chiffres dont personne n'est tout à fait sûr. Vous connaissez votre métier mieux que nous, alors nous écoutons surtout.",
       },
       build: {
-        title: "Nous construisons autour de votre processus",
-        body: "Le système suit les étapes que votre équipe connaît déjà, dans la langue qu'elle utilise déjà. Vos archives existantes vous suivent.",
+        title: "Nous construisons autour de votre routine",
+        body: "Le logiciel suit les étapes que votre équipe connaît déjà, dans la langue qu'elle utilise déjà, et vos registres existants sont repris.",
       },
       stay: {
         title: "Nous restons après la mise en service",
-        body: "Nous formons vos employés sur place. Ensuite, tant que la licence court, nous corrigeons ce qui ne va pas et ajustons l'existant quand votre façon de travailler change.",
+        body: "Nous formons vos employés sur place. Ensuite, tant que la licence court, nous corrigeons ce qui ne va pas et nous ajustons l'existant quand votre façon de travailler évolue.",
       },
     },
   },
 
   faq: {
     eyebrow: "Questions",
-    heading: "Ce que l'on nous demande avant de commencer.",
+    heading: "Les questions qu'on nous pose avant de commencer.",
     items: {
       duration: {
         q: "Combien de temps cela prend-il ?",
@@ -281,7 +272,7 @@ export const fr: Dictionary = {
       },
       changes: {
         q: "Et si j'ai besoin d'un changement plus tard ?",
-        a: "Tant que la licence est renouvelée, les modifications de ce qui existe déjà sont comprises. Un écran ou un processus nouveau est un nouveau module, chiffré à part, et nous vous disons lequel des deux avant de commencer.",
+        a: "Tant que la licence est renouvelée, les modifications de ce que vous avez déjà sont comprises. Une nouveauté, comme un écran ou un processus en plus, est un nouveau module avec son propre devis, et nous vous disons lequel des deux avant de commencer.",
       },
       training: {
         q: "Formez-vous mon équipe ?",
@@ -289,7 +280,7 @@ export const fr: Dictionary = {
       },
       migration: {
         q: "Que deviennent mes anciens registres ?",
-        a: "Ils vous suivent. Nous migrons des années de papier et de tableurs dans le nouveau système, personne ne repart d'un écran vide.",
+        a: "Ils vous suivent. Nous reprenons des années de papier et de tableurs dans le nouveau système, personne ne repart d'un écran vide.",
       },
       broken: {
         q: "Et si quelque chose casse ?",
@@ -479,8 +470,7 @@ export const fr: Dictionary = {
   },
 
   footer: {
-    tagline:
-      "Des systèmes sur mesure pour les entreprises qui fonctionnent encore au papier, à Excel et à WhatsApp.",
+    tagline: "Des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp.",
     navigate: "Navigation",
     connect: "Nous suivre",
     brand: "OUAQT",

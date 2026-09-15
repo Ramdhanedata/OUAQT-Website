@@ -4,9 +4,8 @@
  */
 export const en = {
   meta: {
-    siteTitle: "OUAQT | Custom systems for real business workflows",
-    siteDescription:
-      "OUAQT builds custom systems for businesses still running on paper, Excel, and WhatsApp. 22 live systems across six sectors, from mining and pharmacy to hospitality, transport, food service, and education.",
+    siteTitle: "OUAQT | Software built around the way your business works",
+    siteDescription: "OUAQT builds software for businesses that still run on paper, Excel and WhatsApp. We come to you, see where the hours go, and build a system your team will use every day. 22 systems in daily use across six sectors.",
     projectsTitle: "Projects | OUAQT",
     projectsDescription:
       "22 live systems across six sectors, built for clients in mining, pharmacy, hospitality, transport, food service, and education.",
@@ -33,7 +32,7 @@ export const en = {
     pricing: "Pricing",
     about: "About",
     contact: "Contact",
-    cta: "Start a project",
+    cta: "Talk to us",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     language: "Language",
@@ -41,59 +40,55 @@ export const en = {
   },
 
   hero: {
-    eyebrow: "OUAQT · Custom business systems",
-    heading:
-      "We find what slows your business down, then build the system that fixes it.",
-    body: "Every business has work that takes longer than it should. We learn how yours really operates, then build one system around it that removes the manual effort and gives your team its time back.",
+    eyebrow: "OUAQT · Custom business software",
+    heading: "We find what slows your business down, and build the software that fixes it.",
+    body: "Typing the same record twice. Staying late because the till and the notebook don't match. We come to your business and watch how the work really gets done. Then we build software around it, so your team gets those hours back.",
     primaryCta: "Tell us what's slowing you down",
-    secondaryCta: "See our projects",
+    secondaryCta: "See what we've built",
   },
 
   impact: {
-    liveSystems: "Live systems in production",
-    sectors: "Sectors served, with more on the way",
-    reduction: "Less reconciliation time at GMM",
-    buildTime: "From brief to working build",
+    liveSystems: "Systems in daily use",
+    sectors: "Sectors we work in",
+    reduction: "Less time spent reconciling at GMM",
+    buildTime: "From our first visit to working software",
     buildTimeValue: "48-96h",
   },
 
   problem: {
-    eyebrow: "The problem",
-    heading: "Most businesses still run on paper, Excel, and WhatsApp.",
-    body: "Not because it works, but because they've never had software built for how they actually operate.",
+    eyebrow: "Sound familiar?",
+    heading: "Most businesses still run on paper, Excel and WhatsApp.",
+    body: "Usually that's because the software they were offered never fit the way they work, so the notebook stayed.",
     items: {
-      mining: "A daily 4-hour reconciliation process, done by hand.",
-      pharmacy: "Hours of manual data entry for medicine records.",
-      hospitality:
-        "Tax and commission math across services, a common source of billing errors.",
-      transport:
-        "An hour of manual prep before every trip for checkpoint manifests.",
+      mining: "Four hours every day spent reconciling figures by hand.",
+      pharmacy: "Hours of typing out medicine records, one line at a time.",
+      hospitality: "Taxes and commissions worked out by hand on every bill, and the billing mistakes that come with it.",
+      transport: "An hour of paperwork before every trip can leave.",
     },
   },
 
   pillars: {
-    eyebrow: "The solution",
-    heading:
-      "Custom digital systems, built around how each business actually works.",
+    eyebrow: "How we fix it",
+    heading: "We shape the software around your business, so your team doesn't have to change how it works.",
     workflow: {
-      title: "Built around the real workflow, not a template",
-      body: "Every system is designed from how your team actually works, including the language they work in. The GMM mining system runs French, Arabic, and English because that is how field crews log data.",
+      title: "It works the way your team already works",
+      body: "We start from your real routine, down to the language your staff write in. At GMM the field crews log data in French, Arabic and English, so their system speaks all three.",
     },
     automation: {
-      title: "Automation handles the repetition, people handle the exceptions",
-      body: "The pharmacy system fills medicine records from past entries instead of asking staff to retype them. What is left is the work that genuinely needs a person.",
+      title: "The computer does the repetitive part",
+      body: "At the pharmacy, the system fills in medicine records from past entries, so staff stopped retyping them. Your people keep the work that needs their judgment.",
     },
     migration: {
-      title: "Full migration, isolated per client",
-      body: "Years of paper and spreadsheet history come across with you, so nobody starts from a blank system. And no client's data ever touches another's.",
+      title: "Your old records come with you",
+      body: "We bring years of paper and spreadsheet history into the new system, so nobody starts from an empty screen. Your data stays yours, and it is never mixed with another client's.",
     },
   },
 
   proof: {
-    eyebrow: "Proof it works",
-    heading: "One number that says it all.",
-    body: "GMM's field teams were reconciling bloc movement by hand, four hours a day, across three languages. The system we built for them does it in twenty-five minutes.",
-    cta: "Read the GMM case",
+    eyebrow: "A real result",
+    heading: "Four hours of daily work, now done in twenty-five minutes.",
+    body: "GMM's field teams used to reconcile bloc movements by hand, across paper logs and three languages. Today the system does that work for them.",
+    cta: "See how we did it",
     client: "GMM · Mining client",
     metric: "Daily reconciliation",
     before: "Before",
@@ -101,20 +96,20 @@ export const en = {
     beforeValue: "4 hours",
     afterValue: "25 min",
     reduction: "90% reduction",
-    reductionNote: "In reconciliation time, confirmed by the client.",
+    reductionNote: "Less time spent reconciling, a figure GMM confirmed.",
   },
 
   featured: {
-    heading: "Projects in production",
-    body: "22 live systems, each built for one business and the way it actually runs.",
-    cta: "View all projects",
+    heading: "Some of our work",
+    body: "22 systems in daily use. Each one was built for a single business and the way it runs.",
+    cta: "See all projects",
   },
 
   homeCta: {
-    heading: "Every system starts with a conversation.",
-    body: "Tell us how your business runs today. The paper, the spreadsheets, the group chats. That is where we start, and it usually takes one call to see where the first system belongs.",
-    primary: "Get in touch",
-    secondary: "About OUAQT",
+    heading: "Tell us where your day goes.",
+    body: "Tell us how your business runs today, paper and WhatsApp groups included. One conversation is usually enough to see where software would save you the most time.",
+    primary: "Talk to us",
+    secondary: "Who we are",
   },
 
   projectsPage: {
@@ -245,27 +240,27 @@ export const en = {
 
   process: {
     eyebrow: "How we work",
-    heading: "We start by sitting with you.",
-    body: "No forms to fill in, no requirements document to write. We come to you, and the work starts from what we see.",
+    heading: "It starts with a visit.",
+    body: "You don't need to fill in forms or write a specification. We come to you and start from what we see.",
     steps: {
       listen: {
-        title: "We sit with you and listen",
-        body: "We come to you and spend time with your team, watching the day as it actually happens rather than how it is meant to. Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we ever will, so mostly we listen.",
+        title: "We sit with your team and listen",
+        body: "We spend time with the people doing the work and watch an ordinary day as it really goes. Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we do, so mostly we listen.",
       },
       build: {
-        title: "We build around your workflow",
-        body: "The system follows the steps your team already knows, in the language they already use. Your existing records come across with you.",
+        title: "We build it around your routine",
+        body: "The software follows the steps your team already knows, in the language they already use, and your existing records come along.",
       },
       stay: {
         title: "We stay after it goes live",
-        body: "We train your staff in person. After that, for as long as the licence runs, we fix what goes wrong and adjust what exists when the way you work changes.",
+        body: "We train your staff in person. After that, for as long as the licence runs, we fix what goes wrong and adjust things when the way you work changes.",
       },
     },
   },
 
   faq: {
     eyebrow: "Questions",
-    heading: "The things people ask before starting.",
+    heading: "Questions people ask us before starting.",
     items: {
       duration: {
         q: "How long does it take?",
@@ -281,7 +276,7 @@ export const en = {
       },
       changes: {
         q: "What if I need something changed later?",
-        a: "While the licence is renewed, changes to what already exists are included. A new screen or process is a new module and is quoted separately, and we tell you which one it is before we start.",
+        a: "For as long as the licence is renewed, changes to what you already have are included. Something new, like an extra screen or process, is a new module with its own quote, and we tell you which is which before we start.",
       },
       training: {
         q: "Do you train my team?",
@@ -289,7 +284,7 @@ export const en = {
       },
       migration: {
         q: "What happens to my old records?",
-        a: "They come with you. We migrate years of paper and spreadsheets into the new system, so nobody starts from an empty screen.",
+        a: "They come with you. We bring years of paper and spreadsheets into the new system, so nobody starts from an empty screen.",
       },
       broken: {
         q: "What if something breaks?",
@@ -477,8 +472,7 @@ export const en = {
   },
 
   footer: {
-    tagline:
-      "Custom systems for businesses still running on paper, Excel, and WhatsApp.",
+    tagline: "Software for businesses that still run on paper, Excel and WhatsApp.",
     navigate: "Navigate",
     connect: "Connect",
     brand: "OUAQT",
