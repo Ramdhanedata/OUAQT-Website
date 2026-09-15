@@ -41,7 +41,7 @@ export const fr: Dictionary = {
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
     language: "Langue",
-    homeAria: "OUAQT accueil",
+    homeAria: "Accueil OUAQT",
   },
 
   hero: {
@@ -55,7 +55,7 @@ export const fr: Dictionary = {
   impact: {
     liveSystems: "Systèmes utilisés au quotidien",
     sectors: "Secteurs où nous travaillons",
-    reduction: "De temps de rapprochement en moins chez GMM",
+    reduction: "Temps de rapprochement en moins chez GMM",
     buildTime: "De notre première visite au logiciel en marche",
     buildTimeValue: "48-96 h",
   },
@@ -68,7 +68,7 @@ export const fr: Dictionary = {
       mining: "Quatre heures par jour à rapprocher des chiffres à la main.",
       pharmacy: "Des heures à recopier les registres de médicaments, ligne par ligne.",
       hospitality: "Des taxes et des commissions calculées à la main sur chaque facture, avec les erreurs qui vont avec.",
-      transport: "Une heure de paperasse avant que chaque voyage puisse partir.",
+      transport: "Une heure de paperasse avant chaque départ.",
     },
   },
 
@@ -101,7 +101,7 @@ export const fr: Dictionary = {
     beforeValue: "4 heures",
     afterValue: "25 min",
     reduction: "90 % de réduction",
-    reductionNote: "De temps de rapprochement en moins, chiffre confirmé par GMM.",
+    reductionNote: "Sur le temps de rapprochement, chiffre confirmé par GMM.",
   },
 
   featured: {
@@ -301,8 +301,7 @@ export const fr: Dictionary = {
     updatedDate: "Septembre 2026",
     terms: {
       title: "Licence et conditions d'utilisation",
-      intro:
-        "Ces conditions couvrent les logiciels qu'OUAQT conçoit et déploie pour vous. Elles accompagnent le contrat écrit de votre projet. En cas de divergence, votre contrat prévaut.",
+      intro: "Ces conditions couvrent les logiciels qu'OUAQT conçoit et installe pour vous. Elles accompagnent le contrat écrit de votre projet. En cas de divergence, votre contrat prévaut.",
       ownership: {
         h: "Le logiciel nous appartient",
         b: "OUAQT est propriétaire du système, de son code source, de sa conception et de sa documentation, ainsi que de tout ce qui y sera ajouté par la suite. Le paiement d'un projet ne transfère pas cette propriété.",
@@ -411,9 +410,9 @@ export const fr: Dictionary = {
     stat3: "Le Code des investissements donne désormais la priorité aux PME",
     marketNote: "La Banque mondiale et la SFI financent l'accès des petites entreprises de la région au crédit et aux outils numériques. OUAQT travaille sur le versant numérique de ce même problème.",
     founderEyebrow: "Fondateur",
-    founderRole: "Fondateur & Solutions Engineer / Forward Deployed Engineer",
+    founderRole: "Fondateur & ingénieur solutions / ingénieur terrain",
     founderBio1: "J'ai lancé OUAQT après avoir vu des entreprises solides perdre des heures chaque jour sur un travail que leurs logiciels auraient dû faire. Rien de compliqué. Compter, recopier, vérifier des chiffres à la main, parce que rien de ce qu'on leur avait vendu ne collait à leur façon de travailler.",
-    founderBio2: "Je viens de l'analyse de données et de la conception de logiciels. Je travaille comme un forward deployed engineer : sur place, à côté des personnes qui utiliseront le système, de la première conversation jusqu'au jour où plus personne n'a besoin de l'ancien tableur.",
+    founderBio2: "Je viens de l'analyse de données et de la conception de logiciels. Je travaille en ingénieur de terrain : sur place, à côté des personnes qui utiliseront le système, de la première conversation jusqu'au jour où plus personne n'a besoin de l'ancien tableur.",
     credentials: {
       analytics: {
         title: "Analyse de données chez Deloitte et MyAiPathways",
@@ -467,7 +466,7 @@ export const fr: Dictionary = {
   footer: {
     tagline: "Des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp.",
     navigate: "Navigation",
-    connect: "Nous suivre",
+    connect: "Nous joindre",
     brand: "OUAQT",
     rights: "Tous droits réservés.",
     legal: "Mentions légales",

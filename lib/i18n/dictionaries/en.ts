@@ -309,8 +309,7 @@ export const en = {
     updatedDate: "September 2026",
     terms: {
       title: "Licence and terms of use",
-      intro:
-        "These terms cover software OUAQT builds and deploys for you. They sit alongside the written agreement for your project. Where the two differ, your agreement wins.",
+      intro: "These terms cover software OUAQT builds and installs for you. They sit alongside the written agreement for your project. Where the two differ, your agreement wins.",
       ownership: {
         h: "We own the software",
         b: "OUAQT owns the system, its source code, its design and its documentation, along with anything added to it later. Paying for a project does not transfer that ownership.",
