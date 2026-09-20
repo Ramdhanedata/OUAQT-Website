@@ -1,6 +1,11 @@
 import type { Metadata } from "next";
+import { mayReadImages } from "@/builder/ai";
 import { getBuilderCopy } from "@/builder/copy";
+import { getPrivateSettings } from "@/builder/db/private-settings";
 import { sessionClient } from "@/builder/db/server";
+import { getPublicSettings } from "@/builder/db/settings";
+import { statusOf, graceDaysLeft, daysLeft, type LicencePlan } from "@/builder/licence/status";
+import { priceFor } from "@/builder/payment/pricing";
 import { decryptSerial } from "@/builder/serial/cipher";
 import { AccountArea } from "@/builder/ui/account";
 import { getDictionary } from "@/lib/i18n";
@@ -55,7 +60,7 @@ export default async function AccountPage({ params }: Props) {
 
   const { data: business } = await supabase
     .from("businesses")
-    .select("id, name_latin, pack")
+    .select("id, name_latin, pack, launch_client")
     .order("created_at", { ascending: true })
     .limit(1)
     .maybeSingle();
@@ -76,6 +81,44 @@ export default async function AccountPage({ params }: Props) {
     .eq("business_id", business.id)
     .order("created_at", { ascending: false });
 
+  const [{ data: licenceRow }, { data: lastPayment }, settings, secrets] =
+    await Promise.all([
+      supabase
+        .from("licences")
+        .select("plan, status, starts_at, ends_at")
+        .eq("business_id", business.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      supabase
+        .from("payments")
+        .select("status, created_at")
+        .eq("business_id", business.id)
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle(),
+      getPublicSettings(),
+      getPrivateSettings(),
+    ]);
+
+  /*
+   * The licence state is worked out from its dates here, not read from the
+   * status column: a column nobody has touched since last year says whatever
+   * it said last year.
+   */
+  const licence = licenceRow
+    ? {
+        plan: licenceRow.plan as LicencePlan,
+        startsAt: licenceRow.starts_at ? new Date(licenceRow.starts_at) : null,
+        endsAt: licenceRow.ends_at ? new Date(licenceRow.ends_at) : null,
+        suspended: licenceRow.status === "suspended",
+      }
+    : null;
+
+  const now = new Date();
+  const rules = { renewalGraceDays: settings?.renewal_grace_days ?? 0 };
+  const status = licence ? statusOf(licence, now, rules) : null;
+
   return (
     <AccountArea
       copy={copy}
@@ -91,6 +134,21 @@ export default async function AccountPage({ params }: Props) {
           text: one.text,
           status: one.status,
         })),
+        licence:
+          licence && status
+            ? {
+                status,
+                endsAt: licence.endsAt ? licence.endsAt.toISOString() : null,
+                daysLeft: daysLeft(licence, now),
+                graceDaysLeft: graceDaysLeft(licence, now, rules),
+              }
+            : null,
+        lastPaymentStatus: lastPayment?.status ?? null,
+        price: settings
+          ? priceFor("annual", settings, business.launch_client)
+          : null,
+        bankilyNumber: secrets?.bankily_number || null,
+        aiReadsImages: mayReadImages(),
         installers: {
           windows: process.env.INSTALLER_URL_WINDOWS || null,
           mac: process.env.INSTALLER_URL_MAC || null,

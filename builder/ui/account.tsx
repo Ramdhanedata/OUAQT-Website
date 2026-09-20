@@ -7,7 +7,11 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
+import type { LicenceStatus } from "@/builder/licence/status";
+import type { Price } from "@/builder/payment/pricing";
+import { plural } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
+import { Pay } from "./pay";
 import { isPhone, loginFor } from "./step-account";
 
 /*
@@ -29,6 +33,16 @@ export type AccountState =
       serial: string | null;
       requests: { text: string; status: string }[];
       installers: { windows: string | null; mac: string | null };
+      licence: {
+        status: LicenceStatus;
+        endsAt: string | null;
+        daysLeft: number | null;
+        graceDaysLeft: number | null;
+      } | null;
+      lastPaymentStatus: string | null;
+      price: Price | null;
+      bankilyNumber: string | null;
+      aiReadsImages: boolean;
     };
 
 export function AccountArea({
@@ -198,7 +212,7 @@ function SignedIn({
         </div>
       </section>
 
-      <Waiting copy={copy} title={copy.myAccount.mySubscription} />
+      <Subscription copy={copy} lang={lang} state={state} />
       <Waiting copy={copy} title={copy.myAccount.myDevices} />
 
       <section className="space-y-3">
@@ -222,6 +236,79 @@ function SignedIn({
 
       <SignOut copy={copy} />
     </div>
+  );
+}
+
+function Subscription({
+  copy,
+  lang,
+  state,
+}: {
+  copy: BuilderCopy;
+  lang: Locale;
+  state: Extract<AccountState, { kind: "signed_in" }>;
+}) {
+  const [sent, setSent] = useState(false);
+  const licence = state.licence;
+
+  /*
+   * One sentence that says where he stands, in the order he would ask it:
+   * how long he has, or what stopped, and what to do about it.
+   */
+  const where = (): string => {
+    if (!licence) return copy.licence.notStarted as string;
+    switch (licence.status) {
+      case "trial":
+        return licence.daysLeft == null
+          ? (copy.licence.notStarted as string)
+          : plural(lang, licence.daysLeft, copy.licence.trial);
+      case "expired_trial":
+        return copy.licence.trialOver as string;
+      case "active":
+        return (copy.licence.active as string).replace(
+          "{date}",
+          licence.endsAt ? new Date(licence.endsAt).toLocaleDateString(lang) : ""
+        );
+      case "renewal_due":
+        return plural(lang, licence.graceDaysLeft ?? 0, copy.licence.renewalDue);
+      case "expired":
+        return copy.licence.expired as string;
+      case "suspended":
+        return copy.licence.suspended as string;
+    }
+  };
+
+  const waiting =
+    sent || state.lastPaymentStatus === "pending_confirmation";
+  const owes =
+    !licence ||
+    licence.status === "trial" ||
+    licence.status === "expired_trial" ||
+    licence.status === "renewal_due" ||
+    licence.status === "expired";
+
+  return (
+    <section className="space-y-4">
+      <h2 className="text-xl font-semibold text-foreground">
+        {copy.myAccount.mySubscription}
+      </h2>
+      <p className="text-base leading-relaxed text-foreground">{where()}</p>
+
+      {waiting ? (
+        <p className="text-base leading-relaxed text-muted-foreground">
+          {copy.licence.pending}
+        </p>
+      ) : owes && state.price ? (
+        <Pay
+          copy={copy}
+          language={lang}
+          price={state.price}
+          bankilyNumber={state.bankilyNumber}
+          aiReadsImages={state.aiReadsImages}
+          onSent={() => setSent(true)}
+        />
+      ) : null}
+    </section>
   );
 }
 
