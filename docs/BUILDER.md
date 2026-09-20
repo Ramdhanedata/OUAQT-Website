@@ -4,9 +4,9 @@ A business owner answers questions about his shop and leaves with management
 software ready to install on the shop computer, plus a serial number. This
 document is for whoever picks the work up next.
 
-Status: **B1**. Step 1 is complete, the preview shows the owner's own receipt
-and sale screen, and answers save themselves. The interview, the import, the
-account and everything after are still to come.
+Status: **B2**. Steps 1 and 2 are complete: the owner describes his shop,
+answers the interview, and reads back what his software will do. The import,
+the account and everything after are still to come.
 
 ## The one rule
 
@@ -36,6 +36,8 @@ reads every migration and fails the build if a place to put them appears.
 | `builder/ui/step-business.tsx` | Step 1: business type, languages, name, receipt details, logo |
 | `builder/draft/store.ts` | Answers, on the device and on the server |
 | `builder/logo/` | Cropping, resizing and thresholding the owner's logo, in his browser |
+| `builder/packs/*.json` | The question banks. Data, not code |
+| `builder/ai/` | The provider adapter, and the wall around what it may change |
 | `lib/i18n/routes.ts` | Which slug belongs to which page, per language |
 | `scripts/check-magic-constants.mjs` | Fails the build on hardcoded prices, days or limits |
 
@@ -83,9 +85,12 @@ says so rather than guessing.
 | `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | The builder's database, from the browser | The builder says it is not ready; the marketing site is unaffected |
 | `SUPABASE_SERVICE_ROLE_KEY` | Staff work, server side only | Admin work is unavailable |
 | `SUPABASE_DB_URL` | `npm run db:push` on your own machine | Migrations cannot be applied from here |
+| `GEMINI_API_KEY` | "Expliquer avec mes mots" in the interview | The sentence is kept as a feature request, nothing is interpreted |
+| `AI_PROVIDER`, `AI_MODEL` | Which model answers. Defaults to Gemini Flash | The defaults |
+| `AI_TIER` | `free` or `paid`. Free means the AI reads text only | Treated as free |
 
-Still to come, with the milestone that adds them: AI provider and key (B2),
-installer addresses (B3), the Ed25519 signing key (B5).
+Still to come, with the milestone that adds them: installer addresses (B3),
+the Ed25519 signing key (B5).
 
 ## The database
 
@@ -118,8 +123,33 @@ The preview is loaded separately from the questions. It carries the app
 screens and the schema with it, and on a slow phone that weight between the
 owner and the first question is the difference between answering and leaving.
 
+## Questions and the AI
+
+A pack's questions live in `builder/packs/<pack>/questions.v*.json`, validated
+by `bank.ts` at import and again by `bank.test.ts`. Adding a question is
+editing a file. Every question carries its own default, because every question
+offers "Je ne sais pas", and a test walks every bank to prove a silent owner
+still ends up with software that works.
+
+`maps_to` says where an answer lands in the configuration. A test resolves
+every one of those paths against the real schema, because a path with a typo
+writes a field nobody reads and the answer disappears without an error.
+
+The AI is optional and narrow. It reads one question, the owner's sentence and
+the switches set so far, and proposes a patch. `patch.ts` then decides: every
+path it touches has to be one that question could have set by itself, and the
+result has to validate. Anything else and the question keeps its default while
+the sentence is kept as a feature request.
+
+What the model never sees: the shop's name, phone, address, logo or products.
+The browser sends answers rather than a configuration, and `shareable()` is
+the only thing that reaches the provider. `provider.test.ts` checks it.
+
+With no `GEMINI_API_KEY` there is no provider, and "Expliquer avec mes mots"
+still works: it keeps what he wrote and tells him so.
+
 ## What is not built yet
 
-The interview and the AI (B2), spreadsheet import and staff (B3), account area
+Spreadsheet import and staff (B3), account area
 and serial (B3), payments and admin (B4), the licence API, signing and renewal
 codes (B5), the other three packs (B6).

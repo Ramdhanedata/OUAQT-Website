@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { Pack } from "@/app-ui/packs";
 import type { AppLanguage } from "@/app-ui/config";
+import type { Answers } from "@/builder/packs/bank";
 import { browserClient, ensureAnonymousSession } from "@/builder/db/client";
 
 /*
@@ -30,6 +31,14 @@ export type DraftAnswers = {
   address?: string;
   logo?: string;
   logoMono?: string;
+  /* Step 2: one entry per question the owner answered. */
+  interview?: Answers;
+  /*
+   * What the AI worked out from a sentence he wrote, already validated
+   * against the schema on the server. Kept apart from `interview` because it
+   * is a configuration fragment rather than an answer to a question.
+   */
+  patched?: { common?: unknown; features?: unknown };
 };
 
 export type SaveState = "idle" | "saving" | "saved" | "failed" | "local";

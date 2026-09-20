@@ -118,6 +118,26 @@ export const fr = {
     unavailable: "Vos réponses restent sur cet appareil pour le moment.",
   },
 
+  interview: {
+    dontKnow: "Je ne sais pas",
+    explain: "Expliquer avec mes mots",
+    explainHelp: "Dites-le comme vous l'expliqueriez à un nouvel employé.",
+    send: "Envoyer",
+    sending: "Un instant",
+    noted: "Cette fonction n'est pas encore disponible. Nous l'avons notée.",
+    yes: "Oui",
+    no: "Non",
+    questionOf: "Question {current} sur {total}",
+  },
+
+  summary: {
+    heading: "Vérifiez avant de continuer",
+    intro: "Voici ce que votre logiciel fera. Vous pourrez tout changer plus tard.",
+    edit: "Modifier",
+    business: "Votre commerce",
+    answers: "Vos réponses",
+  },
+
   placeholder: {
     title: "Cette étape arrive bientôt",
     body: "Nous préparons les questions de cette étape. Revenez dans quelques jours, ou écrivez-nous sur WhatsApp.",

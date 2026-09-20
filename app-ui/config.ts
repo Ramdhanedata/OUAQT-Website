@@ -36,6 +36,41 @@ export const businessSchema = z.object({
   logoMono: image,
 });
 
+/*
+ * What every shop answers, whatever it sells.
+ *
+ * These are the owner's own words turned into switches: who takes the money,
+ * when the till is counted, whether he sells on credit. Nothing here is a
+ * price or a limit; those live in settings.
+ */
+export const commonFeatures = z.object({
+  /** Computers the software will run on. The licence decides the ceiling. */
+  devices: z.number().int().min(1),
+  cashiers: z.enum(["owner", "owner_and_staff"]),
+  cashClose: z.enum(["daily", "per_shift"]),
+  credit: z.object({
+    enabled: z.boolean(),
+    limitPerCustomer: z.boolean(),
+  }),
+  printedReceipt: z.boolean(),
+  lowStockAlert: z.boolean(),
+  discounts: z.boolean(),
+});
+
+export const pharmacyFeatures = z.object({
+  /** Selling a strip or a single tablet rather than the whole box. */
+  unitSale: z.boolean(),
+  trackExpiry: z.boolean(),
+  expiryAlertMonths: z.number().int().positive(),
+  batchNumbers: z.boolean(),
+  trackSuppliers: z.boolean(),
+  search: z.array(z.enum(["name", "barcode"])).min(1),
+});
+
+export const packFeatures = z.object({
+  pharmacy: pharmacyFeatures.optional(),
+});
+
 export const configurationSchema = z.object({
   version: z.literal(1),
   pack: z.enum(packs),
@@ -53,10 +88,14 @@ export const configurationSchema = z.object({
     /** A line of thanks at the bottom, in the app's language. */
     footer: z.string().trim().max(80).optional(),
   }),
+  common: commonFeatures,
+  features: packFeatures,
 });
 
 export type Configuration = z.infer<typeof configurationSchema>;
 export type Business = z.infer<typeof businessSchema>;
+export type CommonFeatures = z.infer<typeof commonFeatures>;
+export type PharmacyFeatures = z.infer<typeof pharmacyFeatures>;
 
 /*
  * The configuration an owner has when he has answered nothing at all.
@@ -75,5 +114,27 @@ export function defaultConfiguration(
     business: { nameLatin: "" },
     language: { builder: language, app: language },
     receipt: { showLogo: true, showPhone: true, showAddress: true },
+    common: {
+      devices: 1,
+      cashiers: "owner",
+      cashClose: "daily",
+      credit: { enabled: true, limitPerCustomer: false },
+      printedReceipt: true,
+      lowStockAlert: true,
+      discounts: false,
+    },
+    features:
+      pack === "pharmacy"
+        ? {
+            pharmacy: {
+              unitSale: true,
+              trackExpiry: true,
+              expiryAlertMonths: 3, // not-a-rule: the question's own default, and the owner can change it
+              batchNumbers: true,
+              trackSuppliers: true,
+              search: ["name"],
+            },
+          }
+        : {},
   };
 }

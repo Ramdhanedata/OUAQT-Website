@@ -65,3 +65,21 @@ with B0b once the project exists.
   Rule 9 asks before deleting, but a line tapped by mistake is a correction,
   not a deletion, and a confirmation on every mistap costs more than it saves.
   Cancelling a whole sale will ask, in B2.
+
+## 2026-09-20, B2
+
+- **`AI_TIER=free` means the model reads words and nothing else.** Payment
+  screenshots are not sent to a free endpoint, so B4 will require the typed
+  transaction reference and send the payment straight to manual confirmation.
+  `mayReadImages()` is the single switch.
+- **The model is `gemini-3.6-flash`, not `gemini-2.5-flash`.** Google refuses
+  2.5 for new keys: "no longer available to new users". The name is an
+  environment variable, so moving to a paid provider stays a settings change.
+- **The patch comes back as JSON text, not as a JSON object.** Gemini's
+  structured output returns an empty object for a property with no declared
+  properties, and the paths differ per question so they cannot be declared.
+  The first version of this silently told owners their answer had been applied
+  while nothing had changed. An empty patch is now refused outright.
+- **`c_devices` builds its options from `max_devices` in settings** rather than
+  the "1, 2" written in the brief, so raising the device limit cannot leave the
+  question contradicting the licence.

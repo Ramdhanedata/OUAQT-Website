@@ -112,6 +112,26 @@ export const ar: BuilderCopy = {
     unavailable: "تبقى إجاباتك على هذا الجهاز حالياً.",
   },
 
+  interview: {
+    dontKnow: "لا أعرف",
+    explain: "اشرح بكلماتي",
+    explainHelp: "قلها كما تشرحها لموظف جديد.",
+    send: "إرسال",
+    sending: "لحظة",
+    noted: "هذه الميزة غير متوفرة بعد. سجّلناها.",
+    yes: "نعم",
+    no: "لا",
+    questionOf: "سؤال {current} من {total}",
+  },
+
+  summary: {
+    heading: "تحقق قبل المتابعة",
+    intro: "هذا ما سيفعله برنامجك. يمكنك تغيير كل شيء لاحقاً.",
+    edit: "تعديل",
+    business: "محلك",
+    answers: "إجاباتك",
+  },
+
   placeholder: {
     title: "هذه الخطوة قادمة قريباً",
     body: "نحضّر أسئلة هذه الخطوة. عد بعد بضعة أيام، أو راسلنا على واتساب.",

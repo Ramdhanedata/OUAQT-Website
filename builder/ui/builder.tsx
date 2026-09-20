@@ -26,6 +26,11 @@ const Preview = dynamic(() => import("./preview").then((m) => m.Preview), {
   ssr: false,
 });
 
+/* Step 2 brings the question banks and the schema with it. See step-two.tsx. */
+const StepTwo = dynamic(() => import("./step-two").then((m) => m.StepTwo), {
+  ssr: false,
+});
+
 /* The width at which questions and preview stop taking turns and sit side by side. */
 const WIDE = "(min-width: 900px)"; // not-a-rule: a layout breakpoint
 
@@ -44,11 +49,13 @@ export function Builder({
   locale,
   enabledPacks,
   supportWhatsapp,
+  maxDevices,
 }: {
   copy: BuilderCopy;
   locale: Locale;
   enabledPacks: Pack[];
   supportWhatsapp: string | null;
+  maxDevices: number | null;
 }) {
   const [step, setStep] = useState<number | null>(null);
   const [offline, setOffline] = useState(false);
@@ -86,6 +93,7 @@ export function Builder({
       offline={offline}
       enabledPacks={enabledPacks}
       supportWhatsapp={supportWhatsapp}
+      maxDevices={maxDevices}
       answers={draft.answers}
       update={draft.update}
       saveState={draft.state}
@@ -162,6 +170,7 @@ function Wizard({
   offline,
   enabledPacks,
   supportWhatsapp,
+  maxDevices,
   answers,
   update,
   saveState,
@@ -175,6 +184,7 @@ function Wizard({
   offline: boolean;
   enabledPacks: Pack[];
   supportWhatsapp: string | null;
+  maxDevices: number | null;
   answers: DraftAnswers;
   update: (patch: DraftAnswers) => void;
   saveState: SaveState;
@@ -185,6 +195,8 @@ function Wizard({
   const [screen, setScreen] = useState(0);
   const [lead, setLead] = useState<{ pack: Pack | null } | null>(null);
   const [nameError, setNameError] = useState(false);
+  /* Step 2 reports how many screens it has, since that depends on the answers. */
+  const [interviewScreens, setInterviewScreens] = useState(1);
   const wide = useWide();
 
   const total = STEP_KEYS.length;
@@ -199,14 +211,22 @@ function Wizard({
   const NAME_SCREEN = 2; // not-a-rule: which of the five screens asks the name
   const named = Boolean((answers.nameLatin ?? "").trim());
 
+  const pack = answers.pack ?? enabledPacks[0] ?? "pharmacy";
+
   function goBack() {
     if (lead) return setLead(null);
-    if (step === 0 && !wide && screen > 0) return setScreen(screen - 1);
+    if (!wide && screen > 0) return setScreen(screen - 1);
     if (step === 0) return onLeave();
+    setScreen(0);
     onStep(step - 1);
   }
 
   function goNext() {
+    if (step === 1) {
+      if (!wide && screen < interviewScreens - 1) return setScreen(screen + 1);
+      setScreen(0);
+      return onStep(2);
+    }
     if (step !== 0) return onStep(Math.min(step + 1, total - 1));
 
     const leavingName = wide || screen >= NAME_SCREEN;
@@ -218,10 +238,17 @@ function Wizard({
     setNameError(false);
 
     if (!wide && screen < BUSINESS_SCREENS - 1) return setScreen(screen + 1);
+    setScreen(0);
     onStep(1);
   }
 
-  const questions = lead ? (
+  function answerQuestion(id: string, answer: unknown) {
+    update({
+      interview: { ...(answers.interview ?? {}), [id]: answer as never },
+    });
+  }
+
+  const questionsPane = lead ? (
     <LeadForm
       copy={copy}
       pack={lead.pack}
@@ -238,8 +265,25 @@ function Wizard({
       update={update}
       screen={screen}
       wide={wide}
-      onLead={(pack) => setLead({ pack })}
+      onLead={(chosen) => setLead({ pack: chosen })}
       showNameError={nameError}
+    />
+  ) : step === 1 ? (
+    <StepTwo
+      copy={copy}
+      language={locale}
+      pack={pack}
+      answers={answers}
+      onAnswer={answerQuestion}
+      onFeatures={(patch) => update({ patched: patch })}
+      onEdit={(target) => {
+        setScreen(0);
+        onStep(target);
+      }}
+      onCount={setInterviewScreens}
+      maxDevices={maxDevices}
+      screen={screen}
+      wide={wide}
     />
   ) : (
     <div>
@@ -266,7 +310,7 @@ function Wizard({
             <Progress copy={copy} step={step} total={total} stepName={stepName} />
 
             <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-              {questions}
+              {questionsPane}
             </div>
 
             <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">

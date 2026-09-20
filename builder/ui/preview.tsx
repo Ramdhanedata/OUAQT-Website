@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   Receipt,
   SaleScreen,
+  configurationSchema,
   defaultConfiguration,
   sampleProducts,
   sampleSale,
@@ -12,6 +13,8 @@ import {
   type Pack,
   type ReceiptLine,
 } from "@/app-ui";
+import { applyAnswers } from "@/builder/packs/bank";
+import { interviewFor } from "@/builder/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import type { DraftAnswers } from "@/builder/draft/store";
 import { cn } from "@/lib/utils";
@@ -30,7 +33,28 @@ export function configurationFrom(
   fallbackLanguage: AppLanguage
 ): Configuration {
   const pack: Pack = answers.pack ?? "pharmacy";
-  const base = defaultConfiguration(pack, answers.appLanguage ?? fallbackLanguage);
+  const start = defaultConfiguration(pack, answers.appLanguage ?? fallbackLanguage);
+
+  /*
+   * The interview's answers, then anything the AI worked out from a sentence
+   * he wrote. The AI's part comes last because the server has already
+   * validated it against the schema, so it is the more considered of the two.
+   */
+  const answered = applyAnswers(start, interviewFor(pack), answers.interview ?? {});
+  const patched = answers.patched
+    ? {
+        ...answered,
+        common: (answers.patched.common ?? answered.common) as typeof answered.common,
+        features: (answers.patched.features ?? answered.features) as typeof answered.features,
+      }
+    : answered;
+
+  const base = configurationSchema.safeParse({
+    ...patched,
+    business: { ...patched.business, nameLatin: "x" },
+  }).success
+    ? patched
+    : answered;
 
   return {
     ...base,

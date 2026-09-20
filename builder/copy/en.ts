@@ -113,6 +113,26 @@ export const en: BuilderCopy = {
     unavailable: "Your answers are staying on this device for now.",
   },
 
+  interview: {
+    dontKnow: "I do not know",
+    explain: "Say it in my own words",
+    explainHelp: "Say it the way you would explain it to a new member of staff.",
+    send: "Send",
+    sending: "One moment",
+    noted: "That is not available yet. We have written it down.",
+    yes: "Yes",
+    no: "No",
+    questionOf: "Question {current} of {total}",
+  },
+
+  summary: {
+    heading: "Check this before you carry on",
+    intro: "Here is what your software will do. You can change any of it later.",
+    edit: "Change",
+    business: "Your business",
+    answers: "Your answers",
+  },
+
   placeholder: {
     title: "This step is coming soon",
     body: "We are preparing the questions for this step. Come back in a few days, or write to us on WhatsApp.",

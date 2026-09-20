@@ -50,6 +50,7 @@ export default async function BuilderPage({ params }: Props) {
       locale={params.lang}
       enabledPacks={enabled}
       supportWhatsapp={settings?.support_whatsapp ?? null}
+      maxDevices={settings?.max_devices ?? null}
     />
   );
 }
