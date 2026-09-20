@@ -64,3 +64,19 @@ receipt. If the warehouse pack is going to print it, `app-ui` needs a second
 printable layout, and the builder preview needs to show it. That is real work
 in B6. Tell me whether the warehouse pack prints a sheet, or whether those
 clients stay bespoke.
+
+## Proposed question-bank changes, from the reference apps
+
+Written after the bank was drafted. **Nothing here is in the bank**; each is a
+question for you before it would be.
+
+1. **The A4 delivery sheet.** The reference app printed a bilingual A4
+   shipment sheet, reprinted incrementally as a lorry was loaded. The bank
+   asks nothing about it and `app-ui` has no A4 document, only the 80mm roll.
+2. **Measuring on receipt.** That app recorded dimensions and volume as goods
+   arrived. Whether this warehouse does the same is a question, not an
+   assumption.
+3. **Transfers between his own places.** `wh_out` offers "Mes magasins" as a
+   destination, which covers it loosely. A transfer is really two movements,
+   out of one place and into another, and the bank does not ask whether he
+   thinks of it that way.

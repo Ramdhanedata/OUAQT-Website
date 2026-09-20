@@ -227,6 +227,52 @@ describe("a csv separated by semicolons", () => {
   });
 });
 
+describe("each trade's own columns", () => {
+  it("reads a bakery file that says how each product is sold", () => {
+    const rows = rowsFrom([
+      ["Nom", "Prix", "Quantité", "Vendu par"],
+      ["Pain Alpha", "20", "200", "Pièce"],
+      ["Gâteau Béta", "150", "12", "Poids"],
+    ]);
+    const result = parseProducts(rows, "bakery");
+    expect(result.products[0]).toMatchObject({ name: "Pain Alpha", soldBy: "Pièce" });
+    expect(result.products[1].soldBy).toBe("Poids");
+  });
+
+  it("reads a restaurant file, which has no stock to speak of", () => {
+    const rows = rowsFrom([
+      ["Désignation", "Prix"],
+      ["Thé Alpha", "50"],
+      ["Sandwich Béta", "250"],
+    ]);
+    const result = parseProducts(rows, "restaurant");
+    expect(result.products).toHaveLength(2);
+    expect(result.products[0].quantity).toBe(0);
+  });
+
+  it("reads a warehouse file with units and places", () => {
+    const rows = rowsFrom([
+      ["Nom", "Prix", "Quantité", "Unité", "Emplacement"],
+      ["Sac de riz Alpha", "12000", "60", "Sac", "Dépôt 1"],
+      ["Carton d'huile Béta", "9000", "45", "Carton", "Dépôt 2"],
+    ]);
+    const result = parseProducts(rows, "warehouse");
+    expect(result.products[0]).toMatchObject({ unit: "Sac", location: "Dépôt 1" });
+    expect(result.products[1]).toMatchObject({ unit: "Carton", location: "Dépôt 2" });
+  });
+
+  it("ignores a column a trade has no use for", () => {
+    const rows = rowsFrom([
+      ["Nom", "Prix", "Péremption"],
+      ["Thé Alpha", "50", "12/2026"],
+    ]);
+    /* A restaurant has no expiry column, so the date is left where it was. */
+    const result = parseProducts(rows, "restaurant");
+    expect(result.products[0].expiry).toBeUndefined();
+    expect(result.problems).toEqual([]);
+  });
+});
+
 describe("rows with holes in them", () => {
   it("names the row and the column for each, and keeps the good ones", () => {
     const rows = rowsFrom([

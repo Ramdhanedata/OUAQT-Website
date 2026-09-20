@@ -2,12 +2,21 @@
 
 import { useMemo, useState } from "react";
 import {
+  KitchenTicket,
+  Production,
   Receipt,
   SaleScreen,
+  StockMoves,
+  Tables,
   configurationSchema,
   defaultConfiguration,
+  sampleLocations,
+  sampleMovements,
+  samplePreorders,
   sampleProducts,
+  sampleProduction,
   sampleSale,
+  sampleTables,
   type AppLanguage,
   type Configuration,
   type Pack,
@@ -27,6 +36,8 @@ import { cn } from "@/lib/utils";
  * the preview is the same configuration the app will run on, not a drawing of
  * one.
  */
+
+type Tab = "receipt" | "sale" | "tables" | "kitchen" | "production" | "moves";
 
 export function configurationFrom(
   answers: DraftAnswers,
@@ -82,7 +93,7 @@ export function Preview({
   answers: DraftAnswers;
   fallbackLanguage: AppLanguage;
 }) {
-  const [tab, setTab] = useState<"sale" | "receipt">("receipt");
+  const [tab, setTab] = useState<Tab>("receipt");
   const configuration = useMemo(
     () => configurationFrom(answers, fallbackLanguage),
     [answers, fallbackLanguage]
@@ -90,6 +101,29 @@ export function Preview({
   const [ticket, setTicket] = useState<ReceiptLine[] | null>(null);
 
   const products = sampleProducts(configuration.pack);
+  const language = configuration.language.app;
+
+  /*
+   * Each trade gets the screen it would actually open. The sizes come from
+   * his own answers: a room of fifty tables draws fifty, which is the only
+   * way he can tell whether the screen will work for him.
+   */
+  const extra: { id: Tab; label: string }[] =
+    configuration.pack === "restaurant"
+      ? [
+          { id: "tables", label: copy.preview.tables as string },
+          { id: "kitchen", label: copy.preview.kitchen as string },
+        ]
+      : configuration.pack === "bakery"
+        ? [{ id: "production", label: copy.preview.production as string }]
+        : configuration.pack === "warehouse"
+          ? [{ id: "moves", label: copy.preview.moves as string }]
+          : [];
+
+  const locations = sampleLocations(
+    configuration.features.warehouse?.locations ?? 1,
+    language
+  );
   const lines: ReceiptLine[] =
     ticket && ticket.length > 0
       ? ticket
@@ -102,7 +136,15 @@ export function Preview({
 
   return (
     <div className="flex h-full flex-col">
-      <div role="tablist" className="flex gap-2 border-b border-border px-2">
+      {/*
+        * The strip scrolls rather than squashing. A restaurant has four tabs
+        * and a phone is 375px wide: left to shrink, "Ticket cuisine" wrapped
+        * onto three lines and then lost its last letters off the edge.
+        */}
+      <div
+        role="tablist"
+        className="flex gap-2 overflow-x-auto border-b border-border px-2"
+      >
         <PreviewTab
           selected={tab === "receipt"}
           onClick={() => setTab("receipt")}
@@ -112,6 +154,15 @@ export function Preview({
         <PreviewTab selected={tab === "sale"} onClick={() => setTab("sale")}>
           {copy.preview.sale}
         </PreviewTab>
+        {extra.map((one) => (
+          <PreviewTab
+            key={one.id}
+            selected={tab === one.id}
+            onClick={() => setTab(one.id)}
+          >
+            {one.label}
+          </PreviewTab>
+        ))}
       </div>
 
       <div className="min-h-0 flex-1 overflow-auto bg-muted/40 p-4">
@@ -119,12 +170,47 @@ export function Preview({
           <div className="mx-auto max-w-[360px] shadow-sm">
             <Receipt configuration={configuration} lines={lines} />
           </div>
-        ) : (
+        ) : tab === "sale" ? (
           <div className="mx-auto h-full max-w-[720px] overflow-hidden rounded-lg border border-border">
             <SaleScreen
               configuration={configuration}
               products={products}
               onTicketChange={setTicket}
+            />
+          </div>
+        ) : tab === "tables" ? (
+          <div className="mx-auto h-full max-w-[720px] overflow-hidden rounded-lg border border-border">
+            <Tables
+              configuration={configuration}
+              tables={sampleTables(configuration.features.restaurant?.tables ?? 1)}
+            />
+          </div>
+        ) : tab === "kitchen" ? (
+          <div className="mx-auto max-w-[360px] shadow-sm">
+            <KitchenTicket
+              configuration={configuration}
+              table={1}
+              lines={lines.map((line) => ({
+                id: line.id,
+                name: line.name,
+                quantity: line.quantity,
+              }))}
+            />
+          </div>
+        ) : tab === "production" ? (
+          <div className="mx-auto h-full max-w-[720px] overflow-hidden rounded-lg border border-border">
+            <Production
+              configuration={configuration}
+              rows={sampleProduction(configuration.pack)}
+              preorders={samplePreorders(language)}
+            />
+          </div>
+        ) : (
+          <div className="mx-auto h-full max-w-[720px] overflow-hidden rounded-lg border border-border">
+            <StockMoves
+              configuration={configuration}
+              locations={locations}
+              movements={sampleMovements(locations, language)}
             />
           </div>
         )}
@@ -149,7 +235,7 @@ function PreviewTab({
       aria-selected={selected}
       onClick={onClick}
       className={cn(
-        "min-h-[48px] px-4 text-base",
+        "min-h-[48px] shrink-0 whitespace-nowrap px-4 text-base",
         selected
           ? "border-b-2 border-foreground font-medium text-foreground"
           : "text-muted-foreground"

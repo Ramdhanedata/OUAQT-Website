@@ -1,0 +1,26 @@
+{
+  "name": "@ouaqt/app-ui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "The screens and rules shared by the builder's preview and the desktop app. No Next, no Supabase, no browser storage.",
+  "type": "module",
+  "main": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./config": "./config.ts",
+    "./packs": "./packs.ts",
+    "./codes": "./codes.ts",
+    "./licence-file": "./licence-file.ts",
+    "./format": "./format.ts",
+    "./copy": "./copy.ts",
+    "./sample-data": "./sample-data.ts",
+    "./receipt": "./receipt.tsx",
+    "./sale-screen": "./sale-screen.tsx",
+    "./scaled": "./scaled.tsx"
+  },
+  "peerDependencies": {
+    "react": ">=18",
+    "zod": ">=4"
+  }
+}

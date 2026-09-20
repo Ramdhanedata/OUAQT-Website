@@ -1,4 +1,5 @@
-import type { AppLanguage, Pack } from "./config";
+import type { AppLanguage } from "./config";
+import type { Pack } from "./packs";
 
 /*
  * What the preview shows before the owner has imported anything of his own.
@@ -67,6 +68,97 @@ const byPack: Record<Pack, SampleProduct[]> = {
 
 export function sampleProducts(pack: Pack): SampleProduct[] {
   return byPack[pack];
+}
+
+/*
+ * The pack screens need sample rows too, and their sizes come from the
+ * configuration rather than from here: a room of two hundred tables draws two
+ * hundred tables. That is the point of showing him the screen at all.
+ */
+
+export function sampleTables(count: number): { number: number; total: number | null }[] {
+  return Array.from({ length: Math.max(0, count) }, (_, index) => {
+    const number = index + 1;
+    /* Every third table busy, so the screen shows both states at any size. */
+    const busy = number % 3 === 0;
+    return { number, total: busy ? 250 + (number % 7) * 100 : null };
+  });
+}
+
+export function sampleProduction(pack: Pack): { product: SampleProduct; made: number; sold: number }[] {
+  return byPack[pack].slice(0, 4).map((product, index) => ({
+    product,
+    made: 60 + index * 20,
+    sold: 20 + index * 15,
+  }));
+}
+
+export function samplePreorders(language: AppLanguage): {
+  id: string;
+  customer: string;
+  items: string;
+  dueAt: string;
+  deposit: number | null;
+}[] {
+  const words = {
+    fr: { one: "2 gâteaux", two: "20 baguettes", at: "11:00", late: "17:00" },
+    ar: { one: "كعكتان", two: "20 باغيت", at: "11:00", late: "17:00" },
+    en: { one: "2 cakes", two: "20 baguettes", at: "11:00", late: "17:00" },
+  }[language];
+
+  return [
+    { id: "o1", customer: "Fatimetou", items: words.one, dueAt: words.at, deposit: 500 },
+    { id: "o2", customer: "Mohamed", items: words.two, dueAt: words.late, deposit: null },
+  ];
+}
+
+export function sampleLocations(count: number, language: AppLanguage): string[] {
+  const word = { fr: "Dépôt", ar: "مستودع", en: "Store" }[language];
+  return Array.from({ length: Math.max(1, count) }, (_, index) => `${word} ${index + 1}`);
+}
+
+export function sampleMovements(
+  locations: string[],
+  language: AppLanguage
+): {
+  id: string;
+  direction: "in" | "out";
+  product: string;
+  quantity: number;
+  unit: string;
+  party: string;
+  location: string;
+  at: string;
+}[] {
+  const words = {
+    fr: { supplier: "Fournisseur Nord", customer: "Client Sud", case: "cartons", bag: "sacs" },
+    ar: { supplier: "المورّد الشمالي", customer: "زبون الجنوب", case: "كراتين", bag: "أكياس" },
+    en: { supplier: "North supplier", customer: "South customer", case: "cases", bag: "bags" },
+  }[language];
+
+  const products = byPack.warehouse;
+  return [
+    {
+      id: "m1",
+      direction: "in" as const,
+      product: products[0].name[language],
+      quantity: 40,
+      unit: words.bag,
+      party: words.supplier,
+      location: locations[0],
+      at: "08:15",
+    },
+    {
+      id: "m2",
+      direction: "out" as const,
+      product: products[1].name[language],
+      quantity: 12,
+      unit: words.case,
+      party: words.customer,
+      location: locations[locations.length - 1],
+      at: "10:40",
+    },
+  ];
 }
 
 /** A short sample sale, so the receipt is never shown empty. */

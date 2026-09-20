@@ -47,3 +47,22 @@ Proposals only. Nothing changed in the banks or the schema.
 
 **Before B6 I would like one bakery owner to read these questions aloud.** The
 bakery pack is the only one of the four with no reference app behind it.
+
+## Proposed question-bank changes, from the reference apps
+
+Written after the bank was drafted. **Nothing here is in the bank**; each is a
+question for you before it would be.
+
+1. **Does he bake to order for other shops?** Several bakeries here supply
+   small grocers as well as their own counter, and that is a different
+   customer with a different price. The current bank has no way to say it.
+2. **When does the day start?** A bakery's day begins before midnight for the
+   first batch. The cash close and the production day may need to be an
+   offset, not a calendar date.
+3. **Unsold, resold at what price?** The bank asks what happens to what is
+   left. If the answer is "I sell it the next day", the software needs to know
+   whether that is at full price or a reduced one.
+
+There was no bakery among the reference apps, so these come from the sector
+rather than from a screenshot. Treat them as weaker evidence than the
+pharmacy and warehouse notes.

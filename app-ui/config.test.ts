@@ -36,6 +36,32 @@ describe("the configuration a silent owner gets", () => {
     expect(parsed.success).toBe(false);
   });
 
+  it("refuses a configuration carrying another trade's features", () => {
+    const bakery = defaultConfiguration("bakery", "fr");
+    const parsed = configurationSchema.safeParse({
+      ...bakery,
+      business: { nameLatin: "Test" },
+      features: { ...bakery.features, pharmacy: { unitSale: true, trackExpiry: false, expiryAlertMonths: 3, batchNumbers: false, trackSuppliers: false, search: ["name"] } },
+    });
+    expect(parsed.success).toBe(false);
+  });
+
+  it("refuses a configuration carrying no features at all", () => {
+    const parsed = configurationSchema.safeParse({
+      ...defaultConfiguration("restaurant", "fr"),
+      business: { nameLatin: "Test" },
+      features: {},
+    });
+    expect(parsed.success).toBe(false);
+  });
+
+  it("gives each pack its own features and nobody else's", () => {
+    for (const pack of packs) {
+      const config = defaultConfiguration(pack, "fr");
+      expect(Object.keys(config.features)).toEqual([pack]);
+    }
+  });
+
   it("refuses a pack the app does not have", () => {
     const config = defaultConfiguration("pharmacy", "fr");
     const parsed = configurationSchema.safeParse({

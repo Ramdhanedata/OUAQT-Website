@@ -109,6 +109,10 @@ export const fr = {
     sale: "Écran de vente",
     receipt: "Reçu",
     intro: "Voici votre logiciel avec ce que vous venez d'écrire.",
+    tables: "Les tables",
+    kitchen: "Ticket cuisine",
+    production: "Production",
+    moves: "Entrées et sorties",
   },
 
   save: {

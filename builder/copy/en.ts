@@ -104,6 +104,10 @@ export const en: BuilderCopy = {
     sale: "Sale screen",
     receipt: "Receipt",
     intro: "Here is your software with what you have just written.",
+    tables: "Tables",
+    kitchen: "Kitchen ticket",
+    production: "Production",
+    moves: "Goods in and out",
   },
 
   save: {

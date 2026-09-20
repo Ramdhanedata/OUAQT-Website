@@ -103,6 +103,10 @@ export const ar: BuilderCopy = {
     sale: "شاشة البيع",
     receipt: "وصل",
     intro: "هذا برنامجك بما كتبته الآن.",
+    tables: "الطاولات",
+    kitchen: "تذكرة المطبخ",
+    production: "الإنتاج",
+    moves: "الإدخال والإخراج",
   },
 
   save: {

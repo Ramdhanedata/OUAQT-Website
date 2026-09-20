@@ -114,3 +114,25 @@ with B0b once the project exists.
   has: loose header matching in three languages, names trimmed, and an
   unrecognised role defaulting to Caissier and shown for the owner to check.
   Typing stays the default; the file is the option. Agreed 2026-09-20.
+
+## 2026-09-20, B6
+
+- **A configuration must carry its own pack's features and nobody else's.**
+  The shape alone allowed a bakery configuration with a pharmacy block, which
+  would send the desktop app looking for expiry dates in a shop that sells
+  bread, and allowed one with no block at all, which says nothing about what
+  the software should do. Both are refused now.
+- **The restaurant floor groups into zones above 24 tables.** A flat grid of
+  two hundred is not something anybody can scan, and staff already talk about
+  a room that way: table 34 is in the third zone.
+- **The warehouse place filter is hidden when there is one place.** A screen
+  that makes somebody choose between a single option wastes his morning twice
+  a day.
+- **`rs_kitchen` still offers "Sur un écran"** although the desktop brief has
+  fixed version one at printed tickets only. The bank is as you drafted it;
+  the conflict is written up in docs/packs/restaurant-reference.md and needs
+  your word before launch.
+- **app-ui has a package.json now.** It declares the name, the exports and the
+  peer dependencies, which is the first half of publishing it for the desktop
+  app. It changes nothing for the website: the build and the tests are clean
+  either way.

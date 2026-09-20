@@ -1,6 +1,9 @@
 import type { Pack } from "@/app-ui/packs";
 import commonJson from "./common.v1.json";
+import bakeryJson from "./bakery/questions.v1.json";
 import pharmacyJson from "./pharmacy/questions.v1.json";
+import restaurantJson from "./restaurant/questions.v1.json";
+import warehouseJson from "./warehouse/questions.v1.json";
 import { questionBank, type Question, type QuestionBank } from "./bank";
 
 /*
@@ -17,6 +20,9 @@ import { questionBank, type Question, type QuestionBank } from "./bank";
 
 const raw: Partial<Record<Pack, unknown>> = {
   pharmacy: pharmacyJson,
+  bakery: bakeryJson,
+  restaurant: restaurantJson,
+  warehouse: warehouseJson,
 };
 
 export const common: QuestionBank = questionBank.parse(commonJson);

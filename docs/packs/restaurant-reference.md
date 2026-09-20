@@ -63,3 +63,27 @@ Proposals only. Nothing changed in the banks or the schema.
 | `rs_service_on_receipt` | Le reçu doit-il indiquer sur place ou à emporter ? | yes_no | | Oui | On the reference receipt |
 | `rs_tables` (change) | Ask first whether tables are tracked, then how many | yes_no then number | | Non | The reference client ran on order numbers alone |
 | `rs_kitchen` (change) | Add an option: **La cuisine voit les commandes sur la caisse** | single_choice | existing three, plus this | unchanged | That is what the reference client did |
+
+## Proposed question-bank changes, from the reference apps
+
+Written after the bank was drafted. **Nothing here is in the bank**; each is a
+question for you before it would be.
+
+1. **Orders held open while a table eats.** The reference app kept a running
+   order per table, and the sale screen we share has no place for one. This is
+   the largest gap between the bank and what a restaurant actually does.
+2. **Split payment on one table.** Four people, two paying. The payment
+   question in the common bank offers one method per sale.
+3. **Service charge or a tip line.** Present on the reference receipts; the
+   bank does not ask about it and the receipt has no line for it.
+
+### A conflict to resolve
+
+`rs_kitchen` offers **"Sur un écran"**, and the desktop brief has since fixed
+version one at **printed tickets only**, with no second screen and no extra
+window. Offering the screen option in the builder would promise something the
+software does not do.
+
+Two ways out, and it needs your word: drop the option until the app has it, or
+keep it and have the builder say "bientôt" when it is chosen. Until then the
+bank stays as drafted, which is what you asked for.

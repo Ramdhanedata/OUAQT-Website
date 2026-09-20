@@ -67,11 +67,45 @@ export const pharmacyFeatures = z.object({
   search: z.array(z.enum(["name", "barcode"])).min(1),
 });
 
-export const packFeatures = z.object({
-  pharmacy: pharmacyFeatures.optional(),
+export const bakeryFeatures = z.object({
+  /** By the piece, by weight, or both: a baker often does both. */
+  sellBy: z.array(z.enum(["piece", "weight"])).min(1),
+  trackProduction: z.boolean(),
+  preorders: z.boolean(),
+  deposit: z.boolean(),
+  /** What happens to what is left at closing. */
+  unsold: z.enum(["loss", "resell", "untracked"]),
 });
 
-export const configurationSchema = z.object({
+export const restaurantFeatures = z.object({
+  service: z.array(z.enum(["dine_in", "takeaway", "delivery"])).min(1),
+  /*
+   * How many tables the room has. The ceiling is the question's own, not a
+   * commercial limit: two hundred is more tables than any room we have seen,
+   * and the screen has to stay usable at that number.
+   */
+  tables: z.number().int().min(1).max(200),
+  kitchen: z.enum(["screen", "printed", "spoken"]),
+  payWhen: z.enum(["before", "after"]),
+  options: z.boolean(),
+});
+
+export const warehouseFeatures = z.object({
+  locations: z.number().int().min(1).max(20),
+  recordEntries: z.boolean(),
+  destinations: z.array(z.enum(["customers", "my_shops", "sites"])).min(1),
+  units: z.array(z.enum(["piece", "case", "kilo", "litre"])).min(1),
+  sellsDirect: z.boolean(),
+});
+
+export const packFeatures = z.object({
+  pharmacy: pharmacyFeatures.optional(),
+  bakery: bakeryFeatures.optional(),
+  restaurant: restaurantFeatures.optional(),
+  warehouse: warehouseFeatures.optional(),
+});
+
+const configurationShape = z.object({
   version: z.literal(1),
   pack: z.enum(packs),
   business: businessSchema,
@@ -92,10 +126,46 @@ export const configurationSchema = z.object({
   features: packFeatures,
 });
 
+/*
+ * The configuration, with one rule the shape alone cannot express: the pack a
+ * shop chose is the pack whose features it carries, and no other.
+ *
+ * Without this, a bakery configuration with a pharmacy block validates
+ * happily and the desktop app would go looking for expiry dates in a shop
+ * that sells bread. A bakery with no bakery block at all is the same problem
+ * from the other side: nothing says what its software should do.
+ */
+export const configurationSchema = configurationShape.superRefine(
+  (configuration, context) => {
+    const carried = Object.keys(configuration.features);
+
+    if (!carried.includes(configuration.pack)) {
+      context.addIssue({
+        code: "custom",
+        path: ["features", configuration.pack],
+        message: `a ${configuration.pack} configuration must carry its ${configuration.pack} features`,
+      });
+    }
+
+    for (const other of carried) {
+      if (other !== configuration.pack) {
+        context.addIssue({
+          code: "custom",
+          path: ["features", other],
+          message: `a ${configuration.pack} configuration must not carry ${other} features`,
+        });
+      }
+    }
+  }
+);
+
 export type Configuration = z.infer<typeof configurationSchema>;
 export type Business = z.infer<typeof businessSchema>;
 export type CommonFeatures = z.infer<typeof commonFeatures>;
 export type PharmacyFeatures = z.infer<typeof pharmacyFeatures>;
+export type BakeryFeatures = z.infer<typeof bakeryFeatures>;
+export type RestaurantFeatures = z.infer<typeof restaurantFeatures>;
+export type WarehouseFeatures = z.infer<typeof warehouseFeatures>;
 
 /*
  * The configuration an owner has when he has answered nothing at all.
@@ -123,18 +193,57 @@ export function defaultConfiguration(
       lowStockAlert: true,
       discounts: false,
     },
-    features:
-      pack === "pharmacy"
-        ? {
-            pharmacy: {
-              unitSale: true,
-              trackExpiry: true,
-              expiryAlertMonths: 3, // not-a-rule: the question's own default, and the owner can change it
-              batchNumbers: true,
-              trackSuppliers: true,
-              search: ["name"],
-            },
-          }
-        : {},
+    /*
+     * Each pack's own floor, taken from the defaults in its question bank.
+     * Only the pack he chose is present: a bakery configuration carrying an
+     * empty pharmacy block would be a lie about what his software does.
+     */
+    features: featureDefaults(pack),
   };
+}
+
+function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
+  switch (pack) {
+    case "pharmacy":
+      return {
+        pharmacy: {
+          unitSale: true,
+          trackExpiry: true,
+          expiryAlertMonths: 3, // not-a-rule: the question's own default, and the owner can change it
+          batchNumbers: true,
+          trackSuppliers: true,
+          search: ["name"],
+        },
+      };
+    case "bakery":
+      return {
+        bakery: {
+          sellBy: ["piece"],
+          trackProduction: true,
+          preorders: true,
+          deposit: true,
+          unsold: "loss",
+        },
+      };
+    case "restaurant":
+      return {
+        restaurant: {
+          service: ["dine_in", "takeaway"],
+          tables: 10, // not-a-rule: the question's own default
+          kitchen: "printed",
+          payWhen: "after",
+          options: false,
+        },
+      };
+    case "warehouse":
+      return {
+        warehouse: {
+          locations: 1,
+          recordEntries: true,
+          destinations: ["customers"],
+          units: ["piece", "case"],
+          sellsDirect: false,
+        },
+      };
+  }
 }
