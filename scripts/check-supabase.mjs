@@ -45,9 +45,22 @@ const publicKeys = [
   "max_devices",
   "enabled_packs",
   "support_whatsapp",
-  "price_annual_mru",
-  "price_perpetual_mru",
-  "price_extra_device_mru",
+  "price_installation_builder_mru",
+  "price_annual_launch_mru",
+  "price_annual_standard_mru",
+  "price_quarterly_standard_mru",
+  "price_setup_visit_mru",
+  "price_extra_device_launch_mru",
+  "price_extra_device_standard_mru",
+  "price_installation_launch_mru",
+  "price_installation_standard_mru",
+  "price_perpetual_launch_mru",
+  "price_perpetual_standard_mru",
+  "bespoke_maintenance_percent",
+  "bespoke_maintenance_from_month",
+  "launch_clients_limit",
+  "launch_price_freeze_years",
+  "referral_free_months",
   "tutorial_video_windows_url",
   "tutorial_video_mac_url",
 ];
@@ -58,7 +71,7 @@ const readable = await asVisitor(
   `settings?select=key,value&key=in.(${publicKeys.join(",")})`
 );
 record(
-  "the nine public settings come back",
+  "every public setting comes back",
   Array.isArray(readable.body) && readable.body.length === publicKeys.length,
   Array.isArray(readable.body) ? `got ${readable.body.length}` : `status ${readable.status}`
 );

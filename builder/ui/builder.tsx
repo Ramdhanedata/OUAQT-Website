@@ -7,9 +7,27 @@ import type { Locale } from "@/lib/i18n/config";
 import { cn, fill } from "@/lib/utils";
 import { ArrowLeft, ArrowRight, MessageCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
+import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
+import dynamic from "next/dynamic";
+import { LeadForm } from "./lead-form";
+import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
 
 const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
+
+/*
+ * The preview carries the app screens, the receipt and the schema with it.
+ * None of that is needed to read the first question, and on a slow phone it
+ * would be the difference between answering and giving up, so it is fetched
+ * separately once the questions are on screen.
+ */
+const Preview = dynamic(() => import("./preview").then((m) => m.Preview), {
+  ssr: false,
+});
+
+/* The width at which questions and preview stop taking turns and sit side by side. */
+const WIDE = "(min-width: 900px)"; // not-a-rule: a layout breakpoint
 
 /*
  * The builder shell: the landing, then the four steps.
@@ -18,18 +36,23 @@ const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
  * 900px the owner sees one question at a time with a fixed bar at the bottom.
  * From 900px the questions sit beside a live preview of his own software.
  *
- * B0 ships the frame with the steps empty. The questions, the preview and the
- * saving of answers arrive in B1 and B2.
+ * Step 1 is built. Steps 2 to 4 say so plainly and offer WhatsApp, rather
+ * than showing an empty frame.
  */
 export function Builder({
   copy,
   locale,
+  enabledPacks,
+  supportWhatsapp,
 }: {
   copy: BuilderCopy;
   locale: Locale;
+  enabledPacks: Pack[];
+  supportWhatsapp: string | null;
 }) {
   const [step, setStep] = useState<number | null>(null);
   const [offline, setOffline] = useState(false);
+  const draft = useDraft(locale);
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
@@ -42,26 +65,45 @@ export function Builder({
     };
   }, []);
 
-  if (step === null) {
-    return <Landing copy={copy} onStart={() => setStep(0)} />;
-  }
+  const started = Object.keys(draft.answers).length > 0;
 
-  const stepName = copy.steps[STEP_KEYS[step]] as string;
+  if (step === null) {
+    return (
+      <Landing
+        copy={copy}
+        canResume={started && draft.restored}
+        onStart={() => setStep(0)}
+      />
+    );
+  }
 
   return (
     <Wizard
       copy={copy}
       locale={locale}
       step={step}
-      stepName={stepName}
+      stepName={copy.steps[STEP_KEYS[step]] as string}
       offline={offline}
-      onBack={() => setStep((current) => (current && current > 0 ? current - 1 : null))}
-      onNext={() => setStep((current) => Math.min((current ?? 0) + 1, STEP_KEYS.length - 1))}
+      enabledPacks={enabledPacks}
+      supportWhatsapp={supportWhatsapp}
+      answers={draft.answers}
+      update={draft.update}
+      saveState={draft.state}
+      onLeave={() => setStep(null)}
+      onStep={setStep}
     />
   );
 }
 
-function Landing({ copy, onStart }: { copy: BuilderCopy; onStart: () => void }) {
+function Landing({
+  copy,
+  canResume,
+  onStart,
+}: {
+  copy: BuilderCopy;
+  canResume: boolean;
+  onStart: () => void;
+}) {
   return (
     <section className="py-20 sm:py-28">
       <Container className="max-w-2xl">
@@ -78,23 +120,38 @@ function Landing({ copy, onStart }: { copy: BuilderCopy; onStart: () => void }) 
         <ol className="mt-10 space-y-4">
           {(copy.landing.steps as readonly string[]).map((label, index) => (
             <li key={label} className="flex gap-4">
-              <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border text-sm text-muted-foreground">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-base text-muted-foreground">
                 {index + 1}
               </span>
-              <span className="leading-relaxed text-foreground">{label}</span>
+              <span className="pt-1 text-base leading-relaxed text-foreground">
+                {label}
+              </span>
             </li>
           ))}
         </ol>
 
-        <div className="mt-10">
-          <Button type="button" variant="accent" onClick={onStart} className="min-h-[48px] w-full justify-center text-base sm:w-auto">
-            {copy.landing.start}
-            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+        <div className="mt-10 flex flex-wrap gap-3">
+          <Button type="button" variant="accent" onClick={onStart} className="min-h-[48px] text-base">
+            {canResume ? copy.landing.resume : copy.landing.start}
           </Button>
         </div>
       </Container>
     </section>
   );
+}
+
+function useWide(): boolean {
+  const [wide, setWide] = useState(false);
+
+  useEffect(() => {
+    const query = window.matchMedia(WIDE);
+    const update = () => setWide(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+
+  return wide;
 }
 
 function Wizard({
@@ -103,22 +160,97 @@ function Wizard({
   step,
   stepName,
   offline,
-  onBack,
-  onNext,
+  enabledPacks,
+  supportWhatsapp,
+  answers,
+  update,
+  saveState,
+  onLeave,
+  onStep,
 }: {
   copy: BuilderCopy;
   locale: Locale;
   step: number;
   stepName: string;
   offline: boolean;
-  onBack: () => void;
-  onNext: () => void;
+  enabledPacks: Pack[];
+  supportWhatsapp: string | null;
+  answers: DraftAnswers;
+  update: (patch: DraftAnswers) => void;
+  saveState: SaveState;
+  onLeave: () => void;
+  onStep: (step: number) => void;
 }) {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [screen, setScreen] = useState(0);
+  const [lead, setLead] = useState<{ pack: Pack | null } | null>(null);
+  const [nameError, setNameError] = useState(false);
+  const wide = useWide();
+
   const total = STEP_KEYS.length;
-  const help = `${organization.whatsappUrl}?text=${encodeURIComponent(
+  const whatsapp = supportWhatsapp
+    ? `https://wa.me/${supportWhatsapp}`
+    : organization.whatsappUrl;
+  const help = `${whatsapp}?text=${encodeURIComponent(
     fill(copy.shell.helpMessage as string, { step: step + 1, name: stepName })
   )}`;
+
+  /* The name is the one answer step 1 cannot finish without. */
+  const NAME_SCREEN = 2; // not-a-rule: which of the five screens asks the name
+  const named = Boolean((answers.nameLatin ?? "").trim());
+
+  function goBack() {
+    if (lead) return setLead(null);
+    if (step === 0 && !wide && screen > 0) return setScreen(screen - 1);
+    if (step === 0) return onLeave();
+    onStep(step - 1);
+  }
+
+  function goNext() {
+    if (step !== 0) return onStep(Math.min(step + 1, total - 1));
+
+    const leavingName = wide || screen >= NAME_SCREEN;
+    if (leavingName && !named) {
+      setNameError(true);
+      if (!wide) setScreen(NAME_SCREEN);
+      return;
+    }
+    setNameError(false);
+
+    if (!wide && screen < BUSINESS_SCREENS - 1) return setScreen(screen + 1);
+    onStep(1);
+  }
+
+  const questions = lead ? (
+    <LeadForm
+      copy={copy}
+      pack={lead.pack}
+      whatsappUrl={help}
+      backLabel={copy.shell.back}
+      onBack={() => setLead(null)}
+    />
+  ) : step === 0 ? (
+    <StepBusiness
+      copy={copy}
+      locale={locale}
+      enabledPacks={enabledPacks}
+      answers={answers}
+      update={update}
+      screen={screen}
+      wide={wide}
+      onLead={(pack) => setLead({ pack })}
+      showNameError={nameError}
+    />
+  ) : (
+    <div>
+      <h2 className="text-xl font-medium tracking-tight text-foreground">
+        {copy.placeholder.title}
+      </h2>
+      <p className="mt-3 leading-relaxed text-muted-foreground">
+        {copy.placeholder.body}
+      </p>
+    </div>
+  );
 
   return (
     <div className="pb-28 wizard:pb-0" lang={locale}>
@@ -134,26 +266,35 @@ function Wizard({
             <Progress copy={copy} step={step} total={total} stepName={stepName} />
 
             <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
-              <h2 className="text-xl font-medium tracking-tight text-foreground">
-                {copy.placeholder.title}
-              </h2>
-              <p className="mt-3 leading-relaxed text-muted-foreground">
-                {copy.placeholder.body}
-              </p>
+              {questions}
             </div>
 
-            <a
-              href={help}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-6 inline-flex min-h-[48px] items-center gap-2 text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
-            >
-              <MessageCircle className="h-4 w-4 text-accent" />
-              {copy.shell.help}
-            </a>
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+              <SaveNote copy={copy} state={saveState} />
+              <a
+                href={help}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-[48px] items-center gap-2 text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
+              >
+                <MessageCircle className="h-4 w-4 text-accent" />
+                {copy.shell.help}
+              </a>
+            </div>
 
-            {/* Phone: one fixed bar, thumb height, always reachable. */}
-            <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur wizard:hidden">
+            {/*
+              * Phone: one fixed bar, thumb height, always reachable.
+              *
+              * It steps aside for the "not on this list" form, which carries
+              * its own send and back. Two Continue buttons on one screen, one
+              * of which skips the form, is how an owner loses his answer.
+              */}
+            <div
+              className={cn(
+                "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur wizard:hidden",
+                lead && "hidden"
+              )}
+            >
               <Container className="py-3">
                 <button
                   type="button"
@@ -165,7 +306,7 @@ function Wizard({
                 <div className="flex items-center gap-3">
                   <button
                     type="button"
-                    onClick={onBack}
+                    onClick={goBack}
                     className="flex h-12 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-border px-5 text-base font-medium text-foreground"
                   >
                     <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
@@ -173,7 +314,7 @@ function Wizard({
                   </button>
                   <button
                     type="button"
-                    onClick={onNext}
+                    onClick={goNext}
                     className="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 text-base font-medium text-accent-foreground"
                   >
                     {copy.shell.next}
@@ -184,41 +325,72 @@ function Wizard({
             </div>
 
             {/* From 900px the same two actions sit under the question. */}
-            <div className="mt-8 hidden items-center gap-3 wizard:flex">
-              <Button type="button" variant="outline" onClick={onBack} className="min-h-[48px] text-base">
+            <div
+              className={cn(
+                "mt-8 hidden items-center gap-3 wizard:flex",
+                lead && "wizard:hidden"
+              )}
+            >
+              <Button type="button" variant="outline" onClick={goBack} className="min-h-[48px] text-base">
                 <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
                 {copy.shell.back}
               </Button>
-              <Button type="button" variant="accent" onClick={onNext} className="min-h-[48px] text-base">
+              <Button type="button" variant="accent" onClick={goNext} className="min-h-[48px] text-base">
                 {copy.shell.next}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
             </div>
           </div>
 
-          <aside className="hidden wizard:block">
-            <PreviewPanel copy={copy} />
-          </aside>
+          {/*
+            * Only the preview that can be seen is built. Rendering the desktop
+            * panel behind `hidden` as well as the phone overlay meant two
+            * copies of the app screens on one page, both listening, both
+            * re-rendering on every keystroke.
+            */}
+          {wide ? (
+            <aside>
+              <div className="h-[36rem] overflow-hidden rounded-2xl border border-border bg-surface">
+                <Preview copy={copy} answers={answers} fallbackLanguage={locale} />
+              </div>
+            </aside>
+          ) : null}
         </div>
       </Container>
 
-      {previewOpen ? (
+      {previewOpen && !wide ? (
         <div className="fixed inset-0 z-50 bg-background wizard:hidden">
           <Container className="flex h-full flex-col py-6">
             <button
               type="button"
               onClick={() => setPreviewOpen(false)}
-              className="mb-6 inline-flex min-h-[48px] items-center gap-2 self-start text-base text-muted-foreground"
+              className="mb-4 inline-flex min-h-[48px] items-center gap-2 self-start text-base text-muted-foreground"
             >
               <X className="h-4 w-4" />
               {copy.shell.close}
             </button>
-            <PreviewPanel copy={copy} />
+            <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-border">
+              <Preview copy={copy} answers={answers} fallbackLanguage={locale} />
+            </div>
           </Container>
         </div>
       ) : null}
     </div>
   );
+}
+
+function SaveNote({ copy, state }: { copy: BuilderCopy; state: SaveState }) {
+  if (state === "idle") return null;
+  const label =
+    state === "saving"
+      ? copy.save.saving
+      : state === "saved"
+        ? copy.save.saved
+        : state === "failed"
+          ? copy.save.failed
+          : copy.save.unavailable;
+
+  return <span className="text-base text-muted-foreground">{label}</span>;
 }
 
 function Progress({
@@ -251,19 +423,6 @@ function Progress({
           />
         ))}
       </div>
-    </div>
-  );
-}
-
-function PreviewPanel({ copy }: { copy: BuilderCopy }) {
-  return (
-    <div className="rounded-2xl border border-border bg-muted/40 p-6">
-      <p className="text-base font-medium text-foreground">
-        {copy.shell.previewTitle}
-      </p>
-      <p className="mt-4 text-base leading-relaxed text-muted-foreground">
-        {copy.shell.previewEmpty}
-      </p>
     </div>
   );
 }

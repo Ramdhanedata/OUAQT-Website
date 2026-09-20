@@ -4,9 +4,9 @@ A business owner answers questions about his shop and leaves with management
 software ready to install on the shop computer, plus a serial number. This
 document is for whoever picks the work up next.
 
-Status: **B0**. The route, the two layouts, the shell and the database
-connection exist; the questions, the preview, saving and everything after are
-still to come.
+Status: **B1**. Step 1 is complete, the preview shows the owner's own receipt
+and sale screen, and answers save themselves. The interview, the import, the
+account and everything after are still to come.
 
 ## The one rule
 
@@ -33,6 +33,9 @@ reads every migration and fails the build if a place to put them appears.
 | `builder/db/server.ts` | The visitor's connection and the staff one. Server only |
 | `builder/db/settings.ts` | Prices, trial length and open packs, read and cached |
 | `app-ui/` | Screens shared with the desktop app. No Next, Supabase or browser storage imports |
+| `builder/ui/step-business.tsx` | Step 1: business type, languages, name, receipt details, logo |
+| `builder/draft/store.ts` | Answers, on the device and on the server |
+| `builder/logo/` | Cropping, resizing and thresholding the owner's logo, in his browser |
 | `lib/i18n/routes.ts` | Which slug belongs to which page, per language |
 | `scripts/check-magic-constants.mjs` | Fails the build on hardcoded prices, days or limits |
 
@@ -100,8 +103,23 @@ and every policy applies. `adminClient()` skips them all, so it lives in
 `builder/db/server.ts` behind `import "server-only"` and is used only where
 staff work is being done.
 
+## The preview
+
+`app-ui` holds the screens the desktop app will import unchanged: the sale
+screen and the 80mm receipt so far. They take a configuration and sample data
+as props and render; they know nothing about the builder, the website or the
+database.
+
+The receipt is laid out at 576 pixels, which is 80mm at 203 dpi, and scaled to
+fit. That is why `Scaled` measures instead of using a percentage: what the
+owner sees has to be what the printer cuts.
+
+The preview is loaded separately from the questions. It carries the app
+screens and the schema with it, and on a slow phone that weight between the
+owner and the first question is the difference between answering and leaving.
+
 ## What is not built yet
 
-Questions and packs (B2), spreadsheet import and staff (B3), account area and
-serial (B3), payments and admin (B4), the licence API, signing and renewal
+The interview and the AI (B2), spreadsheet import and staff (B3), account area
+and serial (B3), payments and admin (B4), the licence API, signing and renewal
 codes (B5), the other three packs (B6).

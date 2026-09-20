@@ -41,3 +41,27 @@ and the machine already runs Node 24. Nothing in the site's build changed.
 project yet, and creating one needs your account. `builder/db/migrations`
 holds the SQL; the row-level security tests that need a live database come
 with B0b once the project exists.
+
+## 2026-09-20, B1
+
+- **The logo stays on the device until there is an account.** The draft saved
+  to the server carries every answer except the two logo images. They are the
+  only answer measured in hundreds of kilobytes, and re-uploading them after
+  every keystroke on a 2G connection would cost the owner his patience and his
+  credit. They upload once, at the account step in B3. The cost: an owner who
+  switches phones mid-build keeps his answers and loses his logo.
+- **French groups thousands with U+202F**, a narrow no-break space, which is
+  what `Intl` produces and what the tests pin. A thermal printer with a narrow
+  codepage may not have that character, so the printing side in the desktop app
+  has to normalise it before it goes to the roll.
+- **The pharmacy sample products carry no medicine names, dosages or brands.**
+  They are counter items: soap, plasters, gloves. Nothing on a preview screen
+  should be able to read as advice about a medicine. If you want real product
+  names in the sample list, say so and I will ask what is safe to show.
+- **`BUILDER_DEV_SETTINGS` exists so the builder can be walked with no
+  database.** It is read only when Supabase is unconfigured, so it cannot
+  override a real setting in production, where the variable is not set.
+- **Removing a line from a sale in progress does not ask for confirmation.**
+  Rule 9 asks before deleting, but a line tapped by mistake is a correction,
+  not a deletion, and a confirmation on every mistap costs more than it saves.
+  Cancelling a whole sale will ask, in B2.

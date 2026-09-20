@@ -47,6 +47,77 @@ export const fr = {
     serial: "Votre numéro de série",
   },
 
+  packs: {
+    heading: "Quel est votre commerce ?",
+    pharmacy: "Pharmacie",
+    bakery: "Boulangerie",
+    restaurant: "Restaurant ou café",
+    warehouse: "Dépôt et stock",
+    soon: "Bientôt disponible",
+    other: "Mon activité n'est pas dans la liste",
+  },
+
+  lead: {
+    heading: "Dites-nous ce que vous faites",
+    business: "Votre activité",
+    businessHelp: "Par exemple : quincaillerie, salon de coiffure, atelier.",
+    phone: "Votre numéro de téléphone",
+    submit: "Envoyer",
+    thanks: "Merci. Nous vous prévenons dès que votre activité est prête.",
+    error: "Votre message n'est pas parti. Réessayez, ou écrivez-nous sur WhatsApp.",
+  },
+
+  language: {
+    heading: "Dans quelle langue voulez-vous répondre ?",
+    appHeading: "Et dans quelle langue vos employés utiliseront-ils le logiciel ?",
+    fr: "Français",
+    ar: "العربية",
+    en: "English",
+  },
+
+  name: {
+    heading: "Le nom de votre commerce",
+    latin: "En lettres latines",
+    latinHelp: "C'est le nom qui apparaît en haut du reçu.",
+    arabic: "En arabe, si vous voulez",
+    arabicHelp: "Il s'ajoute sous le premier nom, sur le reçu.",
+    required: "Écrivez le nom de votre commerce pour continuer.",
+  },
+
+  receiptDetails: {
+    heading: "Ce qui apparaît sur le reçu",
+    help: "Les deux sont facultatifs. Vous pourrez les changer plus tard.",
+    phone: "Votre téléphone",
+    address: "Votre adresse",
+  },
+
+  logo: {
+    heading: "Votre logo",
+    help: "Facultatif. Prenez-le en photo ou choisissez un fichier. Il reste sur votre téléphone, nous n'envoyons que l'image préparée.",
+    choose: "Choisir une image",
+    replace: "Changer l'image",
+    remove: "Enlever le logo",
+    working: "Préparation de votre logo",
+    colour: "Sur l'écran",
+    mono: "Sur le reçu imprimé",
+    errorType: "Choisissez une image PNG ou JPEG.",
+    errorUnreadable: "Cette image n'a pas pu être lue. Essayez-en une autre.",
+    errorTooBig: "Cette image est trop lourde même après préparation. Essayez-en une autre.",
+  },
+
+  preview: {
+    sale: "Écran de vente",
+    receipt: "Reçu",
+    intro: "Voici votre logiciel avec ce que vous venez d'écrire.",
+  },
+
+  save: {
+    saving: "Enregistrement",
+    saved: "Enregistré",
+    failed: "Pas encore enregistré. Nous réessayons.",
+    unavailable: "Vos réponses restent sur cet appareil pour le moment.",
+  },
+
   placeholder: {
     title: "Cette étape arrive bientôt",
     body: "Nous préparons les questions de cette étape. Revenez dans quelques jours, ou écrivez-nous sur WhatsApp.",

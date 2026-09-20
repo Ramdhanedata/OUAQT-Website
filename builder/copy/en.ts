@@ -42,6 +42,77 @@ export const en: BuilderCopy = {
     serial: "Your serial number",
   },
 
+  packs: {
+    heading: "What kind of business do you run?",
+    pharmacy: "Pharmacy",
+    bakery: "Bakery",
+    restaurant: "Restaurant or cafe",
+    warehouse: "Warehouse and stock",
+    soon: "Coming soon",
+    other: "My business is not on this list",
+  },
+
+  lead: {
+    heading: "Tell us what you do",
+    business: "Your business",
+    businessHelp: "For example: hardware shop, hair salon, workshop.",
+    phone: "Your phone number",
+    submit: "Send",
+    thanks: "Thank you. We will tell you as soon as your kind of business is ready.",
+    error: "Your message did not go through. Try again, or write to us on WhatsApp.",
+  },
+
+  language: {
+    heading: "Which language would you like to answer in?",
+    appHeading: "And which language will your staff use the software in?",
+    fr: "Français",
+    ar: "العربية",
+    en: "English",
+  },
+
+  name: {
+    heading: "Your business name",
+    latin: "In Latin letters",
+    latinHelp: "This is the name at the top of the receipt.",
+    arabic: "In Arabic, if you want",
+    arabicHelp: "It goes under the first name on the receipt.",
+    required: "Write your business name to continue.",
+  },
+
+  receiptDetails: {
+    heading: "What appears on the receipt",
+    help: "Both are optional. You can change them later.",
+    phone: "Your phone",
+    address: "Your address",
+  },
+
+  logo: {
+    heading: "Your logo",
+    help: "Optional. Take a photo or choose a file. It stays on your phone; only the prepared image is sent.",
+    choose: "Choose an image",
+    replace: "Change the image",
+    remove: "Remove the logo",
+    working: "Preparing your logo",
+    colour: "On the screen",
+    mono: "On the printed receipt",
+    errorType: "Choose a PNG or JPEG image.",
+    errorUnreadable: "This image could not be read. Try another one.",
+    errorTooBig: "This image is too heavy even after preparing. Try another one.",
+  },
+
+  preview: {
+    sale: "Sale screen",
+    receipt: "Receipt",
+    intro: "Here is your software with what you have just written.",
+  },
+
+  save: {
+    saving: "Saving",
+    saved: "Saved",
+    failed: "Not saved yet. We are trying again.",
+    unavailable: "Your answers are staying on this device for now.",
+  },
+
   placeholder: {
     title: "This step is coming soon",
     body: "We are preparing the questions for this step. Come back in a few days, or write to us on WhatsApp.",

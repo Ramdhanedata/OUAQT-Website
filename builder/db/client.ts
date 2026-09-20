@@ -1,6 +1,5 @@
 "use client";
 
-import { createBrowserClient } from "@supabase/ssr";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { supabaseAnonKey, supabaseConfigured, supabaseUrl } from "./env";
 
@@ -10,13 +9,21 @@ import { supabaseAnonKey, supabaseConfigured, supabaseUrl } from "./env";
  * One client per tab, made on first use. Returns null when the keys are
  * missing so a half-configured deployment shows the "not ready" message
  * instead of a stack trace.
+ *
+ * The library itself is fetched only when it is first needed. Nothing is
+ * saved until the owner has answered something, and by then the questions are
+ * already on his screen, so its weight never sits between him and the first
+ * one.
  */
 
 let client: SupabaseClient | null = null;
 
-export function browserClient(): SupabaseClient | null {
+export async function browserClient(): Promise<SupabaseClient | null> {
   if (!supabaseConfigured) return null;
-  client ??= createBrowserClient(supabaseUrl, supabaseAnonKey);
+  if (!client) {
+    const { createBrowserClient } = await import("@supabase/ssr");
+    client = createBrowserClient(supabaseUrl, supabaseAnonKey);
+  }
   return client;
 }
 
@@ -30,7 +37,7 @@ export function browserClient(): SupabaseClient | null {
  * account step in B3 attaches the draft to a real login.
  */
 export async function ensureAnonymousSession(): Promise<SupabaseClient | null> {
-  const supabase = browserClient();
+  const supabase = await browserClient();
   if (!supabase) return null;
 
   const { data } = await supabase.auth.getSession();

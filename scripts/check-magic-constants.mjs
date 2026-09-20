@@ -8,7 +8,9 @@
  * number typed into a component is a number nobody can change from admin.
  *
  * Skipped: tests, database migrations and seeds (where the values belong),
- * and any line carrying `// not-a-rule`.
+ * any line carrying `// not-a-rule`, and a whole file that opens with
+ * `// not-a-rule-file`, which is for invented sample data shown in a preview
+ * and never charged to anyone.
  */
 import fs from "node:fs";
 import path from "node:path";
@@ -16,6 +18,21 @@ import path from "node:path";
 const ROOTS = ["builder", "app-ui"];
 const SKIP = /(\.test\.ts|\.test\.tsx|\/db\/migrations\/|\/db\/seed)/;
 const ESCAPE_HATCH = "not-a-rule";
+const FILE_ESCAPE_HATCH = "not-a-rule-file";
+
+/*
+ * Words that mean the number beside them is a measurement on a screen. A
+ * receipt is laid out in pixels and those pixels are not a business rule, so
+ * a line about font size or width is left alone even when the number is big.
+ */
+const MEASUREMENT_WORDS =
+  /\b(font ?size|font ?weight|line ?height|letter ?spacing|width|height|padding|margin|inset|top|left|right|bottom|gap|radius|opacity|z ?index|stroke|view ?Box|scale|dpi|px|ms|duration|delay|fraction ?digits|characters)\b/i;
+
+/*
+ * A bound inside a validation schema is how long a name may be, not a price
+ * or a limit anyone administers, so those lines are left alone too.
+ */
+const SCHEMA_BOUND = /\bz\.(string|number|array|bigint|instanceof)\(/;
 
 /* Words that turn a nearby number into a rule rather than a measurement. */
 const RULE_WORDS =
@@ -37,18 +54,25 @@ function splitNames(line) {
 }
 
 function check(file) {
-  fs.readFileSync(file, "utf8")
+  const source = fs.readFileSync(file, "utf8");
+  // The marker goes in the file's opening comment, wherever in it.
+  if (source.split("\n").slice(0, 40).join("\n").includes(FILE_ESCAPE_HATCH)) return;
+
+  source
     .split("\n")
     .forEach((raw, index) => {
       if (raw.includes(ESCAPE_HATCH)) return;
       const line = stripNonCode(raw);
-      if (line.trimStart().startsWith("//") || line.trimStart().startsWith("*")) return;
+      const trimmed = line.trimStart();
+      if (trimmed.startsWith("//") || trimmed.startsWith("*") || trimmed.startsWith("/*")) return;
 
       const numbers = [...line.matchAll(/(?<![\w.])(\d+(?:\.\d+)?)(?![\w.])/g)]
         .map((match) => Number(match[1]))
         .filter((value) => ![0, 1].includes(value));
 
       if (numbers.length === 0) return;
+      if (MEASUREMENT_WORDS.test(splitNames(line))) return;
+      if (SCHEMA_BOUND.test(line)) return;
       const looksLikeMoney = numbers.some((value) => value >= 100);
       if (looksLikeMoney || RULE_WORDS.test(splitNames(line))) {
         offenders.push(
