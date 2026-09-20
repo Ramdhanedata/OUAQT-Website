@@ -85,7 +85,20 @@ export const restaurantFeatures = z.object({
    * and the screen has to stay usable at that number.
    */
   tables: z.number().int().min(1).max(200),
-  kitchen: z.enum(["screen", "printed", "spoken"]),
+  /*
+   * A table that orders, orders again, and pays once at the end.
+   *
+   * This is the difference between a restaurant and a counter, so the app is
+   * built around it rather than having it bolted on: an order stays open
+   * against the table until somebody asks for the bill.
+   */
+  openOrders: z.boolean(),
+  /*
+   * A kitchen screen is not offered yet, because version one of the desktop
+   * app prints tickets and nothing else. Adding it back is this enum and the
+   * question bank, together, once the app can do it.
+   */
+  kitchen: z.enum(["printed", "spoken"]),
   payWhen: z.enum(["before", "after"]),
   options: z.boolean(),
 });
@@ -230,6 +243,7 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
         restaurant: {
           service: ["dine_in", "takeaway"],
           tables: 10, // not-a-rule: the question's own default
+          openOrders: true,
           kitchen: "printed",
           payWhen: "after",
           options: false,

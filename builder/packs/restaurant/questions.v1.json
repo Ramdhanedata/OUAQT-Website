@@ -14,19 +14,38 @@
       "options": [
         {
           "id": "dine_in",
-          "label": { "fr": "Sur place", "ar": "في المحل", "en": "In the room" }
+          "label": {
+            "fr": "Sur place",
+            "ar": "في المحل",
+            "en": "In the room"
+          }
         },
         {
           "id": "takeaway",
-          "label": { "fr": "À emporter", "ar": "للأخذ", "en": "Takeaway" }
+          "label": {
+            "fr": "À emporter",
+            "ar": "للأخذ",
+            "en": "Takeaway"
+          }
         },
         {
           "id": "delivery",
-          "label": { "fr": "En livraison", "ar": "توصيل", "en": "Delivery" }
+          "label": {
+            "fr": "En livraison",
+            "ar": "توصيل",
+            "en": "Delivery"
+          }
         }
       ],
-      "default": ["dine_in", "takeaway"],
-      "maps_to": [{ "path": "features.restaurant.service" }]
+      "default": [
+        "dine_in",
+        "takeaway"
+      ],
+      "maps_to": [
+        {
+          "path": "features.restaurant.service"
+        }
+      ]
     },
     {
       "id": "rs_tables",
@@ -37,11 +56,39 @@
         "en": "How many tables do you have?"
       },
       "review": true,
-      "show_if": { "question": "rs_service", "includes": "dine_in" },
+      "show_if": {
+        "question": "rs_service",
+        "includes": "dine_in"
+      },
       "min": 1,
       "max": 200,
       "default": 10,
-      "maps_to": [{ "path": "features.restaurant.tables" }]
+      "maps_to": [
+        {
+          "path": "features.restaurant.tables"
+        }
+      ]
+    },
+    {
+      "id": "rs_open_orders",
+      "type": "yes_no",
+      "label": {
+        "fr": "Vos clients commandent-ils plusieurs fois pendant le repas ?",
+        "ar": "هل يطلب زبائنك أكثر من مرة أثناء الوجبة؟",
+        "en": "Do your customers order more than once during the meal?"
+      },
+      "help": {
+        "fr": "La table commande, recommande, puis paie une seule fois à la fin.",
+        "ar": "تطلب الطاولة، ثم تطلب مجدداً، ثم تدفع مرة واحدة في النهاية.",
+        "en": "The table orders, orders again, then pays once at the end."
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.restaurant.openOrders"
+        }
+      ]
     },
     {
       "id": "rs_kitchen",
@@ -54,10 +101,6 @@
       "review": true,
       "options": [
         {
-          "id": "screen",
-          "label": { "fr": "Sur un écran", "ar": "على شاشة", "en": "On a screen" }
-        },
-        {
           "id": "printed",
           "label": {
             "fr": "Sur un ticket imprimé",
@@ -67,11 +110,19 @@
         },
         {
           "id": "spoken",
-          "label": { "fr": "À l'oral", "ar": "شفهياً", "en": "Spoken" }
+          "label": {
+            "fr": "À l'oral",
+            "ar": "شفهياً",
+            "en": "Spoken"
+          }
         }
       ],
       "default": "printed",
-      "maps_to": [{ "path": "features.restaurant.kitchen" }]
+      "maps_to": [
+        {
+          "path": "features.restaurant.kitchen"
+        }
+      ]
     },
     {
       "id": "rs_pay_when",
@@ -85,15 +136,27 @@
       "options": [
         {
           "id": "before",
-          "label": { "fr": "Avant de manger", "ar": "قبل الأكل", "en": "Before eating" }
+          "label": {
+            "fr": "Avant de manger",
+            "ar": "قبل الأكل",
+            "en": "Before eating"
+          }
         },
         {
           "id": "after",
-          "label": { "fr": "Après le repas", "ar": "بعد الأكل", "en": "After the meal" }
+          "label": {
+            "fr": "Après le repas",
+            "ar": "بعد الأكل",
+            "en": "After the meal"
+          }
         }
       ],
       "default": "after",
-      "maps_to": [{ "path": "features.restaurant.payWhen" }]
+      "maps_to": [
+        {
+          "path": "features.restaurant.payWhen"
+        }
+      ]
     },
     {
       "id": "rs_options",
@@ -105,7 +168,11 @@
       },
       "review": true,
       "default": false,
-      "maps_to": [{ "path": "features.restaurant.options" }]
+      "maps_to": [
+        {
+          "path": "features.restaurant.options"
+        }
+      ]
     }
   ]
 }

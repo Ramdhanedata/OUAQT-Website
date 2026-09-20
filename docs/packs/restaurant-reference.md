@@ -69,21 +69,29 @@ Proposals only. Nothing changed in the banks or the schema.
 Written after the bank was drafted. **Nothing here is in the bank**; each is a
 question for you before it would be.
 
-1. **Orders held open while a table eats.** The reference app kept a running
-   order per table, and the sale screen we share has no place for one. This is
-   the largest gap between the bank and what a restaurant actually does.
+1. ~~**Orders held open while a table eats.**~~ **Done, 2026-09-20.** Added to
+   the bank as `rs_open_orders` and to the schema as
+   `features.restaurant.openOrders`, so the desktop app is built around it
+   rather than having it bolted on: a table orders, orders again, and pays
+   once at the end.
 2. **Split payment on one table.** Four people, two paying. The payment
    question in the common bank offers one method per sale.
 3. **Service charge or a tip line.** Present on the reference receipts; the
    bank does not ask about it and the receipt has no line for it.
 
-### A conflict to resolve
+### The kitchen screen, removed for now
 
-`rs_kitchen` offers **"Sur un écran"**, and the desktop brief has since fixed
-version one at **printed tickets only**, with no second screen and no extra
-window. Offering the screen option in the builder would promise something the
-software does not do.
+**Decided 2026-09-20: dropped.** `rs_kitchen` offered "Sur un écran", and
+version one of the desktop app prints tickets and nothing else. Offering it
+would have promised something the software does not do.
 
-Two ways out, and it needs your word: drop the option until the app has it, or
-keep it and have the builder say "bientôt" when it is chosen. Until then the
-bank stays as drafted, which is what you asked for.
+The question now offers "Sur un ticket imprimé" and "À l'oral". The option is
+gone from the bank **and** from
+`features.restaurant.kitchen` in the schema, so nothing can be configured with
+it by accident.
+
+**To add it back**, when the desktop app supports a kitchen screen: put
+`"screen"` into the enum in `app-ui/config.ts` and the option back into
+`builder/packs/restaurant/questions.v1.json`, in the same change. Whoever
+builds that side of the desktop app should say so here, and tell Adel, so he
+can decide whether to offer it.
