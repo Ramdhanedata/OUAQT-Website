@@ -26,7 +26,7 @@ const FILE_ESCAPE_HATCH = "not-a-rule-file";
  * a line about font size or width is left alone even when the number is big.
  */
 const MEASUREMENT_WORDS =
-  /\b(font ?size|font ?weight|line ?height|letter ?spacing|width|height|padding|margin|inset|top|left|right|bottom|gap|radius|opacity|z ?index|stroke|view ?Box|scale|dpi|px|ms|duration|delay|fraction ?digits|characters)\b/i;
+  /\b(font ?size|font ?weight|line ?height|letter ?spacing|width|height|padding|margin|inset|top|left|right|bottom|gap|radius|opacity|z ?index|stroke|view ?Box|scale|dpi|px|ms|duration|delay|fraction ?digits|characters|status|http|code ?point)\b/i;
 
 /*
  * A bound inside a validation schema is how long a name may be, not a price
