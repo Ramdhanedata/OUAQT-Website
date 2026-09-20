@@ -25,7 +25,8 @@ function rowsFrom(aoa: unknown[][]): unknown[][] {
 }
 
 function rowsFromCsv(csv: string): unknown[][] {
-  const read = XLSX.read(csv, { type: "string", cellDates: false });
+  /* raw, exactly as builder/import/file.ts reads one. */
+  const read = XLSX.read(csv, { type: "string", cellDates: false, raw: true });
   return XLSX.utils.sheet_to_json(read.Sheets[read.SheetNames[0]], {
     header: 1,
     blankrows: true,
@@ -198,6 +199,20 @@ describe("duplicates in the file", () => {
     const result = parseProducts(rows, "pharmacy");
     expect(result.duplicates).toHaveLength(1);
     expect(result.duplicates[0].rows.map((row) => row.row)).toEqual([2, 3]);
+  });
+});
+
+describe("dates that SheetJS would guess at", () => {
+  /*
+   * "06/27" on a box means June 2027. Read by SheetJS's own date detection it
+   * came back as the serial number for June 2001, and a quarter century old
+   * expiry date would have been imported as fact.
+   */
+  it("reads a month and a year as the end of that month, not as a guess", () => {
+    const rows = rowsFromCsv(["Nom;Prix;DLC", "Crème Béta;250;06/27"].join("\n"));
+    const result = parseProducts(rows, "pharmacy", { now: new Date("2026-09-20") });
+    expect(result.products[0].expiry).toBe("2027-06-30");
+    expect(result.warnings).toEqual([]);
   });
 });
 

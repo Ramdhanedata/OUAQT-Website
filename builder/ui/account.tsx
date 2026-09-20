@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { BuilderCopy } from "@/builder/copy";
 import { browserClient } from "@/builder/db/client";
-import { Button } from "@/components/ui/button";
+import { Button } from "./owner-button";
 import { Container } from "@/components/ui/container";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";

@@ -3,7 +3,7 @@
 import { useState } from "react";
 import type { Pack } from "@/app-ui/config";
 import type { BuilderCopy } from "@/builder/copy";
-import { Button } from "@/components/ui/button";
+import { Button } from "./owner-button";
 import { Field, TextInput } from "./fields";
 
 /*

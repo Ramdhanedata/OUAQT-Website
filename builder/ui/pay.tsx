@@ -8,7 +8,7 @@ import type { CheckFailure } from "@/builder/payment/checks";
 import { ACCEPTED_IMAGES, prepareScreenshot, ScreenshotError } from "@/builder/payment/image";
 import type { Price } from "@/builder/payment/pricing";
 import { monthlyEquivalent } from "@/builder/payment/pricing";
-import { Button } from "@/components/ui/button";
+import { Button } from "./owner-button";
 import { fill } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 

@@ -84,11 +84,23 @@ export async function readWorkbook(file: File, pack: Pack): Promise<Workbook> {
    */
   const isText = /\.(csv|txt|tsv)$/i.test(file.name) || file.type.startsWith("text/");
 
+  /*
+   * `raw: true` matters more than it looks.
+   *
+   * Left to itself SheetJS guesses at anything date-shaped, and "06/27",
+   * which an owner writes on a box meaning June 2027, came back as the serial
+   * number for June 2001. A twenty five year old expiry date would have been
+   * imported as fact. Cells are taken as written and read by our own rules,
+   * which know that a month and a year mean the end of that month.
+   *
+   * A real date cell in a .xlsx still arrives as its serial number, which is
+   * exactly what parseExpiry expects.
+   */
   let workbook;
   try {
     workbook = isText
-      ? read(await file.text(), { type: "string", cellDates: false })
-      : read(await file.arrayBuffer(), { cellDates: false });
+      ? read(await file.text(), { type: "string", cellDates: false, raw: true })
+      : read(await file.arrayBuffer(), { cellDates: false, raw: true });
   } catch {
     throw new UnreadableFile();
   }

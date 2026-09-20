@@ -16,7 +16,7 @@ import {
   type RowProblem,
 } from "@/builder/import/parse";
 import { text } from "@/builder/import/normalise";
-import { Button } from "@/components/ui/button";
+import { Button } from "./owner-button";
 import { fill, plural } from "@/lib/utils";
 import { ChoiceButton, Field, TextInput } from "./fields";
 
@@ -84,6 +84,20 @@ export function ImportProducts({
   const [reading, setReading] = useState(false);
   const [unreadable, setUnreadable] = useState(false);
 
+  /*
+   * Which column is which, whether he told us or we worked it out.
+   *
+   * This exists because a correction has to be written into the right cell,
+   * and for a file whose headers we recognised he was never asked, so there
+   * was nothing in `columns` to write against. His fixes went nowhere at all
+   * and the row stayed broken in front of him.
+   */
+  const effectiveColumns = useMemo(() => {
+    if (columns) return columns;
+    if (!workbook || !sheet) return {};
+    return parseProducts(workbook.rows[sheet] ?? [], pack).columns;
+  }, [columns, workbook, sheet, pack]);
+
   /* His corrections are written back into the sheet, then everything is read
      again, so a fixed row goes through exactly the same rules as the rest. */
   const rows = useMemo(() => {
@@ -92,7 +106,7 @@ export function ImportProducts({
     if (Object.keys(fixes).length === 0) return original;
 
     const copyOfRows = original.map((row) => [...row]);
-    const map = columns ?? {};
+    const map = effectiveColumns;
     for (const [rowNumber, byField] of Object.entries(fixes)) {
       const index = Number(rowNumber) - 1;
       if (!copyOfRows[index]) continue;
@@ -102,7 +116,7 @@ export function ImportProducts({
       }
     }
     return copyOfRows;
-  }, [workbook, sheet, fixes, columns]);
+  }, [workbook, sheet, fixes, effectiveColumns]);
 
   const result = useMemo(
     () => (rows ? parseProducts(rows, pack, { columns, currency }) : null),

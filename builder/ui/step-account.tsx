@@ -7,7 +7,7 @@ import type { BuilderCopy } from "@/builder/copy";
 import { browserClient } from "@/builder/db/client";
 import type { DraftAnswers } from "@/builder/draft/store";
 import type { ImportedProduct } from "@/builder/import/parse";
-import { Button } from "@/components/ui/button";
+import { Button } from "./owner-button";
 import { fill } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 import type { StaffMember } from "./step-products";

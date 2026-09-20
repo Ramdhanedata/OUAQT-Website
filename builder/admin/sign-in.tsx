@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { browserClient } from "@/builder/db/client";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/builder/ui/owner-button";
 import { Field, TextInput } from "@/builder/ui/fields";
 
 /*

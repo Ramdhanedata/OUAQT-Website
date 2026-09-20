@@ -5,7 +5,7 @@ import type { AppLanguage } from "@/app-ui/config";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import type { ImportedProduct } from "@/builder/import/parse";
-import { Button } from "@/components/ui/button";
+import { Button } from "./owner-button";
 import { ImportProducts } from "./import-products";
 import { ChoiceButton, Field, TextInput } from "./fields";
 
