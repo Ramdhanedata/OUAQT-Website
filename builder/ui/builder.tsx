@@ -11,7 +11,7 @@ import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
 import dynamic from "next/dynamic";
-import type { ImportedProduct, ImportResult } from "@/builder/import/parse";
+import type { ImportedProduct } from "@/builder/import/parse";
 import { LeadForm } from "./lead-form";
 import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
 
@@ -229,7 +229,6 @@ function Wizard({
    * do not belong in a browser's storage, and they are written to the
    * database the moment there is an account to attach them to.
    */
-  const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [keptProducts, setKeptProducts] = useState<ImportedProduct[] | null>(null);
   const [serial, setSerial] = useState<string | null>(null);
   const wide = useWide();
@@ -325,11 +324,6 @@ function Wizard({
       copy={copy}
       language={locale}
       pack={pack}
-      result={importResult}
-      onResult={(next) => {
-        setImportResult(next);
-        setKeptProducts(null);
-      }}
       kept={keptProducts}
       onKeep={setKeptProducts}
       staff={answers.staff ?? []}

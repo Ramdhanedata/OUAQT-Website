@@ -1,13 +1,12 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import type { AppLanguage } from "@/app-ui/config";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
-import { downloadTemplate, readProductFile } from "@/builder/import/file";
-import type { ImportedProduct, ImportResult, ProblemCode } from "@/builder/import/parse";
+import type { ImportedProduct } from "@/builder/import/parse";
 import { Button } from "@/components/ui/button";
-import { fill, plural } from "@/lib/utils";
+import { ImportProducts } from "./import-products";
 import { ChoiceButton, Field, TextInput } from "./fields";
 
 /*
@@ -27,8 +26,6 @@ export function StepProducts({
   copy,
   language,
   pack,
-  result,
-  onResult,
   kept,
   onKeep,
   staff,
@@ -37,8 +34,6 @@ export function StepProducts({
   copy: BuilderCopy;
   language: AppLanguage;
   pack: Pack;
-  result: ImportResult | null;
-  onResult: (result: ImportResult | null) => void;
   kept: ImportedProduct[] | null;
   onKeep: (products: ImportedProduct[] | null) => void;
   staff: StaffMember[];
@@ -46,179 +41,14 @@ export function StepProducts({
 }) {
   return (
     <div className="space-y-12">
-      <Products
+      <ImportProducts
         copy={copy}
         language={language}
         pack={pack}
-        result={result}
-        onResult={onResult}
         kept={kept}
         onKeep={onKeep}
       />
       <Staff copy={copy} staff={staff} onStaff={onStaff} />
-    </div>
-  );
-}
-
-function Products({
-  copy,
-  language,
-  pack,
-  result,
-  onResult,
-  kept,
-  onKeep,
-}: {
-  copy: BuilderCopy;
-  language: AppLanguage;
-  pack: Pack;
-  result: ImportResult | null;
-  onResult: (result: ImportResult | null) => void;
-  kept: ImportedProduct[] | null;
-  onKeep: (products: ImportedProduct[] | null) => void;
-}) {
-  const input = useRef<HTMLInputElement>(null);
-  const [reading, setReading] = useState(false);
-
-  async function take(file: File | undefined) {
-    if (!file) return;
-    setReading(true);
-    try {
-      onResult(await readProductFile(file, pack));
-    } catch {
-      onResult({
-        products: [],
-        problems: [],
-        missingColumns: ["name", "price"],
-        blankRows: 0,
-        truncated: false,
-      });
-    } finally {
-      setReading(false);
-    }
-  }
-
-  return (
-    <section className="space-y-4">
-      <h2 className="text-xl font-semibold text-foreground">
-        {copy.products.heading}
-      </h2>
-      <p className="text-base leading-relaxed text-muted-foreground">
-        {copy.products.help}
-      </p>
-
-      <input
-        ref={input}
-        type="file"
-        accept=".xlsx,.xls,.csv"
-        className="sr-only"
-        onChange={(event) => void take(event.target.files?.[0])}
-      />
-
-      <div className="flex flex-wrap gap-3">
-        <Button type="button" onClick={() => input.current?.click()}>
-          {result ? copy.products.another : copy.products.choose}
-        </Button>
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() =>
-            void downloadTemplate(pack, language, `ouaqt-${pack}.xlsx`)
-          }
-        >
-          {copy.products.template}
-        </Button>
-      </div>
-
-      {reading ? (
-        <p className="text-base text-muted-foreground">{copy.products.reading}</p>
-      ) : null}
-
-      {result && !reading ? (
-        <Outcome
-          copy={copy}
-          language={language}
-          result={result}
-          kept={kept}
-          onKeep={onKeep}
-        />
-      ) : null}
-    </section>
-  );
-}
-
-function Outcome({
-  copy,
-  language,
-  result,
-  kept,
-  onKeep,
-}: {
-  copy: BuilderCopy;
-  language: AppLanguage;
-  result: ImportResult;
-  kept: ImportedProduct[] | null;
-  onKeep: (products: ImportedProduct[] | null) => void;
-}) {
-  if (result.missingColumns.length > 0) {
-    return (
-      <p className="text-base leading-relaxed text-destructive">
-        {copy.products.missingColumns}
-      </p>
-    );
-  }
-
-  const said: Record<ProblemCode, string> = {
-    missing_name: copy.products.missingName as string,
-    missing_price: copy.products.missingPrice as string,
-    bad_price: copy.products.badPrice as string,
-    bad_quantity: copy.products.badQuantity as string,
-    bad_expiry: copy.products.badExpiry as string,
-  };
-
-  /* Ten is enough to see the pattern. The rest are the same three mistakes. */
-  const SHOWN = 10; // not-a-rule: how many problem lines fit on a phone
-  const shown = result.problems.slice(0, SHOWN);
-
-  return (
-    <div className="space-y-4">
-      <p className="text-base text-foreground">
-        {plural(language, result.products.length, copy.products.ready)}{" "}
-        {result.problems.length > 0
-          ? plural(language, result.problems.length, copy.products.toFix)
-          : null}
-      </p>
-
-      {result.truncated ? (
-        <p className="text-base text-muted-foreground">{copy.products.truncated}</p>
-      ) : null}
-
-      {shown.length > 0 ? (
-        <ul className="space-y-2">
-          {shown.map((problem) => (
-            <li
-              key={`${problem.row}-${problem.code}`}
-              className="text-base leading-relaxed text-muted-foreground"
-            >
-              {fill(copy.products.problem as string, {
-                row: problem.row,
-                what: said[problem.code],
-                column: problem.column,
-              })}
-            </li>
-          ))}
-        </ul>
-      ) : null}
-
-      {result.products.length > 0 ? (
-        <Button
-          type="button"
-          variant={kept ? "outline" : "accent"}
-          onClick={() => onKeep(kept ? null : result.products)}
-        >
-          {copy.products.keep}
-        </Button>
-      ) : null}
     </div>
   );
 }

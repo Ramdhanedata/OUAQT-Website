@@ -68,8 +68,8 @@ describe("reading a file", () => {
     expect(result.problems).toEqual([
       { row: 3, column: "Nom", code: "missing_name" },
       { row: 4, column: "Prix", code: "missing_price" },
-      { row: 5, column: "Prix", code: "bad_price" },
-      { row: 7, column: "Péremption", code: "bad_expiry" },
+      { row: 5, column: "Prix", code: "bad_price", found: "à voir" },
+      { row: 7, column: "Péremption", code: "bad_expiry", found: "13/2026" },
     ]);
     expect(result.blankRows).toBe(1);
   });
@@ -89,15 +89,20 @@ describe("reading a file", () => {
     expect(result.products[0].quantity).toBe(0);
   });
 
-  it("accepts a price of zero", () => {
+  /*
+   * A price of zero is nearly always an empty cell that Excel filled in, and
+   * a product that rings up free is a bad morning. It is shown to him rather
+   * than imported quietly.
+   */
+  it("flags a price of zero instead of importing it", () => {
     const result = parseProducts([header, ["Sachet", "0", "10"]], "bakery");
-    expect(result.products[0].price).toBe(0);
-    expect(result.problems).toHaveLength(0);
+    expect(result.products).toHaveLength(0);
+    expect(result.problems[0].code).toBe("zero_price");
   });
 
-  it("refuses a negative price", () => {
+  it("flags a negative price as the negative price it is", () => {
     const result = parseProducts([header, ["Sachet", "-5", "10"]], "bakery");
-    expect(result.problems[0].code).toBe("bad_price");
+    expect(result.problems[0].code).toBe("negative_price");
   });
 
   it("says which columns it could not find at all", () => {

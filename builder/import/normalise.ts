@@ -11,6 +11,32 @@
  * administers.
  */
 
+/*
+ * Arabic-Indic digits, both families.
+ *
+ * A file typed on an Arabic keyboard has ٠١٢٣ where a French one has 0123,
+ * and a Persian keyboard has ۰۱۲۳ again. They mean the same numbers and are
+ * turned into the digits the rest of this file understands, before anything
+ * else looks at the text.
+ */
+const ARABIC_INDIC = "\u0660\u0661\u0662\u0663\u0664\u0665\u0666\u0667\u0668\u0669";
+const EASTERN_ARABIC_INDIC = "\u06f0\u06f1\u06f2\u06f3\u06f4\u06f5\u06f6\u06f7\u06f8\u06f9";
+
+export function westernDigits(value: string): string {
+  let out = "";
+  for (const character of value) {
+    const arabic = ARABIC_INDIC.indexOf(character);
+    const eastern = EASTERN_ARABIC_INDIC.indexOf(character);
+    if (arabic >= 0) out += String(arabic);
+    else if (eastern >= 0) out += String(eastern);
+    /* The Arabic decimal separator and thousands mark. */
+    else if (character === "\u066b") out += ",";
+    else if (character === "\u066c") out += " ";
+    else out += character;
+  }
+  return out;
+}
+
 /** A cell that holds nothing worth reading. */
 export function isBlank(cell: unknown): boolean {
   return cell === null || cell === undefined || String(cell).trim() === "";
@@ -21,7 +47,22 @@ export function isBlankRow(cells: unknown[]): boolean {
 }
 
 export function text(cell: unknown): string {
-  return String(cell ?? "").trim();
+  return String(cell ?? "").trim().replace(/\s+/g, " ");
+}
+
+/*
+ * A code read as writing, never as a number.
+ *
+ * A barcode beginning 00123 is not the number 123, and a batch number is not
+ * arithmetic. Excel turns both into numbers given the chance, and the leading
+ * zeros are gone for good, so anything that arrives as a number here is put
+ * back as the digits it was.
+ */
+export function code(cell: unknown): string {
+  if (typeof cell === "number") {
+    return Number.isInteger(cell) ? cell.toFixed(0) : String(cell);
+  }
+  return westernDigits(text(cell));
 }
 
 /*
@@ -36,14 +77,14 @@ export function parseNumber(cell: unknown): number | null {
   if (typeof cell === "number") return Number.isFinite(cell) ? cell : null;
   if (isBlank(cell)) return null;
 
-  let raw = text(cell)
+  let raw = westernDigits(text(cell))
     /*
      * The currency, at either end, with or without a space before it. Not
      * anywhere in the middle: "350mru" is a price, but a cell that happens to
      * contain those letters elsewhere is not one to start editing.
      */
-    .replace(/^(MRU|UM|MRO)\s*/i, "")
-    .replace(/\s*(MRU|UM|MRO)$/i, "")
+    .replace(/^(MRU|UM|MRO|ouguiyas?|أوقية|اوقية)\s*/i, "")
+    .replace(/\s*(MRU|UM|MRO|ouguiyas?|أوقية|اوقية)$/i, "")
     // Spaces used for grouping, including the narrow ones Excel inserts.
     .replace(/[\s  ']/g, "")
     .trim();
@@ -78,6 +119,30 @@ export function parseNumber(cell: unknown): number | null {
 const EXCEL_EPOCH = Date.UTC(1899, 11, 30);
 const MS_IN_A_DAY = 86_400_000;
 
+/*
+ * A quantity written the way a shopkeeper counts: "12 boîtes", "5 cartons".
+ *
+ * The number is what goes in the stock column. The word beside it is a real
+ * answer to a question we have not asked yet, so it is handed back rather
+ * than thrown away: the import screen offers it as the unit.
+ */
+export function parseQuantity(cell: unknown): { value: number | null; unit: string | null } {
+  if (typeof cell === "number") {
+    return { value: Number.isFinite(cell) ? cell : null, unit: null };
+  }
+  if (isBlank(cell)) return { value: null, unit: null };
+
+  const raw = westernDigits(text(cell));
+  const match = raw.match(/^([\d\s\u00a0\u202f.,']*\d)\s*(.*)$/);
+  if (!match) return { value: parseNumber(cell), unit: null };
+
+  const unit = match[2].trim();
+  return {
+    value: parseNumber(match[1]),
+    unit: unit === "" ? null : unit,
+  };
+}
+
 export function parseExpiry(cell: unknown): string | null {
   if (isBlank(cell)) return null;
 
@@ -86,7 +151,7 @@ export function parseExpiry(cell: unknown): string | null {
     return Number.isFinite(date.getTime()) ? iso(date) : null;
   }
 
-  const raw = text(cell);
+  const raw = westernDigits(text(cell));
 
   const monthYear = raw.match(/^(\d{1,2})\s*[/\-.]\s*(\d{2}|\d{4})$/);
   if (monthYear) {

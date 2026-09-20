@@ -3,7 +3,8 @@
 import type { Pack } from "@/app-ui/packs";
 import type { AppLanguage } from "@/app-ui/config";
 import { fieldsFor, type ImportField } from "./columns";
-import { parseProducts, type ImportResult } from "./parse";
+import { parseProducts } from "./parse";
+import { describeSheet, type SheetSummary } from "./table";
 
 /*
  * The file itself: reading the one he sends, and writing the one we offer.
@@ -50,11 +51,24 @@ const examples: Record<Pack, Record<ImportField, string>[]> = {
   ],
 };
 
-/** Reads whatever he chose, in his browser, and hands back rows and problems. */
-export async function readProductFile(
-  file: File,
-  pack: Pack
-): Promise<ImportResult> {
+export type Workbook = {
+  sheets: SheetSummary[];
+  rows: Record<string, unknown[][]>;
+};
+
+export class UnreadableFile extends Error {}
+
+/**
+ * Opens the file in his browser and hands back every sheet in it.
+ *
+ * Every sheet, not the first one, because a shop's workbook often has the
+ * products on the third tab behind a summary and a page of notes. Which one
+ * to use is a question for him when it is not obvious.
+ *
+ * A photo, a PDF or a file with a password on it lands in the catch: none of
+ * them are spreadsheets and none of them can be made into one here.
+ */
+export async function readWorkbook(file: File, pack: Pack): Promise<Workbook> {
   const { read, utils } = await import("xlsx");
 
   /*
@@ -66,29 +80,48 @@ export async function readProductFile(
    * does not help either: the browser build ships without the codepage
    * tables and says so in the console. Handing it a string sidesteps both.
    *
-   * A .xlsx carries its own encoding, so it goes through as bytes.
+   * A .xlsx or an old .xls carries its own encoding, so it goes as bytes.
    */
   const isText = /\.(csv|txt|tsv)$/i.test(file.name) || file.type.startsWith("text/");
-  const workbook = isText
-    ? read(await file.text(), { type: "string", cellDates: false })
-    : read(await file.arrayBuffer(), { cellDates: false });
-  const sheet = workbook.Sheets[workbook.SheetNames[0]];
-  if (!sheet) {
-    return {
-      products: [],
-      problems: [],
-      missingColumns: ["name", "price"],
-      blankRows: 0,
-      truncated: false,
-    };
+
+  let workbook;
+  try {
+    workbook = isText
+      ? read(await file.text(), { type: "string", cellDates: false })
+      : read(await file.arrayBuffer(), { cellDates: false });
+  } catch {
+    throw new UnreadableFile();
   }
 
-  const rows = utils.sheet_to_json<unknown[]>(sheet, {
-    header: 1,
-    blankrows: true,
-    defval: "",
-  });
-  return parseProducts(rows, pack);
+  if (workbook.SheetNames.length === 0) throw new UnreadableFile();
+
+  const rows: Record<string, unknown[][]> = {};
+  const sheets: SheetSummary[] = [];
+
+  for (const name of workbook.SheetNames) {
+    const sheet = workbook.Sheets[name];
+    if (!sheet) continue;
+    const asRows = utils.sheet_to_json<unknown[]>(sheet, {
+      header: 1,
+      blankrows: true,
+      defval: "",
+    });
+    rows[name] = asRows;
+    sheets.push(describeSheet(name, asRows, pack));
+  }
+
+  if (sheets.length === 0) throw new UnreadableFile();
+  return { sheets, rows };
+}
+
+/** The old single-sheet way in, kept for the simple case. */
+export async function readProductFile(
+  file: File,
+  pack: Pack
+): Promise<ReturnType<typeof parseProducts>> {
+  const workbook = await readWorkbook(file, pack);
+  const best = workbook.sheets[0]?.name;
+  return parseProducts(best ? workbook.rows[best] : [], pack);
 }
 
 /** Builds the template for this pack and hands it to the browser to save. */

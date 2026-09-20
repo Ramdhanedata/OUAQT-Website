@@ -23,16 +23,54 @@ export const importFields = [
 
 export type ImportField = (typeof importFields)[number];
 
+/*
+ * The words owners actually put at the top of a column, in the three
+ * languages. Compared after accents, case and punctuation are stripped, so
+ * "Désignation", "DESIGNATION" and "désignation :" are one entry.
+ */
 const aliases: Record<ImportField, string[]> = {
-  name: ["nom", "name", "designation", "produit", "article", "libelle", "الاسم", "المنتج", "اسم المنتج"],
-  price: ["prix", "price", "prix de vente", "pv", "tarif", "السعر", "سعر البيع"],
-  quantity: ["quantite", "qte", "stock", "quantity", "qty", "الكمية", "المخزون"],
-  barcode: ["code", "code barres", "code barre", "codebarres", "barcode", "ean", "الباركود", "رمز"],
-  expiry: ["peremption", "date de peremption", "expiration", "expiry", "exp", "تاريخ الانتهاء", "الصلاحية"],
-  batch: ["lot", "numero de lot", "batch", "رقم التشغيلة", "التشغيلة"],
-  unit: ["unite", "unit", "conditionnement", "الوحدة"],
-  location: ["lieu", "emplacement", "location", "depot", "magasin", "الموقع", "المخزن"],
-  soldBy: ["vendu par", "vente", "sold by", "unite de vente", "طريقة البيع"],
+  name: [
+    "nom", "noms", "name", "designation", "designations", "produit", "produits",
+    "article", "articles", "libelle", "libelles", "description", "medicament",
+    "الاسم", "اسم", "المنتج", "اسم المنتج", "التسمية", "المادة", "الصنف",
+  ],
+  price: [
+    "prix", "price", "prix de vente", "prix unitaire", "pv", "pu", "tarif",
+    "montant", "valeur", "selling price", "unit price",
+    "السعر", "سعر", "سعر البيع", "الثمن", "المبلغ", "سعر الوحدة",
+  ],
+  quantity: [
+    "quantite", "quantites", "qte", "qty", "quantity", "stock", "en stock",
+    "nombre", "nbr", "disponible",
+    "الكمية", "كمية", "المخزون", "العدد", "المتوفر",
+  ],
+  barcode: [
+    "code", "code barres", "code barre", "codebarres", "code a barres",
+    "barcode", "ean", "gencod", "reference", "ref",
+    "الباركود", "رمز", "الرمز", "المرجع",
+  ],
+  expiry: [
+    "peremption", "date de peremption", "date peremption", "expiration",
+    "date expiration", "date d expiration", "expiry", "expiry date", "exp",
+    "dlc", "dluo", "validite",
+    "تاريخ الانتهاء", "انتهاء الصلاحية", "الصلاحية", "تاريخ الصلاحية",
+  ],
+  batch: [
+    "lot", "numero de lot", "no lot", "n lot", "batch", "batch number",
+    "رقم التشغيلة", "التشغيلة", "رقم الدفعة", "الدفعة",
+  ],
+  unit: [
+    "unite", "unites", "unit", "conditionnement", "presentation", "format",
+    "الوحدة", "وحدة", "التعبئة",
+  ],
+  location: [
+    "lieu", "emplacement", "location", "depot", "magasin", "entrepot", "rayon",
+    "الموقع", "المخزن", "المستودع", "المكان",
+  ],
+  soldBy: [
+    "vendu par", "vente", "sold by", "unite de vente", "mode de vente",
+    "طريقة البيع", "نوع البيع",
+  ],
 };
 
 /** Which columns a pack can use. Anything else in the file is left alone. */
