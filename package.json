@@ -9,24 +9,31 @@
     "lint": "next lint",
     "test": "vitest run",
     "test:watch": "vitest",
-    "check:constants": "node scripts/check-magic-constants.mjs"
+    "check:constants": "node scripts/check-magic-constants.mjs",
+    "db:push": "node --env-file-if-exists=.env.local scripts/db-push.mjs",
+    "db:check": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs"
   },
   "dependencies": {
+    "@supabase/ssr": "^0.12.7",
+    "@supabase/supabase-js": "^2.116.0",
     "clsx": "^2.1.1",
     "lucide-react": "^1.41.0",
     "next": "14.2.35",
     "react": "^18",
     "react-dom": "^18",
+    "server-only": "^0.0.1",
     "tailwind-merge": "^3.6.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
     "@types/node": "^24.13.6",
+    "@types/pg": "^8.23.1",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@vitejs/plugin-react": "^6.1.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.35",
+    "pg": "^8.23.0",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",

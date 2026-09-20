@@ -4,8 +4,9 @@ A business owner answers questions about his shop and leaves with management
 software ready to install on the shop computer, plus a serial number. This
 document is for whoever picks the work up next.
 
-Status: **B0**. The route, the two layouts and the shell exist; the questions,
-the preview, saving and everything after are still to come.
+Status: **B0**. The route, the two layouts, the shell and the database
+connection exist; the questions, the preview, saving and everything after are
+still to come.
 
 ## The one rule
 
@@ -27,7 +28,10 @@ reads every migration and fails the build if a place to put them appears.
 | `app/[lang]/builder/` | The route. One folder, three public addresses |
 | `builder/copy/` | Builder text, French first, then English and Arabic |
 | `builder/ui/` | Builder screens (Next-aware, browser side) |
-| `builder/db/migrations/` | Schema and settings seed, plain SQL |
+| `builder/db/migrations/` | Schema, settings seed and policies, plain SQL |
+| `builder/db/client.ts` | The browser's connection, and the anonymous session |
+| `builder/db/server.ts` | The visitor's connection and the staff one. Server only |
+| `builder/db/settings.ts` | Prices, trial length and open packs, read and cached |
 | `app-ui/` | Screens shared with the desktop app. No Next, Supabase or browser storage imports |
 | `lib/i18n/routes.ts` | Which slug belongs to which page, per language |
 | `scripts/check-magic-constants.mjs` | Fails the build on hardcoded prices, days or limits |
@@ -73,10 +77,28 @@ says so rather than guessing.
 | `NEXT_PUBLIC_SITE_URL` | Canonical addresses, share images | Falls back to the Vercel address |
 | `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, `CONTACT_FROM_EMAIL` | The marketing contact form | The form sends through FormSubmit from the browser |
 | `GOOGLE_SITE_VERIFICATION` | Search Console ownership | No verification tag |
+| `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` | The builder's database, from the browser | The builder says it is not ready; the marketing site is unaffected |
+| `SUPABASE_SERVICE_ROLE_KEY` | Staff work, server side only | Admin work is unavailable |
+| `SUPABASE_DB_URL` | `npm run db:push` on your own machine | Migrations cannot be applied from here |
 
-Still to come, with the milestone that adds them: Supabase URL and keys (B0b),
-AI provider and key (B2), installer addresses (B3), the Ed25519 signing key
-(B5).
+Still to come, with the milestone that adds them: AI provider and key (B2),
+installer addresses (B3), the Ed25519 signing key (B5).
+
+## The database
+
+```bash
+npm run db:push        # applies builder/db/migrations, once each, in order
+npm run db:check       # proves row level security against the live database
+```
+
+`db:check` signs in anonymously the way an owner's browser does, saves a draft,
+then checks a second visitor can neither read nor change it. It removes
+everything it created. Run it after any migration that touches a policy.
+
+Two clients, and the difference matters. `sessionClient()` acts as the visitor
+and every policy applies. `adminClient()` skips them all, so it lives in
+`builder/db/server.ts` behind `import "server-only"` and is used only where
+staff work is being done.
 
 ## What is not built yet
 
