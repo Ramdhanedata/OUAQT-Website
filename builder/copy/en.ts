@@ -296,6 +296,20 @@ export const en: BuilderCopy = {
     failTooOld: "That transfer is more than {expected} days old. Make a new one, or write to us.",
   },
 
+  devices: {
+    none: "No computer yet. Yours appears here as soon as you install the software.",
+    main: "Main computer",
+    secondary: "Second computer",
+    lastSeen: "Seen on {date}",
+    release: "This computer no longer works",
+    confirm: "Free this computer? You will be able to install the software on another one.",
+    cancel: "No, keep it",
+    releasing: "One moment",
+    released: "Freed. You can install the software on another computer.",
+    tooMany: "You have already freed all the computers allowed this year. Write to us on WhatsApp and we will do it for you.",
+    failed: "Not freed. Try again, or write to us on WhatsApp.",
+  },
+
   placeholder: {
     title: "This step is coming soon",
     body: "We are preparing the questions for this step. Come back in a few days, or write to us on WhatsApp.",

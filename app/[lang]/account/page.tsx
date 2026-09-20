@@ -81,7 +81,7 @@ export default async function AccountPage({ params }: Props) {
     .eq("business_id", business.id)
     .order("created_at", { ascending: false });
 
-  const [{ data: licenceRow }, { data: lastPayment }, settings, secrets] =
+  const [{ data: licenceRow }, { data: lastPayment }, { data: deviceRows }, settings, secrets] =
     await Promise.all([
       supabase
         .from("licences")
@@ -97,6 +97,12 @@ export default async function AccountPage({ params }: Props) {
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle(),
+      supabase
+        .from("devices")
+        .select("device_id, name, role, status, last_seen")
+        .eq("business_id", business.id)
+        .eq("status", "active")
+        .order("first_seen"),
       getPublicSettings(),
       getPrivateSettings(),
     ]);
@@ -144,6 +150,12 @@ export default async function AccountPage({ params }: Props) {
               }
             : null,
         lastPaymentStatus: lastPayment?.status ?? null,
+        devices: (deviceRows ?? []).map((device) => ({
+          deviceId: device.device_id,
+          name: device.name,
+          role: device.role === "main" ? ("main" as const) : ("secondary" as const),
+          lastSeen: device.last_seen,
+        })),
         price: settings
           ? priceFor("annual", settings, business.launch_client)
           : null,

@@ -11,7 +11,9 @@
     "test:watch": "vitest",
     "check:constants": "node scripts/check-magic-constants.mjs",
     "db:push": "node --env-file-if-exists=.env.local scripts/db-push.mjs",
-    "db:check": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs"
+    "db:check": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs",
+    "licence:keys": "node scripts/licence-keys.mjs",
+    "licence:client": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/licence-client.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

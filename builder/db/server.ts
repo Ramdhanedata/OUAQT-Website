@@ -51,6 +51,25 @@ export function sessionClient(): SupabaseClient | null {
   });
 }
 
+/*
+ * The same visitor, when the caller is not a browser.
+ *
+ * A browser sends its session in a cookie. Anything else that acts for an
+ * owner, the test client that plays the desktop app today and a phone app
+ * later, sends a bearer token instead. Either way the request runs as him,
+ * with every row level security policy applying exactly as before.
+ */
+export function requestClient(request: Request): SupabaseClient | null {
+  const header = request.headers.get("authorization") ?? "";
+  if (!header.toLowerCase().startsWith("bearer ")) return sessionClient();
+  if (!supabaseConfigured) return null;
+
+  return createClient(supabaseUrl, supabaseAnonKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+    global: { headers: { Authorization: header } },
+  });
+}
+
 /** Goes past row level security. Server code only, and only for staff work. */
 export function adminClient(): SupabaseClient | null {
   const key = serviceRoleKey();

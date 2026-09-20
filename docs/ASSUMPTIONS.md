@@ -107,3 +107,10 @@ with B0b once the project exists.
   since 2022. A csv is decoded as UTF-8 here before SheetJS sees it, because
   left alone it reads Latin-1 and a header saying "Péremption" arrives as
   "PÃ©remption", no column matches it, and every expiry date goes unchecked.
+
+## Agreed, to build after B6
+
+- **Staff imported from a file**, with the same tolerance the product import
+  has: loose header matching in three languages, names trimmed, and an
+  unrecognised role defaulting to Caissier and shown for the owner to check.
+  Typing stays the default; the file is the option. Agreed 2026-09-20.

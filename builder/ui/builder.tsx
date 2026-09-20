@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
+import { record } from "@/builder/events";
 import dynamic from "next/dynamic";
 import type { ImportedProduct } from "@/builder/import/parse";
 import { LeadForm } from "./lead-form";
@@ -232,6 +233,11 @@ function Wizard({
   const [keptProducts, setKeptProducts] = useState<ImportedProduct[] | null>(null);
   const [serial, setSerial] = useState<string | null>(null);
   const wide = useWide();
+
+  /* Which step he reached, so we can see where owners stop. */
+  useEffect(() => {
+    record("reached", step, answers.pack);
+  }, [step, answers.pack]);
 
   const total = STEP_KEYS.length;
   const whatsapp = supportWhatsapp

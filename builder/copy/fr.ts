@@ -301,6 +301,20 @@ export const fr = {
     failTooOld: "Ce transfert a plus de {expected} jours. Refaites-en un, ou écrivez-nous.",
   },
 
+  devices: {
+    none: "Aucun ordinateur pour l'instant. Le vôtre apparaît ici dès que vous installez le logiciel.",
+    main: "Ordinateur principal",
+    secondary: "Deuxième ordinateur",
+    lastSeen: "Vu le {date}",
+    release: "Cet ordinateur ne fonctionne plus",
+    confirm: "Libérer cet ordinateur ? Vous pourrez installer le logiciel sur un autre.",
+    cancel: "Non, garder",
+    releasing: "Un instant",
+    released: "Libéré. Vous pouvez installer le logiciel sur un autre ordinateur.",
+    tooMany: "Vous avez déjà libéré tous les postes permis cette année. Écrivez-nous sur WhatsApp et nous le ferons pour vous.",
+    failed: "Pas libéré. Réessayez, ou écrivez-nous sur WhatsApp.",
+  },
+
   placeholder: {
     title: "Cette étape arrive bientôt",
     body: "Nous préparons les questions de cette étape. Revenez dans quelques jours, ou écrivez-nous sur WhatsApp.",

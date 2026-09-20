@@ -4,9 +4,10 @@ A business owner answers questions about his shop and leaves with management
 software ready to install on the shop computer, plus a serial number. This
 document is for whoever picks the work up next.
 
-Status: **B2**. Steps 1 and 2 are complete: the owner describes his shop,
-answers the interview, and reads back what his software will do. The import,
-the account and everything after are still to come.
+Status: **B5**. An owner can build his software, import the spreadsheet he
+already has, create an account, get a serial, pay by Bankily, and have a
+desktop computer activate against a signed licence. Staff confirm payments,
+free computers and issue renewal codes. The other three packs are B6.
 
 ## The one rule
 
@@ -38,6 +39,12 @@ reads every migration and fails the build if a place to put them appears.
 | `builder/logo/` | Cropping, resizing and thresholding the owner's logo, in his browser |
 | `builder/packs/*.json` | The question banks. Data, not code |
 | `builder/ai/` | The provider adapter, and the wall around what it may change |
+| `builder/import/` | Reading the spreadsheet an owner actually has |
+| `builder/licence/` | Status from dates, issuing and signing licence files |
+| `builder/payment/` | What is owed, and what a payment check may decide |
+| `builder/admin/` | Staff screens, behind a second factor |
+| `app-ui/codes.ts`, `app-ui/licence-file.ts` | Shared with the desktop app. Pure, offline |
+| `docs/LICENCE_API.md` | The contract the desktop app follows |
 | `lib/i18n/routes.ts` | Which slug belongs to which page, per language |
 | `scripts/check-magic-constants.mjs` | Fails the build on hardcoded prices, days or limits |
 
@@ -150,6 +157,5 @@ still works: it keeps what he wrote and tells him so.
 
 ## What is not built yet
 
-Spreadsheet import and staff (B3), account area
-and serial (B3), payments and admin (B4), the licence API, signing and renewal
-codes (B5), the other three packs (B6).
+The bakery, restaurant and warehouse packs (B6), and staff imported from a
+file, which was agreed for after B6.

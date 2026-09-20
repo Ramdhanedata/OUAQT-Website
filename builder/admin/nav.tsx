@@ -1,13 +1,12 @@
 import Link from "next/link";
 
-/*
- * Eight pages was the plan; these are the ones with something behind them.
- * A link to an empty page wastes somebody's tap on a phone in a hurry, so
- * the rest appear when they have something to show.
- */
+/* The eight pages from the brief, all of them now with something behind them. */
 const pages = [
   { href: "/admin", label: "Paiements" },
   { href: "/admin/clients", label: "Clients" },
+  { href: "/admin/postes", label: "Postes" },
+  { href: "/admin/codes", label: "Codes" },
+  { href: "/admin/parcours", label: "Parcours" },
   { href: "/admin/demandes", label: "Demandes" },
   { href: "/admin/reglages", label: "Réglages" },
   { href: "/admin/cout-ia", label: "Coût IA" },

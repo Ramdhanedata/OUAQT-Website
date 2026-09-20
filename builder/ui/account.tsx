@@ -9,7 +9,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 import type { LicenceStatus } from "@/builder/licence/status";
 import type { Price } from "@/builder/payment/pricing";
-import { plural } from "@/lib/utils";
+import { fill, plural } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 import { Pay } from "./pay";
 import { isPhone, loginFor } from "./step-account";
@@ -40,6 +40,12 @@ export type AccountState =
         graceDaysLeft: number | null;
       } | null;
       lastPaymentStatus: string | null;
+      devices: {
+        deviceId: string;
+        name: string | null;
+        role: "main" | "secondary";
+        lastSeen: string;
+      }[];
       price: Price | null;
       bankilyNumber: string | null;
       aiReadsImages: boolean;
@@ -213,7 +219,7 @@ function SignedIn({
       </section>
 
       <Subscription copy={copy} lang={lang} state={state} />
-      <Waiting copy={copy} title={copy.myAccount.myDevices} />
+      <MyDevices copy={copy} lang={lang} devices={state.devices} />
 
       <section className="space-y-3">
         <h2 className="text-xl font-semibold text-foreground">
@@ -308,6 +314,107 @@ function Subscription({
           onSent={() => setSent(true)}
         />
       ) : null}
+    </section>
+  );
+}
+
+function MyDevices({
+  copy,
+  lang,
+  devices,
+}: {
+  copy: BuilderCopy;
+  lang: Locale;
+  devices: Extract<AccountState, { kind: "signed_in" }>["devices"];
+}) {
+  const [asking, setAsking] = useState<string | null>(null);
+  const [done, setDone] = useState<Record<string, string>>({});
+  const [busy, setBusy] = useState(false);
+
+  async function release(deviceId: string) {
+    setBusy(true);
+    const response = await fetch("/api/builder/device", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ deviceId }),
+    });
+    const body = await response.json().catch(() => null);
+    setBusy(false);
+    setAsking(null);
+
+    setDone((all) => ({
+      ...all,
+      [deviceId]: response.ok
+        ? (copy.devices.released as string)
+        : body?.error === "too_many_releases"
+          ? (copy.devices.tooMany as string)
+          : (copy.devices.failed as string),
+    }));
+  }
+
+  return (
+    <section className="space-y-3">
+      <h2 className="text-xl font-semibold text-foreground">
+        {copy.myAccount.myDevices}
+      </h2>
+
+      {devices.length === 0 ? (
+        <p className="text-base leading-relaxed text-muted-foreground">
+          {copy.devices.none}
+        </p>
+      ) : (
+        <ul className="divide-y divide-border">
+          {devices.map((device) => (
+            <li key={device.deviceId} className="space-y-2 py-3">
+              <p className="text-base text-foreground">
+                {device.name ??
+                  (device.role === "main" ? copy.devices.main : copy.devices.secondary)}
+                <span className="text-muted-foreground">
+                  {" "}
+                  ·{" "}
+                  {fill(copy.devices.lastSeen as string, {
+                    date: new Date(device.lastSeen).toLocaleDateString(lang),
+                  })}
+                </span>
+              </p>
+
+              {done[device.deviceId] ? (
+                <p className="text-base leading-relaxed text-muted-foreground">
+                  {done[device.deviceId]}
+                </p>
+              ) : asking === device.deviceId ? (
+                /* Rule 9: anything that takes something away asks first. */
+                <div className="space-y-2">
+                  <p className="text-base leading-relaxed text-foreground">
+                    {copy.devices.confirm}
+                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    <Button
+                      type="button"
+                      variant="accent"
+                      disabled={busy}
+                      onClick={() => void release(device.deviceId)}
+                    >
+                      {busy ? copy.devices.releasing : copy.devices.release}
+                    </Button>
+                    <Button type="button" variant="outline" onClick={() => setAsking(null)}>
+                      {copy.devices.cancel}
+                    </Button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setAsking(device.deviceId)}
+                  className="min-h-[48px] text-base text-muted-foreground underline decoration-border underline-offset-4"
+                >
+                  {copy.devices.release}
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+      )}
     </section>
   );
 }
