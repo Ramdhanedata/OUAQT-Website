@@ -11,7 +11,9 @@ import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
 import dynamic from "next/dynamic";
+import type { ImportedProduct, ImportResult } from "@/builder/import/parse";
 import { LeadForm } from "./lead-form";
+import type { StaffMember } from "./step-products";
 import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
 
 const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
@@ -30,6 +32,17 @@ const Preview = dynamic(() => import("./preview").then((m) => m.Preview), {
 const StepTwo = dynamic(() => import("./step-two").then((m) => m.StepTwo), {
   ssr: false,
 });
+
+/* Step 3 brings the spreadsheet reader, which is the heaviest thing here. */
+const StepProducts = dynamic(
+  () => import("./step-products").then((m) => m.StepProducts),
+  { ssr: false }
+);
+
+const StepAccount = dynamic(
+  () => import("./step-account").then((m) => m.StepAccount),
+  { ssr: false }
+);
 
 /* The width at which questions and preview stop taking turns and sit side by side. */
 const WIDE = "(min-width: 900px)"; // not-a-rule: a layout breakpoint
@@ -50,12 +63,18 @@ export function Builder({
   enabledPacks,
   supportWhatsapp,
   maxDevices,
+  installers,
+  tutorials,
+  termsHref,
 }: {
   copy: BuilderCopy;
   locale: Locale;
   enabledPacks: Pack[];
   supportWhatsapp: string | null;
   maxDevices: number | null;
+  installers: { windows: string | null; mac: string | null };
+  tutorials: { windows: string | null; mac: string | null };
+  termsHref: string;
 }) {
   const [step, setStep] = useState<number | null>(null);
   const [offline, setOffline] = useState(false);
@@ -94,6 +113,9 @@ export function Builder({
       enabledPacks={enabledPacks}
       supportWhatsapp={supportWhatsapp}
       maxDevices={maxDevices}
+      installers={installers}
+      tutorials={tutorials}
+      termsHref={termsHref}
       answers={draft.answers}
       update={draft.update}
       saveState={draft.state}
@@ -171,6 +193,9 @@ function Wizard({
   enabledPacks,
   supportWhatsapp,
   maxDevices,
+  installers,
+  tutorials,
+  termsHref,
   answers,
   update,
   saveState,
@@ -185,6 +210,9 @@ function Wizard({
   enabledPacks: Pack[];
   supportWhatsapp: string | null;
   maxDevices: number | null;
+  installers: { windows: string | null; mac: string | null };
+  tutorials: { windows: string | null; mac: string | null };
+  termsHref: string;
   answers: DraftAnswers;
   update: (patch: DraftAnswers) => void;
   saveState: SaveState;
@@ -197,6 +225,15 @@ function Wizard({
   const [nameError, setNameError] = useState(false);
   /* Step 2 reports how many screens it has, since that depends on the answers. */
   const [interviewScreens, setInterviewScreens] = useState(1);
+  /*
+   * The product list is held here rather than in the draft. Ten thousand rows
+   * do not belong in a browser's storage, and they are written to the
+   * database the moment there is an account to attach them to.
+   */
+  const [importResult, setImportResult] = useState<ImportResult | null>(null);
+  const [keptProducts, setKeptProducts] = useState<ImportedProduct[] | null>(null);
+  const [staff, setStaff] = useState<StaffMember[]>([]);
+  const [serial, setSerial] = useState<string | null>(null);
   const wide = useWide();
 
   const total = STEP_KEYS.length;
@@ -285,15 +322,35 @@ function Wizard({
       screen={screen}
       wide={wide}
     />
+  ) : step === 2 ? (
+    <StepProducts
+      copy={copy}
+      language={locale}
+      pack={pack}
+      result={importResult}
+      onResult={(next) => {
+        setImportResult(next);
+        setKeptProducts(null);
+      }}
+      kept={keptProducts}
+      onKeep={setKeptProducts}
+      staff={staff}
+      onStaff={setStaff}
+    />
   ) : (
-    <div>
-      <h2 className="text-xl font-medium tracking-tight text-foreground">
-        {copy.placeholder.title}
-      </h2>
-      <p className="mt-3 leading-relaxed text-muted-foreground">
-        {copy.placeholder.body}
-      </p>
-    </div>
+    <StepAccount
+      copy={copy}
+      language={locale}
+      pack={pack}
+      answers={answers}
+      products={keptProducts ?? []}
+      staff={staff}
+      termsHref={termsHref}
+      installers={installers}
+      tutorials={tutorials}
+      serial={serial}
+      onSerial={setSerial}
+    />
   );
 
   return (
@@ -336,7 +393,7 @@ function Wizard({
             <div
               className={cn(
                 "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur wizard:hidden",
-                lead && "hidden"
+                (lead || step === 3) && "hidden"
               )}
             >
               <Container className="py-3">
@@ -372,7 +429,7 @@ function Wizard({
             <div
               className={cn(
                 "mt-8 hidden items-center gap-3 wizard:flex",
-                lead && "wizard:hidden"
+                (lead || step === 3) && "wizard:hidden"
               )}
             >
               <Button type="button" variant="outline" onClick={goBack} className="min-h-[48px] text-base">

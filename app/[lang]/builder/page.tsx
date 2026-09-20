@@ -51,6 +51,15 @@ export default async function BuilderPage({ params }: Props) {
       enabledPacks={enabled}
       supportWhatsapp={settings?.support_whatsapp ?? null}
       maxDevices={settings?.max_devices ?? null}
+      installers={{
+        windows: process.env.INSTALLER_URL_WINDOWS || null,
+        mac: process.env.INSTALLER_URL_MAC || null,
+      }}
+      tutorials={{
+        windows: settings?.tutorial_video_windows_url || null,
+        mac: settings?.tutorial_video_mac_url || null,
+      }}
+      termsHref={`/${params.lang}/terms`}
     />
   );
 }
