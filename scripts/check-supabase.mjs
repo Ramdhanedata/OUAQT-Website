@@ -122,10 +122,19 @@ for (const table of [
   "admin_users",
   "audit_events",
 ]) {
-  const response = await asVisitor(`${table}?select=id&limit=1`);
+  /*
+   * `select=*` rather than a column name. Not every table has an `id`:
+   * admin_users is keyed by user_id, and asking for a column that does not
+   * exist comes back as a 400 that reads exactly like a security failure.
+   */
+  const response = await asVisitor(`${table}?select=*&limit=1`);
   const empty = Array.isArray(response.body) && response.body.length === 0;
   const refused = response.status === 401 || response.status === 403;
-  record(`${table} shows a visitor nothing`, empty || refused);
+  record(
+    `${table} shows a visitor nothing`,
+    empty || refused,
+    empty || refused ? "" : `status ${response.status}`
+  );
 }
 
 console.log("\nAn owner's own draft, under an anonymous session\n");
