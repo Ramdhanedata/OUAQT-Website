@@ -7,6 +7,18 @@
  * is derived from them every time it is asked for. The one exception is
  * `suspended`, which is a decision rather than a date.
  *
+ * What happens when an annual licence runs out:
+ *
+ *   for renewal_grace_days   `renewal_due`. The software works exactly as
+ *                            before and reminds him once a day, with the
+ *                            number to pay and the amount.
+ *   after that               `expired`. Read-only, like an unpaid trial:
+ *                            everything already recorded stays visible, no
+ *                            new sales, and paying unlocks it again at once.
+ *
+ * Nothing is ever deleted, at any point. The grace length is delivered to the
+ * desktop app inside its licence file so it behaves the same with no network.
+ *
  * not-a-rule-file: this decides shape, never how long anything lasts. Every
  * duration arrives as an argument, read from settings.
  */
@@ -33,6 +45,11 @@ export type Licence = {
   suspended?: boolean;
 };
 
+/** The durations that shape the answers, all of them read from settings. */
+export type LicenceRules = {
+  renewalGraceDays: number;
+};
+
 const MS_IN_A_DAY = 86_400_000;
 
 /**
@@ -41,7 +58,11 @@ const MS_IN_A_DAY = 86_400_000;
  * A trial that has not started yet is still a trial: the owner has his
  * software and has not run it anywhere, which is not something to punish.
  */
-export function statusOf(licence: Licence, now: Date): LicenceStatus {
+export function statusOf(
+  licence: Licence,
+  now: Date,
+  rules: LicenceRules
+): LicenceStatus {
   if (licence.suspended) return "suspended";
 
   if (licence.plan === "perpetual") return "active";
@@ -53,12 +74,38 @@ export function statusOf(licence: Licence, now: Date): LicenceStatus {
 
   // annual, and the extra device that follows it
   if (!licence.endsAt) return "active";
+  if (now < licence.endsAt) return "active";
+
   /*
-   * Tacite reconduction: the day it ends it is due for renewal, not dead. The
-   * shop keeps working and the owner is asked to pay, which is the difference
-   * between a business relationship and a locked till.
+   * Tacite reconduction, with a limit. The day it ends it is due for renewal,
+   * not dead: the shop keeps working and the owner is reminded. A month later
+   * it goes read-only, which is a stop he has been warned about daily rather
+   * than a till that dies at midnight over an unpaid invoice.
    */
-  return now < licence.endsAt ? "active" : "renewal_due";
+  return now < graceEnd(licence.endsAt, rules) ? "renewal_due" : "expired";
+}
+
+/** When the grace after an annual licence runs out. */
+export function graceEnd(endsAt: Date, rules: LicenceRules): Date {
+  return new Date(endsAt.getTime() + rules.renewalGraceDays * MS_IN_A_DAY);
+}
+
+/**
+ * Days left before the software goes read-only, for the daily reminder.
+ * Null when it is not in that state.
+ */
+export function graceDaysLeft(
+  licence: Licence,
+  now: Date,
+  rules: LicenceRules
+): number | null {
+  if (statusOf(licence, now, rules) !== "renewal_due" || !licence.endsAt) {
+    return null;
+  }
+  const left = Math.ceil(
+    (graceEnd(licence.endsAt, rules).getTime() - now.getTime()) / MS_IN_A_DAY
+  );
+  return Math.max(0, left);
 }
 
 /** Whole days from now until the end, never negative. Null when there is no end. */
@@ -73,7 +120,18 @@ export function trialEnd(startsAt: Date, trialDays: number): Date {
   return new Date(startsAt.getTime() + trialDays * MS_IN_A_DAY);
 }
 
-/** Whether the software may still be written to, as opposed to read. */
+/**
+ * Whether the software may still be written to, as opposed to read.
+ *
+ * Read-only never means hidden. Every sale, every debt and every stock count
+ * already recorded stays on screen whatever the licence says, and paying puts
+ * the rest back the same minute.
+ */
 export function canStillWork(status: LicenceStatus): boolean {
   return status === "trial" || status === "active" || status === "renewal_due";
+}
+
+/** Whether the owner should be reminded today, and how urgently. */
+export function needsReminder(status: LicenceStatus): boolean {
+  return status === "renewal_due";
 }

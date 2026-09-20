@@ -23,6 +23,8 @@ const money = z.number().nonnegative().nullable();
 
 const publicSettings = z.object({
   trial_days: z.number().int().positive(),
+  /* How long a lapsed annual licence keeps working before it goes read-only. */
+  renewal_grace_days: z.number().int().nonnegative(),
   max_devices: z.number().int().positive(),
   enabled_packs: z.array(z.string()),
   support_whatsapp: z.string(),

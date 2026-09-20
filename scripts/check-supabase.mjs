@@ -42,6 +42,7 @@ async function asVisitor(path) {
 
 const publicKeys = [
   "trial_days",
+  "renewal_grace_days",
   "max_devices",
   "enabled_packs",
   "support_whatsapp",
@@ -194,8 +195,16 @@ if (signIn?.user) {
     for (const id of [signIn.user.id, strangerSignIn?.user?.id]) {
       if (id) await admin.auth.admin.deleteUser(id);
     }
-    const { data: left } = await admin.from("builder_drafts").select("id");
-    record("the test left nothing behind", left?.length === 0);
+    /*
+     * Its own rows, not the whole table. Asserting the table is empty passes
+     * once, on an untouched project, and fails ever after for the wrong
+     * reason: somebody else's draft is not this test's mess.
+     */
+    const { data: left } = await admin
+      .from("builder_drafts")
+      .select("id")
+      .eq("id", draftId);
+    record("the test left nothing behind", (left?.length ?? 0) === 0);
   } else {
     console.log(
       "\n  SUPABASE_SERVICE_ROLE_KEY is not set, so the probe rows stay behind."

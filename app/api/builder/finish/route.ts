@@ -7,6 +7,7 @@ import {
 } from "@/app-ui/config";
 import { packs } from "@/app-ui/packs";
 import { adminClient, sessionClient } from "@/builder/db/server";
+import { getPublicSettings } from "@/builder/db/settings";
 import { applyAnswers } from "@/builder/packs/bank";
 import { interviewFor } from "@/builder/packs";
 import { encryptSerial, serialSecretIsSet } from "@/builder/serial/cipher";
@@ -150,10 +151,40 @@ export async function POST(request: Request) {
     }
   }
 
+  /*
+   * Which side of the launch offer he falls on is decided once, here, and
+   * kept. Counting again later would move his price under him as other people
+   * sign up, and the offer promises the opposite.
+   *
+   * Two owners finishing in the same second could both see the same count and
+   * both be counted in. At a hundred clients that is a rounding error in our
+   * favour, not a hole worth a lock.
+   */
+  const settings = await getPublicSettings();
+  const { count } = await admin
+    .from("businesses")
+    .select("id", { count: "exact", head: true });
+
+  const limit = settings?.launch_clients_limit ?? 0;
+  const launchClient = (count ?? limit) < limit;
+  const freezeYears = settings?.launch_price_freeze_years ?? null;
+  const frozenUntil =
+    launchClient && freezeYears
+      ? new Date(
+          Date.UTC(
+            new Date().getUTCFullYear() + freezeYears,
+            new Date().getUTCMonth(),
+            new Date().getUTCDate()
+          )
+        ).toISOString()
+      : null;
+
   const { data: business, error: businessError } = await supabase
     .from("businesses")
     .insert({
       owner_id: owner.id,
+      launch_client: launchClient,
+      price_frozen_until: frozenUntil,
       name_latin: data.business.nameLatin,
       name_arabic: data.business.nameArabic ?? null,
       pack: data.pack,
@@ -210,6 +241,21 @@ export async function POST(request: Request) {
     await admin.from("businesses").delete().eq("id", business.id);
     return NextResponse.json({ error: "no_serial" }, { status: 502 });
   }
+
+  /*
+   * A trial licence with no dates on it. It starts when a desktop device
+   * activates for the first time, not when the account is made: an owner who
+   * builds his software on Friday and installs it on Monday should not lose
+   * the weekend.
+   */
+  await admin.from("licences").insert({
+    business_id: business.id,
+    plan: "trial",
+    status: "trial",
+    starts_at: null,
+    ends_at: null,
+    renewal_secret: crypto.randomUUID(),
+  });
 
   if (data.products.length > 0) {
     await supabase.from("products_initial").insert(
