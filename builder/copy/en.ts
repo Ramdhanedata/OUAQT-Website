@@ -139,8 +139,14 @@ export const en: BuilderCopy = {
     template: "Download the template",
     choose: "Choose my file",
     reading: "Reading your file",
-    ready: "{count} products ready.",
-    toFix: "{count} rows to fix.",
+    ready: {
+      one: "{count} product ready.",
+      other: "{count} products ready.",
+    },
+    toFix: {
+      one: "{count} row to fix.",
+      other: "{count} rows to fix.",
+    },
     problem: "Row {row}: {what} Check the {column} column.",
     missingName: "name missing.",
     missingPrice: "price missing.",

@@ -13,7 +13,6 @@ import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/sto
 import dynamic from "next/dynamic";
 import type { ImportedProduct, ImportResult } from "@/builder/import/parse";
 import { LeadForm } from "./lead-form";
-import type { StaffMember } from "./step-products";
 import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
 
 const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
@@ -232,7 +231,6 @@ function Wizard({
    */
   const [importResult, setImportResult] = useState<ImportResult | null>(null);
   const [keptProducts, setKeptProducts] = useState<ImportedProduct[] | null>(null);
-  const [staff, setStaff] = useState<StaffMember[]>([]);
   const [serial, setSerial] = useState<string | null>(null);
   const wide = useWide();
 
@@ -334,8 +332,8 @@ function Wizard({
       }}
       kept={keptProducts}
       onKeep={setKeptProducts}
-      staff={staff}
-      onStaff={setStaff}
+      staff={answers.staff ?? []}
+      onStaff={(next) => update({ staff: next })}
     />
   ) : (
     <StepAccount
@@ -344,7 +342,7 @@ function Wizard({
       pack={pack}
       answers={answers}
       products={keptProducts ?? []}
-      staff={staff}
+      staff={answers.staff ?? []}
       termsHref={termsHref}
       installers={installers}
       tutorials={tutorials}
@@ -393,7 +391,12 @@ function Wizard({
             <div
               className={cn(
                 "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur wizard:hidden",
-                (lead || step === 3) && "hidden"
+                /*
+                 * The last step keeps Retour until the serial exists: until
+                 * then he may still want to fix a product or a name. Once it
+                 * is issued there is nothing after it to continue to.
+                 */
+                (lead || (step === 3 && serial)) && "hidden"
               )}
             >
               <Container className="py-3">
@@ -429,7 +432,7 @@ function Wizard({
             <div
               className={cn(
                 "mt-8 hidden items-center gap-3 wizard:flex",
-                (lead || step === 3) && "wizard:hidden"
+                (lead || (step === 3 && serial)) && "wizard:hidden"
               )}
             >
               <Button type="button" variant="outline" onClick={goBack} className="min-h-[48px] text-base">

@@ -34,6 +34,13 @@ export type DraftAnswers = {
   /* Step 2: one entry per question the owner answered. */
   interview?: Answers;
   /*
+   * Step 3's staff list. A few names, so it belongs in the draft and survives
+   * a reload. The product list does not: ten thousand rows have no business
+   * in a browser's storage, and they are written to the database the moment
+   * there is an account to attach them to.
+   */
+  staff?: { name: string; role: "manager" | "cashier" }[];
+  /*
    * What the AI worked out from a sentence he wrote, already validated
    * against the schema on the server. Kept apart from `interview` because it
    * is a configuration fragment rather than an answer to a question.

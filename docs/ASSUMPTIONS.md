@@ -83,3 +83,27 @@ with B0b once the project exists.
 - **`c_devices` builds its options from `max_devices` in settings** rather than
   the "1, 2" written in the brief, so raising the device limit cannot leave the
   question contradicting the licence.
+
+## 2026-09-20, B3
+
+- **Plurals are handled by `Intl.PluralRules`, not a library.** This was the
+  open question about an ICU formatter. The copy supplies whichever forms its
+  language uses and `other` is the fallback every language must have. French
+  needs one and other; Arabic also uses zero, two, few and many, and a test
+  checks all of them. No dependency, nothing to keep up to date.
+- **Configurations and serials are written by the server, never by the owner's
+  browser.** Their tables are select-only for owners, which was right and
+  which my first version of the finish route ignored. The configuration is
+  what the desktop app runs on and the serial is what unlocks it: neither may
+  be written by a browser holding a public key.
+- **Finishing twice does not make two businesses.** A retry returns the serial
+  the first attempt issued, and a failure part way through deletes the
+  half-built business rather than leaving a shell that blocks the next try.
+- **The product list lives in memory until the account exists.** Ten thousand
+  rows do not belong in browser storage. The staff list does live in the
+  draft, because it is a few names. An owner who reloads between the import
+  and the account loses the import and has to choose the file again.
+- **SheetJS comes from the SheetJS CDN, not npm.** The npm copy has been stale
+  since 2022. A csv is decoded as UTF-8 here before SheetJS sees it, because
+  left alone it reads Latin-1 and a header saying "Péremption" arrives as
+  "PÃ©remption", no column matches it, and every expiry date goes unchecked.

@@ -143,18 +143,38 @@ function AccountForm({
       const { data: current } = await supabase.auth.getSession();
 
       /*
-       * An owner who started without an account already has an anonymous
-       * session, and his draft belongs to it. Updating that session keeps the
-       * same user, so nothing he answered is orphaned.
+       * Three ways in, and picking the wrong one is how an owner gets told
+       * his own number is taken:
+       *
+       *   anonymous session   he started without an account, and his draft
+       *                       belongs to that session. Updating it keeps the
+       *                       same user, so nothing he answered is orphaned.
+       *   real session        he is already signed in. Nothing to create.
+       *   no session          a new account.
        */
-      const signedUp = current.session?.user
+      const user = current.session?.user;
+      const signedUp = user?.is_anonymous
         ? await supabase.auth.updateUser({ email, password })
-        : await supabase.auth.signUp({ email, password });
+        : user
+          ? { error: null }
+          : await supabase.auth.signUp({ email, password });
 
       if (signedUp.error) {
+        /*
+         * Supabase says this several ways depending on which call refused:
+         * "User already registered", "email address is already in use", and a
+         * bare 422 on an account that exists. They all mean one thing to the
+         * owner, and it is not "something went wrong".
+         */
         const message = signedUp.error.message.toLowerCase();
+        const taken =
+          message.includes("already") ||
+          message.includes("registered") ||
+          message.includes("in use") ||
+          signedUp.error.status === 422;
+
         setError(
-          message.includes("already") || message.includes("registered")
+          taken
             ? (copy.account.errorTaken as string)
             : (copy.account.errorGeneric as string)
         );

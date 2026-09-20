@@ -144,8 +144,14 @@ export const fr = {
     template: "Télécharger le modèle",
     choose: "Choisir mon fichier",
     reading: "Lecture de votre fichier",
-    ready: "{count} produits prêts.",
-    toFix: "{count} lignes à corriger.",
+    ready: {
+      one: "{count} produit prêt.",
+      other: "{count} produits prêts.",
+    },
+    toFix: {
+      one: "{count} ligne à corriger.",
+      other: "{count} lignes à corriger.",
+    },
     problem: "Ligne {row} : {what} Vérifiez la colonne {column}.",
     missingName: "nom manquant.",
     missingPrice: "prix manquant.",
@@ -226,8 +232,19 @@ export const fr = {
   },
 } as const;
 
+/*
+ * Each group is a flat set of strings, with two exceptions that the type
+ * allows for: a list (the landing's steps) and a set of plural forms, which
+ * is a map of Intl.PluralRules categories to sentences.
+ */
 export type BuilderCopy = {
   readonly [K in keyof typeof fr]: (typeof fr)[K] extends string
     ? string
-    : { readonly [P in keyof (typeof fr)[K]]: (typeof fr)[K][P] extends string ? string : readonly string[] };
+    : {
+        readonly [P in keyof (typeof fr)[K]]: (typeof fr)[K][P] extends string
+          ? string
+          : (typeof fr)[K][P] extends readonly string[]
+            ? readonly string[]
+            : Readonly<Record<string, string>>;
+      };
 };

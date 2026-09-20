@@ -7,7 +7,7 @@ import type { BuilderCopy } from "@/builder/copy";
 import { downloadTemplate, readProductFile } from "@/builder/import/file";
 import type { ImportedProduct, ImportResult, ProblemCode } from "@/builder/import/parse";
 import { Button } from "@/components/ui/button";
-import { fill } from "@/lib/utils";
+import { fill, plural } from "@/lib/utils";
 import { ChoiceButton, Field, TextInput } from "./fields";
 
 /*
@@ -137,6 +137,7 @@ function Products({
       {result && !reading ? (
         <Outcome
           copy={copy}
+          language={language}
           result={result}
           kept={kept}
           onKeep={onKeep}
@@ -148,11 +149,13 @@ function Products({
 
 function Outcome({
   copy,
+  language,
   result,
   kept,
   onKeep,
 }: {
   copy: BuilderCopy;
+  language: AppLanguage;
   result: ImportResult;
   kept: ImportedProduct[] | null;
   onKeep: (products: ImportedProduct[] | null) => void;
@@ -180,9 +183,9 @@ function Outcome({
   return (
     <div className="space-y-4">
       <p className="text-base text-foreground">
-        {fill(copy.products.ready as string, { count: result.products.length })}{" "}
+        {plural(language, result.products.length, copy.products.ready)}{" "}
         {result.problems.length > 0
-          ? fill(copy.products.toFix as string, { count: result.problems.length })
+          ? plural(language, result.problems.length, copy.products.toFix)
           : null}
       </p>
 

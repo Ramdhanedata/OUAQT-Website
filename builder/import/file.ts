@@ -56,7 +56,22 @@ export async function readProductFile(
   pack: Pack
 ): Promise<ImportResult> {
   const { read, utils } = await import("xlsx");
-  const workbook = read(await file.arrayBuffer(), { cellDates: false });
+
+  /*
+   * A .csv is text and is decoded here, as UTF-8, before SheetJS sees it.
+   *
+   * Left to itself SheetJS reads a csv as Latin-1, so a file whose header
+   * says "Péremption" arrives as "PÃ©remption", no column matches it, and
+   * every expiry date in the file goes unchecked. Asking for codepage 65001
+   * does not help either: the browser build ships without the codepage
+   * tables and says so in the console. Handing it a string sidesteps both.
+   *
+   * A .xlsx carries its own encoding, so it goes through as bytes.
+   */
+  const isText = /\.(csv|txt|tsv)$/i.test(file.name) || file.type.startsWith("text/");
+  const workbook = isText
+    ? read(await file.text(), { type: "string", cellDates: false })
+    : read(await file.arrayBuffer(), { cellDates: false });
   const sheet = workbook.Sheets[workbook.SheetNames[0]];
   if (!sheet) {
     return {

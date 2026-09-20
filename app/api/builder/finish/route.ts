@@ -16,10 +16,19 @@ import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
  * The end of the interview: a business, a configuration, and the number he
  * will type into the shop computer.
  *
- * It runs as the owner, not as staff, so row level security is doing the work
- * rather than trust. The one thing it borrows the service role for is asking
- * whether a serial is already taken, which is a question about somebody
- * else's row and which no owner may ask directly.
+ * Who writes what, and why the split matters:
+ *
+ *   as the owner   his business, his products, his staff. These are his, row
+ *                  level security checks every one, and he can edit them.
+ *
+ *   as the server  the configuration and the serial. Those tables are select
+ *                  only for owners on purpose. The configuration is what the
+ *                  desktop app runs on and the serial is what unlocks it, so
+ *                  neither may be written by a browser holding a public key.
+ *                  They are written here, after validation, or not at all.
+ *
+ * Calling it twice does not make a second business. A retry after a failure
+ * returns what the first attempt built.
  */
 
 const product = z.object({
@@ -111,6 +120,36 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_configuration" }, { status: 400 });
   }
 
+  const admin = adminClient();
+  if (!admin) {
+    return NextResponse.json({ error: "no_database" }, { status: 501 });
+  }
+
+  /*
+   * An owner who taps Create twice, or comes back after a failure, gets the
+   * business he already has rather than a second one beside it.
+   */
+  const { data: existing } = await supabase
+    .from("businesses")
+    .select("id")
+    .eq("owner_id", owner.id)
+    .limit(1)
+    .maybeSingle();
+
+  if (existing) {
+    const { data: already } = await admin
+      .from("serials")
+      .select("serial_cipher")
+      .eq("business_id", existing.id)
+      .maybeSingle();
+
+    if (already?.serial_cipher) {
+      const { decryptSerial } = await import("@/builder/serial/cipher");
+      const serial = await decryptSerial(already.serial_cipher);
+      if (serial) return NextResponse.json({ businessId: existing.id, serial });
+    }
+  }
+
   const { data: business, error: businessError } = await supabase
     .from("businesses")
     .insert({
@@ -126,23 +165,29 @@ export async function POST(request: Request) {
     .single();
 
   if (businessError || !business) {
+    // The owner sees one sentence; the log has to say what actually broke,
+    // or the next person debugging this is guessing.
+    console.error("builder/finish: business not saved", businessError);
     return NextResponse.json({ error: "not_saved" }, { status: 502 });
   }
 
-  await supabase.from("configurations").insert({
+  const { error: configError } = await admin.from("configurations").insert({
     business_id: business.id,
     version: 1,
     schema_version: String(configuration.data.version),
     config: configuration.data,
   });
+  if (configError) {
+    console.error("builder/finish: configuration not saved", configError);
+    await admin.from("businesses").delete().eq("id", business.id);
+    return NextResponse.json({ error: "not_saved" }, { status: 502 });
+  }
 
   /*
    * Asking whether a serial is taken is a question about another owner's row,
    * so it is asked with the service role and never from the browser.
    */
-  const admin = adminClient();
   const serial = await makeUniqueSerial(async (candidate) => {
-    if (!admin) return false;
     const hash = await hashSerial(candidate);
     const { data: clash } = await admin
       .from("serials")
@@ -152,13 +197,17 @@ export async function POST(request: Request) {
     return Boolean(clash);
   });
 
-  const { error: serialError } = await supabase.from("serials").insert({
+  const { error: serialError } = await admin.from("serials").insert({
     business_id: business.id,
     serial_hash: await hashSerial(serial),
     serial_cipher: await encryptSerial(serial),
   });
 
   if (serialError) {
+    console.error("builder/finish: serial not saved", serialError);
+    // Without a serial the business is of no use to anyone, and leaving it
+    // behind would make his next attempt find an empty shell and stop.
+    await admin.from("businesses").delete().eq("id", business.id);
     return NextResponse.json({ error: "no_serial" }, { status: 502 });
   }
 
