@@ -71,7 +71,7 @@ function Landing({ copy, onStart }: { copy: BuilderCopy; onStart: () => void }) 
         <p className="mt-6 text-balance text-lg leading-relaxed text-muted-foreground">
           {copy.landing.intro}
         </p>
-        <p className="mt-4 text-sm text-muted-foreground">
+        <p className="mt-4 text-base text-muted-foreground">
           {copy.landing.duration} · {copy.landing.noAccount}
         </p>
 
@@ -87,7 +87,7 @@ function Landing({ copy, onStart }: { copy: BuilderCopy; onStart: () => void }) 
         </ol>
 
         <div className="mt-10">
-          <Button type="button" variant="accent" onClick={onStart} className="w-full justify-center sm:w-auto">
+          <Button type="button" variant="accent" onClick={onStart} className="min-h-[48px] w-full justify-center text-base sm:w-auto">
             {copy.landing.start}
             <ArrowRight className="h-4 w-4 rtl:rotate-180" />
           </Button>
@@ -124,7 +124,7 @@ function Wizard({
     <div className="pb-28 wizard:pb-0" lang={locale}>
       <Container className="py-8 wizard:py-12">
         {offline ? (
-          <p className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-sm text-foreground">
+          <p className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-base text-foreground">
             {copy.shell.offline}
           </p>
         ) : null}
@@ -146,7 +146,7 @@ function Wizard({
               href={help}
               target="_blank"
               rel="noreferrer"
-              className="mt-6 inline-flex items-center gap-2 text-sm text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
+              className="mt-6 inline-flex min-h-[48px] items-center gap-2 text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
             >
               <MessageCircle className="h-4 w-4 text-accent" />
               {copy.shell.help}
@@ -158,7 +158,7 @@ function Wizard({
                 <button
                   type="button"
                   onClick={() => setPreviewOpen(true)}
-                  className="mb-2 h-10 w-full rounded-full border border-border text-sm text-muted-foreground"
+                  className="mb-2 h-12 w-full rounded-full border border-border text-base text-muted-foreground"
                 >
                   {copy.shell.preview}
                 </button>
@@ -166,7 +166,7 @@ function Wizard({
                   <button
                     type="button"
                     onClick={onBack}
-                    className="flex h-12 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-border px-5 text-sm font-medium text-foreground"
+                    className="flex h-12 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-border px-5 text-base font-medium text-foreground"
                   >
                     <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
                     {copy.shell.back}
@@ -174,7 +174,7 @@ function Wizard({
                   <button
                     type="button"
                     onClick={onNext}
-                    className="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 text-sm font-medium text-accent-foreground"
+                    className="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 text-base font-medium text-accent-foreground"
                   >
                     {copy.shell.next}
                     <ArrowRight className="h-4 w-4 rtl:rotate-180" />
@@ -185,11 +185,11 @@ function Wizard({
 
             {/* From 900px the same two actions sit under the question. */}
             <div className="mt-8 hidden items-center gap-3 wizard:flex">
-              <Button type="button" variant="outline" onClick={onBack}>
+              <Button type="button" variant="outline" onClick={onBack} className="min-h-[48px] text-base">
                 <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
                 {copy.shell.back}
               </Button>
-              <Button type="button" variant="accent" onClick={onNext}>
+              <Button type="button" variant="accent" onClick={onNext} className="min-h-[48px] text-base">
                 {copy.shell.next}
                 <ArrowRight className="h-4 w-4 rtl:rotate-180" />
               </Button>
@@ -208,7 +208,7 @@ function Wizard({
             <button
               type="button"
               onClick={() => setPreviewOpen(false)}
-              className="mb-6 inline-flex items-center gap-2 self-start text-sm text-muted-foreground"
+              className="mb-6 inline-flex min-h-[48px] items-center gap-2 self-start text-base text-muted-foreground"
             >
               <X className="h-4 w-4" />
               {copy.shell.close}
@@ -234,7 +234,7 @@ function Progress({
 }) {
   return (
     <div>
-      <p className="text-sm text-muted-foreground">
+      <p className="text-base text-muted-foreground">
         {fill(copy.shell.stepOf as string, { current: step + 1, total })}
       </p>
       <h1 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
@@ -258,10 +258,10 @@ function Progress({
 function PreviewPanel({ copy }: { copy: BuilderCopy }) {
   return (
     <div className="rounded-2xl border border-border bg-muted/40 p-6">
-      <p className="text-xs font-medium uppercase tracking-[0.2em] text-muted-foreground">
+      <p className="text-base font-medium text-foreground">
         {copy.shell.previewTitle}
       </p>
-      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+      <p className="mt-4 text-base leading-relaxed text-muted-foreground">
         {copy.shell.previewEmpty}
       </p>
     </div>
