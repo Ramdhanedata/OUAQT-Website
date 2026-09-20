@@ -1,3 +1,5 @@
+import { translateSlug } from "./routes";
+
 export const locales = ["en", "fr", "ar"] as const;
 
 export type Locale = (typeof locales)[number];
@@ -37,6 +39,11 @@ export function localeHref(locale: Locale, path: string): string {
 /**
  * Swaps the locale segment of a path, so the switcher can link to the current
  * page in another language. "/fr/projects/gmm-mining" -> "/ar/projects/gmm-mining"
+ *
+ * Most pages use the same path in every language. The few that do not (the
+ * builder, the account area) also get their slug translated, so switching
+ * language from /fr/creer-mon-logiciel lands on /en/build-my-software rather
+ * than a page that does not exist.
  */
 export function withLocale(pathname: string, locale: Locale): string {
   const segments = pathname.split("/").filter(Boolean);
@@ -44,6 +51,10 @@ export function withLocale(pathname: string, locale: Locale): string {
     segments[0] = locale;
   } else {
     segments.unshift(locale);
+  }
+  if (segments.length > 1) {
+    const translated = translateSlug(segments[1], locale);
+    if (translated) segments[1] = translated;
   }
   return `/${segments.join("/")}`;
 }
