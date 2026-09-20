@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { projects } from "@/lib/data/projects";
 import { locales } from "@/lib/i18n/config";
 import { siteUrl } from "@/lib/i18n/metadata";
+import { localisedHref } from "@/lib/i18n/routes";
 
 /*
  * Lists every localised page so search engines can find all of them, and
@@ -21,7 +22,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: "/privacy", priority: 0.3 },
   ];
 
-  return locales.flatMap((lang) =>
+  /*
+   * The builder is not in the list above because its address is a different
+   * word in each language. Same page, three URLs, declared as translations of
+   * each other so they are not read as three competing pages.
+   */
+  const builder = locales.map((lang) => ({
+    url: `${base}${localisedHref(lang, "builder")}`,
+    lastModified: new Date(),
+    changeFrequency: "monthly" as const,
+    priority: 0.9,
+    alternates: {
+      languages: Object.fromEntries(
+        locales.map((l) => [l, `${base}${localisedHref(l, "builder")}`])
+      ),
+    },
+  }));
+
+  const pages = locales.flatMap((lang) =>
     paths.map(({ path, priority }) => ({
       url: `${base}/${lang}${path}`,
       lastModified: new Date(),
@@ -34,4 +52,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       },
     }))
   );
+
+  return [...builder, ...pages];
 }

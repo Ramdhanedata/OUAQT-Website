@@ -29,8 +29,10 @@ export function generateMetadata({ params }: Props): Metadata {
   const copy = dict.projects[project.slug];
 
   return {
-    title: `${copy.title} | ${dict.common.brand}`,
-    description: copy.summary,
+    // The visible heading tells the story; the search result has to earn the
+    // click in sixty characters, so each case study carries its own pair.
+    title: `${copy.metaTitle} | ${dict.common.brand}`,
+    description: copy.metaDescription,
     alternates: alternatesFor(params.lang, `/projects/${project.slug}`),
   };
 }

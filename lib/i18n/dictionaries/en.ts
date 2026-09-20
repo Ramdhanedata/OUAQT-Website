@@ -4,12 +4,12 @@
  */
 export const en = {
   meta: {
-    siteTitle: "OUAQT | Custom software for what slows your business down",
-    siteDescription: "OUAQT finds the bottlenecks that slow a business down, then builds the software that removes them: pharmacy tills and records, hotel billing, restaurant and bakery tills, transport, workshops and warehouses. On site or remotely. First visit free.",
-    projectsTitle: "Projects | OUAQT",
-    projectsDescription: "22 systems in daily use at mines, pharmacies, hotels, transport companies, restaurants and schools. See what each one fixed.",
-    aboutTitle: "About OUAQT",
-    aboutDescription: "Why OUAQT exists and who is behind it. OUAQT finds what slows businesses down and builds the software that fixes it, founded by Elboumby Aumar Ramdhane.",
+    siteTitle: "Build your shop's software | OUAQT",
+    siteDescription: "Answer a few questions and leave with the software your shop runs on, ready to install. It works without internet and your data stays on your computer.",
+    projectsTitle: "Projects: 22 systems in daily use | OUAQT",
+    projectsDescription: "Pharmacies, hotels, transport, restaurants, mines and schools. See what each system changed, then build your own from a few questions.",
+    aboutTitle: "About OUAQT and its founder",
+    aboutDescription: "Why OUAQT builds management software for small businesses, from the online builder to custom projects. Founded by Elboumby Aumar Ramdhane.",
     contactTitle: "Contact | OUAQT",
     contactDescription: "Tell us what takes your team too long. We usually reply within one business day, by email or on WhatsApp.",
     termsTitle: "Licence and terms of use | OUAQT",
@@ -18,9 +18,9 @@ export const en = {
     privacyTitle: "Privacy policy | OUAQT",
     privacyDescription:
       "What OUAQT does with personal information, on this website and inside the systems we build.",
-    pricingTitle: "Pricing | OUAQT",
+    pricingTitle: "Pricing: software you build online, and custom projects | OUAQT",
     pricingDescription:
-      "An installation fee paid once, then an annual licence, at the same prices for every OUAQT product. The software runs on your own computers with no internet needed for daily work.",
+      "Every OUAQT price in one place: the software you build online, then installation and the annual licence for custom projects.",
     shareLine: "22 systems in daily use across mining, pharmacy, hospitality, transport, food service and education.",
     shareAlt: "OUAQT: we find what slows your business down, and build the software that fixes it.",
     shareReach: "We work on site or remotely.",
@@ -506,6 +506,8 @@ export const en = {
    */
   projects: {
     "gmm-mining": {
+      metaTitle: "GMM: daily reconciliation from 4 hours to 25 minutes",
+      metaDescription: "Block tracking in three languages that brought the daily reconciliation down from four hours to twenty five minutes, on the mine site.",
       title: "GMM Bloc Tracking & Reconciliation",
       summary: "Bloc tracking in three languages that cut daily reconciliation from four hours to twenty-five minutes.",
       description: "Every day, GMM spent four hours reconciling bloc movements by hand. We replaced that with a system built around how the field crews already work, in the three languages they use.",
@@ -530,6 +532,8 @@ export const en = {
       ],
     },
     "pharmacy-pos": {
+      metaTitle: "Pharmacy software: registers that fill themselves",
+      metaDescription: "A pharmacy till that fills the medicine registers instead of the staff. The same software can now be built online, from a few questions.",
       title: "Pharmacy Till & Medicine Records",
       summary: "A pharmacy till that fills in medicine records by itself, so staff stop retyping them.",
       description: "Keeping medicine records meant hours of the same typing every day. Now the system fills them in from the pharmacy's own history, and staff only deal with the unusual cases.",
@@ -554,6 +558,8 @@ export const en = {
       ],
     },
     "hotel-operations": {
+      metaTitle: "Hotel billing with taxes and commissions worked out",
+      metaDescription: "Hotel billing where the software works out the taxes and commissions on every invoice, instead of someone redoing them by hand.",
       title: "Hotel Billing & Operations",
       summary: "Hotel billing where the software works out taxes and commissions on every bill.",
       description: "Working out taxes and commissions by hand kept causing billing mistakes. The system applies the hotel's own rules, the same way, on every bill.",
@@ -578,6 +584,8 @@ export const en = {
       ],
     },
     "transport-manifests": {
+      metaTitle: "Transport manifests prepared for you",
+      metaDescription: "Checkpoint manifests prepared from the trip's own data, instead of an hour of paperwork before every departure.",
       title: "Transport Manifests & Checkpoints",
       summary: "Checkpoint papers prepared from trip data, instead of an hour of paperwork before every departure.",
       description: "Each trip needed about an hour of paperwork before the vehicle could leave. Now the system prepares those documents from information the company already has.",
@@ -602,6 +610,8 @@ export const en = {
       ],
     },
     "school-operations": {
+      metaTitle: "SchoolOS: pupils, fees and attendance in one place",
+      metaDescription: "One system for pupils, teachers, fees, attendance and the school shop, running without internet on the school's own computers.",
       title: "SchoolOS Student Records & Tuition",
       summary: "One system for students, teachers, fees, attendance and the school shop, working without internet on the school's own computers.",
       description: "A private school group kept enrolments, fees, attendance and shop sales in separate books and spreadsheets. SchoolOS brings it all together, on the computers the staff already use.",
@@ -626,6 +636,8 @@ export const en = {
       ],
     },
     "restaurant-pos": {
+      metaTitle: "Restaurant, cafe and bakery till",
+      metaDescription: "A till built for the real rhythm of the room, at the table and at the counter. Coming soon in the OUAQT software builder.",
       title: "Restaurant & Café Till",
       summary: "A till built around how the room really runs, for table service and the bakery counter.",
       description: "Orders, the kitchen and the day's takings were tracked in three different places. The till brings them together and adapts to the pace of each site.",

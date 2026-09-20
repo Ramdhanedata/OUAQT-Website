@@ -7,7 +7,9 @@ import { FeaturedProjects } from "@/components/home/featured-projects";
 import { Process } from "@/components/home/process";
 import { Faq } from "@/components/home/faq";
 import { CallToAction } from "@/components/home/cta";
+import { JsonLd } from "@/components/seo/json-ld";
 import { getDictionary } from "@/lib/i18n";
+import { softwareApplicationData } from "@/lib/seo/software-application";
 import type { Locale } from "@/lib/i18n/config";
 
 /*
@@ -22,6 +24,7 @@ export default function Home({ params }: { params: { lang: Locale } }) {
 
   return (
     <>
+      <JsonLd data={softwareApplicationData(params.lang, dict)} />
       <Hero dict={dict} lang={params.lang} />
       <ImpactBar dict={dict} />
       <Problem dict={dict} />

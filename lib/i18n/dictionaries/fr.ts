@@ -2,12 +2,12 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "OUAQT | Logiciels sur mesure pour ce qui ralentit votre entreprise",
-    siteDescription: "OUAQT repère ce qui ralentit une entreprise, puis construit le logiciel qui règle le problème : caisse et registres de pharmacie, facturation d'hôtel, caisse de restaurant et de boulangerie, transport, ateliers et entrepôts. Sur place ou à distance. Première visite gratuite.",
-    projectsTitle: "Projets | OUAQT",
-    projectsDescription: "22 systèmes utilisés chaque jour dans des mines, des pharmacies, des hôtels, des sociétés de transport, des restaurants et des écoles. Voyez ce que chacun a changé.",
-    aboutTitle: "À propos d'OUAQT",
-    aboutDescription: "Pourquoi OUAQT existe et qui est derrière. OUAQT repère ce qui ralentit les entreprises et construit le logiciel qui règle le problème, fondée par Elboumby Aumar Ramdhane.",
+    siteTitle: "Créez le logiciel de votre commerce | OUAQT",
+    siteDescription: "Répondez à quelques questions et repartez avec le logiciel de votre commerce, prêt à installer. Il fonctionne sans internet, vos données restent chez vous.",
+    projectsTitle: "Projets : 22 systèmes utilisés chaque jour | OUAQT",
+    projectsDescription: "Pharmacies, hôtels, transport, restaurants, mines et écoles. Voyez ce que chaque système a changé, puis créez le vôtre en quelques questions.",
+    aboutTitle: "À propos d'OUAQT et de son fondateur",
+    aboutDescription: "Pourquoi OUAQT construit des logiciels de gestion pour les commerces, du créateur en ligne aux projets sur mesure. Fondée par Elboumby Aumar Ramdhane.",
     contactTitle: "Contact | OUAQT",
     contactDescription: "Dites-nous ce qui prend trop de temps à votre équipe. Nous répondons en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
@@ -16,9 +16,9 @@ export const fr: Dictionary = {
     privacyTitle: "Politique de confidentialité | OUAQT",
     privacyDescription:
       "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
-    pricingTitle: "Tarifs | OUAQT",
+    pricingTitle: "Tarifs : logiciel en ligne et projets sur mesure | OUAQT",
     pricingDescription:
-      "Une installation payée une fois, puis une licence annuelle, aux mêmes tarifs pour tous les logiciels OUAQT. Le logiciel tourne sur vos ordinateurs, sans internet pour le travail de tous les jours.",
+      "Les tarifs OUAQT au même endroit : le logiciel que vous créez en ligne, puis l'installation et la licence annuelle des projets sur mesure.",
     shareLine: "22 systèmes utilisés au quotidien dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
     shareAlt: "OUAQT : nous repérons ce qui ralentit votre entreprise, et nous construisons le logiciel qui règle le problème.",
     shareReach: "Nous travaillons sur place ou à distance.",
@@ -493,6 +493,8 @@ export const fr: Dictionary = {
 
   projects: {
     "gmm-mining": {
+      metaTitle: "GMM : le rapprochement passé de 4 heures à 25 minutes",
+      metaDescription: "Un suivi des blocs en trois langues qui a ramené le rapprochement quotidien de quatre heures à vingt-cinq minutes, sur le site de la mine.",
       title: "GMM Suivi des blocs & rapprochement",
       summary: "Un suivi des blocs en trois langues qui a ramené le rapprochement quotidien de quatre heures à vingt-cinq minutes.",
       description: "Chaque jour, GMM passait quatre heures à rapprocher les mouvements de blocs à la main. Nous avons remplacé ce travail par un système construit autour de la façon dont les équipes de terrain travaillent déjà, dans les trois langues qu'elles utilisent.",
@@ -517,6 +519,8 @@ export const fr: Dictionary = {
       ],
     },
     "pharmacy-pos": {
+      metaTitle: "Logiciel de pharmacie : registres remplis tout seuls",
+      metaDescription: "Une caisse de pharmacie qui remplit les registres de médicaments à la place du personnel. Le même logiciel se crée maintenant en ligne, en quelques questions.",
       title: "Caisse & registres de pharmacie",
       summary: "Une caisse de pharmacie qui remplit toute seule les registres de médicaments, pour que le personnel arrête de les retaper.",
       description: "Tenir les registres de médicaments, c'était des heures de la même saisie chaque jour. Le système les remplit maintenant à partir de l'historique de la pharmacie, et le personnel ne s'occupe plus que des cas particuliers.",
@@ -541,6 +545,8 @@ export const fr: Dictionary = {
       ],
     },
     "hotel-operations": {
+      metaTitle: "Facturation d'hôtel : taxes et commissions calculées",
+      metaDescription: "Une facturation d'hôtel où le logiciel calcule les taxes et les commissions sur chaque facture, au lieu de les reprendre à la main.",
       title: "Facturation & exploitation hôtelière",
       summary: "Une facturation d'hôtel où le logiciel calcule les taxes et les commissions sur chaque facture.",
       description: "Calculer les taxes et les commissions à la main causait sans cesse des erreurs de facturation. Le système applique les règles de l'hôtel, de la même façon, sur chaque facture.",
@@ -565,6 +571,8 @@ export const fr: Dictionary = {
       ],
     },
     "transport-manifests": {
+      metaTitle: "Manifestes de transport préparés automatiquement",
+      metaDescription: "Des manifestes de contrôle préparés à partir des données du voyage, au lieu d'une heure de paperasse avant chaque départ.",
       title: "Manifestes de transport & points de contrôle",
       summary: "Des manifestes de contrôle préparés à partir des données du voyage, au lieu d'une heure de paperasse avant chaque départ.",
       description: "Chaque voyage demandait environ une heure de paperasse avant que le véhicule puisse partir. Le système prépare maintenant ces documents à partir des informations que la société a déjà.",
@@ -589,6 +597,8 @@ export const fr: Dictionary = {
       ],
     },
     "school-operations": {
+      metaTitle: "SchoolOS : élèves, frais et présences au même endroit",
+      metaDescription: "Un seul système pour les élèves, les enseignants, les frais, les présences et la boutique de l'école, qui fonctionne sans internet.",
       title: "SchoolOS, dossiers élèves et scolarité",
       summary: "Un seul système pour les élèves, les enseignants, les frais, les présences et la boutique de l'école, qui fonctionne sans internet sur les ordinateurs de l'école.",
       description: "Un groupe scolaire privé suivait les inscriptions, les frais, les présences et les ventes de la boutique dans des registres et des tableurs séparés. SchoolOS réunit tout au même endroit, sur les ordinateurs que le personnel utilise déjà.",
@@ -613,6 +623,8 @@ export const fr: Dictionary = {
       ],
     },
     "restaurant-pos": {
+      metaTitle: "Caisse restaurant, café et boulangerie",
+      metaDescription: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir. Bientôt disponible dans le créateur de logiciels OUAQT.",
       title: "Caisse restaurant & café",
       summary: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir de la boulangerie.",
       description: "Les commandes, la cuisine et la recette du jour étaient suivies à trois endroits différents. La caisse réunit tout et s'adapte au rythme de chaque établissement.",
