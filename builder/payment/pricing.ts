@@ -72,7 +72,4 @@ export function priceFor(
 }
 
 /** What an owner thinks in: the yearly price divided by twelve. */
-export function monthlyEquivalent(annual: number): number {
-  const MONTHS = 12; // not-a-rule: a year has twelve months
-  return annual / MONTHS;
-}
+export { perMonth as monthlyEquivalent } from "@/app-ui/money";

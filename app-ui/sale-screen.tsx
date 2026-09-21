@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import type { Configuration } from "./config";
 import { getAppCopy } from "./copy";
 import { formatAmount, formatMoney, formatQuantity, isRightToLeft } from "./format";
+import { lineTotal, sum } from "./money";
 import type { SampleProduct } from "./sample-data";
 import type { ReceiptLine } from "./receipt";
 
@@ -56,7 +57,7 @@ export function SaleScreen({
   const remove = (id: string) =>
     setTicket((lines) => lines.filter((l) => l.id !== id));
 
-  const total = ticket.reduce((sum, l) => sum + l.quantity * l.unitPrice, 0);
+  const total = sum(ticket.map((l) => lineTotal(l.quantity, l.unitPrice)));
   const tracksStock = configuration.pack !== "restaurant";
 
   return (
@@ -122,7 +123,7 @@ export function SaleScreen({
                       <span className="text-base font-medium">{line.name}</span>
                       <span className="text-base font-semibold">
                         <bdi dir="ltr">
-                          {formatAmount(line.quantity * line.unitPrice, language)}
+                          {formatAmount(lineTotal(line.quantity, line.unitPrice), language)}
                         </bdi>
                       </span>
                     </div>

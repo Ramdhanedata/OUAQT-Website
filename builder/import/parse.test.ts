@@ -59,7 +59,7 @@ describe("reading a file", () => {
     expect(result.products[0]).toMatchObject({
       row: 2,
       name: "Savon antiseptique",
-      price: 1200.5,
+      price: 120050,
       quantity: 24,
       expiry: "2026-12-31",
       batch: "A12",

@@ -1,7 +1,13 @@
 import type { AppLanguage } from "./config";
+import { toMajor, type Minor } from "./money";
 
 /*
  * Numbers and money, written the way each language writes them.
+ *
+ * Every amount that comes in here is an integer of the smallest unit, as
+ * money is stored everywhere else. The division into ouguiyas happens at the
+ * last possible moment, for display, and the result is never used to
+ * calculate anything.
  *
  * Arabic gets Western digits on purpose. Shop staff read prices off invoices,
  * calculators and phone screens that all use them, and the receipt printer has
@@ -16,20 +22,20 @@ const numberLocale: Record<AppLanguage, string> = {
 
 const DECIMALS = 2; // not-a-rule: MRU is written with two decimals
 
-export function formatAmount(value: number, language: AppLanguage): string {
+export function formatAmount(minor: Minor, language: AppLanguage): string {
   return new Intl.NumberFormat(numberLocale[language], {
     minimumFractionDigits: DECIMALS,
     maximumFractionDigits: DECIMALS,
-  }).format(value);
+  }).format(toMajor(minor));
 }
 
 /** An amount with its currency, as it appears on a receipt or a total. */
 export function formatMoney(
-  value: number,
+  minor: Minor,
   language: AppLanguage,
   currency = "MRU"
 ): string {
-  return `${formatAmount(value, language)} ${currency}`;
+  return `${formatAmount(minor, language)} ${currency}`;
 }
 
 export function formatQuantity(value: number, language: AppLanguage): string {

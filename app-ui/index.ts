@@ -9,6 +9,7 @@ export * from "./packs";
 export * from "./config";
 export * from "./copy";
 export * from "./format";
+export * from "./money";
 export * from "./sample-data";
 export { Receipt, RECEIPT_WIDTH, type ReceiptLine } from "./receipt";
 export { SaleScreen } from "./sale-screen";

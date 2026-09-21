@@ -7,6 +7,7 @@ import {
   formatQuantity,
   isRightToLeft,
 } from "./format";
+import { lineTotal, sum } from "./money";
 import { Scaled } from "./scaled";
 
 /*
@@ -62,7 +63,7 @@ export function Receipt({
    * "sensible default", he thinks the thing is broken.
    */
   const when = at ?? new Date();
-  const total = lines.reduce((sum, l) => sum + l.quantity * l.unitPrice, 0);
+  const total = sum(lines.map((l) => lineTotal(l.quantity, l.unitPrice)));
 
   return (
     <Scaled width={RECEIPT_WIDTH}>
@@ -140,7 +141,7 @@ export function Receipt({
                 </Ltr>
               </span>
               <span>
-                <Ltr>{formatAmount(line.quantity * line.unitPrice, language)}</Ltr>
+                <Ltr>{formatAmount(lineTotal(line.quantity, line.unitPrice), language)}</Ltr>
               </span>
             </div>
           </div>

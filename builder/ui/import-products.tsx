@@ -1,14 +1,13 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { formatMoney, type AppLanguage } from "@/app-ui";
+import { formatMoney, fromOldOuguiya, type AppLanguage } from "@/app-ui";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import { importFields, type ColumnMap, type ImportField } from "@/builder/import/columns";
 import type { DuplicateChoice, DuplicateGroup } from "@/builder/import/duplicates";
 import { resolve } from "@/builder/import/duplicates";
 import { downloadTemplate, readWorkbook, UnreadableFile, type Workbook } from "@/builder/import/file";
-import { toNewOuguiya } from "@/builder/import/currency";
 import {
   parseProducts,
   type ImportedProduct,
@@ -390,7 +389,7 @@ function WhichMoney({
             {samples.map((product) => (
               <li key={product.row} className="text-base text-foreground">
                 {product.name}{" "}
-                <bdi dir="ltr">{formatMoney(toNewOuguiya(product.price), language)}</bdi>
+                <bdi dir="ltr">{formatMoney(fromOldOuguiya(product.price), language)}</bdi>
               </li>
             ))}
           </ul>

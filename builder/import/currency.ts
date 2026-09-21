@@ -33,6 +33,8 @@ const SUSPICIOUS_MEDIAN: Record<Pack, number> = {
   restaurant: 5_000,
   warehouse: 100_000,
 };
+/* These are read against prices as written in the file, in whole ouguiyas,
+   before anything is converted to the smallest unit. */
 
 export function mentionsOldMoney(header: string, samples: unknown[]): boolean {
   if (OLD_WORDS.test(header)) return true;

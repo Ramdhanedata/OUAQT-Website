@@ -92,7 +92,7 @@ describe("a file written in Arabic", () => {
     expect(result.products).toHaveLength(2);
     expect(result.products[0]).toMatchObject({
       name: "صابون ألفا",
-      price: 120,
+      price: 12000,
       quantity: 24,
       expiry: "2026-12-31",
     });
@@ -128,7 +128,8 @@ describe("prices that might be old ouguiyas", () => {
       ["Savon Alpha", "12000", "24"],
     ]);
     const result = parseProducts(rows, "pharmacy", { currency: "old" });
-    expect(result.products[0].price).toBe(1200);
+    /* 12000 written, old money, so 1 200 MRU, stored as 120000. */
+    expect(result.products[0].price).toBe(120000);
     expect(result.currency.ask).toBe(false);
   });
 });
@@ -223,7 +224,7 @@ describe("a csv separated by semicolons", () => {
     );
     const result = parseProducts(rows, "pharmacy");
     expect(result.products).toHaveLength(2);
-    expect(result.products[0]).toMatchObject({ name: "Savon Alpha", price: 120 });
+    expect(result.products[0]).toMatchObject({ name: "Savon Alpha", price: 12000 });
   });
 });
 

@@ -31,12 +31,34 @@ POST /api/licence/activate
 }
 ```
 
-```
-200 { "licence": "<signed>", "deviceToken": "<keep this>" }
+```jsonc
+200 {
+  "licence":     "<signed>",          // see below
+  "deviceToken": "<keep this>",       // shown once, needed to refresh
+
+  // Everything the app needs to rearrange itself, in one response, so a
+  // shop on a borrowed hotspot is online for one call and no more.
+  "configuration": { /* the builder's configuration, same schema as app-ui */ },
+  "products":      [ { "name": "...", "price": 12050, "quantity": 24, /* ... */ } ],
+  "staff":         [ { "name": "...", "role": "manager | cashier" } ],
+  "logo":          { "colour": "<signed url>", "mono": "<signed url>" } | null
+}
 404 { "error": "unknown_serial" }
 409 { "error": "device_limit", "maxDevices": 2 }
 503 { "error": "no_signing_key" }      // never on a working deployment
 ```
+
+**Prices are integers in minor units.** 1 MRU is 100, so `12050` is 120,50 MRU.
+Never a float, never a formatted string, anywhere in this API.
+
+The logo arrives as two short-lived signed URLs rather than as bytes, because
+the response is already the largest thing a shop downloads on a hotspot and
+the images are the part that can be fetched again. Fetch them during
+activation and store them locally; the URLs expire.
+
+`configuration`, `products` and `staff` are what the owner had when he
+activated. Anything he changes afterwards from his phone arrives at the next
+refresh.
 
 Keep the `deviceToken`. It is shown once and is how the app proves it is
 itself when refreshing. Store it beside the licence file.
@@ -63,8 +85,14 @@ POST /api/licence/refresh
 }
 ```
 
-```
-200 { "licence": "<signed>" }
+```jsonc
+200 {
+  "licence": "<signed>",
+  // Present only when they have changed since the version the app names.
+  "configuration": { /* ... */ } | null,
+  "products":      [ /* ... */ ]  | null,
+  "staff":         [ /* ... */ ]  | null
+}
 403 { "error": "wrong_token" }
 404 { "error": "unknown_device" }     // released, or never activated
 ```
@@ -75,6 +103,13 @@ have; that is what the grace days in it are for.
 
 `unknown_device` means the owner freed this computer from his account. Tell
 him it was released and offer to activate again.
+
+### Not built yet
+
+As of 2026-09-21 activation returns `licence` and `deviceToken` only. The
+configuration, products, staff and logo above are the agreed contract and are
+built before D2 of the desktop app. Nothing in the desktop app should be
+written against the smaller shape.
 
 ## The licence file
 

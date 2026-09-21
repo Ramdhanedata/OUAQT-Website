@@ -98,16 +98,17 @@ describe("money and counts are written differently", () => {
     // ordinary one. Worth pinning: a thermal printer with a narrow codepage
     // may not have that character, which is a note in docs/ASSUMPTIONS.md
     // for whoever writes the printing side.
-    expect(formatAmount(1234.5, "fr")).toBe("1\u202f234,50");
+    // 123450 of the smallest unit is 1 234,50 MRU.
+    expect(formatAmount(123450, "fr")).toBe("1\u202f234,50");
     expect(formatQuantity(24, "fr")).toBe("24");
   });
 
   it("uses Western digits in Arabic", () => {
-    expect(formatMoney(640, "ar")).toMatch(/^640,00 MRU$/);
+    expect(formatMoney(64000, "ar")).toMatch(/^640,00 MRU$/);
   });
 
   it("writes English amounts the English way", () => {
-    expect(formatAmount(1234.5, "en")).toBe("1,234.50");
+    expect(formatAmount(123450, "en")).toBe("1,234.50");
   });
 
   it("writes a date a shopkeeper can read at a glance", () => {

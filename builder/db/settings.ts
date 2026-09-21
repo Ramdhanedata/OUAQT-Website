@@ -19,7 +19,8 @@ const HOW_OFTEN_TO_REREAD_SECONDS = 300; // not-a-rule: cache lifetime, not a bu
 
 const rows = z.array(z.object({ key: z.string(), value: z.unknown() }));
 
-const money = z.number().nonnegative().nullable();
+/* An integer of the smallest unit. 1500000 is 15 000 MRU. */
+const money = z.number().int().nonnegative().nullable();
 
 const publicSettings = z.object({
   trial_days: z.number().int().positive(),
@@ -111,15 +112,6 @@ export async function getPublicSettings(): Promise<PublicSettings | null> {
 /** Which packs the builder currently opens. Empty when settings are unreadable. */
 export async function getEnabledPacks(): Promise<string[]> {
   return (await getPublicSettings())?.enabled_packs ?? [];
-}
-
-/*
- * A yearly price said the way an owner thinks about it. He does not compare
- * annual licences; he asks what it costs a month.
- */
-export function monthlyEquivalent(annual: number): number {
-  const MONTHS_IN_A_YEAR = 12; // not-a-rule: a year has twelve months
-  return annual / MONTHS_IN_A_YEAR;
 }
 
 /** How long the free trial runs, or null when settings cannot be read. */

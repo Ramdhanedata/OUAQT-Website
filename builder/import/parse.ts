@@ -1,5 +1,6 @@
 import type { Pack } from "@/app-ui/packs";
 import { findColumns, type ColumnMap, type ImportField } from "./columns";
+import { toMajor, toMinor } from "@/app-ui/money";
 import { currencyDoubt, toNewOuguiya, type CurrencyDoubt } from "./currency";
 import { findDuplicates, type DuplicateGroup } from "./duplicates";
 import {
@@ -201,7 +202,11 @@ export function parseProducts(
       return;
     }
 
-    const price = options.currency === "old" ? toNewOuguiya(read) : read;
+    /*
+     * Converted to the smallest unit here and nowhere else, after the old
+     * ouguiya question is settled, so every price downstream is an integer.
+     */
+    const price = toMinor(options.currency === "old" ? toNewOuguiya(read) : read);
 
     const rawQuantity = cell(row, columns, "quantity");
     const counted = parseQuantity(rawQuantity);
@@ -274,7 +279,13 @@ export function parseProducts(
             pack,
             priceHeader: label(columns, "price"),
             priceCells,
-            prices: products.map((product) => product.price),
+            /*
+             * In whole ouguiyas, because that is what the question is about:
+             * whether the numbers in his file are ten times too big. Passing
+             * the stored amounts would make every ordinary price look
+             * suspicious by a factor of a hundred.
+             */
+            prices: products.map((product) => toMajor(product.price)),
           }),
     duplicates: findDuplicates(products),
   };
