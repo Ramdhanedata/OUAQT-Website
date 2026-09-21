@@ -6,6 +6,7 @@ import { founder } from "@/lib/data/founder";
 import { LinkedInIcon } from "@/components/ui/social-icons";
 import { getDictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
+import { localisedHref } from "@/lib/i18n/routes";
 import { ArrowRight, Mail, MapPin } from "lucide-react";
 import Image from "next/image";
 import { alternatesFor } from "@/lib/i18n/metadata";
@@ -82,6 +83,32 @@ export default function AboutPage({ params }: Props) {
             <p className="mt-6 leading-relaxed text-muted-foreground">
               {dict.about.body2}
             </p>
+          </FadeIn>
+        </Container>
+      </Section>
+
+      {/* How the bespoke work turned into a builder anyone can use. */}
+      <Section className="border-t border-border">
+        <Container>
+          <FadeIn>
+            <h2 className="max-w-2xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              {dict.about.storyHeading}
+            </h2>
+            <p className="mt-8 max-w-2xl leading-relaxed text-muted-foreground">
+              {dict.about.storyBody1}
+            </p>
+            <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
+              {dict.about.storyBody2}
+            </p>
+            <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
+              {dict.about.storyBody3}
+            </p>
+            <div className="mt-8">
+              <Button href={localisedHref(params.lang, "builder")} variant="accent">
+                {dict.builderHome.heroPrimary}
+                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+              </Button>
+            </div>
           </FadeIn>
         </Container>
       </Section>

@@ -352,79 +352,140 @@ export const en = {
     updatedDate: "September 2026",
     terms: {
       title: "Licence and terms of use",
-      intro: "These terms cover software OUAQT builds and installs for you. They sit alongside the written agreement for your project. Where the two differ, your agreement wins.",
-      ownership: {
-        h: "We own the software",
-        b: "OUAQT owns the system, its source code, its design and its documentation, along with anything added to it later. Paying for a project does not transfer that ownership.",
+      intro:
+        "These terms cover two different things. Part one is about the software you build yourself on this site. Part two is about the projects we build and install at your premises. Part three applies to both.",
+      selfServePart: {
+        h: "Part one: the software you build online",
+        b: "This part applies as soon as you build software on this site and receive a serial number.",
+      },
+      trial: {
+        h: "The free trial",
+        b: "Your software can be tried free for {trialDays} days. The trial starts the day you activate it on your computer, not the day you download it. During the trial everything works. At the end, until anything is paid, the software turns read-only: you can see and export your data, you can no longer enter new data.",
+      },
+      selfLicence: {
+        h: "What you are buying",
+        b: "You are not buying the software, you are buying the right to use it in your business, on at most {devices} devices. The annual licence renews each year and can be cancelled before the renewal date. The quarterly licence works the same way, by quarter. The permanent licence is paid once and does not renew.",
+      },
+      payment: {
+        h: "Payment",
+        b: "Payment is made by Bankily, to the number shown in the software and on this site. You send us the transaction reference and we confirm the payment by hand, usually the same day. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
+      },
+      grace: {
+        h: "If a renewal is paid late",
+        b: "Your licence does not stop on its due date. You have {graceDays} days during which the software keeps working normally, with a daily reminder showing the amount and the Bankily number. After that the software turns read-only, as at the end of a trial. As soon as the payment is confirmed, everything opens again immediately. Your data is never deleted, however late the payment.",
+      },
+      devices: {
+        h: "Your devices",
+        b: "Your licence covers {devices} computers. If you change machine, you release the old one from your account, up to the number of releases a year shown in your account. Beyond that, write to us and we will do it for you. Reinstalling the software on the same computer does not use up a device.",
+      },
+      selfData: {
+        h: "Your data does not reach us",
+        b: "Your sales, your stock, your movements and your customers' accounts stay on your computers. Our servers do not receive them, and no part of the software sends them. What we hold is limited to what it takes to build your software and manage your licence: your account, your answers to the questions, the configuration that comes out of them, your logo, the product list you imported at the start, your serial numbers, your devices and your payments.",
+      },
+      selfSupport: {
+        h: "What the licence includes",
+        b: "Software updates, support over WhatsApp, and fixing whatever does not work as stated. Installation is yours: you download and you install. If you would rather we came and did it, that is an installation visit, charged separately. Backing up your data happens on your own media and is yours to do: the software helps you do it, and we keep no copy.",
+      },
+      selfChanges: {
+        h: "What the licence does not include",
+        b: "A trade the builder does not cover yet, or a way of working its questions do not provide for, is a bespoke project and is quoted separately.",
+      },
+      bespokePart: {
+        h: "Part two: the projects we build and install",
+        b: "This part applies to systems we design and install at your premises. It accompanies the written contract for your project. Where the two differ, your contract prevails.",
       },
       licence: {
-        h: "You hold a licence to use it",
-        b: "You receive a non-exclusive licence to use the software inside your own business, on up to {devices} devices at the same site. The annual licence renews automatically each year by tacit renewal and can be cancelled before the renewal date. The perpetual licence is paid once and does not renew.",
-      },
-      restrictions: {
-        h: "What the licence does not allow",
-        b: "The licence is for your business alone. Under it you may not:",
-        items: [
-          "sell, rent, lend or otherwise pass the system to anyone else",
-          "give access to another business, including a related company, without our written agreement",
-          "copy the software, or install it on more devices than your licence covers",
-          "take it apart, decompile it, or attempt to recover the source code",
-          "remove or alter any OUAQT name or notice inside it",
-          "use it to build or assist a competing product",
-        ],
-      },
-      yourData: {
-        h: "Your data stays yours",
-        b: "Everything your business puts into the system, and everything we migrate into it, belongs to you. We do not sell it, do not use it for anything beyond running and supporting your system, and never mix it with another client's. Ask for a copy at any time and we hand it over.",
+        h: "Your licence to use it",
+        b: "You receive a non-exclusive licence to use the software within your business, on at most {devices} devices at one site. The annual licence renews each year and can be cancelled before the renewal date. The perpetual licence is paid once and does not renew.",
       },
       corrections: {
         h: "Corrections",
-        b: "While the annual licence is renewed, we correct anything wrong or slow in what we delivered at no charge. Under the perpetual licence those corrections are included for {months} months. They do not cover changes made by someone else, or hardware and network faults outside the software.",
+        b: "While the annual licence is renewed, we fix anything wrong or slow in what we delivered, at no charge. With the perpetual licence those fixes are included for {months} months. They do not cover changes made by a third party, nor hardware or network failures outside the software.",
       },
       support: {
         h: "What the licence covers",
-        b: "Installation, staff training and data migration are paid once, through the installation fee or the perpetual licence price. The annual licence then includes updates, the product catalogue where the product has one, off-site backup, support, and modifications to existing behaviour on request, for as long as it is renewed. The perpetual licence includes the same for {months} months only, after which the software keeps running with no further payment and no further service. A new module is always quoted separately, and OUAQT tells you before starting whether a request is a modification or a new module.",
+        b: "Installation, training your staff and bringing your old records across are paid once, through the installation fee or the price of the perpetual licence. The annual licence then includes updates, the product catalogue where the software has one, support, and changes to existing behaviour on request, for as long as it is renewed. The perpetual licence includes the same services for {months} months only, after which the software keeps working with no further payment and no service at all. A new module is always quoted separately, and we tell you before starting whether your request is a change or a new module.",
+      },
+      yourData: {
+        h: "Your data stays yours",
+        b: "Everything your business enters into the system, and everything we migrate into it, belongs to you. We do not sell it, we use it only to run and support your system, and we never mix it with another client's data. Ask for a copy whenever you want and we will hand it over.",
       },
       termination: {
         h: "Late renewal and the end of the licence",
-        b: "If the annual licence is renewed late, entering new data is suspended until it is paid. Reading and exporting your data is never blocked. The licence can also end if these terms are broken in a serious way and the problem is not put right after we raise it, and in every case we give you a complete copy of your data.",
+        b: "If the annual licence is renewed late, entering new data is suspended until payment. Reading and exporting your data is never blocked. The licence can also end if these terms are seriously breached and the situation is not put right after we raise it. In every case, we hand you a full copy of your data.",
+      },
+      commonPart: {
+        h: "Part three: what applies in both cases",
+        b: "The rules below apply to any OUAQT software, however you obtained it.",
+      },
+      ownership: {
+        h: "The software belongs to us",
+        b: "OUAQT owns the software, its source code, its design and its documentation, along with anything added to it later. Paying for a licence or a project does not transfer that ownership.",
+      },
+      restrictions: {
+        h: "What the licence does not allow",
+        b: "The licence is for your business alone. Accordingly, you may not:",
+        items: [
+          "sell, rent, lend or transfer the software to anyone else",
+          "give access to another business, including a related company, without our written agreement",
+          "copy the software or install it on more devices than your licence covers",
+          "take it apart, decompile it or try to recover its source code",
+          "remove or alter any OUAQT notice or name it carries",
+          "use it to create or assist a competing product",
+        ],
       },
       law: {
         h: "Governing law",
-        b: "These terms are governed by the law of the Islamic Republic of Mauritania, and any dispute is heard by the courts of Nouakchott.",
+        b: "These terms are governed by the law of the Islamic Republic of Mauritania, and any dispute goes before the courts of Nouakchott.",
       },
     },
     privacy: {
       title: "Privacy policy",
       intro:
-        "What OUAQT does with personal information, both on this website and inside the systems we build.",
+        "What OUAQT holds about you, and what it never has. This page covers this site, the software builder on it, and the systems we install at your premises.",
       collect: {
-        h: "What this website collects",
-        b: "Only what you type into the contact form: your name, your email address, your message, and which language you were reading in. There are no advertising trackers and no third-party analytics on this site.",
+        h: "What this site collects",
+        b: "On ordinary pages, only what you type into the contact form: your name, your email address or phone, your message and the language you were reading. This site carries no advertising tracker and no third-party analytics.",
       },
-      why: {
-        h: "Why we collect it",
-        b: "To read your enquiry and reply to it. Nothing else. You are not added to any mailing list.",
+      builder: {
+        h: "When you build software",
+        b: "To build your software and manage your licence, we keep: the account you open, your answers to the questions, the configuration that comes out of them, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the computers you activate and your payments.",
+      },
+      neverReceived: {
+        h: "What we never receive",
+        b: "Once the software is installed, your sales, your stock, your movements and your customers' accounts stay on your computers. Our servers do not receive them and no part of the software sends them. The product list you import at the start is there to prepare your software; what you sell afterwards never reaches us.",
+      },
+      ai: {
+        h: "Artificial intelligence",
+        b: "When you describe the way you work in your own words, that sentence may be sent to an artificial intelligence service to be turned into settings, and what it proposes is then checked against our own rules before anything is applied. Nothing else is sent to it: not your product list, not your staff, not your payment receipts. The builder works entirely without this feature, and your tap answers never go through it.",
+      },
+      payments: {
+        h: "Payments",
+        b: "You pay by Bankily, straight from your phone. We see neither your code nor your balance. We keep the transaction reference you type, the amount expected, and the receipt you attach, for as long as it takes to confirm the payment and account for your licence.",
+      },
+      where: {
+        h: "Where this is kept",
+        b: "On servers in Ireland, at our database host, and on the Vercel network that serves this site. Both work for us and are not allowed to use your information for their own purposes.",
       },
       sharing: {
-        h: "Who else sees it",
-        b: "Your message passes through the service that delivers our email so it can reach our inbox, and this site is hosted by Vercel. Neither is permitted to use your information for their own purposes. We never sell it and never pass it to anyone else.",
+        h: "Who else has access",
+        b: "Nobody else. Your contact message passes through the service that carries our email so it can reach our inbox. We never sell your information and we pass it to nobody for commercial purposes.",
       },
       retention: {
         h: "How long we keep it",
-        b: "Your message stays in our email for as long as the conversation is useful. Ask us to delete it and we will.",
+        b: "Your contact message stays in our mailbox for as long as the exchange is useful. What concerns your software and your licence is kept for as long as your account exists, because it is what lets your software be reinstalled and what proves what you paid. Ask us to delete your account and we erase it.",
       },
       clientSystems: {
-        h: "Data inside the systems we build",
-        b: "When we install software for your business, the records inside it are yours, not ours. They stay on your own computers, separate from every other client, and the licence adds an off-site backup copy. We look at them only when you ask us to for support, and never for anything else.",
+        h: "The systems we install ourselves",
+        b: "When we design and install a system for your business, the data in it is yours, not ours. It stays on your own computers, separate from any other client's. We look at it only when you ask us to for support, never for anything else.",
       },
       rights: {
         h: "Your rights",
-        b: "Ask what we hold about you, ask for a copy, or ask us to delete it. Write to the address below and we act on it.",
+        b: "Ask what we hold about you, ask for a copy of it, or ask us to delete it. Write to the address below and we act on it.",
       },
       contact: {
-        h: "Getting in touch",
-        b: "Questions about this policy, or about anything we hold, go to ouaqt.mrt@gmail.com.",
+        h: "Write to us",
+        b: "Any question about this policy, or about what we hold, to ouaqt.mrt@gmail.com.",
       },
     },
   },
@@ -457,9 +518,18 @@ export const en = {
 
   about: {
     eyebrow: "About OUAQT",
-    heading: "The same problem, in every sector we visit.",
-    body1: "Mines, pharmacies, hotels, transport companies, restaurants, schools. We keep meeting capable businesses whose most important work runs on paper, spreadsheets and group chats. Usually the software they were offered never fit the way they operate.",
-    body2: "That is the problem we work on. Every system we build fits one client: their routine, their records, and the languages their staff use.",
+    heading: "The owner knows his business better than anyone.",
+    body1:
+      "We built bespoke systems one client at a time: mining, pharmacies, hotels, transport, restaurants, schools. Every time, the same scene. A solid business, a team that knows what it is doing, and the most important work of the day resting on paper, spreadsheets and WhatsApp groups.",
+    body2:
+      "And every time, the same discovery. Nobody understood the problem better than the owner himself. Our job was never to teach him his trade, it was to turn what he already knew into software that looked like him.",
+    storyHeading: "What we did about it",
+    storyBody1:
+      "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into a builder: the owner answers questions about the way he works, and leaves with his software, ready to install, the same day.",
+    storyBody2:
+      "This is not a template touched up afterwards. It is the same software for everybody, set by his own answers: his products, his languages, his staff, the way he takes money. It runs on his own computers, with no internet, and his figures never reach us.",
+    storyBody3:
+      "The trades the builder does not cover yet, and the businesses whose work falls outside it, we still build for one at a time, as before.",
     marketHeading: "The numbers behind it.",
     stat1: "of Mauritania's GDP runs through the informal sector",
     stat2: "of the workforce is in informal employment",

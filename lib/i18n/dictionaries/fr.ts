@@ -343,30 +343,51 @@ export const fr: Dictionary = {
     updatedDate: "Septembre 2026",
     terms: {
       title: "Licence et conditions d'utilisation",
-      intro: "Ces conditions couvrent les logiciels qu'OUAQT conçoit et installe pour vous. Elles accompagnent le contrat écrit de votre projet. En cas de divergence, votre contrat prévaut.",
-      ownership: {
-        h: "Le logiciel nous appartient",
-        b: "OUAQT est propriétaire du système, de son code source, de sa conception et de sa documentation, ainsi que de tout ce qui y sera ajouté par la suite. Le paiement d'un projet ne transfère pas cette propriété.",
+      intro:
+        "Ces conditions couvrent deux choses différentes. La première partie concerne le logiciel que vous créez vous-même sur ce site. La deuxième concerne les projets que nous construisons et installons chez vous. La troisième vaut dans les deux cas.",
+      selfServePart: {
+        h: "Première partie : le logiciel que vous créez en ligne",
+        b: "Cette partie s'applique dès que vous créez un logiciel sur ce site et recevez un numéro de série.",
+      },
+      trial: {
+        h: "L'essai gratuit",
+        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours. L'essai commence le jour où vous l'activez sur votre ordinateur, pas le jour où vous le téléchargez. Pendant l'essai, tout fonctionne. À la fin, tant que rien n'est payé, le logiciel passe en lecture seule : vous voyez et vous exportez vos données, vous n'en saisissez plus de nouvelles.",
+      },
+      selfLicence: {
+        h: "Ce que vous achetez",
+        b: "Vous n'achetez pas le logiciel, vous achetez le droit de l'utiliser dans votre entreprise, sur {devices} postes au maximum. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence trimestrielle fonctionne de la même façon, par trimestre. La licence définitive se paie une fois et ne se renouvelle pas.",
+      },
+      payment: {
+        h: "Le paiement",
+        b: "Le paiement se fait par Bankily, au numéro indiqué dans le logiciel et sur ce site. Vous nous transmettez la référence de la transaction, et nous confirmons le paiement à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
+      },
+      grace: {
+        h: "Si le renouvellement est payé en retard",
+        b: "Votre licence ne s'arrête pas le jour de son échéance. Vous disposez de {graceDays} jours pendant lesquels le logiciel continue de fonctionner normalement, avec un rappel quotidien indiquant le montant et le numéro Bankily. Passé ce délai, le logiciel passe en lecture seule, comme à la fin d'un essai. Dès que le paiement est confirmé, tout se rouvre immédiatement. Vos données ne sont jamais effacées, quel que soit le retard.",
+      },
+      devices: {
+        h: "Vos postes",
+        b: "Votre licence couvre {devices} ordinateurs. Si vous changez de machine, vous libérez l'ancienne depuis votre compte, dans la limite d'un nombre de libérations par an indiqué dans votre compte. Au-delà, écrivez-nous et nous le faisons pour vous. Réinstaller le logiciel sur le même ordinateur ne consomme pas de poste.",
+      },
+      selfData: {
+        h: "Vos données ne nous parviennent pas",
+        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos ordinateurs. Nos serveurs ne les reçoivent pas, et aucune partie du logiciel ne les envoie. Ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, vos réponses aux questions, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos postes et vos paiements.",
+      },
+      selfSupport: {
+        h: "Ce que la licence comprend",
+        b: "Les mises à jour du logiciel, l'assistance par WhatsApp, et la correction de ce qui ne fonctionne pas comme annoncé. L'installation est la vôtre : vous téléchargez et vous installez. Si vous préférez que nous venions le faire, c'est une visite d'installation facturée à part. La sauvegarde de vos données se fait sur vos propres supports et relève de vous : le logiciel vous aide à la faire, nous n'en conservons aucune copie.",
+      },
+      selfChanges: {
+        h: "Ce que la licence ne comprend pas",
+        b: "Un métier que le créateur ne couvre pas encore, ou une façon de travailler que ses questions ne prévoient pas, relève d'un projet sur mesure et fait l'objet d'un devis séparé.",
+      },
+      bespokePart: {
+        h: "Deuxième partie : les projets que nous construisons et installons",
+        b: "Cette partie s'applique aux systèmes que nous concevons et installons chez vous. Elle accompagne le contrat écrit de votre projet. En cas de divergence, votre contrat prévaut.",
       },
       licence: {
-        h: "Vous disposez d'une licence d'utilisation",
+        h: "Votre licence d'utilisation",
         b: "Vous recevez une licence non exclusive pour utiliser le logiciel au sein de votre entreprise, sur {devices} postes au maximum sur un même site. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence perpétuelle se paie une fois et ne se renouvelle pas.",
-      },
-      restrictions: {
-        h: "Ce que la licence n'autorise pas",
-        b: "La licence est réservée à votre entreprise. À ce titre, vous ne pouvez pas :",
-        items: [
-          "vendre, louer, prêter ou céder le système à un tiers",
-          "en donner l'accès à une autre entreprise, y compris une société liée, sans notre accord écrit",
-          "copier le logiciel ou l'installer sur plus de postes que votre licence n'en couvre",
-          "le décomposer, le décompiler ou tenter d'en récupérer le code source",
-          "retirer ou modifier une mention ou un nom OUAQT qu'il contient",
-          "l'utiliser pour créer ou aider un produit concurrent",
-        ],
-      },
-      yourData: {
-        h: "Vos données restent les vôtres",
-        b: "Tout ce que votre entreprise saisit dans le système, et tout ce que nous y migrons, vous appartient. Nous ne le vendons pas, ne l'utilisons que pour faire fonctionner et soutenir votre système, et ne le mélangeons jamais aux données d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
       },
       corrections: {
         h: "Corrections",
@@ -374,11 +395,35 @@ export const fr: Dictionary = {
       },
       support: {
         h: "Ce que couvre la licence",
-        b: "L'installation, la formation de vos employés et la reprise des données se paient une fois, par les frais d'installation ou par le prix de la licence perpétuelle. La licence annuelle comprend ensuite les mises à jour, le catalogue produits lorsque le logiciel en a un, la sauvegarde hors site, l'assistance et les modifications de l'existant sur demande, tant qu'elle est renouvelée. La licence perpétuelle comprend les mêmes services pendant {months} mois seulement, après quoi le logiciel continue de fonctionner sans autre paiement et sans aucun service. Un nouveau module fait toujours l'objet d'un devis séparé, et OUAQT indique avant de commencer si une demande est une modification ou un nouveau module.",
+        b: "L'installation, la formation de vos employés et la reprise des données se paient une fois, par les frais d'installation ou par le prix de la licence perpétuelle. La licence annuelle comprend ensuite les mises à jour, le catalogue produits lorsque le logiciel en a un, l'assistance et les modifications de l'existant sur demande, tant qu'elle est renouvelée. La licence perpétuelle comprend les mêmes services pendant {months} mois seulement, après quoi le logiciel continue de fonctionner sans autre paiement et sans aucun service. Un nouveau module fait toujours l'objet d'un devis séparé, et nous vous indiquons avant de commencer si votre demande est une modification ou un nouveau module.",
+      },
+      yourData: {
+        h: "Vos données restent les vôtres",
+        b: "Tout ce que votre entreprise saisit dans le système, et tout ce que nous y migrons, vous appartient. Nous ne le vendons pas, nous ne l'utilisons que pour faire fonctionner et soutenir votre système, et nous ne le mélangeons jamais aux données d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
       },
       termination: {
         h: "Retard de renouvellement et fin de la licence",
-        b: "Si la licence annuelle est renouvelée en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués. La licence peut aussi prendre fin si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement, et nous vous remettons dans tous les cas une copie complète de vos données.",
+        b: "Si la licence annuelle est renouvelée en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués. La licence peut aussi prendre fin si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement. Dans tous les cas, nous vous remettons une copie complète de vos données.",
+      },
+      commonPart: {
+        h: "Troisième partie : ce qui vaut dans les deux cas",
+        b: "Les règles ci-dessous s'appliquent à tout logiciel OUAQT, quelle que soit la façon dont vous l'avez obtenu.",
+      },
+      ownership: {
+        h: "Le logiciel nous appartient",
+        b: "OUAQT est propriétaire du logiciel, de son code source, de sa conception et de sa documentation, ainsi que de tout ce qui y sera ajouté par la suite. Payer une licence ou un projet ne transfère pas cette propriété.",
+      },
+      restrictions: {
+        h: "Ce que la licence n'autorise pas",
+        b: "La licence est réservée à votre entreprise. À ce titre, vous ne pouvez pas :",
+        items: [
+          "vendre, louer, prêter ou céder le logiciel à un tiers",
+          "en donner l'accès à une autre entreprise, y compris une société liée, sans notre accord écrit",
+          "copier le logiciel ou l'installer sur plus de postes que votre licence n'en couvre",
+          "le décomposer, le décompiler ou tenter d'en récupérer le code source",
+          "retirer ou modifier une mention ou un nom OUAQT qu'il contient",
+          "l'utiliser pour créer ou aider un produit concurrent",
+        ],
       },
       law: {
         h: "Droit applicable",
@@ -388,26 +433,42 @@ export const fr: Dictionary = {
     privacy: {
       title: "Politique de confidentialité",
       intro:
-        "Ce qu'OUAQT fait des informations personnelles, sur ce site comme dans les systèmes que nous construisons.",
+        "Ce qu'OUAQT détient à votre sujet, et ce qu'il n'a jamais. Cette page couvre ce site, le créateur de logiciel qui s'y trouve, et les systèmes que nous installons chez vous.",
       collect: {
         h: "Ce que ce site collecte",
-        b: "Uniquement ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail, votre message et la langue que vous lisiez. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
+        b: "Sur les pages ordinaires, uniquement ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail ou votre téléphone, votre message et la langue que vous lisiez. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
       },
-      why: {
-        h: "Pourquoi nous le collectons",
-        b: "Pour lire votre demande et y répondre. Rien d'autre. Vous n'êtes inscrit à aucune liste de diffusion.",
+      builder: {
+        h: "Quand vous créez un logiciel",
+        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les ordinateurs que vous activez et vos paiements.",
+      },
+      neverReceived: {
+        h: "Ce que nous ne recevons jamais",
+        b: "Une fois le logiciel installé, vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos ordinateurs. Nos serveurs ne les reçoivent pas et aucune partie du logiciel ne les envoie. La liste de produits que vous importez au départ sert à préparer votre logiciel ; ce que vous vendez ensuite ne nous parvient pas.",
+      },
+      ai: {
+        h: "L'intelligence artificielle",
+        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés, ni vos justificatifs de paiement. Le créateur fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
+      },
+      payments: {
+        h: "Les paiements",
+        b: "Vous payez par Bankily, directement depuis votre téléphone. Nous ne voyons ni votre code ni votre solde. Nous conservons la référence de transaction que vous saisissez, le montant attendu, et le justificatif que vous joignez, le temps de confirmer le paiement et de justifier votre licence.",
+      },
+      where: {
+        h: "Où ces informations sont conservées",
+        b: "Sur des serveurs situés en Irlande, chez notre hébergeur de base de données, et sur le réseau de Vercel qui sert ce site. L'un et l'autre travaillent pour nous et n'ont pas le droit d'utiliser vos informations à leurs propres fins.",
       },
       sharing: {
         h: "Qui d'autre y a accès",
-        b: "Votre message transite par le service qui achemine nos e-mails afin d'arriver dans notre boîte, et ce site est hébergé par Vercel. Ni l'un ni l'autre n'est autorisé à utiliser vos informations à ses propres fins. Nous ne les vendons jamais et ne les transmettons à personne.",
+        b: "Personne d'autre. Votre message de contact transite par le service qui achemine nos e-mails pour arriver dans notre boîte. Nous ne vendons jamais vos informations et nous ne les transmettons à personne à des fins commerciales.",
       },
       retention: {
-        h: "Combien de temps nous le gardons",
-        b: "Votre message reste dans notre messagerie tant que l'échange est utile. Demandez-nous de le supprimer et nous le ferons.",
+        h: "Combien de temps nous les gardons",
+        b: "Votre message de contact reste dans notre messagerie tant que l'échange est utile. Ce qui concerne votre logiciel et votre licence est conservé tant que votre compte existe, parce que c'est ce qui permet de réinstaller votre logiciel et de prouver ce que vous avez payé. Demandez la suppression de votre compte et nous l'effaçons.",
       },
       clientSystems: {
-        h: "Les données dans les systèmes que nous construisons",
-        b: "Quand nous installons un logiciel pour votre entreprise, les données qu'il contient sont les vôtres, pas les nôtres. Elles restent sur vos propres ordinateurs, séparées de celles de tout autre client, et la licence y ajoute une copie de sauvegarde hors site. Nous ne les consultons que si vous nous le demandez pour une assistance, jamais pour autre chose.",
+        h: "Les systèmes que nous installons nous-mêmes",
+        b: "Quand nous concevons et installons un système pour votre entreprise, les données qu'il contient sont les vôtres, pas les nôtres. Elles restent sur vos propres ordinateurs, séparées de celles de tout autre client. Nous ne les consultons que si vous nous le demandez pour une assistance, jamais pour autre chose.",
       },
       rights: {
         h: "Vos droits",
@@ -448,9 +509,18 @@ export const fr: Dictionary = {
 
   about: {
     eyebrow: "À propos d'OUAQT",
-    heading: "Le même problème, dans chaque secteur où nous allons.",
-    body1: "Mines, pharmacies, hôtels, transport, restaurants, écoles. Nous rencontrons sans cesse des entreprises solides dont le travail le plus important repose sur du papier, des tableurs et des groupes de discussion. Le plus souvent, les logiciels qu'on leur a proposés ne correspondaient pas à leur façon de travailler.",
-    body2: "C'est ce problème que nous réglons. Chaque système que nous construisons est fait pour un seul client, sa routine, ses registres et les langues de son personnel.",
+    heading: "Le patron connaît son commerce mieux que personne.",
+    body1:
+      "Nous avons construit des systèmes sur mesure, un client à la fois : mines, pharmacies, hôtels, transport, restaurants, écoles. À chaque fois la même scène. Une entreprise solide, une équipe qui sait ce qu'elle fait, et le travail le plus important posé sur du papier, des tableurs et des groupes WhatsApp.",
+    body2:
+      "Et à chaque fois, la même découverte. Personne ne comprenait le problème mieux que le patron lui-même. Notre travail n'était pas de lui apprendre son métier, c'était de traduire ce qu'il savait déjà en un logiciel qui lui ressemble.",
+    storyHeading: "Ce que nous avons fait de ce constat",
+    storyBody1:
+      "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait un créateur en ligne : le patron répond à des questions sur sa façon de travailler, et il repart avec son logiciel, prêt à installer, le jour même.",
+    storyBody2:
+      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres ordinateurs, sans internet, et ses chiffres ne nous parviennent jamais.",
+    storyBody3:
+      "Les métiers que le créateur ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
     marketHeading: "Les chiffres derrière ce constat.",
     stat1: "du PIB mauritanien passe par le secteur informel",
     stat2: "de la population active occupe un emploi informel",
