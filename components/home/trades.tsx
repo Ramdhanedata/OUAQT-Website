@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { packs, type Pack } from "@/app-ui/packs";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
+import { Notify } from "@/components/packs/notify";
 
 /*
  * The four trades, and the honest state of each.
@@ -21,11 +21,13 @@ export function Trades({
   lang,
   enabledPacks,
   packHrefs,
+  packPages,
 }: {
   dict: Dictionary;
   lang: Locale;
   enabledPacks: Pack[];
   packHrefs: Record<Pack, string>;
+  packPages: Record<Pack, string>;
 }) {
   const home = dict.builderHome;
   const [asking, setAsking] = useState<Pack | "other" | null>(null);
@@ -48,7 +50,7 @@ export function Trades({
           {packs.map((pack) => {
             const open = enabledPacks.includes(pack);
             return (
-              <li key={pack}>
+              <li key={pack} className="flex flex-col">
                 {open ? (
                   <a
                     href={packHrefs[pack]}
@@ -75,13 +77,19 @@ export function Trades({
                     </span>
                   </button>
                 )}
+                <a
+                  href={packPages[pack]}
+                  className="mt-2 inline-flex min-h-[44px] items-center px-1 text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
+                >
+                  {home.tradesLearnMore}
+                </a>
               </li>
             );
           })}
         </ul>
 
         {asking && asking !== "other" ? (
-          <TellMe dict={dict} businessType={label[asking]} />
+          <Notify dict={dict} businessType={label[asking]} />
         ) : null}
 
         <div className="mt-8">
@@ -98,68 +106,5 @@ export function Trades({
         </p>
       </Container>
     </section>
-  );
-}
-
-/** A phone number for a trade that is not open yet, and nothing else. */
-function TellMe({ dict, businessType }: { dict: Dictionary; businessType: string }) {
-  const home = dict.builderHome;
-  const [phone, setPhone] = useState("");
-  const [state, setState] = useState<"idle" | "sending" | "sent" | "failed">("idle");
-
-  async function send() {
-    setState("sending");
-    try {
-      const response = await fetch("/api/builder/lead", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ businessType, phone }),
-      });
-      setState(response.ok ? "sent" : "failed");
-    } catch {
-      setState("failed");
-    }
-  }
-
-  if (state === "sent") {
-    return (
-      <p className="mt-6 text-base leading-relaxed text-foreground">
-        {home.tradesThanks}
-      </p>
-    );
-  }
-
-  return (
-    <div className="mt-6 max-w-md space-y-3 rounded-2xl border border-border p-6">
-      <p className="text-base leading-relaxed text-foreground">
-        {home.tradesLeaveNumber}
-      </p>
-      <label className="block">
-        <span className="text-base text-muted-foreground">{home.tradesPhone}</span>
-        <input
-          type="text"
-          dir="ltr"
-          inputMode="tel"
-          autoComplete="tel"
-          value={phone}
-          onChange={(event) => setPhone(event.target.value)}
-          className="mt-1 min-h-[48px] w-full rounded-lg border border-border bg-background px-4 text-base text-foreground outline-none focus:border-foreground"
-        />
-      </label>
-
-      {state === "failed" ? (
-        <p className="text-base leading-relaxed text-destructive">{home.tradesError}</p>
-      ) : null}
-
-      <Button
-        type="button"
-        variant="accent"
-        className="min-h-[48px] text-base"
-        disabled={phone.trim().length < 6 || state === "sending"}
-        onClick={() => void send()}
-      >
-        {home.tradesSend}
-      </Button>
-    </div>
   );
 }

@@ -13,7 +13,7 @@ import { JsonLd } from "@/components/seo/json-ld";
 import { getPublicSettings } from "@/builder/db/settings";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
-import { localisedHref } from "@/lib/i18n/routes";
+import { localisedHref, packRouteId } from "@/lib/i18n/routes";
 import { softwareApplicationData } from "@/lib/seo/software-application";
 
 /*
@@ -35,14 +35,18 @@ export default async function Home({ params }: { params: { lang: Locale } }) {
   );
 
   /*
-   * Every open trade points at the builder for now. When the pack pages are
-   * built each one points at its own, which is the only change here.
+   * An open trade goes straight into the builder with the trade already
+   * chosen: one tap from the home page to the first question. Its own page,
+   * which is what a search finds, sits beside it as a second link for the
+   * owner who wants to read before he starts.
    */
   const builder = localisedHref(params.lang, "builder");
-  const packHrefs = Object.fromEntries(packs.map((pack) => [pack, builder])) as Record<
-    Pack,
-    string
-  >;
+  const packHrefs = Object.fromEntries(
+    packs.map((pack) => [pack, `${builder}?pack=${pack}`])
+  ) as Record<Pack, string>;
+  const packPages = Object.fromEntries(
+    packs.map((pack) => [pack, localisedHref(params.lang, packRouteId(pack))])
+  ) as Record<Pack, string>;
 
   return (
     <>
@@ -56,6 +60,7 @@ export default async function Home({ params }: { params: { lang: Locale } }) {
         lang={params.lang}
         enabledPacks={enabled}
         packHrefs={packHrefs}
+        packPages={packPages}
       />
       <Worries dict={dict} />
       <Proof dict={dict} lang={params.lang} />

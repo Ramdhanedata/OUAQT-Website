@@ -61,6 +61,7 @@ export function Builder({
   copy,
   locale,
   enabledPacks,
+  startPack,
   supportWhatsapp,
   maxDevices,
   installers,
@@ -70,6 +71,7 @@ export function Builder({
   copy: BuilderCopy;
   locale: Locale;
   enabledPacks: Pack[];
+  startPack: Pack | null;
   supportWhatsapp: string | null;
   maxDevices: number | null;
   installers: { windows: string | null; mac: string | null };
@@ -92,6 +94,23 @@ export function Builder({
   }, []);
 
   const started = Object.keys(draft.answers).length > 0;
+
+  /*
+   * A trade's landing page sends the owner here with his trade already
+   * chosen, so he does not answer the same question twice. It is applied once
+   * the draft has been read back, and never over answers he already gave:
+   * arriving from a link is not a reason to lose an afternoon's work.
+   */
+  const [preselected, setPreselected] = useState(false);
+  useEffect(() => {
+    if (preselected || !draft.restored) return;
+    if (!startPack || !enabledPacks.includes(startPack)) return;
+    setPreselected(true);
+    if (Object.keys(draft.answers).length > 0) return;
+    draft.update({ pack: startPack });
+    setStep(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [preselected, draft.restored, startPack]);
 
   if (step === null) {
     return (

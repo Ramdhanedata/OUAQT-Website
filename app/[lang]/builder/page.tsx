@@ -8,7 +8,10 @@ import { localisedHref } from "@/lib/i18n/routes";
 import { locales } from "@/lib/i18n/config";
 import type { Metadata } from "next";
 
-type Props = { params: { lang: Locale } };
+type Props = {
+  params: { lang: Locale };
+  searchParams?: { pack?: string };
+};
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
@@ -38,17 +41,22 @@ export function generateMetadata({ params }: Props): Metadata {
  * shows "coming soon" and takes a phone number, which is the honest state of
  * a builder that cannot save anything anyway.
  */
-export default async function BuilderPage({ params }: Props) {
+export default async function BuilderPage({ params, searchParams }: Props) {
   const settings = await getPublicSettings();
   const enabled = (settings?.enabled_packs ?? []).filter((name): name is Pack =>
     (packs as readonly string[]).includes(name)
   );
+
+  /* ?pack=pharmacy, the way the four trade pages link here. */
+  const asked = searchParams?.pack;
+  const startPack = enabled.find((name) => name === asked) ?? null;
 
   return (
     <Builder
       copy={getBuilderCopy(params.lang)}
       locale={params.lang}
       enabledPacks={enabled}
+      startPack={startPack}
       supportWhatsapp={settings?.support_whatsapp ?? null}
       maxDevices={settings?.max_devices ?? null}
       installers={{

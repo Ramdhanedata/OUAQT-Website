@@ -1,3 +1,4 @@
+import type { Pack } from "@/app-ui/packs";
 import type { Locale } from "./config";
 
 /*
@@ -20,7 +21,38 @@ export const localisedRoutes = {
     ar: "build-my-software",
   },
   account: { fr: "compte", en: "account", ar: "account" },
+
+  /*
+   * One landing page per trade. These are the addresses an owner reaches from
+   * a search, so the French carries the words he would actually type, and the
+   * Arabic keeps the Latin slug for the same reason as the builder above.
+   */
+  "pack-pharmacy": {
+    fr: "logiciel-gestion-pharmacie",
+    en: "pharmacy-management-software",
+    ar: "pharmacy-management-software",
+  },
+  "pack-restaurant": {
+    fr: "logiciel-caisse-restaurant",
+    en: "restaurant-pos-software",
+    ar: "restaurant-pos-software",
+  },
+  "pack-bakery": {
+    fr: "logiciel-gestion-boulangerie",
+    en: "bakery-management-software",
+    ar: "bakery-management-software",
+  },
+  "pack-warehouse": {
+    fr: "logiciel-gestion-stock",
+    en: "warehouse-management-software",
+    ar: "warehouse-management-software",
+  },
 } as const;
+
+/** The landing page route for a trade: "pharmacy" -> "pack-pharmacy". */
+export function packRouteId(pack: Pack): LocalisedRouteId {
+  return `pack-${pack}` as LocalisedRouteId;
+}
 
 export type LocalisedRouteId = keyof typeof localisedRoutes;
 

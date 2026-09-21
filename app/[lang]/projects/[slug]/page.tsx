@@ -10,6 +10,19 @@ import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import type { Pack } from "@/app-ui/packs";
+import { localisedHref, packRouteId } from "@/lib/i18n/routes";
+import { ArrowRight } from "lucide-react";
+
+/*
+ * Case studies whose trade the builder now covers. They are the pages an
+ * owner in that trade lands on from a search, so each one points at the
+ * software he can have today rather than leaving him to find it.
+ */
+const TRADE_OF: Partial<Record<string, Pack>> = {
+  "pharmacy-pos": "pharmacy",
+  "restaurant-pos": "restaurant",
+};
 
 type Props = {
   params: { lang: Locale; slug: string };
@@ -91,6 +104,26 @@ export default function ProjectDetailPage({ params }: Props) {
               {dict.projectDetail.back}
             </Button>
           </FadeIn>
+
+          {TRADE_OF[project.slug] ? (
+            <FadeIn>
+              <div className="mt-8 rounded-2xl border border-border p-6">
+                <p className="text-base leading-relaxed text-foreground">
+                  {dict.projectDetail.builderNote}
+                </p>
+                <a
+                  href={localisedHref(
+                    params.lang,
+                    packRouteId(TRADE_OF[project.slug] as Pack)
+                  )}
+                  className="mt-3 inline-flex min-h-[48px] items-center gap-2 text-base text-foreground underline decoration-border underline-offset-4"
+                >
+                  {dict.projectDetail.builderNoteLink}
+                  <ArrowRight className="size-4 rtl:rotate-180" aria-hidden />
+                </a>
+              </div>
+            </FadeIn>
+          ) : null}
 
           <div className="mt-10 grid grid-cols-1 gap-16 lg:grid-cols-3">
             <FadeIn className="lg:col-span-2">

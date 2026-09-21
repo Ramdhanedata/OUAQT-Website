@@ -401,6 +401,9 @@ export const fr: Dictionary = {
     role: "Ce que nous avons fait",
     tools: "Ce qu'il contient",
     screenshotAlt: "capture d'écran du produit",
+    /* Shown only on the case studies whose trade the builder covers. */
+    builderNote: "Ce genre de logiciel se crée maintenant en ligne, en répondant à quelques questions.",
+    builderNoteLink: "Voir le logiciel pour ce métier",
   },
 
   sectors: {
@@ -486,6 +489,7 @@ export const fr: Dictionary = {
     tradesHeading: "Pour quel commerce",
     tradesOpen: "Disponible",
     tradesSoon: "Bientôt disponible",
+    tradesLearnMore: "En savoir plus",
     tradesOther: "Mon activité n'est pas dans la liste",
     tradesLeaveNumber: "Laissez votre numéro, nous vous prévenons.",
     tradesPhone: "Votre numéro de téléphone",

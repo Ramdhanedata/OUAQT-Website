@@ -410,6 +410,9 @@ export const en = {
     role: "What we did",
     tools: "What's in it",
     screenshotAlt: "product screenshot",
+    /* Shown only on the case studies whose trade the builder covers. */
+    builderNote: "Software like this is now built online, by answering a few questions.",
+    builderNoteLink: "See the software for this trade",
   },
 
   sectors: {
@@ -491,6 +494,7 @@ export const en = {
     tradesHeading: "For which trade",
     tradesOpen: "Available",
     tradesSoon: "Coming soon",
+    tradesLearnMore: "Read more",
     tradesOther: "My business is not on this list",
     tradesLeaveNumber: "Leave your number and we will tell you.",
     tradesPhone: "Your phone number",

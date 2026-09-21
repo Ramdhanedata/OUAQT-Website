@@ -404,6 +404,9 @@ export const ar: Dictionary = {
     role: "ما قمنا به",
     tools: "ما يتضمنه",
     screenshotAlt: "لقطة شاشة للمنتج",
+    /* Shown only on the case studies whose trade the builder covers. */
+    builderNote: "برنامج من هذا النوع ينشأ الآن على الإنترنت، بالإجابة عن بضعة أسئلة.",
+    builderNoteLink: "انظر برنامج هذا المجال",
   },
 
   sectors: {
@@ -487,6 +490,7 @@ export const ar: Dictionary = {
     tradesHeading: "لأي نشاط",
     tradesOpen: "متوفر",
     tradesSoon: "قريباً",
+    tradesLearnMore: "المزيد",
     tradesOther: "نشاطي ليس في هذه القائمة",
     tradesLeaveNumber: "اترك رقمك وسنخبرك.",
     tradesPhone: "رقم هاتفك",
