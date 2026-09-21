@@ -221,7 +221,7 @@ export const en = {
       eyebrow: "Perpetual licence",
       heading: "For buyers who would rather not pay every year",
       cadence: "Paid once, installation included",
-      body: "That covers updates, the product catalogue, off-site backup, support and modifications for {months} months only. After that the software keeps running with nothing more to pay and no further service.",
+      body: "That covers updates, the product catalogue, support and modifications for {months} months only. After that the software keeps running with nothing more to pay and no further service.",
       cta: "Contact us",
     },
     included: {
@@ -232,7 +232,6 @@ export const en = {
         "Moving the software to a replacement machine after a breakdown, a theft or an upgrade, at no charge while the total stays within {devices}",
         "Updates",
         "The product catalogue, where the product has one",
-        "Off-site backup",
         "Support",
         "Changes to what already exists, on request, such as a form field, a receipt or label layout, a report column, a sort order, a print format, wording, a user role or a tax rate",
         "Correcting anything wrong or slow in what we delivered",
@@ -266,7 +265,7 @@ export const en = {
         },
         {
           q: "Where is my data stored?",
-          a: "On your own computers, at your premises. The licence also includes an off-site backup, so your records do not depend on a single machine.",
+          a: "On your own computers, at your premises. They do not come to us, and backing them up happens on your own media.",
         },
         {
           q: "What happens if I do not renew?",

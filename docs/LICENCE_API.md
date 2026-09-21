@@ -142,6 +142,7 @@ needs WebCrypto Ed25519: Chromium 137 or later, so a recent Electron.
   "renewalGraceDays": 30,
   "clockGraceDays": 2,
   "deviceReleasesPerYear": 2,
+  "trialSummaryDays": 5,
 
   "devices": [{ "deviceId": "...", "role": "main | secondary" }],
   "renewalSecret": "what renewal codes are checked against, offline",
@@ -174,6 +175,13 @@ and a payment puts the rest back the same minute.
 `clockGraceDays` is how much backwards clock movement to forgive before
 treating the machine as tampered with. A shop computer whose battery has died
 is not a fraud.
+
+`trialSummaryDays` is how many days before a trial ends the app shows the
+owner what his own shop did with it: sales rung up, credit carried, evenings
+the till did not match. **Those figures are computed on his machine from his
+own data and never leave it.** There is no field in this API that could carry
+them and no endpoint that would take them, and there must never be one. Only
+the timing travels, and only in this direction.
 
 ## Renewal codes, for a shop with no network
 

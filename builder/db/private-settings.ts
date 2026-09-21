@@ -20,6 +20,8 @@ const privateSettings = z.object({
   payment_max_age_days: z.number().int().positive(),
   device_releases_per_year: z.number().int().nonnegative(),
   clock_grace_days: z.number().int().nonnegative(),
+  /* When the app shows the owner what his trial did. See 0010. */
+  trial_summary_days: z.number().int().nonnegative(),
 });
 
 export type PrivateSettings = z.infer<typeof privateSettings>;

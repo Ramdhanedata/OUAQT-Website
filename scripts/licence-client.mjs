@@ -161,6 +161,8 @@ check("the licence is signed by us", licence !== null);
 check("it carries the grace days the app needs offline", licence?.renewalGraceDays > 0,
   `renewalGraceDays ${licence?.renewalGraceDays}, clockGraceDays ${licence?.clockGraceDays}`);
 check("the trial started at activation, not before", Boolean(licence?.startsAt));
+check("it knows when to show the owner what his trial did", licence?.trialSummaryDays > 0,
+  `trialSummaryDays ${licence?.trialSummaryDays}`);
 check("this computer is the main one", licence?.devices?.[0]?.role === "main");
 
 /*

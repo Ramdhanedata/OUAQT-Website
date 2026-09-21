@@ -35,6 +35,12 @@ export type LicencePayload = {
   maxDevices: number;
   renewalGraceDays: number;
   clockGraceDays: number;
+  /*
+   * How many days before a trial ends the app shows the owner his own
+   * figures. The figures themselves are computed on his machine and never
+   * sent anywhere; only this timing comes from us.
+   */
+  trialSummaryDays: number;
   deviceReleasesPerYear: number;
   devices: LicenceDevice[];
   /*

@@ -18,6 +18,7 @@ const payload: LicencePayload = {
   maxDevices: 2,
   renewalGraceDays: 30,
   clockGraceDays: 2,
+  trialSummaryDays: 5,
   deviceReleasesPerYear: 2,
   devices: [
     { deviceId: "device-one", role: "main" },

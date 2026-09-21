@@ -38,6 +38,7 @@ export type IssueInput = {
     renewalGraceDays: number;
     clockGraceDays: number;
     deviceReleasesPerYear: number;
+    trialSummaryDays: number;
   };
   now?: Date;
 };
@@ -70,6 +71,7 @@ export function licencePayload(input: IssueInput): LicencePayload {
     renewalGraceDays: input.rules.renewalGraceDays,
     clockGraceDays: input.rules.clockGraceDays,
     deviceReleasesPerYear: input.rules.deviceReleasesPerYear,
+    trialSummaryDays: input.rules.trialSummaryDays,
     renewalSecret: input.licence.renewalSecret,
     devices: input.devices.map((device) => ({
       deviceId: device.device_id,

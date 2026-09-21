@@ -1,3 +1,4 @@
+import { revalidateTag } from "next/cache";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { adminGate } from "@/builder/admin/guard";
@@ -82,6 +83,14 @@ export async function POST(request: Request) {
     action: "changed",
     detail: { from: existing.value, to: parsed },
   });
+
+  /*
+   * The site reads settings through a cached fetch, so without this a price
+   * changed here would keep showing the old figure for five minutes. The
+   * whole point of holding prices in this table is that a change is a change,
+   * not a deploy and not a wait.
+   */
+  revalidateTag("settings");
 
   return NextResponse.json({ ok: true });
 }

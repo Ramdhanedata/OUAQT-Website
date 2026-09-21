@@ -212,7 +212,7 @@ export const fr: Dictionary = {
       eyebrow: "Licence perpétuelle",
       heading: "Pour ceux qui préfèrent ne pas payer chaque année",
       cadence: "Payée une fois, installation comprise",
-      body: "Ce montant comprend les mises à jour, le catalogue produits, la sauvegarde hors site, l'assistance et les modifications pendant {months} mois seulement. Passé ce délai, le logiciel continue de fonctionner sans rien payer de plus, et sans aucun service.",
+      body: "Ce montant comprend les mises à jour, le catalogue produits, l'assistance et les modifications pendant {months} mois seulement. Passé ce délai, le logiciel continue de fonctionner sans rien payer de plus, et sans aucun service.",
       cta: "Nous contacter",
     },
     included: {
@@ -223,7 +223,6 @@ export const fr: Dictionary = {
         "Le transfert du logiciel sur une machine de remplacement après une panne, un vol ou un changement de matériel, sans frais tant que le total ne dépasse pas {devices} postes",
         "Les mises à jour",
         "Le catalogue produits, pour les logiciels qui en ont un",
-        "La sauvegarde hors site",
         "L'assistance",
         "Les modifications de l'existant sur demande, comme un champ de formulaire, la mise en page d'un ticket ou d'une étiquette, une colonne de rapport, un ordre de tri, un format d'impression, un libellé, un rôle utilisateur ou un taux de taxe",
         "La correction de tout ce qui est faux ou lent dans ce que nous avons livré",
@@ -257,11 +256,11 @@ export const fr: Dictionary = {
         },
         {
           q: "Où sont stockées mes données ?",
-          a: "Sur vos propres ordinateurs, dans vos locaux. La licence comprend aussi une sauvegarde hors site, pour que vos données ne dépendent pas d'une seule machine.",
+          a: "Sur vos propres ordinateurs, dans vos locaux. Elles ne partent pas chez nous, et la sauvegarde se fait sur vos propres supports.",
         },
         {
           q: "Que se passe-t-il si je ne renouvelle pas ?",
-          a: "La saisie de nouvelles données est suspendue, et les mises à jour, la sauvegarde et l'assistance s'arrêtent. Vous pouvez toujours consulter et exporter tout ce qui est déjà enregistré.",
+          a: "La saisie de nouvelles données est suspendue, et les mises à jour et l'assistance s'arrêtent. Vous pouvez toujours consulter et exporter tout ce qui est déjà enregistré.",
         },
         {
           q: "Puis-je payer en plusieurs fois ?",
