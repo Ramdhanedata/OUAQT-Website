@@ -31,6 +31,7 @@ export default function PrivacyPage({ params }: Props) {
         p.neverReceived,
         p.ai,
         p.payments,
+        p.fingerprint,
         p.where,
         p.sharing,
         p.retention,

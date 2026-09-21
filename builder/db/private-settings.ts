@@ -22,6 +22,13 @@ const privateSettings = z.object({
   clock_grace_days: z.number().int().nonnegative(),
   /* When the app shows the owner what his trial did. See 0010. */
   trial_summary_days: z.number().int().nonnegative(),
+
+  /* Who gets a free trial, and how sure we have to be. See 0012. */
+  trial_one_per_fingerprint: z.boolean(),
+  trial_one_per_phone: z.boolean(),
+  trial_require_fingerprint: z.boolean(),
+  trial_fingerprint_parts_to_match: z.number().int().positive(),
+  trial_similarity_percent: z.number().int().min(0).max(100),
 });
 
 export type PrivateSettings = z.infer<typeof privateSettings>;

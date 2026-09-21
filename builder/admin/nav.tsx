@@ -1,12 +1,13 @@
 import Link from "next/link";
 
-/* The eight pages from the brief, all of them now with something behind them. */
+/* The pages from the brief, plus the trials list the abuse rules needed. */
 const pages = [
   { href: "/admin", label: "Paiements" },
   { href: "/admin/clients", label: "Clients" },
   { href: "/admin/postes", label: "Postes" },
   { href: "/admin/codes", label: "Codes" },
   { href: "/admin/parcours", label: "Parcours" },
+  { href: "/admin/essais", label: "Essais" },
   { href: "/admin/demandes", label: "Demandes" },
   { href: "/admin/reglages", label: "Réglages" },
   { href: "/admin/cout-ia", label: "Coût IA" },

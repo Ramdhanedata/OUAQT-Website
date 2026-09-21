@@ -453,6 +453,10 @@ export const fr: Dictionary = {
         h: "Les paiements",
         b: "Vous payez par Bankily, directement depuis votre téléphone. Nous ne voyons ni votre code ni votre solde. Nous conservons la référence de transaction que vous saisissez, le montant attendu, et le justificatif que vous joignez, le temps de confirmer le paiement et de justifier votre licence.",
       },
+      fingerprint: {
+        h: "L'empreinte de votre ordinateur",
+        b: "Pour qu'un même ordinateur ne prenne pas un essai gratuit après l'autre, le logiciel calcule une empreinte à partir de votre carte mère, de votre disque système et de l'identifiant de votre système d'exploitation. Il ne nous envoie que des empreintes chiffrées, jamais les numéros eux-mêmes, et nous ne pouvons pas remonter aux numéros à partir de ce que nous recevons. Cela sert à une seule chose : savoir si cette machine a déjà eu un essai. Si vous avez acheté votre ordinateur d'occasion, ou si vous l'avez fait réparer, écrivez-nous et nous vous ouvrons l'essai à la main.",
+      },
       where: {
         h: "Où ces informations sont conservées",
         b: "Sur des serveurs situés en Irlande, chez notre hébergeur de base de données, et sur le réseau de Vercel qui sert ce site. L'un et l'autre travaillent pour nous et n'ont pas le droit d'utiliser vos informations à leurs propres fins.",

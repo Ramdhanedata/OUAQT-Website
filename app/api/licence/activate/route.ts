@@ -8,6 +8,7 @@ import { hashToken, newDeviceToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 import { setupFor } from "@/builder/licence/setup";
+import { claimTrial } from "@/builder/licence/trial-claim";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 
@@ -30,6 +31,20 @@ const body = z
     deviceId: z.string().min(8).max(200),
     deviceName: z.string().trim().max(60).optional(),
     platform: z.enum(["windows", "mac"]),
+    /*
+     * The machine, in three salted hashes the app computes from its
+     * motherboard, its system disk and the operating system's machine id. We
+     * never receive the values behind them, and there is no field here that
+     * could carry one.
+     */
+    fingerprint: z
+      .object({
+        board: z.string().min(16).max(128).nullish(),
+        disk: z.string().min(16).max(128).nullish(),
+        machine: z.string().min(16).max(128).nullish(),
+      })
+      .strict()
+      .optional(),
   })
   .strict();
 
@@ -60,7 +75,7 @@ export async function POST(request: Request) {
   const [{ data: business }, settings, secrets] = await Promise.all([
     supabase
       .from("businesses")
-      .select("id, name_latin")
+      .select("id, owner_id, name_latin, receipt_address")
       .eq("id", found.business_id)
       .maybeSingle(),
     getPublicSettings(),
@@ -126,10 +141,15 @@ export async function POST(request: Request) {
 
   /* The trial begins the first time a computer runs the software. */
   if (current && current.plan === "trial" && !current.starts_at) {
+    const fingerprint = {
+      board: input.data.fingerprint?.board ?? null,
+      disk: input.data.fingerprint?.disk ?? null,
+      machine: input.data.fingerprint?.machine ?? null,
+    };
+
     /*
-     * Unless this computer has already had one under another shop. The phone
-     * number is the login, so a second account with the same number cannot
-     * exist; the machine is the other way the same person tries again.
+     * This exact computer under another shop is the plainest case of all, and
+     * it does not need a fingerprint to see.
      */
     const { data: seenElsewhere } = await supabase
       .from("devices")
@@ -139,11 +159,38 @@ export async function POST(request: Request) {
       .limit(1)
       .maybeSingle();
 
+    const outcome = seenElsewhere
+      ? ({ kind: "refused", decision: { allowed: false, because: "same_machine" } } as const)
+      : await claimTrial(supabase, business, fingerprint, secrets, true);
+
+    if (outcome.kind === "refused") {
+      await audit({
+        actorId: null,
+        subject: "licence",
+        subjectId: current.id,
+        action: "trial_refused",
+        detail: { deviceId: input.data.deviceId, because: outcome.decision.because },
+      });
+
+      /*
+       * A refusal is a door, not a verdict. The app has no configuration yet,
+       * so the number to call travels with the error: whoever this is, a
+       * second-hand PC or a man on his brother's phone, there is a person at
+       * the other end of it.
+       */
+      return NextResponse.json(
+        {
+          error: "trial_not_available",
+          because: outcome.decision.because,
+          supportWhatsapp: settings.support_whatsapp,
+        },
+        { status: 403 }
+      );
+    }
+
     const now = new Date();
     const starts = now.toISOString();
-    const ends = seenElsewhere
-      ? starts
-      : trialEnd(now, settings.trial_days).toISOString();
+    const ends = trialEnd(now, settings.trial_days).toISOString();
 
     await supabase
       .from("licences")
@@ -156,7 +203,7 @@ export async function POST(request: Request) {
       actorId: null,
       subject: "licence",
       subjectId: current.id,
-      action: seenElsewhere ? "trial_refused_device_seen" : "trial_started",
+      action: "trial_started",
       detail: { deviceId: input.data.deviceId },
     });
   }

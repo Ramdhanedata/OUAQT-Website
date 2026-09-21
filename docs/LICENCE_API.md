@@ -27,7 +27,14 @@ POST /api/licence/activate
   "serial":     "RXVE-7DV3",        // what the owner types
   "deviceId":   "a-stable-id",      // the app's own id for this computer
   "deviceName": "Caisse",           // optional, shown to the owner
-  "platform":   "windows"           // or "mac"
+  "platform":   "windows",          // or "mac"
+
+  // The machine, in three salted hashes. Never a serial number.
+  "fingerprint": {
+    "board":   "<sha256 of salt + motherboard/BIOS serial>",
+    "disk":    "<sha256 of salt + system disk serial>",
+    "machine": "<sha256 of salt + OS machine id>"
+  }
 }
 ```
 
@@ -46,6 +53,9 @@ POST /api/licence/activate
 }
 404 { "error": "unknown_serial" }
 409 { "error": "device_limit", "maxDevices": 2 }
+403 { "error": "trial_not_available",  // only when a trial would start
+      "because": "same_machine | same_phone | same_business | no_fingerprint",
+      "supportWhatsapp": "2222..." }
 503 { "error": "no_signing_key" }      // never on a working deployment
 ```
 
@@ -70,10 +80,32 @@ this, and none should cost the owner one of his two machines. The token is
 replaced each time.
 
 The **trial starts here**, not at account creation: an owner who builds his
-software on Friday and installs it on Monday should not lose the weekend. A
-`deviceId` that has already been through a trial under another shop gets no
-new one; the phone number is the login, so a second account with the same
-number cannot exist.
+software on Friday and installs it on Monday should not lose the weekend.
+
+### One trial per shop
+
+A trial is claimed once, against three marks: the machine, the owner's login
+phone, and the business. A second trial matching any of them is refused with
+`trial_not_available`.
+
+The fingerprint travels as three salted hashes and never as serial numbers.
+Two of the three agreeing is enough to call it the same machine, so a
+replaced disk or a reinstalled system does not cost an owner his trial, and
+three different parts is a different computer. How many must agree is a
+setting.
+
+`403 trial_not_available` is **not an accusation and must never be shown as
+one.** A second-hand PC and a machine repaired with new parts both land here,
+and both of those owners are honest. Show the reason in his own words, show
+the WhatsApp number that came with the error, and stop. Someone grants the
+trial by hand from the admin area and his next activation works.
+
+`no_fingerprint` means this build sent none. Tell him to update the app
+rather than telling him he was refused.
+
+None of the softer signals (the same logo, the same product list, a shop name
+that looks like an earlier one) ever refuse anything. They are written down
+for a person to look at.
 
 ## Refresh
 

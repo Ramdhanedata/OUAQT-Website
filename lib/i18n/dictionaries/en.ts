@@ -462,6 +462,10 @@ export const en = {
         h: "Payments",
         b: "You pay by Bankily, straight from your phone. We see neither your code nor your balance. We keep the transaction reference you type, the amount expected, and the receipt you attach, for as long as it takes to confirm the payment and account for your licence.",
       },
+      fingerprint: {
+        h: "Your computer's fingerprint",
+        b: "So that one computer cannot take one free trial after another, the software works out a fingerprint from your motherboard, your system disk and your operating system's own identifier. It sends us hashed fingerprints only, never the numbers themselves, and we cannot work the numbers back out from what reaches us. It is used for one thing: knowing whether this machine has already had a trial. If you bought your computer second-hand, or had it repaired, write to us and we will open the trial by hand.",
+      },
       where: {
         h: "Where this is kept",
         b: "On servers in Ireland, at our database host, and on the Vercel network that serves this site. Both work for us and are not allowed to use your information for their own purposes.",

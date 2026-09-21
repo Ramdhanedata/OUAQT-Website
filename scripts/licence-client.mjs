@@ -12,6 +12,7 @@
  * be run against the test project as often as you like.
  */
 
+import { createHash } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 
 const base = process.argv[2] ?? "http://localhost:3000";
@@ -148,11 +149,27 @@ await admin.from("staff_initial").insert({
 
 console.log("Activation\n");
 
+/*
+ * The machine, as the app will send it: three salted hashes and no serial
+ * numbers. Two of the three agreeing is the same computer, so a part can be
+ * replaced without the owner losing anything.
+ */
+const FINGERPRINT_SALT = "ouaqt-desktop"; // the app ships one; it hides values, it is not a secret
+function part(value) {
+  return createHash("sha256").update(`${FINGERPRINT_SALT}:${value}`).digest("hex");
+}
+function machine(board, disk, id) {
+  return { board: part(board), disk: part(disk), machine: part(id) };
+}
+
+const thisPc = machine(`board-${stamp}`, `disk-${stamp}`, `os-${stamp}`);
+
 const first = await post("/api/licence/activate", {
   serial,
   deviceId: `device-one-${stamp}`,
   deviceName: "Caisse",
   platform: "windows",
+  fingerprint: thisPc,
 });
 check("the first computer activates", first.status === 200, `status ${first.status}`);
 
@@ -318,10 +335,159 @@ const checkedElsewhere = await verifyRenewalCode({
 });
 check("and fails for another shop's licence", !checkedElsewhere.ok);
 
+/* ── One trial per shop, and the honest people that rule is wrong about ─── */
+
+console.log("\nTrials\n");
+
+/*
+ * A second shop, with its own owner, its own serial and its own phone.
+ *
+ * The phone is the digits of the login, so each of these needs a different
+ * one or they all look like the same person trying again. Which is the rule
+ * working, but not the rule under test.
+ */
+let shopCounter = 0;
+async function anotherShop(label, phone = `${stamp}${(shopCounter += 1)}`) {
+  const { data: madeUser } = await admin.auth.admin.createUser({
+    email: `${phone}@${process.env.NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN ?? "ouaqtcom.vercel.app"}`,
+    password: `licence-client-${label}-${stamp}`,
+    email_confirm: true,
+  });
+  const { data: shop } = await admin
+    .from("businesses")
+    .insert({
+      owner_id: madeUser.user.id,
+      name_latin: `Test ${label}`,
+      pack: "pharmacy",
+      app_language: "fr",
+    })
+    .select("id")
+    .single();
+  await admin.from("licences").insert({
+    business_id: shop.id,
+    plan: "trial",
+    status: "trial",
+    renewal_secret: crypto.randomUUID(),
+  });
+  const ownSerial = makeSerial();
+  await admin.from("serials").insert({
+    business_id: shop.id,
+    serial_hash: await hashSerial(ownSerial),
+    serial_cipher: "test-client-does-not-decrypt",
+  });
+  return { id: shop.id, ownerId: madeUser.user.id, serial: ownSerial };
+}
+
+const shops = [];
+
+/*
+ * The plain case: a different shop, a different phone, the same computer. It
+ * is refused, and the refusal carries the number to call rather than a
+ * lecture.
+ */
+const sameMachineShop = await anotherShop("same-machine");
+shops.push(sameMachineShop);
+const onSameMachine = await post("/api/licence/activate", {
+  serial: sameMachineShop.serial,
+  deviceId: `device-other-${stamp}`,
+  platform: "windows",
+  fingerprint: thisPc,
+});
+check("a second shop on the same computer is refused", onSameMachine.status === 403,
+  `status ${onSameMachine.status}, ${onSameMachine.body?.error}`);
+check("the refusal says which rule, not who is to blame",
+  onSameMachine.body?.because === "same_machine", String(onSameMachine.body?.because));
+check("and hands over the number to call",
+  Boolean(onSameMachine.body?.supportWhatsapp), onSameMachine.body?.supportWhatsapp ?? "");
+
+/*
+ * A repaired PC. The disk died and was replaced, so one part of three is new.
+ * It is still the same computer, which is the point of using three.
+ */
+const repairedShop = await anotherShop("repaired");
+shops.push(repairedShop);
+const repaired = { ...thisPc, disk: part(`new-disk-${stamp}`) };
+const afterRepair = await post("/api/licence/activate", {
+  serial: repairedShop.serial,
+  deviceId: `device-repaired-${stamp}`,
+  platform: "windows",
+  fingerprint: repaired,
+});
+check("a repaired PC is still recognised as the same machine", afterRepair.status === 403,
+  `status ${afterRepair.status}`);
+
+/* A genuinely different computer gets its own trial, as it should. */
+const freshShop = await anotherShop("fresh");
+shops.push(freshShop);
+const onNewPc = await post("/api/licence/activate", {
+  serial: freshShop.serial,
+  deviceId: `device-fresh-${stamp}`,
+  platform: "windows",
+  fingerprint: machine(`board-b-${stamp}`, `disk-b-${stamp}`, `os-b-${stamp}`),
+});
+check("a different computer gets its own trial", onNewPc.status === 200,
+  `status ${onNewPc.status}`);
+
+/*
+ * The same man, a new computer, the same telephone. The machine is different
+ * and the number is not, which is the other half of the rule.
+ */
+/* The digits of the first owner's login, on a brand new account. */
+const samePhoneShop = await anotherShop("same-phone", `${stamp}`);
+shops.push(samePhoneShop);
+const onSamePhone = await post("/api/licence/activate", {
+  serial: samePhoneShop.serial,
+  deviceId: `device-phone-${stamp}`,
+  platform: "windows",
+  fingerprint: machine(`board-c-${stamp}`, `disk-c-${stamp}`, `os-c-${stamp}`),
+});
+check("a second shop on the same phone number is refused",
+  onSamePhone.status === 403 && onSamePhone.body?.because === "same_phone",
+  `status ${onSamePhone.status}, ${onSamePhone.body?.because}`);
+
+/* An app that sends no fingerprint at all is asked for one, not let through. */
+const silentShop = await anotherShop("silent");
+shops.push(silentShop);
+const silent = await post("/api/licence/activate", {
+  serial: silentShop.serial,
+  deviceId: `device-silent-${stamp}`,
+  platform: "windows",
+});
+check("an app that sends no fingerprint gets no trial", silent.status === 403,
+  `status ${silent.status}, ${silent.body?.because}`);
+
+/*
+ * The second-hand PC. This owner is honest and the rule is wrong about him,
+ * so someone gives him a trial by hand and his next activation works.
+ */
+await admin.from("trial_overrides").insert({
+  business_id: sameMachineShop.id,
+  reason: "Ordinateur acheté d'occasion, vérifié par téléphone",
+});
+const afterOverride = await post("/api/licence/activate", {
+  serial: sameMachineShop.serial,
+  deviceId: `device-other-${stamp}`,
+  platform: "windows",
+  fingerprint: thisPc,
+});
+check("a trial given by hand opens the door again", afterOverride.status === 200,
+  `status ${afterOverride.status}`);
+
+const { data: usedOverride } = await admin
+  .from("trial_overrides")
+  .select("used_at")
+  .eq("business_id", sameMachineShop.id)
+  .maybeSingle();
+check("and is used once, not kept open", Boolean(usedOverride?.used_at));
+
 /* ── Clearing up ────────────────────────────────────────────────────────── */
 
 await admin.from("businesses").delete().eq("id", business.id);
 await admin.auth.admin.deleteUser(owner.id);
+for (const shop of shops) {
+  await admin.from("businesses").delete().eq("id", shop.id);
+  await admin.auth.admin.deleteUser(shop.ownerId);
+}
 
 console.log(
   failures === 0
