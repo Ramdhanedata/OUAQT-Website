@@ -5,6 +5,7 @@ import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
+import { setupFor } from "@/builder/licence/setup";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 
 /*
@@ -27,6 +28,11 @@ const body = z
     businessId: z.string().uuid(),
     deviceId: z.string().min(8).max(200),
     deviceToken: z.string().min(20).max(200),
+    /*
+     * Which configuration the app already holds. A number, so there is still
+     * no field here that could carry a sale, a stock movement or a debt.
+     */
+    configurationVersion: z.number().int().nonnegative().optional(),
   })
   .strict();
 
@@ -115,5 +121,23 @@ export async function POST(request: Request) {
     },
   });
 
-  return NextResponse.json({ licence: signed });
+  /*
+   * The owner's own lists, but only when they are not the ones the app
+   * already has. They travel together, keyed to the configuration version:
+   * anything that changes a product, a member of staff or a setting writes a
+   * new configuration, so one number answers for all three.
+   */
+  const setup = await setupFor(supabase, business.id);
+  const unchanged =
+    input.data.configurationVersion !== undefined &&
+    setup.configurationVersion === input.data.configurationVersion;
+
+  return NextResponse.json({
+    licence: signed,
+    configurationVersion: setup.configurationVersion,
+    configuration: unchanged ? null : setup.configuration,
+    products: unchanged ? null : setup.products,
+    staff: unchanged ? null : setup.staff,
+    logo: unchanged ? null : setup.logo,
+  });
 }

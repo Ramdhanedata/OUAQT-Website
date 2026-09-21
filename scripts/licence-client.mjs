@@ -123,6 +123,27 @@ await admin.from("serials").insert({
   serial_cipher: "test-client-does-not-decrypt",
 });
 
+/*
+ * What the builder would have written for this shop: the configuration the
+ * app rearranges itself around, a couple of products and one cashier. Prices
+ * are in the smallest unit, the way the whole system holds money.
+ */
+await admin.from("configurations").insert({
+  business_id: business.id,
+  version: 1,
+  schema_version: "1",
+  config: { pack: "pharmacy", language: { app: "fr" } },
+});
+await admin.from("products_initial").insert([
+  { business_id: business.id, row_number: 1, data: { name: "Paracétamol 500mg", price: 12050, quantity: 24 } },
+  { business_id: business.id, row_number: 2, data: { name: "Gants, boîte", price: 40000, quantity: 6 } },
+]);
+await admin.from("staff_initial").insert({
+  business_id: business.id,
+  name: "Caissier",
+  role: "cashier",
+});
+
 /* ── Activation ─────────────────────────────────────────────────────────── */
 
 console.log("Activation\n");
@@ -141,6 +162,19 @@ check("it carries the grace days the app needs offline", licence?.renewalGraceDa
   `renewalGraceDays ${licence?.renewalGraceDays}, clockGraceDays ${licence?.clockGraceDays}`);
 check("the trial started at activation, not before", Boolean(licence?.startsAt));
 check("this computer is the main one", licence?.devices?.[0]?.role === "main");
+
+/*
+ * One call has to be enough. A shop on a borrowed hotspot activates, and is
+ * then on its own with everything it needs.
+ */
+check("the configuration arrives with the licence", first.body?.configuration?.pack === "pharmacy");
+check("so does the product list", first.body?.products?.length === 2,
+  `${first.body?.products?.length ?? 0} products`);
+check("prices arrive in the smallest unit", first.body?.products?.[0]?.price === 12050,
+  String(first.body?.products?.[0]?.price));
+check("so does the staff list", first.body?.staff?.[0]?.role === "cashier");
+check("the configuration names its version", first.body?.configurationVersion === 1,
+  String(first.body?.configurationVersion));
 
 const tampered = first.body.licence.replace(/^(.{20})./, "$1X");
 check("an edited licence does not verify", (await verifyLicence(tampered)) === null);
@@ -177,6 +211,21 @@ const refreshed = await post("/api/licence/refresh", {
   deviceToken: token,
 });
 check("a computer with its token gets a fresh licence", refreshed.status === 200);
+check("and is sent the lists again when it names no version",
+  refreshed.body?.products?.length === 2);
+
+const refreshedSame = await post("/api/licence/refresh", {
+  businessId: business.id,
+  deviceId: `device-one-${stamp}`,
+  deviceToken: token,
+  configurationVersion: 1,
+});
+check("a computer already holding the current version is sent no lists",
+  refreshedSame.status === 200 &&
+    refreshedSame.body?.configuration === null &&
+    refreshedSame.body?.products === null &&
+    refreshedSame.body?.staff === null,
+  `status ${refreshedSame.status}`);
 
 const wrongToken = await post("/api/licence/refresh", {
   businessId: business.id,

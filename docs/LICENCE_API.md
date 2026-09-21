@@ -33,8 +33,9 @@ POST /api/licence/activate
 
 ```jsonc
 200 {
-  "licence":     "<signed>",          // see below
-  "deviceToken": "<keep this>",       // shown once, needed to refresh
+  "licence":              "<signed>",   // see below
+  "deviceToken":          "<keep this>", // shown once, needed to refresh
+  "configurationVersion": 3,             // name it back on every refresh
 
   // Everything the app needs to rearrange itself, in one response, so a
   // shop on a borrowed hotspot is online for one call and no more.
@@ -79,19 +80,22 @@ number cannot exist.
 ```
 POST /api/licence/refresh
 {
-  "businessId":  "uuid, from the licence file",
-  "deviceId":    "the same id",
-  "deviceToken": "the one from activation"
+  "businessId":           "uuid, from the licence file",
+  "deviceId":             "the same id",
+  "deviceToken":          "the one from activation",
+  "configurationVersion": 3        // optional: what the app already holds
 }
 ```
 
 ```jsonc
 200 {
-  "licence": "<signed>",
-  // Present only when they have changed since the version the app names.
+  "licence":              "<signed>",
+  "configurationVersion": 4,
+  // Null when the version the app named is still the current one.
   "configuration": { /* ... */ } | null,
   "products":      [ /* ... */ ]  | null,
-  "staff":         [ /* ... */ ]  | null
+  "staff":         [ /* ... */ ]  | null,
+  "logo":          { "colour": "...", "mono": "..." } | null
 }
 403 { "error": "wrong_token" }
 404 { "error": "unknown_device" }     // released, or never activated
@@ -104,12 +108,15 @@ have; that is what the grace days in it are for.
 `unknown_device` means the owner freed this computer from his account. Tell
 him it was released and offer to activate again.
 
-### Not built yet
+The four travel together, keyed to `configurationVersion`. Anything that
+changes a product, a member of staff or a setting writes a new configuration,
+so one number answers for all of them. An app that names the current version
+gets four nulls and a small response; one that names nothing, or an older
+number, gets the lot.
 
-As of 2026-09-21 activation returns `licence` and `deviceToken` only. The
-configuration, products, staff and logo above are the agreed contract and are
-built before D2 of the desktop app. Nothing in the desktop app should be
-written against the smaller shape.
+Omitting `configurationVersion` is always safe. It costs a larger response
+and never a wrong one, which is the right way round for a first install or a
+licence file restored from a backup.
 
 ## The licence file
 

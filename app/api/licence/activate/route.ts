@@ -7,6 +7,7 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken, newDeviceToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
+import { setupFor } from "@/builder/licence/setup";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 
@@ -194,5 +195,19 @@ export async function POST(request: Request) {
     detail: { businessId: business.id, platform: input.data.platform },
   });
 
-  return NextResponse.json({ licence: signed, deviceToken: token });
+  /*
+   * The configuration and the shop's own lists travel with the licence, so a
+   * computer that is online for one call has everything it needs afterwards.
+   */
+  const setup = await setupFor(supabase, business.id);
+
+  return NextResponse.json({
+    licence: signed,
+    deviceToken: token,
+    configuration: setup.configuration,
+    configurationVersion: setup.configurationVersion,
+    products: setup.products,
+    staff: setup.staff,
+    logo: setup.logo,
+  });
 }
