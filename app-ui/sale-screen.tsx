@@ -21,15 +21,28 @@ export function SaleScreen({
   configuration,
   products,
   onTicketChange,
+  onCharge,
 }: {
   configuration: Configuration;
   products: SampleProduct[];
   onTicketChange?: (lines: ReceiptLine[]) => void;
+  /*
+   * What happens when the cashier presses the one big button.
+   *
+   * The builder's preview does not pass it, so there the screen shows what
+   * the shop will look like and takes nobody's money. The desktop app passes
+   * the real thing. Returning false keeps the ticket on screen: a sale that
+   * did not reach the disk must not disappear from in front of the person
+   * who rang it up.
+   */
+  onCharge?: (lines: ReceiptLine[]) => boolean | Promise<boolean>;
 }) {
   const language = configuration.language.app;
   const copy = getAppCopy(language);
   const rtl = isRightToLeft(language);
   const [ticket, setTicket] = useState<ReceiptLine[]>([]);
+  /* Pressed twice in a hurry must not ring the sale up twice. */
+  const [charging, setCharging] = useState(false);
 
   useEffect(() => {
     onTicketChange?.(ticket);
@@ -157,7 +170,17 @@ export function SaleScreen({
             </div>
             <button
               type="button"
-              disabled={ticket.length === 0}
+              disabled={ticket.length === 0 || charging}
+              onClick={async () => {
+                if (!onCharge || ticket.length === 0) return;
+                setCharging(true);
+                try {
+                  const kept = await onCharge(ticket);
+                  if (kept !== false) setTicket([]);
+                } finally {
+                  setCharging(false);
+                }
+              }}
               className="mt-3 min-h-[56px] w-full rounded-lg bg-black text-lg font-semibold text-white disabled:opacity-30"
             >
               {copy.sale.charge}
