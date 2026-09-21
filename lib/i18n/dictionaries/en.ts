@@ -141,10 +141,41 @@ export const en = {
    * from lib/data/pricing.ts, and prices render from the same file.
    */
   pricingPage: {
+    /* The builder's own prices, read from settings, shown above the rest. */
+    builderTrack: {
+      eyebrow: "The software you build online",
+      heading: "You build it yourself, you install it the same day",
+      intro:
+        "You answer the questions, you download your software and you install it on the shop PC. Nobody travels to you, so there is no installation fee to pay: the licence alone is enough.",
+      soon: "Price coming soon",
+      trial: "Free trial of {days} days before you pay anything.",
+      devices: "{devices} devices included: the till and a second computer.",
+      launchNote:
+        "Launch price, for our first {clients} clients. Your price then stays the same for {years} years.",
+      launchCondition:
+        "The launch price applies to our first {clients} clients. After that, the standard price applies.",
+      payment: "Payment by Bankily. You see the amount before you pay.",
+      cta: "Build my software",
+      monthly: "{amount} a month",
+      annual: { label: "Annual licence", cadence: "Per year" },
+      quarterly: { label: "Quarterly licence", cadence: "Per quarter" },
+      perpetual: { label: "Permanent licence", cadence: "Paid once" },
+      extraDevice: { label: "Extra device", cadence: "Per year" },
+      setupVisit: {
+        label: "Installation visit, if you want one",
+        cadence: "Paid once",
+      },
+    },
+    customTrack: {
+      eyebrow: "Bespoke project",
+      heading: "Or we come and install it, and build what is missing",
+      intro:
+        "For the trades the builder does not cover yet, and for businesses that want us to do the work on site.",
+    },
     eyebrow: "Pricing",
-    heading: "Installation once, then a licence each year.",
+    heading: "The software you build yourself, and the software we build for you.",
     intro:
-      "Installation pays for our days of work at your site, training your team and bringing your old records across. After that the software runs on your own computers and needs no internet connection for daily work.",
+      "The first is built online, in a few questions, and installed the same day. The second we build and install at your site. Either way the software runs on your own computers and needs no internet connection for daily work.",
     freeVisit: "Before anything is agreed, our first visit to understand how you work is free.",
     scope: "These prices are the same for every ready-to-install OUAQT product.",
     launchScope:

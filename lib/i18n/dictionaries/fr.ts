@@ -131,10 +131,41 @@ export const fr: Dictionary = {
   },
 
   pricingPage: {
+    /* The builder's own prices, read from settings, shown above the rest. */
+    builderTrack: {
+      eyebrow: "Le logiciel que vous créez en ligne",
+      heading: "Vous le créez vous-même, vous l'installez le jour même",
+      intro:
+        "Vous répondez aux questions, vous téléchargez votre logiciel et vous l'installez sur l'ordinateur de la boutique. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
+      soon: "Tarif bientôt disponible",
+      trial: "Essai gratuit de {days} jours avant de payer quoi que ce soit.",
+      devices: "{devices} postes compris : la caisse et un deuxième ordinateur.",
+      launchNote:
+        "Tarif de lancement, réservé à nos {clients} premiers clients. Votre prix reste ensuite le même pendant {years} ans.",
+      launchCondition:
+        "Le tarif de lancement s'applique à nos {clients} premiers clients. Au-delà, c'est le tarif standard.",
+      payment: "Paiement par Bankily. Vous voyez le montant avant de payer.",
+      cta: "Créer mon logiciel",
+      monthly: "soit {amount} par mois",
+      annual: { label: "Licence annuelle", cadence: "Par an" },
+      quarterly: { label: "Licence trimestrielle", cadence: "Par trimestre" },
+      perpetual: { label: "Licence définitive", cadence: "Payée une fois" },
+      extraDevice: { label: "Poste supplémentaire", cadence: "Par an" },
+      setupVisit: {
+        label: "Visite d'installation, si vous la voulez",
+        cadence: "Payée une fois",
+      },
+    },
+    customTrack: {
+      eyebrow: "Projet sur mesure",
+      heading: "Ou nous venons l'installer, et nous construisons ce qui manque",
+      intro:
+        "Pour les métiers que le créateur ne couvre pas encore, et pour les entreprises qui veulent que nous venions faire le travail sur place.",
+    },
     eyebrow: "Tarifs",
-    heading: "Une installation, puis une licence chaque année.",
+    heading: "Le logiciel que vous créez vous-même, et celui que nous construisons.",
     intro:
-      "L'installation paie nos journées de travail chez vous, la formation de votre équipe et la reprise de vos anciennes données. Ensuite, le logiciel tourne sur vos propres ordinateurs et n'a pas besoin d'internet pour le travail de tous les jours.",
+      "Le premier se crée en ligne, en quelques questions, et s'installe le jour même. Le second est construit et installé par nous, chez vous. Dans les deux cas le logiciel tourne sur vos propres ordinateurs et n'a pas besoin d'internet pour le travail de tous les jours.",
     freeVisit: "Avant tout engagement, notre première visite pour comprendre votre fonctionnement est gratuite.",
     scope:
       "Ces tarifs sont les mêmes pour tous les logiciels OUAQT prêts à installer.",
