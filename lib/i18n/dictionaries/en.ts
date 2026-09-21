@@ -43,6 +43,7 @@ export const en = {
 
   nav: {
     home: "Home",
+    custom: "Custom project",
     projects: "Projects",
     pricing: "Pricing",
     about: "About",
@@ -455,6 +456,78 @@ export const en = {
     ctaHeading: "What slows your business down?",
     ctaBody: "If part of your day still depends on a spreadsheet nobody trusts, that is usually where we start.",
     ctaButton: "Talk to us",
+  },
+
+  packLabels: {
+    pharmacy: "Pharmacy",
+    bakery: "Bakery",
+    restaurant: "Restaurant or cafe",
+    warehouse: "Warehouse and stock",
+  },
+
+  builderHome: {
+    heroHeading: "Describe your shop. Leave with your software.",
+    heroBody: "Nobody knows your shop better than you do. Answer a few questions about how you work, and the software that goes with it installs on the shop computer.",
+    heroPrimary: "Build my software",
+    heroSecondary: "Custom project",
+    heroReassurance: "Works without internet · Your data stays with you · {days} day free trial",
+    heroReassuranceNoTrial: "Works without internet · Your data stays with you",
+
+    impactMinutes: "Under 20 minutes",
+    impactMinutesLabel: "to build your software",
+    impactOffline: "No internet",
+    impactOfflineLabel: "for the everyday work",
+    impactData: "Your data",
+    impactDataLabel: "stays on your computer",
+
+    howHeading: "How it works",
+    howStep1: "You answer",
+    howStep1Body: "A few questions about your shop: what you sell, how you take payment, who works the till.",
+    howStep2: "You see the result",
+    howStep2Body: "The receipt and the sale screen change as you answer. Nothing is fixed.",
+    howStep3: "You install it",
+    howStep3Body: "You download the software and install it on the shop computer.",
+
+    tradesHeading: "For which trade",
+    tradesOpen: "Available",
+    tradesSoon: "Coming soon",
+    tradesOther: "My business is not on this list",
+    tradesLeaveNumber: "Leave your number and we will tell you.",
+    tradesPhone: "Your phone number",
+    tradesSend: "Tell me",
+    tradesThanks: "Thank you. We will write as soon as it is ready.",
+    tradesError: "Your number did not go through. Try again, or write to us on WhatsApp.",
+
+    worriesHeading: "What worries owners, and what is actually true",
+    worry1: "What if the internet goes?",
+    worry1Body: "The software works on your computer. Internet is only for installing and updating.",
+    worry2: "Where does my data go?",
+    worry2Body: "Your sales, your stock and your customers' accounts stay with you. We never receive them.",
+    worry3: "How do I pay?",
+    worry3Body: "By Bankily, once a year. You see the amount before you pay.",
+    worry4: "What if it does not suit me?",
+    worry4Body: "You try it free before paying anything.",
+
+    customHeading: "Is your business unlike any other?",
+    customBody: "For mines, hotels, transport, schools and anything outside the usual, we build to order. It starts with a visit, free, at your place.",
+    customProjects: "See our projects",
+    customPricing: "See the prices",
+    customTalk: "Let us talk",
+
+    faqHeading: "What people ask us",
+    faq1: "Does the software work without internet?",
+    faq1Body: "Yes. It installs on the shop computer and works there. Internet is only for installing, updating and paying.",
+    faq2: "Who sees my sales and my customers?",
+    faq2Body: "Only you. Your sales, your stock and your customers' accounts stay on your computers. We never receive them.",
+    faq3: "How many computers can I install it on?",
+    faq3Body: "Two: the till and a second machine. Both work without internet and agree with each other over your own network.",
+    faq4: "What if I need help?",
+    faq4Body: "Write to us on WhatsApp. We usually answer the same day, in French or Arabic.",
+
+    ctaHeading: "Your software, today",
+    ctaBody: "A few questions and you leave with it. You can also write to us first if you would rather.",
+    ctaButton: "Build my software",
+    ctaWhatsapp: "Write on WhatsApp",
   },
 
   contact: {

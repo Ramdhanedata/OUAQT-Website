@@ -37,6 +37,7 @@ export const fr: Dictionary = {
 
   nav: {
     home: "Accueil",
+    custom: "Projet sur mesure",
     projects: "Projets",
     pricing: "Tarifs",
     about: "À propos",
@@ -446,6 +447,82 @@ export const fr: Dictionary = {
     ctaHeading: "Qu'est-ce qui ralentit votre entreprise ?",
     ctaBody: "Si une partie de votre journée dépend encore d'un tableur dont personne n'est sûr, c'est en général par là que nous commençons.",
     ctaButton: "Parlons-en",
+  },
+
+  /*
+   * The new home page: the builder first, custom projects second.
+   * French is written first and the other two follow its meaning.
+   */
+  packLabels: {
+    pharmacy: "Pharmacie",
+    bakery: "Boulangerie",
+    restaurant: "Restaurant ou café",
+    warehouse: "Dépôt et stock",
+  },
+
+  builderHome: {
+    heroHeading: "Décrivez votre commerce. Repartez avec votre logiciel.",
+    heroBody: "Personne ne connaît votre commerce mieux que vous. Répondez à quelques questions sur votre façon de travailler, et le logiciel qui va avec s'installe sur l'ordinateur de la boutique.",
+    heroPrimary: "Créer mon logiciel",
+    heroSecondary: "Projet sur mesure",
+    heroReassurance: "Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
+    heroReassuranceNoTrial: "Sans internet · Vos données restent chez vous",
+
+    impactMinutes: "Moins de 20 minutes",
+    impactMinutesLabel: "pour créer votre logiciel",
+    impactOffline: "Sans internet",
+    impactOfflineLabel: "pour le travail de tous les jours",
+    impactData: "Vos données",
+    impactDataLabel: "restent sur votre ordinateur",
+
+    howHeading: "Comment ça marche",
+    howStep1: "Vous répondez",
+    howStep1Body: "Quelques questions sur votre commerce : ce que vous vendez, comment vous encaissez, qui tient la caisse.",
+    howStep2: "Vous voyez le résultat",
+    howStep2Body: "Le reçu et l'écran de vente se règlent à mesure que vous répondez. Rien n'est figé.",
+    howStep3: "Vous installez",
+    howStep3Body: "Vous téléchargez le logiciel et vous l'installez sur l'ordinateur de la boutique.",
+
+    tradesHeading: "Pour quel commerce",
+    tradesOpen: "Disponible",
+    tradesSoon: "Bientôt disponible",
+    tradesOther: "Mon activité n'est pas dans la liste",
+    tradesLeaveNumber: "Laissez votre numéro, nous vous prévenons.",
+    tradesPhone: "Votre numéro de téléphone",
+    tradesSend: "Me prévenir",
+    tradesThanks: "Merci. Nous vous écrivons dès que c'est prêt.",
+    tradesError: "Votre numéro n'est pas parti. Réessayez, ou écrivez-nous sur WhatsApp.",
+
+    worriesHeading: "Ce qui inquiète, et ce qu'il en est",
+    worry1: "Et si internet coupe ?",
+    worry1Body: "Le logiciel travaille sur votre ordinateur. Internet ne sert qu'à l'installation et aux mises à jour.",
+    worry2: "Où vont mes données ?",
+    worry2Body: "Vos ventes, votre stock et les comptes de vos clients restent chez vous. Nous ne les recevons pas.",
+    worry3: "Comment je paie ?",
+    worry3Body: "Par Bankily, une fois par an. Vous voyez le montant avant de payer.",
+    worry4: "Et si ça ne me convient pas ?",
+    worry4Body: "Vous l'essayez gratuitement avant de payer quoi que ce soit.",
+
+    customHeading: "Votre activité ne ressemble à aucune autre ?",
+    customBody: "Pour les mines, les hôtels, le transport, les écoles et tout ce qui sort du cadre, nous construisons sur mesure. Ça commence par une visite, gratuite, chez vous.",
+    customProjects: "Voir nos réalisations",
+    customPricing: "Voir les tarifs",
+    customTalk: "Parlons-en",
+
+    faqHeading: "Les questions qu'on nous pose",
+    faq1: "Le logiciel marche-t-il sans internet ?",
+    faq1Body: "Oui. Il s'installe sur l'ordinateur de la boutique et travaille là. Internet ne sert qu'à l'installation, aux mises à jour et au paiement.",
+    faq2: "Qui voit mes ventes et mes clients ?",
+    faq2Body: "Vous seul. Vos ventes, votre stock et les comptes de vos clients restent sur vos ordinateurs. Nous ne les recevons jamais.",
+    faq3: "Sur combien d'ordinateurs puis-je l'installer ?",
+    faq3Body: "Deux : la caisse et un deuxième poste. Les deux fonctionnent sans internet et se mettent d'accord entre eux sur votre réseau.",
+    faq4: "Et si j'ai besoin d'aide ?",
+    faq4Body: "Écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe.",
+
+    ctaHeading: "Votre logiciel, aujourd'hui",
+    ctaBody: "Quelques questions, et vous repartez avec. Vous pouvez aussi nous écrire d'abord si vous préférez.",
+    ctaButton: "Créer mon logiciel",
+    ctaWhatsapp: "Écrire sur WhatsApp",
   },
 
   contact: {

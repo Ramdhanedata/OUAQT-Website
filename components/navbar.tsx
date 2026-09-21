@@ -29,11 +29,18 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
     label: getBuilderCopy(lang).nav,
   };
 
+  /*
+   * The builder first, the custom path second, then the rest.
+   *
+   * "Accueil" is gone: the logo has always gone home and a second way to do
+   * the same thing cost a slot. "À propos" moved to the footer, which is
+   * where people look for it, and which leaves five links that fit at
+   * 1024px in French without shrinking anything.
+   */
   const links = [
-    { href: "/", label: dict.nav.home },
+    { href: "/#sur-mesure", label: dict.nav.custom },
     { href: "/projects", label: dict.nav.projects },
     { href: "/pricing", label: dict.nav.pricing },
-    { href: "/about", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];
 
