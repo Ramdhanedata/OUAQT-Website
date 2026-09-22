@@ -29,6 +29,9 @@ const privateSettings = z.object({
   trial_require_fingerprint: z.boolean(),
   trial_fingerprint_parts_to_match: z.number().int().positive(),
   trial_similarity_percent: z.number().int().min(0).max(100),
+
+  /* How long the one-click activation link lives. See 0013. */
+  activation_token_hours: z.number().int().positive(),
 });
 
 export type PrivateSettings = z.infer<typeof privateSettings>;

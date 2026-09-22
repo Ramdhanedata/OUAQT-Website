@@ -56,6 +56,7 @@ POST /api/licence/activate
 404 { "error": "unknown_serial" }
 403 { "error": "bad_token" }           // wrong, already used, or expired
 409 { "error": "device_limit", "maxDevices": 2 }
+409 { "error": "different_business" }  // this PC's database belongs to another shop
 403 { "error": "trial_not_available",  // only when a trial would start
       "because": "same_machine | same_phone | same_business | no_fingerprint",
       "supportWhatsapp": "2222..." }
@@ -115,6 +116,19 @@ serial and cannot be used as one.
 The app sends it in place of `serial`. Everything else about activation is
 the same, including the trial rules and the response, so there is one
 activation path and not two.
+
+#### A computer that already holds a shop
+
+If this machine's database already belongs to a shop, the app sends that
+shop's id as `expectBusinessId`. A serial or token for any other shop is
+refused with `different_business` **before** anything happens on our side: no
+trial starts, no device is registered, no claim is written.
+
+The app then stops, and offers two ways out: pay for the licence the data
+belongs to, or talk to us. It never deletes, overwrites, renames or migrates
+the database it found. A shop's year of sales is the most valuable object on
+that machine, and this is the one moment the software is ever tempted to
+remove it.
 
 #### How the link opens the app
 

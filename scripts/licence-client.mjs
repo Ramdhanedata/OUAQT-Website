@@ -480,6 +480,120 @@ const { data: usedOverride } = await admin
   .maybeSingle();
 check("and is used once, not kept open", Boolean(usedOverride?.used_at));
 
+/* ── One click, for an owner who built on the shop PC ──────────────────── */
+
+console.log("\nOne-click activation\n");
+
+/*
+ * A shop of its own, so the token cases do not lean on anything above. It has
+ * a fingerprint nobody has used, so its trial is not refused for reasons that
+ * have nothing to do with the token.
+ */
+const clickShop = await anotherShop("one-click");
+shops.push(clickShop);
+const clickPc = machine(`board-click-${stamp}`, `disk-click-${stamp}`, `os-click-${stamp}`);
+
+/* Step 4 asks for a token, as the owner, the way the page will. */
+const ownerClient = createClient(url, anon, { auth: { persistSession: false } });
+const { data: signedIn } = await ownerClient.auth.signInWithPassword({
+  email: `${stamp}${shopCounter}@${process.env.NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN ?? "ouaqtcom.vercel.app"}`,
+  password: `licence-client-one-click-${stamp}`,
+});
+const asOwner = { authorization: `Bearer ${signedIn?.session?.access_token ?? ""}` };
+
+const minted = await post("/api/builder/activation-token", {}, asOwner);
+const link = minted.body?.link ?? "";
+const oneTime = new URL(link || "ouaqt://activate").searchParams.get("token") ?? "";
+check("step 4 gets a link for its own shop", minted.status === 200 && link.startsWith("ouaqt://activate?token="),
+  `status ${minted.status}`);
+check("the link carries a token, not the serial", oneTime.length >= 20 && oneTime !== clickShop.serial);
+
+const { data: stored } = await admin
+  .from("activation_tokens")
+  .select("token_hash")
+  .eq("business_id", clickShop.id);
+check("only the token's hash is kept", stored?.length === 1 && stored[0].token_hash !== oneTime);
+
+/* The PC build: the app opens from the link and activates, nothing typed. */
+const clicked = await post("/api/licence/activate", {
+  token: oneTime,
+  deviceId: `device-click-${stamp}`,
+  platform: "windows",
+  fingerprint: clickPc,
+});
+check("a PC build activates from the link with nothing typed", clicked.status === 200,
+  `status ${clicked.status}, ${clicked.body?.error ?? ""}`);
+check("and gets the whole shop with it", Boolean(clicked.body?.licence) && Boolean(clicked.body?.deviceToken));
+
+/* Used twice: the same link on a second computer. */
+const twice = await post("/api/licence/activate", {
+  token: oneTime,
+  deviceId: `device-click-second-${stamp}`,
+  platform: "windows",
+  fingerprint: clickPc,
+});
+check("a token used twice is refused", twice.status === 403 && twice.body?.error === "bad_token",
+  `status ${twice.status}, ${twice.body?.error}`);
+
+/* Expired: a link from yesterday. */
+const staleToken = `stale-${stamp}-${crypto.randomUUID()}`;
+await admin.from("activation_tokens").insert({
+  business_id: clickShop.id,
+  token_hash: createHash("sha256").update(staleToken).digest("hex"),
+  expires_at: new Date(Date.now() - 60_000).toISOString(),
+});
+const expired = await post("/api/licence/activate", {
+  token: staleToken,
+  deviceId: `device-click-stale-${stamp}`,
+  platform: "windows",
+  fingerprint: clickPc,
+});
+check("an expired token is refused", expired.status === 403 && expired.body?.error === "bad_token",
+  `status ${expired.status}, ${expired.body?.error}`);
+
+/*
+ * A refused activation must not spend the link. A token for a shop whose
+ * trial is refused (this PC already had one) comes back usable.
+ */
+const refusedShop = await anotherShop("refused-click");
+shops.push(refusedShop);
+const refusedToken = `refused-${stamp}-${crypto.randomUUID()}`;
+const { data: refusedRow } = await admin.from("activation_tokens").insert({
+  business_id: refusedShop.id,
+  token_hash: createHash("sha256").update(refusedToken).digest("hex"),
+  expires_at: new Date(Date.now() + 3_600_000).toISOString(),
+}).select("id").single();
+const refused = await post("/api/licence/activate", {
+  token: refusedToken,
+  deviceId: `device-refused-${stamp}`,
+  platform: "windows",
+  fingerprint: thisPc,
+});
+const { data: afterRefusal } = await admin.from("activation_tokens").select("used_at").eq("id", refusedRow.id).single();
+check("a refused activation hands the token back", refused.status === 403 && afterRefusal?.used_at === null,
+  `status ${refused.status}, ${refused.body?.error}`);
+
+/* Never both proofs at once. */
+const both = await post("/api/licence/activate", {
+  serial: clickShop.serial,
+  token: oneTime,
+  deviceId: `device-both-${stamp}`,
+  platform: "windows",
+});
+check("a serial and a token together is refused", both.status === 400);
+
+/* A computer that already holds another shop's database. */
+const otherDb = await post("/api/licence/activate", {
+  serial: freshShop.serial,
+  deviceId: `device-fresh-${stamp}`,
+  platform: "windows",
+  fingerprint: machine(`board-b-${stamp}`, `disk-b-${stamp}`, `os-b-${stamp}`),
+  expectBusinessId: clickShop.id,
+});
+check("a serial for a different shop than this PC's database is refused",
+  otherDb.status === 409 && otherDb.body?.error === "different_business",
+  `status ${otherDb.status}, ${otherDb.body?.error}`);
+
 /* ── Clearing up ────────────────────────────────────────────────────────── */
 
 await admin.from("businesses").delete().eq("id", business.id);

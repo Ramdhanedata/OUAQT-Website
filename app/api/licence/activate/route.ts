@@ -9,6 +9,7 @@ import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 import { setupFor } from "@/builder/licence/setup";
 import { claimTrial } from "@/builder/licence/trial-claim";
+import { claimActivationToken, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 
@@ -27,7 +28,9 @@ import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 
 const body = z
   .object({
-    serial: z.string().min(8).max(20),
+    /* One of these two, never both: typed by the owner, or carried by the link. */
+    serial: z.string().min(8).max(20).optional(),
+    token: z.string().min(20).max(200).optional(),
     deviceId: z.string().min(8).max(200),
     deviceName: z.string().trim().max(60).optional(),
     platform: z.enum(["windows", "mac"]),
@@ -45,8 +48,19 @@ const body = z
       })
       .strict()
       .optional(),
+    /*
+     * The shop this computer's database already belongs to, when it has one.
+     * An id we issued, not the shop's data. With it, a serial for a different
+     * shop is refused here, before a trial starts or a device is registered,
+     * so a PC full of one shop's year can never be turned into another shop's
+     * trial.
+     */
+    expectBusinessId: z.string().uuid().optional(),
   })
-  .strict();
+  .strict()
+  .refine((value) => Boolean(value.serial) !== Boolean(value.token), {
+    message: "a serial or a token, and only one of them",
+  });
 
 export async function POST(request: Request) {
   const input = body.safeParse(await request.json().catch(() => null));
@@ -58,19 +72,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "no_signing_key" }, { status: 503 });
   }
 
-  const serial = normaliseSerial(input.data.serial);
-  if (!serial) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
-
   const supabase = adminClient();
   if (!supabase) return NextResponse.json({ error: "no_database" }, { status: 503 });
 
-  const { data: found } = await supabase
-    .from("serials")
-    .select("business_id")
-    .eq("serial_hash", await hashSerial(serial))
-    .maybeSingle();
+  /*
+   * Which shop this is, from whichever proof came. A token is taken here, and
+   * given back in the finally below if this activation does not succeed.
+   */
+  let tokenId: string | null = null;
+  let found: { business_id: string } | null = null;
+
+  if (input.data.token) {
+    const claim = await claimActivationToken(supabase, input.data.token, input.data.deviceId);
+    if (!claim.ok) return NextResponse.json({ error: "bad_token" }, { status: 403 });
+    tokenId = claim.id;
+    found = { business_id: claim.businessId };
+  } else {
+    const serial = normaliseSerial(input.data.serial ?? "");
+    if (!serial) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+
+    const { data } = await supabase
+      .from("serials")
+      .select("business_id")
+      .eq("serial_hash", await hashSerial(serial))
+      .maybeSingle();
+    found = data;
+  }
 
   if (!found) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+
+  let succeeded = false;
+  try {
 
   const [{ data: business }, settings, secrets] = await Promise.all([
     supabase
@@ -84,6 +116,10 @@ export async function POST(request: Request) {
 
   if (!business || !settings || !secrets) {
     return NextResponse.json({ error: "not_available" }, { status: 503 });
+  }
+
+  if (input.data.expectBusinessId && input.data.expectBusinessId !== business.id) {
+    return NextResponse.json({ error: "different_business" }, { status: 409 });
   }
 
   const { data: devices } = await supabase
@@ -249,6 +285,7 @@ export async function POST(request: Request) {
    */
   const setup = await setupFor(supabase, business.id);
 
+  succeeded = true;
   return NextResponse.json({
     licence: signed,
     deviceToken: token,
@@ -258,4 +295,11 @@ export async function POST(request: Request) {
     staff: setup.staff,
     logo: setup.logo,
   });
+  } finally {
+    /*
+     * A refused or failed activation hands the token back, so the owner's
+     * link still works for his next try. Only a success spends it.
+     */
+    if (tokenId && !succeeded) await releaseActivationToken(supabase, tokenId);
+  }
 }
