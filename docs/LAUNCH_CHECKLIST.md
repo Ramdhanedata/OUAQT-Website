@@ -27,6 +27,29 @@ paying shop. Each one is a switch or a value, not a piece of work.
       only, so payment screenshots are never sent to it and every payment
       waits for a person. That is the right behaviour, but it does not scale.
 
+## The installers
+
+- [ ] **macOS notarisation, before the first real owner.** Unsigned, macOS
+  refuses the first open, and the way through is a right-click and "Open"
+  that most people do not know exists. Decided 2026-09-22: buy it.
+  1. Join the Apple Developer Program (99 USD a year) with the OUAQT Apple ID.
+  2. In Xcode or at developer.apple.com, create a **Developer ID
+     Application** certificate and export it as a `.p12` with a password.
+  3. At appleid.apple.com, make an **app-specific password**. Not the
+     account password.
+  4. In `Ramdhanedata/ouaqt-desktop`, Settings, Secrets and variables,
+     Actions, add all five: `MAC_CSC_LINK` (the `.p12`, base64),
+     `MAC_CSC_KEY_PASSWORD`, `APPLE_ID`, `APPLE_APP_SPECIFIC_PASSWORD`,
+     `APPLE_TEAM_ID`. All five or none: the build refuses half of them.
+  5. Push anything. The macOS workflow signs and notarises, and the log says
+     "notarization successful". Open the `.dmg` on a Mac that has never seen
+     it: it should open with no warning at all.
+- [ ] **Windows stays unsigned for now,** with the install video showing the
+  "More info, Run anyway" box. Decided 2026-09-22: buy a certificate only if
+  owners get stuck. When that day comes, add `WINDOWS_CSC_LINK` and
+  `WINDOWS_CSC_KEY_PASSWORD` to the same secrets and the next push signs.
+  Nothing else changes.
+
 ## Settings, in the admin area
 
 - [ ] `tutorial_video_windows_url` and `tutorial_video_mac_url`, or the
