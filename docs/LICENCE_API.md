@@ -24,7 +24,9 @@ because there is no field to store it in.
 ```
 POST /api/licence/activate
 {
+  // One of these two, never both. See "Two ways in" below.
   "serial":     "RXVE-7DV3",        // what the owner types
+  "token":      "<one-time, from the website>",
   "deviceId":   "a-stable-id",      // the app's own id for this computer
   "deviceName": "Caisse",           // optional, shown to the owner
   "platform":   "windows",          // or "mac"
@@ -52,6 +54,7 @@ POST /api/licence/activate
   "logo":          { "colour": "<signed url>", "mono": "<signed url>" } | null
 }
 404 { "error": "unknown_serial" }
+403 { "error": "bad_token" }           // wrong, already used, or expired
 409 { "error": "device_limit", "maxDevices": 2 }
 403 { "error": "trial_not_available",  // only when a trial would start
       "because": "same_machine | same_phone | same_business | no_fingerprint",
@@ -81,6 +84,58 @@ replaced each time.
 
 The **trial starts here**, not at account creation: an owner who builds his
 software on Friday and installs it on Monday should not lose the weekend.
+
+### Two ways in, and nobody types on the PC they built on
+
+**A PC owner must never type his serial.** He built his software on the
+machine he is about to install it on; asking him to copy a code from one
+window into another is a step we invented.
+
+| He built on | What he does |
+| --- | --- |
+| His phone | Step 4 shows the serial and the short address to open on the shop PC. He types the serial there, once. |
+| The shop PC | Step 4's main button installs. Afterwards, "Ouvrir mon logiciel" opens the app through a link and it activates with nothing typed. |
+
+The serial is still the licence for everybody. A second device, a reinstall,
+a support call and an offline renewal all use it, which is why step 4 keeps
+showing it on the PC path, smaller, as the thing to keep.
+
+#### The one-time token
+
+The website creates it when an owner reaches step 4 on a PC. It is not the
+serial and cannot be used as one.
+
+- opaque random bytes, stored hashed, never stored in the clear
+- **one device, once.** Consumed the moment an activation succeeds
+- expires 24 hours after it is made
+- belongs to one business and can activate nothing else
+- **never written to a log, an error message, an audit row or a screen.**
+  It travels from the page to the app and is spent
+
+The app sends it in place of `serial`. Everything else about activation is
+the same, including the trial rules and the response, so there is one
+activation path and not two.
+
+#### How the link opens the app
+
+A registered URL scheme: `ouaqt://activate?token=...`
+
+**Windows.** The installer registers the scheme, so the button works as soon
+as the install finishes. Electron takes the single-instance lock and reads
+the URL from `argv` on a cold start, or from `second-instance` when the app
+is already open.
+
+**macOS.** The scheme is declared in the bundle, but LaunchServices only
+takes notice once the app has been opened. Step 4 on a Mac therefore says to
+open the app once after installing, and then to press the button. This is not
+a flaw we can code around, and an instruction that matches what actually
+happens is better than a button that silently does nothing.
+
+**When it does not work.** A browser that refuses the scheme, a token that
+has expired, a token already spent, a machine where the scheme never
+registered: all of them end the same way. The app shows the serial screen
+with one plain sentence about what happened and where his serial is. Nobody
+is ever stuck on a screen with no way forward.
 
 ### One trial per shop
 
