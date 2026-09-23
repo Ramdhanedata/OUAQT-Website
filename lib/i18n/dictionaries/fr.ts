@@ -181,19 +181,19 @@ export const fr: Dictionary = {
       label: "Licence annuelle",
       cadence: "Par an",
       freeze:
-        "Au tarif de lancement, ce montant reste bloqué pendant {years} ans, et la licence reste résiliable chaque année.",
+        "Au tarif de lancement, ce montant ne bouge pas pendant {years} ans, et vous pouvez arrêter la licence chaque année.",
     },
     extraDevice: {
       label: "Poste supplémentaire au-delà des {devices} inclus",
       cadence: "Par an",
     },
     renewal:
-      "La licence se renouvelle chaque année par tacite reconduction. Vous pouvez la résilier avant la date de renouvellement.",
+      "La licence se renouvelle d'elle-même chaque année. Vous pouvez l'arrêter avant la date de renouvellement.",
     lateRenewal:
       "Si le renouvellement est payé en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués.",
     contact: "Nous contacter",
     whatsapp: "WhatsApp",
-    products: "Les tarifs actuels couvrent les systèmes pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, ainsi que les systèmes de gestion d'atelier et d'entrepôt.",
+    products: "Ces tarifs valent pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, les ateliers et les dépôts.",
     productNames: {
       pharmacy: "les pharmacies",
       hotel: "les hôtels",
@@ -203,7 +203,7 @@ export const fr: Dictionary = {
     bespoke: {
       eyebrow: "Sur mesure",
       heading: "Un système construit pour votre seule entreprise",
-      body: "Pour une mine, un rapprochement ou un transport qui dépasse le système standard, nous construisons sur commande et chiffrons les jours de travail sur devis.",
+      body: "Pour une mine, une grande société de transport ou tout travail qui dépasse le logiciel standard, nous construisons sur commande et chiffrons les jours de travail sur devis.",
       maintenance:
         "La maintenance annuelle représente {rate} de la valeur du développement et commence au {month}e mois.",
       cta: "Demander un devis",
@@ -217,7 +217,7 @@ export const fr: Dictionary = {
     },
     included: {
       heading: "Compris dans la licence",
-      lead: "Tant que la licence est renouvelée, elle couvre tout ce qui suit, mais pas les nouveaux modules.",
+      lead: "Tant que la licence est renouvelée. Les nouveaux modules n'en font pas partie.",
       items: [
         "L'installation sur {devices} postes au maximum, sur le même site",
         "Le transfert du logiciel sur une machine de remplacement après une panne, un vol ou un changement de matériel, sans frais tant que le total ne dépasse pas {devices} postes",
@@ -230,7 +230,7 @@ export const fr: Dictionary = {
     },
     quoted: {
       heading: "Sur devis séparé",
-      lead: "Un nouveau module est un écran ou un processus qui n'existe pas encore, et il fait toujours l'objet d'un devis séparé.",
+      lead: "Un nouveau module, c'est un écran ou un processus qui n'existe pas encore.",
       items: [
         "La comptabilité",
         "La paie",

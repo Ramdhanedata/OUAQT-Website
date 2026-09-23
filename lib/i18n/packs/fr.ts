@@ -13,11 +13,11 @@ export const packPagesFr: PackPagesCopy = {
     doesHeading: "Ce que le logiciel fait",
     previewHeading: "Les écrans, avant de décider",
     previewBody:
-      "Voici les écrans tels qu'ils sortiront chez vous. Le reçu porte votre nom dès que vous le tapez.",
+      "Ils changent à chaque réponse, et le reçu porte votre nom dès que vous le tapez.",
     worriesHeading: "Ce qu'on nous demande",
     closingHeading: "Commencez par la première question",
     closingBody:
-      "Il faut moins de vingt minutes, et vous voyez le résultat se régler à mesure que vous répondez.",
+      "Il faut moins de vingt minutes, et le logiciel prend forme à chaque réponse.",
     soonHeading: "Ce métier n'est pas encore ouvert",
     soonBody: "Laissez votre numéro, nous vous prévenons le jour où il l'est.",
     pricing: "Voir les tarifs",
@@ -31,7 +31,7 @@ export const packPagesFr: PackPagesCopy = {
       "Créez le logiciel de votre pharmacie en répondant à quelques questions. Péremption, numéros de lot, vente à la boîte ou à la plaquette, crédit clients. Il fonctionne sans internet.",
     heading: "Le logiciel de votre pharmacie, fait à votre façon de travailler",
     intro:
-      "Vous répondez à quelques questions sur votre officine et vous repartez avec le logiciel qui va avec : la vente à la boîte ou à la plaquette, les dates de péremption, les numéros de lot, et les comptes des clients qui paient plus tard. Il s'installe sur l'ordinateur du comptoir et travaille sans internet.",
+      "Vous répondez à quelques questions sur votre pharmacie et vous repartez avec le logiciel qui va avec : la vente à la boîte ou à la plaquette, les dates de péremption, les numéros de lot, et les comptes des clients qui paient plus tard. Il s'installe sur l'ordinateur du comptoir et travaille sans internet.",
     cta: "Créer le logiciel de ma pharmacie",
     does: [
       {
@@ -76,7 +76,7 @@ export const packPagesFr: PackPagesCopy = {
           "Vous envoyez votre fichier Excel tel qu'il est, même en désordre, et le logiciel le lit. Vous vérifiez les premières lignes avant que rien ne soit gardé.",
       },
       {
-        question: "Mon préparateur lit mieux l'arabe",
+        question: "Mon vendeur lit mieux l'arabe",
         answer:
           "L'écran de vente se met en arabe ou en français. La langue du logiciel se choisit séparément de la vôtre.",
       },
@@ -86,7 +86,7 @@ export const packPagesFr: PackPagesCopy = {
   restaurant: {
     title: "Logiciel de caisse pour restaurant | OUAQT",
     description:
-      "Le logiciel de caisse de votre restaurant : les tables, les commandes qui restent ouvertes pendant le repas, le ticket de cuisine et l'addition. Bientôt disponible.",
+      "Le logiciel de caisse de votre restaurant : les tables, les commandes qui restent ouvertes pendant le repas, le ticket de cuisine et l'addition.",
     heading: "Le logiciel de caisse de votre restaurant",
     intro:
       "Les tables de votre salle, les commandes qui restent ouvertes pendant que les clients mangent, le ticket qui part en cuisine, et l'addition à la fin. Sur l'ordinateur de la salle, sans internet.",
@@ -143,7 +143,7 @@ export const packPagesFr: PackPagesCopy = {
   bakery: {
     title: "Logiciel de gestion pour boulangerie | OUAQT",
     description:
-      "Le logiciel de votre boulangerie : la production du jour, les commandes à l'avance avec acompte, la vente au comptoir et le crédit des habitués. Bientôt disponible.",
+      "Le logiciel de votre boulangerie : la production du jour, les commandes à l'avance avec acompte, la vente au comptoir et le crédit des habitués.",
     heading: "Le logiciel de votre boulangerie",
     intro:
       "Ce qui est sorti du four ce matin, ce qui a été vendu, ce qui reste, et les commandes que vos clients passent à l'avance. Sur l'ordinateur de la boutique, sans internet.",
@@ -200,10 +200,10 @@ export const packPagesFr: PackPagesCopy = {
   warehouse: {
     title: "Logiciel de gestion de stock pour dépôt | OUAQT",
     description:
-      "Le logiciel de votre dépôt : les entrées, les sorties, plusieurs emplacements, et un stock qui se tient tout seul. Bientôt disponible.",
+      "Le logiciel de votre dépôt : les entrées, les sorties, plusieurs emplacements, et un stock qui se tient tout seul.",
     heading: "Le logiciel de gestion de stock de votre dépôt",
     intro:
-      "Ce qui entre, ce qui sort, et ce qui reste, emplacement par emplacement. Le stock n'est jamais un chiffre tapé à la main : il se déduit des mouvements. Sur votre ordinateur, sans internet.",
+      "Le stock de chaque emplacement se déduit des entrées et des sorties : il n'est jamais un chiffre tapé à la main. Sur votre ordinateur, sans internet.",
     cta: "Créer le logiciel de mon dépôt",
     does: [
       {
@@ -257,7 +257,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   shop: {
     title: "Logiciel de caisse pour boutique et épicerie | OUAQT",
-    description: "Le logiciel de caisse de votre boutique : vente au code-barres ou en cases, stock, crédit des clients, caisse du soir. Bientôt disponible.",
+    description: "Le logiciel de caisse de votre boutique : vente au code-barres ou en cases, stock, crédit des clients, caisse du soir.",
     heading: "Le logiciel de caisse de votre boutique",
     intro: "Vous scannez ou vous touchez l'article, le client paie, le stock baisse tout seul. Le crédit des habitués et la caisse du soir sont au même endroit. Sur votre ordinateur, sans internet.",
     cta: "Créer le logiciel de ma boutique",
@@ -305,7 +305,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   hotel: {
     title: "Logiciel de gestion pour hôtel et auberge | OUAQT",
-    description: "Le logiciel de votre hôtel : le tableau des chambres, les réservations, l'arrivée et le départ, les extras sur la note. Bientôt disponible.",
+    description: "Le logiciel de votre hôtel : le tableau des chambres, les réservations, l'arrivée et le départ, les extras sur la note.",
     heading: "Le logiciel de gestion de votre hôtel",
     intro: "Vos chambres sur un seul écran, libres, occupées ou à nettoyer. La réservation, l'arrivée, les extras, et la note au départ. Sur l'ordinateur de la réception, sans internet.",
     cta: "Créer le logiciel de mon hôtel",
@@ -353,7 +353,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   transport: {
     title: "Logiciel pour compagnie de transport et envoi de colis | OUAQT",
-    description: "Le logiciel de votre compagnie de transport : les départs, les billets par place, les colis avec leur code, la liste des passagers. Bientôt disponible.",
+    description: "Le logiciel de votre compagnie de transport : les départs, les billets par place, les colis avec leur code, la liste des passagers.",
     heading: "Le logiciel de votre compagnie de transport",
     intro: "Les départs du jour, les places vendues, les colis reçus et remis. Chaque billet et chaque colis est payé et noté. Sur l'ordinateur du guichet, sans internet.",
     cta: "Créer le logiciel de ma compagnie",
@@ -401,7 +401,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   general: {
     title: "Logiciel de ventes, stock et rapports pour toute activité | OUAQT",
-    description: "Un logiciel simple pour toute activité : les ventes, le stock si vous en avez, les dépenses, et les rapports du jour et du mois. Bientôt disponible.",
+    description: "Un logiciel simple pour toute activité : les ventes, le stock si vous en avez, les dépenses, et les rapports du jour et du mois.",
     heading: "Ventes, stock et rapports, pour votre activité",
     intro: "Un salon, un atelier, une société de services, un petit commerce : vous vendez, vous notez vos dépenses, et vous voyez ce que la journée et le mois ont rapporté. Vous gardez seulement ce qui vous sert.",
     cta: "Créer le logiciel de mon activité",
@@ -420,7 +420,7 @@ export const packPagesFr: PackPagesCopy = {
       },
       {
         title: "Le rapport du jour et du mois",
-        body: "Ce qui est entré, ce qui est sorti, et ce qui reste.",
+        body: "Les ventes moins les dépenses, pour le jour ou pour le mois.",
       },
       {
         title: "Le carnet de crédit",
@@ -434,7 +434,7 @@ export const packPagesFr: PackPagesCopy = {
     worries: [
       {
         question: "Mon activité n'est dans aucune liste",
-        answer: "C'est pour elle. Vous répondez à trois questions et le logiciel se règle sur vos réponses.",
+        answer: "C'est pour elle. Vous répondez à quelques questions et le logiciel se règle sur vos réponses.",
       },
       {
         question: "Est-ce que mes chiffres partent quelque part ?",
