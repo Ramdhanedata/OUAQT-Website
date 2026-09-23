@@ -14,6 +14,7 @@ import { fill, plural } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 import { licenceLine, owes } from "./licence-line";
 import { Pay } from "./pay";
+import { InstallHelp } from "./install-help";
 import { isPhone, loginFor } from "./step-account";
 
 /*
@@ -244,6 +245,7 @@ function SignedIn({
             {copy.myAccount.edit}
           </a>
         </div>
+        {state.installers.windows || state.installers.mac ? <InstallHelp copy={copy} first="windows" /> : null}
       </section>
 
       <Subscription copy={copy} lang={lang} state={state} />

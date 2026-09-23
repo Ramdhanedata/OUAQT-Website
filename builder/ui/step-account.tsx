@@ -12,6 +12,7 @@ import { fill } from "@/lib/utils";
 import { localisedHref } from "@/lib/i18n/routes";
 import { Field, TextInput } from "./fields";
 import type { StaffMember } from "./step-products";
+import { InstallHelp } from "./install-help";
 
 /*
  * Step 4: an account, then the number that makes it his.
@@ -332,9 +333,7 @@ export function SerialPanel({
           {copy.serial.downloadInstall}
         </a>
 
-        <p className="text-base leading-relaxed text-muted-foreground">
-          {machine === "windows" ? copy.serial.windowsWarning : copy.serial.macWarning}
-        </p>
+        <InstallHelp copy={copy} first={machine === "windows" ? "windows" : "mac"} />
 
         <OpenMySoftware copy={copy} mac={machine === "mac"} link={link ?? null} />
 
@@ -503,23 +502,26 @@ function PhoneOrSoon({
           <p className="text-lg font-medium leading-relaxed text-foreground">{copy.serial.soon}</p>
         </div>
       ) : showDownloads ? (
-        <div className="flex flex-wrap gap-3">
-          {installers.windows ? (
-            <a
-              href={installers.windows}
-              className="inline-flex min-h-[48px] items-center rounded-lg bg-accent px-5 text-base font-medium text-accent-foreground"
-            >
-              {copy.serial.windows}
-            </a>
-          ) : null}
-          {installers.mac ? (
-            <a
-              href={installers.mac}
-              className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
-            >
-              {copy.serial.mac}
-            </a>
-          ) : null}
+        <div className="space-y-5">
+          <div className="flex flex-wrap gap-3">
+            {installers.windows ? (
+              <a
+                href={installers.windows}
+                className="inline-flex min-h-[48px] items-center rounded-lg bg-accent px-5 text-base font-medium text-accent-foreground"
+              >
+                {copy.serial.windows}
+              </a>
+            ) : null}
+            {installers.mac ? (
+              <a
+                href={installers.mac}
+                className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
+              >
+                {copy.serial.mac}
+              </a>
+            ) : null}
+          </div>
+          <InstallHelp copy={copy} first="windows" />
         </div>
       ) : (
         <div className="rounded-xl border-2 border-foreground p-5">

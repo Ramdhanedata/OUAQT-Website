@@ -255,6 +255,10 @@ export const fr = {
       "Windows peut afficher « Windows a protégé votre ordinateur ». Cliquez sur « Informations complémentaires », puis sur « Exécuter quand même ».",
     macWarning:
       "Ouvrez le fichier, glissez OUAQT dans Applications, puis faites un clic droit sur OUAQT et choisissez « Ouvrir ».",
+    macWarningStill:
+      "Si le Mac refuse encore de l'ouvrir : ouvrez Réglages Système, puis Confidentialité et sécurité, et cliquez sur « Ouvrir quand même ».",
+    onMac: "Sur Mac",
+    onWindows: "Sur Windows",
     afterInstall: "Une fois le logiciel installé :",
     open: "Ouvrir mon logiciel",
     opening: "Ouverture…",

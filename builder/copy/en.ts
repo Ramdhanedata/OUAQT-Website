@@ -248,6 +248,9 @@ export const en: BuilderCopy = {
     windowsWarning:
       "Windows may show \"Windows protected your PC\". Click \"More info\", then \"Run anyway\".",
     macWarning: "Open the file, drag OUAQT into Applications, then right-click OUAQT and choose \"Open\".",
+    macWarningStill: "If the Mac still refuses to open it: open System Settings, then Privacy & Security, and click \"Open Anyway\".",
+    onMac: "On a Mac",
+    onWindows: "On Windows",
     afterInstall: "Once the software is installed:",
     open: "Open my software",
     opening: "Opening…",
