@@ -9,13 +9,13 @@ import { ArrowLeft, ArrowRight, MessageCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
-import { forgetResumed, resumedCode, useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
+import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
 import { record } from "@/builder/events";
 import dynamic from "next/dynamic";
 import type { ImportedProduct } from "@/builder/import/parse";
 import { LeadForm } from "./lead-form";
 import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
-import { CodeEntry, CodeIssued, SUMMARY_FLAG, SWITCHED_FLAG } from "./config-code";
+import { CodeEntry, CodeIssued, forgetOpened, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
 import { localisedHref } from "@/lib/i18n/routes";
 
 const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
@@ -46,8 +46,7 @@ const StepAccount = dynamic(
   { ssr: false }
 );
 
-/* Only for a configuration opened by code: the summary and the download. */
-const ResumeSummary = dynamic(() => import("./resume").then((m) => m.ResumeSummary), { ssr: false });
+/* Only for a configuration opened by code: its download. */
 const ResumeDownload = dynamic(() => import("./resume").then((m) => m.ResumeDownload), { ssr: false });
 
 const LANGUAGE_NAMES: Record<Locale, string> = { fr: "Français", ar: "العربية", en: "English" };
@@ -93,39 +92,31 @@ export function Builder({
   const draft = useDraft(locale);
 
   /*
-   * A configuration opened by code: its summary first, and a note when the
-   * page changed language to match it, with the way back.
+   * A configuration opened by code. Everything was answered on the phone, so
+   * this computer shows its download and nothing else, with a note when the
+   * page changed language to match it, and the way back.
    */
-  const [resumed, setResumed] = useState(false);
-  const [showSummary, setShowSummary] = useState(false);
+  const [opened, setOpened] = useState<Opened | null>(null);
   const [switchedFrom, setSwitchedFrom] = useState<Locale | null>(null);
   useEffect(() => {
-    setResumed(Boolean(resumedCode()));
+    const found = readOpened();
+    if (found?.pack) setOpened(found);
+    else if (found) forgetOpened();
     try {
-      if (window.sessionStorage.getItem(SUMMARY_FLAG)) {
-        window.sessionStorage.removeItem(SUMMARY_FLAG);
-        setShowSummary(true);
-        setStep(0);
-      }
       const from = window.sessionStorage.getItem(SWITCHED_FLAG) as Locale | null;
       if (from) {
         window.sessionStorage.removeItem(SWITCHED_FLAG);
         setSwitchedFrom(from);
       }
     } catch {
-      // No session storage: the builder opens where the draft left off.
+      // No session storage: no note to show.
     }
   }, []);
 
-  /* An expired code: a fresh configuration, started on purpose, never silently. */
+  /* An expired code: the questions again, started on purpose, never silently. */
   const startOver = () => {
-    forgetResumed();
-    try {
-      window.localStorage.removeItem("ouaqt.builder.draft");
-    } catch {
-      // Nothing stored to clear.
-    }
-    window.location.href = localisedHref(locale, "builder");
+    forgetOpened();
+    setStep(0);
   };
 
   const codeEntry = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} />;
@@ -163,22 +154,55 @@ export function Builder({
   const switchedNote = switchedFrom ? (
     <p className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-base text-foreground">
       {fill(copy.code.switched, { language: LANGUAGE_NAMES[locale] })}{" "}
-      <a
-        href={localisedHref(switchedFrom, "builder")}
-        onClick={() => {
-          /* Back in his own language, on the same summary he was reading. */
-          try {
-            if (showSummary) window.sessionStorage.setItem(SUMMARY_FLAG, "1");
-          } catch {
-            // Without session storage he lands where the draft left off.
-          }
-        }}
-        className="underline underline-offset-4"
-      >
+      <a href={localisedHref(switchedFrom, "builder")} className="underline underline-offset-4">
         {fill(copy.code.switchBack, { language: LANGUAGE_NAMES[switchedFrom] })}
       </a>
     </p>
   ) : null;
+
+  if (opened?.pack) {
+    const whatsapp = supportWhatsapp ? `https://wa.me/${supportWhatsapp}` : organization.whatsappUrl;
+    const stepName = copy.steps.serial as string;
+    const help = `${whatsapp}?text=${encodeURIComponent(
+      fill(copy.shell.helpMessage as string, { step: STEP_KEYS.length, name: stepName })
+    )}`;
+    const name = (locale === "ar" && opened.nameArabic) || opened.nameLatin;
+    return (
+      <div lang={locale}>
+        <Container className="max-w-3xl py-8 wizard:py-12">
+          {offline ? (
+            <p className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-base text-foreground">
+              {copy.shell.offline}
+            </p>
+          ) : null}
+          {switchedNote}
+          <Progress copy={copy} step={STEP_KEYS.length - 1} total={STEP_KEYS.length} stepName={stepName} />
+          <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
+            <ResumeDownload
+              copy={copy}
+              language={locale}
+              code={opened.code}
+              pack={opened.pack}
+              name={name}
+              installers={installers}
+              tutorials={tutorials}
+              trialDays={trialDays}
+              supportWhatsapp={supportWhatsapp}
+            />
+          </div>
+          <a
+            href={help}
+            target="_blank"
+            rel="noreferrer"
+            className="mt-4 inline-flex min-h-[48px] items-center gap-2 text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
+          >
+            <MessageCircle className="h-4 w-4 text-accent" />
+            {copy.shell.help}
+          </a>
+        </Container>
+      </div>
+    );
+  }
 
   if (step === null) {
     return (
@@ -186,20 +210,15 @@ export function Builder({
         copy={copy}
         canResume={started && draft.restored}
         onStart={() => setStep(0)}
-        codeEntry={resumed ? null : codeEntry}
+        codeEntry={codeEntry}
       />
     );
   }
 
   return (
     <Wizard
-      resumed={resumed}
-      showSummary={showSummary}
-      onSummaryDone={() => setShowSummary(false)}
-      switchedNote={switchedNote}
-      codeEntry={resumed ? null : codeEntry}
+      codeEntry={codeEntry}
       flush={draft.flush}
-      trialDays={trialDays}
       copy={copy}
       locale={locale}
       step={step}
@@ -283,13 +302,8 @@ function useWide(): boolean {
 }
 
 function Wizard({
-  resumed,
-  showSummary,
-  onSummaryDone,
-  switchedNote,
   codeEntry,
   flush,
-  trialDays,
   copy,
   locale,
   step,
@@ -323,13 +337,8 @@ function Wizard({
   saveState: SaveState;
   onLeave: () => void;
   onStep: (step: number) => void;
-  resumed: boolean;
-  showSummary: boolean;
-  onSummaryDone: () => void;
-  switchedNote: React.ReactNode;
   codeEntry: React.ReactNode;
   flush: () => Promise<void>;
-  trialDays: number | null;
 }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   /*
@@ -375,13 +384,10 @@ function Wizard({
   const [serial, setSerial] = useState<string | null>(null);
   const wide = useWide();
 
-  /*
-   * The code arrives after a long summary he scrolled to the end of: it opens
-   * at the top, where the code is, and so does the summary of a code opened.
-   */
+  /* The code arrives after a long summary he scrolled to the end of: it opens at the top, where the code is. */
   useEffect(() => {
-    if (showCode || showSummary) window.scrollTo({ top: 0 });
-  }, [showCode, showSummary]);
+    if (showCode) window.scrollTo({ top: 0 });
+  }, [showCode]);
 
   /* Which step he reached, so we can see where owners stop. */
   useEffect(() => {
@@ -412,11 +418,6 @@ function Wizard({
 
   function goNext() {
     if (issuing) return;
-    if (showSummary) {
-      onSummaryDone();
-      setScreen(0);
-      return onStep(2);
-    }
     if (showCode) {
       setShowCode(false);
       setScreen(0);
@@ -426,11 +427,10 @@ function Wizard({
       if (!wide && screen < interviewScreens - 1) return setScreen(screen + 1);
       /*
        * The questions are done: the code de configuration, once, before
-       * anything else. A computer that opened a code already has one. If it
-       * cannot be issued (no network, no database), the owner carries on
-       * and nothing blocks him.
+       * anything else. If it cannot be issued (no network, no database), the
+       * owner carries on and nothing blocks him.
        */
-      if (!resumed && !issued) {
+      if (!issued) {
         setIssuing(true);
         void issue().then((ok) => {
           setIssuing(false);
@@ -464,23 +464,7 @@ function Wizard({
     });
   }
 
-  const questionsPane = showSummary ? (
-    <ResumeSummary
-      copy={copy}
-      language={locale}
-      answers={answers}
-      onEdit={(target) => {
-        onSummaryDone();
-        setScreen(0);
-        onStep(target);
-      }}
-      onContinue={() => {
-        onSummaryDone();
-        setScreen(0);
-        onStep(2);
-      }}
-    />
-  ) : showCode && issued ? (
+  const questionsPane = showCode && issued ? (
     <CodeIssued
       copy={copy}
       code={issued.code}
@@ -541,18 +525,6 @@ function Wizard({
       staff={answers.staff ?? []}
       onStaff={(next) => update({ staff: next })}
     />
-  ) : resumed ? (
-    <ResumeDownload
-      copy={copy}
-      language={locale}
-      pack={pack}
-      products={keptProducts ?? []}
-      installers={installers}
-      tutorials={tutorials}
-      trialDays={trialDays}
-      supportWhatsapp={supportWhatsapp}
-      onReady={setSerial}
-    />
   ) : (
     <StepAccount
       copy={copy}
@@ -577,7 +549,6 @@ function Wizard({
             {copy.shell.offline}
           </p>
         ) : null}
-        {switchedNote}
 
         <div className="grid gap-10 wizard:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] wizard:gap-14">
           <div>
@@ -615,7 +586,7 @@ function Wizard({
                  * then he may still want to fix a product or a name. Once it
                  * is issued there is nothing after it to continue to.
                  */
-                (lead || showCode || showSummary || (step === 3 && serial)) && "hidden"
+                (lead || showCode || (step === 3 && serial)) && "hidden"
               )}
             >
               <Container className="py-3">
@@ -651,7 +622,7 @@ function Wizard({
             <div
               className={cn(
                 "mt-8 hidden items-center gap-3 wizard:flex",
-                (lead || showCode || showSummary || (step === 3 && serial)) && "wizard:hidden"
+                (lead || showCode || (step === 3 && serial)) && "wizard:hidden"
               )}
             >
               <Button type="button" variant="outline" onClick={goBack} className="min-h-[48px] text-base">

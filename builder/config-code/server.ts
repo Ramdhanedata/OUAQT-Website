@@ -29,10 +29,11 @@ export type Draft = {
   status: "active" | "expired";
   logo_path: string | null;
   logo_mono_path: string | null;
+  made_in_test_mode: boolean;
 };
 
 const COLUMNS =
-  "id, session_owner, business_id, pack, locale, step, answers, code, phone, created_at, last_accessed_at, status, logo_path, logo_mono_path";
+  "id, session_owner, business_id, pack, locale, step, answers, code, phone, created_at, last_accessed_at, status, logo_path, logo_mono_path, made_in_test_mode";
 
 export type Found = { kind: "found"; draft: Draft } | { kind: "unknown" } | { kind: "expired"; draft: Draft };
 
@@ -133,16 +134,4 @@ export async function keepLogo(
   const up2 = await admin.storage.from("logos").upload(monoPath, two.bytes, { contentType: two.type, upsert: true });
   if (up1.error || up2.error) return null;
   return { colourPath, monoPath };
-}
-
-/** Short-lived addresses for the logo, for the summary on the computer. */
-export async function logoLinks(admin: SupabaseClient, draft: Draft): Promise<{ colour: string; mono: string } | null> {
-  if (!draft.logo_path || !draft.logo_mono_path) return null;
-  const SECONDS = 600; // not-a-rule: long enough to read the summary
-  const [colour, mono] = await Promise.all([
-    admin.storage.from("logos").createSignedUrl(draft.logo_path, SECONDS),
-    admin.storage.from("logos").createSignedUrl(draft.logo_mono_path, SECONDS),
-  ]);
-  if (!colour.data || !mono.data) return null;
-  return { colour: colour.data.signedUrl, mono: mono.data.signedUrl };
 }

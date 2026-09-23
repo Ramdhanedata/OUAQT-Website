@@ -7,8 +7,7 @@ import { Button } from "./owner-button";
 import { Container } from "@/components/ui/container";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
-import { forgetResumed } from "@/builder/draft/store";
-import { CodeEntry } from "./config-code";
+import { CodeEntry, forgetOpened } from "./config-code";
 import type { LicenceStatus } from "@/builder/licence/status";
 import type { Price } from "@/builder/payment/pricing";
 import { fill, plural } from "@/lib/utils";
@@ -84,7 +83,7 @@ export function AccountArea({
                   locale={lang}
                   supportWhatsapp={null}
                   onRestart={() => {
-                    forgetResumed();
+                    forgetOpened();
                     window.location.href = localisedHref(lang, "builder");
                   }}
                 />

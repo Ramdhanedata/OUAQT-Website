@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { normaliseConfigurationCode } from "@/builder/config-code/code";
-import { attemptKeys, clearFailures, logoLinks, openByCode, recordFailure, waitingFor } from "@/builder/config-code/server";
+import { attemptKeys, clearFailures, openByCode, recordFailure, waitingFor } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 
@@ -15,6 +15,11 @@ import { getPublicSettings } from "@/builder/db/settings";
  *
  * A code is never used up. An owner reinstalling after a broken PC types the
  * same one and gets the same configuration.
+ *
+ * Everything was answered on the phone, so the computer goes straight to the
+ * download and is told only what that screen shows: the trade, the name and
+ * the language. The answers themselves stay on the server, where the shop is
+ * made from them.
  */
 
 const body = z.object({ code: z.string().max(400) }).strict();
@@ -48,14 +53,14 @@ export async function POST(request: Request) {
   }
 
   const draft = found.draft;
+  const answers = draft.answers as { pack?: string; nameLatin?: string; nameArabic?: string };
   return NextResponse.json(
     {
       code: draft.code,
-      answers: draft.answers,
       locale: draft.locale,
-      step: draft.step,
-      logo: await logoLinks(admin, draft),
-      hasShop: Boolean(draft.business_id),
+      pack: answers.pack ?? null,
+      nameLatin: answers.nameLatin ?? "",
+      nameArabic: answers.nameArabic ?? "",
     },
     { headers: { "cache-control": "no-store" } }
   );

@@ -51,42 +51,6 @@ export type DraftAnswers = {
 export type SaveState = "idle" | "saving" | "saved" | "failed" | "local";
 
 const LOCAL_KEY = "ouaqt.builder.draft";
-/*
- * Set when this browser opened a configuration with a code de configuration.
- * From then on its changes are saved through the code, into the phone's own
- * draft, rather than into a new draft of this browser's session: the code
- * keeps pointing at one configuration, whichever device changed it last.
- */
-export const RESUME_KEY = "ouaqt.builder.resume";
-
-export function resumedCode(): string | null {
-  try {
-    return window.localStorage.getItem(RESUME_KEY);
-  } catch {
-    return null;
-  }
-}
-
-/*
- * Taking over a configuration opened by code: its answers become this
- * browser's draft, and its code is remembered so saves go back to it.
- */
-export function adoptResumed(code: string, answers: DraftAnswers, step: number): void {
-  try {
-    window.localStorage.setItem(RESUME_KEY, code);
-    window.localStorage.setItem(LOCAL_KEY, JSON.stringify({ answers, step }));
-  } catch {
-    // Storage blocked: the page still has the answers in memory for this visit.
-  }
-}
-
-export function forgetResumed(): void {
-  try {
-    window.localStorage.removeItem(RESUME_KEY);
-  } catch {
-    // Nothing to forget.
-  }
-}
 const SETTLE_MS = 800; // not-a-rule: how long typing pauses before we save
 
 type Stored = { answers: DraftAnswers; step: number };
@@ -136,8 +100,6 @@ export function useDraft(locale: string) {
   /* Then, if there is a database, whatever the server has for this owner. */
   useEffect(() => {
     if (!restored) return;
-    /* A configuration opened by code is the phone's; this session has none to read. */
-    if (resumedCode()) return;
     let cancelled = false;
 
     (async () => {
@@ -176,18 +138,6 @@ export function useDraft(locale: string) {
 
   const save = useCallback(
     async (next: DraftAnswers, nextStep: number) => {
-      const code = resumedCode();
-      if (code) {
-        setState("saving");
-        const response = await fetch("/api/builder/configuration-code/save", {
-          method: "POST",
-          headers: { "content-type": "application/json" },
-          body: JSON.stringify({ code, answers: forServer(next), step: nextStep }),
-        }).catch(() => null);
-        setState(response?.ok ? "saved" : "failed");
-        return;
-      }
-
       const supabase = await browserClient();
       if (!supabase) {
         setState("local");
@@ -260,12 +210,5 @@ export function useDraft(locale: string) {
     await save(answers, step);
   }, [answers, save, step]);
 
-  /* Replace everything with a configuration opened by code. */
-  const replace = useCallback((next: DraftAnswers, nextStep: number) => {
-    setAnswers(next);
-    setStep(nextStep);
-    writeLocal({ answers: next, step: nextStep });
-  }, []);
-
-  return { answers, step, setStep, update, state, restored, flush, replace };
+  return { answers, step, setStep, update, state, restored, flush };
 }

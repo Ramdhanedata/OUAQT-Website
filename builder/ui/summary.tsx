@@ -19,15 +19,12 @@ export function Summary({
   answers,
   questions,
   onEdit,
-  bare = false,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
   answers: DraftAnswers;
   questions: Question[];
   onEdit: (step: number) => void;
-  /* Without its own heading, inside a screen that already has one. */
-  bare?: boolean;
 }) {
   const given: Answers = answers.interview ?? {};
   /*
@@ -40,16 +37,14 @@ export function Summary({
 
   return (
     <div className="space-y-8">
-      {bare ? null : (
-        <div>
-          <h2 className="text-xl font-semibold text-foreground">
-            {copy.summary.heading}
-          </h2>
-          <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-            {copy.summary.intro}
-          </p>
-        </div>
-      )}
+      <div>
+        <h2 className="text-xl font-semibold text-foreground">
+          {copy.summary.heading}
+        </h2>
+        <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+          {copy.summary.intro}
+        </p>
+      </div>
 
       <section>
         <div className="flex items-baseline justify-between gap-4">

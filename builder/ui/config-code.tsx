@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import type { BuilderCopy } from "@/builder/copy";
 import { formatAsTyped } from "@/builder/config-code/code";
-import { adoptResumed, type DraftAnswers } from "@/builder/draft/store";
+import type { Pack } from "@/app-ui/packs";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 import { fill } from "@/lib/utils";
@@ -22,50 +22,50 @@ import { Button } from "./owner-button";
 
 export type Opened = {
   code: string;
-  answers: DraftAnswers;
   locale: Locale;
-  step: number;
-  logo: { colour: string; mono: string } | null;
-  hasShop: boolean;
+  pack: Pack | null;
+  nameLatin: string;
+  nameArabic: string;
 };
 
-/* Set before moving to the builder, read by it once it has loaded. */
-export const SUMMARY_FLAG = "ouaqt.builder.summary";
+/*
+ * A code opened in this tab. Kept for the tab only: on a shop's shared
+ * computer the next person to open the builder starts their own, and the
+ * code can be typed again any time, since it is never used up.
+ */
+const OPENED_KEY = "ouaqt.builder.opened";
+/* Set before moving to the builder in another language, read by it once. */
 export const SWITCHED_FLAG = "ouaqt.builder.switched";
 
-async function asDataUrl(url: string): Promise<string | undefined> {
+export function readOpened(): Opened | null {
   try {
-    const blob = await (await fetch(url)).blob();
-    return await new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(typeof reader.result === "string" ? reader.result : undefined);
-      reader.onerror = () => resolve(undefined);
-      reader.readAsDataURL(blob);
-    });
+    const raw = window.sessionStorage.getItem(OPENED_KEY);
+    return raw ? (JSON.parse(raw) as Opened) : null;
   } catch {
-    return undefined;
+    return null;
+  }
+}
+
+export function forgetOpened(): void {
+  try {
+    window.sessionStorage.removeItem(OPENED_KEY);
+  } catch {
+    // Nothing kept.
   }
 }
 
 /*
- * Taking a configuration opened by code into the builder: its answers and
- * logo become this browser's draft, the summary opens first, and the page is
- * the language the configuration was made in, with a note saying so.
+ * Everything was answered on the phone: a code opened here goes straight to
+ * the download, in the language the configuration was made in, with a note
+ * when the page changed language for it.
  */
-export async function openInBuilder(opened: Opened, from: Locale): Promise<void> {
-  const [logo, logoMono] = opened.logo ? await Promise.all([asDataUrl(opened.logo.colour), asDataUrl(opened.logo.mono)]) : [undefined, undefined];
-  /*
-   * The software's language, written down: left unanswered it would follow
-   * whichever page he reads, and the shop would not match the summary.
-   */
-  const appLanguage = opened.answers.appLanguage ?? opened.answers.builderLanguage ?? opened.locale;
-  adoptResumed(opened.code, { ...opened.answers, appLanguage, ...(logo && logoMono ? { logo, logoMono } : {}) }, opened.step);
+export function openInBuilder(opened: Opened, from: Locale): void {
   try {
-    window.sessionStorage.setItem(SUMMARY_FLAG, "1");
+    window.sessionStorage.setItem(OPENED_KEY, JSON.stringify(opened));
     if (opened.locale !== from) window.sessionStorage.setItem(SWITCHED_FLAG, from);
     else window.sessionStorage.removeItem(SWITCHED_FLAG);
   } catch {
-    // Without session storage the builder simply opens where the draft left off.
+    // Without session storage there is nowhere to carry the code to.
   }
   const target = localisedHref(opened.locale, "builder");
   if (window.location.pathname === target) window.location.reload();
@@ -129,7 +129,7 @@ export function CodeEntry({
         | (Opened & { error?: string; wait?: number; supportWhatsapp?: string | null })
         | null;
       if (response.ok && body?.code) {
-        await openInBuilder(body, locale);
+        openInBuilder({ code: body.code, locale: body.locale, pack: body.pack, nameLatin: body.nameLatin, nameArabic: body.nameArabic }, locale);
         return;
       }
       if (response.status === 429) {
