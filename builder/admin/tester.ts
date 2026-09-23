@@ -5,10 +5,10 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 /*
  * Test access to trades that are not open to owners yet.
  *
- * A trade stays out of enabled_packs until its screens are finished and Adel
- * has approved it. Until then nobody reaching the builder can choose it,
- * including Adel, unless he has come through the admin area, which sets this
- * cookie. With it, the builder also opens the trades listed in test_packs.
+ * A trade stays "test" in builder/packs/opening.ts until its screens are
+ * finished and Adel has approved it. Until then nobody reaching the builder
+ * can choose it, including Adel, unless he has come through the admin area,
+ * which sets this cookie. With it, the builder also opens the "test" trades.
  *
  * The cookie is a signed expiry and nothing else: it says "somebody on the
  * staff opened test mode on this browser, until then". Signed with a key

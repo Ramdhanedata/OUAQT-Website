@@ -40,7 +40,7 @@ export async function GET(request: Request) {
   await audit({
     actorId: gate.staff.id,
     subject: "settings",
-    subjectId: "test_packs",
+    subjectId: "test_mode",
     action: "test_mode_opened",
     detail: {},
   });

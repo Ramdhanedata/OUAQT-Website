@@ -7,7 +7,6 @@ const settings = {
   trial_days: 14,
   renewal_grace_days: 30,
   max_devices: 2,
-  enabled_packs: ["pharmacy"],
   support_whatsapp: "22226406568",
   price_installation_builder_mru: 0,
   price_annual_launch_mru: 1500000,

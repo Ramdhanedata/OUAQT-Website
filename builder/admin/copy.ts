@@ -188,7 +188,7 @@ const fr = {
     title: "Réglages",
     intro:
       "Les valeurs changent ici, jamais dans le code. Un prix vide veut dire que la page le dit, plutôt que d'inventer un chiffre.",
-    testPacks: "Métiers en test, fermés aux clients : voir {key} ci-dessous.",
+    testPacks: "Les métiers en test sont fermés aux clients. Ce lien les ouvre dans ce navigateur, pour les essayer.",
     testBuilder: "Tester le créateur",
     leaveTest: "Quitter le mode test",
     save: "Enregistrer",
@@ -400,7 +400,7 @@ const en: AdminCopy = {
     title: "Settings",
     intro:
       "Values change here, never in the code. An empty price means the page says so, rather than inventing a figure.",
-    testPacks: "Trades in test, closed to customers: see {key} below.",
+    testPacks: "Trades in test are closed to customers. This link opens them in this browser, to try them.",
     testBuilder: "Test the builder",
     leaveTest: "Leave test mode",
     save: "Save",
@@ -607,7 +607,7 @@ const ar: AdminCopy = {
   settings: {
     title: "الإعدادات",
     intro: "تتغير القيم هنا، لا في الشفرة. السعر الفارغ يعني أن الصفحة تقول ذلك، بدل اختراع رقم.",
-    testPacks: "مجالات قيد الاختبار، مغلقة أمام الزبائن: انظر {key} أدناه.",
+    testPacks: "المجالات قيد الاختبار مغلقة أمام الزبائن. هذا الرابط يفتحها في هذا المتصفح لتجربتها.",
     testBuilder: "اختبار المنشئ",
     leaveTest: "الخروج من وضع الاختبار",
     save: "حفظ",

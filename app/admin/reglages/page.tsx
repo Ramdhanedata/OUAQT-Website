@@ -33,15 +33,13 @@ export default async function SettingsPage() {
       </p>
 
       {/*
-        * The way into trades that are not open to owners yet. They are listed
-        * in test_packs below; this link lets this browser choose them in the
-        * builder for thirty days.
+        * The way into trades that are not open to owners yet (which ones:
+        * builder/packs/opening.ts). This link lets this browser choose them
+        * in the builder for thirty days.
         */}
       <div className="mt-6 flex flex-wrap items-center gap-4 rounded-lg border border-border p-4">
         <p className="text-base leading-relaxed text-foreground">
-          {t.settings.testPacks.split("{key}")[0]}
-          <code>test_packs</code>
-          {t.settings.testPacks.split("{key}")[1]}
+          {t.settings.testPacks}
         </p>
         <a
           href="/api/admin/test-builder"

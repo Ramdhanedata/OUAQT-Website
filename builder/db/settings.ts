@@ -27,7 +27,6 @@ const publicSettings = z.object({
   /* How long a lapsed annual licence keeps working before it goes read-only. */
   renewal_grace_days: z.number().int().nonnegative(),
   max_devices: z.number().int().positive(),
-  enabled_packs: z.array(z.string()),
   support_whatsapp: z.string(),
 
   /* The builder track. */
@@ -125,11 +124,6 @@ export async function getPublicSettings(): Promise<PublicSettings | null> {
   const asObject = Object.fromEntries(body.data.map((r) => [r.key, r.value]));
   const parsed = publicSettings.safeParse(asObject);
   return parsed.success ? parsed.data : null;
-}
-
-/** Which packs the builder currently opens. Empty when settings are unreadable. */
-export async function getEnabledPacks(): Promise<string[]> {
-  return (await getPublicSettings())?.enabled_packs ?? [];
 }
 
 /** How long the free trial runs, or null when settings cannot be read. */
