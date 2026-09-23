@@ -16,7 +16,7 @@ import { decryptSerial, serialSecretIsSet } from "@/builder/serial/cipher";
  *
  *   as the server  the configuration and the serial. Those tables are select
  *                  only for owners on purpose. The configuration is what the
- *                  desktop app runs on and the serial is what unlocks it, so
+ *                  desktop app runs on and the serial is what activates it, so
  *                  neither may be written by a browser holding a public key.
  *                  They are written here, after validation, or not at all.
  *
