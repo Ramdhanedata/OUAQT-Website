@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Pack } from "@/app-ui/config";
 import type { BuilderCopy } from "@/builder/copy";
+import { fill } from "@/lib/utils";
 import { Button } from "./owner-button";
 import { Field, TextInput } from "./fields";
 
@@ -11,6 +12,9 @@ import { Field, TextInput } from "./fields";
  * not open yet. He leaves a number and we stop asking him questions, because
  * there is nothing to build for him today and pretending otherwise wastes his
  * evening.
+ *
+ * A pack he tapped is named back to him, and only his number is asked: he
+ * has just said what he does, and asking again reads as not listening.
  */
 export function LeadForm({
   copy,
@@ -31,7 +35,7 @@ export function LeadForm({
     "idle"
   );
 
-  const ready = businessType.trim().length > 1 && phone.trim().length > 5;
+  const ready = (pack !== null || businessType.trim().length > 1) && phone.trim().length > 5;
 
   async function send() {
     setState("sending");
@@ -39,7 +43,7 @@ export function LeadForm({
       const response = await fetch("/api/builder/lead", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ businessType, phone, pack: pack ?? undefined }),
+        body: JSON.stringify({ phone, ...(pack ? { pack } : { businessType }) }),
       });
       setState(response.ok ? "sent" : "failed");
     } catch {
@@ -62,11 +66,21 @@ export function LeadForm({
 
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-foreground">{copy.lead.heading}</h2>
-
-      <Field label={copy.lead.business} help={copy.lead.businessHelp}>
-        <TextInput value={businessType} onChange={setBusinessType} />
-      </Field>
+      {pack ? (
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">
+            {fill(copy.lead.soonHeading, { trade: (copy.packs as Record<string, string>)[pack] ?? pack })}
+          </h2>
+          <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.lead.soonIntro}</p>
+        </div>
+      ) : (
+        <>
+          <h2 className="text-xl font-semibold text-foreground">{copy.lead.heading}</h2>
+          <Field label={copy.lead.business} help={copy.lead.businessHelp}>
+            <TextInput value={businessType} onChange={setBusinessType} />
+          </Field>
+        </>
+      )}
 
       <Field label={copy.lead.phone}>
         <TextInput

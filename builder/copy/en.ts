@@ -63,6 +63,8 @@ export const en: BuilderCopy = {
     phone: "Your phone number",
     submit: "Send",
     thanks: "Thank you. We will tell you as soon as your kind of business is ready.",
+    soonHeading: "{trade}: coming soon",
+    soonIntro: "This software is not open yet. Leave your number and we will tell you when it is ready.",
     error: "Your message did not go through. Try again, or write to us on WhatsApp.",
   },
 

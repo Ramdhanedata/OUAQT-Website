@@ -11,6 +11,13 @@ import { MESSAGE } from "@/builder/notify/whatsapp";
 /* Numbers are kept as their last eight digits: Mauritanian, so 222 in front. */
 const COUNTRY = "222"; // not-a-rule: the one country the product is sold in
 
+/* "pharmacy" or "pharmacy: what he wrote", from a trade tapped before it opened. */
+function leadLabel(stored: string, packs: Record<string, string>): string {
+  const [first, ...rest] = stored.split(": ");
+  if (!(first in packs)) return stored;
+  return [packs[first], rest.join(": ")].filter(Boolean).join(" · ");
+}
+
 function shownPhone(phone: string): string {
   return `+${COUNTRY} ${phone.replace(/(\d{2})(?=\d)/g, "$1 ")}`;
 }
@@ -137,7 +144,7 @@ export default async function RequestsPage() {
           <ul className="mt-4 divide-y divide-border">
             {(leads ?? []).map((lead) => (
               <li key={lead.id} className="flex flex-wrap justify-between gap-3 py-3">
-                <span className="text-base text-foreground">{lead.business_type}</span>
+                <span className="text-base text-foreground">{leadLabel(lead.business_type, t.packs)}</span>
                 <a
                   href={`https://wa.me/${lead.phone.replace(/\D/g, "")}`}
                   className="text-base text-foreground underline"

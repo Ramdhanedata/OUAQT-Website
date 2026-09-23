@@ -14,16 +14,19 @@ import { packs } from "@/app-ui/packs";
  * him back on.
  */
 
-const lead = z.object({
-  businessType: z.string().trim().min(2).max(120),
-  phone: z
-    .string()
-    .trim()
-    .min(6)
-    .max(20)
-    .regex(/^[0-9+\s().-]+$/),
-  pack: z.enum(packs).optional(),
-});
+/* A pack he tapped says what he does; otherwise he writes it. */
+const lead = z
+  .object({
+    businessType: z.string().trim().max(120).optional(),
+    phone: z
+      .string()
+      .trim()
+      .min(6)
+      .max(20)
+      .regex(/^[0-9+\s().-]+$/),
+    pack: z.enum(packs).optional(),
+  })
+  .refine((one) => Boolean(one.pack) || (one.businessType ?? "").length >= 2);
 
 const A_MINUTE = 60_000; // not-a-rule: the rate limit window
 const MOST_PER_MINUTE = 5; // not-a-rule: submissions from one address
@@ -58,7 +61,7 @@ export async function POST(request: Request) {
 
   const { error } = await supabase.from("leads_other_business").insert({
     business_type: body.data.pack
-      ? `${body.data.pack}: ${body.data.businessType}`
+      ? [body.data.pack, body.data.businessType].filter(Boolean).join(": ")
       : body.data.businessType,
     phone: body.data.phone,
   });

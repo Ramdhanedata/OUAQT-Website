@@ -68,6 +68,8 @@ export const fr = {
     phone: "Votre numéro de téléphone",
     submit: "Envoyer",
     thanks: "Merci. Nous vous prévenons dès que votre activité est prête.",
+    soonHeading: "{trade} : bientôt disponible",
+    soonIntro: "Ce logiciel n'est pas encore ouvert. Laissez votre numéro, nous vous prévenons dès qu'il est prêt.",
     error: "Votre message n'est pas parti. Réessayez, ou écrivez-nous sur WhatsApp.",
   },
 
