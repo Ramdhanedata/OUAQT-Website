@@ -346,9 +346,20 @@ function SerialPanel({
           ) : null}
         </div>
       ) : (
-        <p className="text-base leading-relaxed text-muted-foreground">
-          {copy.serial.soon}
-        </p>
+        /*
+         * No installer yet, and the owner must not be left wondering where his
+         * software went. This was a grey line under the buttons, and the first
+         * person to reach step 4 on the preview did not see it: it is the most
+         * important sentence on the page when it applies, so it looks like one.
+         */
+        <div
+          role="status"
+          className="rounded-xl border-2 border-foreground p-5"
+        >
+          <p className="text-lg font-medium leading-relaxed text-foreground">
+            {copy.serial.soon}
+          </p>
+        </div>
       )}
 
       {/* On a phone there is nothing to install, so say where to go instead. */}
