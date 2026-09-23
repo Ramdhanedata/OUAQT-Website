@@ -1,7 +1,7 @@
 import { packs, type Pack } from "@/app-ui/packs";
 import { Builder } from "@/builder/ui/builder";
 import { getPublicSettings, installersFor, type Installers } from "@/builder/db/settings";
-import { getPrivateSettings } from "@/builder/db/private-settings";
+import { choosablePacks } from "@/builder/packs/opening";
 import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { cookies } from "next/headers";
 import { getBuilderCopy } from "@/builder/copy";
@@ -49,15 +49,11 @@ export default async function BuilderPage({ params, searchParams }: Props) {
 
   /*
    * A browser that came through the admin area's test link also gets the
-   * trades that are not open to owners yet. Everybody else sees exactly
-   * enabled_packs.
+   * trades that are not open to owners yet. Everybody else sees the open
+   * ones. Which is which: builder/packs/opening.ts.
    */
   const tester = isTester(cookies().get(TESTER_COOKIE)?.value);
-  const testing = tester ? ((await getPrivateSettings())?.test_packs ?? []) : [];
-
-  const enabled = [...new Set([...(settings?.enabled_packs ?? []), ...testing])].filter(
-    (name): name is Pack => (packs as readonly string[]).includes(name)
-  );
+  const enabled = choosablePacks(tester);
 
   /* ?pack=pharmacy, the way the four trade pages link here. */
   const asked = searchParams?.pack;

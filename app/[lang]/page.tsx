@@ -11,6 +11,7 @@ import { Trades } from "@/components/home/trades";
 import { Worries } from "@/components/home/worries";
 import { JsonLd } from "@/components/seo/json-ld";
 import { getPublicSettings } from "@/builder/db/settings";
+import { openPacks } from "@/builder/packs/opening";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref, packRouteId } from "@/lib/i18n/routes";
@@ -30,9 +31,8 @@ export default async function Home({ params }: { params: { lang: Locale } }) {
   const dict = getDictionary(params.lang);
   const settings = await getPublicSettings();
 
-  const enabled = (settings?.enabled_packs ?? []).filter((name): name is Pack =>
-    (packs as readonly string[]).includes(name)
-  );
+  /* Which trades are open: builder/packs/opening.ts. */
+  const enabled = openPacks();
 
   /*
    * An open trade goes straight into the builder with the trade already

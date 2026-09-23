@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { packs, type Pack } from "@/app-ui/packs";
 import { getPublicSettings } from "@/builder/db/settings";
+import { OPENING } from "@/builder/packs/opening";
 import { PackPage } from "@/components/packs/pack-page";
 import { locales, type Locale } from "@/lib/i18n/config";
 import { getPackPage } from "@/lib/i18n/packs";
@@ -29,14 +30,10 @@ export function packRoute(pack: Pack) {
     };
   }
 
-  /*
-   * Whether the trade is open is read from settings on every render, like the
-   * home page, so opening a pack in the admin area opens its landing page too
-   * without a deploy.
-   */
+  /* Whether the trade is open: builder/packs/opening.ts, like the home page and the builder. */
   async function Page({ params }: Props) {
     const settings = await getPublicSettings();
-    const open = (settings?.enabled_packs ?? []).some((name) => name === pack);
+    const open = OPENING[pack] === "open";
     return (
       <PackPage
         lang={params.lang}
