@@ -347,3 +347,15 @@ npm run licence:keys
 Replacing the pair makes every licence already issued unverifiable, and every
 shop holding one stops working. It belongs in the launch checklist, not in a
 hurry.
+
+## A shop built in test mode
+
+Staff test the software on their own computers, which have had trials
+already, so the one-trial-per-machine rule would refuse every test shop after
+the first. A shop created while the test-mode cookie is set (Réglages, "Tester
+le créateur", in the admin area) is given a trial override at creation, the
+same override "Donner un essai" writes by hand, with the reason "Créé en mode
+test depuis l'administration" and a `trial_granted_test_mode` audit event.
+The cookie is signed by the server and only set from the admin area, so an
+owner cannot obtain one.
+

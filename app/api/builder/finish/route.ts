@@ -1,3 +1,4 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import {
@@ -6,6 +7,8 @@ import {
   defaultConfiguration,
 } from "@/app-ui/config";
 import { packs } from "@/app-ui/packs";
+import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
+import { audit } from "@/builder/db/audit";
 import { adminClient, sessionClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { applyAnswers } from "@/builder/packs/bank";
@@ -256,6 +259,29 @@ export async function POST(request: Request) {
     ends_at: null,
     renewal_secret: crypto.randomUUID(),
   });
+
+  /*
+   * A shop built in test mode is staff trying the software on their own
+   * computer, and that computer has had a trial already: the one-trial-per-
+   * machine rule would refuse the second build, doing its job against the
+   * wrong person. Such a shop gets its trial by the same override staff give
+   * by hand in Essais, with the reason written and the grant in the audit
+   * trail. The test-mode cookie is signed by the server and set only from
+   * the admin area, so no owner can give himself one.
+   */
+  if (isTester(cookies().get(TESTER_COOKIE)?.value)) {
+    await admin.from("trial_overrides").insert({
+      business_id: business.id,
+      reason: "Créé en mode test depuis l'administration",
+    });
+    await audit({
+      actorId: null,
+      subject: "licence",
+      subjectId: business.id,
+      action: "trial_granted_test_mode",
+      detail: {},
+    });
+  }
 
   if (data.products.length > 0) {
     await supabase.from("products_initial").insert(
