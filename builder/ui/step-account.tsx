@@ -289,18 +289,24 @@ function machineOf(): Machine {
   return "other";
 }
 
-function SerialPanel({
+export function SerialPanel({
   copy,
   language,
   serial,
   installers,
   tutorials,
+  link,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
   serial: string;
   installers: Installers;
   tutorials: Tutorials;
+  /*
+   * A one-click link made already, by the code de configuration path, which
+   * has no account to ask for one with.
+   */
+  link?: string | null;
 }) {
   const [machine, setMachine] = useState<Machine>("other");
   useEffect(() => setMachine(machineOf()), []);
@@ -330,7 +336,7 @@ function SerialPanel({
           {machine === "windows" ? copy.serial.windowsWarning : copy.serial.macWarning}
         </p>
 
-        <OpenMySoftware copy={copy} mac={machine === "mac"} />
+        <OpenMySoftware copy={copy} mac={machine === "mac"} link={link ?? null} />
 
         {other ? (
           <a
@@ -377,11 +383,16 @@ function SerialPanel({
  * the button tells him what to do instead, and the app itself falls back to
  * asking for the serial, so nobody is left stuck.
  */
-function OpenMySoftware({ copy, mac }: { copy: BuilderCopy; mac: boolean }) {
+function OpenMySoftware({ copy, mac, link }: { copy: BuilderCopy; mac: boolean; link: string | null }) {
   const [state, setState] = useState<"idle" | "opening" | "failed">("idle");
 
   async function open() {
     setState("opening");
+    if (link) {
+      window.location.href = link;
+      setState("idle");
+      return;
+    }
     try {
       const response = await fetch("/api/builder/activation-token", { method: "POST" });
       const body = (await response.json().catch(() => null)) as { link?: string } | null;

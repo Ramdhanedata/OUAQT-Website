@@ -65,6 +65,7 @@ export default async function BuilderPage({ params, searchParams }: Props) {
 
   return (
     <Builder
+      trialDays={settings?.trial_days ?? null}
       copy={getBuilderCopy(params.lang)}
       locale={params.lang}
       enabledPacks={enabled}

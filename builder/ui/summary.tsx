@@ -19,26 +19,37 @@ export function Summary({
   answers,
   questions,
   onEdit,
+  bare = false,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
   answers: DraftAnswers;
   questions: Question[];
   onEdit: (step: number) => void;
+  /* Without its own heading, inside a screen that already has one. */
+  bare?: boolean;
 }) {
   const given: Answers = answers.interview ?? {};
-  const asked = questions.filter((item) => isAsked(item, given));
+  /*
+   * Which questions applied is judged with the defaults filled in: a question
+   * shown because an earlier one kept its default ("Combien de tables ?"
+   * after "Sur place" was left as it was) was asked, and belongs here.
+   */
+  const effective: Answers = Object.fromEntries(questions.map((item) => [item.id, given[item.id] ?? item.default]));
+  const asked = questions.filter((item) => isAsked(item, effective));
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-xl font-semibold text-foreground">
-          {copy.summary.heading}
-        </h2>
-        <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-          {copy.summary.intro}
-        </p>
-      </div>
+      {bare ? null : (
+        <div>
+          <h2 className="text-xl font-semibold text-foreground">
+            {copy.summary.heading}
+          </h2>
+          <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+            {copy.summary.intro}
+          </p>
+        </div>
+      )}
 
       <section>
         <div className="flex items-baseline justify-between gap-4">
@@ -105,7 +116,7 @@ function readable(
     return question.options
       .filter((option) => chosen.includes(option.id))
       .map((option) => option.label[language])
-      .join(", ");
+      .join(language === "ar" ? "، " : ", ");
   }
 
   if (question.type === "single_choice" && question.options) {

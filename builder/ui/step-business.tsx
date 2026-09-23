@@ -30,6 +30,8 @@ type Props = {
   wide: boolean;
   onLead: (pack: Pack | null) => void;
   showNameError: boolean;
+  /* "J'ai déjà un code de configuration", quiet, under the first question. */
+  codeEntry?: React.ReactNode;
 };
 
 export function StepBusiness(props: Props) {
@@ -50,8 +52,9 @@ export function StepBusiness(props: Props) {
   return <Part {...props} />;
 }
 
-function PackChoice({ copy, enabledPacks, answers, update, onLead }: Props) {
+function PackChoice({ copy, enabledPacks, answers, update, onLead, codeEntry }: Props) {
   return (
+    <>
     <Fieldset legend={copy.packs.heading}>
       {allPacks.map((pack) => {
         const open = enabledPacks.includes(pack);
@@ -68,6 +71,8 @@ function PackChoice({ copy, enabledPacks, answers, update, onLead }: Props) {
       })}
       <ChoiceButton onClick={() => onLead(null)}>{copy.packs.other}</ChoiceButton>
     </Fieldset>
+    {codeEntry ? <div className="mt-6">{codeEntry}</div> : null}
+    </>
   );
 }
 
