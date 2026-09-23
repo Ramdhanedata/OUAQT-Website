@@ -343,35 +343,35 @@ export const fr = {
   },
 
   /*
-   * The code de configuration: a phone's finished questions, picked up on a
-   * computer. Never called a numéro de série, which activates the installed
-   * software and is another thing entirely.
+   * The owner's one number, his numéro de série: given on the phone when the
+   * questions end, typed on the shop computer to download the software, and
+   * typed into the software to activate it.
    */
   code: {
-    have: "J'ai déjà un code de configuration",
-    label: "Votre code de configuration",
-    placeholder: "OUAQT-XXXX-XXXX",
+    have: "J'ai déjà mon numéro de série",
+    label: "Votre numéro de série",
+    placeholder: "XXXX-XXXX",
     open: "Continuer",
     opening: "Un instant…",
-    unknown: "Code introuvable. Vérifiez les caractères, ou demandez un nouvel envoi.",
-    expired: "Ce code a expiré. Vous pouvez recommencer la configuration, ou nous écrire sur WhatsApp.",
+    unknown: "Numéro introuvable. Vérifiez les caractères, ou demandez un nouvel envoi.",
+    expired: "Ce numéro a expiré. Vous pouvez recommencer la configuration, ou nous écrire sur WhatsApp.",
     restart: "Recommencer",
     contact: "Écrire sur WhatsApp",
-    expiredMessage: "Bonjour, mon code de configuration a expiré : {code}",
+    expiredMessage: "Bonjour, mon numéro de série a expiré : {code}",
     wait: "Trop d'essais. Réessayez dans {seconds} s.",
-    failed: "Le code n'a pas pu être vérifié. Réessayez dans un moment.",
-    lost: "Vous avez perdu votre code ?",
-    lostIntro: "Tapez le numéro de téléphone donné pendant la configuration. Le code vous sera renvoyé sur WhatsApp.",
+    failed: "Le numéro n'a pas pu être vérifié. Réessayez dans un moment.",
+    lost: "Vous avez perdu votre numéro ?",
+    lostIntro: "Tapez le numéro de téléphone donné pendant la configuration. Votre numéro de série vous sera renvoyé sur WhatsApp.",
     lostPhone: "Numéro de téléphone",
     lostSend: "Envoyer",
-    lostDone: "C'est noté. Si ce numéro a servi à une configuration, vous recevrez le code sur WhatsApp.",
-    issuedHeading: "Votre code de configuration",
-    issuedIntro: "C'est terminé sur le téléphone. Sur l'ordinateur du commerce, ouvrez le site OUAQT et tapez ce code : votre logiciel est prêt à télécharger.",
+    lostDone: "C'est noté. Si ce téléphone a servi à une configuration, vous recevrez le numéro de série sur WhatsApp.",
+    issuedHeading: "Votre numéro de série",
+    issuedIntro: "C'est terminé sur le téléphone. Sur l'ordinateur du commerce, ouvrez le site OUAQT et tapez ce numéro : votre logiciel est prêt à télécharger.",
     issuedSent: "Il vous a aussi été envoyé sur WhatsApp.",
-    issuedKeep: "Faites une capture d'écran de ce code, ou notez-le sur un papier.",
-    issuedPhone: "Votre numéro WhatsApp, pour pouvoir vous renvoyer ce code",
-    issuedPhoneSave: "Enregistrer le numéro",
-    issuedPhoneSaved: "Numéro enregistré.",
+    issuedKeep: "Faites une capture d'écran de ce numéro, ou notez-le sur un papier.",
+    issuedPhone: "Votre numéro WhatsApp, pour pouvoir vous le renvoyer",
+    issuedPhoneSave: "Enregistrer",
+    issuedPhoneSaved: "Numéro WhatsApp enregistré.",
     issuedContinue: "Continuer sur ce téléphone",
     copy: "Copier",
     copied: "Copié",

@@ -11,9 +11,9 @@ import { Field, TextInput } from "./fields";
 import { Button } from "./owner-button";
 
 /*
- * The code de configuration on screen: shown once when the questions end,
- * typed on another device to pick them up, and asked for again by phone
- * number when it is lost.
+ * The owner's numéro de série on screen: shown once when the questions end,
+ * typed on the shop computer to download the software, and asked for again
+ * by phone number when it is lost.
  *
  * The entry is a quiet line that opens a single field in place. Most people
  * who arrive here are new, and a screen asking everyone "new or returning?"
@@ -21,13 +21,14 @@ import { Button } from "./owner-button";
  */
 
 /*
- * What the box opened: a code de configuration, or the numéro de série of a
- * shop already made on the phone. A serial has no configuration language of
- * its own, so the page stays in the one he is reading.
+ * What the box opened: the number, and what the download screen shows. A
+ * shop made before its configuration was kept has no language of its own,
+ * so the page stays in the one he is reading.
  */
 export type Opened = {
-  code?: string;
-  serial?: string;
+  serial: string;
+  /* Its shop exists already: a reinstall, or a shop past its trial. */
+  made?: boolean;
   locale: Locale;
   pack: Pack | null;
   nameLatin: string;
@@ -35,9 +36,9 @@ export type Opened = {
 };
 
 /*
- * A code opened in this tab. Kept for the tab only: on a shop's shared
+ * A number opened in this tab. Kept for the tab only: on a shop's shared
  * computer the next person to open the builder starts their own, and the
- * code can be typed again any time, since it is never used up.
+ * number can be typed again any time, since it is never used up.
  */
 const OPENED_KEY = "ouaqt.builder.opened";
 /* Set before moving to the builder in another language, read by it once. */
@@ -61,7 +62,7 @@ export function forgetOpened(): void {
 }
 
 /*
- * Everything was answered on the phone: a code opened here goes straight to
+ * Everything was answered on the phone: a number opened here goes straight to
  * the download, in the language the configuration was made in, with a note
  * when the page changed language for it.
  */
@@ -71,15 +72,15 @@ export function openInBuilder(opened: Opened, from: Locale): void {
     if (opened.locale !== from) window.sessionStorage.setItem(SWITCHED_FLAG, from);
     else window.sessionStorage.removeItem(SWITCHED_FLAG);
   } catch {
-    // Without session storage there is nowhere to carry the code to.
+    // Without session storage there is nowhere to carry the number to.
   }
   const target = localisedHref(opened.locale, "builder");
   if (window.location.pathname === target) window.location.reload();
   else window.location.href = target;
 }
 
-/* A code with its prefix, or eight characters that may be a numéro de série. */
-const COMPLETE = /^(OUAQT-)?[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+/* All eight characters: enough to look the number up. */
+const COMPLETE = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
 
 type Problem =
   | { kind: "unknown" }
@@ -95,7 +96,7 @@ export function CodeEntry({
   copy: BuilderCopy;
   locale: Locale;
   supportWhatsapp: string | null;
-  /* An expired code: start a fresh configuration, never silently. */
+  /* An expired number: start a fresh configuration, never silently. */
   onRestart?: () => void;
 }) {
   const [open, setOpen] = useState(false);
@@ -133,15 +134,16 @@ export function CodeEntry({
       const response = await fetch("/api/builder/configuration-code/resume", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ code: entry }),
+        body: JSON.stringify({ number: entry }),
       });
       const body = (await response.json().catch(() => null)) as
         | (Omit<Opened, "locale"> & { locale: Locale | null; error?: string; wait?: number; supportWhatsapp?: string | null })
         | null;
-      if (response.ok && (body?.code || body?.serial)) {
+      if (response.ok && body?.serial) {
         openInBuilder(
           {
-            ...(body.code ? { code: body.code } : { serial: body.serial }),
+            serial: body.serial,
+            made: body.made,
             locale: body.locale ?? locale,
             pack: body.pack,
             nameLatin: body.nameLatin,
@@ -185,7 +187,7 @@ export function CodeEntry({
             const next = formatAsTyped(event.target.value);
             setValue(next);
             /*
-             * A whole code or numéro de série opens by itself, pasted or
+             * A whole number opens by itself, pasted or
              * typed to the last character: no button to find. Once per
              * entry, so a wrong one is not tried again on every keystroke.
              */
@@ -226,7 +228,7 @@ export function CodeEntry({
               </Button>
             ) : null}
             {problem.whatsapp ? (
-              /* The message carries the code, so staff can revive it without asking. */
+              /* The message carries the number, so staff can revive it without asking. */
               <a
                 href={`https://wa.me/${problem.whatsapp}?text=${encodeURIComponent(fill(copy.code.expiredMessage, { code: problem.code }))}`}
                 target="_blank"
@@ -262,9 +264,9 @@ export function CodeEntry({
 }
 
 /*
- * The code again, by the phone number given during the questions. The
+ * The number again, by the phone number given during the questions. The
  * answer on screen is the same whether the number was known or not, and the
- * code itself only ever goes to that number.
+ * numéro de série itself only ever goes to that phone.
  */
 function LostCode({ copy }: { copy: BuilderCopy }) {
   const [phone, setPhone] = useState("");
@@ -311,21 +313,21 @@ function LostCode({ copy }: { copy: BuilderCopy }) {
 }
 
 /*
- * The code, the moment the questions are done: large, with a copy button,
+ * The number, the moment the questions are done: large, with a copy button,
  * and a plain sentence on what it is for. Sent on WhatsApp too once that is
  * connected; until then the screen asks him to keep it, and never claims a
  * message went out.
  */
 export function CodeIssued({
   copy,
-  code,
+  serial,
   sent,
   hasPhone,
   onPhone,
   onContinue,
 }: {
   copy: BuilderCopy;
-  code: string;
+  serial: string;
   sent: boolean;
   hasPhone: boolean;
   onPhone: (phone: string) => Promise<boolean>;
@@ -339,14 +341,14 @@ export function CodeIssued({
     <div className="space-y-6">
       <h2 className="text-xl font-semibold text-foreground">{copy.code.issuedHeading}</h2>
       <p className="whitespace-nowrap text-xl font-semibold tracking-wider min-[360px]:text-2xl text-foreground sm:text-4xl sm:tracking-widest">
-        <bdi dir="ltr">{code}</bdi>
+        <bdi dir="ltr">{serial}</bdi>
       </p>
       <Button
         type="button"
         variant="accent"
         className="min-h-[48px] text-base"
         onClick={() => {
-          void navigator.clipboard?.writeText(code).then(() => setCopied(true));
+          void navigator.clipboard?.writeText(serial).then(() => setCopied(true));
         }}
       >
         {copied ? copy.code.copied : copy.code.copy}

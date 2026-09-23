@@ -181,8 +181,8 @@ export function Builder({
             <ResumeDownload
               copy={copy}
               language={locale}
-              code={opened.code}
               serial={opened.serial}
+              made={Boolean(opened.made)}
               pack={opened.pack}
               name={name}
               installers={installers}
@@ -343,10 +343,10 @@ function Wizard({
 }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   /*
-   * The code de configuration, issued once, when the questions end, and shown
+   * The numéro de série, given once, when the questions end, and shown
    * on its own screen before products and staff.
    */
-  const [issued, setIssued] = useState<{ code: string; sent: boolean; hasPhone: boolean } | null>(null);
+  const [issued, setIssued] = useState<{ serial: string; sent: boolean; hasPhone: boolean } | null>(null);
   const [showCode, setShowCode] = useState(false);
   /* While the code is being fetched the screen holds still, and taps wait. */
   const [issuing, setIssuing] = useState(false);
@@ -363,9 +363,9 @@ function Wizard({
           ...(answers.logo && answers.logoMono ? { logo: answers.logo, logoMono: answers.logoMono } : {}),
         }),
       });
-      const body = (await response.json().catch(() => null)) as { code?: string; sent?: boolean; hasPhone?: boolean } | null;
-      if (!response.ok || !body?.code) return false;
-      setIssued({ code: body.code, sent: Boolean(body.sent), hasPhone: Boolean(body.hasPhone) });
+      const body = (await response.json().catch(() => null)) as { serial?: string; sent?: boolean; hasPhone?: boolean } | null;
+      if (!response.ok || !body?.serial) return false;
+      setIssued({ serial: body.serial, sent: Boolean(body.sent), hasPhone: Boolean(body.hasPhone) });
       return true;
     } catch {
       return false;
@@ -427,7 +427,7 @@ function Wizard({
     if (step === 1) {
       if (!wide && screen < interviewScreens - 1) return setScreen(screen + 1);
       /*
-       * The questions are done: the code de configuration, once, before
+       * The questions are done: the numéro de série, once, before
        * anything else. If it cannot be issued (no network, no database), the
        * owner carries on and nothing blocks him.
        */
@@ -468,7 +468,7 @@ function Wizard({
   const questionsPane = showCode && issued ? (
     <CodeIssued
       copy={copy}
-      code={issued.code}
+      serial={issued.serial}
       sent={issued.sent}
       hasPhone={issued.hasPhone}
       onPhone={(phone) => issue(phone)}

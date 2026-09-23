@@ -21,8 +21,8 @@ type Installers = { windows: string | null; mac: string | null };
 export function ResumeDownload({
   copy,
   language,
-  code,
   serial,
+  made,
   pack,
   name,
   installers,
@@ -32,9 +32,10 @@ export function ResumeDownload({
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
-  /* One or the other: a code makes the shop, a serial finds the one made. */
-  code?: string;
-  serial?: string;
+  /* The number given on the phone: it makes the shop the first time. */
+  serial: string;
+  /* Its shop exists already, so the trial may be over or paid for: no trial line. */
+  made: boolean;
   pack: Pack;
   /* Which configuration this is, so a mistyped code that exists is noticed. */
   name: string;
@@ -51,7 +52,7 @@ export function ResumeDownload({
     const response = await fetch("/api/builder/configuration-code/shop", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify(serial ? { serial } : { code }),
+      body: JSON.stringify({ number: serial }),
     }).catch(() => null);
     const body = (await response?.json().catch(() => null)) as { serial?: string; link?: string | null; pack?: Pack } | null;
     if (!response?.ok || !body?.serial) return setState("failed");
@@ -61,7 +62,7 @@ export function ResumeDownload({
   /*
    * Prepared the moment the screen opens: the owner came here to download,
    * so the installer button is the first and only thing he has to press.
-   * Safe to repeat, since the same code always finds the same shop.
+   * Safe to repeat, since the same number always finds the same shop.
    */
   const started = useRef(false);
   useEffect(() => {
@@ -98,8 +99,7 @@ export function ResumeDownload({
     <div className="space-y-5">
       <h2 className="text-xl font-semibold text-foreground">{copy.serial.pcHeading}</h2>
       {which}
-      {/* A shop found by its serial may be past its trial, or paid: no trial line. */}
-      {trialDays && !serial ? (
+      {trialDays && !made ? (
         <p className="text-base leading-relaxed text-muted-foreground">{fill(copy.code.downloadIntro, { days: trialDays })}</p>
       ) : null}
       {state === "busy" ? (

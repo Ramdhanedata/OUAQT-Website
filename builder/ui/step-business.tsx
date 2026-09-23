@@ -30,7 +30,7 @@ type Props = {
   wide: boolean;
   onLead: (pack: Pack | null) => void;
   showNameError: boolean;
-  /* "J'ai déjà un code de configuration", quiet, under the first question. */
+  /* "J'ai déjà mon numéro de série", quiet, under the first question. */
   codeEntry?: React.ReactNode;
 };
 

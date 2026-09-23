@@ -303,7 +303,7 @@ export function SerialPanel({
   installers: Installers;
   tutorials: Tutorials;
   /*
-   * A one-click link made already, by the code de configuration path, which
+   * A one-click link made already, by the path from the computer, which
    * has no account to ask for one with.
    */
   link?: string | null;
