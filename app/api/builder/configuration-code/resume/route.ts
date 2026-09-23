@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { normaliseConfigurationCode } from "@/builder/config-code/code";
-import { attemptKeys, clearFailures, openByCode, recordFailure, waitingFor } from "@/builder/config-code/server";
+import { attemptKeys, clearFailures, openByCode, openBySerial, recordFailure, waitingFor } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 
@@ -41,6 +41,15 @@ export async function POST(request: Request) {
   const found = await openByCode(admin, code);
 
   if (found.kind === "unknown") {
+    /* Not a code: perhaps the numéro de série of a shop finished on the phone. */
+    const shop = await openBySerial(admin, input.data.code);
+    if (shop) {
+      await clearFailures(admin, keys);
+      return NextResponse.json(
+        { serial: shop.serial, locale: null, pack: shop.pack, nameLatin: shop.nameLatin, nameArabic: shop.nameArabic },
+        { headers: { "cache-control": "no-store" } }
+      );
+    }
     const next = await recordFailure(admin, keys);
     return NextResponse.json({ error: "unknown", wait: next }, { status: 404 });
   }

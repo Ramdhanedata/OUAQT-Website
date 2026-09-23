@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { normaliseConfigurationCode } from "@/builder/config-code/code";
-import { attemptKeys, openByCode, recordFailure, waitingFor } from "@/builder/config-code/server";
+import { attemptKeys, openByCode, openBySerial, recordFailure, waitingFor } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { configurationFrom, createShop, product, shopInput } from "@/builder/licence/create-shop";
@@ -23,14 +23,19 @@ import { serialSecretIsSet } from "@/builder/serial/cipher";
  *
  * No account is asked for here. An owner who pays later claims the shop with
  * one; until then the code and the serial are what lead back to it.
+ *
+ * Reached with a numéro de série instead, the shop already exists: this only
+ * hands back a fresh one-click link for it.
  */
 
 const body = z
   .object({
-    code: z.string().max(40),
+    code: z.string().max(40).optional(),
+    serial: z.string().max(40).optional(),
     products: z.array(product).max(10_000).default([]),
   })
-  .strict();
+  .strict()
+  .refine((one) => Boolean(one.code) !== Boolean(one.serial));
 
 export async function POST(request: Request) {
   const input = body.safeParse(await request.json().catch(() => null));
@@ -45,7 +50,25 @@ export async function POST(request: Request) {
   const wait = await waitingFor(admin, keys);
   if (wait > 0) return NextResponse.json({ error: "slow_down", wait }, { status: 429 });
 
-  const found = await openByCode(admin, normaliseConfigurationCode(input.data.code));
+  const secrets = await getPrivateSettings();
+  const linkFor = async (businessId: string) => {
+    const minted = secrets ? await mintActivationToken(admin, businessId, secrets.activation_token_hours) : null;
+    return minted ? `ouaqt://activate?token=${encodeURIComponent(minted.token)}` : null;
+  };
+
+  if (input.data.serial) {
+    const shop = await openBySerial(admin, input.data.serial);
+    if (!shop) {
+      await recordFailure(admin, keys);
+      return NextResponse.json({ error: "unknown" }, { status: 404 });
+    }
+    return NextResponse.json(
+      { serial: shop.serial, pack: shop.pack, link: await linkFor(shop.businessId) },
+      { headers: { "cache-control": "no-store" } }
+    );
+  }
+
+  const found = await openByCode(admin, normaliseConfigurationCode(input.data.code ?? ""));
   if (found.kind === "unknown") await recordFailure(admin, keys);
   if (found.kind !== "found") return NextResponse.json({ error: found.kind }, { status: found.kind === "expired" ? 410 : 404 });
   const draft = found.draft;
@@ -108,14 +131,11 @@ export async function POST(request: Request) {
     }
   }
 
-  const secrets = await getPrivateSettings();
-  const minted = secrets ? await mintActivationToken(admin, made.businessId, secrets.activation_token_hours) : null;
-
   return NextResponse.json(
     {
       serial: made.serial,
       pack: shaped.data.pack,
-      link: minted ? `ouaqt://activate?token=${encodeURIComponent(minted.token)}` : null,
+      link: await linkFor(made.businessId),
     },
     { headers: { "cache-control": "no-store" } }
   );

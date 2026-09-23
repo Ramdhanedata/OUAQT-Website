@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 import { isExpired, waitAfter } from "./code";
 
 /*
@@ -53,6 +54,34 @@ export async function openByCode(admin: SupabaseClient, code: string, now = new 
   const touched = now.toISOString();
   await admin.from("builder_drafts").update({ last_accessed_at: touched }).eq("id", draft.id);
   return { kind: "found", draft: { ...draft, last_accessed_at: touched } };
+}
+
+/*
+ * A numéro de série typed into the code box. An owner who finished all four
+ * steps on the phone has a serial rather than a code to carry to the
+ * computer, and it leads to the same download. A prefix added by habit, or
+ * by an older page, is ignored.
+ */
+export type SerialShop = { businessId: string; serial: string; pack: string; nameLatin: string; nameArabic: string };
+
+export async function openBySerial(admin: SupabaseClient, input: string): Promise<SerialShop | null> {
+  const serial = normaliseSerial(input.replace(/^\s*OUAQT[\s\-_.:]*/i, ""));
+  if (!serial) return null;
+  const { data: row } = await admin.from("serials").select("business_id").eq("serial_hash", await hashSerial(serial)).maybeSingle();
+  if (!row) return null;
+  const { data: business } = await admin
+    .from("businesses")
+    .select("id, pack, name_latin, name_arabic")
+    .eq("id", row.business_id)
+    .maybeSingle();
+  if (!business) return null;
+  return {
+    businessId: business.id,
+    serial,
+    pack: business.pack,
+    nameLatin: business.name_latin ?? "",
+    nameArabic: business.name_arabic ?? "",
+  };
 }
 
 async function sha256(text: string): Promise<string> {

@@ -6,7 +6,8 @@
  * A phone session answers and gets its code; another device opens it typed
  * sloppily and pasted as a link; a guesser is slowed down without slowing
  * anyone else; the computer changes nothing; Télécharger makes the shop
- * with no account, and the same code works again for a reinstall; a lost
+ * with no account, and the same code works again for a reinstall; the
+ * shop's numéro de série typed in the same box finds that shop; a lost
  * code is queued for staff and never shown; thirty days unopened, it says
  * expired and the row is kept. Everything it creates, it removes.
  */
@@ -66,6 +67,16 @@ const { data: logoRow } = await admin.from("logos").select("colour_path").eq("bu
 check("and carrying the logo", Boolean(logoRow));
 const twice = await post("/api/builder/configuration-code/shop", { code }, pc.token, "10.2.2.2");
 check("the same code works again, for a reinstall: same serial, a fresh link", twice.json?.serial === shop.json.serial && twice.json?.link && twice.json.link !== shop.json.link);
+
+const typedSerial = shop.json.serial.toLowerCase().replace("-", " ");
+const bySerial = await post("/api/builder/configuration-code/resume", { code: typedSerial }, pc.token, "10.2.2.2");
+check("its numéro de série typed in the same box opens the same shop", bySerial.status === 200 && bySerial.json?.serial === shop.json.serial && bySerial.json?.pack === "pharmacy" && !bySerial.json?.code, JSON.stringify(bySerial.json));
+const prefixed = await post("/api/builder/configuration-code/resume", { code: `OUAQT-${shop.json.serial}` }, pc.token, "10.2.2.2");
+check("even with OUAQT put in front of it", prefixed.status === 200 && prefixed.json?.serial === shop.json.serial);
+const fromSerial = await post("/api/builder/configuration-code/shop", { serial: shop.json.serial }, pc.token, "10.2.2.2");
+check("and Télécharger from it gives a fresh link for that shop, no second shop", fromSerial.status === 200 && fromSerial.json?.serial === shop.json.serial && fromSerial.json?.link?.startsWith("ouaqt://activate?token="));
+const { count: shops } = await admin.from("businesses").select("id", { count: "exact", head: true }).eq("owner_id", phone.user.id);
+check("still one shop", shops === 1);
 
 const resend = await post("/api/builder/configuration-code/resend", { phone: "22 99 88 77" }, pc.token, "10.4.4.4");
 const { data: request } = await admin.from("configuration_code_requests").select("phone, sent, handled_at").eq("phone", "22998877").order("created_at", { ascending: false }).limit(1).maybeSingle();
