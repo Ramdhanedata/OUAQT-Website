@@ -24,11 +24,46 @@ import { sessionClient } from "@/builder/db/server";
 
 export type Staff = { id: string; name: string | null };
 
+/*
+ * Test deployments, open without a login. Decided 2026-09-23 so the builder
+ * can be tested without an email, a password and an authenticator.
+ *
+ * Open only when all of these hold, so it can never reach a real shop:
+ *
+ *   - the deployment is not production. Vercel says "production" for main,
+ *     "preview" for branches, and nothing at all on a developer's machine.
+ *   - the database is the test project, ouaqt-builder-test. A preview
+ *     pointed at the production database stays locked, whatever else is true.
+ *
+ * The test project holds invented shops only. Anyone who has the preview link
+ * can use this admin area while it is open, which is the price of no login.
+ */
+const TEST_PROJECT_REF = "vpdbkhykiylhigkwacvp"; // ouaqt-builder-test, public in its own URL
+
+export function adminOpenForTesting(): boolean {
+  if (process.env.VERCEL_ENV === "production") return false;
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+  return url.includes(`//${TEST_PROJECT_REF}.supabase.co`);
+}
+
 export type AdminGate =
   | { allowed: true; staff: Staff }
   | { allowed: false; reason: "signed_out" | "needs_second_factor" | "not_staff" };
 
 export async function adminGate(): Promise<AdminGate> {
+  /*
+   * Open for testing: act as the test staff account, so every confirmation,
+   * grant and setting change is still written down against somebody.
+   */
+  if (adminOpenForTesting()) {
+    const { adminClient } = await import("@/builder/db/server");
+    const admin = adminClient();
+    const { data: first } = admin
+      ? await admin.from("admin_users").select("user_id").order("created_at").limit(1).maybeSingle()
+      : { data: null };
+    if (first) return { allowed: true, staff: { id: first.user_id, name: "Test, sans connexion" } };
+  }
+
   const supabase = sessionClient();
   if (!supabase) return { allowed: false, reason: "signed_out" };
 
