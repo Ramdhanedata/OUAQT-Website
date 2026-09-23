@@ -1,4 +1,5 @@
 import { adminGate } from "@/builder/admin/guard";
+import { AdminNav } from "@/builder/admin/nav";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { PaymentsToConfirm, type PaymentRow } from "@/builder/admin/payments";
 import { adminClient } from "@/builder/db/server";
@@ -69,14 +70,14 @@ export default async function AdminPage() {
 
   return (
     <>
-      <header className="mb-8 flex items-baseline justify-between gap-4">
-        <h1 className="text-2xl font-semibold text-foreground">
-          Paiements à confirmer
-        </h1>
-        <span className="text-base text-muted-foreground">
-          {gate.staff.name ?? "staff"}
-        </span>
-      </header>
+      {/*
+        * The same menu as every other admin page. This one drew its own
+        * header, so the page staff land on first had no way to the others.
+        */}
+      <AdminNav current="/admin" staff={gate.staff.name ?? "staff"} />
+      <h1 className="mb-6 text-2xl font-semibold text-foreground">
+        Paiements à confirmer
+      </h1>
       <PaymentsToConfirm rows={rows} />
     </>
   );
