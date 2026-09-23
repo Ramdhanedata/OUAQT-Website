@@ -7,6 +7,8 @@
  * runs that file.
  *
  *   npm run db:push
+ *   npm run db:push -- --until 0019    stop after 0019, for a change that
+ *                                      must wait until new code is deployed
  */
 
 import { readFileSync, readdirSync } from "node:fs";
@@ -59,8 +61,17 @@ const applied = new Set(
   )
 );
 
+/* --until 0019: apply up to and including the file that starts with 0019. */
+const untilAt = process.argv.indexOf("--until");
+const until = untilAt === -1 ? null : process.argv[untilAt + 1];
+if (untilAt !== -1 && !/^\d{4}$/.test(until ?? "")) {
+  console.error("--until takes a four-digit migration number, such as 0019.");
+  process.exit(1);
+}
+
 const files = readdirSync(DIR)
   .filter((f) => f.endsWith(".sql"))
+  .filter((f) => until === null || f.slice(0, 4) <= until)
   .sort();
 
 let ran = 0;
