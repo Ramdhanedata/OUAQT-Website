@@ -1,6 +1,9 @@
 import { packs, type Pack } from "@/app-ui/packs";
 import { Builder } from "@/builder/ui/builder";
-import { getPublicSettings } from "@/builder/db/settings";
+import { getPublicSettings, installersFor, type Installers } from "@/builder/db/settings";
+import { getPrivateSettings } from "@/builder/db/private-settings";
+import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
+import { cookies } from "next/headers";
 import { getBuilderCopy } from "@/builder/copy";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -43,8 +46,17 @@ export function generateMetadata({ params }: Props): Metadata {
  */
 export default async function BuilderPage({ params, searchParams }: Props) {
   const settings = await getPublicSettings();
-  const enabled = (settings?.enabled_packs ?? []).filter((name): name is Pack =>
-    (packs as readonly string[]).includes(name)
+
+  /*
+   * A browser that came through the admin area's test link also gets the
+   * trades that are not open to owners yet. Everybody else sees exactly
+   * enabled_packs.
+   */
+  const tester = isTester(cookies().get(TESTER_COOKIE)?.value);
+  const testing = tester ? ((await getPrivateSettings())?.test_packs ?? []) : [];
+
+  const enabled = [...new Set([...(settings?.enabled_packs ?? []), ...testing])].filter(
+    (name): name is Pack => (packs as readonly string[]).includes(name)
   );
 
   /* ?pack=pharmacy, the way the four trade pages link here. */
@@ -59,10 +71,11 @@ export default async function BuilderPage({ params, searchParams }: Props) {
       startPack={startPack}
       supportWhatsapp={settings?.support_whatsapp ?? null}
       maxDevices={settings?.max_devices ?? null}
-      installers={{
-        windows: process.env.INSTALLER_URL_WINDOWS || null,
-        mac: process.env.INSTALLER_URL_MAC || null,
-      }}
+      installers={
+        Object.fromEntries(
+          packs.map((pack) => [pack, installersFor(settings, pack)])
+        ) as Record<Pack, Installers>
+      }
       tutorials={{
         windows: settings?.tutorial_video_windows_url || null,
         mac: settings?.tutorial_video_mac_url || null,

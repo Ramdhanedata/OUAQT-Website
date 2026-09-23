@@ -3,7 +3,7 @@ import { mayReadImages } from "@/builder/ai";
 import { getBuilderCopy } from "@/builder/copy";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { sessionClient } from "@/builder/db/server";
-import { getPublicSettings } from "@/builder/db/settings";
+import { getPublicSettings, installersFor } from "@/builder/db/settings";
 import { statusOf, graceDaysLeft, daysLeft, type LicencePlan } from "@/builder/licence/status";
 import { priceFor } from "@/builder/payment/pricing";
 import { decryptSerial } from "@/builder/serial/cipher";
@@ -161,10 +161,7 @@ export default async function AccountPage({ params }: Props) {
           : null,
         bankilyNumber: secrets?.bankily_number || null,
         aiReadsImages: mayReadImages(),
-        installers: {
-          windows: process.env.INSTALLER_URL_WINDOWS || null,
-          mac: process.env.INSTALLER_URL_MAC || null,
-        },
+        installers: installersFor(settings, business.pack),
       }}
     />
   );

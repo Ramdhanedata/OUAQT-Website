@@ -238,6 +238,23 @@ export const fr = {
     onPhone: "Pour installer, ouvrez cette adresse sur l'ordinateur du commerce :",
     tutorialWindows: "Voir la vidéo d'installation sur Windows",
     tutorialMac: "Voir la vidéo d'installation sur Mac",
+
+    /* On the shop PC itself: install, then open, and never type the serial. */
+    pcHeading: "Votre logiciel est prêt",
+    downloadInstall: "Télécharger et installer",
+    alsoMac: "Vous êtes sur Mac ? Télécharger pour Mac",
+    alsoWindows: "Vous êtes sur Windows ? Télécharger pour Windows",
+    keepNumber: "Gardez ce numéro : il vous servira pour un deuxième poste ou une réinstallation.",
+    windowsWarning:
+      "Windows peut afficher « Windows a protégé votre ordinateur ». Cliquez sur « Informations complémentaires », puis sur « Exécuter quand même ».",
+    macWarning:
+      "Ouvrez le fichier, glissez OUAQT dans Applications, puis faites un clic droit sur OUAQT et choisissez « Ouvrir ».",
+    afterInstall: "Une fois le logiciel installé :",
+    open: "Ouvrir mon logiciel",
+    opening: "Ouverture…",
+    macOpenFirst: "Sur Mac, ouvrez d'abord le logiciel une fois depuis Applications, puis appuyez sur ce bouton.",
+    openFallback: "Si rien ne s'ouvre, tapez votre numéro de série dans le logiciel : il vous le demandera.",
+    openFailed: "Le lien n'a pas pu être préparé. Tapez votre numéro de série dans le logiciel.",
   },
 
   myAccount: {

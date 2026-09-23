@@ -74,7 +74,7 @@ export function Builder({
   startPack: Pack | null;
   supportWhatsapp: string | null;
   maxDevices: number | null;
-  installers: { windows: string | null; mac: string | null };
+  installers: Record<Pack, { windows: string | null; mac: string | null }>;
   tutorials: { windows: string | null; mac: string | null };
   termsHref: string;
 }) {
@@ -229,7 +229,7 @@ function Wizard({
   enabledPacks: Pack[];
   supportWhatsapp: string | null;
   maxDevices: number | null;
-  installers: { windows: string | null; mac: string | null };
+  installers: Record<Pack, { windows: string | null; mac: string | null }>;
   tutorials: { windows: string | null; mac: string | null };
   termsHref: string;
   answers: DraftAnswers;

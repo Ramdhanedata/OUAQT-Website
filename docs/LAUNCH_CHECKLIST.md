@@ -20,9 +20,11 @@ paying shop. Each one is a switch or a value, not a piece of work.
 - [ ] `NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN` decided **before** the first owner.
       Changing it afterwards locks every one of them out of their account.
       It currently points at the Vercel address because ouaqt.com has no DNS.
-- [ ] `INSTALLER_URL_WINDOWS` and `INSTALLER_URL_MAC` pointing at the real
-      installers. Until then the builder says the software is coming and hides
-      the buttons, which is honest but is not a launch.
+- [ ] The `installer_url_windows_<trade>` and `installer_url_mac_<trade>`
+      settings pointing at the real installers, for every trade that is open.
+      A trade whose addresses are empty says the software is coming, which is
+      honest but is not a launch. They point at the public
+      `Ramdhanedata/ouaqt-releases` repository's latest release.
 - [ ] `AI_TIER=paid` and a paid key. On `free` the AI reads the owner's words
       only, so payment screenshots are never sent to it and every payment
       waits for a person. That is the right behaviour, but it does not scale.

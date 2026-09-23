@@ -233,6 +233,21 @@ export const en: BuilderCopy = {
     onPhone: "To install it, open this address on the shop computer:",
     tutorialWindows: "Watch the Windows installation video",
     tutorialMac: "Watch the Mac installation video",
+
+    pcHeading: "Your software is ready",
+    downloadInstall: "Download and install",
+    alsoMac: "On a Mac? Download for Mac",
+    alsoWindows: "On Windows? Download for Windows",
+    keepNumber: "Keep this number: you will need it for a second computer or a reinstall.",
+    windowsWarning:
+      "Windows may show \"Windows protected your PC\". Click \"More info\", then \"Run anyway\".",
+    macWarning: "Open the file, drag OUAQT into Applications, then right-click OUAQT and choose \"Open\".",
+    afterInstall: "Once the software is installed:",
+    open: "Open my software",
+    opening: "Opening…",
+    macOpenFirst: "On a Mac, open the software once from Applications first, then press this button.",
+    openFallback: "If nothing opens, type your serial number into the software: it will ask for it.",
+    openFailed: "The link could not be prepared. Type your serial number into the software.",
   },
 
   myAccount: {

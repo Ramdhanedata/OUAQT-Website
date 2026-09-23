@@ -31,6 +31,29 @@ export default async function SettingsPage() {
         que la page le dit, plutôt que d&apos;inventer un chiffre.
       </p>
 
+      {/*
+        * The way into trades that are not open to owners yet. They are listed
+        * in test_packs below; this link lets this browser choose them in the
+        * builder for thirty days.
+        */}
+      <div className="mt-6 flex flex-wrap items-center gap-4 rounded-lg border border-border p-4">
+        <p className="text-base leading-relaxed text-foreground">
+          Métiers en test, fermés aux clients : voir <code>test_packs</code> ci-dessous.
+        </p>
+        <a
+          href="/api/admin/test-builder"
+          className="inline-flex min-h-[44px] items-center rounded-md bg-foreground px-4 text-base font-medium text-background"
+        >
+          Tester le créateur
+        </a>
+        <a
+          href="/api/admin/test-builder?off=1"
+          className="inline-flex min-h-[44px] items-center text-base text-muted-foreground underline"
+        >
+          Quitter le mode test
+        </a>
+      </div>
+
       <ul className="mt-6 divide-y divide-border">
         {(settings ?? []).map((setting) => (
           <SettingRow

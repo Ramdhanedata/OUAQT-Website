@@ -32,6 +32,9 @@ const privateSettings = z.object({
 
   /* How long the one-click activation link lives. See 0013. */
   activation_token_hours: z.number().int().positive(),
+
+  /* Trades open only in test mode, from the admin area. See 0015. */
+  test_packs: z.array(z.string()),
 });
 
 export type PrivateSettings = z.infer<typeof privateSettings>;

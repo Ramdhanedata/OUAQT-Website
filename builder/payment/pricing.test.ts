@@ -27,6 +27,14 @@ const settings = {
   referral_free_months: 1,
   tutorial_video_windows_url: "",
   tutorial_video_mac_url: "",
+  installer_url_windows_pharmacy: "",
+  installer_url_mac_pharmacy: "",
+  installer_url_windows_bakery: "",
+  installer_url_mac_bakery: "",
+  installer_url_windows_restaurant: "",
+  installer_url_mac_restaurant: "",
+  installer_url_windows_warehouse: "",
+  installer_url_mac_warehouse: "",
 } satisfies PublicSettings;
 
 describe("what an owner owes", () => {

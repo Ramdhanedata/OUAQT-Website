@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { AppLanguage } from "@/app-ui/config";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
@@ -9,6 +9,7 @@ import type { DraftAnswers } from "@/builder/draft/store";
 import type { ImportedProduct } from "@/builder/import/parse";
 import { Button } from "./owner-button";
 import { fill } from "@/lib/utils";
+import { localisedHref } from "@/lib/i18n/routes";
 import { Field, TextInput } from "./fields";
 import type { StaffMember } from "./step-products";
 
@@ -70,7 +71,7 @@ export function StepAccount({
   products: ImportedProduct[];
   staff: StaffMember[];
   termsHref: string;
-  installers: Installers;
+  installers: Record<Pack, Installers>;
   tutorials: Tutorials;
   serial: string | null;
   onSerial: (serial: string) => void;
@@ -79,8 +80,9 @@ export function StepAccount({
     return (
       <SerialPanel
         copy={copy}
+        language={language}
         serial={serial}
-        installers={installers}
+        installers={installers[pack]}
         tutorials={tutorials}
       />
     );
@@ -270,32 +272,186 @@ function AccountForm({
   );
 }
 
+/*
+ * What kind of machine is reading step 4, from the browser's own description
+ * of itself. This decides which download to offer, not how anything is laid
+ * out: an iPad calls itself a Mac, so a touch screen counts as a phone.
+ */
+type Machine = "windows" | "mac" | "phone" | "other";
+
+function machineOf(): Machine {
+  if (typeof navigator === "undefined") return "other";
+  const agent = navigator.userAgent;
+  if (/Android|iPhone|iPod/i.test(agent)) return "phone";
+  if (/Macintosh/i.test(agent) && navigator.maxTouchPoints > 1) return "phone";
+  if (/Windows/i.test(agent)) return "windows";
+  if (/Macintosh|Mac OS X/i.test(agent)) return "mac";
+  return "other";
+}
+
 function SerialPanel({
   copy,
+  language,
   serial,
   installers,
   tutorials,
 }: {
   copy: BuilderCopy;
+  language: AppLanguage;
   serial: string;
   installers: Installers;
   tutorials: Tutorials;
 }) {
+  const [machine, setMachine] = useState<Machine>("other");
+  useEffect(() => setMachine(machineOf()), []);
+
+  const onPc = machine === "windows" || machine === "mac";
+  const mine = machine === "windows" ? installers.windows : machine === "mac" ? installers.mac : null;
+  const other = machine === "windows" ? installers.mac : machine === "mac" ? installers.windows : null;
+
+  /*
+   * The owner who built on the shop PC itself. He installs, then opens, and
+   * never types his serial into the machine he built it on. The serial is
+   * still here, smaller, as the thing to keep for a second computer.
+   */
+  if (onPc && mine) {
+    return (
+      <div className="space-y-6">
+        <h2 className="text-xl font-semibold text-foreground">{copy.serial.pcHeading}</h2>
+
+        <a
+          href={mine}
+          className="flex min-h-[56px] w-full items-center justify-center rounded-lg bg-accent px-5 text-lg font-semibold text-accent-foreground"
+        >
+          {copy.serial.downloadInstall}
+        </a>
+
+        <p className="text-base leading-relaxed text-muted-foreground">
+          {machine === "windows" ? copy.serial.windowsWarning : copy.serial.macWarning}
+        </p>
+
+        <OpenMySoftware copy={copy} mac={machine === "mac"} />
+
+        {other ? (
+          <a
+            href={other}
+            className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4"
+          >
+            {machine === "windows" ? copy.serial.alsoMac : copy.serial.alsoWindows}
+          </a>
+        ) : null}
+
+        <div className="rounded-xl border border-border p-4">
+          <p className="text-base leading-relaxed text-muted-foreground">{copy.serial.keepNumber}</p>
+          <p
+            dir="ltr"
+            className="mt-2 font-mono text-xl font-semibold tracking-[0.15em] text-foreground"
+          >
+            {serial}
+          </p>
+        </div>
+
+        <Tutorials copy={copy} tutorials={tutorials} />
+      </div>
+    );
+  }
+
+  return (
+    <PhoneOrSoon
+      copy={copy}
+      language={language}
+      serial={serial}
+      installers={installers}
+      tutorials={tutorials}
+      showDownloads={machine === "other"}
+    />
+  );
+}
+
+/*
+ * "Ouvrir mon logiciel": a one-time link for the app that was just installed.
+ *
+ * Made when he presses the button, not before, so its twenty-four hours start
+ * when he is ready. The link itself never appears on the page: it is handed
+ * straight to the browser to open. Whatever goes wrong, the sentence under
+ * the button tells him what to do instead, and the app itself falls back to
+ * asking for the serial, so nobody is left stuck.
+ */
+function OpenMySoftware({ copy, mac }: { copy: BuilderCopy; mac: boolean }) {
+  const [state, setState] = useState<"idle" | "opening" | "failed">("idle");
+
+  async function open() {
+    setState("opening");
+    try {
+      const response = await fetch("/api/builder/activation-token", { method: "POST" });
+      const body = (await response.json().catch(() => null)) as { link?: string } | null;
+      if (!response.ok || !body?.link?.startsWith("ouaqt://")) {
+        setState("failed");
+        return;
+      }
+      window.location.href = body.link;
+      setState("idle");
+    } catch {
+      setState("failed");
+    }
+  }
+
+  return (
+    <div className="space-y-3 rounded-xl border-2 border-foreground p-5">
+      <p className="text-base font-medium text-foreground">{copy.serial.afterInstall}</p>
+      {mac ? (
+        <p className="text-base leading-relaxed text-muted-foreground">{copy.serial.macOpenFirst}</p>
+      ) : null}
+      <Button
+        type="button"
+        variant="primary"
+        className="min-h-[56px] w-full text-lg"
+        disabled={state === "opening"}
+        onClick={() => void open()}
+      >
+        {state === "opening" ? copy.serial.opening : copy.serial.open}
+      </Button>
+      <p className="text-base leading-relaxed text-muted-foreground" role={state === "failed" ? "alert" : undefined}>
+        {state === "failed" ? copy.serial.openFailed : copy.serial.openFallback}
+      </p>
+    </div>
+  );
+}
+
+/*
+ * A phone, or a trade with nothing to download yet. On a phone there is
+ * nothing to install, so it shows the serial and where to go on the shop
+ * computer. With no installer yet, it says so plainly.
+ */
+function PhoneOrSoon({
+  copy,
+  language,
+  serial,
+  installers,
+  tutorials,
+  showDownloads,
+}: {
+  copy: BuilderCopy;
+  language: AppLanguage;
+  serial: string;
+  installers: Installers;
+  tutorials: Tutorials;
+  showDownloads: boolean;
+}) {
   const [copied, setCopied] = useState(false);
-  const address = typeof window === "undefined" ? "" : window.location.origin;
+  const origin = typeof window === "undefined" ? "" : window.location.origin;
+  /* Where he signs in on the shop PC: his account page, which has the downloads. */
+  const address = `${origin}${localisedHref(language, "account")}`;
   const share = `https://wa.me/?text=${encodeURIComponent(
     fill(copy.serial.shareMessage as string, { serial, url: address })
   )}`;
+  const anyInstaller = Boolean(installers.windows || installers.mac);
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-semibold text-foreground">
-          {copy.serial.heading}
-        </h2>
-        <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-          {copy.serial.intro}
-        </p>
+        <h2 className="text-xl font-semibold text-foreground">{copy.serial.heading}</h2>
+        <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.serial.intro}</p>
       </div>
 
       <p
@@ -326,7 +482,16 @@ function SerialPanel({
         </a>
       </div>
 
-      {installers.windows || installers.mac ? (
+      {!anyInstaller ? (
+        /*
+         * No installer yet, and the owner must not be left wondering where his
+         * software went. This was a grey line, and the first person to reach
+         * step 4 on the preview did not see it.
+         */
+        <div role="status" className="rounded-xl border-2 border-foreground p-5">
+          <p className="text-lg font-medium leading-relaxed text-foreground">{copy.serial.soon}</p>
+        </div>
+      ) : showDownloads ? (
         <div className="flex flex-wrap gap-3">
           {installers.windows ? (
             <a
@@ -346,52 +511,43 @@ function SerialPanel({
           ) : null}
         </div>
       ) : (
-        /*
-         * No installer yet, and the owner must not be left wondering where his
-         * software went. This was a grey line under the buttons, and the first
-         * person to reach step 4 on the preview did not see it: it is the most
-         * important sentence on the page when it applies, so it looks like one.
-         */
-        <div
-          role="status"
-          className="rounded-xl border-2 border-foreground p-5"
-        >
-          <p className="text-lg font-medium leading-relaxed text-foreground">
-            {copy.serial.soon}
+        <div className="rounded-xl border-2 border-foreground p-5">
+          <p className="text-base leading-relaxed text-foreground">{copy.serial.onPhone}</p>
+          <p dir="ltr" className="mt-2 break-all text-lg font-medium text-foreground">
+            {address}
           </p>
         </div>
       )}
 
-      {/* On a phone there is nothing to install, so say where to go instead. */}
-      <p className="text-base leading-relaxed text-muted-foreground wizard:hidden">
-        {copy.serial.onPhone}{" "}
-        <bdi dir="ltr" className="text-foreground">
-          {address}
-        </bdi>
-      </p>
+      <Tutorials copy={copy} tutorials={tutorials} />
+    </div>
+  );
+}
 
-      <div className="space-y-2">
-        {tutorials.windows ? (
-          <a
-            href={tutorials.windows}
-            target="_blank"
-            rel="noreferrer"
-            className="block min-h-[48px] text-base text-muted-foreground underline decoration-border underline-offset-4"
-          >
-            {copy.serial.tutorialWindows}
-          </a>
-        ) : null}
-        {tutorials.mac ? (
-          <a
-            href={tutorials.mac}
-            target="_blank"
-            rel="noreferrer"
-            className="block min-h-[48px] text-base text-muted-foreground underline decoration-border underline-offset-4"
-          >
-            {copy.serial.tutorialMac}
-          </a>
-        ) : null}
-      </div>
+function Tutorials({ copy, tutorials }: { copy: BuilderCopy; tutorials: Tutorials }) {
+  if (!tutorials.windows && !tutorials.mac) return null;
+  return (
+    <div className="space-y-2">
+      {tutorials.windows ? (
+        <a
+          href={tutorials.windows}
+          target="_blank"
+          rel="noreferrer"
+          className="block min-h-[48px] text-base text-muted-foreground underline decoration-border underline-offset-4"
+        >
+          {copy.serial.tutorialWindows}
+        </a>
+      ) : null}
+      {tutorials.mac ? (
+        <a
+          href={tutorials.mac}
+          target="_blank"
+          rel="noreferrer"
+          className="block min-h-[48px] text-base text-muted-foreground underline decoration-border underline-offset-4"
+        >
+          {copy.serial.tutorialMac}
+        </a>
+      ) : null}
     </div>
   );
 }

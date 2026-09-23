@@ -54,6 +54,16 @@ const publicSettings = z.object({
 
   tutorial_video_windows_url: z.string(),
   tutorial_video_mac_url: z.string(),
+
+  /* Where each trade downloads from, per system. Empty means not yet. See 0014. */
+  installer_url_windows_pharmacy: z.string(),
+  installer_url_mac_pharmacy: z.string(),
+  installer_url_windows_bakery: z.string(),
+  installer_url_mac_bakery: z.string(),
+  installer_url_windows_restaurant: z.string(),
+  installer_url_mac_restaurant: z.string(),
+  installer_url_windows_warehouse: z.string(),
+  installer_url_mac_warehouse: z.string(),
 });
 
 export type PublicSettings = z.infer<typeof publicSettings>;
@@ -117,4 +127,22 @@ export async function getEnabledPacks(): Promise<string[]> {
 /** How long the free trial runs, or null when settings cannot be read. */
 export async function getTrialDays(): Promise<number | null> {
   return (await getPublicSettings())?.trial_days ?? null;
+}
+
+/** One trade's downloads, or nulls where there is nothing to download yet. */
+export type Installers = { windows: string | null; mac: string | null };
+
+export function installersFor(
+  settings: PublicSettings | null,
+  pack: string
+): Installers {
+  if (!settings) return { windows: null, mac: null };
+  const read = (key: string) => {
+    const value = (settings as Record<string, unknown>)[key];
+    return typeof value === "string" && value.trim() ? value.trim() : null;
+  };
+  return {
+    windows: read(`installer_url_windows_${pack}`),
+    mac: read(`installer_url_mac_${pack}`),
+  };
 }
