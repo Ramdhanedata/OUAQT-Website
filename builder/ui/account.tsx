@@ -12,6 +12,7 @@ import type { LicenceStatus } from "@/builder/licence/status";
 import type { Price } from "@/builder/payment/pricing";
 import { fill, plural } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
+import { licenceLine, owes } from "./licence-line";
 import { Pay } from "./pay";
 import { isPhone, loginFor } from "./step-account";
 
@@ -74,10 +75,10 @@ export function AccountArea({
               <SignIn copy={copy} />
               {/*
                 * The owner who configured on his phone and never made an
-                * account comes here looking for his download. His code de
-                * configuration is what leads to it.
+                * account comes here looking for his download, or to pay. His
+                * numéro de série is what leads to both.
                 */}
-              <div className="mt-10 border-t border-border pt-6">
+              <div className="mt-10 space-y-2 border-t border-border pt-6">
                 <CodeEntry
                   copy={copy}
                   locale={lang}
@@ -87,6 +88,14 @@ export function AccountArea({
                     window.location.href = localisedHref(lang, "builder");
                   }}
                 />
+                <div>
+                  <a
+                    href={localisedHref(lang, "pay")}
+                    className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+                  >
+                    {copy.payBySerial.link}
+                  </a>
+                </div>
               </div>
             </>
           ) : state.kind === "no_business" ? (
@@ -276,41 +285,11 @@ function Subscription({
   const [sent, setSent] = useState(false);
   const licence = state.licence;
 
-  /*
-   * One sentence that says where he stands, in the order he would ask it:
-   * how long he has, or what stopped, and what to do about it.
-   */
-  const where = (): string => {
-    if (!licence) return copy.licence.notStarted as string;
-    switch (licence.status) {
-      case "trial":
-        return licence.daysLeft == null
-          ? (copy.licence.notStarted as string)
-          : plural(lang, licence.daysLeft, copy.licence.trial);
-      case "expired_trial":
-        return copy.licence.trialOver as string;
-      case "active":
-        return (copy.licence.active as string).replace(
-          "{date}",
-          licence.endsAt ? new Date(licence.endsAt).toLocaleDateString(lang) : ""
-        );
-      case "renewal_due":
-        return plural(lang, licence.graceDaysLeft ?? 0, copy.licence.renewalDue);
-      case "expired":
-        return copy.licence.expired as string;
-      case "suspended":
-        return copy.licence.suspended as string;
-    }
-  };
+  const where = () => licenceLine(copy, lang, licence);
 
   const waiting =
     sent || state.lastPaymentStatus === "pending_confirmation";
-  const owes =
-    !licence ||
-    licence.status === "trial" ||
-    licence.status === "expired_trial" ||
-    licence.status === "renewal_due" ||
-    licence.status === "expired";
+  const due = owes(licence);
 
   return (
     <section className="space-y-4">
@@ -323,7 +302,7 @@ function Subscription({
         <p className="text-base leading-relaxed text-muted-foreground">
           {copy.licence.pending}
         </p>
-      ) : owes && state.price ? (
+      ) : due && state.price ? (
         <Pay
           copy={copy}
           language={lang}

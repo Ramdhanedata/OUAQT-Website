@@ -380,7 +380,15 @@ export const fr = {
     retry: "Réessayer",
     preparing: "Préparation de votre logiciel…",
     downloadFailed: "Le logiciel n'a pas pu être préparé. Réessayez, ou écrivez-nous sur WhatsApp.",
-    downloadIntro: "Essai gratuit de {days} jours. Le paiement vient après l'essai, depuis votre compte.",
+    downloadIntro: "Essai gratuit de {days} jours. Après l'essai, vous payez sur ce site avec ce même numéro.",
+  },
+
+  /* Paying with the numéro de série, for an owner who never made an account. */
+  payBySerial: {
+    title: "Payer mon abonnement",
+    heading: "Payer avec votre numéro de série",
+    intro: "Tapez le numéro de série de votre logiciel. Aucun compte n'est nécessaire.",
+    link: "Payer avec mon numéro de série",
   },
 
   placeholder: {

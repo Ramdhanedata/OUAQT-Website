@@ -21,6 +21,8 @@ export const localisedRoutes = {
     ar: "build-my-software",
   },
   account: { fr: "compte", en: "account", ar: "account" },
+  /* Paying with the numéro de série, for an owner who never made an account. */
+  pay: { fr: "payer", en: "pay", ar: "pay" },
 
   /*
    * One landing page per trade. These are the addresses an owner reaches from

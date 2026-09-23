@@ -368,7 +368,14 @@ export const en: BuilderCopy = {
     retry: "Try again",
     preparing: "Preparing your software…",
     downloadFailed: "The software could not be prepared. Try again, or write to us on WhatsApp.",
-    downloadIntro: "Free trial of {days} days. Payment comes after the trial, from your account.",
+    downloadIntro: "Free trial of {days} days. After the trial, you pay on this site with this same number.",
+  },
+
+  payBySerial: {
+    title: "Pay my subscription",
+    heading: "Pay with your serial number",
+    intro: "Type your software's serial number. No account needed.",
+    link: "Pay with my serial number",
   },
 
   placeholder: {

@@ -29,6 +29,7 @@ export function Pay({
   bankilyNumber,
   aiReadsImages,
   onSent,
+  serial,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
@@ -36,6 +37,11 @@ export function Pay({
   bankilyNumber: string | null;
   aiReadsImages: boolean;
   onSent: () => void;
+  /*
+   * Paying with the numéro de série alone, with no account: the screenshot
+   * goes up with the number, and the server files it under that shop.
+   */
+  serial?: string;
 }) {
   const input = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
@@ -71,6 +77,20 @@ export function Pay({
     setBusy(true);
 
     try {
+      if (serial) {
+        const prepared = await prepareScreenshot(file);
+        const form = new FormData();
+        form.set("number", serial);
+        form.set("plan", price.plan);
+        if (reference.trim()) form.set("reference", reference.trim());
+        form.set("image", prepared, "screenshot.jpg");
+        const response = await fetch("/api/builder/payment/serial", { method: "POST", body: form });
+        const body = await response.json().catch(() => null);
+        if (!response.ok) return setError(copy.pay.errorSend as string);
+        if (body.decision === "rejected_auto") return setError(explain(copy, body.failures ?? [], language));
+        return onSent();
+      }
+
       const supabase = await browserClient();
       const { data: auth } = (await supabase?.auth.getUser()) ?? { data: { user: null } };
       if (!supabase || !auth.user) return setError(copy.pay.errorSend as string);
