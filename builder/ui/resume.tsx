@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { AppLanguage } from "@/app-ui/config";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
@@ -22,6 +22,7 @@ export function ResumeDownload({
   copy,
   language,
   code,
+  serial,
   pack,
   name,
   installers,
@@ -31,7 +32,9 @@ export function ResumeDownload({
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
-  code: string;
+  /* One or the other: a code makes the shop, a serial finds the one made. */
+  code?: string;
+  serial?: string;
   pack: Pack;
   /* Which configuration this is, so a mistyped code that exists is noticed. */
   name: string;
@@ -40,57 +43,84 @@ export function ResumeDownload({
   trialDays: number | null;
   supportWhatsapp: string | null;
 }) {
-  const [state, setState] = useState<"idle" | "busy" | "failed">("idle");
+  const [state, setState] = useState<"busy" | "failed">("busy");
   const [ready, setReady] = useState<{ serial: string; link: string | null; pack: Pack } | null>(null);
 
-  async function download() {
+  async function prepare() {
     setState("busy");
     const response = await fetch("/api/builder/configuration-code/shop", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ code }),
+      body: JSON.stringify(serial ? { serial } : { code }),
     }).catch(() => null);
     const body = (await response?.json().catch(() => null)) as { serial?: string; link?: string | null; pack?: Pack } | null;
     if (!response?.ok || !body?.serial) return setState("failed");
     setReady({ serial: body.serial, link: body.link ?? null, pack: body.pack ?? pack });
-    setState("idle");
   }
+
+  /*
+   * Prepared the moment the screen opens: the owner came here to download,
+   * so the installer button is the first and only thing he has to press.
+   * Safe to repeat, since the same code always finds the same shop.
+   */
+  const started = useRef(false);
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    void prepare();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const which = (
+    <p className="text-base font-medium text-foreground">
+      {name ? `${name} · ` : ""}
+      {(copy.packs as Record<string, string>)[pack] ?? pack}
+    </p>
+  );
 
   if (ready) {
     return (
-      <SerialPanel
-        copy={copy}
-        language={language}
-        serial={ready.serial}
-        installers={installers[ready.pack]}
-        tutorials={tutorials}
-        link={ready.link}
-      />
+      <div className="space-y-5">
+        {which}
+        <SerialPanel
+          copy={copy}
+          language={language}
+          serial={ready.serial}
+          installers={installers[ready.pack]}
+          tutorials={tutorials}
+          link={ready.link}
+        />
+      </div>
     );
   }
 
   return (
     <div className="space-y-5">
       <h2 className="text-xl font-semibold text-foreground">{copy.serial.pcHeading}</h2>
-      <p className="text-base font-medium text-foreground">
-        {name ? `${name} · ` : ""}
-        {(copy.packs as Record<string, string>)[pack] ?? pack}
-      </p>
-      {trialDays ? <p className="text-base leading-relaxed text-muted-foreground">{fill(copy.code.downloadIntro, { days: trialDays })}</p> : null}
-      <p className="text-base leading-relaxed text-muted-foreground">{copy.code.productsLater}</p>
-      {state === "failed" ? (
-        <p className="text-base text-foreground" role="alert">
-          {copy.code.downloadFailed}{" "}
-          {supportWhatsapp ? (
-            <a href={`https://wa.me/${supportWhatsapp}`} target="_blank" rel="noreferrer" className="underline underline-offset-4">
-              {copy.code.contact}
-            </a>
-          ) : null}
-        </p>
+      {which}
+      {/* A shop found by its serial may be past its trial, or paid: no trial line. */}
+      {trialDays && !serial ? (
+        <p className="text-base leading-relaxed text-muted-foreground">{fill(copy.code.downloadIntro, { days: trialDays })}</p>
       ) : null}
-      <Button type="button" variant="accent" className="min-h-[56px] w-full text-lg" disabled={state === "busy"} onClick={() => void download()}>
-        {state === "busy" ? copy.code.preparing : copy.code.download}
-      </Button>
+      {state === "busy" ? (
+        <p className="text-base text-muted-foreground" role="status">
+          {copy.code.preparing}
+        </p>
+      ) : (
+        <>
+          <p className="text-base text-foreground" role="alert">
+            {copy.code.downloadFailed}{" "}
+            {supportWhatsapp ? (
+              <a href={`https://wa.me/${supportWhatsapp}`} target="_blank" rel="noreferrer" className="underline underline-offset-4">
+                {copy.code.contact}
+              </a>
+            ) : null}
+          </p>
+          <Button type="button" variant="accent" className="min-h-[56px] w-full text-lg" onClick={() => void prepare()}>
+            {copy.code.retry}
+          </Button>
+        </>
+      )}
     </div>
   );
 }

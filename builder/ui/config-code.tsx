@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { BuilderCopy } from "@/builder/copy";
 import { formatAsTyped } from "@/builder/config-code/code";
 import type { Pack } from "@/app-ui/packs";
@@ -20,8 +20,14 @@ import { Button } from "./owner-button";
  * would tax all of them to serve a few.
  */
 
+/*
+ * What the box opened: a code de configuration, or the numéro de série of a
+ * shop already made on the phone. A serial has no configuration language of
+ * its own, so the page stays in the one he is reading.
+ */
 export type Opened = {
-  code: string;
+  code?: string;
+  serial?: string;
   locale: Locale;
   pack: Pack | null;
   nameLatin: string;
@@ -72,6 +78,9 @@ export function openInBuilder(opened: Opened, from: Locale): void {
   else window.location.href = target;
 }
 
+/* A code with its prefix, or eight characters that may be a numéro de série. */
+const COMPLETE = /^(OUAQT-)?[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+
 type Problem =
   | { kind: "unknown" }
   | { kind: "expired"; whatsapp: string | null; code: string }
@@ -95,6 +104,7 @@ export function CodeEntry({
   const [problem, setProblem] = useState<Problem | null>(null);
   const [wait, setWait] = useState(0);
   const [lost, setLost] = useState(false);
+  const tried = useRef("");
 
   /* After five wrong entries each try waits a little: the field says how long. */
   useEffect(() => {
@@ -115,27 +125,36 @@ export function CodeEntry({
     );
   }
 
-  async function submit() {
-    if (!value.trim() || busy || wait > 0) return;
+  async function submit(entry = value) {
+    if (!entry.trim() || busy || wait > 0) return;
     setBusy(true);
     setProblem(null);
     try {
       const response = await fetch("/api/builder/configuration-code/resume", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ code: value }),
+        body: JSON.stringify({ code: entry }),
       });
       const body = (await response.json().catch(() => null)) as
-        | (Opened & { error?: string; wait?: number; supportWhatsapp?: string | null })
+        | (Omit<Opened, "locale"> & { locale: Locale | null; error?: string; wait?: number; supportWhatsapp?: string | null })
         | null;
-      if (response.ok && body?.code) {
-        openInBuilder({ code: body.code, locale: body.locale, pack: body.pack, nameLatin: body.nameLatin, nameArabic: body.nameArabic }, locale);
+      if (response.ok && (body?.code || body?.serial)) {
+        openInBuilder(
+          {
+            ...(body.code ? { code: body.code } : { serial: body.serial }),
+            locale: body.locale ?? locale,
+            pack: body.pack,
+            nameLatin: body.nameLatin,
+            nameArabic: body.nameArabic,
+          },
+          locale
+        );
         return;
       }
       if (response.status === 429) {
         setWait(body?.wait ?? 5);
       } else if (response.status === 410) {
-        setProblem({ kind: "expired", whatsapp: body?.supportWhatsapp ?? supportWhatsapp, code: value });
+        setProblem({ kind: "expired", whatsapp: body?.supportWhatsapp ?? supportWhatsapp, code: entry });
       } else if (response.status === 404) {
         setProblem({ kind: "unknown" });
         if (body?.wait) setWait(body.wait);
@@ -162,7 +181,19 @@ export function CodeEntry({
           autoCapitalize="characters"
           placeholder={copy.code.placeholder}
           disabled={wait > 0}
-          onChange={(event) => setValue(formatAsTyped(event.target.value))}
+          onChange={(event) => {
+            const next = formatAsTyped(event.target.value);
+            setValue(next);
+            /*
+             * A whole code or numéro de série opens by itself, pasted or
+             * typed to the last character: no button to find. Once per
+             * entry, so a wrong one is not tried again on every keystroke.
+             */
+            if (COMPLETE.test(next) && next !== tried.current) {
+              tried.current = next;
+              void submit(next);
+            }
+          }}
           onKeyDown={(event) => {
             if (event.key === "Enter") void submit();
           }}
@@ -312,7 +343,7 @@ export function CodeIssued({
       </p>
       <Button
         type="button"
-        variant="outline"
+        variant="accent"
         className="min-h-[48px] text-base"
         onClick={() => {
           void navigator.clipboard?.writeText(code).then(() => setCopied(true));
@@ -322,7 +353,6 @@ export function CodeIssued({
       </Button>
       <p className="text-base leading-relaxed text-foreground">{copy.code.issuedIntro}</p>
       <p className="text-base leading-relaxed text-muted-foreground">{sent ? copy.code.issuedSent : copy.code.issuedKeep}</p>
-      <p className="text-base leading-relaxed text-muted-foreground">{copy.code.issuedNotSerial}</p>
 
       {!savedPhone ? (
         <div className="space-y-3">
@@ -343,7 +373,13 @@ export function CodeIssued({
         <p className="text-base text-muted-foreground">{copy.code.issuedPhoneSaved}</p>
       ) : null}
 
-      <Button type="button" variant="accent" className="min-h-[48px] text-base" onClick={onContinue}>
+      {/*
+        * Quiet on purpose: the software is installed on the computer, so the
+        * phone's part ends here for most owners. Carrying on gives him steps 3
+        * and 4 on the phone, and the numéro de série they end with also opens
+        * the download on the computer.
+        */}
+      <Button type="button" variant="outline" className="min-h-[48px] text-base" onClick={onContinue}>
         {copy.code.issuedContinue}
       </Button>
     </div>

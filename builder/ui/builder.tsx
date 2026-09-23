@@ -182,6 +182,7 @@ export function Builder({
               copy={copy}
               language={locale}
               code={opened.code}
+              serial={opened.serial}
               pack={opened.pack}
               name={name}
               installers={installers}
