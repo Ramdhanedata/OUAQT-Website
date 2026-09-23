@@ -37,6 +37,10 @@ export function Trades({
     bakery: dict.packLabels.bakery,
     restaurant: dict.packLabels.restaurant,
     warehouse: dict.packLabels.warehouse,
+    shop: dict.packLabels.shop,
+    hotel: dict.packLabels.hotel,
+    transport: dict.packLabels.transport,
+    general: dict.packLabels.general,
   };
 
   return (

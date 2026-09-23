@@ -49,6 +49,10 @@ const fr = {
     bakery: "Boulangerie",
     restaurant: "Restaurant",
     warehouse: "Dépôt",
+    shop: "Boutique",
+    hotel: "Hôtel",
+    transport: "Transport",
+    general: "Autre activité",
   } as Record<string, string>,
   plans: {
     trial: "Essai",
@@ -247,7 +251,7 @@ const en: AdminCopy = {
     aiCost: "AI cost",
   },
 
-  packs: { pharmacy: "Pharmacy", bakery: "Bakery", restaurant: "Restaurant", warehouse: "Warehouse" },
+  packs: { pharmacy: "Pharmacy", bakery: "Bakery", restaurant: "Restaurant", warehouse: "Warehouse", shop: "Shop", hotel: "Hotel", transport: "Transport", general: "Other business" },
   plans: {
     trial: "Trial",
     annual: "Annual",
@@ -443,7 +447,7 @@ const ar: AdminCopy = {
     aiCost: "تكلفة الذكاء الاصطناعي",
   },
 
-  packs: { pharmacy: "صيدلية", bakery: "مخبزة", restaurant: "مطعم", warehouse: "مستودع" },
+  packs: { pharmacy: "صيدلية", bakery: "مخبزة", restaurant: "مطعم", warehouse: "مستودع", shop: "متجر", hotel: "فندق", transport: "نقل", general: "نشاط آخر" },
   plans: {
     trial: "تجربة",
     annual: "سنوية",

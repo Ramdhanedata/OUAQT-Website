@@ -564,6 +564,10 @@ export const ar: Dictionary = {
     bakery: "مخبزة",
     restaurant: "مطعم أو مقهى",
     warehouse: "مستودع ومخزون",
+    shop: "متجر أو بقالة",
+    hotel: "فندق أو نزل",
+    transport: "نقل المسافرين والطرود",
+    general: "نشاط آخر: مبيعات ومخزون وتقارير",
   },
 
   builderHome: {

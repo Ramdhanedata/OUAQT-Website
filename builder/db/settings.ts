@@ -64,6 +64,14 @@ const publicSettings = z.object({
   installer_url_mac_restaurant: z.string(),
   installer_url_windows_warehouse: z.string(),
   installer_url_mac_warehouse: z.string(),
+  installer_url_windows_shop: z.string(),
+  installer_url_mac_shop: z.string(),
+  installer_url_windows_hotel: z.string(),
+  installer_url_mac_hotel: z.string(),
+  installer_url_windows_transport: z.string(),
+  installer_url_mac_transport: z.string(),
+  installer_url_windows_general: z.string(),
+  installer_url_mac_general: z.string(),
 });
 
 export type PublicSettings = z.infer<typeof publicSettings>;

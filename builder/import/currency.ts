@@ -32,6 +32,10 @@ const SUSPICIOUS_MEDIAN: Record<Pack, number> = {
   bakery: 2_000,
   restaurant: 5_000,
   warehouse: 100_000,
+  shop: 20_000,
+  hotel: 100_000,
+  transport: 100_000,
+  general: 50_000,
 };
 /* These are read against prices as written in the file, in whole ouguiyas,
    before anything is converted to the smallest unit. */

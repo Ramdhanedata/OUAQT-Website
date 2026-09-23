@@ -111,11 +111,60 @@ export const warehouseFeatures = z.object({
   sellsDirect: z.boolean(),
 });
 
+/*
+ * A shop: a grocery, a boutique, a hardware store, a phone shop. Sold by the
+ * piece or by weight, found by name or barcode, and shown as tiles when the
+ * shop has few enough products to pick by eye.
+ */
+export const shopFeatures = z.object({
+  sellBy: z.array(z.enum(["piece", "weight"])).min(1),
+  search: z.array(z.enum(["name", "barcode"])).min(1),
+  tiles: z.boolean(),
+});
+
+/*
+ * A hotel, a guest house, furnished flats. The number of rooms sizes the
+ * board; advances and extras charged to the room are the two habits that
+ * differ most from one house to the next.
+ */
+export const hotelFeatures = z.object({
+  rooms: z.number().int().min(1).max(500),
+  advances: z.boolean(),
+  extras: z.boolean(),
+  guestDocument: z.boolean(),
+});
+
+/*
+ * A transport company: passengers, parcels or both, between the towns it
+ * serves. Seats are numbered or not; a parcel is paid by its sender, by its
+ * receiver, or either.
+ */
+export const transportFeatures = z.object({
+  carries: z.array(z.enum(["passengers", "parcels"])).min(1),
+  seatNumbers: z.boolean(),
+  parcelPayer: z.enum(["sender", "receiver", "either"]),
+});
+
+/*
+ * Any business that is none of the above: a salon, a workshop, a service
+ * company, a small trader. The owner switches on what he uses, and the
+ * software shows nothing else.
+ */
+export const generalFeatures = z.object({
+  sells: z.array(z.enum(["products", "services"])).min(1),
+  trackStock: z.boolean(),
+  expenses: z.boolean(),
+});
+
 export const packFeatures = z.object({
   pharmacy: pharmacyFeatures.optional(),
+  shop: shopFeatures.optional(),
   bakery: bakeryFeatures.optional(),
   restaurant: restaurantFeatures.optional(),
   warehouse: warehouseFeatures.optional(),
+  hotel: hotelFeatures.optional(),
+  transport: transportFeatures.optional(),
+  general: generalFeatures.optional(),
 });
 
 const configurationShape = z.object({
@@ -179,6 +228,10 @@ export type PharmacyFeatures = z.infer<typeof pharmacyFeatures>;
 export type BakeryFeatures = z.infer<typeof bakeryFeatures>;
 export type RestaurantFeatures = z.infer<typeof restaurantFeatures>;
 export type WarehouseFeatures = z.infer<typeof warehouseFeatures>;
+export type ShopFeatures = z.infer<typeof shopFeatures>;
+export type HotelFeatures = z.infer<typeof hotelFeatures>;
+export type TransportFeatures = z.infer<typeof transportFeatures>;
+export type GeneralFeatures = z.infer<typeof generalFeatures>;
 
 /*
  * The configuration an owner has when he has answered nothing at all.
@@ -259,5 +312,20 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
           sellsDirect: false,
         },
       };
+    case "shop":
+      return { shop: { sellBy: ["piece"], search: ["name", "barcode"], tiles: true } };
+    case "hotel":
+      return {
+        hotel: {
+          rooms: 10, // not-a-rule: the question's own default
+          advances: true,
+          extras: true,
+          guestDocument: true,
+        },
+      };
+    case "transport":
+      return { transport: { carries: ["passengers", "parcels"], seatNumbers: true, parcelPayer: "either" } };
+    case "general":
+      return { general: { sells: ["products", "services"], trackStock: true, expenses: true } };
   }
 }

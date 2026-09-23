@@ -60,11 +60,51 @@ const warehouse: SampleProduct[] = [
   { id: "w6", name: { fr: "Carton de savon", ar: "كرتون صابون", en: "Soap, case" }, price: 480000, inStock: 52 },
 ];
 
+const shop: SampleProduct[] = [
+  { id: "s1", name: { fr: "Lait en poudre", ar: "حليب مجفف", en: "Powdered milk" }, price: 18000, inStock: 24 },
+  { id: "s2", name: { fr: "Sucre, 1 kg", ar: "سكر، 1 كغ", en: "Sugar, 1 kg" }, price: 4500, inStock: 50 },
+  { id: "s3", name: { fr: "Huile, 1 litre", ar: "زيت، 1 لتر", en: "Oil, 1 litre" }, price: 9000, inStock: 36 },
+  { id: "s4", name: { fr: "Thé vert, paquet", ar: "شاي أخضر، علبة", en: "Green tea, pack" }, price: 12000, inStock: 40 },
+  { id: "s5", name: { fr: "Savon", ar: "صابون", en: "Soap" }, price: 3000, inStock: 60 },
+  { id: "s6", name: { fr: "Recharge téléphone", ar: "تعبئة رصيد", en: "Phone top-up" }, price: 10000, inStock: 100 },
+];
+
+const hotel: SampleProduct[] = [
+  { id: "h1", name: { fr: "Nuit, chambre double", ar: "ليلة، غرفة مزدوجة", en: "Night, double room" }, price: 250000, inStock: 0 },
+  { id: "h2", name: { fr: "Petit-déjeuner", ar: "فطور", en: "Breakfast" }, price: 25000, inStock: 0 },
+  { id: "h3", name: { fr: "Blanchisserie", ar: "غسيل", en: "Laundry" }, price: 20000, inStock: 0 },
+  { id: "h4", name: { fr: "Eau minérale", ar: "ماء معدني", en: "Mineral water" }, price: 5000, inStock: 48 },
+  { id: "h5", name: { fr: "Dîner", ar: "عشاء", en: "Dinner" }, price: 60000, inStock: 0 },
+  { id: "h6", name: { fr: "Navette aéroport", ar: "نقل إلى المطار", en: "Airport shuttle" }, price: 80000, inStock: 0 },
+];
+
+const transport: SampleProduct[] = [
+  { id: "t1", name: { fr: "Nouakchott → Nouadhibou", ar: "نواكشوط ← نواذيبو", en: "Nouakchott → Nouadhibou" }, price: 80000, inStock: 0 },
+  { id: "t2", name: { fr: "Nouakchott → Rosso", ar: "نواكشوط ← روصو", en: "Nouakchott → Rosso" }, price: 30000, inStock: 0 },
+  { id: "t3", name: { fr: "Nouakchott → Kiffa", ar: "نواكشوط ← كيفه", en: "Nouakchott → Kiffa" }, price: 70000, inStock: 0 },
+  { id: "t4", name: { fr: "Colis, petit", ar: "طرد صغير", en: "Parcel, small" }, price: 10000, inStock: 0 },
+  { id: "t5", name: { fr: "Colis, grand", ar: "طرد كبير", en: "Parcel, large" }, price: 25000, inStock: 0 },
+  { id: "t6", name: { fr: "Bagage en plus", ar: "أمتعة إضافية", en: "Extra luggage" }, price: 10000, inStock: 0 },
+];
+
+const general: SampleProduct[] = [
+  { id: "g1", name: { fr: "Coupe de cheveux", ar: "قص الشعر", en: "Haircut" }, price: 30000, inStock: 0 },
+  { id: "g2", name: { fr: "Réparation", ar: "إصلاح", en: "Repair" }, price: 50000, inStock: 0 },
+  { id: "g3", name: { fr: "Shampooing", ar: "شامبو", en: "Shampoo" }, price: 25000, inStock: 12 },
+  { id: "g4", name: { fr: "Photocopie", ar: "نسخة", en: "Photocopy" }, price: 500, inStock: 0 },
+  { id: "g5", name: { fr: "Câble de chargeur", ar: "سلك شاحن", en: "Charger cable" }, price: 15000, inStock: 20 },
+  { id: "g6", name: { fr: "Livraison", ar: "توصيل", en: "Delivery" }, price: 20000, inStock: 0 },
+];
+
 const byPack: Record<Pack, SampleProduct[]> = {
   pharmacy,
+  shop,
   bakery,
   restaurant,
   warehouse,
+  hotel,
+  transport,
+  general,
 };
 
 export function sampleProducts(pack: Pack): SampleProduct[] {

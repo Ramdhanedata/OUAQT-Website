@@ -35,6 +35,14 @@ const settings = {
   installer_url_mac_restaurant: "",
   installer_url_windows_warehouse: "",
   installer_url_mac_warehouse: "",
+  installer_url_windows_shop: "",
+  installer_url_mac_shop: "",
+  installer_url_windows_hotel: "",
+  installer_url_mac_hotel: "",
+  installer_url_windows_transport: "",
+  installer_url_mac_transport: "",
+  installer_url_windows_general: "",
+  installer_url_mac_general: "",
 } satisfies PublicSettings;
 
 describe("what an owner owes", () => {

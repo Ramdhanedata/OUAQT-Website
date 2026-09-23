@@ -565,6 +565,10 @@ export const fr: Dictionary = {
     bakery: "Boulangerie",
     restaurant: "Restaurant ou café",
     warehouse: "Dépôt et stock",
+    shop: "Boutique ou épicerie",
+    hotel: "Hôtel ou auberge",
+    transport: "Transport de voyageurs et de colis",
+    general: "Autre activité : ventes, stock et rapports",
   },
 
   builderHome: {

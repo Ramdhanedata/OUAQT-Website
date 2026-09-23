@@ -49,6 +49,22 @@ const examples: Record<Pack, Record<ImportField, string>[]> = {
     { name: "Sac de riz, 50 kg", price: "12000", quantity: "60", barcode: "", expiry: "", batch: "", unit: "Sac", location: "Dépôt 1", soldBy: "" },
     { name: "Carton d'huile", price: "9000", quantity: "45", barcode: "", expiry: "", batch: "", unit: "Carton", location: "Dépôt 1", soldBy: "" },
   ],
+  shop: [
+    { name: "Lait en poudre, 400 g", price: "180", quantity: "24", barcode: "6111000000001", expiry: "", batch: "", unit: "Boîte", location: "", soldBy: "" },
+    { name: "Sucre, 1 kg", price: "45", quantity: "50", barcode: "", expiry: "", batch: "", unit: "kg", location: "", soldBy: "" },
+  ],
+  hotel: [
+    { name: "Petit-déjeuner", price: "250", quantity: "0", barcode: "", expiry: "", batch: "", unit: "", location: "", soldBy: "" },
+    { name: "Eau minérale", price: "50", quantity: "48", barcode: "", expiry: "", batch: "", unit: "Bouteille", location: "", soldBy: "" },
+  ],
+  transport: [
+    { name: "Emballage de colis", price: "100", quantity: "30", barcode: "", expiry: "", batch: "", unit: "", location: "", soldBy: "" },
+    { name: "Eau minérale", price: "50", quantity: "48", barcode: "", expiry: "", batch: "", unit: "Bouteille", location: "", soldBy: "" },
+  ],
+  general: [
+    { name: "Coupe de cheveux", price: "300", quantity: "0", barcode: "", expiry: "", batch: "", unit: "", location: "", soldBy: "" },
+    { name: "Shampooing", price: "250", quantity: "12", barcode: "", expiry: "", batch: "", unit: "Flacon", location: "", soldBy: "" },
+  ],
 };
 
 export type Workbook = {

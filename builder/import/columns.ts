@@ -79,6 +79,7 @@ export function fieldsFor(pack: Pack): ImportField[] {
   if (pack === "pharmacy") return [...base, "expiry", "batch"];
   if (pack === "bakery") return [...base, "soldBy"];
   if (pack === "warehouse") return [...base, "unit", "location"];
+  if (pack === "shop" || pack === "general" || pack === "hotel") return [...base, "unit"];
   return base;
 }
 

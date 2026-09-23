@@ -570,6 +570,10 @@ export const en = {
     bakery: "Bakery",
     restaurant: "Restaurant or cafe",
     warehouse: "Warehouse and stock",
+    shop: "Shop or grocery",
+    hotel: "Hotel or guest house",
+    transport: "Passenger and parcel transport",
+    general: "Any other business: sales, stock and reports",
   },
 
   builderHome: {

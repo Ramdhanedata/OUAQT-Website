@@ -47,6 +47,26 @@ export const localisedRoutes = {
     en: "warehouse-management-software",
     ar: "warehouse-management-software",
   },
+  "pack-shop": {
+    fr: "logiciel-caisse-boutique",
+    en: "shop-pos-software",
+    ar: "shop-pos-software",
+  },
+  "pack-hotel": {
+    fr: "logiciel-gestion-hotel",
+    en: "hotel-management-software",
+    ar: "hotel-management-software",
+  },
+  "pack-transport": {
+    fr: "logiciel-gestion-transport",
+    en: "transport-company-software",
+    ar: "transport-company-software",
+  },
+  "pack-general": {
+    fr: "logiciel-gestion-commerce",
+    en: "small-business-software",
+    ar: "small-business-software",
+  },
 } as const;
 
 /** The landing page route for a trade: "pharmacy" -> "pack-pharmacy". */

@@ -253,4 +253,197 @@ export const packPagesFr: PackPagesCopy = {
       },
     ],
   },
+
+  /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
+  shop: {
+    title: "Logiciel de caisse pour boutique et épicerie | OUAQT",
+    description: "Le logiciel de caisse de votre boutique : vente au code-barres ou en cases, stock, crédit des clients, caisse du soir. Bientôt disponible.",
+    heading: "Le logiciel de caisse de votre boutique",
+    intro: "Vous scannez ou vous touchez l'article, le client paie, le stock baisse tout seul. Le crédit des habitués et la caisse du soir sont au même endroit. Sur votre ordinateur, sans internet.",
+    cta: "Créer le logiciel de ma boutique",
+    does: [
+      {
+        title: "Vendre vite",
+        body: "Le code-barres, le nom ou une case à toucher : l'article est sur le ticket en une seconde, avec la monnaie à rendre.",
+      },
+      {
+        title: "Au poids ou à la pièce",
+        body: "Le sucre au kilo, le lait à la boîte, sur le même ticket.",
+      },
+      {
+        title: "Le stock qui se tient",
+        body: "Chaque vente le baisse, chaque livraison le monte, et vous voyez ce qui manque avant qu'il ne manque.",
+      },
+      {
+        title: "Le carnet de crédit",
+        body: "Ce que chaque client doit, ligne par ligne, et ce qu'il a payé.",
+      },
+      {
+        title: "La caisse du soir",
+        body: "Vous comptez le tiroir, le logiciel affiche ce qu'il attendait, et l'écart se voit tout de suite.",
+      },
+      {
+        title: "Bankily, Masrvi, Sedad",
+        body: "Le paiement mobile est noté avec le nom de l'application, et les rapports les séparent.",
+      },
+    ],
+    worries: [
+      {
+        question: "Et si le courant saute ?",
+        answer: "Chaque vente est écrite sur le disque avant que l'écran ne passe à la suivante. Au redémarrage, elle est là.",
+      },
+      {
+        question: "Est-ce que mes chiffres partent quelque part ?",
+        answer: "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+      },
+      {
+        question: "J'ai déjà ma liste d'articles dans Excel",
+        answer: "Vous envoyez le fichier tel qu'il est, et le logiciel le lit.",
+      },
+    ],
+  },
+  /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
+  hotel: {
+    title: "Logiciel de gestion pour hôtel et auberge | OUAQT",
+    description: "Le logiciel de votre hôtel : le tableau des chambres, les réservations, l'arrivée et le départ, les extras sur la note. Bientôt disponible.",
+    heading: "Le logiciel de gestion de votre hôtel",
+    intro: "Vos chambres sur un seul écran, libres, occupées ou à nettoyer. La réservation, l'arrivée, les extras, et la note au départ. Sur l'ordinateur de la réception, sans internet.",
+    cta: "Créer le logiciel de mon hôtel",
+    does: [
+      {
+        title: "Le tableau des chambres",
+        body: "Chaque chambre avec son état : libre, occupée, réservée pour aujourd'hui, à nettoyer.",
+      },
+      {
+        title: "Les réservations",
+        body: "Le nom du client, son téléphone, sa pièce d'identité et ses dates. Une chambre ne peut pas être donnée deux fois pour la même nuit.",
+      },
+      {
+        title: "L'avance à la réservation",
+        body: "Elle est notée, elle entre dans la caisse le jour où elle est payée, et elle est déduite de la note.",
+      },
+      {
+        title: "Les extras sur la note",
+        body: "Repas, boissons, blanchisserie : ajoutés à la chambre pendant le séjour, payés au départ.",
+      },
+      {
+        title: "La note au départ",
+        body: "Les nuits comptées toutes seules, les extras, l'avance déduite, et le reçu imprimé.",
+      },
+      {
+        title: "Le taux d'occupation",
+        body: "Combien de nuits vendues sur combien possibles, et ce que chaque mois a rapporté.",
+      },
+    ],
+    worries: [
+      {
+        question: "Et si le courant saute ?",
+        answer: "Chaque réservation et chaque paiement sont écrits sur le disque tout de suite. Au redémarrage, tout est là.",
+      },
+      {
+        question: "Est-ce que les données de mes clients partent quelque part ?",
+        answer: "Non. Elles restent sur votre ordinateur. Nous ne les recevons jamais.",
+      },
+      {
+        question: "Mon réceptionniste lit l'arabe",
+        answer: "L'écran se met en arabe ou en français, au choix.",
+      },
+    ],
+  },
+  /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
+  transport: {
+    title: "Logiciel pour compagnie de transport et envoi de colis | OUAQT",
+    description: "Le logiciel de votre compagnie de transport : les départs, les billets par place, les colis avec leur code, la liste des passagers. Bientôt disponible.",
+    heading: "Le logiciel de votre compagnie de transport",
+    intro: "Les départs du jour, les places vendues, les colis reçus et remis. Chaque billet et chaque colis est payé et noté. Sur l'ordinateur du guichet, sans internet.",
+    cta: "Créer le logiciel de ma compagnie",
+    does: [
+      {
+        title: "Les départs",
+        body: "Chaque trajet avec son véhicule, son chauffeur et son heure, et combien de places il reste.",
+      },
+      {
+        title: "Le billet par place",
+        body: "Le nom du voyageur et son téléphone. Une place vendue ne peut pas l'être une deuxième fois.",
+      },
+      {
+        title: "Les colis avec leur code",
+        body: "L'expéditeur, le destinataire et un code que le destinataire donne au guichet d'arrivée.",
+      },
+      {
+        title: "Payé au départ ou à l'arrivée",
+        body: "Le colis se paie par l'expéditeur ou par le destinataire, comme vous faites déjà.",
+      },
+      {
+        title: "La liste avant le départ",
+        body: "Les passagers et les colis du trajet, imprimés pour le chauffeur.",
+      },
+      {
+        title: "Ce que chaque ligne rapporte",
+        body: "Billets et colis, trajet par trajet, jour par jour.",
+      },
+    ],
+    worries: [
+      {
+        question: "Et si le courant saute ?",
+        answer: "Chaque billet est écrit sur le disque avant d'être imprimé. Au redémarrage, il est là.",
+      },
+      {
+        question: "Est-ce que mes chiffres partent quelque part ?",
+        answer: "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+      },
+      {
+        question: "Un voyageur annule",
+        answer: "Le billet est annulé avec sa raison, la place redevient libre, et la caisse le sait.",
+      },
+    ],
+  },
+  /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
+  general: {
+    title: "Logiciel de ventes, stock et rapports pour toute activité | OUAQT",
+    description: "Un logiciel simple pour toute activité : les ventes, le stock si vous en avez, les dépenses, et les rapports du jour et du mois. Bientôt disponible.",
+    heading: "Ventes, stock et rapports, pour votre activité",
+    intro: "Un salon, un atelier, une société de services, un petit commerce : vous vendez, vous notez vos dépenses, et vous voyez ce que la journée et le mois ont rapporté. Vous gardez seulement ce qui vous sert.",
+    cta: "Créer le logiciel de mon activité",
+    does: [
+      {
+        title: "Produits et services",
+        body: "Une coupe, une réparation, un article : tout se vend sur le même ticket.",
+      },
+      {
+        title: "Le stock, si vous en avez",
+        body: "Vous le suivez ou vous l'éteignez. Le logiciel ne montre que ce que vous utilisez.",
+      },
+      {
+        title: "Les dépenses",
+        body: "Le loyer, l'électricité, les salaires, notés avec leur catégorie.",
+      },
+      {
+        title: "Le rapport du jour et du mois",
+        body: "Ce qui est entré, ce qui est sorti, et ce qui reste.",
+      },
+      {
+        title: "Le carnet de crédit",
+        body: "Ce que chaque client doit, et ce qu'il a payé.",
+      },
+      {
+        title: "La caisse du soir",
+        body: "Vous comptez le tiroir, le logiciel affiche ce qu'il attendait, et l'écart se voit tout de suite.",
+      },
+    ],
+    worries: [
+      {
+        question: "Mon activité n'est dans aucune liste",
+        answer: "C'est pour elle. Vous répondez à trois questions et le logiciel se règle sur vos réponses.",
+      },
+      {
+        question: "Est-ce que mes chiffres partent quelque part ?",
+        answer: "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+      },
+      {
+        question: "Et si le courant saute ?",
+        answer: "Chaque vente est écrite sur le disque avant que l'écran ne passe à la suivante.",
+      },
+    ],
+  },
 };
