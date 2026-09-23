@@ -14,7 +14,8 @@
     "db:check": "node --env-file-if-exists=.env.local scripts/check-supabase.mjs",
     "licence:keys": "node scripts/licence-keys.mjs",
     "licence:client": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/licence-client.mjs",
-    "test-shop": "node --env-file-if-exists=.env.local scripts/test-shop.mjs"
+    "test-shop": "node --env-file-if-exists=.env.local scripts/test-shop.mjs",
+    "make-admin": "node --env-file-if-exists=.env.local scripts/make-admin.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
