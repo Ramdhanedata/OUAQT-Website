@@ -12,6 +12,7 @@ import { claimTrial } from "@/builder/licence/trial-claim";
 import { claimActivationToken, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
+import { openByNumber, shopFor } from "@/builder/config-code/server";
 
 /*
  * A shop computer coming to life for the first time.
@@ -97,6 +98,19 @@ export async function POST(request: Request) {
       .eq("serial_hash", await hashSerial(serial))
       .maybeSingle();
     found = data;
+
+    /*
+     * A number given on the phone whose shop is not made yet: typed straight
+     * into the software, it makes the shop now, the same way the website's
+     * download does. One number works everywhere.
+     */
+    if (!found) {
+      const reserved = await openByNumber(supabase, serial);
+      if (reserved.kind === "draft") {
+        const shop = await shopFor(supabase, reserved, { tester: false });
+        if (shop.ok) found = { business_id: shop.businessId };
+      }
+    }
   }
 
   if (!found) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });

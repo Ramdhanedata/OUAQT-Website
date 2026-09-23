@@ -3,14 +3,15 @@ import { z } from "zod";
 import { phoneKey } from "@/builder/config-code/code";
 import { attemptKeys, recordFailure, waitingFor } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
-import { sendConfigurationCode } from "@/builder/notify/whatsapp";
+import { sendNumber } from "@/builder/notify/whatsapp";
+import { decryptSerial } from "@/builder/serial/cipher";
 
 /*
- * "Vous avez perdu votre code ?": the phone number used during the
- * questions, and the code is sent again to that number.
+ * "Vous avez perdu votre numéro ?": the phone number used during the
+ * questions, and the numéro de série is sent again to that phone.
  *
- * The code is never shown on screen from a phone number alone, and the
- * answer is the same whether the number was found or not, so this cannot be
+ * The number is never shown on screen from a phone number alone, and the
+ * answer is the same whether the phone was found or not, so this cannot be
  * used to learn who configured what. Until the WhatsApp send is connected,
  * the request is queued in the admin area for staff to send by hand.
  */
@@ -34,21 +35,22 @@ export async function POST(request: Request) {
 
   const { data: draft } = await admin
     .from("builder_drafts")
-    .select("id, code, locale")
+    .select("id, serial_cipher, locale")
     .eq("phone", phone)
-    .not("code", "is", null)
+    .not("serial_hash", "is", null)
     .order("updated_at", { ascending: false })
     .limit(1)
     .maybeSingle();
+  const serial = draft?.serial_cipher ? await decryptSerial(draft.serial_cipher) : null;
 
-  /* Asking again and again for numbers that are not there counts as guessing. */
-  if (!draft) {
+  /* Asking again and again for phones that are not there counts as guessing. */
+  if (!draft || !serial) {
     await recordFailure(admin, keys);
     return NextResponse.json({ ok: true });
   }
 
   const language = draft.locale === "ar" || draft.locale === "en" ? draft.locale : "fr";
-  const sent = await sendConfigurationCode({ phone, code: draft.code as string, language });
+  const sent = await sendNumber({ phone, serial, language });
   await admin.from("configuration_code_requests").insert({ draft_id: draft.id, phone, sent: sent.sent, handled_at: sent.sent ? new Date().toISOString() : null });
   return NextResponse.json({ ok: true });
 }

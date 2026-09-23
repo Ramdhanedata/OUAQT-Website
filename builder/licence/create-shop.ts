@@ -18,11 +18,14 @@ import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
  *
  *   step 4 on the website   the owner creates his account, then this runs
  *                           for that account.
- *   a code de configuration the owner resumes on a computer and presses
- *                           Télécharger; this runs for the session the phone
- *                           answered the questions under, which is who the
- *                           configuration belongs to until an account claims
- *                           it.
+ *   his numéro de série     typed on the computer's website, or into the
+ *                           software, before step 4; this runs for the
+ *                           session the phone answered the questions under,
+ *                           which is who the configuration belongs to until
+ *                           an account claims it.
+ *
+ * The numéro de série is given on the phone when the questions end, before
+ * any shop exists, so it arrives here reserved and is used as it is.
  *
  * Calling it twice does not make a second business. A retry returns what the
  * first attempt built. Every write is made with the service role, so the
@@ -68,6 +71,7 @@ export const shopInput = z.object({
 });
 
 export type ShopInput = z.infer<typeof shopInput>;
+export type ImportedRow = z.infer<typeof product>;
 
 export type CreatedShop =
   | { ok: true; businessId: string; serial: string; created: boolean }
@@ -96,7 +100,7 @@ export async function createShop(
   admin: SupabaseClient,
   ownerId: string,
   data: ShopInput,
-  options: { tester: boolean; logo?: { colourPath: string; monoPath: string } | null }
+  options: { tester: boolean; logo?: { colourPath: string; monoPath: string } | null; serial?: string | null }
 ): Promise<CreatedShop> {
   const configuration = configurationFrom(data);
   if (!configuration.success) return { ok: false, error: "invalid_configuration", status: 400 };
@@ -184,11 +188,13 @@ export async function createShop(
    * Asking whether a serial is taken is a question about another owner's row,
    * so it is asked with the service role and never from the browser.
    */
-  const serial = await makeUniqueSerial(async (candidate) => {
-    const hash = await hashSerial(candidate);
-    const { data: clash } = await admin.from("serials").select("business_id").eq("serial_hash", hash).maybeSingle();
-    return Boolean(clash);
-  });
+  const serial =
+    options.serial ??
+    (await makeUniqueSerial(async (candidate) => {
+      const hash = await hashSerial(candidate);
+      const { data: clash } = await admin.from("serials").select("business_id").eq("serial_hash", hash).maybeSingle();
+      return Boolean(clash);
+    }));
 
   const { error: serialError } = await admin.from("serials").insert({
     business_id: business.id,

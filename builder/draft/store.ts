@@ -202,7 +202,7 @@ export function useDraft(locale: string) {
   }, []);
 
   /*
-   * Save now rather than after the pause: the code de configuration is
+   * Save now rather than after the pause: the numéro de série is
    * issued for what the server holds, so it must hold the last answer.
    */
   const flush = useCallback(async () => {

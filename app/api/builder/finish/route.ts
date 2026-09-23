@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { adminClient, sessionClient } from "@/builder/db/server";
 import { createShop, shopInput } from "@/builder/licence/create-shop";
-import { serialSecretIsSet } from "@/builder/serial/cipher";
+import { decryptSerial, serialSecretIsSet } from "@/builder/serial/cipher";
 
 /*
  * The end of the interview: a business, a configuration, and the number he
@@ -49,13 +49,13 @@ export async function POST(request: Request) {
   }
 
   /*
-   * The logo went up with the code de configuration, onto his draft. The
-   * account step used to promise it would upload it and never did, so a
-   * shop's receipt came out without its mark.
+   * The logo went up when the questions ended, onto his draft, and so was his
+   * numéro de série given: the shop is made with that same number, so the
+   * one on his phone is the one the software asks for.
    */
   const { data: draft } = await admin
     .from("builder_drafts")
-    .select("id, logo_path, logo_mono_path")
+    .select("id, logo_path, logo_mono_path, serial_cipher")
     .eq("session_owner", owner.id)
     .order("updated_at", { ascending: false })
     .limit(1)
@@ -64,6 +64,7 @@ export async function POST(request: Request) {
   const made = await createShop(admin, owner.id, input.data, {
     tester: isTester(cookies().get(TESTER_COOKIE)?.value),
     logo: draft?.logo_path && draft.logo_mono_path ? { colourPath: draft.logo_path, monoPath: draft.logo_mono_path } : null,
+    serial: draft?.serial_cipher ? await decryptSerial(draft.serial_cipher) : null,
   });
   if (!made.ok) return NextResponse.json({ error: made.error }, { status: made.status });
 

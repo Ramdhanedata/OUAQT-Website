@@ -1,18 +1,22 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
-import { isExpired, waitAfter } from "./code";
+import { configurationFrom, createShop, shopInput, type ImportedRow } from "@/builder/licence/create-shop";
+import { decryptSerial, encryptSerial } from "@/builder/serial/cipher";
+import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
+import { isExpired, readNumber, waitAfter } from "./code";
 
 /*
- * The server's side of the code de configuration: finding the draft a code
- * points to, keeping it alive, counting wrong entries, and putting the logo
- * where the shop will find it.
+ * The server's side of the owner's one number, his numéro de série: giving
+ * it when the questions end, finding what it stands for, making the shop the
+ * first time it is used, counting wrong entries, and putting the logo where
+ * the shop will find it.
  *
  * Everything here runs with the service role, because the draft belongs to
  * the phone's session and the computer asking is a different one. What makes
- * that safe is the code itself: eight characters from thirty is about six
- * hundred billion possibilities, and wrong entries slow down after five.
+ * that safe is the number itself: eight characters from thirty-one is about
+ * eight hundred and fifty billion possibilities, and wrong entries slow down
+ * after five.
  */
 
 export type Draft = {
@@ -23,7 +27,8 @@ export type Draft = {
   locale: string;
   step: number;
   answers: Record<string, unknown>;
-  code: string;
+  serial_hash: string | null;
+  serial_cipher: string | null;
   phone: string | null;
   created_at: string;
   last_accessed_at: string | null;
@@ -34,17 +39,120 @@ export type Draft = {
 };
 
 const COLUMNS =
-  "id, session_owner, business_id, pack, locale, step, answers, code, phone, created_at, last_accessed_at, status, logo_path, logo_mono_path, made_in_test_mode";
+  "id, session_owner, business_id, pack, locale, step, answers, serial_hash, serial_cipher, phone, created_at, last_accessed_at, status, logo_path, logo_mono_path, made_in_test_mode";
 
-export type Found = { kind: "found"; draft: Draft } | { kind: "unknown" } | { kind: "expired"; draft: Draft };
+type Answers = Record<string, unknown> & {
+  pack?: string;
+  appLanguage?: string;
+  builderLanguage?: string;
+  nameLatin?: string;
+  nameArabic?: string;
+  phone?: string;
+  address?: string;
+  interview?: Record<string, unknown>;
+  patched?: { common?: unknown; features?: unknown };
+  staff?: { name: string; role: "manager" | "cashier" }[];
+};
+
+/* Whether a serial already belongs to a shop or is reserved on a draft. */
+async function taken(admin: SupabaseClient, serial: string): Promise<boolean> {
+  const hash = await hashSerial(serial);
+  const [{ data: shop }, { data: draft }] = await Promise.all([
+    admin.from("serials").select("business_id").eq("serial_hash", hash).maybeSingle(),
+    admin.from("builder_drafts").select("id").eq("serial_hash", hash).maybeSingle(),
+  ]);
+  return Boolean(shop || draft);
+}
 
 /*
- * The draft behind a code, kept alive by being opened. Thirty days without
- * being opened and it is marked expired; the row stays, so staff can revive
- * it for someone who calls.
+ * The number for a draft: given once, when its questions end, and the same
+ * every time after. A session that already has a shop (an owner who started
+ * the questions again) gets that shop's number, the one its software knows.
  */
-export async function openByCode(admin: SupabaseClient, code: string, now = new Date()): Promise<Found> {
-  const { data } = await admin.from("builder_drafts").select(COLUMNS).eq("code", code).maybeSingle();
+export async function numberFor(
+  admin: SupabaseClient,
+  draft: { id: string; session_owner: string; serial_cipher: string | null }
+): Promise<string | null> {
+  if (draft.serial_cipher) {
+    const kept = await decryptSerial(draft.serial_cipher);
+    if (kept) return kept;
+  }
+
+  const { data: business } = await admin.from("businesses").select("id").eq("owner_id", draft.session_owner).limit(1).maybeSingle();
+  let serial: string | null = null;
+  if (business) {
+    const { data: row } = await admin.from("serials").select("serial_cipher").eq("business_id", business.id).maybeSingle();
+    serial = row?.serial_cipher ? await decryptSerial(row.serial_cipher) : null;
+  }
+  serial ??= await makeUniqueSerial((candidate) => taken(admin, candidate));
+  const hash = await hashSerial(serial);
+
+  /* An older draft of the same shop lets go of the number: the newest one holds it. */
+  if (business) {
+    await admin.from("builder_drafts").update({ serial_hash: null, serial_cipher: null }).eq("serial_hash", hash).neq("id", draft.id);
+  }
+  await admin
+    .from("builder_drafts")
+    .update({
+      serial_hash: hash,
+      serial_cipher: await encryptSerial(serial),
+      last_accessed_at: new Date().toISOString(),
+      status: "active",
+      ...(business ? { business_id: business.id } : {}),
+    })
+    .eq("id", draft.id)
+    .is("serial_hash", null);
+
+  /* Read back: a second tap may have got there first, and its number is the one. */
+  const { data: again } = await admin.from("builder_drafts").select("serial_cipher").eq("id", draft.id).single();
+  return again?.serial_cipher ? decryptSerial(again.serial_cipher) : null;
+}
+
+export type Found =
+  | { kind: "shop"; businessId: string; serial: string; pack: string; nameLatin: string; nameArabic: string; draft: Draft | null }
+  | { kind: "draft"; serial: string; draft: Draft }
+  | { kind: "expired"; draft: Draft }
+  | { kind: "unknown" };
+
+/*
+ * What a number stands for: a shop already made, or a configuration whose
+ * shop is made the first time the number is used. A configuration not
+ * opened for thirty days is marked expired; the row stays, so staff can
+ * revive it for someone who calls. A shop's number never expires.
+ */
+export async function openByNumber(admin: SupabaseClient, input: string, now = new Date()): Promise<Found> {
+  const serial = readNumber(input);
+  if (!serial) return { kind: "unknown" };
+  const hash = await hashSerial(serial);
+
+  const { data: row } = await admin.from("serials").select("business_id").eq("serial_hash", hash).maybeSingle();
+  if (row) {
+    const { data: business } = await admin
+      .from("businesses")
+      .select("id, pack, name_latin, name_arabic")
+      .eq("id", row.business_id)
+      .maybeSingle();
+    if (business) {
+      const { data: draft } = await admin
+        .from("builder_drafts")
+        .select(COLUMNS)
+        .eq("business_id", business.id)
+        .order("updated_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      return {
+        kind: "shop",
+        businessId: business.id,
+        serial,
+        pack: business.pack,
+        nameLatin: business.name_latin ?? "",
+        nameArabic: business.name_arabic ?? "",
+        draft: (draft as Draft | null) ?? null,
+      };
+    }
+  }
+
+  const { data } = await admin.from("builder_drafts").select(COLUMNS).eq("serial_hash", hash).maybeSingle();
   if (!data) return { kind: "unknown" };
   const draft = data as Draft;
   if (draft.status === "expired" || isExpired(draft.last_accessed_at, draft.created_at, now)) {
@@ -53,35 +161,93 @@ export async function openByCode(admin: SupabaseClient, code: string, now = new 
   }
   const touched = now.toISOString();
   await admin.from("builder_drafts").update({ last_accessed_at: touched }).eq("id", draft.id);
-  return { kind: "found", draft: { ...draft, last_accessed_at: touched } };
+  return { kind: "draft", serial, draft: { ...draft, last_accessed_at: touched } };
 }
 
-/*
- * A numéro de série typed into the code box. An owner who finished all four
- * steps on the phone has a serial rather than a code to carry to the
- * computer, and it leads to the same download. A prefix added by habit, or
- * by an older page, is ignored.
- */
-export type SerialShop = { businessId: string; serial: string; pack: string; nameLatin: string; nameArabic: string };
-
-export async function openBySerial(admin: SupabaseClient, input: string): Promise<SerialShop | null> {
-  const serial = normaliseSerial(input.replace(/^\s*OUAQT[\s\-_.:]*/i, ""));
-  if (!serial) return null;
-  const { data: row } = await admin.from("serials").select("business_id").eq("serial_hash", await hashSerial(serial)).maybeSingle();
-  if (!row) return null;
-  const { data: business } = await admin
-    .from("businesses")
-    .select("id, pack, name_latin, name_arabic")
-    .eq("id", row.business_id)
-    .maybeSingle();
-  if (!business) return null;
+/** What the download screen shows for a number: the trade and the name. */
+export function describe(found: Extract<Found, { kind: "shop" | "draft" }>) {
+  if (found.kind === "shop") {
+    return { serial: found.serial, pack: found.pack, nameLatin: found.nameLatin, nameArabic: found.nameArabic, locale: found.draft?.locale ?? null, made: true };
+  }
+  const answers = found.draft.answers as Answers;
   return {
-    businessId: business.id,
-    serial,
-    pack: business.pack,
-    nameLatin: business.name_latin ?? "",
-    nameArabic: business.name_arabic ?? "",
+    serial: found.serial,
+    pack: answers.pack ?? found.draft.pack,
+    nameLatin: answers.nameLatin ?? "",
+    nameArabic: answers.nameArabic ?? "",
+    locale: found.draft.locale,
+    made: false,
   };
+}
+
+function shapeOf(draft: Draft, products: ImportedRow[]) {
+  const answers = draft.answers as Answers;
+  return shopInput.safeParse({
+    pack: answers.pack,
+    language: answers.appLanguage ?? answers.builderLanguage ?? draft.locale,
+    business: {
+      nameLatin: answers.nameLatin ?? "",
+      nameArabic: answers.nameArabic || undefined,
+      phone: answers.phone || undefined,
+      address: answers.address || undefined,
+    },
+    answers: answers.interview ?? {},
+    patched: answers.patched,
+    staff: answers.staff ?? [],
+    products,
+  });
+}
+
+export type Shop = { ok: true; businessId: string; serial: string; pack: string } | { ok: false; error: string; status: number };
+
+/*
+ * The shop a number stands for, made now if this is its first use, from the
+ * computer's download page or from the software itself. Answers changed on
+ * the phone since the shop was made become a new version of its
+ * configuration, never an edit of the one a running shop uses.
+ */
+export async function shopFor(
+  admin: SupabaseClient,
+  found: Extract<Found, { kind: "shop" | "draft" }>,
+  options: { tester: boolean; products?: ImportedRow[] }
+): Promise<Shop> {
+  if (found.kind === "shop") {
+    const draft = found.draft;
+    if (draft) {
+      const shaped = shapeOf(draft, []);
+      const configuration = shaped.success ? configurationFrom(shaped.data) : null;
+      const { data: latest } = await admin
+        .from("configurations")
+        .select("version, config")
+        .eq("business_id", found.businessId)
+        .order("version", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (configuration?.success && latest && JSON.stringify(latest.config) !== JSON.stringify(configuration.data)) {
+        await admin.from("configurations").insert({
+          business_id: found.businessId,
+          version: latest.version + 1,
+          schema_version: String(configuration.data.version),
+          config: configuration.data,
+          created_by: "phone_answers",
+        });
+      }
+    }
+    return { ok: true, businessId: found.businessId, serial: found.serial, pack: found.pack };
+  }
+
+  const draft = found.draft;
+  const shaped = shapeOf(draft, options.products ?? []);
+  if (!shaped.success) return { ok: false, error: "incomplete", status: 400 };
+  const made = await createShop(admin, draft.session_owner, shaped.data, {
+    /* In test mode on the phone that answered, or where this runs. */
+    tester: draft.made_in_test_mode || options.tester,
+    logo: draft.logo_path && draft.logo_mono_path ? { colourPath: draft.logo_path, monoPath: draft.logo_mono_path } : null,
+    serial: found.serial,
+  });
+  if (!made.ok) return { ok: false, error: made.error, status: made.status };
+  await admin.from("builder_drafts").update({ business_id: made.businessId }).eq("id", draft.id);
+  return { ok: true, businessId: made.businessId, serial: made.serial, pack: shaped.data.pack };
 }
 
 async function sha256(text: string): Promise<string> {

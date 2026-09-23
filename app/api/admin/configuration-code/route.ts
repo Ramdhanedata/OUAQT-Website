@@ -1,23 +1,24 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { adminGate } from "@/builder/admin/guard";
-import { normaliseConfigurationCode } from "@/builder/config-code/code";
+import { readNumber } from "@/builder/config-code/code";
+import { hashSerial } from "@/builder/serial/serial";
 import { audit } from "@/builder/db/audit";
 import { adminClient } from "@/builder/db/server";
 
 /*
- * Staff closing the loop on a code de configuration, from Demandes.
+ * Staff closing the loop on an owner's numéro de série, from Demandes.
  *
- *   sent     a code asked for again was sent by hand on WhatsApp, until the
- *            send is connected (builder/notify/whatsapp.ts).
- *   revive   an expired code works again, for thirty more days, for an owner
- *            who wrote in. Expired codes are never deleted, so this is always
- *            possible.
+ *   sent     a number asked for again was sent by hand on WhatsApp, until
+ *            the send is connected (builder/notify/whatsapp.ts).
+ *   revive   an expired number works again, for thirty more days, for an
+ *            owner who wrote in. Expired configurations are never deleted, so
+ *            this is always possible.
  */
 
 const body = z.discriminatedUnion("action", [
   z.object({ action: z.literal("sent"), requestId: z.string().uuid() }).strict(),
-  z.object({ action: z.literal("revive"), code: z.string().trim().min(1).max(200) }).strict(),
+  z.object({ action: z.literal("revive"), number: z.string().trim().min(1).max(200) }).strict(),
 ]);
 
 export async function POST(request: Request) {
@@ -47,11 +48,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const code = normaliseConfigurationCode(input.data.code);
+  const serial = readNumber(input.data.number);
+  if (!serial) return NextResponse.json({ error: "not_found" }, { status: 404 });
   const { data, error } = await admin
     .from("builder_drafts")
     .update({ status: "active", last_accessed_at: new Date().toISOString() })
-    .eq("code", code)
+    .eq("serial_hash", await hashSerial(serial))
     .select("id");
   if (error || !data?.length) return NextResponse.json({ error: "not_found" }, { status: 404 });
   await audit({

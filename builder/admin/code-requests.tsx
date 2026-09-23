@@ -6,8 +6,8 @@ import { fill } from "@/lib/utils";
 import type { AdminCopy } from "./copy";
 
 /*
- * The two things staff do for a code de configuration: say a code asked for
- * again was sent by hand, and make an expired code work again.
+ * The two things staff do for an owner's numéro de série: say one asked for
+ * again was sent by hand, and make an expired one work again.
  */
 
 type Words = AdminCopy["requests"];
@@ -28,13 +28,13 @@ async function act(payload: Record<string, string>): Promise<boolean> {
 export function CodeRequestActions({
   t,
   requestId,
-  code,
+  serial,
   expired,
   days,
 }: {
   t: Words;
   requestId: string;
-  code: string;
+  serial: string;
   expired: boolean;
   days: number;
 }) {
@@ -51,7 +51,7 @@ export function CodeRequestActions({
           disabled={revived === "busy"}
           onClick={() => {
             setRevived("busy");
-            void act({ action: "revive", code }).then((ok) => setRevived(ok ? "done" : "failed"));
+            void act({ action: "revive", number: serial }).then((ok) => setRevived(ok ? "done" : "failed"));
           }}
         >
           {t.revive}
@@ -79,7 +79,7 @@ export function CodeRequestActions({
   );
 }
 
-/* An owner wrote in with an expired code: typed or pasted here, it works again. */
+/* An owner wrote in with an expired number: typed or pasted here, it works again. */
 export function ReviveCode({ t, days }: { t: Words; days: number }) {
   const [code, setCode] = useState("");
   const [state, setState] = useState<"idle" | "busy" | "done" | "failed">("idle");
@@ -96,7 +96,7 @@ export function ReviveCode({ t, days }: { t: Words; days: number }) {
             setCode(event.target.value);
             setState("idle");
           }}
-          placeholder="OUAQT-XXXX-XXXX"
+          placeholder="XXXX-XXXX"
           className="mt-1 min-h-[44px] w-full rounded-lg border border-border bg-background px-3 text-base text-foreground"
         />
       </label>
@@ -107,7 +107,7 @@ export function ReviveCode({ t, days }: { t: Words; days: number }) {
         disabled={!code.trim() || state === "busy"}
         onClick={() => {
           setState("busy");
-          void act({ action: "revive", code }).then((ok) => setState(ok ? "done" : "failed"));
+          void act({ action: "revive", number: code }).then((ok) => setState(ok ? "done" : "failed"));
         }}
       >
         {t.revive}

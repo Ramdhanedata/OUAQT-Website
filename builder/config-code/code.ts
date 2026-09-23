@@ -1,47 +1,27 @@
 /*
- * The code de configuration: a short pointer to a configuration kept on the
- * server, so an owner who answered the questions on his phone can pick them
- * up on a computer without answering again.
+ * The one number an owner carries: his numéro de série.
  *
- * It is not the numéro de série. That one activates the installed software and
- * is XXXX-XXXX; this one resumes a configuration on the website and always
- * starts with OUAQT-. Owners who finished on the phone often type their
- * numéro de série into the website's box instead, so the box takes that
- * too and opens the same download (see the resume route).
+ * Given on the phone the moment the questions end, typed on the shop
+ * computer's website to download the software, and typed into the software
+ * to activate it. One number, because two (a code for the website and a
+ * serial for the software) was one more than anyone could keep apart at a
+ * shop counter.
  *
- * The code carries no answers. Every question added later would lengthen it,
- * and nobody can dictate a long string over the phone.
+ * Its alphabet and shape are the serial's own (builder/serial/serial.ts).
+ * This file reads it out of whatever the owner typed or pasted, and holds the
+ * rules around it: how long an unused one lasts, and how wrong entries slow
+ * down.
  *
- * not-a-rule-file: an alphabet, a length and a prefix, not prices or limits.
+ * not-a-rule-file: a length and a pattern, not prices or limits.
  */
 
-export const CODE_PREFIX = "OUAQT";
-
-/*
- * Nothing that is confused when read aloud or over a bad line: no O or 0, no
- * I, 1 or L, and no U, which is heard as V. Uppercase only.
- */
-export const CODE_ALPHABET = "23456789ABCDEFGHJKMNPQRSTVWXYZ";
+import { normaliseSerial } from "@/builder/serial/serial";
 
 const GROUP = 4;
-const GROUPS = 2;
-const BODY = GROUP * GROUPS;
-
-/** A fresh code, from the platform's cryptographic random source. */
-export function makeConfigurationCode(): string {
-  const limit = Math.floor(256 / CODE_ALPHABET.length) * CODE_ALPHABET.length;
-  let body = "";
-  while (body.length < BODY) {
-    const bytes = new Uint8Array(BODY * 2);
-    crypto.getRandomValues(bytes);
-    for (const byte of bytes) {
-      if (byte >= limit) continue;
-      body += CODE_ALPHABET[byte % CODE_ALPHABET.length];
-      if (body.length === BODY) break;
-    }
-  }
-  return `${CODE_PREFIX}-${body.slice(0, GROUP)}-${body.slice(GROUP)}`;
-}
+const LENGTH = GROUP * 2;
+/* One group of the serial's alphabet: no 0, O, 1, I or L. */
+const PART = "[2-9A-HJKMNP-Z]{4}";
+const IN_TEXT = new RegExp(`(?<![A-Z0-9])(${PART})-(${PART})(?![A-Z0-9])`);
 
 function decode(input: string): string {
   try {
@@ -52,54 +32,33 @@ function decode(input: string): string {
 }
 
 /*
- * Whatever the owner typed or pasted, as the one form codes are stored in.
- *
- * "ouaqt-abcd-efgh", "OUAQTABCDEFGH", "  abcd efgh ", "ABCD-EFGH" and a link
- * with the code somewhere in it all come out as "OUAQT-ABCD-EFGH". Nothing
- * is refused here: an entry that does not look like a code is still looked
- * up, and the lookup is what says it was not found. A typo is the usual
- * cause, and a formatting error message would only hide it.
+ * The number, from whatever he typed or pasted: lowercase, spaces, no
+ * hyphen, a whole WhatsApp message, a link with the number in it. Null when
+ * there is no number in it; the lookup then says it was not found, since a
+ * typo is the usual cause and a message about format would only hide it.
  */
-export function normaliseConfigurationCode(input: string): string {
+export function readNumber(input: string): string | null {
   const text = decode(input).toUpperCase();
-
-  /* Anywhere in a pasted sentence or link: the prefix, then eight characters. */
-  const found = text.match(/OUAQT[\s\-_.:]*([A-Z0-9]{4})[\s\-_.:]*([A-Z0-9]{4})/);
-  if (found) return `${CODE_PREFIX}-${found[1]}-${found[2]}`;
-
   const bare = text.replace(/[^A-Z0-9]/g, "");
-  const body = bare.startsWith(CODE_PREFIX) ? bare.slice(CODE_PREFIX.length) : bare;
-  if (body.length === BODY) return `${CODE_PREFIX}-${body.slice(0, GROUP)}-${body.slice(GROUP)}`;
-  return bare;
+  if (bare.length === LENGTH) return normaliseSerial(bare);
+  const found = text.match(IN_TEXT);
+  return found ? `${found[1]}-${found[2]}` : null;
 }
 
 /*
- * The field's value as the owner types: uppercase, a hyphen between groups
- * of four. Nothing is added: a numéro de série typed here stays exactly what
- * he typed, and the lookup, not the box, tells a code from a serial. A long
- * paste is read whole, so a link dropped in the box becomes its code.
+ * The field's value as he types: uppercase, a hyphen after the fourth
+ * character, nothing added. A long paste is read whole, so a message or a
+ * link dropped in the box becomes its number.
  */
 export function formatAsTyped(input: string): string {
-  const upper = decode(input).toUpperCase();
-  if (upper.length > CODE_PREFIX.length + BODY + GROUPS + 2 || /[/?=&]/.test(upper)) {
-    const whole = normaliseConfigurationCode(upper);
-    if (whole.startsWith(`${CODE_PREFIX}-`)) return whole;
+  const text = decode(input).toUpperCase();
+  const bare = text.replace(/[^A-Z0-9]/g, "");
+  if (bare.length > LENGTH) {
+    const found = readNumber(text);
+    if (found) return found;
   }
-
-  const bare = upper.replace(/[^A-Z0-9]/g, "");
-  if (bare.length === 0) return "";
-  /* Still typing the prefix itself: leave it as it is. */
-  if (CODE_PREFIX.startsWith(bare)) return bare;
-
-  const prefixed = bare.startsWith(CODE_PREFIX);
-  const body = (prefixed ? bare.slice(CODE_PREFIX.length) : bare).slice(0, BODY);
-  const grouped = body.length > GROUP ? `${body.slice(0, GROUP)}-${body.slice(GROUP)}` : body;
-  return prefixed ? `${CODE_PREFIX}-${grouped}` : grouped;
-}
-
-/** Whether the value has as many characters as a code: enough to look it up. */
-export function looksComplete(value: string): boolean {
-  return /^OUAQT-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(normaliseConfigurationCode(value));
+  const body = bare.slice(0, LENGTH);
+  return body.length > GROUP ? `${body.slice(0, GROUP)}-${body.slice(GROUP)}` : body;
 }
 
 /* ── Lifetime and wrong entries ─────────────────────────────────────────── */
@@ -107,7 +66,11 @@ export function looksComplete(value: string): boolean {
 export const LIFETIME_DAYS = 30; // not-a-rule: the brief's own lifetime, from last access
 const DAY_MS = 86_400_000;
 
-/** Expired when not opened for thirty days. Opening it again pushes the date. */
+/*
+ * A number not yet used to make a shop expires when not opened for thirty
+ * days; opening it again pushes the date. Once its shop exists it never
+ * expires: it is then what the software runs on.
+ */
 export function isExpired(lastAccessedAt: string | null, createdAt: string, now = new Date()): boolean {
   const last = new Date(lastAccessedAt ?? createdAt).getTime();
   return now.getTime() - last > LIFETIME_DAYS * DAY_MS;
@@ -129,7 +92,7 @@ export function waitAfter(failures: number): number {
 
 /*
  * A phone number as digits, for matching the one given at the start of the
- * questions with the one typed to get the code again. The last eight digits
+ * questions with the one typed to get the number again. The last eight digits
  * are what a Mauritanian number is; the country code and spaces vary.
  */
 export function phoneKey(phone: string | null | undefined): string | null {

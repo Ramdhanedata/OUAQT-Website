@@ -7,6 +7,7 @@ import { adminClient } from "@/builder/db/server";
 import { wordFor } from "@/builder/admin/copy";
 import { LIFETIME_DAYS } from "@/builder/config-code/code";
 import { MESSAGE } from "@/builder/notify/whatsapp";
+import { decryptSerial } from "@/builder/serial/cipher";
 
 /* Numbers are kept as their last eight digits: Mauritanian, so 222 in front. */
 const COUNTRY = "222"; // not-a-rule: the one country the product is sold in
@@ -30,8 +31,8 @@ function shownPhone(phone: string): string {
  * turn a sentence into a setting, and the leads come from owners whose trade
  * has no pack yet.
  *
- * Above them, the codes de configuration owners asked for again, which staff
- * send by hand until the WhatsApp send is connected.
+ * Above them, the numéros de série owners asked for again, which staff send
+ * by hand until the WhatsApp send is connected.
  */
 export default async function RequestsPage() {
   const gate = await adminGate();
@@ -54,7 +55,7 @@ export default async function RequestsPage() {
       .limit(100),
     supabase
       .from("configuration_code_requests")
-      .select("id, phone, created_at, draft:builder_drafts (code, status, locale, pack)")
+      .select("id, phone, created_at, draft:builder_drafts (serial_cipher, status, locale, pack)")
       .is("handled_at", null)
       .order("created_at", { ascending: false })
       .limit(100),
@@ -64,9 +65,16 @@ export default async function RequestsPage() {
     id: string;
     phone: string;
     created_at: string;
-    draft: { code: string; status: string; locale: string; pack: string | null } | null;
+    draft: { serial_cipher: string | null; status: string; locale: string; pack: string | null } | null;
   };
-  const waiting = ((codeRequests ?? []) as unknown as Waiting[]).filter((one) => one.draft?.code);
+  const waiting = (
+    await Promise.all(
+      ((codeRequests ?? []) as unknown as Waiting[]).map(async (one) => ({
+        ...one,
+        serial: one.draft?.serial_cipher ? await decryptSerial(one.draft.serial_cipher) : null,
+      }))
+    )
+  ).filter((one) => one.draft && one.serial);
 
   return (
     <>
@@ -82,12 +90,13 @@ export default async function RequestsPage() {
             {waiting.map((one) => {
               const draft = one.draft!;
               const language = draft.locale === "ar" || draft.locale === "en" ? draft.locale : "fr";
-              const link = `https://wa.me/${COUNTRY}${one.phone}?text=${encodeURIComponent(MESSAGE[language](draft.code))}`;
+              const serial = one.serial!;
+              const link = `https://wa.me/${COUNTRY}${one.phone}?text=${encodeURIComponent(MESSAGE[language](serial))}`;
               const expired = draft.status === "expired";
               return (
                 <li key={one.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
                   <span className="text-base text-foreground">
-                    <bdi dir="ltr" className="font-mono">{draft.code}</bdi>
+                    <bdi dir="ltr" className="font-mono">{serial}</bdi>
                     <span className="text-muted-foreground">
                       {" · "}
                       <bdi dir="ltr">{shownPhone(one.phone)}</bdi>
@@ -101,7 +110,7 @@ export default async function RequestsPage() {
                     <a href={link} target="_blank" rel="noreferrer" className="text-base text-foreground underline">
                       {t.requests.sendOnWhatsApp}
                     </a>
-                    <CodeRequestActions t={t.requests} requestId={one.id} code={draft.code} expired={expired} days={LIFETIME_DAYS} />
+                    <CodeRequestActions t={t.requests} requestId={one.id} serial={serial} expired={expired} days={LIFETIME_DAYS} />
                   </span>
                 </li>
               );

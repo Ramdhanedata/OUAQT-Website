@@ -5,13 +5,13 @@ import "server-only";
  *  NOT CONNECTED YET. Nothing is sent from here.
  * ─────────────────────────────────────────────────────────────────────────
  *
- * Sending the code de configuration to the owner on WhatsApp, to the number
- * he gave during the questions. Two callers:
+ * Sending the owner his numéro de série on WhatsApp, to the phone number he
+ * gave during the questions. Two callers:
  *
- *   - the moment the code is issued, without asking him, because owners
+ *   - the moment the questions end, without asking him, because owners
  *     screenshot things and lose them;
- *   - "Vous avez perdu votre code ?", which sends it again to that number and
- *     never shows it on screen from a phone number alone.
+ *   - "Vous avez perdu votre numéro ?", which sends it again to that phone
+ *     and never shows it on screen from a phone number alone.
  *
  * Until a WhatsApp Business sender is set up, this answers { sent: false }
  * and says why, and every caller behaves honestly: the issue screen does not
@@ -25,24 +25,24 @@ import "server-only";
  * To connect it: send the message below through the provider, return
  * { sent: true } on success, and { sent: false, reason } on any failure. The
  * callers need no other change. The message must not carry anything but the
- * code and what it is for.
+ * number and what it is for.
  */
 
 export type SendResult = { sent: true } | { sent: false; reason: "not_connected" | "no_phone" | "failed" };
 
 /* Also the text staff send by hand from Demandes, so both say the same thing. */
-export const MESSAGE: Record<"fr" | "ar" | "en", (code: string) => string> = {
-  fr: (code) => `OUAQT. Votre code de configuration : ${code}. Il récupère votre configuration sur un ordinateur.`,
-  ar: (code) => `OUAQT. رمز الإعداد الخاص بك: ${code}. يسترجع إعدادك على حاسوب.`,
-  en: (code) => `OUAQT. Your configuration code: ${code}. It brings your configuration back on a computer.`,
+export const MESSAGE: Record<"fr" | "ar" | "en", (serial: string) => string> = {
+  fr: (serial) => `OUAQT. Votre numéro de série : ${serial}. Sur l'ordinateur du commerce, tapez-le sur le site OUAQT pour télécharger votre logiciel.`,
+  ar: (serial) => `OUAQT. رقمك التسلسلي: ${serial}. على حاسوب المحل، اكتبه في موقع OUAQT لتنزيل برنامجك.`,
+  en: (serial) => `OUAQT. Your serial number: ${serial}. On the shop computer, type it on the OUAQT website to download your software.`,
 };
 
-export async function sendConfigurationCode(input: {
+export async function sendNumber(input: {
   phone: string | null;
-  code: string;
+  serial: string;
   language: "fr" | "ar" | "en";
 }): Promise<SendResult> {
   if (!input.phone) return { sent: false, reason: "no_phone" };
-  void MESSAGE[input.language](input.code);
+  void MESSAGE[input.language](input.serial);
   return { sent: false, reason: "not_connected" };
 }
