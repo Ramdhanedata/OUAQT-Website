@@ -59,12 +59,21 @@ describe("reading what the owner typed", () => {
 });
 
 describe("the field as it is typed", () => {
-  it("uppercases and puts the hyphens in", () => {
-    expect(formatAsTyped("a")).toBe("OUAQT-A");
-    expect(formatAsTyped("abcd")).toBe("OUAQT-ABCD");
-    expect(formatAsTyped("abcde")).toBe("OUAQT-ABCD-E");
-    expect(formatAsTyped("abcdefgh")).toBe("OUAQT-ABCD-EFGH");
-    expect(formatAsTyped("abcdefghij")).toBe("OUAQT-ABCD-EFGH");
+  it("adds nothing to what he types, only groups of four", () => {
+    expect(formatAsTyped("a")).toBe("A");
+    expect(formatAsTyped("abcd")).toBe("ABCD");
+    expect(formatAsTyped("abcde")).toBe("ABCD-E");
+    expect(formatAsTyped("abcdefgh")).toBe("ABCD-EFGH");
+    expect(formatAsTyped("abcdefghij")).toBe("ABCD-EFGH");
+  });
+
+  it("leaves a numéro de série as the serial it is", () => {
+    expect(formatAsTyped("gm6s funn")).toBe("GM6S-FUNN");
+  });
+
+  it("formats a code typed with its prefix", () => {
+    expect(formatAsTyped("ouaqtabcdefgh")).toBe("OUAQT-ABCD-EFGH");
+    expect(formatAsTyped("ouaqt abcd e")).toBe("OUAQT-ABCD-E");
   });
 
   it("leaves the prefix alone while it is being typed", () => {

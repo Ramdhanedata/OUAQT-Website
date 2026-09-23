@@ -5,8 +5,9 @@
  *
  * It is not the numéro de série. That one activates the installed software and
  * is XXXX-XXXX; this one resumes a configuration on the website and always
- * starts with OUAQT-. Different names, different shapes, so one typed into
- * the other's box is recognisable at once.
+ * starts with OUAQT-. Owners who finished on the phone often type their
+ * numéro de série into the website's box instead, so the box takes that
+ * too and opens the same download (see the resume route).
  *
  * The code carries no answers. Every question added later would lengthen it,
  * and nobody can dictate a long string over the phone.
@@ -73,9 +74,10 @@ export function normaliseConfigurationCode(input: string): string {
 }
 
 /*
- * The field's value as the owner types: uppercase, hyphens put in for him,
- * the prefix added once he starts on the characters after it. A long paste
- * is read whole, so a link dropped in the box becomes its code.
+ * The field's value as the owner types: uppercase, a hyphen between groups
+ * of four. Nothing is added: a numéro de série typed here stays exactly what
+ * he typed, and the lookup, not the box, tells a code from a serial. A long
+ * paste is read whole, so a link dropped in the box becomes its code.
  */
 export function formatAsTyped(input: string): string {
   const upper = decode(input).toUpperCase();
@@ -89,10 +91,10 @@ export function formatAsTyped(input: string): string {
   /* Still typing the prefix itself: leave it as it is. */
   if (CODE_PREFIX.startsWith(bare)) return bare;
 
-  const body = (bare.startsWith(CODE_PREFIX) ? bare.slice(CODE_PREFIX.length) : bare).slice(0, BODY);
-  const first = body.slice(0, GROUP);
-  const second = body.slice(GROUP);
-  return `${CODE_PREFIX}-${first}${second ? `-${second}` : ""}`;
+  const prefixed = bare.startsWith(CODE_PREFIX);
+  const body = (prefixed ? bare.slice(CODE_PREFIX.length) : bare).slice(0, BODY);
+  const grouped = body.length > GROUP ? `${body.slice(0, GROUP)}-${body.slice(GROUP)}` : body;
+  return prefixed ? `${CODE_PREFIX}-${grouped}` : grouped;
 }
 
 /** Whether the value has as many characters as a code: enough to look it up. */
