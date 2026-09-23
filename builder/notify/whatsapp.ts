@@ -18,6 +18,10 @@ import "server-only";
  * claim a message went out, and a re-send request is queued for staff in the
  * admin area (Demandes) to send by hand.
  *
+ * The phone arrives as its last eight digits, the way numbers are matched
+ * (see phoneKey in builder/config-code/code.ts): a Mauritanian number, to be
+ * sent to with 222 in front.
+ *
  * To connect it: send the message below through the provider, return
  * { sent: true } on success, and { sent: false, reason } on any failure. The
  * callers need no other change. The message must not carry anything but the
@@ -26,7 +30,8 @@ import "server-only";
 
 export type SendResult = { sent: true } | { sent: false; reason: "not_connected" | "no_phone" | "failed" };
 
-const MESSAGE: Record<"fr" | "ar" | "en", (code: string) => string> = {
+/* Also the text staff send by hand from Demandes, so both say the same thing. */
+export const MESSAGE: Record<"fr" | "ar" | "en", (code: string) => string> = {
   fr: (code) => `OUAQT. Votre code de configuration : ${code}. Il récupère votre configuration sur un ordinateur.`,
   ar: (code) => `OUAQT. رمز الإعداد الخاص بك: ${code}. يسترجع إعدادك على حاسوب.`,
   en: (code) => `OUAQT. Your configuration code: ${code}. It brings your configuration back on a computer.`,
