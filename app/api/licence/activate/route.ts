@@ -138,31 +138,12 @@ export async function POST(request: Request) {
   const token = newDeviceToken();
   const tokenHash = await hashToken(token);
 
-  if (already) {
-    await supabase
-      .from("devices")
-      .update({ last_seen: new Date().toISOString(), token_hash: tokenHash })
-      .eq("id", already.id);
-  } else {
-    if (active.length >= settings.max_devices) {
-      return NextResponse.json(
-        { error: "device_limit", maxDevices: settings.max_devices },
-        { status: 409 }
-      );
-    }
-
-    const { error } = await supabase.from("devices").insert({
-      business_id: business.id,
-      device_id: input.data.deviceId,
-      name: input.data.deviceName ?? null,
-      platform: input.data.platform,
-      role: active.length === 0 ? "main" : "secondary",
-      token_hash: tokenHash,
-    });
-
-    if (error) {
-      return NextResponse.json({ error: "not_activated" }, { status: 502 });
-    }
+  /* A full shop is told so now, before anything is decided or written. */
+  if (!already && active.length >= settings.max_devices) {
+    return NextResponse.json(
+      { error: "device_limit", maxDevices: settings.max_devices },
+      { status: 409 }
+    );
   }
 
   const { data: licence } = await supabase
@@ -174,6 +155,7 @@ export async function POST(request: Request) {
     .maybeSingle();
 
   let current = licence;
+  let startsTrial = false;
 
   /* The trial begins the first time a computer runs the software. */
   if (current && current.plan === "trial" && !current.starts_at) {
@@ -224,6 +206,36 @@ export async function POST(request: Request) {
       );
     }
 
+    startsTrial = true;
+  }
+
+  /*
+   * Only now is the computer registered: after the trial has been allowed.
+   * Registering it first meant a refused attempt still took one of the shop's
+   * device slots, so an owner refused twice on a second-hand PC and then
+   * granted a trial by hand was told his licence had no room left.
+   */
+  if (already) {
+    await supabase
+      .from("devices")
+      .update({ last_seen: new Date().toISOString(), token_hash: tokenHash })
+      .eq("id", already.id);
+  } else {
+    const { error } = await supabase.from("devices").insert({
+      business_id: business.id,
+      device_id: input.data.deviceId,
+      name: input.data.deviceName ?? null,
+      platform: input.data.platform,
+      role: active.length === 0 ? "main" : "secondary",
+      token_hash: tokenHash,
+    });
+
+    if (error) {
+      return NextResponse.json({ error: "not_activated" }, { status: 502 });
+    }
+  }
+
+  if (startsTrial && current) {
     const now = new Date();
     const starts = now.toISOString();
     const ends = trialEnd(now, settings.trial_days).toISOString();

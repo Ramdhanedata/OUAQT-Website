@@ -480,6 +480,42 @@ const { data: usedOverride } = await admin
   .maybeSingle();
 check("and is used once, not kept open", Boolean(usedOverride?.used_at));
 
+/*
+ * The same owner, refused twice before he rings us. Each refusal was a fresh
+ * install, so a new device id each time. None of them may take a device slot,
+ * or the trial granted by hand afterwards lands on a licence that is full.
+ */
+const retriedShop = await anotherShop("retried");
+shops.push(retriedShop);
+for (const attempt of ["one", "two"]) {
+  await post("/api/licence/activate", {
+    serial: retriedShop.serial,
+    deviceId: `device-retried-${attempt}-${stamp}`,
+    platform: "windows",
+    fingerprint: thisPc,
+  });
+}
+const { count: slotsAfterRefusals } = await admin
+  .from("devices")
+  .select("id", { count: "exact", head: true })
+  .eq("business_id", retriedShop.id);
+check("refused attempts take no device slot", slotsAfterRefusals === 0, `${slotsAfterRefusals} registered`);
+
+await admin.from("trial_overrides").insert({ business_id: retriedShop.id, reason: "Refused twice, verified by phone" });
+const afterTwoRefusals = await post("/api/licence/activate", {
+  serial: retriedShop.serial,
+  deviceId: `device-retried-three-${stamp}`,
+  platform: "windows",
+  fingerprint: thisPc,
+});
+const { count: slotsAfterGrant } = await admin
+  .from("devices")
+  .select("id", { count: "exact", head: true })
+  .eq("business_id", retriedShop.id);
+check("and the trial granted by hand then activates, on one computer",
+  afterTwoRefusals.status === 200 && slotsAfterGrant === 1,
+  `status ${afterTwoRefusals.status} ${afterTwoRefusals.body?.error ?? ""}, ${slotsAfterGrant} registered`);
+
 /* ── One click, for an owner who built on the shop PC ──────────────────── */
 
 console.log("\nOne-click activation\n");
