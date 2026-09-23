@@ -80,7 +80,13 @@ export function SaleScreen({
     >
       <header className="flex items-center justify-between border-b-2 border-black/10 px-4 py-3">
         <span className="truncate text-lg font-semibold">
-          {configuration.business.nameLatin || copy.sale.title}
+          {/*
+            * His name in the language the till speaks. An Arabic till whose
+            * owner gave an Arabic name shows that one; otherwise the Latin.
+            */}
+          {(language === "ar" && configuration.business.nameArabic) ||
+            configuration.business.nameLatin ||
+            copy.sale.title}
         </span>
         <button
           type="button"
