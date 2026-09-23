@@ -55,12 +55,18 @@ export async function POST(request: Request) {
     /* Six hundred billion possibilities; a clash is retried, never shared. */
     for (let attempt = 0; attempt < 5 && !code; attempt += 1) {
       const candidate = makeConfigurationCode();
-      const { error } = await admin
+      const { data: taken, error } = await admin
         .from("builder_drafts")
         .update({ code: candidate, phone, last_accessed_at: new Date().toISOString(), status: "active" })
         .eq("id", draft.id)
-        .is("code", null);
-      if (!error) code = candidate;
+        .is("code", null)
+        .select("id");
+      if (!error && taken && taken.length > 0) code = candidate;
+      /* A second tap got there first: its code is the one. */
+      if (!error && taken?.length === 0) {
+        const { data: again } = await admin.from("builder_drafts").select("code").eq("id", draft.id).single();
+        code = (again?.code as string | null) ?? null;
+      }
     }
     if (!code) return NextResponse.json({ error: "not_saved" }, { status: 502 });
   } else if (phone && phone !== draft.phone) {

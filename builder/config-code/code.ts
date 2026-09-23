@@ -3,7 +3,7 @@
  * server, so an owner who answered the questions on his phone can pick them
  * up on a computer without answering again.
  *
- * It is not the numéro de série. That one unlocks the installed software and
+ * It is not the numéro de série. That one activates the installed software and
  * is XXXX-XXXX; this one resumes a configuration on the website and always
  * starts with OUAQT-. Different names, different shapes, so one typed into
  * the other's box is recognisable at once.
