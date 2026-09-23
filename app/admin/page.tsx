@@ -1,5 +1,6 @@
 import { adminGate } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
+import { adminWords } from "@/builder/admin/language";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { PaymentsToConfirm, type PaymentRow } from "@/builder/admin/payments";
 import { adminClient } from "@/builder/db/server";
@@ -14,11 +15,12 @@ import { adminClient } from "@/builder/db/server";
  */
 export default async function AdminPage() {
   const gate = await adminGate();
+  const { lang, t, locale } = adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
   if (!supabase) {
-    return <p className="text-base text-foreground">No database configured.</p>;
+    return <p className="text-base text-foreground">{t.noDatabase}</p>;
   }
 
   const { data: payments } = await supabase
@@ -74,11 +76,12 @@ export default async function AdminPage() {
         * The same menu as every other admin page. This one drew its own
         * header, so the page staff land on first had no way to the others.
         */}
-      <AdminNav current="/admin" staff={gate.staff.name ?? "staff"} />
-      <h1 className="mb-6 text-2xl font-semibold text-foreground">
-        Paiements à confirmer
-      </h1>
-      <PaymentsToConfirm rows={rows} />
+      <AdminNav current="/admin" staff={gate.staff.name ?? t.staffFallback} />
+      <h1 className="mb-6 text-2xl font-semibold text-foreground">{t.payments.title}</h1>
+      <PaymentsToConfirm
+        rows={rows}
+        words={{ t: t.payments, packs: t.packs, plans: t.plans, lang, locale }}
+      />
     </>
   );
 }

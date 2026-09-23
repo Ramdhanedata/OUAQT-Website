@@ -1,7 +1,9 @@
 import { adminGate } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
+import { adminWords } from "@/builder/admin/language";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { adminClient } from "@/builder/db/server";
+import { wordFor } from "@/builder/admin/copy";
 
 /*
  * What owners asked for and could not have.
@@ -13,10 +15,11 @@ import { adminClient } from "@/builder/db/server";
  */
 export default async function RequestsPage() {
   const gate = await adminGate();
+  const { t, locale } = adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
-  if (!supabase) return <p className="text-base">No database configured.</p>;
+  if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
   const [{ data: requests }, { data: leads }] = await Promise.all([
     supabase
@@ -33,15 +36,13 @@ export default async function RequestsPage() {
 
   return (
     <>
-      <AdminNav current="/admin/demandes" staff={gate.staff.name ?? "staff"} />
+      <AdminNav current="/admin/demandes" staff={gate.staff.name ?? t.staffFallback} />
 
       <section className="mb-12">
-        <h1 className="text-2xl font-semibold text-foreground">
-          Ce que les propriétaires ont demandé
-        </h1>
+        <h1 className="text-2xl font-semibold text-foreground">{t.requests.title}</h1>
         {(requests ?? []).length === 0 ? (
           <p className="mt-3 text-base text-muted-foreground">
-            Rien pour l&apos;instant.
+            {t.requests.nothing}
           </p>
         ) : (
           <ul className="mt-4 divide-y divide-border">
@@ -49,8 +50,9 @@ export default async function RequestsPage() {
               <li key={one.id} className="py-3">
                 <p className="text-base text-foreground">{one.text}</p>
                 <p className="mt-1 text-base text-muted-foreground">
-                  {one.pack ?? "sans pack"} · {one.question_id ?? "sans question"} ·{" "}
-                  {new Date(one.created_at).toLocaleDateString("fr")}
+                  {one.pack ? wordFor(t.packs, one.pack) : t.requests.noPack} ·{" "}
+                  {one.question_id ?? t.requests.noQuestion} ·{" "}
+                  {new Date(one.created_at).toLocaleDateString(locale)}
                 </p>
               </li>
             ))}
@@ -59,12 +61,10 @@ export default async function RequestsPage() {
       </section>
 
       <section>
-        <h2 className="text-xl font-semibold text-foreground">
-          Activités qui n&apos;ont pas encore de pack
-        </h2>
+        <h2 className="text-xl font-semibold text-foreground">{t.requests.leadsTitle}</h2>
         {(leads ?? []).length === 0 ? (
           <p className="mt-3 text-base text-muted-foreground">
-            Personne n&apos;a encore laissé son numéro.
+            {t.requests.noLeads}
           </p>
         ) : (
           <ul className="mt-4 divide-y divide-border">

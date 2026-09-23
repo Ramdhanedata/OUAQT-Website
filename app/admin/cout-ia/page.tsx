@@ -1,7 +1,9 @@
 import { adminGate } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
+import { adminWords } from "@/builder/admin/language";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { adminClient } from "@/builder/db/server";
+import { fill } from "@/lib/utils";
 
 /*
  * What the AI costs, in the only unit that matters before a bill arrives.
@@ -11,10 +13,11 @@ import { adminClient } from "@/builder/db/server";
  */
 export default async function AiCostPage() {
   const gate = await adminGate();
+  const { t, locale } = adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
-  if (!supabase) return <p className="text-base">No database configured.</p>;
+  if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
   const { data: calls } = await supabase
     .from("ai_calls")
@@ -38,24 +41,24 @@ export default async function AiCostPage() {
 
   return (
     <>
-      <AdminNav current="/admin/cout-ia" staff={gate.staff.name ?? "staff"} />
-      <h1 className="text-2xl font-semibold text-foreground">Coût IA</h1>
+      <AdminNav current="/admin/cout-ia" staff={gate.staff.name ?? t.staffFallback} />
+      <h1 className="text-2xl font-semibold text-foreground">{t.aiCost.title}</h1>
 
       {rows.length === 0 ? (
         <p className="mt-3 text-base text-muted-foreground">
-          Aucun appel pour l&apos;instant.
+          {t.aiCost.none}
         </p>
       ) : (
         <>
           <p className="mt-3 text-base text-foreground">
-            {rows.length} appels, {totalTokens.toLocaleString("fr")} jetons au total.
+            {fill(t.aiCost.total, { calls: rows.length.toLocaleString(locale), tokens: totalTokens.toLocaleString(locale) })}
           </p>
           <table className="mt-6 w-full text-start">
             <thead>
               <tr className="border-b border-border text-base text-muted-foreground">
-                <th className="py-2 text-start font-normal">Résultat</th>
-                <th className="py-2 text-end font-normal">Appels</th>
-                <th className="py-2 text-end font-normal">Jetons</th>
+                <th className="py-2 text-start font-normal">{t.aiCost.outcome}</th>
+                <th className="py-2 text-end font-normal">{t.aiCost.calls}</th>
+                <th className="py-2 text-end font-normal">{t.aiCost.tokens}</th>
               </tr>
             </thead>
             <tbody>
@@ -64,7 +67,7 @@ export default async function AiCostPage() {
                   <td className="py-2 text-foreground">{outcome}</td>
                   <td className="py-2 text-end text-foreground">{seen.calls}</td>
                   <td className="py-2 text-end text-foreground">
-                    {seen.tokens.toLocaleString("fr")}
+                    {seen.tokens.toLocaleString(locale)}
                   </td>
                 </tr>
               ))}

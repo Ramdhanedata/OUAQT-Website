@@ -1,6 +1,7 @@
 import { deviceCodeFor } from "@/app-ui/codes";
 import { adminGate } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
+import { adminWords } from "@/builder/admin/language";
 import { Devices, type DeviceRow } from "@/builder/admin/devices";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { adminClient } from "@/builder/db/server";
@@ -11,10 +12,11 @@ import { adminClient } from "@/builder/db/server";
  */
 export default async function DevicesPage() {
   const gate = await adminGate();
+  const { t, locale } = adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
-  if (!supabase) return <p className="text-base">No database configured.</p>;
+  if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
   const { data: devices } = await supabase
     .from("devices")
@@ -45,9 +47,9 @@ export default async function DevicesPage() {
 
   return (
     <>
-      <AdminNav current="/admin/postes" staff={gate.staff.name ?? "staff"} />
-      <h1 className="text-2xl font-semibold text-foreground">Postes</h1>
-      <Devices rows={rows} />
+      <AdminNav current="/admin/postes" staff={gate.staff.name ?? t.staffFallback} />
+      <h1 className="text-2xl font-semibold text-foreground">{t.devices.title}</h1>
+      <Devices rows={rows} words={{ t: t.devices, roles: t.roles, locale }} />
     </>
   );
 }

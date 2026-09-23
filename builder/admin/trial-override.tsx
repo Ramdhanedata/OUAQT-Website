@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import type { AdminCopy } from "./copy";
 
 /*
  * Give a trial to a shop the rules refused.
@@ -10,8 +11,10 @@ import { Button } from "@/components/ui/button";
  * whether we were being kind or being had.
  */
 export function TrialOverride({
+  t,
   businesses,
 }: {
+  t: AdminCopy["trials"];
   businesses: { id: string; name: string }[];
 }) {
   const [businessId, setBusinessId] = useState("");
@@ -36,13 +39,13 @@ export function TrialOverride({
   return (
     <div className="mt-6 max-w-xl space-y-3 rounded-lg border border-border p-4">
       <label className="block">
-        <span className="text-base text-muted-foreground">Le commerce</span>
+        <span className="text-base text-muted-foreground">{t.shop}</span>
         <select
           value={businessId}
           onChange={(event) => setBusinessId(event.target.value)}
           className="mt-1 min-h-[44px] w-full rounded-lg border border-border bg-background px-3 text-base text-foreground"
         >
-          <option value="">Choisir</option>
+          <option value="">{t.choose}</option>
           {businesses.map((one) => (
             <option key={one.id} value={one.id}>
               {one.name}
@@ -52,12 +55,12 @@ export function TrialOverride({
       </label>
 
       <label className="block">
-        <span className="text-base text-muted-foreground">Pourquoi</span>
+        <span className="text-base text-muted-foreground">{t.why}</span>
         <input
           type="text"
           value={reason}
           onChange={(event) => setReason(event.target.value)}
-          placeholder="Ordinateur acheté d'occasion, vérifié par téléphone"
+          placeholder={t.whyExample}
           className="mt-1 min-h-[44px] w-full rounded-lg border border-border bg-background px-3 text-base text-foreground"
         />
       </label>
@@ -69,16 +72,16 @@ export function TrialOverride({
         disabled={!businessId || reason.trim().length < 4 || state === "sending"}
         onClick={() => void grant()}
       >
-        Donner un essai
+        {t.grant}
       </Button>
 
       {state === "done" ? (
         <p className="text-base text-foreground">
-          C'est fait. Son essai démarrera à la prochaine activation.
+          {t.granted}
         </p>
       ) : null}
       {state === "failed" ? (
-        <p className="text-base text-destructive">Rien n'a été enregistré. Réessayez.</p>
+        <p className="text-base text-destructive">{t.grantFailed}</p>
       ) : null}
     </div>
   );

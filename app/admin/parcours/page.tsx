@@ -1,7 +1,9 @@
 import { adminGate } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
+import { adminWords } from "@/builder/admin/language";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { adminClient } from "@/builder/db/server";
+import { wordFor } from "@/builder/admin/copy";
 
 /*
  * Where owners stop.
@@ -10,14 +12,14 @@ import { adminClient } from "@/builder/db/server";
  * of everyone who started, how many were still there at step three. A count
  * per step on its own hides the drop.
  */
-const STEPS = ["Votre commerce", "Questions", "Produits et employés", "Numéro de série"];
 
 export default async function FunnelPage() {
   const gate = await adminGate();
+  const { t } = adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
-  if (!supabase) return <p className="text-base">No database configured.</p>;
+  if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
   const { data: events } = await supabase
     .from("builder_events")
@@ -35,11 +37,11 @@ export default async function FunnelPage() {
     if (!reached.has(step)) reached.set(step, new Set());
     reached.get(step)!.add(row.session_hash);
 
-    const pack = row.pack ?? "sans pack";
+    const pack = row.pack ? wordFor(t.packs, row.pack) : t.funnel.noPack;
     if (!byPack.has(pack)) byPack.set(pack, new Set());
     byPack.get(pack)!.add(row.session_hash);
 
-    const device = row.device_class ?? "inconnu";
+    const device = row.device_class ?? t.funnel.unknown;
     if (!byDevice.has(device)) byDevice.set(device, new Set());
     byDevice.get(device)!.add(row.session_hash);
   }
@@ -48,25 +50,25 @@ export default async function FunnelPage() {
 
   return (
     <>
-      <AdminNav current="/admin/parcours" staff={gate.staff.name ?? "staff"} />
-      <h1 className="text-2xl font-semibold text-foreground">Parcours</h1>
+      <AdminNav current="/admin/parcours" staff={gate.staff.name ?? t.staffFallback} />
+      <h1 className="text-2xl font-semibold text-foreground">{t.funnel.title}</h1>
 
       {started === 0 ? (
         <p className="mt-3 text-base text-muted-foreground">
-          Personne n&apos;a encore commencé.
+          {t.funnel.nobody}
         </p>
       ) : (
         <>
           <table className="mt-6 w-full">
             <thead>
               <tr className="border-b border-border text-base text-muted-foreground">
-                <th className="py-2 text-start font-normal">Étape</th>
-                <th className="py-2 text-end font-normal">Arrivés</th>
-                <th className="py-2 text-end font-normal">Sur cent</th>
+                <th className="py-2 text-start font-normal">{t.funnel.step}</th>
+                <th className="py-2 text-end font-normal">{t.funnel.reached}</th>
+                <th className="py-2 text-end font-normal">{t.funnel.perHundred}</th>
               </tr>
             </thead>
             <tbody>
-              {STEPS.map((label, step) => {
+              {t.funnel.steps.map((label, step) => {
                 const count = reached.get(step)?.size ?? 0;
                 return (
                   <tr key={label} className="border-b border-border text-base">
@@ -82,8 +84,8 @@ export default async function FunnelPage() {
           </table>
 
           <div className="mt-8 grid gap-8 sm:grid-cols-2">
-            <Split title="Par activité" rows={byPack} />
-            <Split title="Téléphone ou ordinateur" rows={byDevice} />
+            <Split title={t.funnel.byPack} rows={byPack} />
+            <Split title={t.funnel.byDevice} rows={byDevice} />
           </div>
         </>
       )}

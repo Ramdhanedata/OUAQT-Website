@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { fill } from "@/lib/utils";
+import type { AdminCopy } from "./copy";
 
 /*
  * One setting, one field, one save.
@@ -13,10 +15,12 @@ export function SettingRow({
   settingKey,
   value,
   description,
+  t,
 }: {
   settingKey: string;
   value: string;
   description: string | null;
+  t: AdminCopy["settings"];
 }) {
   const [text, setText] = useState(value);
   const [state, setState] = useState<"idle" | "saving" | "saved" | "failed">("idle");
@@ -37,10 +41,10 @@ export function SettingRow({
       setState("failed");
       setProblem(
         body?.error === "not_json"
-          ? "Ce n'est pas une valeur valide. Un nombre s'écrit 15000, un texte entre guillemets."
+          ? t.notJson
           : body?.error === "wrong_kind"
-            ? `Cette valeur doit rester du même type qu'avant (${body.was}).`
-            : "Pas enregistré."
+            ? fill(t.wrongKind, { was: String(body.was) })
+            : t.notSaved
       );
       return;
     }
@@ -52,7 +56,7 @@ export function SettingRow({
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <code className="text-base text-foreground">{settingKey}</code>
         {state === "saved" ? (
-          <span className="text-base text-muted-foreground">Enregistré</span>
+          <span className="text-base text-muted-foreground">{t.saved}</span>
         ) : null}
       </div>
       {description ? (
@@ -75,7 +79,7 @@ export function SettingRow({
           disabled={state === "saving" || text === value}
           className="min-h-[48px] rounded-lg border border-border px-5 text-base text-foreground disabled:opacity-40"
         >
-          Enregistrer
+          {t.save}
         </button>
       </div>
       {problem ? <p className="mt-2 text-base text-destructive">{problem}</p> : null}

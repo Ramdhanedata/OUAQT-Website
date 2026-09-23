@@ -3,7 +3,9 @@ import { AdminNav } from "@/builder/admin/nav";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { TrialOverride } from "@/builder/admin/trial-override";
 import { adminClient } from "@/builder/db/server";
-import type { Signal } from "@/builder/licence/trial";
+import { wordFor } from "@/builder/admin/copy";
+import { adminWords } from "@/builder/admin/language";
+import { fill } from "@/lib/utils";
 
 /*
  * Trials: the ones we flagged, and the ones we refused.
@@ -13,26 +15,14 @@ import type { Signal } from "@/builder/licence/trial";
  * bottom is how either of them ends.
  */
 
-const why: Record<Signal, string> = {
-  same_logo: "Même logo qu'un essai précédent",
-  same_products: "Même liste de produits",
-  similar_name: "Nom de commerce très proche",
-  similar_address: "Adresse très proche",
-};
-
-const refusals: Record<string, string> = {
-  same_machine: "Même ordinateur qu'un essai précédent",
-  same_phone: "Même numéro de téléphone",
-  same_business: "Ce commerce a déjà eu son essai",
-  no_fingerprint: "Le logiciel n'a envoyé aucune empreinte de machine",
-};
 
 export default async function TrialsPage() {
   const gate = await adminGate();
+  const { t, locale } = adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
-  if (!supabase) return <p className="text-base">No database configured.</p>;
+  if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
   const [{ data: claims }, { data: refused }, { data: businesses }] = await Promise.all([
     supabase
@@ -55,32 +45,31 @@ export default async function TrialsPage() {
 
   return (
     <>
-      <AdminNav current="/admin/essais" staff={gate.staff.name ?? "staff"} />
-      <h1 className="text-2xl font-semibold text-foreground">Essais</h1>
+      <AdminNav current="/admin/essais" staff={gate.staff.name ?? t.staffFallback} />
+      <h1 className="text-2xl font-semibold text-foreground">{t.trials.title}</h1>
       <p className="mt-2 max-w-2xl text-base leading-relaxed text-muted-foreground">
-        Un essai par commerce. Ce qui est signalé ci-dessous n&apos;a bloqué
-        personne&nbsp;: c&apos;est une raison de regarder, pas une accusation.
+        {t.trials.intro}
       </p>
 
       <section className="mt-10">
         <h2 className="text-base font-medium text-foreground">
-          Possible essai répété ({flagged.length})
+          {fill(t.trials.flagged, { count: flagged.length })}
         </h2>
         {flagged.length === 0 ? (
-          <p className="mt-2 text-base text-muted-foreground">Rien à signaler.</p>
+          <p className="mt-2 text-base text-muted-foreground">{t.trials.nothingFlagged}</p>
         ) : (
           <ul className="mt-3 divide-y divide-border">
             {flagged.map((one) => (
               <li key={one.id} className="py-3">
                 <p className="text-base text-foreground">
-                  {one.name || "Sans nom"}
+                  {one.name || t.trials.unnamed}
                   <span className="text-muted-foreground">
                     {" · "}
-                    {new Date(one.created_at as string).toLocaleDateString("fr")}
+                    {new Date(one.created_at as string).toLocaleDateString(locale)}
                   </span>
                 </p>
                 <p className="mt-1 text-base text-muted-foreground">
-                  {(one.signals as Signal[]).map((signal) => why[signal] ?? signal).join(" · ")}
+                  {(one.signals as string[]).map((signal) => wordFor(t.trials.signals, signal)).join(" · ")}
                 </p>
               </li>
             ))}
@@ -90,10 +79,10 @@ export default async function TrialsPage() {
 
       <section className="mt-10">
         <h2 className="text-base font-medium text-foreground">
-          Refusés, à rappeler ({(refused ?? []).length})
+          {fill(t.trials.refused, { count: (refused ?? []).length })}
         </h2>
         {(refused ?? []).length === 0 ? (
-          <p className="mt-2 text-base text-muted-foreground">Personne.</p>
+          <p className="mt-2 text-base text-muted-foreground">{t.trials.nobodyRefused}</p>
         ) : (
           <ul className="mt-3 divide-y divide-border">
             {(refused ?? []).map((one, index) => {
@@ -101,10 +90,10 @@ export default async function TrialsPage() {
               return (
                 <li key={index} className="py-3">
                   <p className="text-base text-foreground">
-                    {refusals[detail?.because ?? ""] ?? detail?.because ?? "Refusé"}
+                    {detail?.because ? wordFor(t.trials.refusals, detail.because) : t.trials.refusedFallback}
                   </p>
                   <p className="mt-1 text-base text-muted-foreground">
-                    {new Date(one.created_at as string).toLocaleString("fr")}
+                    {new Date(one.created_at as string).toLocaleString(locale)}
                   </p>
                 </li>
               );
@@ -114,13 +103,12 @@ export default async function TrialsPage() {
       </section>
 
       <section className="mt-10">
-        <h2 className="text-base font-medium text-foreground">Donner un essai</h2>
+        <h2 className="text-base font-medium text-foreground">{t.trials.grantTitle}</h2>
         <p className="mt-2 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          Pour un ordinateur acheté d&apos;occasion, une machine réparée que
-          nous n&apos;avons pas reconnue, ou toute personne que nous avons
-          refusée à tort. Son essai démarre à sa prochaine activation.
+          {t.trials.grantIntro}
         </p>
         <TrialOverride
+          t={t.trials}
           businesses={(businesses ?? []).map((one) => ({
             id: one.id as string,
             name: one.name_latin as string,
@@ -130,14 +118,14 @@ export default async function TrialsPage() {
 
       <section className="mt-10">
         <h2 className="text-base font-medium text-foreground">
-          Tous les essais ({(claims ?? []).length})
+          {fill(t.trials.all, { count: (claims ?? []).length })}
         </h2>
         <ul className="mt-3 divide-y divide-border">
           {(claims ?? []).map((one) => (
             <li key={one.id} className="flex flex-wrap justify-between gap-2 py-2">
-              <span className="text-base text-foreground">{one.name || "Sans nom"}</span>
+              <span className="text-base text-foreground">{one.name || t.trials.unnamed}</span>
               <span className="text-base text-muted-foreground">
-                {new Date(one.created_at as string).toLocaleDateString("fr")}
+                {new Date(one.created_at as string).toLocaleDateString(locale)}
               </span>
             </li>
           ))}

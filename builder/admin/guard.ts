@@ -61,7 +61,8 @@ export async function adminGate(): Promise<AdminGate> {
     const { data: first } = admin
       ? await admin.from("admin_users").select("user_id").order("created_at").limit(1).maybeSingle()
       : { data: null };
-    if (first) return { allowed: true, staff: { id: first.user_id, name: "Test, sans connexion" } };
+    /* No name here: the menu says "test, no sign-in" in the reader's language. */
+    if (first) return { allowed: true, staff: { id: first.user_id, name: null } };
   }
 
   const supabase = sessionClient();

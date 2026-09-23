@@ -1,10 +1,12 @@
 import { adminGate } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
+import { adminWords } from "@/builder/admin/language";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { statusOf, type LicencePlan } from "@/builder/licence/status";
 import { hashSerial, isSerial } from "@/builder/serial/serial";
+import { wordFor } from "@/builder/admin/copy";
 
 /*
  * Finding one client, by whatever the person on the phone has in front of
@@ -20,10 +22,11 @@ export default async function ClientsPage({
   searchParams: { q?: string };
 }) {
   const gate = await adminGate();
+  const { t, locale } = adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
-  if (!supabase) return <p className="text-base">No database configured.</p>;
+  if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
   const query = (searchParams.q ?? "").trim();
   const settings = await getPublicSettings();
@@ -65,28 +68,28 @@ export default async function ClientsPage({
 
   return (
     <>
-      <AdminNav current="/admin/clients" staff={gate.staff.name ?? "staff"} />
-      <h1 className="text-2xl font-semibold text-foreground">Clients</h1>
+      <AdminNav current="/admin/clients" staff={gate.staff.name ?? t.staffFallback} />
+      <h1 className="text-2xl font-semibold text-foreground">{t.clients.title}</h1>
 
       <form method="get" className="mt-4 flex gap-3">
         <input
           type="text"
           name="q"
           defaultValue={query}
-          placeholder="Nom du commerce ou numéro de série"
+          placeholder={t.clients.search}
           className="min-h-[48px] flex-1 rounded-lg border border-border bg-background px-4 text-base text-foreground outline-none focus:border-foreground"
         />
         <button
           type="submit"
           className="min-h-[48px] rounded-lg border border-border px-5 text-base text-foreground"
         >
-          Chercher
+          {t.clients.searchButton}
         </button>
       </form>
 
       {(businesses ?? []).length === 0 ? (
         <p className="mt-6 text-base text-muted-foreground">
-          {query ? "Rien trouvé." : "Aucun client pour l'instant."}
+          {query ? t.clients.nothingFound : t.clients.none}
         </p>
       ) : (
         <ul className="mt-6 divide-y divide-border">
@@ -103,7 +106,7 @@ export default async function ClientsPage({
                   now,
                   rules
                 )
-              : "aucune licence";
+              : null;
 
             return (
               <li key={business.id} className="flex flex-wrap justify-between gap-3 py-3">
@@ -111,14 +114,14 @@ export default async function ClientsPage({
                   {business.name_latin}
                   <span className="text-muted-foreground">
                     {" "}
-                    · {business.pack}
-                    {business.launch_client ? " · lancement" : ""}
+                    · {wordFor(t.packs, business.pack)}
+                    {business.launch_client ? ` · ${t.clients.launch}` : ""}
                   </span>
                 </span>
                 <span className="text-base text-muted-foreground">
-                  {status}
+                  {status ? wordFor(t.statuses, status) : t.clients.noLicence}
                   {licence?.ends_at
-                    ? ` · ${new Date(licence.ends_at).toLocaleDateString("fr")}`
+                    ? ` · ${new Date(licence.ends_at).toLocaleDateString(locale)}`
                     : ""}
                 </span>
               </li>

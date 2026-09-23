@@ -1,6 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { fill } from "@/lib/utils";
+import { wordFor, type AdminCopy } from "./copy";
+
+export type DeviceWords = { t: AdminCopy["devices"]; roles: Record<string, string>; locale: string };
 
 /*
  * The computers a shop has activated, and the button that frees one.
@@ -21,13 +25,13 @@ export type DeviceRow = {
   lastSeen: string;
 };
 
-export function Devices({ rows }: { rows: DeviceRow[] }) {
+export function Devices({ rows, words }: { rows: DeviceRow[]; words: DeviceWords }) {
   const [freed, setFreed] = useState<Record<string, boolean>>({});
 
   if (rows.length === 0) {
     return (
       <p className="mt-3 text-base text-muted-foreground">
-        Aucun ordinateur activé pour l&apos;instant.
+        {words.t.none}
       </p>
     );
   }
@@ -37,6 +41,7 @@ export function Devices({ rows }: { rows: DeviceRow[] }) {
       {rows.map((row) => (
         <li key={row.deviceId} className="py-4">
           <Device
+            words={words}
             row={row}
             freed={Boolean(freed[row.deviceId])}
             onFreed={() => setFreed((all) => ({ ...all, [row.deviceId]: true }))}
@@ -48,10 +53,12 @@ export function Devices({ rows }: { rows: DeviceRow[] }) {
 }
 
 function Device({
+  words,
   row,
   freed,
   onFreed,
 }: {
+  words: DeviceWords;
   row: DeviceRow;
   freed: boolean;
   onFreed: () => void;
@@ -61,7 +68,7 @@ function Device({
   const [error, setError] = useState<string | null>(null);
 
   async function release() {
-    if (reason.trim() === "") return setError("Dites pourquoi: cela reste écrit.");
+    if (reason.trim() === "") return setError(words.t.reasonNeeded);
     setBusy(true);
     setError(null);
 
@@ -75,7 +82,7 @@ function Device({
       }),
     });
     setBusy(false);
-    if (!response.ok) return setError("Pas libéré.");
+    if (!response.ok) return setError(words.t.notFreed);
     onFreed();
   }
 
@@ -86,7 +93,7 @@ function Device({
           {row.businessName}
           <span className="text-muted-foreground">
             {" "}
-            · {row.name ?? "sans nom"} · {row.platform ?? "?"} · {row.role}
+            · {row.name ?? words.t.unnamed} · {row.platform ?? "?"} · {wordFor(words.roles, row.role)}
           </span>
         </span>
         <span className="text-base text-muted-foreground">
@@ -96,8 +103,8 @@ function Device({
 
       <p className="text-base text-muted-foreground">
         {freed || row.status !== "active"
-          ? "Libéré"
-          : `Vu le ${new Date(row.lastSeen).toLocaleDateString("fr")}`}
+          ? words.t.freed
+          : fill(words.t.seen, { date: new Date(row.lastSeen).toLocaleDateString(words.locale) })}
       </p>
 
       {!freed && row.status === "active" ? (
@@ -106,7 +113,7 @@ function Device({
             type="text"
             value={reason}
             onChange={(event) => setReason(event.target.value)}
-            placeholder="Raison"
+            placeholder={words.t.reason}
             className="min-h-[48px] flex-1 rounded-lg border border-border bg-background px-4 text-base text-foreground outline-none focus:border-foreground"
           />
           <button
@@ -115,7 +122,7 @@ function Device({
             onClick={() => void release()}
             className="min-h-[48px] rounded-lg border border-border px-5 text-base text-foreground"
           >
-            Libérer
+            {words.t.release}
           </button>
         </div>
       ) : null}

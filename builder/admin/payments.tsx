@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { formatMoney } from "@/app-ui";
 import { Button } from "@/components/ui/button";
+import { wordFor, type AdminCopy, type AdminLanguage } from "./copy";
 
 /*
  * One payment, everything needed to judge it, and two buttons.
@@ -25,14 +26,22 @@ export type PaymentRow = {
   screenshotUrl: string | null;
 };
 
-export function PaymentsToConfirm({ rows }: { rows: PaymentRow[] }) {
+/* What this screen needs to speak the reader's language. */
+export type PaymentWords = {
+  t: AdminCopy["payments"];
+  packs: Record<string, string>;
+  plans: Record<string, string>;
+  lang: AdminLanguage;
+  locale: string;
+};
+
+export function PaymentsToConfirm({ rows, words }: { rows: PaymentRow[]; words: PaymentWords }) {
   const [decided, setDecided] = useState<Record<string, string>>({});
 
   if (rows.length === 0) {
     return (
       <p className="text-base leading-relaxed text-muted-foreground">
-        Rien à confirmer. Les paiements arrivent ici dès qu'un propriétaire
-        envoie une capture.
+        {words.t.empty}
       </p>
     );
   }
@@ -42,6 +51,7 @@ export function PaymentsToConfirm({ rows }: { rows: PaymentRow[] }) {
       {rows.map((row) => (
         <li key={row.id} className="rounded-2xl border border-border p-4 sm:p-6">
           <Payment
+            words={words}
             row={row}
             decision={decided[row.id]}
             onDecided={(status) => setDecided((all) => ({ ...all, [row.id]: status }))}
@@ -53,10 +63,12 @@ export function PaymentsToConfirm({ rows }: { rows: PaymentRow[] }) {
 }
 
 function Payment({
+  words,
   row,
   decision,
   onDecided,
 }: {
+  words: PaymentWords;
   row: PaymentRow;
   decision?: string;
   onDecided: (status: string) => void;
@@ -67,7 +79,7 @@ function Payment({
 
   async function decide(action: "confirm" | "reject") {
     if (action === "reject" && reason.trim() === "") {
-      return setError("Dites pourquoi: le propriétaire le verra.");
+      return setError(words.t.reasonNeeded);
     }
     setBusy(true);
     setError(null);
@@ -80,14 +92,14 @@ function Payment({
     const body = await response.json().catch(() => null);
     setBusy(false);
 
-    if (!response.ok) return setError(body?.error ?? "failed");
+    if (!response.ok) return setError(body?.error ?? words.t.failed);
     onDecided(body.status);
   }
 
   if (decision) {
     return (
       <p className="text-base text-foreground">
-        {row.businessName} · {decision === "confirmed" ? "Confirmé" : "Rejeté"}
+        {row.businessName} · {decision === "confirmed" ? words.t.confirmed : words.t.rejected}
       </p>
     );
   }
@@ -97,18 +109,18 @@ function Payment({
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <span className="text-lg font-medium text-foreground">{row.businessName}</span>
         <span className="text-base text-muted-foreground">
-          {row.pack}
-          {row.launchClient ? " · lancement" : ""}
+          {wordFor(words.packs, row.pack)}
+          {row.launchClient ? ` · ${words.t.launch}` : ""}
         </span>
       </div>
 
       <dl className="grid grid-cols-2 gap-x-6 gap-y-2">
-        <Line label="Attendu" value={formatMoney(row.expected, "fr")} />
-        <Line label="Formule" value={row.plan} />
-        <Line label="Référence" value={row.reference ?? "aucune"} />
+        <Line label={words.t.expected} value={formatMoney(row.expected, words.lang)} />
+        <Line label={words.t.plan} value={wordFor(words.plans, row.plan)} />
+        <Line label={words.t.reference} value={row.reference ?? words.t.none} />
         <Line
-          label="Reçu le"
-          value={new Date(row.receivedAt).toLocaleString("fr")}
+          label={words.t.received}
+          value={new Date(row.receivedAt).toLocaleString(words.locale)}
         />
       </dl>
 
@@ -117,18 +129,16 @@ function Payment({
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={row.screenshotUrl}
-            alt="Capture du transfert"
+            alt={words.t.screenshotAlt}
             className="max-h-80 rounded-lg border border-border object-contain"
           />
         </a>
       ) : (
-        <p className="text-base text-destructive">Capture introuvable.</p>
+        <p className="text-base text-destructive">{words.t.noScreenshot}</p>
       )}
 
       <label className="block">
-        <span className="text-base text-muted-foreground">
-          Raison, si vous rejetez
-        </span>
+        <span className="text-base text-muted-foreground">{words.t.reasonLabel}</span>
         <input
           type="text"
           value={reason}
@@ -141,10 +151,10 @@ function Payment({
 
       <div className="flex flex-wrap gap-3">
         <Button type="button" variant="accent" disabled={busy} onClick={() => void decide("confirm")}>
-          Confirmer
+          {words.t.confirm}
         </Button>
         <Button type="button" variant="outline" disabled={busy} onClick={() => void decide("reject")}>
-          Rejeter
+          {words.t.reject}
         </Button>
       </div>
     </div>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import type { AdminCopy } from "./copy";
 
 /*
  * Making a renewal code for a shop on the phone.
@@ -13,8 +14,10 @@ import { useState } from "react";
 const SHORTEST_DEVICE_CODE = 8; // not-a-rule: a format, not a limit anyone sets
 
 export function RenewalForm({
+  t,
   businesses,
 }: {
+  t: AdminCopy["codes"];
   businesses: { id: string; name: string }[];
 }) {
   const [businessId, setBusinessId] = useState(businesses[0]?.id ?? "");
@@ -38,14 +41,14 @@ export function RenewalForm({
     const body = await response.json().catch(() => null);
     setBusy(false);
 
-    if (!response.ok) return setError(body?.error ?? "Pas généré.");
+    if (!response.ok) return setError(body?.error ?? t.notGenerated);
     setCode(body.code);
   }
 
   return (
     <div className="mt-6 max-w-md space-y-5">
       <label className="block">
-        <span className="text-base text-muted-foreground">Le commerce</span>
+        <span className="text-base text-muted-foreground">{t.shop}</span>
         <select
           value={businessId}
           onChange={(event) => setBusinessId(event.target.value)}
@@ -60,9 +63,7 @@ export function RenewalForm({
       </label>
 
       <label className="block">
-        <span className="text-base text-muted-foreground">
-          Le code affiché par son logiciel
-        </span>
+        <span className="text-base text-muted-foreground">{t.deviceCode}</span>
         <input
           type="text"
           dir="ltr"
@@ -74,7 +75,7 @@ export function RenewalForm({
       </label>
 
       <label className="block">
-        <span className="text-base text-muted-foreground">Nouvelle date de fin</span>
+        <span className="text-base text-muted-foreground">{t.newEnd}</span>
         <input
           type="date"
           value={endsAt}
@@ -89,14 +90,14 @@ export function RenewalForm({
         onClick={() => void make()}
         className="min-h-[48px] rounded-lg bg-accent px-5 text-base font-medium text-accent-foreground disabled:opacity-40"
       >
-        Générer le code
+        {t.generate}
       </button>
 
       {error ? <p className="text-base text-destructive">{error}</p> : null}
 
       {code ? (
         <div className="rounded-xl border border-border p-4">
-          <p className="text-base text-muted-foreground">À lire au propriétaire</p>
+          <p className="text-base text-muted-foreground">{t.readToOwner}</p>
           <p
             dir="ltr"
             className="mt-1 font-mono text-2xl font-semibold tracking-[0.2em] text-foreground"
@@ -111,7 +112,7 @@ export function RenewalForm({
             }}
             className="mt-3 min-h-[48px] rounded-lg border border-border px-5 text-base text-foreground"
           >
-            {copied ? "Copié" : "Copier"}
+            {copied ? t.copied : t.copy}
           </button>
         </div>
       ) : null}
