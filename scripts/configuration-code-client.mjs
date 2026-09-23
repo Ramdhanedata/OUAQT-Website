@@ -5,7 +5,7 @@
  *
  * A phone session answers and gets its code; another device opens it typed
  * sloppily and pasted as a link; a guesser is slowed down without slowing
- * anyone else; a change on the computer is saved; Télécharger makes the shop
+ * anyone else; the computer changes nothing; Télécharger makes the shop
  * with no account, and the same code works again for a reinstall; a lost
  * code is queued for staff and never shown; thirty days unopened, it says
  * expired and the row is kept. Everything it creates, it removes.
@@ -41,8 +41,8 @@ check("the draft keeps the phone as digits and the logo in storage", stored.phon
 const pc = await session();
 const sloppy = `  ${code.toLowerCase().replace(/-/g, " ")} `;
 const opened = await post("/api/builder/configuration-code/resume", { code: sloppy }, pc.token, "10.2.2.2");
-check("another device opens it, typed in lowercase with spaces", opened.status === 200 && opened.json?.answers?.nameLatin === "Pharmacie Code", String(opened.status));
-check("and learns the language it was made in, and sees the logo", opened.json?.locale === "ar" && Boolean(opened.json?.logo?.colour));
+check("another device opens it, typed in lowercase with spaces", opened.status === 200 && opened.json?.nameLatin === "Pharmacie Code" && opened.json?.pack === "pharmacy", String(opened.status));
+check("and learns the language it was made in, and nothing more than the download shows", opened.json?.locale === "ar" && opened.json?.answers === undefined);
 const link = await post("/api/builder/configuration-code/resume", { code: `https://ouaqt.com/fr/x?code=${code}` }, pc.token, "10.2.2.2");
 check("a pasted link opens it too", link.status === 200);
 
@@ -55,13 +55,13 @@ check("after five wrong entries even the right code must wait", slowed.status ==
 const other = await post("/api/builder/configuration-code/resume", { code }, pc.token, "10.2.2.2");
 check("someone else is not slowed down by the guesser", other.status === 200);
 
-const saved = await post("/api/builder/configuration-code/save", { code, answers: { ...opened.json.answers, nameLatin: "Pharmacie Code Modifiée" }, step: 2 }, pc.token, "10.2.2.2");
-check("a change on the computer is saved into the same configuration", saved.status === 200);
+const saved = await post("/api/builder/configuration-code/save", { code, answers: {}, step: 2 }, pc.token, "10.2.2.2");
+check("the computer cannot change the answers: there is nothing to save through", saved.status === 404 || saved.status === 405, String(saved.status));
 
 const shop = await post("/api/builder/configuration-code/shop", { code, products: [{ row: 1, name: "Savon", price: 12000, quantity: 5 }] }, pc.token, "10.2.2.2");
 check("Télécharger makes the shop without an account", shop.status === 200 && /^[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(shop.json?.serial ?? "") && shop.json?.link?.startsWith("ouaqt://activate?token="), JSON.stringify({ s: shop.status, serial: shop.json?.serial }));
 const { data: business } = await admin.from("businesses").select("id, name_latin, owner_id").eq("owner_id", phone.user.id).single();
-check("owned by the phone session that answered, with the change made on the computer", business?.name_latin === "Pharmacie Code Modifiée");
+check("owned by the phone session that answered, with its answers", business?.name_latin === "Pharmacie Code");
 const { data: logoRow } = await admin.from("logos").select("colour_path").eq("business_id", business.id).maybeSingle();
 check("and carrying the logo", Boolean(logoRow));
 const twice = await post("/api/builder/configuration-code/shop", { code }, pc.token, "10.2.2.2");
@@ -78,11 +78,35 @@ const expired = await post("/api/builder/configuration-code/resume", { code }, p
 const { data: marked } = await admin.from("builder_drafts").select("status").eq("code", code).single();
 check("thirty days unopened, it says expired, and the row is kept, marked", expired.status === 410 && expired.json?.error === "expired" && marked.status === "expired");
 
+/*
+ * Staff answering on a phone in test mode: the computer has no test-mode
+ * cookie, and its shop still gets the test-mode trial. Only where the admin
+ * area is open for testing, since that is where the cookie can be had.
+ */
+const staffPhone = await session();
+const opening = await fetch(`${base}/api/admin/test-builder`, { redirect: "manual" });
+const testerCookie = (opening.headers.get("set-cookie") ?? "").split(";")[0];
+let testBusiness = null;
+if (!testerCookie.includes("=")) {
+  console.log("  skip  test mode on the phone: the admin area is closed here");
+} else {
+  await staffPhone.client.from("builder_drafts").insert({ session_owner: staffPhone.user.id, pack: "restaurant", locale: "fr", step: 2, answers: { pack: "restaurant", nameLatin: "Essai Mode Test", interview: {} } });
+  const res = await fetch(`${base}/api/builder/configuration-code`, { method: "POST", headers: { "content-type": "application/json", authorization: `Bearer ${staffPhone.token}`, cookie: testerCookie, "x-forwarded-for": "10.5.5.5" }, body: JSON.stringify({ language: "fr" }) });
+  const staffCode = (await res.json()).code;
+  const made = await post("/api/builder/configuration-code/shop", { code: staffCode }, pc.token, "10.5.5.5");
+  const { data: shopRow } = await admin.from("businesses").select("id").eq("owner_id", staffPhone.user.id).single();
+  testBusiness = shopRow?.id ?? null;
+  const { data: override } = await admin.from("trial_overrides").select("business_id").eq("business_id", testBusiness).maybeSingle();
+  check("a phone in test mode gives the computer's shop the test-mode trial", made.status === 200 && Boolean(override));
+  await admin.from("builder_drafts").delete().eq("code", staffCode);
+}
+
 /* Tidy the test's own rows. */
 await admin.from("configuration_code_requests").delete().eq("phone", "22998877");
 await admin.from("businesses").delete().eq("id", business.id);
+if (testBusiness) await admin.from("businesses").delete().eq("id", testBusiness);
 await admin.from("builder_drafts").delete().eq("code", code);
-for (const one of [phone, pc, guesser]) await admin.auth.admin.deleteUser(one.user.id);
+for (const one of [phone, pc, guesser, staffPhone]) await admin.auth.admin.deleteUser(one.user.id);
 /* The test's own wrong entries only: its sessions are gone, so their counts go too. */
 await admin.from("configuration_code_attempts").delete().lt("last_failure_at", new Date(Date.now() + 60_000).toISOString()).gt("last_failure_at", new Date(Date.now() - 600_000).toISOString());
 console.log(failures === 0 ? "\nThe code de configuration holds up.\n" : `\n${failures} checks failed.\n`);

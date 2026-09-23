@@ -17,8 +17,9 @@ import { serialSecretIsSet } from "@/builder/serial/cipher";
  * série and trial licence, exactly as the account step does, for the phone's
  * session that answered the questions. Every later time, the same shop is
  * found and a fresh one-click link is handed back, so the same code serves a
- * reinstall after a broken PC. A change made on the summary becomes a new
- * version of the configuration, never an edit of the one a running shop uses.
+ * reinstall after a broken PC. Answers changed on the phone since become a
+ * new version of the configuration, never an edit of the one a running shop
+ * uses.
  *
  * No account is asked for here. An owner who pays later claims the shop with
  * one; until then the code and the serial are what lead back to it.
@@ -78,7 +79,8 @@ export async function POST(request: Request) {
   if (!shaped.success) return NextResponse.json({ error: "incomplete" }, { status: 400 });
 
   const made = await createShop(admin, draft.session_owner, shaped.data, {
-    tester: isTester(cookies().get(TESTER_COOKIE)?.value),
+    /* In test mode on the phone that answered, or on this computer. */
+    tester: draft.made_in_test_mode || isTester(cookies().get(TESTER_COOKIE)?.value),
     logo: draft.logo_path && draft.logo_mono_path ? { colourPath: draft.logo_path, monoPath: draft.logo_mono_path } : null,
   });
   if (!made.ok) return NextResponse.json({ error: made.error }, { status: made.status });

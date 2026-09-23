@@ -1,5 +1,7 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { makeConfigurationCode, phoneKey } from "@/builder/config-code/code";
 import { keepLogo } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
@@ -40,7 +42,7 @@ export async function POST(request: Request) {
 
   const { data: draft } = await admin
     .from("builder_drafts")
-    .select("id, code, answers, phone, logo_path")
+    .select("id, code, answers, phone, logo_path, made_in_test_mode")
     .eq("session_owner", auth.user.id)
     .order("updated_at", { ascending: false })
     .limit(1)
@@ -71,6 +73,15 @@ export async function POST(request: Request) {
     if (!code) return NextResponse.json({ error: "not_saved" }, { status: 502 });
   } else if (phone && phone !== draft.phone) {
     await admin.from("builder_drafts").update({ phone }).eq("id", draft.id);
+  }
+
+  /*
+   * Staff answering on a phone in test mode: the shop the computer makes from
+   * this code gets the same test-mode trial. The cookie is signed by the
+   * server and set only from the admin area.
+   */
+  if (!draft.made_in_test_mode && isTester(cookies().get(TESTER_COOKIE)?.value)) {
+    await admin.from("builder_drafts").update({ made_in_test_mode: true }).eq("id", draft.id);
   }
 
   if (!draft.logo_path && input.data.logo && input.data.logoMono) {
