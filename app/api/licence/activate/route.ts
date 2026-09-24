@@ -7,7 +7,7 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken, newDeviceToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
-import { setupFor } from "@/builder/licence/setup";
+import { serialFor, setupFor } from "@/builder/licence/setup";
 import { claimTrial } from "@/builder/licence/trial-claim";
 import { claimActivationToken, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
@@ -310,10 +310,12 @@ export async function POST(request: Request) {
    * computer that is online for one call has everything it needs afterwards.
    */
   const setup = await setupFor(supabase, business.id);
+  const serial = await serialFor(supabase, business.id);
 
   succeeded = true;
   return NextResponse.json({
     licence: signed,
+    serial,
     deviceToken: token,
     configuration: setup.configuration,
     configurationVersion: setup.configurationVersion,

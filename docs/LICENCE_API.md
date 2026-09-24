@@ -43,6 +43,7 @@ POST /api/licence/activate
 ```jsonc
 200 {
   "licence":              "<signed>",   // see below
+  "serial":               "XXXX-XXXX",   // the shop's own numéro de série, to show when the trial ends
   "deviceToken":          "<keep this>", // shown once, needed to refresh
   "configurationVersion": 3,             // name it back on every refresh
 
@@ -191,6 +192,7 @@ POST /api/licence/refresh
 ```jsonc
 200 {
   "licence":              "<signed>",
+  "serial":               "XXXX-XXXX",   // the same, for a computer activated by a link
   "configurationVersion": 4,
   // Null when the version the app named is still the current one.
   "configuration": { /* ... */ } | null,

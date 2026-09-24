@@ -5,7 +5,7 @@ import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
-import { setupFor } from "@/builder/licence/setup";
+import { serialFor, setupFor } from "@/builder/licence/setup";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 
 /*
@@ -129,12 +129,14 @@ export async function POST(request: Request) {
    * new configuration, so one number answers for all three.
    */
   const setup = await setupFor(supabase, business.id);
+  const serial = await serialFor(supabase, business.id);
   const unchanged =
     input.data.configurationVersion !== undefined &&
     setup.configurationVersion === input.data.configurationVersion;
 
   return NextResponse.json({
     licence: signed,
+    serial,
     configurationVersion: setup.configurationVersion,
     configuration: unchanged ? null : setup.configuration,
     products: unchanged ? null : setup.products,
