@@ -1,0 +1,103 @@
+{
+  "bank": "bakery",
+  "version": 1,
+  "questions": [
+    {
+      "id": "bk_sell_by",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Comment vendez-vous vos produits ?",
+        "ar": "كيف تبيع منتجاتك؟",
+        "en": "How do you sell your products?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "piece",
+          "label": { "fr": "À la pièce", "ar": "بالحبة", "en": "By the piece" }
+        },
+        {
+          "id": "weight",
+          "label": { "fr": "Au poids", "ar": "بالوزن", "en": "By weight" }
+        }
+      ],
+      "default": ["piece"],
+      "maps_to": [{ "path": "features.bakery.sellBy" }]
+    },
+    {
+      "id": "bk_production",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous noter ce que vous produisez chaque jour ?",
+        "ar": "هل تريد تسجيل ما تنتجه كل يوم؟",
+        "en": "Do you want to record what you make each day?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "features.bakery.trackProduction" }]
+    },
+    {
+      "id": "bk_preorders",
+      "type": "yes_no",
+      "label": {
+        "fr": "Prenez-vous des commandes à l'avance, par exemple des gâteaux ?",
+        "ar": "هل تأخذ طلبات مسبقة، مثل الكعك؟",
+        "en": "Do you take orders in advance, cakes for example?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "features.bakery.preorders" }]
+    },
+    {
+      "id": "bk_deposit",
+      "type": "yes_no",
+      "label": {
+        "fr": "Demandez-vous une avance sur les commandes ?",
+        "ar": "هل تطلب عربوناً على الطلبات؟",
+        "en": "Do you ask for a deposit on orders?"
+      },
+      "review": true,
+      "show_if": { "question": "bk_preorders", "equals": true },
+      "default": true,
+      "maps_to": [{ "path": "features.bakery.deposit" }]
+    },
+    {
+      "id": "bk_unsold",
+      "type": "single_choice",
+      "label": {
+        "fr": "Que faites-vous des invendus en fin de journée ?",
+        "ar": "ماذا تفعل بما لم يُبع في آخر اليوم؟",
+        "en": "What do you do with what is left at the end of the day?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "loss",
+          "label": {
+            "fr": "Je les note comme perte",
+            "ar": "أسجلها خسارة",
+            "en": "I record it as a loss"
+          }
+        },
+        {
+          "id": "resell",
+          "label": {
+            "fr": "Je les revends le lendemain",
+            "ar": "أبيعها في اليوم التالي",
+            "en": "I sell it the next day"
+          }
+        },
+        {
+          "id": "untracked",
+          "label": {
+            "fr": "Je ne les suis pas",
+            "ar": "لا أتابعها",
+            "en": "I do not keep track of it"
+          }
+        }
+      ],
+      "default": "loss",
+      "maps_to": [{ "path": "features.bakery.unsold" }]
+    }
+  ]
+}

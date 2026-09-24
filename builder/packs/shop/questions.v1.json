@@ -1,0 +1,100 @@
+{
+  "bank": "shop",
+  "version": 1,
+  "questions": [
+    {
+      "id": "sh_sell_by",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Comment vendez-vous vos articles ?",
+        "ar": "كيف تبيع سلعك؟",
+        "en": "How do you sell your goods?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "piece",
+          "label": {
+            "fr": "À la pièce",
+            "ar": "بالقطعة",
+            "en": "By the piece"
+          }
+        },
+        {
+          "id": "weight",
+          "label": {
+            "fr": "Au poids",
+            "ar": "بالوزن",
+            "en": "By weight"
+          }
+        }
+      ],
+      "default": [
+        "piece"
+      ],
+      "maps_to": [
+        {
+          "path": "features.shop.sellBy"
+        }
+      ]
+    },
+    {
+      "id": "sh_search",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Comment retrouvez-vous un article au moment de la vente ?",
+        "ar": "كيف تجد السلعة عند البيع؟",
+        "en": "How do you find an item when you sell it?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "name",
+          "label": {
+            "fr": "Par son nom",
+            "ar": "باسمها",
+            "en": "By its name"
+          }
+        },
+        {
+          "id": "barcode",
+          "label": {
+            "fr": "En scannant le code-barres",
+            "ar": "بمسح الرمز الشريطي",
+            "en": "By scanning its barcode"
+          }
+        }
+      ],
+      "default": [
+        "name",
+        "barcode"
+      ],
+      "maps_to": [
+        {
+          "path": "features.shop.search"
+        }
+      ]
+    },
+    {
+      "id": "sh_tiles",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous voir vos articles en cases à toucher, en plus de la recherche ?",
+        "ar": "هل تريد رؤية سلعك في مربعات تضغط عليها، إضافة إلى البحث؟",
+        "en": "Would you like your items as tiles to tap, as well as the search?"
+      },
+      "help": {
+        "fr": "Pratique quand vous vendez surtout les mêmes vingt articles.",
+        "ar": "مفيد عندما تبيع غالبا نفس العشرين سلعة.",
+        "en": "Handy when you mostly sell the same twenty items."
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.shop.tiles"
+        }
+      ]
+    }
+  ]
+}

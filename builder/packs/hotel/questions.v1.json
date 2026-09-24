@@ -1,0 +1,72 @@
+{
+  "bank": "hotel",
+  "version": 1,
+  "questions": [
+    {
+      "id": "ho_rooms",
+      "type": "number",
+      "label": {
+        "fr": "Combien de chambres avez-vous ?",
+        "ar": "كم غرفة لديك؟",
+        "en": "How many rooms do you have?"
+      },
+      "review": true,
+      "min": 1,
+      "max": 500,
+      "default": 10,
+      "maps_to": [
+        {
+          "path": "features.hotel.rooms"
+        }
+      ]
+    },
+    {
+      "id": "ho_advances",
+      "type": "yes_no",
+      "label": {
+        "fr": "Demandez-vous une avance à la réservation ?",
+        "ar": "هل تطلب تسبيقا عند الحجز؟",
+        "en": "Do you ask for an advance when a room is booked?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.hotel.advances"
+        }
+      ]
+    },
+    {
+      "id": "ho_extras",
+      "type": "yes_no",
+      "label": {
+        "fr": "Ajoutez-vous des extras à la note de la chambre (repas, boissons, blanchisserie) ?",
+        "ar": "هل تضيف خدمات إضافية إلى فاتورة الغرفة (وجبات، مشروبات، غسيل)؟",
+        "en": "Do you add extras to the room's bill (meals, drinks, laundry)?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.hotel.extras"
+        }
+      ]
+    },
+    {
+      "id": "ho_document",
+      "type": "yes_no",
+      "label": {
+        "fr": "Notez-vous la pièce d'identité de chaque client ?",
+        "ar": "هل تسجل وثيقة هوية كل نزيل؟",
+        "en": "Do you write down each guest's identity document?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.hotel.guestDocument"
+        }
+      ]
+    }
+  ]
+}

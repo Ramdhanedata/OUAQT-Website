@@ -1,0 +1,145 @@
+{
+  "bank": "common",
+  "version": 1,
+  "questions": [
+    {
+      "id": "c_devices",
+      "type": "single_choice",
+      "label": {
+        "fr": "Combien d'ordinateurs utiliserez-vous dans votre commerce ?",
+        "ar": "كم حاسوباً ستستعمل في محلك؟",
+        "en": "How many computers will you use in your shop?"
+      },
+      "review": true,
+      "options_from": "max_devices",
+      "default": 1,
+      "maps_to": [{ "path": "common.devices" }]
+    },
+    {
+      "id": "c_cashiers",
+      "type": "single_choice",
+      "label": {
+        "fr": "Qui encaisse l'argent des clients ?",
+        "ar": "من يستلم أموال الزبائن؟",
+        "en": "Who takes the customers' money?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "owner",
+          "label": { "fr": "Moi seulement", "ar": "أنا فقط", "en": "Only me" }
+        },
+        {
+          "id": "owner_and_staff",
+          "label": {
+            "fr": "Moi et des employés",
+            "ar": "أنا وموظفون",
+            "en": "Me and my staff"
+          }
+        }
+      ],
+      "default": "owner",
+      "maps_to": [{ "path": "common.cashiers" }]
+    },
+    {
+      "id": "c_close",
+      "type": "single_choice",
+      "label": {
+        "fr": "Quand voulez-vous faire le compte de la caisse ?",
+        "ar": "متى تريد جرد الصندوق؟",
+        "en": "When do you want to count the till?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "daily",
+          "label": { "fr": "Chaque soir", "ar": "كل مساء", "en": "Every evening" }
+        },
+        {
+          "id": "per_shift",
+          "label": {
+            "fr": "À chaque changement d'équipe",
+            "ar": "عند كل تغيير فريق",
+            "en": "At every shift change"
+          }
+        }
+      ],
+      "default": "daily",
+      "maps_to": [{ "path": "common.cashClose" }]
+    },
+    {
+      "id": "c_credit",
+      "type": "yes_no",
+      "label": {
+        "fr": "Vendez-vous à crédit à certains clients ?",
+        "ar": "هل تبيع بالدين لبعض الزبائن؟",
+        "en": "Do you sell on credit to some customers?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "common.credit.enabled" }]
+    },
+    {
+      "id": "c_credit_limit",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous une limite de crédit par client ?",
+        "ar": "هل تريد حداً للدين لكل زبون؟",
+        "en": "Do you want a credit limit for each customer?"
+      },
+      "review": true,
+      "default": false,
+      "show_if": { "question": "c_credit", "equals": true },
+      "maps_to": [{ "path": "common.credit.limitPerCustomer" }]
+    },
+    {
+      "id": "c_receipt",
+      "type": "single_choice",
+      "label": {
+        "fr": "Donnez-vous un reçu imprimé aux clients ?",
+        "ar": "هل تعطي الزبائن وصلاً مطبوعاً؟",
+        "en": "Do you give customers a printed receipt?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "printer",
+          "label": {
+            "fr": "Oui, avec une imprimante de tickets",
+            "ar": "نعم، بآلة طباعة الوصولات",
+            "en": "Yes, with a receipt printer"
+          }
+        },
+        { "id": "none", "label": { "fr": "Non", "ar": "لا", "en": "No" } }
+      ],
+      "default": "printer",
+      "maps_to": [
+        { "path": "common.printedReceipt", "map": { "printer": true, "none": false } }
+      ]
+    },
+    {
+      "id": "c_low_stock",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous une alerte quand un produit va manquer ?",
+        "ar": "هل تريد تنبيهاً عندما يوشك منتج على النفاد؟",
+        "en": "Do you want a warning when a product is about to run out?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "common.lowStockAlert" }]
+    },
+    {
+      "id": "c_discount",
+      "type": "yes_no",
+      "label": {
+        "fr": "Faites-vous des remises à certains clients ?",
+        "ar": "هل تمنح تخفيضات لبعض الزبائن؟",
+        "en": "Do you give discounts to some customers?"
+      },
+      "review": true,
+      "default": false,
+      "maps_to": [{ "path": "common.discounts" }]
+    }
+  ]
+}

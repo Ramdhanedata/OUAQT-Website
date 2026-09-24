@@ -6,6 +6,8 @@ type LegalSection = {
   h: string;
   b: string;
   items?: readonly string[];
+  /* A part opener, for a document that covers more than one agreement. */
+  part?: boolean;
 };
 
 /*
@@ -45,7 +47,13 @@ export function LegalPage({
         <div className="mt-14 space-y-10 border-t border-border pt-10">
           {sections.map((section) => (
             <FadeIn key={section.h}>
-              <h2 className="text-xl font-semibold tracking-tight text-foreground">
+              <h2
+                className={
+                  section.part
+                    ? "border-t border-border pt-10 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl"
+                    : "text-xl font-semibold tracking-tight text-foreground"
+                }
+              >
                 {section.h}
               </h2>
               <p className="mt-3 leading-relaxed text-muted-foreground">

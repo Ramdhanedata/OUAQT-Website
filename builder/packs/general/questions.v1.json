@@ -1,0 +1,84 @@
+{
+  "bank": "general",
+  "version": 1,
+  "questions": [
+    {
+      "id": "ge_sells",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Que vendez-vous ?",
+        "ar": "ماذا تبيع؟",
+        "en": "What do you sell?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "products",
+          "label": {
+            "fr": "Des produits",
+            "ar": "منتجات",
+            "en": "Products"
+          }
+        },
+        {
+          "id": "services",
+          "label": {
+            "fr": "Des services",
+            "ar": "خدمات",
+            "en": "Services"
+          }
+        }
+      ],
+      "default": [
+        "products",
+        "services"
+      ],
+      "maps_to": [
+        {
+          "path": "features.general.sells"
+        }
+      ]
+    },
+    {
+      "id": "ge_stock",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous suivre votre stock ?",
+        "ar": "هل تريد متابعة مخزونك؟",
+        "en": "Would you like to follow your stock?"
+      },
+      "review": true,
+      "show_if": {
+        "question": "ge_sells",
+        "includes": "products"
+      },
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.general.trackStock"
+        }
+      ]
+    },
+    {
+      "id": "ge_expenses",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous noter vos dépenses (loyer, électricité, salaires) ?",
+        "ar": "هل تريد تسجيل مصاريفك (الإيجار، الكهرباء، الأجور)؟",
+        "en": "Would you like to note your expenses (rent, electricity, wages)?"
+      },
+      "help": {
+        "fr": "Vos rapports montrent alors ce qui reste une fois les dépenses payées.",
+        "ar": "عندها تظهر تقاريرك ما يبقى بعد دفع المصاريف.",
+        "en": "Your reports then show what is left once the expenses are paid."
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.general.expenses"
+        }
+      ]
+    }
+  ]
+}

@@ -9,9 +9,17 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    // The builder and the screens shared with the desktop app.
+    "./builder/**/*.{ts,tsx}",
+    "./app-ui/**/*.{ts,tsx}",
   ],
   theme: {
     extend: {
+      screens: {
+        // The builder switches from one-question-per-screen to questions
+        // beside a live preview here, as the brief asks.
+        wizard: "900px",
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",

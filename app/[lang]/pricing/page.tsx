@@ -6,6 +6,9 @@ import { PriceBook } from "@/components/pricing/price-book";
 import { Bespoke } from "@/components/pricing/bespoke";
 import { Perpetual } from "@/components/pricing/perpetual";
 import { Coverage } from "@/components/pricing/coverage";
+import { BuilderPrices } from "@/components/pricing/builder-prices";
+import { getPublicSettings } from "@/builder/db/settings";
+import { getLaunchOffer } from "@/builder/payment/launch";
 import { pricingTerms } from "@/lib/data/pricing";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -25,14 +28,19 @@ export function generateMetadata({ params }: Props): Metadata {
 }
 
 /*
- * Order follows the brief: the price everyone pays, the products it covers,
- * bespoke work, then the perpetual option set below the annual licence so it
- * never reads as the default, then scope and questions.
+ * Two tracks, in the order an owner meets them: the software he builds
+ * himself, which is the main offer, and below it the one we come and install.
+ *
+ * The first block's figures come from the settings table and the second's
+ * from the price book, because one is a product he buys today and the other
+ * is a quotation for work. A price nobody has set yet says so.
  */
-export default function PricingPage({ params }: Props) {
+export default async function PricingPage({ params }: Props) {
   const dict = getDictionary(params.lang);
   const p = dict.pricingPage;
   const terms = pricingTerms(params.lang);
+  const settings = await getPublicSettings();
+  const offer = await getLaunchOffer();
 
   return (
     <>
@@ -47,6 +55,29 @@ export default function PricingPage({ params }: Props) {
             </h1>
             <p className="mt-6 max-w-2xl leading-relaxed text-muted-foreground">
               {p.intro}
+            </p>
+          </FadeIn>
+        </Container>
+      </Section>
+
+      <BuilderPrices
+        dict={dict}
+        lang={params.lang}
+        settings={settings}
+        offer={offer}
+      />
+
+      <Section className="pb-0 sm:pb-0">
+        <Container>
+          <FadeIn>
+            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              {p.customTrack.eyebrow}
+            </p>
+            <h2 className="mt-4 max-w-3xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+              {p.customTrack.heading}
+            </h2>
+            <p className="mt-4 max-w-2xl leading-relaxed text-muted-foreground">
+              {p.customTrack.intro}
             </p>
             <p className="mt-4 max-w-2xl text-sm font-medium text-foreground">
               {p.freeVisit}

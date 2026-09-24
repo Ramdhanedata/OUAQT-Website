@@ -7,6 +7,8 @@ import { LanguageSwitcher } from "@/components/language-switcher";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
+import { localisedHref } from "@/lib/i18n/routes";
+import { getBuilderCopy } from "@/builder/copy";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,11 +19,28 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
+  /*
+   * The builder sits in the action button rather than as a sixth link: in
+   * French the six labels do not fit the header at 1024px. Contact stays a
+   * link, so nothing is lost.
+   */
+  const builder = {
+    href: localisedHref(lang, "builder"),
+    label: getBuilderCopy(lang).nav,
+  };
+
+  /*
+   * The builder first, the custom path second, then the rest.
+   *
+   * "Accueil" is gone: the logo has always gone home and a second way to do
+   * the same thing cost a slot. "À propos" moved to the footer, which is
+   * where people look for it, and which leaves five links that fit at
+   * 1024px in French without shrinking anything.
+   */
   const links = [
-    { href: "/", label: dict.nav.home },
+    { href: "/#sur-mesure", label: dict.nav.custom },
     { href: "/projects", label: dict.nav.projects },
     { href: "/pricing", label: dict.nav.pricing },
-    { href: "/about", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];
 
@@ -74,11 +93,11 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
         <div className="hidden items-center gap-3 lg:flex">
           <LanguageSwitcher locale={lang} label={dict.nav.language} />
           <Button
-            href={localeHref(lang, "/contact")}
+            href={builder.href}
             variant="accent"
             className="whitespace-nowrap text-sm"
           >
-            {dict.nav.cta}
+            {builder.label}
           </Button>
         </div>
 
@@ -114,11 +133,11 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
               ))}
               <div className="mt-2 px-3">
                 <Button
-                  href={localeHref(lang, "/contact")}
+                  href={builder.href}
                   variant="accent"
                   className="w-full justify-center text-sm"
                 >
-                  {dict.nav.cta}
+                  {builder.label}
                 </Button>
               </div>
           </Container>

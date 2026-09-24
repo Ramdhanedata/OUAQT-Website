@@ -2,12 +2,12 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "OUAQT | Logiciels sur mesure pour ce qui ralentit votre entreprise",
-    siteDescription: "OUAQT repère ce qui ralentit une entreprise, puis construit le logiciel qui règle le problème : caisse et registres de pharmacie, facturation d'hôtel, caisse de restaurant et de boulangerie, transport, ateliers et entrepôts. Sur place ou à distance. Première visite gratuite.",
-    projectsTitle: "Projets | OUAQT",
-    projectsDescription: "22 systèmes utilisés chaque jour dans des mines, des pharmacies, des hôtels, des sociétés de transport, des restaurants et des écoles. Voyez ce que chacun a changé.",
-    aboutTitle: "À propos d'OUAQT",
-    aboutDescription: "Pourquoi OUAQT existe et qui est derrière. OUAQT repère ce qui ralentit les entreprises et construit le logiciel qui règle le problème, fondée par Elboumby Aumar Ramdhane.",
+    siteTitle: "Créez le logiciel de votre commerce | OUAQT",
+    siteDescription: "Répondez à quelques questions et repartez avec le logiciel de votre commerce, prêt à installer. Il fonctionne sans internet, vos données restent chez vous.",
+    projectsTitle: "Projets : 22 systèmes utilisés chaque jour | OUAQT",
+    projectsDescription: "Pharmacies, hôtels, transport, restaurants, mines et écoles. Voyez ce que chaque système a changé, puis créez le vôtre en quelques questions.",
+    aboutTitle: "À propos d'OUAQT et de son fondateur",
+    aboutDescription: "Pourquoi OUAQT construit des logiciels de gestion pour les commerces, du créateur en ligne aux projets sur mesure. Fondée par Elboumby Aumar Ramdhane.",
     contactTitle: "Contact | OUAQT",
     contactDescription: "Dites-nous ce qui prend trop de temps à votre équipe. Nous répondons en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
@@ -16,9 +16,9 @@ export const fr: Dictionary = {
     privacyTitle: "Politique de confidentialité | OUAQT",
     privacyDescription:
       "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
-    pricingTitle: "Tarifs | OUAQT",
+    pricingTitle: "Tarifs : logiciel en ligne et projets sur mesure | OUAQT",
     pricingDescription:
-      "Une installation payée une fois, puis une licence annuelle, aux mêmes tarifs pour tous les logiciels OUAQT. Le logiciel tourne sur vos ordinateurs, sans internet pour le travail de tous les jours.",
+      "Les tarifs OUAQT au même endroit : le logiciel que vous créez en ligne, puis l'installation et la licence annuelle des projets sur mesure.",
     shareLine: "22 systèmes utilisés au quotidien dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
     shareAlt: "OUAQT : nous repérons ce qui ralentit votre entreprise, et nous construisons le logiciel qui règle le problème.",
     shareReach: "Nous travaillons sur place ou à distance.",
@@ -37,6 +37,7 @@ export const fr: Dictionary = {
 
   nav: {
     home: "Accueil",
+    custom: "Projet sur mesure",
     projects: "Projets",
     pricing: "Tarifs",
     about: "À propos",
@@ -130,10 +131,41 @@ export const fr: Dictionary = {
   },
 
   pricingPage: {
+    /* The builder's own prices, read from settings, shown above the rest. */
+    builderTrack: {
+      eyebrow: "Le logiciel que vous créez en ligne",
+      heading: "Vous le créez vous-même, vous l'installez le jour même",
+      intro:
+        "Vous répondez aux questions, vous téléchargez votre logiciel et vous l'installez sur l'ordinateur de la boutique. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
+      soon: "Tarif bientôt disponible",
+      trial: "Essai gratuit de {days} jours avant de payer quoi que ce soit.",
+      devices: "{devices} postes compris : la caisse et un deuxième ordinateur.",
+      launchNote:
+        "Tarif de lancement, réservé à nos {clients} premiers clients. Votre prix reste ensuite le même pendant {years} ans.",
+      launchCondition:
+        "Le tarif de lancement s'applique à nos {clients} premiers clients. Au-delà, c'est le tarif standard.",
+      payment: "Paiement par Bankily. Vous voyez le montant avant de payer.",
+      cta: "Créer mon logiciel",
+      monthly: "soit {amount} par mois",
+      annual: { label: "Licence annuelle", cadence: "Par an" },
+      quarterly: { label: "Licence trimestrielle", cadence: "Par trimestre" },
+      perpetual: { label: "Licence définitive", cadence: "Payée une fois" },
+      extraDevice: { label: "Poste supplémentaire", cadence: "Par an" },
+      setupVisit: {
+        label: "Visite d'installation, si vous la voulez",
+        cadence: "Payée une fois",
+      },
+    },
+    customTrack: {
+      eyebrow: "Projet sur mesure",
+      heading: "Ou nous venons l'installer, et nous construisons ce qui manque",
+      intro:
+        "Pour les métiers que le créateur ne couvre pas encore, et pour les entreprises qui veulent que nous venions faire le travail sur place.",
+    },
     eyebrow: "Tarifs",
-    heading: "Une installation, puis une licence chaque année.",
+    heading: "Le logiciel que vous créez vous-même, et celui que nous construisons.",
     intro:
-      "L'installation paie nos journées de travail chez vous, la formation de votre équipe et la reprise de vos anciennes données. Ensuite, le logiciel tourne sur vos propres ordinateurs et n'a pas besoin d'internet pour le travail de tous les jours.",
+      "Le premier se crée en ligne, en quelques questions, et s'installe le jour même. Le second est construit et installé par nous, chez vous. Dans les deux cas le logiciel tourne sur vos propres ordinateurs et n'a pas besoin d'internet pour le travail de tous les jours.",
     freeVisit: "Avant tout engagement, notre première visite pour comprendre votre fonctionnement est gratuite.",
     scope:
       "Ces tarifs sont les mêmes pour tous les logiciels OUAQT prêts à installer.",
@@ -149,19 +181,19 @@ export const fr: Dictionary = {
       label: "Licence annuelle",
       cadence: "Par an",
       freeze:
-        "Au tarif de lancement, ce montant reste bloqué pendant {years} ans, et la licence reste résiliable chaque année.",
+        "Au tarif de lancement, ce montant ne bouge pas pendant {years} ans, et vous pouvez arrêter la licence chaque année.",
     },
     extraDevice: {
       label: "Poste supplémentaire au-delà des {devices} inclus",
       cadence: "Par an",
     },
     renewal:
-      "La licence se renouvelle chaque année par tacite reconduction. Vous pouvez la résilier avant la date de renouvellement.",
+      "La licence se renouvelle d'elle-même chaque année. Vous pouvez l'arrêter avant la date de renouvellement.",
     lateRenewal:
       "Si le renouvellement est payé en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués.",
     contact: "Nous contacter",
     whatsapp: "WhatsApp",
-    products: "Les tarifs actuels couvrent les systèmes pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, ainsi que les systèmes de gestion d'atelier et d'entrepôt.",
+    products: "Ces tarifs valent pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, les ateliers et les dépôts.",
     productNames: {
       pharmacy: "les pharmacies",
       hotel: "les hôtels",
@@ -171,7 +203,7 @@ export const fr: Dictionary = {
     bespoke: {
       eyebrow: "Sur mesure",
       heading: "Un système construit pour votre seule entreprise",
-      body: "Pour une mine, un rapprochement ou un transport qui dépasse le système standard, nous construisons sur commande et chiffrons les jours de travail sur devis.",
+      body: "Pour une mine, une grande société de transport ou tout travail qui dépasse le logiciel standard, nous construisons sur commande et chiffrons les jours de travail sur devis.",
       maintenance:
         "La maintenance annuelle représente {rate} de la valeur du développement et commence au {month}e mois.",
       cta: "Demander un devis",
@@ -180,18 +212,17 @@ export const fr: Dictionary = {
       eyebrow: "Licence perpétuelle",
       heading: "Pour ceux qui préfèrent ne pas payer chaque année",
       cadence: "Payée une fois, installation comprise",
-      body: "Ce montant comprend les mises à jour, le catalogue produits, la sauvegarde hors site, l'assistance et les modifications pendant {months} mois seulement. Passé ce délai, le logiciel continue de fonctionner sans rien payer de plus, et sans aucun service.",
+      body: "Ce montant comprend les mises à jour, le catalogue produits, l'assistance et les modifications pendant {months} mois seulement. Passé ce délai, le logiciel continue de fonctionner sans rien payer de plus, et sans aucun service.",
       cta: "Nous contacter",
     },
     included: {
       heading: "Compris dans la licence",
-      lead: "Tant que la licence est renouvelée, elle couvre tout ce qui suit, mais pas les nouveaux modules.",
+      lead: "Tant que la licence est renouvelée. Les nouveaux modules n'en font pas partie.",
       items: [
         "L'installation sur {devices} postes au maximum, sur le même site",
         "Le transfert du logiciel sur une machine de remplacement après une panne, un vol ou un changement de matériel, sans frais tant que le total ne dépasse pas {devices} postes",
         "Les mises à jour",
         "Le catalogue produits, pour les logiciels qui en ont un",
-        "La sauvegarde hors site",
         "L'assistance",
         "Les modifications de l'existant sur demande, comme un champ de formulaire, la mise en page d'un ticket ou d'une étiquette, une colonne de rapport, un ordre de tri, un format d'impression, un libellé, un rôle utilisateur ou un taux de taxe",
         "La correction de tout ce qui est faux ou lent dans ce que nous avons livré",
@@ -199,7 +230,7 @@ export const fr: Dictionary = {
     },
     quoted: {
       heading: "Sur devis séparé",
-      lead: "Un nouveau module est un écran ou un processus qui n'existe pas encore, et il fait toujours l'objet d'un devis séparé.",
+      lead: "Un nouveau module, c'est un écran ou un processus qui n'existe pas encore.",
       items: [
         "La comptabilité",
         "La paie",
@@ -225,11 +256,11 @@ export const fr: Dictionary = {
         },
         {
           q: "Où sont stockées mes données ?",
-          a: "Sur vos propres ordinateurs, dans vos locaux. La licence comprend aussi une sauvegarde hors site, pour que vos données ne dépendent pas d'une seule machine.",
+          a: "Sur vos propres ordinateurs, dans vos locaux. Elles ne partent pas chez nous, et la sauvegarde se fait sur vos propres supports.",
         },
         {
           q: "Que se passe-t-il si je ne renouvelle pas ?",
-          a: "La saisie de nouvelles données est suspendue, et les mises à jour, la sauvegarde et l'assistance s'arrêtent. Vous pouvez toujours consulter et exporter tout ce qui est déjà enregistré.",
+          a: "La saisie de nouvelles données est suspendue, et les mises à jour et l'assistance s'arrêtent. Vous pouvez toujours consulter et exporter tout ce qui est déjà enregistré.",
         },
         {
           q: "Puis-je payer en plusieurs fois ?",
@@ -311,30 +342,51 @@ export const fr: Dictionary = {
     updatedDate: "Septembre 2026",
     terms: {
       title: "Licence et conditions d'utilisation",
-      intro: "Ces conditions couvrent les logiciels qu'OUAQT conçoit et installe pour vous. Elles accompagnent le contrat écrit de votre projet. En cas de divergence, votre contrat prévaut.",
-      ownership: {
-        h: "Le logiciel nous appartient",
-        b: "OUAQT est propriétaire du système, de son code source, de sa conception et de sa documentation, ainsi que de tout ce qui y sera ajouté par la suite. Le paiement d'un projet ne transfère pas cette propriété.",
+      intro:
+        "Ces conditions couvrent deux choses différentes. La première partie concerne le logiciel que vous créez vous-même sur ce site. La deuxième concerne les projets que nous construisons et installons chez vous. La troisième vaut dans les deux cas.",
+      selfServePart: {
+        h: "Première partie : le logiciel que vous créez en ligne",
+        b: "Cette partie s'applique dès que vous créez un logiciel sur ce site et recevez un numéro de série.",
+      },
+      trial: {
+        h: "L'essai gratuit",
+        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours. L'essai commence le jour où vous l'activez sur votre ordinateur, pas le jour où vous le téléchargez. Pendant l'essai, tout fonctionne. À la fin, tant que rien n'est payé, le logiciel passe en lecture seule : vous voyez et vous exportez vos données, vous n'en saisissez plus de nouvelles.",
+      },
+      selfLicence: {
+        h: "Ce que vous achetez",
+        b: "Vous n'achetez pas le logiciel, vous achetez le droit de l'utiliser dans votre entreprise, sur {devices} postes au maximum. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence trimestrielle fonctionne de la même façon, par trimestre. La licence définitive se paie une fois et ne se renouvelle pas.",
+      },
+      payment: {
+        h: "Le paiement",
+        b: "Le paiement se fait par Bankily, au numéro indiqué dans le logiciel et sur ce site. Vous nous transmettez la référence de la transaction, et nous confirmons le paiement à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
+      },
+      grace: {
+        h: "Si le renouvellement est payé en retard",
+        b: "Votre licence ne s'arrête pas le jour de son échéance. Vous disposez de {graceDays} jours pendant lesquels le logiciel continue de fonctionner normalement, avec un rappel quotidien indiquant le montant et le numéro Bankily. Passé ce délai, le logiciel passe en lecture seule, comme à la fin d'un essai. Dès que le paiement est confirmé, tout se rouvre immédiatement. Vos données ne sont jamais effacées, quel que soit le retard.",
+      },
+      devices: {
+        h: "Vos postes",
+        b: "Votre licence couvre {devices} ordinateurs. Si vous changez de machine, vous libérez l'ancienne depuis votre compte, dans la limite d'un nombre de libérations par an indiqué dans votre compte. Au-delà, écrivez-nous et nous le faisons pour vous. Réinstaller le logiciel sur le même ordinateur ne consomme pas de poste.",
+      },
+      selfData: {
+        h: "Vos données ne nous parviennent pas",
+        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos ordinateurs. Nos serveurs ne les reçoivent pas, et aucune partie du logiciel ne les envoie. Ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, vos réponses aux questions, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos postes et vos paiements.",
+      },
+      selfSupport: {
+        h: "Ce que la licence comprend",
+        b: "Les mises à jour du logiciel, l'assistance par WhatsApp, et la correction de ce qui ne fonctionne pas comme annoncé. L'installation est la vôtre : vous téléchargez et vous installez. Si vous préférez que nous venions le faire, c'est une visite d'installation facturée à part. La sauvegarde de vos données se fait sur vos propres supports et relève de vous : le logiciel vous aide à la faire, nous n'en conservons aucune copie.",
+      },
+      selfChanges: {
+        h: "Ce que la licence ne comprend pas",
+        b: "Un métier que le créateur ne couvre pas encore, ou une façon de travailler que ses questions ne prévoient pas, relève d'un projet sur mesure et fait l'objet d'un devis séparé.",
+      },
+      bespokePart: {
+        h: "Deuxième partie : les projets que nous construisons et installons",
+        b: "Cette partie s'applique aux systèmes que nous concevons et installons chez vous. Elle accompagne le contrat écrit de votre projet. En cas de divergence, votre contrat prévaut.",
       },
       licence: {
-        h: "Vous disposez d'une licence d'utilisation",
+        h: "Votre licence d'utilisation",
         b: "Vous recevez une licence non exclusive pour utiliser le logiciel au sein de votre entreprise, sur {devices} postes au maximum sur un même site. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence perpétuelle se paie une fois et ne se renouvelle pas.",
-      },
-      restrictions: {
-        h: "Ce que la licence n'autorise pas",
-        b: "La licence est réservée à votre entreprise. À ce titre, vous ne pouvez pas :",
-        items: [
-          "vendre, louer, prêter ou céder le système à un tiers",
-          "en donner l'accès à une autre entreprise, y compris une société liée, sans notre accord écrit",
-          "copier le logiciel ou l'installer sur plus de postes que votre licence n'en couvre",
-          "le décomposer, le décompiler ou tenter d'en récupérer le code source",
-          "retirer ou modifier une mention ou un nom OUAQT qu'il contient",
-          "l'utiliser pour créer ou aider un produit concurrent",
-        ],
-      },
-      yourData: {
-        h: "Vos données restent les vôtres",
-        b: "Tout ce que votre entreprise saisit dans le système, et tout ce que nous y migrons, vous appartient. Nous ne le vendons pas, ne l'utilisons que pour faire fonctionner et soutenir votre système, et ne le mélangeons jamais aux données d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
       },
       corrections: {
         h: "Corrections",
@@ -342,11 +394,35 @@ export const fr: Dictionary = {
       },
       support: {
         h: "Ce que couvre la licence",
-        b: "L'installation, la formation de vos employés et la reprise des données se paient une fois, par les frais d'installation ou par le prix de la licence perpétuelle. La licence annuelle comprend ensuite les mises à jour, le catalogue produits lorsque le logiciel en a un, la sauvegarde hors site, l'assistance et les modifications de l'existant sur demande, tant qu'elle est renouvelée. La licence perpétuelle comprend les mêmes services pendant {months} mois seulement, après quoi le logiciel continue de fonctionner sans autre paiement et sans aucun service. Un nouveau module fait toujours l'objet d'un devis séparé, et OUAQT indique avant de commencer si une demande est une modification ou un nouveau module.",
+        b: "L'installation, la formation de vos employés et la reprise des données se paient une fois, par les frais d'installation ou par le prix de la licence perpétuelle. La licence annuelle comprend ensuite les mises à jour, le catalogue produits lorsque le logiciel en a un, l'assistance et les modifications de l'existant sur demande, tant qu'elle est renouvelée. La licence perpétuelle comprend les mêmes services pendant {months} mois seulement, après quoi le logiciel continue de fonctionner sans autre paiement et sans aucun service. Un nouveau module fait toujours l'objet d'un devis séparé, et nous vous indiquons avant de commencer si votre demande est une modification ou un nouveau module.",
+      },
+      yourData: {
+        h: "Vos données restent les vôtres",
+        b: "Tout ce que votre entreprise saisit dans le système, et tout ce que nous y migrons, vous appartient. Nous ne le vendons pas, nous ne l'utilisons que pour faire fonctionner et soutenir votre système, et nous ne le mélangeons jamais aux données d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
       },
       termination: {
         h: "Retard de renouvellement et fin de la licence",
-        b: "Si la licence annuelle est renouvelée en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués. La licence peut aussi prendre fin si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement, et nous vous remettons dans tous les cas une copie complète de vos données.",
+        b: "Si la licence annuelle est renouvelée en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués. La licence peut aussi prendre fin si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement. Dans tous les cas, nous vous remettons une copie complète de vos données.",
+      },
+      commonPart: {
+        h: "Troisième partie : ce qui vaut dans les deux cas",
+        b: "Les règles ci-dessous s'appliquent à tout logiciel OUAQT, quelle que soit la façon dont vous l'avez obtenu.",
+      },
+      ownership: {
+        h: "Le logiciel nous appartient",
+        b: "OUAQT est propriétaire du logiciel, de son code source, de sa conception et de sa documentation, ainsi que de tout ce qui y sera ajouté par la suite. Payer une licence ou un projet ne transfère pas cette propriété.",
+      },
+      restrictions: {
+        h: "Ce que la licence n'autorise pas",
+        b: "La licence est réservée à votre entreprise. À ce titre, vous ne pouvez pas :",
+        items: [
+          "vendre, louer, prêter ou céder le logiciel à un tiers",
+          "en donner l'accès à une autre entreprise, y compris une société liée, sans notre accord écrit",
+          "copier le logiciel ou l'installer sur plus de postes que votre licence n'en couvre",
+          "le décomposer, le décompiler ou tenter d'en récupérer le code source",
+          "retirer ou modifier une mention ou un nom OUAQT qu'il contient",
+          "l'utiliser pour créer ou aider un produit concurrent",
+        ],
       },
       law: {
         h: "Droit applicable",
@@ -356,26 +432,46 @@ export const fr: Dictionary = {
     privacy: {
       title: "Politique de confidentialité",
       intro:
-        "Ce qu'OUAQT fait des informations personnelles, sur ce site comme dans les systèmes que nous construisons.",
+        "Ce qu'OUAQT détient à votre sujet, et ce qu'il n'a jamais. Cette page couvre ce site, le créateur de logiciel qui s'y trouve, et les systèmes que nous installons chez vous.",
       collect: {
         h: "Ce que ce site collecte",
-        b: "Uniquement ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail, votre message et la langue que vous lisiez. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
+        b: "Sur les pages ordinaires, uniquement ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail ou votre téléphone, votre message et la langue que vous lisiez. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
       },
-      why: {
-        h: "Pourquoi nous le collectons",
-        b: "Pour lire votre demande et y répondre. Rien d'autre. Vous n'êtes inscrit à aucune liste de diffusion.",
+      builder: {
+        h: "Quand vous créez un logiciel",
+        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les ordinateurs que vous activez et vos paiements.",
+      },
+      neverReceived: {
+        h: "Ce que nous ne recevons jamais",
+        b: "Une fois le logiciel installé, vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos ordinateurs. Nos serveurs ne les reçoivent pas et aucune partie du logiciel ne les envoie. La liste de produits que vous importez au départ sert à préparer votre logiciel ; ce que vous vendez ensuite ne nous parvient pas.",
+      },
+      ai: {
+        h: "L'intelligence artificielle",
+        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés, ni vos justificatifs de paiement. Le créateur fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
+      },
+      payments: {
+        h: "Les paiements",
+        b: "Vous payez par Bankily, directement depuis votre téléphone. Nous ne voyons ni votre code ni votre solde. Nous conservons la référence de transaction que vous saisissez, le montant attendu, et le justificatif que vous joignez, le temps de confirmer le paiement et de justifier votre licence.",
+      },
+      fingerprint: {
+        h: "L'empreinte de votre ordinateur",
+        b: "Pour qu'un même ordinateur ne prenne pas un essai gratuit après l'autre, le logiciel calcule une empreinte à partir de votre carte mère, de votre disque système et de l'identifiant de votre système d'exploitation. Il ne nous envoie que des empreintes chiffrées, jamais les numéros eux-mêmes, et nous ne pouvons pas remonter aux numéros à partir de ce que nous recevons. Cela sert à une seule chose : savoir si cette machine a déjà eu un essai. Si vous avez acheté votre ordinateur d'occasion, ou si vous l'avez fait réparer, écrivez-nous et nous vous ouvrons l'essai à la main.",
+      },
+      where: {
+        h: "Où ces informations sont conservées",
+        b: "Sur des serveurs situés en Irlande, chez notre hébergeur de base de données, et sur le réseau de Vercel qui sert ce site. L'un et l'autre travaillent pour nous et n'ont pas le droit d'utiliser vos informations à leurs propres fins.",
       },
       sharing: {
         h: "Qui d'autre y a accès",
-        b: "Votre message transite par le service qui achemine nos e-mails afin d'arriver dans notre boîte, et ce site est hébergé par Vercel. Ni l'un ni l'autre n'est autorisé à utiliser vos informations à ses propres fins. Nous ne les vendons jamais et ne les transmettons à personne.",
+        b: "Personne d'autre. Votre message de contact transite par le service qui achemine nos e-mails pour arriver dans notre boîte. Nous ne vendons jamais vos informations et nous ne les transmettons à personne à des fins commerciales.",
       },
       retention: {
-        h: "Combien de temps nous le gardons",
-        b: "Votre message reste dans notre messagerie tant que l'échange est utile. Demandez-nous de le supprimer et nous le ferons.",
+        h: "Combien de temps nous les gardons",
+        b: "Votre message de contact reste dans notre messagerie tant que l'échange est utile. Ce qui concerne votre logiciel et votre licence est conservé tant que votre compte existe, parce que c'est ce qui permet de réinstaller votre logiciel et de prouver ce que vous avez payé. Demandez la suppression de votre compte et nous l'effaçons.",
       },
       clientSystems: {
-        h: "Les données dans les systèmes que nous construisons",
-        b: "Quand nous installons un logiciel pour votre entreprise, les données qu'il contient sont les vôtres, pas les nôtres. Elles restent sur vos propres ordinateurs, séparées de celles de tout autre client, et la licence y ajoute une copie de sauvegarde hors site. Nous ne les consultons que si vous nous le demandez pour une assistance, jamais pour autre chose.",
+        h: "Les systèmes que nous installons nous-mêmes",
+        b: "Quand nous concevons et installons un système pour votre entreprise, les données qu'il contient sont les vôtres, pas les nôtres. Elles restent sur vos propres ordinateurs, séparées de celles de tout autre client. Nous ne les consultons que si vous nous le demandez pour une assistance, jamais pour autre chose.",
       },
       rights: {
         h: "Vos droits",
@@ -400,6 +496,9 @@ export const fr: Dictionary = {
     role: "Ce que nous avons fait",
     tools: "Ce qu'il contient",
     screenshotAlt: "capture d'écran du produit",
+    /* Shown only on the case studies whose trade the builder covers. */
+    builderNote: "Ce genre de logiciel se crée maintenant en ligne, en répondant à quelques questions.",
+    builderNoteLink: "Voir le logiciel pour ce métier",
   },
 
   sectors: {
@@ -413,9 +512,18 @@ export const fr: Dictionary = {
 
   about: {
     eyebrow: "À propos d'OUAQT",
-    heading: "Le même problème, dans chaque secteur où nous allons.",
-    body1: "Mines, pharmacies, hôtels, transport, restaurants, écoles. Nous rencontrons sans cesse des entreprises solides dont le travail le plus important repose sur du papier, des tableurs et des groupes de discussion. Le plus souvent, les logiciels qu'on leur a proposés ne correspondaient pas à leur façon de travailler.",
-    body2: "C'est ce problème que nous réglons. Chaque système que nous construisons est fait pour un seul client, sa routine, ses registres et les langues de son personnel.",
+    heading: "Le patron connaît son commerce mieux que personne.",
+    body1:
+      "Nous avons construit des systèmes sur mesure, un client à la fois : mines, pharmacies, hôtels, transport, restaurants, écoles. À chaque fois la même scène. Une entreprise solide, une équipe qui sait ce qu'elle fait, et le travail le plus important posé sur du papier, des tableurs et des groupes WhatsApp.",
+    body2:
+      "Et à chaque fois, la même découverte. Personne ne comprenait le problème mieux que le patron lui-même. Notre travail n'était pas de lui apprendre son métier, c'était de traduire ce qu'il savait déjà en un logiciel qui lui ressemble.",
+    storyHeading: "Ce que nous avons fait de ce constat",
+    storyBody1:
+      "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait un créateur en ligne : le patron répond à des questions sur sa façon de travailler, et il repart avec son logiciel, prêt à installer, le jour même.",
+    storyBody2:
+      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres ordinateurs, sans internet, et ses chiffres ne nous parviennent jamais.",
+    storyBody3:
+      "Les métiers que le créateur ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
     marketHeading: "Les chiffres derrière ce constat.",
     stat1: "du PIB mauritanien passe par le secteur informel",
     stat2: "de la population active occupe un emploi informel",
@@ -446,6 +554,87 @@ export const fr: Dictionary = {
     ctaHeading: "Qu'est-ce qui ralentit votre entreprise ?",
     ctaBody: "Si une partie de votre journée dépend encore d'un tableur dont personne n'est sûr, c'est en général par là que nous commençons.",
     ctaButton: "Parlons-en",
+  },
+
+  /*
+   * The new home page: the builder first, custom projects second.
+   * French is written first and the other two follow its meaning.
+   */
+  packLabels: {
+    pharmacy: "Pharmacie",
+    bakery: "Boulangerie",
+    restaurant: "Restaurant ou café",
+    warehouse: "Dépôt et stock",
+    shop: "Boutique ou épicerie",
+    hotel: "Hôtel ou auberge",
+    transport: "Transport de voyageurs et de colis",
+    general: "Autre activité : ventes, stock et rapports",
+  },
+
+  builderHome: {
+    heroHeading: "Décrivez votre commerce. Repartez avec votre logiciel.",
+    heroBody: "Personne ne connaît votre commerce mieux que vous. Répondez à quelques questions sur votre façon de travailler, et le logiciel qui va avec s'installe sur l'ordinateur de la boutique.",
+    heroPrimary: "Créer mon logiciel",
+    heroSecondary: "Projet sur mesure",
+    heroReassurance: "Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
+    heroReassuranceNoTrial: "Sans internet · Vos données restent chez vous",
+
+    impactMinutes: "Moins de 20 minutes",
+    impactMinutesLabel: "pour créer votre logiciel",
+    impactOffline: "Sans internet",
+    impactOfflineLabel: "pour le travail de tous les jours",
+    impactData: "Vos données",
+    impactDataLabel: "restent sur votre ordinateur",
+
+    howHeading: "Comment ça marche",
+    howStep1: "Vous répondez",
+    howStep1Body: "Quelques questions sur votre commerce : ce que vous vendez, comment vous encaissez, qui tient la caisse.",
+    howStep2: "Vous voyez le résultat",
+    howStep2Body: "Le reçu et l'écran de vente se règlent à mesure que vous répondez. Rien n'est figé.",
+    howStep3: "Vous installez",
+    howStep3Body: "Vous téléchargez le logiciel et vous l'installez sur l'ordinateur de la boutique.",
+
+    tradesHeading: "Pour quel commerce",
+    tradesOpen: "Disponible",
+    tradesSoon: "Bientôt disponible",
+    tradesLearnMore: "En savoir plus",
+    tradesOther: "Mon activité n'est pas dans la liste",
+    tradesLeaveNumber: "Laissez votre numéro, nous vous prévenons.",
+    tradesPhone: "Votre numéro de téléphone",
+    tradesSend: "Me prévenir",
+    tradesThanks: "Merci. Nous vous écrivons dès que c'est prêt.",
+    tradesError: "Votre numéro n'est pas parti. Réessayez, ou écrivez-nous sur WhatsApp.",
+
+    worriesHeading: "Ce qui inquiète, et ce qu'il en est",
+    worry1: "Et si internet coupe ?",
+    worry1Body: "Le logiciel travaille sur votre ordinateur. Internet ne sert qu'à l'installation et aux mises à jour.",
+    worry2: "Où vont mes données ?",
+    worry2Body: "Vos ventes, votre stock et les comptes de vos clients restent chez vous. Nous ne les recevons pas.",
+    worry3: "Comment je paie ?",
+    worry3Body: "Par Bankily, une fois par an. Vous voyez le montant avant de payer.",
+    worry4: "Et si ça ne me convient pas ?",
+    worry4Body: "Vous l'essayez gratuitement avant de payer quoi que ce soit.",
+
+    customHeading: "Votre activité ne ressemble à aucune autre ?",
+    customBody: "Pour les mines, les hôtels, le transport, les écoles et tout ce qui sort du cadre, nous construisons sur mesure. Ça commence par une visite, gratuite, chez vous.",
+    customProjects: "Voir nos réalisations",
+    customPricing: "Voir les tarifs",
+    customTalk: "Parlons-en",
+
+    faqHeading: "Les questions qu'on nous pose",
+    faq1: "Le logiciel marche-t-il sans internet ?",
+    faq1Body: "Oui. Il s'installe sur l'ordinateur de la boutique et travaille là. Internet ne sert qu'à l'installation, aux mises à jour et au paiement.",
+    faq2: "Qui voit mes ventes et mes clients ?",
+    faq2Body: "Vous seul. Vos ventes, votre stock et les comptes de vos clients restent sur vos ordinateurs. Nous ne les recevons jamais.",
+    faq3: "Sur combien d'ordinateurs puis-je l'installer ?",
+    faq3Body: "Deux : la caisse et un deuxième poste. Les deux fonctionnent sans internet et se mettent d'accord entre eux sur votre réseau.",
+    faq4: "Et si j'ai besoin d'aide ?",
+    faq4Body: "Écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe.",
+
+    ctaHeading: "Votre logiciel, aujourd'hui",
+    ctaBody: "Quelques questions, et vous repartez avec. Vous pouvez aussi nous écrire d'abord si vous préférez.",
+    ctaButton: "Créer mon logiciel",
+    ctaWhatsapp: "Écrire sur WhatsApp",
   },
 
   contact: {
@@ -493,6 +682,8 @@ export const fr: Dictionary = {
 
   projects: {
     "gmm-mining": {
+      metaTitle: "GMM : le rapprochement passé de 4 heures à 25 minutes",
+      metaDescription: "Un suivi des blocs en trois langues qui a ramené le rapprochement quotidien de quatre heures à vingt-cinq minutes, sur le site de la mine.",
       title: "GMM Suivi des blocs & rapprochement",
       summary: "Un suivi des blocs en trois langues qui a ramené le rapprochement quotidien de quatre heures à vingt-cinq minutes.",
       description: "Chaque jour, GMM passait quatre heures à rapprocher les mouvements de blocs à la main. Nous avons remplacé ce travail par un système construit autour de la façon dont les équipes de terrain travaillent déjà, dans les trois langues qu'elles utilisent.",
@@ -517,6 +708,8 @@ export const fr: Dictionary = {
       ],
     },
     "pharmacy-pos": {
+      metaTitle: "Logiciel de pharmacie : registres remplis tout seuls",
+      metaDescription: "Une caisse de pharmacie qui remplit les registres de médicaments à la place du personnel. Le même logiciel se crée maintenant en ligne, en quelques questions.",
       title: "Caisse & registres de pharmacie",
       summary: "Une caisse de pharmacie qui remplit toute seule les registres de médicaments, pour que le personnel arrête de les retaper.",
       description: "Tenir les registres de médicaments, c'était des heures de la même saisie chaque jour. Le système les remplit maintenant à partir de l'historique de la pharmacie, et le personnel ne s'occupe plus que des cas particuliers.",
@@ -541,6 +734,8 @@ export const fr: Dictionary = {
       ],
     },
     "hotel-operations": {
+      metaTitle: "Facturation d'hôtel : taxes et commissions calculées",
+      metaDescription: "Une facturation d'hôtel où le logiciel calcule les taxes et les commissions sur chaque facture, au lieu de les reprendre à la main.",
       title: "Facturation & exploitation hôtelière",
       summary: "Une facturation d'hôtel où le logiciel calcule les taxes et les commissions sur chaque facture.",
       description: "Calculer les taxes et les commissions à la main causait sans cesse des erreurs de facturation. Le système applique les règles de l'hôtel, de la même façon, sur chaque facture.",
@@ -565,6 +760,8 @@ export const fr: Dictionary = {
       ],
     },
     "transport-manifests": {
+      metaTitle: "Manifestes de transport préparés automatiquement",
+      metaDescription: "Des manifestes de contrôle préparés à partir des données du voyage, au lieu d'une heure de paperasse avant chaque départ.",
       title: "Manifestes de transport & points de contrôle",
       summary: "Des manifestes de contrôle préparés à partir des données du voyage, au lieu d'une heure de paperasse avant chaque départ.",
       description: "Chaque voyage demandait environ une heure de paperasse avant que le véhicule puisse partir. Le système prépare maintenant ces documents à partir des informations que la société a déjà.",
@@ -589,6 +786,8 @@ export const fr: Dictionary = {
       ],
     },
     "school-operations": {
+      metaTitle: "SchoolOS : élèves, frais et présences au même endroit",
+      metaDescription: "Un seul système pour les élèves, les enseignants, les frais, les présences et la boutique de l'école, qui fonctionne sans internet.",
       title: "SchoolOS, dossiers élèves et scolarité",
       summary: "Un seul système pour les élèves, les enseignants, les frais, les présences et la boutique de l'école, qui fonctionne sans internet sur les ordinateurs de l'école.",
       description: "Un groupe scolaire privé suivait les inscriptions, les frais, les présences et les ventes de la boutique dans des registres et des tableurs séparés. SchoolOS réunit tout au même endroit, sur les ordinateurs que le personnel utilise déjà.",
@@ -613,6 +812,8 @@ export const fr: Dictionary = {
       ],
     },
     "restaurant-pos": {
+      metaTitle: "Caisse restaurant, café et boulangerie",
+      metaDescription: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir. Bientôt disponible dans le créateur de logiciels OUAQT.",
       title: "Caisse restaurant & café",
       summary: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir de la boulangerie.",
       description: "Les commandes, la cuisine et la recette du jour étaient suivies à trois endroits différents. La caisse réunit tout et s'adapte au rythme de chaque établissement.",

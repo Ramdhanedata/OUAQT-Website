@@ -1,0 +1,109 @@
+{
+  "bank": "transport",
+  "version": 1,
+  "questions": [
+    {
+      "id": "tr_carries",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Que transportez-vous ?",
+        "ar": "ماذا تنقل؟",
+        "en": "What do you carry?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "passengers",
+          "label": {
+            "fr": "Des voyageurs",
+            "ar": "مسافرين",
+            "en": "Passengers"
+          }
+        },
+        {
+          "id": "parcels",
+          "label": {
+            "fr": "Des colis",
+            "ar": "طرود",
+            "en": "Parcels"
+          }
+        }
+      ],
+      "default": [
+        "passengers",
+        "parcels"
+      ],
+      "maps_to": [
+        {
+          "path": "features.transport.carries"
+        }
+      ]
+    },
+    {
+      "id": "tr_seats",
+      "type": "yes_no",
+      "label": {
+        "fr": "Les places de vos véhicules sont-elles numérotées ?",
+        "ar": "هل مقاعد مركباتك مرقمة؟",
+        "en": "Are the seats in your vehicles numbered?"
+      },
+      "review": true,
+      "show_if": {
+        "question": "tr_carries",
+        "includes": "passengers"
+      },
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.transport.seatNumbers"
+        }
+      ]
+    },
+    {
+      "id": "tr_parcel_payer",
+      "type": "single_choice",
+      "label": {
+        "fr": "Qui paie l'envoi d'un colis ?",
+        "ar": "من يدفع ثمن إرسال الطرد؟",
+        "en": "Who pays for sending a parcel?"
+      },
+      "review": true,
+      "show_if": {
+        "question": "tr_carries",
+        "includes": "parcels"
+      },
+      "options": [
+        {
+          "id": "sender",
+          "label": {
+            "fr": "L'expéditeur, au départ",
+            "ar": "المرسل، عند الإرسال",
+            "en": "The sender, when it is sent"
+          }
+        },
+        {
+          "id": "receiver",
+          "label": {
+            "fr": "Le destinataire, à l'arrivée",
+            "ar": "المستلم، عند الوصول",
+            "en": "The receiver, when it arrives"
+          }
+        },
+        {
+          "id": "either",
+          "label": {
+            "fr": "L'un ou l'autre",
+            "ar": "هذا أو ذاك",
+            "en": "Either one"
+          }
+        }
+      ],
+      "default": "either",
+      "maps_to": [
+        {
+          "path": "features.transport.parcelPayer"
+        }
+      ]
+    }
+  ]
+}

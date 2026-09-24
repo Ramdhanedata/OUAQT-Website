@@ -8,12 +8,17 @@
   or edit the `accent` color in tailwind.config.ts to rebrand.
 */
 :root {
-  --background: #fafafa;
+  /*
+   * Ivory, the same family across the website and the apps: the page in
+   * medium ivory, what sits on it (cards, panels, fields) in ivory light,
+   * and quiet fills in pampas. The border is warmed to match.
+   */
+  --background: #f0eee6;
   --foreground: #0a0a0a;
-  --muted: #f0f0ee;
+  --muted: #f4f3ee;
   --muted-foreground: #6b6b68;
-  --border: #e5e5e2;
-  --surface: #ffffff;
+  --border: #e0ddd3;
+  --surface: #faf9f5;
 }
 
 * {

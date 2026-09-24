@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Source_Serif_4, Cairo } from "next/font/google";
 import "../globals.css";
 import { Navbar } from "@/components/navbar";
@@ -48,6 +48,9 @@ type Props = {
   children: React.ReactNode;
   params: { lang: string };
 };
+
+/* The phone's browser bar in the page's own ivory, see globals.css. */
+export const viewport: Viewport = { themeColor: "#f0eee6" };
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));

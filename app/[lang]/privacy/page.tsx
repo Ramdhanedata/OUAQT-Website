@@ -27,7 +27,12 @@ export default function PrivacyPage({ params }: Props) {
       updatedDate={dict.legal.updatedDate}
       sections={[
         p.collect,
-        p.why,
+        p.builder,
+        p.neverReceived,
+        p.ai,
+        p.payments,
+        p.fingerprint,
+        p.where,
         p.sharing,
         p.retention,
         p.clientSystems,

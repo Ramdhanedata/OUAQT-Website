@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, locales } from "@/lib/i18n/config";
+import { defaultLocale, locales, type Locale } from "@/lib/i18n/config";
+import { localisedHref, localisedRoutes, routeIdForSlug } from "@/lib/i18n/routes";
 
 /*
  * Every page lives under a locale prefix (/en, /fr, /ar). This redirects any
@@ -34,7 +35,7 @@ export function middleware(request: NextRequest) {
   const hasLocale = locales.some(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
-  if (hasLocale) return NextResponse.next();
+  if (hasLocale) return localisedSlugs(request);
 
   const locale = pickLocale(request);
   const url = request.nextUrl.clone();
@@ -43,7 +44,42 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  // Skip Next internals, the API, and anything with a file extension
-  // (favicon, images, the noise SVG, and so on).
-  matcher: ["/((?!_next|api|.*\\.).*)"],
+  // Skip Next internals, the API, the admin area (which has no language
+  // prefix), and anything with a file extension (favicon, images, and so on).
+  matcher: ["/((?!_next|api|admin|.*\\.).*)"],
 };
+
+/*
+ * The builder and the account area have a slug per language, while the pages
+ * themselves live in one folder named after the route id. This maps between
+ * the two:
+ *
+ *   /fr/creer-mon-logiciel  ->  renders app/[lang]/builder  (address unchanged)
+ *   /fr/builder             ->  redirects to /fr/creer-mon-logiciel
+ */
+function localisedSlugs(request: NextRequest) {
+  const [locale, slug, ...rest] = request.nextUrl.pathname
+    .split("/")
+    .filter(Boolean) as [Locale, string?, ...string[]];
+  if (!slug) return NextResponse.next();
+
+  if (slug in localisedRoutes) {
+    const id = slug as keyof typeof localisedRoutes;
+    const publicSlug = localisedRoutes[id][locale];
+    if (publicSlug !== slug) {
+      const tail = rest.length ? `/${rest.join("/")}` : "";
+      return NextResponse.redirect(
+        new URL(localisedHref(locale, id, tail), request.url)
+      );
+    }
+    return NextResponse.next();
+  }
+
+  const id = routeIdForSlug(slug);
+  if (!id) return NextResponse.next();
+
+  // A slug from another language points at the same page; keep the address.
+  const url = request.nextUrl.clone();
+  url.pathname = `/${[locale, id, ...rest].join("/")}`;
+  return NextResponse.rewrite(url);
+}

@@ -1,0 +1,103 @@
+{
+  "bank": "pharmacy",
+  "version": 1,
+  "questions": [
+    {
+      "id": "ph_unit",
+      "type": "yes_no",
+      "label": {
+        "fr": "Vendez-vous certains médicaments au détail, par plaquette ou à l'unité ?",
+        "ar": "هل تبيع بعض الأدوية بالتجزئة، بالشريط أو بالحبة؟",
+        "en": "Do you sell some medicines singly, by strip or by unit?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "features.pharmacy.unitSale" }]
+    },
+    {
+      "id": "ph_expiry",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous suivre les dates de péremption ?",
+        "ar": "هل تريد متابعة تواريخ انتهاء الصلاحية؟",
+        "en": "Do you want to keep track of expiry dates?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "features.pharmacy.trackExpiry" }]
+    },
+    {
+      "id": "ph_expiry_alert",
+      "type": "single_choice",
+      "label": {
+        "fr": "Combien de temps avant la péremption voulez-vous être prévenu ?",
+        "ar": "قبل كم من الوقت من انتهاء الصلاحية تريد أن تُنبَّه؟",
+        "en": "How long before the expiry date do you want to be warned?"
+      },
+      "review": true,
+      "show_if": { "question": "ph_expiry", "equals": true },
+      "options": [
+        { "id": "1", "label": { "fr": "1 mois", "ar": "شهر واحد", "en": "1 month" } },
+        { "id": "3", "label": { "fr": "3 mois", "ar": "3 أشهر", "en": "3 months" } },
+        { "id": "6", "label": { "fr": "6 mois", "ar": "6 أشهر", "en": "6 months" } }
+      ],
+      "default": "3",
+      "maps_to": [
+        {
+          "path": "features.pharmacy.expiryAlertMonths",
+          "map": { "1": 1, "3": 3, "6": 6 }
+        }
+      ]
+    },
+    {
+      "id": "ph_batch",
+      "type": "yes_no",
+      "label": {
+        "fr": "Notez-vous les numéros de lot ?",
+        "ar": "هل تسجل أرقام التشغيلة؟",
+        "en": "Do you record batch numbers?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "features.pharmacy.batchNumbers" }]
+    },
+    {
+      "id": "ph_suppliers",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous enregistrer vos achats par fournisseur ?",
+        "ar": "هل تريد تسجيل مشترياتك حسب المورّد؟",
+        "en": "Do you want to record your purchases by supplier?"
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [{ "path": "features.pharmacy.trackSuppliers" }]
+    },
+    {
+      "id": "ph_search",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Comment cherchez-vous un médicament au moment de la vente ?",
+        "ar": "كيف تبحث عن دواء أثناء البيع؟",
+        "en": "How do you look for a medicine during a sale?"
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "name",
+          "label": { "fr": "Par le nom", "ar": "بالاسم", "en": "By name" }
+        },
+        {
+          "id": "barcode",
+          "label": {
+            "fr": "Avec un lecteur de code-barres",
+            "ar": "بقارئ الباركود",
+            "en": "With a barcode scanner"
+          }
+        }
+      ],
+      "default": ["name"],
+      "maps_to": [{ "path": "features.pharmacy.search" }]
+    }
+  ]
+}

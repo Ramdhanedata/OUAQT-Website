@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    /* Next compiles with SWC and decides what browsers get from browserslist.
+       Without a target here TypeScript assumed ES5 and refused ordinary
+       modern syntax: a Unicode regular expression flag, iterating a Set. It
+       was type-checking against a language the code never runs on. */
+    "target": "ES2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
