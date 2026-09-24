@@ -67,13 +67,6 @@ export const ar: BuilderCopy = {
     error: "لم تصل رسالتك. حاول مرة أخرى، أو راسلنا على واتساب.",
   },
 
-  language: {
-    heading: "بأي لغة تريد الإجابة؟",
-    appHeading: "وبأي لغة سيستعمل موظفوك البرنامج؟",
-    fr: "Français",
-    ar: "العربية",
-    en: "English",
-  },
 
   name: {
     heading: "اسم محلك",
@@ -100,7 +93,7 @@ export const ar: BuilderCopy = {
     working: "جاري تحضير شعارك",
     colour: "على الشاشة",
     mono: "على الوصل المطبوع",
-    errorType: "اختر صورة PNG أو JPEG.",
+    errorType: "اختر صورة PNG أو JPG أو SVG.",
     errorUnreadable: "تعذرت قراءة هذه الصورة. جرّب صورة أخرى.",
     errorTooBig: "هذه الصورة ثقيلة حتى بعد التحضير. جرّب صورة أخرى.",
   },

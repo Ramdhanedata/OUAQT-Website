@@ -73,13 +73,6 @@ export const fr = {
     error: "Votre message n'est pas parti. Réessayez, ou écrivez-nous sur WhatsApp.",
   },
 
-  language: {
-    heading: "Dans quelle langue voulez-vous répondre ?",
-    appHeading: "Et dans quelle langue vos employés utiliseront-ils le logiciel ?",
-    fr: "Français",
-    ar: "العربية",
-    en: "English",
-  },
 
   name: {
     heading: "Le nom de votre commerce",
@@ -106,7 +99,7 @@ export const fr = {
     working: "Préparation de votre logo",
     colour: "Sur l'écran",
     mono: "Sur le reçu imprimé",
-    errorType: "Choisissez une image PNG ou JPEG.",
+    errorType: "Choisissez une image PNG, JPG ou SVG.",
     errorUnreadable: "Cette image n'a pas pu être lue. Essayez-en une autre.",
     errorTooBig: "Cette image est trop lourde même après préparation. Essayez-en une autre.",
   },

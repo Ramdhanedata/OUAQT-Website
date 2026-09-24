@@ -68,13 +68,6 @@ export const en: BuilderCopy = {
     error: "Your message did not go through. Try again, or write to us on WhatsApp.",
   },
 
-  language: {
-    heading: "Which language would you like to answer in?",
-    appHeading: "And which language will your staff use the software in?",
-    fr: "Français",
-    ar: "العربية",
-    en: "English",
-  },
 
   name: {
     heading: "Your business name",
@@ -101,7 +94,7 @@ export const en: BuilderCopy = {
     working: "Preparing your logo",
     colour: "On the screen",
     mono: "On the printed receipt",
-    errorType: "Choose a PNG or JPEG image.",
+    errorType: "Choose a PNG, JPG or SVG image.",
     errorUnreadable: "This image could not be read. Try another one.",
     errorTooBig: "This image is too heavy even after preparing. Try another one.",
   },

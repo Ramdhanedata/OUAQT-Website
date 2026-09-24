@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
  * his.
  */
 
-export const BUSINESS_SCREENS = 5;
+export const BUSINESS_SCREENS = 4;
 
 type Props = {
   copy: BuilderCopy;
@@ -36,7 +36,7 @@ type Props = {
 
 export function StepBusiness(props: Props) {
   const { wide, screen } = props;
-  const parts = [PackChoice, Languages, BusinessName, ReceiptDetails, LogoStep];
+  const parts = [PackChoice, BusinessName, ReceiptDetails, LogoStep];
 
   if (wide) {
     return (
@@ -73,46 +73,6 @@ function PackChoice({ copy, enabledPacks, answers, update, onLead, codeEntry }: 
     </Fieldset>
     {codeEntry ? <div className="mt-6">{codeEntry}</div> : null}
     </>
-  );
-}
-
-const languageOptions: AppLanguage[] = ["fr", "ar", "en"];
-
-function Languages({ copy, locale, answers, update }: Props) {
-  const builder = answers.builderLanguage ?? locale;
-  const app = answers.appLanguage ?? builder;
-
-  return (
-    <div className="space-y-8">
-      <Fieldset legend={copy.language.heading}>
-        {languageOptions.map((option) => (
-          <ChoiceButton
-            key={option}
-            selected={builder === option}
-            onClick={() =>
-              update({
-                builderLanguage: option,
-                appLanguage: answers.appLanguage ?? option,
-              })
-            }
-          >
-            {copy.language[option]}
-          </ChoiceButton>
-        ))}
-      </Fieldset>
-
-      <Fieldset legend={copy.language.appHeading}>
-        {languageOptions.map((option) => (
-          <ChoiceButton
-            key={option}
-            selected={app === option}
-            onClick={() => update({ appLanguage: option })}
-          >
-            {copy.language[option]}
-          </ChoiceButton>
-        ))}
-      </Fieldset>
-    </div>
   );
 }
 

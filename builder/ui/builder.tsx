@@ -404,7 +404,7 @@ function Wizard({
   )}`;
 
   /* The name is the one answer step 1 cannot finish without. */
-  const NAME_SCREEN = 2; // not-a-rule: which of the five screens asks the name
+  const NAME_SCREEN = 1; // not-a-rule: which of the four screens asks the name
   const named = Boolean((answers.nameLatin ?? "").trim());
 
   const pack = answers.pack ?? enabledPacks[0] ?? "pharmacy";
