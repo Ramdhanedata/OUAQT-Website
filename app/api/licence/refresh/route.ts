@@ -6,6 +6,7 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
 import { serialFor, setupFor } from "@/builder/licence/setup";
+import { followDraft } from "@/builder/config-code/server";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 
 /*
@@ -128,6 +129,8 @@ export async function POST(request: Request) {
    * anything that changes a product, a member of staff or a setting writes a
    * new configuration, so one number answers for all three.
    */
+  /* What the owner changed on the website since: his answers, name, logo and staff. */
+  await followDraft(supabase, business.id);
   const setup = await setupFor(supabase, business.id);
   const serial = await serialFor(supabase, business.id);
   const unchanged =

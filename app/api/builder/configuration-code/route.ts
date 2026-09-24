@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { phoneKey } from "@/builder/config-code/code";
-import { keepLogo, numberFor } from "@/builder/config-code/server";
+import { followDraft, keepLogo, numberFor } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
 import { sendNumber } from "@/builder/notify/whatsapp";
 import { serialSecretIsSet } from "@/builder/serial/cipher";
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
 
   const { data: draft } = await admin
     .from("builder_drafts")
-    .select("id, session_owner, serial_cipher, answers, phone, logo_path, made_in_test_mode")
+    .select("id, session_owner, serial_cipher, answers, phone, logo_path, logo_mono_path, made_in_test_mode, business_id")
     .eq("session_owner", auth.user.id)
     .order("updated_at", { ascending: false })
     .limit(1)
@@ -68,10 +68,21 @@ export async function POST(request: Request) {
     await admin.from("builder_drafts").update({ made_in_test_mode: true }).eq("id", draft.id);
   }
 
-  if (!draft.logo_path && input.data.logo && input.data.logoMono) {
-    const kept = await keepLogo(admin, auth.user.id, draft.id, input.data.logo, input.data.logoMono);
-    if (kept) await admin.from("builder_drafts").update({ logo_path: kept.colourPath, logo_mono_path: kept.monoPath }).eq("id", draft.id);
+  /*
+   * The logo he has now, kept every time the number is asked for: an owner
+   * who changes his logo and finishes again gets the new one, on the draft
+   * and, when his shop already exists, on the shop, for the app to pick up.
+   */
+  if (input.data.logo && input.data.logoMono) {
+    const kept = await keepLogo(admin, auth.user.id, draft.id, input.data.logo, input.data.logoMono, {
+      colourPath: draft.logo_path,
+      monoPath: draft.logo_mono_path,
+    });
+    if (kept && (kept.colourPath !== draft.logo_path || kept.monoPath !== draft.logo_mono_path)) {
+      await admin.from("builder_drafts").update({ logo_path: kept.colourPath, logo_mono_path: kept.monoPath }).eq("id", draft.id);
+    }
   }
+  if (draft.business_id) await followDraft(admin, draft.business_id);
 
   const sent = await sendNumber({ phone, serial, language: input.data.language });
 

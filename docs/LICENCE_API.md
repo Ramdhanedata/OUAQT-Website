@@ -217,6 +217,14 @@ so one number answers for all of them. An app that names the current version
 gets four nulls and a small response; one that names nothing, or an older
 number, gets the lot.
 
+Before answering, the route brings the shop up to date with what its owner
+last did on the website: his answers, his shop's name, his logo and his staff
+list. A difference in any of them is a new configuration version, so the app
+picks it up on this call. A new logo is a new file whose name carries its
+fingerprint, which is how the change is seen. The app keeps the logo it has
+when a new one fails to download, and adds staff names it does not have yet;
+it never removes one.
+
 Omitting `configurationVersion` is always safe. It costs a larger response
 and never a wrong one, which is the right way round for a first install or a
 licence file restored from a backup.

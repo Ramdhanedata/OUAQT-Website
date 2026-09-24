@@ -41,6 +41,8 @@ export const product = z.object({
   expiry: z.string().max(10).optional(),
   batch: z.string().max(60).optional(),
   unit: z.string().max(40).optional(),
+  /* The word written beside a quantity, "boîtes", "sachets": the unit when no unit column says it. */
+  quantityUnit: z.string().max(40).optional(),
   location: z.string().max(60).optional(),
   soldBy: z.string().max(40).optional(),
 });
@@ -118,9 +120,45 @@ function sameValue(a: unknown, b: unknown): boolean {
  * change is a new version of the configuration, never an edit of the one a
  * running shop uses; the app picks it up the next time it asks.
  */
-export async function followAnswers(admin: SupabaseClient, businessId: string, data: ShopInput): Promise<void> {
+export type LogoPaths = { colourPath: string; monoPath: string };
+
+/*
+ * A running shop following what its owner changed on the website: his
+ * answers, his name, his logo and his staff. Anything that differs becomes
+ * a new version of the configuration, which is the number the app asks
+ * about, so the next refresh brings it to every computer in the shop.
+ */
+export async function followAnswers(
+  admin: SupabaseClient,
+  businessId: string,
+  data: ShopInput,
+  logo?: LogoPaths | null
+): Promise<void> {
   const configuration = configurationFrom(data);
   if (!configuration.success) return;
+
+  /* A new logo is a new file (its name carries its content), so a new path is a new logo. */
+  let logoChanged = false;
+  if (logo) {
+    const { data: current } = await admin.from("logos").select("colour_path, mono_path").eq("business_id", businessId).maybeSingle();
+    if (!current || current.colour_path !== logo.colourPath || current.mono_path !== logo.monoPath) {
+      await admin.from("logos").upsert({ business_id: businessId, colour_path: logo.colourPath, mono_path: logo.monoPath });
+      logoChanged = true;
+    }
+  }
+
+  /* The staff list as he last wrote it; the app adds the names it does not have yet. */
+  let staffChanged = false;
+  const { data: staffNow } = await admin.from("staff_initial").select("name, role").eq("business_id", businessId);
+  const shape = (list: { name: string; role: string }[]) =>
+    JSON.stringify(list.map((person) => `${person.name.trim()}|${person.role}`).sort());
+  if (shape(staffNow ?? []) !== shape(data.staff)) {
+    await admin.from("staff_initial").delete().eq("business_id", businessId);
+    if (data.staff.length > 0) {
+      await admin.from("staff_initial").insert(data.staff.map((person) => ({ business_id: businessId, name: person.name, role: person.role })));
+    }
+    staffChanged = true;
+  }
 
   await admin
     .from("businesses")
@@ -141,14 +179,15 @@ export async function followAnswers(admin: SupabaseClient, businessId: string, d
     .order("version", { ascending: false })
     .limit(1)
     .maybeSingle();
-  if (latest && sameValue(latest.config, configuration.data)) return;
+  const answersChanged = !latest || !sameValue(latest.config, configuration.data);
+  if (!answersChanged && !logoChanged && !staffChanged) return;
 
   await admin.from("configurations").insert({
     business_id: businessId,
     version: (latest?.version ?? 0) + 1,
     schema_version: String(configuration.data.version),
     config: configuration.data,
-    created_by: "answers_changed",
+    created_by: answersChanged ? "answers_changed" : logoChanged ? "logo_changed" : "staff_changed",
   });
 }
 
@@ -181,7 +220,7 @@ export async function createShop(
     if (already?.serial_cipher) {
       const serial = await decryptSerial(already.serial_cipher);
       if (serial) {
-        await followAnswers(admin, existing.id, data);
+        await followAnswers(admin, existing.id, data, options.logo);
         return { ok: true, businessId: existing.id, serial, created: false };
       }
     }
