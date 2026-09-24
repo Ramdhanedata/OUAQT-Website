@@ -96,6 +96,62 @@ export function configurationFrom(data: ShopInput) {
   });
 }
 
+/*
+ * The same value written the same way whatever order its keys come in: the
+ * database stores a configuration with its keys reordered, so comparing the
+ * raw text would see a change every time.
+ */
+function sameValue(a: unknown, b: unknown): boolean {
+  const stable = (value: unknown): unknown =>
+    Array.isArray(value)
+      ? value.map(stable)
+      : value && typeof value === "object"
+        ? Object.fromEntries(Object.keys(value as object).sort().map((key) => [key, stable((value as Record<string, unknown>)[key])]))
+        : value;
+  return JSON.stringify(stable(a)) === JSON.stringify(stable(b));
+}
+
+/*
+ * A shop that exists already, brought up to the answers just given. The owner
+ * who finishes the questions again, with another trade or another name, gets
+ * the software he just described, not the one he described last week. The
+ * change is a new version of the configuration, never an edit of the one a
+ * running shop uses; the app picks it up the next time it asks.
+ */
+export async function followAnswers(admin: SupabaseClient, businessId: string, data: ShopInput): Promise<void> {
+  const configuration = configurationFrom(data);
+  if (!configuration.success) return;
+
+  await admin
+    .from("businesses")
+    .update({
+      name_latin: data.business.nameLatin,
+      name_arabic: data.business.nameArabic ?? null,
+      pack: data.pack,
+      app_language: configuration.data.language.app,
+      receipt_phone: data.business.phone ?? null,
+      receipt_address: data.business.address ?? null,
+    })
+    .eq("id", businessId);
+
+  const { data: latest } = await admin
+    .from("configurations")
+    .select("version, config")
+    .eq("business_id", businessId)
+    .order("version", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (latest && sameValue(latest.config, configuration.data)) return;
+
+  await admin.from("configurations").insert({
+    business_id: businessId,
+    version: (latest?.version ?? 0) + 1,
+    schema_version: String(configuration.data.version),
+    config: configuration.data,
+    created_by: "answers_changed",
+  });
+}
+
 export async function createShop(
   admin: SupabaseClient,
   ownerId: string,
@@ -124,7 +180,10 @@ export async function createShop(
       .maybeSingle();
     if (already?.serial_cipher) {
       const serial = await decryptSerial(already.serial_cipher);
-      if (serial) return { ok: true, businessId: existing.id, serial, created: false };
+      if (serial) {
+        await followAnswers(admin, existing.id, data);
+        return { ok: true, businessId: existing.id, serial, created: false };
+      }
     }
   }
 

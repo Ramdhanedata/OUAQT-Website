@@ -1,7 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { configurationFrom, createShop, shopInput, type ImportedRow } from "@/builder/licence/create-shop";
+import { createShop, followAnswers, shopInput, type ImportedRow } from "@/builder/licence/create-shop";
 import { decryptSerial, encryptSerial } from "@/builder/serial/cipher";
 import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
 import { isExpired, readNumber, waitAfter } from "./code";
@@ -129,14 +129,15 @@ export async function openByNumber(admin: SupabaseClient, input: string, now = n
   if (row) {
     const { data: business } = await admin
       .from("businesses")
-      .select("id, pack, name_latin, name_arabic")
+      .select("id, owner_id, pack, name_latin, name_arabic")
       .eq("id", row.business_id)
       .maybeSingle();
     if (business) {
+      /* His newest answers: linked to the shop, or simply his, from before they were linked. */
       const { data: draft } = await admin
         .from("builder_drafts")
         .select(COLUMNS)
-        .eq("business_id", business.id)
+        .or(`business_id.eq.${business.id},session_owner.eq.${business.owner_id}`)
         .order("updated_at", { ascending: false })
         .limit(1)
         .maybeSingle();
@@ -167,7 +168,16 @@ export async function openByNumber(admin: SupabaseClient, input: string, now = n
 /** What the download screen shows for a number: the trade and the name. */
 export function describe(found: Extract<Found, { kind: "shop" | "draft" }>) {
   if (found.kind === "shop") {
-    return { serial: found.serial, pack: found.pack, nameLatin: found.nameLatin, nameArabic: found.nameArabic, locale: found.draft?.locale ?? null, made: true };
+    /* What the download will make of it: his newest answers when there are any. */
+    const newest = (found.draft?.answers ?? {}) as Answers;
+    return {
+      serial: found.serial,
+      pack: newest.pack ?? found.pack,
+      nameLatin: newest.nameLatin ?? found.nameLatin,
+      nameArabic: newest.nameArabic ?? found.nameArabic,
+      locale: found.draft?.locale ?? null,
+      made: true,
+    };
   }
   const answers = found.draft.answers as Answers;
   return {
@@ -213,25 +223,10 @@ export async function shopFor(
 ): Promise<Shop> {
   if (found.kind === "shop") {
     const draft = found.draft;
-    if (draft) {
-      const shaped = shapeOf(draft, []);
-      const configuration = shaped.success ? configurationFrom(shaped.data) : null;
-      const { data: latest } = await admin
-        .from("configurations")
-        .select("version, config")
-        .eq("business_id", found.businessId)
-        .order("version", { ascending: false })
-        .limit(1)
-        .maybeSingle();
-      if (configuration?.success && latest && JSON.stringify(latest.config) !== JSON.stringify(configuration.data)) {
-        await admin.from("configurations").insert({
-          business_id: found.businessId,
-          version: latest.version + 1,
-          schema_version: String(configuration.data.version),
-          config: configuration.data,
-          created_by: "phone_answers",
-        });
-      }
+    const shaped = draft ? shapeOf(draft, []) : null;
+    if (shaped?.success) {
+      await followAnswers(admin, found.businessId, shaped.data);
+      return { ok: true, businessId: found.businessId, serial: found.serial, pack: shaped.data.pack };
     }
     return { ok: true, businessId: found.businessId, serial: found.serial, pack: found.pack };
   }

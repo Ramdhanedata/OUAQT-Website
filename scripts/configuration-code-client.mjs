@@ -74,6 +74,14 @@ check("the same number works again, for a reinstall: same shop, a fresh link", t
 const reopened = await post("/api/builder/configuration-code/resume", { number: serial }, pc.token, "10.2.2.2");
 check("once the shop exists the number says so", reopened.json?.made === true);
 
+/* He finishes the questions again with another trade and another name: the shop follows. */
+await admin.from("builder_drafts").update({ pack: "restaurant", answers: answers("Restaurant Numéro", "restaurant", "ar") }).eq("session_owner", phone.user.id);
+const shown = await post("/api/builder/configuration-code/resume", { number: serial }, pc.token, "10.2.2.2");
+const followed = await post("/api/builder/configuration-code/shop", { number: serial }, pc.token, "10.2.2.2");
+const { data: nowShop } = await admin.from("businesses").select("pack, name_latin").eq("id", business.id).single();
+const { data: newest } = await admin.from("configurations").select("version, config").eq("business_id", business.id).order("version", { ascending: false }).limit(1).single();
+check("finishing again with another trade changes the shop, as a new version of its configuration", shown.json?.pack === "restaurant" && followed.json?.pack === "restaurant" && followed.json?.serial === serial && nowShop.pack === "restaurant" && nowShop.name_latin === "Restaurant Numéro" && newest.config.pack === "restaurant" && newest.version === 2, JSON.stringify({ shop: nowShop, version: newest.version, pack: newest.config.pack }));
+
 /* Typed straight into the software before any download: the shop is made then. */
 const direct = await session();
 await direct.client.from("builder_drafts").insert({ session_owner: direct.user.id, pack: "shop", locale: "fr", step: 2, answers: answers("Boutique Numéro", "shop", "fr") });
