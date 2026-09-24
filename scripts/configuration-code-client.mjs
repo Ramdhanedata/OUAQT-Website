@@ -12,6 +12,7 @@
  * staff and never shown; thirty days unopened, an unused number says expired
  * and the row is kept. Everything it creates, it removes.
  */
+import { createHash } from "node:crypto";
 import { createClient } from "@supabase/supabase-js";
 const base = process.argv[2] ?? "http://localhost:3000";
 const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, { auth: { persistSession: false } });
@@ -74,6 +75,13 @@ check("the same number works again, for a reinstall: same shop, a fresh link", t
 const reopened = await post("/api/builder/configuration-code/resume", { number: serial }, pc.token, "10.2.2.2");
 check("once the shop exists the number says so", reopened.json?.made === true);
 
+/* The shop computer activates, the way the app does. */
+const part = (value) => createHash("sha256").update(`ouaqt-desktop:${value}`).digest("hex");
+const stampId = Date.now().toString(36);
+const shopPc = await post("/api/licence/activate", { serial, deviceId: `device-${stampId}`, platform: "mac", fingerprint: { board: part(`board-${stampId}`), disk: part(`disk-${stampId}`), machine: part(`os-${stampId}`) } }, null, "10.2.2.2");
+check("the shop computer activates with the number", shopPc.status === 200 && shopPc.json?.configuration?.pack === "pharmacy", `${shopPc.status} ${shopPc.json?.error ?? ""}`);
+const heldVersion = shopPc.json?.configurationVersion;
+
 /* He finishes the questions again with another trade and another name: the shop follows. */
 await admin.from("builder_drafts").update({ pack: "restaurant", answers: answers("Restaurant Numéro", "restaurant", "ar") }).eq("session_owner", phone.user.id);
 const shown = await post("/api/builder/configuration-code/resume", { number: serial }, pc.token, "10.2.2.2");
@@ -81,6 +89,12 @@ const followed = await post("/api/builder/configuration-code/shop", { number: se
 const { data: nowShop } = await admin.from("businesses").select("pack, name_latin").eq("id", business.id).single();
 const { data: newest } = await admin.from("configurations").select("version, config").eq("business_id", business.id).order("version", { ascending: false }).limit(1).single();
 check("finishing again with another trade changes the shop, as a new version of its configuration", shown.json?.pack === "restaurant" && followed.json?.pack === "restaurant" && followed.json?.serial === serial && nowShop.pack === "restaurant" && nowShop.name_latin === "Restaurant Numéro" && newest.config.pack === "restaurant" && newest.version === 2, JSON.stringify({ shop: nowShop, version: newest.version, pack: newest.config.pack }));
+
+/* The app asks what changed, as it does at start and every few hours. */
+const asked = await post("/api/licence/refresh", { businessId: business.id, deviceId: `device-${stampId}`, deviceToken: shopPc.json?.deviceToken, configurationVersion: heldVersion }, null, "10.2.2.2");
+check("the app asking what changed is handed the new trade", asked.status === 200 && asked.json?.configuration?.pack === "restaurant" && asked.json?.configurationVersion > heldVersion, `${asked.status} ${asked.json?.configuration?.pack}`);
+const again2 = await post("/api/licence/refresh", { businessId: business.id, deviceId: `device-${stampId}`, deviceToken: shopPc.json?.deviceToken, configurationVersion: asked.json?.configurationVersion }, null, "10.2.2.2");
+check("and nothing more once it holds it", again2.status === 200 && again2.json?.configuration === null);
 
 /* Typed straight into the software before any download: the shop is made then. */
 const direct = await session();
