@@ -4,6 +4,7 @@ import {
   contentBounds,
   fitWithin,
   otsuThreshold,
+  removeBackground,
   toMonochrome,
 } from "./pixels";
 
@@ -41,11 +42,19 @@ export async function processLogo(file: File): Promise<ProcessedLogo> {
 
   const source = await decode(file);
   const full = draw(source.image, source.width, source.height);
-  const bounds = contentBounds(
-    full.getImageData(0, 0, source.width, source.height).data,
-    source.width,
-    source.height
-  );
+  const original = full.getImageData(0, 0, source.width, source.height);
+
+  /*
+   * Where ink ends and paper begins, read from the picture as it came, page
+   * and all: once the page is gone, a red stroke beside black ink would be
+   * the lighter of the two and fall off the receipt.
+   */
+  const threshold = otsuThreshold(original.data);
+
+  /* The page it was drawn or photographed on, taken away, then the margins. */
+  const cut = removeBackground(original.data, source.width, source.height);
+  full.putImageData(new ImageData(cut.pixels, source.width, source.height), 0, 0);
+  const bounds = contentBounds(cut.pixels, source.width, source.height);
 
   const size = fitWithin(bounds.width, bounds.height, MAX_SIDE);
   const canvas = surface(size.width, size.height);
@@ -54,7 +63,7 @@ export async function processLogo(file: File): Promise<ProcessedLogo> {
 
   context.imageSmoothingQuality = "high";
   context.drawImage(
-    source.image,
+    full.canvas,
     bounds.x,
     bounds.y,
     bounds.width,
@@ -68,7 +77,7 @@ export async function processLogo(file: File): Promise<ProcessedLogo> {
   const pixels = context.getImageData(0, 0, size.width, size.height);
   const colour = await compress(canvas);
 
-  const monoPixels = toMonochrome(pixels.data, otsuThreshold(pixels.data));
+  const monoPixels = toMonochrome(pixels.data, threshold);
   const monoCanvas = surface(size.width, size.height);
   const monoContext = monoCanvas.getContext("2d");
   if (!monoContext) throw new LogoError("unreadable");
@@ -141,13 +150,23 @@ function draw(source: CanvasImageSource, width: number, height: number) {
   return context;
 }
 
-/* PNG keeps flat colour and sharp edges. Photographs need JPEG to fit. */
+/*
+ * PNG keeps flat colour, sharp edges and the transparency where the page
+ * was. Photographs need JPEG to fit; JPEG has no transparency, so the
+ * picture is laid on white first rather than coming out on black.
+ */
 async function compress(canvas: HTMLCanvasElement): Promise<string> {
   const png = await toDataUrl(canvas, "image/png");
   if (png.length <= MAX_BYTES) return png;
 
+  const flat = surface(canvas.width, canvas.height);
+  const context = flat.getContext("2d");
+  if (!context) throw new LogoError("unreadable");
+  context.fillStyle = "#ffffff";
+  context.fillRect(0, 0, flat.width, flat.height);
+  context.drawImage(canvas, 0, 0);
   for (const quality of JPEG_QUALITIES) {
-    const jpeg = await toDataUrl(canvas, "image/jpeg", quality);
+    const jpeg = await toDataUrl(flat, "image/jpeg", quality);
     if (jpeg.length <= MAX_BYTES) return jpeg;
   }
   throw new LogoError("too_big");

@@ -194,18 +194,23 @@ function LogoStep({ copy, answers, update }: Props) {
 
       {answers.logo && answers.logoMono ? (
         <div className="grid grid-cols-2 gap-4">
-          <LogoCard label={copy.logo.colour} src={answers.logo} />
-          <LogoCard label={copy.logo.mono} src={answers.logoMono} />
+          <LogoCard label={copy.logo.colour} src={answers.logo} surface="screen" />
+          <LogoCard label={copy.logo.mono} src={answers.logoMono} surface="paper" />
         </div>
       ) : null}
     </div>
   );
 }
 
-function LogoCard({ label, src }: { label: string; src: string }) {
+/*
+ * Each logo shown where it will live: the screen one on the software's own
+ * ivory, so the owner sees his logo without its page around it, and the
+ * receipt one on white, the colour of the paper.
+ */
+function LogoCard({ label, src, surface }: { label: string; src: string; surface: "screen" | "paper" }) {
   return (
     <figure className="rounded-lg border border-border p-3">
-      <div className="flex h-28 items-center justify-center bg-white">
+      <div className={`flex h-28 items-center justify-center rounded-md ${surface === "screen" ? "bg-background" : "bg-white"}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt="" className="max-h-28 max-w-full object-contain" />
       </div>
