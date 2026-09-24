@@ -62,13 +62,13 @@ function page(dict, lang, fonts) {
 @font-face{font-family:"OuaqtSerif";src:url(${fonts.serifLatin}) format("woff2");font-weight:200 900}
 @font-face{font-family:"OuaqtCairo";src:url(${fonts.cairoArabic}) format("woff2");font-weight:200 1000;unicode-range:U+0600-06FF,U+0750-077F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF}
 @font-face{font-family:"OuaqtCairo";src:url(${fonts.cairoLatin}) format("woff2");font-weight:200 1000;unicode-range:U+0000-00FF}
-html,body{margin:0;width:1200px;height:630px;background:#fafafa;overflow:hidden}
+html,body{margin:0;width:1200px;height:630px;background:#f0eee6;overflow:hidden}
 /* Custom names on purpose: an unquoted "Serif" is the generic keyword, and the browser drops the rule. */
 body{font-family:${rtl ? '"OuaqtCairo"' : '"OuaqtSerif"'},Georgia,serif;color:#0a0a0a;-webkit-font-smoothing:antialiased}
 .frame{box-sizing:border-box;height:630px;padding:64px 76px;display:flex;flex-direction:column}
 .top{display:flex;align-items:center;justify-content:space-between}
 .logo{height:58px;width:auto}
-.pill{font-size:21px;padding:9px 20px;border:1.5px solid #C9A961;border-radius:999px;color:#7a6330;background:#fffdf7}
+.pill{font-size:21px;padding:9px 20px;border:1.5px solid #C9A961;border-radius:999px;color:#7a6330;background:#faf9f5}
 h1{margin:44px 0 0;font-weight:${rtl ? 700 : 650};font-size:62px;line-height:${rtl ? 1.4 : 1.1};letter-spacing:${rtl ? "0" : "-0.012em"};max-width:1000px;text-wrap:balance}
 .bottom{margin-top:auto}
 .rule{width:150px;height:3px;background:#C9A961;margin-bottom:22px}
