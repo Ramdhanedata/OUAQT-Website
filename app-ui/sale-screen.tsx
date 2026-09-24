@@ -76,7 +76,7 @@ export function SaleScreen({
   return (
     <div
       dir={rtl ? "rtl" : "ltr"}
-      className="flex h-full min-h-[480px] flex-col bg-white text-black"
+      className="flex h-full min-h-[480px] flex-col bg-background text-black"
     >
       <header className="flex items-center justify-between border-b-2 border-black/10 px-4 py-3">
         <span className="truncate text-lg font-semibold">

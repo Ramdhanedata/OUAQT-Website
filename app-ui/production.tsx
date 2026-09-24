@@ -43,7 +43,7 @@ export function Production({
   const showDeposit = configuration.features.bakery?.deposit ?? false;
 
   return (
-    <div dir={rtl ? "rtl" : "ltr"} className="flex h-full flex-col bg-white text-black">
+    <div dir={rtl ? "rtl" : "ltr"} className="flex h-full flex-col bg-background text-black">
       <header className="border-b-2 border-black/10 px-4 py-3">
         <span className="text-lg font-semibold">{copy.production.title}</span>
       </header>
