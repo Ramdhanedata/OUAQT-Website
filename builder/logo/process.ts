@@ -19,7 +19,7 @@ const MAX_SIDE = 512; // not-a-rule: the largest logo the app needs
 const MAX_BYTES = 1_000_000; // not-a-rule: 1 MB, the upload ceiling in the brief
 const JPEG_QUALITIES = [0.9, 0.75, 0.6, 0.45]; // not-a-rule: compression steps
 
-export const ACCEPTED_TYPES = ["image/png", "image/jpeg"];
+export const ACCEPTED_TYPES = ["image/png", "image/jpeg", "image/svg+xml"];
 
 export type ProcessedLogo = {
   /** The colour version, for the screen. */
@@ -40,7 +40,7 @@ export async function processLogo(file: File): Promise<ProcessedLogo> {
   if (!ACCEPTED_TYPES.includes(file.type)) throw new LogoError("type");
 
   const source = await decode(file);
-  const full = draw(source, source.width, source.height);
+  const full = draw(source.image, source.width, source.height);
   const bounds = contentBounds(
     full.getImageData(0, 0, source.width, source.height).data,
     source.width,
@@ -54,7 +54,7 @@ export async function processLogo(file: File): Promise<ProcessedLogo> {
 
   context.imageSmoothingQuality = "high";
   context.drawImage(
-    source,
+    source.image,
     bounds.x,
     bounds.y,
     bounds.width,
@@ -86,11 +86,43 @@ export async function processLogo(file: File): Promise<ProcessedLogo> {
   return { colour, mono, width: size.width, height: size.height };
 }
 
-async function decode(file: File): Promise<ImageBitmap> {
+type Decoded = { image: CanvasImageSource; width: number; height: number };
+
+async function decode(file: File): Promise<Decoded> {
+  if (file.type === "image/svg+xml") return decodeSvg(file);
   try {
-    return await createImageBitmap(file);
+    const bitmap = await createImageBitmap(file);
+    return { image: bitmap, width: bitmap.width, height: bitmap.height };
   } catch {
     throw new LogoError("unreadable");
+  }
+}
+
+/*
+ * A drawing rather than a photograph: it has no pixels of its own, so it is
+ * drawn at the largest size the app uses, keeping its proportions, and then
+ * treated exactly like a PNG from there on.
+ */
+async function decodeSvg(file: File): Promise<Decoded> {
+  const url = URL.createObjectURL(file);
+  try {
+    const image = new Image();
+    image.decoding = "async";
+    image.src = url;
+    await image.decode();
+    const ratio = image.naturalWidth > 0 && image.naturalHeight > 0 ? image.naturalWidth / image.naturalHeight : 1;
+    const width = ratio >= 1 ? MAX_SIDE : Math.round(MAX_SIDE * ratio);
+    const height = ratio >= 1 ? Math.round(MAX_SIDE / ratio) : MAX_SIDE;
+    /* Drawn once onto a canvas, so every later step works in the same pixels. */
+    const canvas = surface(width, height);
+    const context = canvas.getContext("2d");
+    if (!context) throw new LogoError("unreadable");
+    context.drawImage(image, 0, 0, width, height);
+    return { image: canvas, width, height };
+  } catch {
+    throw new LogoError("unreadable");
+  } finally {
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   }
 }
 
@@ -101,11 +133,11 @@ function surface(width: number, height: number): HTMLCanvasElement {
   return canvas;
 }
 
-function draw(source: ImageBitmap, width: number, height: number) {
+function draw(source: CanvasImageSource, width: number, height: number) {
   const canvas = surface(width, height);
   const context = canvas.getContext("2d");
   if (!context) throw new LogoError("unreadable");
-  context.drawImage(source, 0, 0);
+  context.drawImage(source, 0, 0, width, height);
   return context;
 }
 
