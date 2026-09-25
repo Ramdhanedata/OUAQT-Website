@@ -10,7 +10,7 @@ import { localisedHref } from "@/lib/i18n/routes";
 import { CodeEntry, forgetOpened } from "./config-code";
 import type { LicenceStatus } from "@/builder/licence/status";
 import type { Price } from "@/builder/payment/pricing";
-import { fill, plural } from "@/lib/utils";
+import { fill } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 import { licenceLine, owes } from "./licence-line";
 import { Pay } from "./pay";
@@ -415,18 +415,6 @@ function MyDevices({
           ))}
         </ul>
       )}
-    </section>
-  );
-}
-
-/* A part that is not built yet, said plainly rather than shown empty. */
-function Waiting({ copy, title }: { copy: BuilderCopy; title: string }) {
-  return (
-    <section className="space-y-2">
-      <h2 className="text-xl font-semibold text-foreground">{title}</h2>
-      <p className="text-base leading-relaxed text-muted-foreground">
-        {copy.myAccount.soon}
-      </p>
     </section>
   );
 }

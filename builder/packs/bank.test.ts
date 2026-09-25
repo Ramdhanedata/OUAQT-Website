@@ -29,6 +29,7 @@ function resolve(schema: z.ZodTypeAny, path: string): z.ZodTypeAny | null {
       const inner = def._def?.innerType ?? def.unwrap?.();
       if (!inner || inner === node) break;
       node = inner;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       if (!(node as any)._def?.innerType && !(node as any).unwrap) break;
     }
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

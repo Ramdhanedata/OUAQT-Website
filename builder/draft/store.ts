@@ -31,6 +31,8 @@ export type DraftAnswers = {
   address?: string;
   logo?: string;
   logoMono?: string;
+  /* He took his logo away: the shop's goes too, rather than staying because none was sent. */
+  logoRemoved?: boolean;
   /* Step 2: one entry per question the owner answered. */
   interview?: Answers;
   /*
@@ -74,7 +76,9 @@ function writeLocal(value: Stored) {
 
 /** Everything but the logo: what is worth sending after every answer. */
 function forServer(answers: DraftAnswers): DraftAnswers {
-  const { logo: _logo, logoMono: _logoMono, ...rest } = answers;
+  const rest = { ...answers };
+  delete rest.logo;
+  delete rest.logoMono;
   return rest;
 }
 
