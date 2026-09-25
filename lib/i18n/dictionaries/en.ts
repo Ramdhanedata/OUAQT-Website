@@ -154,7 +154,7 @@ export const en = {
         "Launch price, for our first {clients} clients. Your price then stays the same for {years} years.",
       launchCondition:
         "The launch price applies to our first {clients} clients. After that, the standard price applies.",
-      payment: "Payment by Bankily. You see the amount before you pay.",
+      payment: "Payment by Bankily, Masrvi, BimBank, SEDAD or Click. You see the amount before you pay.",
       cta: "Build my software",
       monthly: "{amount} a month",
       annual: { label: "Annual licence", cadence: "Per year" },
@@ -367,11 +367,11 @@ export const en = {
       },
       payment: {
         h: "Payment",
-        b: "Payment is made by Bankily, to the number shown in the software and on this site. You send us the transaction reference and we confirm the payment by hand, usually the same day. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
+        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send us the screenshot of the confirmation and we confirm the payment by hand, usually the same day. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
       },
       grace: {
         h: "If a renewal is paid late",
-        b: "Your licence does not stop on its due date. You have {graceDays} days during which the software keeps working normally, with a daily reminder showing the amount and the Bankily number. After that the software turns read-only, as at the end of a trial. As soon as the payment is confirmed, everything opens again immediately. Your data is never deleted, however late the payment.",
+        b: "Your licence does not stop on its due date. You have {graceDays} days during which the software keeps working normally, with a daily reminder to pay on this site. After that the software turns read-only, as at the end of a trial. As soon as the payment is confirmed, everything opens again immediately. Your data is never deleted, however late the payment.",
       },
       devices: {
         h: "Your devices",
@@ -456,11 +456,11 @@ export const en = {
       },
       ai: {
         h: "Artificial intelligence",
-        b: "When you describe the way you work in your own words, that sentence may be sent to an artificial intelligence service to be turned into settings, and what it proposes is then checked against our own rules before anything is applied. Nothing else is sent to it: not your product list, not your staff, not your payment receipts. The builder works entirely without this feature, and your tap answers never go through it.",
+        b: "When you describe the way you work in your own words, that sentence may be sent to an artificial intelligence service to be turned into settings, and what it proposes is then checked against our own rules before anything is applied. The screenshot of your payment may also be sent to it to take down the amount, the date and the transaction number, only on a paid plan of that service, whose terms rule out using it to train its models. Nothing else is sent to it: not your product list, not your staff. The builder works entirely without this feature, and your tap answers never go through it.",
       },
       payments: {
         h: "Payments",
-        b: "You pay by Bankily, straight from your phone. We see neither your code nor your balance. We keep the transaction reference you type, the amount expected, and the receipt you attach, for as long as it takes to confirm the payment and account for your licence.",
+        b: "You pay with Bankily, Masrvi, BimBank, SEDAD or Click, straight from your phone. We never see your secret code. We keep the screenshot you send, what is taken down from it (the amount, the date and the transaction number) and the amount expected, for as long as it takes to confirm the payment and account for your licence.",
       },
       fingerprint: {
         h: "Your computer's fingerprint",
@@ -616,7 +616,7 @@ export const en = {
     worry2: "Where does my data go?",
     worry2Body: "Your sales, your stock and your customers' accounts stay with you. We never receive them.",
     worry3: "How do I pay?",
-    worry3Body: "By Bankily, once a year. You see the amount before you pay.",
+    worry3Body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year. You see the amount before you pay.",
     worry4: "What if it does not suit me?",
     worry4Body: "You try it free before paying anything.",
 

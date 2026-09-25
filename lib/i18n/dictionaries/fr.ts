@@ -144,7 +144,7 @@ export const fr: Dictionary = {
         "Tarif de lancement, réservé à nos {clients} premiers clients. Votre prix reste ensuite le même pendant {years} ans.",
       launchCondition:
         "Le tarif de lancement s'applique à nos {clients} premiers clients. Au-delà, c'est le tarif standard.",
-      payment: "Paiement par Bankily. Vous voyez le montant avant de payer.",
+      payment: "Paiement par Bankily, Masrvi, BimBank, SEDAD ou Click. Vous voyez le montant avant de payer.",
       cta: "Créer mon logiciel",
       monthly: "soit {amount} par mois",
       annual: { label: "Licence annuelle", cadence: "Par an" },
@@ -358,11 +358,11 @@ export const fr: Dictionary = {
       },
       payment: {
         h: "Le paiement",
-        b: "Le paiement se fait par Bankily, au numéro indiqué dans le logiciel et sur ce site. Vous nous transmettez la référence de la transaction, et nous confirmons le paiement à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
+        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous nous envoyez la capture d'écran de la confirmation, et nous confirmons le paiement à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
       },
       grace: {
         h: "Si le renouvellement est payé en retard",
-        b: "Votre licence ne s'arrête pas le jour de son échéance. Vous disposez de {graceDays} jours pendant lesquels le logiciel continue de fonctionner normalement, avec un rappel quotidien indiquant le montant et le numéro Bankily. Passé ce délai, le logiciel passe en lecture seule, comme à la fin d'un essai. Dès que le paiement est confirmé, tout se rouvre immédiatement. Vos données ne sont jamais effacées, quel que soit le retard.",
+        b: "Votre licence ne s'arrête pas le jour de son échéance. Vous disposez de {graceDays} jours pendant lesquels le logiciel continue de fonctionner normalement, avec un rappel quotidien pour payer sur ce site. Passé ce délai, le logiciel passe en lecture seule, comme à la fin d'un essai. Dès que le paiement est confirmé, tout se rouvre immédiatement. Vos données ne sont jamais effacées, quel que soit le retard.",
       },
       devices: {
         h: "Vos postes",
@@ -447,11 +447,11 @@ export const fr: Dictionary = {
       },
       ai: {
         h: "L'intelligence artificielle",
-        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés, ni vos justificatifs de paiement. Le créateur fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
+        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. La capture de votre paiement peut aussi lui être envoyée pour en relever le montant, la date et le numéro de la transaction, uniquement avec une offre payante de ce service, dont les conditions excluent de s'en servir pour entraîner ses modèles. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés. Le créateur fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
       },
       payments: {
         h: "Les paiements",
-        b: "Vous payez par Bankily, directement depuis votre téléphone. Nous ne voyons ni votre code ni votre solde. Nous conservons la référence de transaction que vous saisissez, le montant attendu, et le justificatif que vous joignez, le temps de confirmer le paiement et de justifier votre licence.",
+        b: "Vous payez avec Bankily, Masrvi, BimBank, SEDAD ou Click, directement depuis votre téléphone. Nous ne voyons jamais votre code secret. Nous conservons la capture que vous envoyez, ce qui y est relevé (le montant, la date et le numéro de la transaction) et le montant attendu, le temps de confirmer le paiement et de justifier votre licence.",
       },
       fingerprint: {
         h: "L'empreinte de votre ordinateur",
@@ -611,7 +611,7 @@ export const fr: Dictionary = {
     worry2: "Où vont mes données ?",
     worry2Body: "Vos ventes, votre stock et les comptes de vos clients restent chez vous. Nous ne les recevons pas.",
     worry3: "Comment je paie ?",
-    worry3Body: "Par Bankily, une fois par an. Vous voyez le montant avant de payer.",
+    worry3Body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an. Vous voyez le montant avant de payer.",
     worry4: "Et si ça ne me convient pas ?",
     worry4Body: "Vous l'essayez gratuitement avant de payer quoi que ce soit.",
 
