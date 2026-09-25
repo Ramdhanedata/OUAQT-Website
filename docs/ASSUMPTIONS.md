@@ -190,4 +190,15 @@ with B0b once the project exists.
   screenshot here. The result is said at once in a box: "Paiement réussi"
   when it was read and matched, "Paiement reçu" when a person will look,
   or what is wrong with the screenshot.
+- **Screenshots are read on every tier (Adel's decision, 2026-09-25).** He
+  wants the owner told at once: "Paiement réussi. Merci." or "Vérifiez
+  votre paiement". That needs the screenshot read, and he chose the free
+  Gemini tier over waiting for a paid key, knowing the provider may keep
+  what it is sent and use it to improve its products. `mayReadImages()` now
+  says yes everywhere, and the privacy page says what is sent and why.
+  Tested end to end with invented Bankily confirmations: the right amount
+  was confirmed on the spot, 15 000 against 18 000 was refused.
+- **`destructive` is a colour now.** The builder and the admin used it for
+  every error from the start and it was never defined, so errors read in
+  plain black. A red that reads on ivory.
 

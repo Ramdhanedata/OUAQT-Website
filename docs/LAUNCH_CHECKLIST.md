@@ -25,12 +25,11 @@ paying shop. Each one is a switch or a value, not a piece of work.
       A trade whose addresses are empty says the software is coming, which is
       honest but is not a launch. They point at the public
       `Ramdhanedata/ouaqt-releases` repository's latest release.
-- [ ] `AI_TIER=paid` and a paid key. On `free` the AI reads the owner's words
-      only, so payment screenshots are never sent to it and every payment
-      waits for a person. That is the right behaviour, but it does not scale.
-      On `paid` the screenshot is read for the amount, the date and the
-      transaction number, and a wrong one is refused while the owner is still
-      on the page (see ASSUMPTIONS, 2026-09-25).
+- [ ] Decide on `AI_TIER=paid` and a paid key. Payment screenshots are read
+      on either tier since 2026-09-25 (see ASSUMPTIONS), so owners are told
+      at once whether a payment went through. On `free` the provider may keep
+      the receipts it reads and use them; a paid key keeps them out of its
+      training, and the privacy page would then say so again.
 - [ ] The five payment numbers in Réglages (`bankily_number`,
       `masrvi_number`, `bimbank_number`, `sedad_number`, `click_number`).
       0021 starts the four new ones with the Bankily number.
