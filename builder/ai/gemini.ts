@@ -200,7 +200,7 @@ export function geminiProvider(apiKey: string, model: string): AiProvider {
  * that does not come back in time only means a person reads it instead.
  */
 const RECEIPT_TIMEOUT_MS = 20_000; // not-a-rule: an image takes longer than a sentence
-const BUSY = new Set([429, 500, 502, 503, 504]);
+const BUSY = new Set([429, 500, 502, 503, 504]); // not-a-rule: HTTP statuses for a busy or failing service
 const RETRY_AFTER_MS = [1_500, 3_000]; // not-a-rule: a busy service, asked again shortly
 
 const receiptSchema = {
