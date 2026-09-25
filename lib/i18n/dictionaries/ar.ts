@@ -154,7 +154,7 @@ export const ar: Dictionary = {
       cta: "أنشئ برنامجي",
       monthly: "أي {amount} في الشهر",
       annual: { label: "رخصة سنوية", cadence: "في السنة" },
-      quarterly: { label: "رخصة فصلية", cadence: "في الفصل" },
+      semiannual: { label: "رخصة نصف سنوية", cadence: "كل 6 أشهر" },
       perpetual: { label: "رخصة دائمة", cadence: "تدفع مرة واحدة" },
       extraDevice: { label: "جهاز إضافي", cadence: "في السنة" },
       setupVisit: {
@@ -610,7 +610,7 @@ export const ar: Dictionary = {
     worry2: "إلى أين تذهب بياناتي؟",
     worry2Body: "مبيعاتك ومخزونك وحسابات زبائنك تبقى عندك. لا تصلنا أبداً.",
     worry3: "كيف أدفع؟",
-    worry3Body: "عبر بنكيلي أو مصرفي أو بيم بنك أو سداد أو كليك، مرة في السنة. ترى المبلغ قبل أن تدفع.",
+    worry3Body: "عبر بنكيلي أو مصرفي أو بيم بنك أو سداد أو كليك، مرة في السنة أو كل ستة أشهر. ترى المبلغ قبل أن تدفع.",
     worry4: "وإذا لم يناسبني؟",
     worry4Body: "تجربه مجاناً قبل أن تدفع أي شيء.",
 

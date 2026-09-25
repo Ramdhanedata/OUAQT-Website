@@ -158,7 +158,7 @@ export const en = {
       cta: "Build my software",
       monthly: "{amount} a month",
       annual: { label: "Annual licence", cadence: "Per year" },
-      quarterly: { label: "Quarterly licence", cadence: "Per quarter" },
+      semiannual: { label: "Six-month licence", cadence: "Every 6 months" },
       perpetual: { label: "Permanent licence", cadence: "Paid once" },
       extraDevice: { label: "Extra device", cadence: "Per year" },
       setupVisit: {
@@ -616,7 +616,7 @@ export const en = {
     worry2: "Where does my data go?",
     worry2Body: "Your sales, your stock and your customers' accounts stay with you. We never receive them.",
     worry3: "How do I pay?",
-    worry3Body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year. You see the amount before you pay.",
+    worry3Body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year or every six months. You see the amount before you pay.",
     worry4: "What if it does not suit me?",
     worry4Body: "You try it free before paying anything.",
 

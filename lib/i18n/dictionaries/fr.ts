@@ -148,7 +148,7 @@ export const fr: Dictionary = {
       cta: "Créer mon logiciel",
       monthly: "soit {amount} par mois",
       annual: { label: "Licence annuelle", cadence: "Par an" },
-      quarterly: { label: "Licence trimestrielle", cadence: "Par trimestre" },
+      semiannual: { label: "Licence semestrielle", cadence: "Tous les 6 mois" },
       perpetual: { label: "Licence définitive", cadence: "Payée une fois" },
       extraDevice: { label: "Poste supplémentaire", cadence: "Par an" },
       setupVisit: {
@@ -611,7 +611,7 @@ export const fr: Dictionary = {
     worry2: "Où vont mes données ?",
     worry2Body: "Vos ventes, votre stock et les comptes de vos clients restent chez vous. Nous ne les recevons pas.",
     worry3: "Comment je paie ?",
-    worry3Body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an. Vous voyez le montant avant de payer.",
+    worry3Body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an ou tous les six mois. Vous voyez le montant avant de payer.",
     worry4: "Et si ça ne me convient pas ?",
     worry4Body: "Vous l'essayez gratuitement avant de payer quoi que ce soit.",
 
