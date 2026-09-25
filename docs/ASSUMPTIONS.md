@@ -211,4 +211,11 @@ with B0b once the project exists.
   already used is refused. Only a screenshot that could not be read at all
   goes to a person; a busy reading service is asked twice more first.
   `payment_max_age_days` no longer decides anything.
+- **All eight trades are open (Adel, 2026-09-25).** `OPENING` says "open"
+  for every one. Three questions are no longer asked because the apps do
+  the same whatever the answer: selling medicines by the strip (ph_unit), a
+  pharmacy's purchases by supplier (ph_suppliers) and a restaurant's "pay
+  before or after" (rs_pay_when). Their settings keep their defaults, so no
+  configuration changes shape. The other answers that were being ignored
+  now drive the apps: lot numbers, selling by weight, suppliers, units.
 
