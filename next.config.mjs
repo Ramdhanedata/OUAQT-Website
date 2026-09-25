@@ -3,6 +3,8 @@ const nextConfig = {
   reactStrictMode: true,
   // No need to announce the framework to every visitor.
   poweredByHeader: false,
+  // Lint the builder and the shared app code too, not only Next's default folders.
+  eslint: { dirs: ["app", "components", "lib", "builder", "app-ui"] },
   images: {
     // AVIF first: roughly a third smaller than WebP for these photos.
     formats: ["image/avif", "image/webp"],
