@@ -200,6 +200,8 @@ export function geminiProvider(apiKey: string, model: string): AiProvider {
  * that does not come back in time only means a person reads it instead.
  */
 const RECEIPT_TIMEOUT_MS = 20_000; // not-a-rule: an image takes longer than a sentence
+const BUSY = new Set([429, 500, 502, 503, 504]);
+const RETRY_AFTER_MS = [1_500, 3_000]; // not-a-rule: a busy service, asked again shortly
 
 const receiptSchema = {
   type: "object",
@@ -262,8 +264,8 @@ async function readReceipt(
     latencyMs: Date.now() - started,
   });
 
-  try {
-    const response = await fetch(`${ENDPOINT}/${model}:generateContent?key=${apiKey}`, {
+  const ask = () =>
+    fetch(`${ENDPOINT}/${model}:generateContent?key=${apiKey}`, {
       method: "POST",
       headers: { "content-type": "application/json" },
       signal: controller.signal,
@@ -283,6 +285,19 @@ async function readReceipt(
         },
       }),
     });
+
+  try {
+    /*
+     * A busy service (overloaded, or too many requests this minute) usually
+     * answers a second later. Asked again twice, inside the same time limit,
+     * so the owner gets his answer rather than a wait for a person.
+     */
+    let response = await ask();
+    for (const wait of RETRY_AFTER_MS) {
+      if (response.ok || !BUSY.has(response.status)) break;
+      await new Promise((resolve) => setTimeout(resolve, wait));
+      response = await ask();
+    }
     if (!response.ok) return done({ kind: "unavailable", why: `http_${response.status}` });
 
     const body = await response.json();

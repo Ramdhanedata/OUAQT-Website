@@ -60,3 +60,31 @@ describe("reading a payment screenshot with Gemini", () => {
     expect(outcome.result).toEqual({ kind: "unavailable", why: "network" });
   });
 });
+
+describe("a busy reading service", () => {
+  it("is asked again, and its answer is used", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout"] });
+    const busy = { ok: false, status: 503, json: async () => ({}) };
+    const fine = await answer({ is_receipt: true, amount: 9000, currency: "MRU", date: "2026-09-25", reference: "T2", recipient: "38087272" })();
+    const fetch = vi.fn().mockResolvedValueOnce(busy).mockResolvedValueOnce(fine);
+    vi.stubGlobal("fetch", fetch);
+    const pending = geminiProvider("key", "model").readReceipt(image);
+    await vi.runAllTimersAsync();
+    const outcome = await pending;
+    vi.useRealTimers();
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(outcome.result).toMatchObject({ kind: "read", reading: { amount: 9000 } });
+  });
+
+  it("gives up after three tries and says why", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout"] });
+    const fetch = vi.fn().mockResolvedValue({ ok: false, status: 503, json: async () => ({}) });
+    vi.stubGlobal("fetch", fetch);
+    const pending = geminiProvider("key", "model").readReceipt(image);
+    await vi.runAllTimersAsync();
+    const outcome = await pending;
+    vi.useRealTimers();
+    expect(fetch).toHaveBeenCalledTimes(3);
+    expect(outcome.result).toEqual({ kind: "unavailable", why: "http_503" });
+  });
+});

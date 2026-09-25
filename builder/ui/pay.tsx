@@ -54,7 +54,7 @@ export function Pay({
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   /* Refused on sight: the screenshot shows something other than what was expected. */
-  const [refused, setRefused] = useState<string | null>(null);
+  const [refused, setRefused] = useState<string[] | null>(null);
   const [plan, setPlan] = useState(prices[0]?.plan ?? "annual");
   const price = prices.find((one) => one.plan === plan) ?? prices[0];
 
@@ -275,7 +275,14 @@ export function Pay({
           {refused ? (
             <div className="rounded-xl border-2 border-destructive/60 bg-destructive/5 p-4" role="alert">
               <p className="text-base font-semibold text-destructive">{copy.pay.problemTitle}</p>
-              <p className="mt-1 text-base leading-relaxed text-foreground">{refused}</p>
+              <ul className="mt-2 space-y-2">
+                {refused.map((reason, index) => (
+                  <li key={index} className="text-base leading-relaxed text-foreground">
+                    {reason}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-base text-muted-foreground">{copy.pay.problemHelp}</p>
             </div>
           ) : null}
           {error ? (
@@ -355,35 +362,34 @@ export function PaymentReceived({
   );
 }
 
-/** A refusal in the owner's words, naming what to do about it. */
+/** Each rule that failed, in the owner's words, naming what to do about it. */
 function explain(
   copy: BuilderCopy,
   failures: CheckFailure[],
   language: AppLanguage
-): string {
-  return failures
-    .map((failure) => {
-      switch (failure.code) {
-        case "not_receipt":
-          return copy.pay.failNotReceipt as string;
-        case "reference_used":
-          return copy.pay.failReferenceUsed as string;
-        case "image_used":
-          return copy.pay.failImageUsed as string;
-        case "wrong_amount":
-          return fill(copy.pay.failAmount as string, {
-            found: formatMoney(Number(failure.found ?? 0), language).replace(" MRU", ""),
-            expected: formatMoney(Number(failure.expected ?? 0), language).replace(" MRU", ""),
-          });
-        case "wrong_recipient":
-          return copy.pay.failRecipient as string;
-        case "too_old":
-          return fill(copy.pay.failTooOld as string, {
-            expected: String(failure.expected ?? ""),
-          });
-        case "future_date":
-          return copy.pay.failFuture as string;
-      }
-    })
-    .join(" ");
+): string[] {
+  const money = (minor: unknown) => formatMoney(Number(minor ?? 0), language).replace(" MRU", "");
+  const day = (iso: unknown) => new Date(`${String(iso)}T00:00:00Z`).toLocaleDateString(language, { timeZone: "UTC" });
+  return failures.map((failure) => {
+    switch (failure.code) {
+      case "not_receipt":
+        return copy.pay.failNotReceipt as string;
+      case "reference_used":
+        return copy.pay.failReferenceUsed as string;
+      case "image_used":
+        return copy.pay.failImageUsed as string;
+      case "wrong_amount":
+        return fill(copy.pay.failAmount as string, { found: money(failure.found), expected: money(failure.expected) });
+      case "amount_unread":
+        return fill(copy.pay.failAmountUnread as string, { expected: money(failure.expected) });
+      case "wrong_recipient":
+        return fill(copy.pay.failRecipient as string, { expected: String(failure.expected ?? "") });
+      case "recipient_unread":
+        return fill(copy.pay.failRecipientUnread as string, { expected: String(failure.expected ?? "") });
+      case "wrong_date":
+        return fill(copy.pay.failDate as string, { found: day(failure.found) });
+      case "date_unread":
+        return copy.pay.failDateUnread as string;
+    }
+  });
 }

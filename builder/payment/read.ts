@@ -35,5 +35,7 @@ export async function readReceipt(bytes: ArrayBuffer): Promise<Extracted> {
       latency_ms: latencyMs,
     });
 
+  /* A reading that did not come back is said in the log, so a busy or refused provider is seen. */
+  if (result.kind !== "read") console.warn("payment: screenshot not read,", result.why);
   return result.kind === "read" ? receiptFrom(result.reading) : null;
 }

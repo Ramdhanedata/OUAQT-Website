@@ -101,7 +101,6 @@ export async function filePayment(
   const outcome = checkPayment({
     expectedAmount: price.amount,
     payToNumber: payTo.number,
-    paymentMaxAgeDays: secrets.payment_max_age_days,
     now: new Date(),
     extracted,
     referenceAlreadyUsed: Boolean(sameReference),
@@ -150,7 +149,7 @@ export async function filePayment(
    * the admin area, and can undo it. Anything short of that waits for them.
    */
   let decision: Decision = outcome.decision;
-  if (secrets.payment_auto_confirm && confirmsAlone(outcome, extracted, price.amount)) {
+  if (secrets.payment_auto_confirm && confirmsAlone(outcome, extracted)) {
     const granted = await grantLicence(admin, { business_id: input.businessId, plan: input.plan });
     if (granted.ok) {
       await admin

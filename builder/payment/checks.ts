@@ -1,21 +1,18 @@
 /*
- * What can be decided about a payment without a person, and what cannot.
+ * What the screenshot of a payment has to show, and what it showed.
  *
- * Nothing here ever marks a payment as paid. The best outcome is
- * "pending_confirmation", which means the automatic checks found nothing
- * wrong and a human being still has to look. That is the whole design: the
- * checks exist to catch the honest mistake and the obvious duplicate early,
- * while the owner is still on the page and can fix it, not to decide who has
- * paid us.
+ * Adel's rules, 2026-09-25. Three things are read off the screenshot and each
+ * must be right: the number the money went to is OUAQT's number on the app
+ * he chose, the date is today's, and the amount is exactly the price of the
+ * plan he chose (a year or six months). All three right, and nothing used
+ * before: the payment succeeds (see confirmsAlone). Any one wrong or missing:
+ * it does not, and he is told which, while he is still on the page.
  *
- * The owner types nothing but chooses his app and sends the screenshot. When
- * the AI reads images, what it read is checked here: that it is a transfer
- * at all, the amount, the date, the number it went to, and that the
- * transaction number has not been used. When it does not, there is nothing
- * to check but the image itself, and a person reads the rest.
+ * When the screenshot could not be read at all (the reading failed or ran out
+ * of time), there is nothing to judge and a person looks.
  *
- * not-a-rule-file: the amounts, the number and the window all arrive as
- * arguments, read from settings.
+ * not-a-rule-file: the amount and the number arrive as arguments, read from
+ * settings.
  */
 
 import { toMinor } from "@/app-ui/money";
@@ -25,9 +22,11 @@ export type CheckCode =
   | "reference_used"
   | "image_used"
   | "wrong_amount"
+  | "amount_unread"
   | "wrong_recipient"
-  | "too_old"
-  | "future_date";
+  | "recipient_unread"
+  | "wrong_date"
+  | "date_unread";
 
 export type CheckFailure = {
   code: CheckCode;
@@ -37,7 +36,7 @@ export type CheckFailure = {
 
 /**
  * What was read off the screenshot, tidied by receipt.ts. Null when it was
- * not read: the free tier, no key, or a reading that did not come back.
+ * not read: no key, or a reading that did not come back.
  * `amountMru` is as written on the screenshot, in ouguiyas, not minor units.
  */
 export type Extracted = {
@@ -58,14 +57,6 @@ export type PaymentDecision = {
   reference: string | null;
 };
 
-const MS_IN_A_DAY = 86_400_000;
-
-/*
- * A transfer dated tomorrow is a clock or a timezone, not a forgery, up to a
- * day. Past that, the date on the screenshot is not the date it was sent.
- */
-const FUTURE_SLACK_DAYS = 1; // not-a-rule: one timezone's worth of doubt
-
 /** Phone numbers are compared as digits: spaces and a country code are noise. */
 function sameNumber(a: string, b: string): boolean {
   const digits = (value: string) => value.replace(/\D/g, "");
@@ -75,12 +66,16 @@ function sameNumber(a: string, b: string): boolean {
   return left.endsWith(right) || right.endsWith(left);
 }
 
+/* Today as the owner's apps write it: Mauritania keeps UTC all year. */
+function today(now: Date): string {
+  return now.toISOString().slice(0, 10);
+}
+
 export function checkPayment(input: {
-  /** In minor units, as stored. */
+  /** In minor units, as stored: the price of the plan he chose. */
   expectedAmount: number;
-  /** The number on the app he chose. */
+  /** OUAQT's number on the app he chose. */
   payToNumber: string;
-  paymentMaxAgeDays: number;
   now: Date;
   extracted: Extracted;
   referenceAlreadyUsed: boolean;
@@ -90,46 +85,36 @@ export function checkPayment(input: {
   const read = input.extracted;
   const reference = read?.reference?.trim() || null;
 
-  if (input.imageAlreadyUsed) {
-    failures.push({ code: "image_used" });
+  if (input.imageAlreadyUsed) failures.push({ code: "image_used" });
+
+  /* Not read at all: nothing more can be said, a person looks. */
+  if (read === null) {
+    return { decision: failures.length === 0 ? "pending_confirmation" : "rejected_auto", failures, reference };
   }
 
   /* Not a transfer at all: nothing else on it is worth checking. */
-  if (read?.isReceipt === false) {
+  if (read.isReceipt === false) {
     failures.push({ code: "not_receipt" });
     return { decision: "rejected_auto", failures, reference };
   }
 
-  if (reference && input.referenceAlreadyUsed) {
-    failures.push({ code: "reference_used", found: reference });
-  }
+  if (reference && input.referenceAlreadyUsed) failures.push({ code: "reference_used", found: reference });
 
-  /*
-   * Only what was actually read gets checked. A reading that could not make
-   * out the amount is not evidence that the amount is wrong.
-   *
-   * Less than expected is refused. More is not: he has paid, and a person
-   * sees the difference beside the screenshot.
-   */
-  if (read?.amountMru != null) {
-    const found = toMinor(read.amountMru);
-    if (found < input.expectedAmount) {
-      failures.push({ code: "wrong_amount", expected: input.expectedAmount, found });
-    }
-  }
-
-  if (read?.recipient && !sameNumber(read.recipient, input.payToNumber)) {
+  /* The number it went to: OUAQT's, on the app he chose. */
+  if (!read.recipient) failures.push({ code: "recipient_unread", expected: input.payToNumber });
+  else if (!sameNumber(read.recipient, input.payToNumber)) {
     failures.push({ code: "wrong_recipient", expected: input.payToNumber, found: read.recipient });
   }
 
-  if (read?.date) {
-    /* In whole days: a transfer from a week ago today is a week old, not more. */
-    const days = (input.now.getTime() - new Date(read.date).getTime()) / MS_IN_A_DAY;
-    if (Number.isFinite(days) && Math.floor(days) > input.paymentMaxAgeDays) {
-      failures.push({ code: "too_old", expected: input.paymentMaxAgeDays, found: Math.floor(days) });
-    } else if (Number.isFinite(days) && days < -FUTURE_SLACK_DAYS) {
-      failures.push({ code: "future_date", found: read.date });
-    }
+  /* Today's date. */
+  if (!read.date) failures.push({ code: "date_unread" });
+  else if (read.date !== today(input.now)) failures.push({ code: "wrong_date", expected: today(input.now), found: read.date });
+
+  /* Exactly the price of the plan he chose. */
+  if (read.amountMru == null) failures.push({ code: "amount_unread", expected: input.expectedAmount });
+  else {
+    const found = toMinor(read.amountMru);
+    if (found !== input.expectedAmount) failures.push({ code: "wrong_amount", expected: input.expectedAmount, found });
   }
 
   return {
@@ -140,24 +125,10 @@ export function checkPayment(input: {
 }
 
 /*
- * Whether a payment may be confirmed without waiting for a person (0022).
- *
- * Only when everything was read and everything matched: a transfer, at least
- * the price, a date inside the window, a transaction number, and our number
- * as the recipient. A field that could not be read is not a failure, but it
- * is not a match either, so that payment waits for a person. A person still
- * looks at every automatic confirmation afterwards and can undo it.
+ * Whether the payment succeeds on the spot (0022): the screenshot was read,
+ * it is a transfer, and every rule above passed. A person still sees every
+ * one of these afterwards in the admin area, and can undo it.
  */
-export function confirmsAlone(outcome: PaymentDecision, read: Extracted, expectedAmount: number): boolean {
-  return (
-    outcome.decision === "pending_confirmation" &&
-    outcome.failures.length === 0 &&
-    read !== null &&
-    read.isReceipt === true &&
-    read.amountMru != null &&
-    toMinor(read.amountMru) >= expectedAmount &&
-    Boolean(read.date) &&
-    Boolean(outcome.reference) &&
-    Boolean(read.recipient)
-  );
+export function confirmsAlone(outcome: PaymentDecision, read: Extracted): boolean {
+  return outcome.decision === "pending_confirmation" && outcome.failures.length === 0 && read !== null && read.isReceipt !== false;
 }
