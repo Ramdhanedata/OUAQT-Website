@@ -1,5 +1,6 @@
 "use client";
 
+import { machineOf } from "./machine";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { organization } from "@/lib/data/contact";
@@ -437,7 +438,15 @@ function Wizard({
         void issue().then((ok) => {
           setIssuing(false);
           setScreen(0);
-          if (ok) setShowCode(true);
+          /*
+           * On a phone, the number to type on the shop's computer, with the
+           * products still to add here if he wants. On a computer he is at
+           * the shop's computer already: straight to the download (Adel,
+           * 2026-09-25). His products can come back one step, or be
+           * imported in the software itself.
+           */
+          if (ok && machineOf() === "phone") setShowCode(true);
+          else if (ok) onStep(total - 1);
           else onStep(2);
         });
         return;
@@ -538,7 +547,8 @@ function Wizard({
       termsHref={termsHref}
       installers={installers}
       tutorials={tutorials}
-      serial={serial}
+      /* The number issued after the questions is enough to download: no account needed first. */
+      serial={serial ?? issued?.serial ?? null}
       onSerial={setSerial}
     />
   );
