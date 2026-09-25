@@ -358,7 +358,7 @@ export const fr: Dictionary = {
       },
       payment: {
         h: "Le paiement",
-        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous nous envoyez la capture d'écran de la confirmation, et nous confirmons le paiement à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
+        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous envoyez la capture d'écran de la confirmation avec votre numéro de série. Quand tout y correspond, le paiement est confirmé tout de suite et votre logiciel se rouvre de lui-même. Sinon, nous le confirmons à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
       },
       grace: {
         h: "Si le renouvellement est payé en retard",

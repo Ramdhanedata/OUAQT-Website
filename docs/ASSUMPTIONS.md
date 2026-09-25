@@ -162,3 +162,23 @@ with B0b once the project exists.
 - **The privacy page says the screenshot may go to the AI service**, on a
   paid plan whose terms rule out training on it. It said receipts were never
   sent, which stops being true the day `AI_TIER=paid` is set.
+- **A payment that checks out is confirmed at once (0022).** Adel's word:
+  after a payment the software should open straight away. So when the
+  screenshot was read and every field matched (a transfer, at least the price,
+  a date inside the window, a transaction number not used before, our number
+  as the recipient), the licence opens without waiting, and the app, which
+  asks every 30 seconds while it shows the end of its trial, opens with it.
+  A field that could not be read sends the payment to a person instead. Every
+  automatic confirmation still reaches the admin area, to be kept or undone;
+  undoing puts the licence back as it was. `payment_auto_confirm` turns it
+  off. On the free AI tier nothing is read, so a person confirms every
+  payment and the app opens as soon as they do.
+- **The trial counts down out of sight.** No notice in the last days any
+  more; Réglages still says how many days are left, for an owner who looks.
+  When it ends the app stops selling and says so kindly each time it opens,
+  with the serial number, how to pay from the phone, and a WhatsApp button to
+  OUAQT, whose number now comes with every licence check.
+- **A paid licence does remind.** In its last five days and through the grace
+  days after it, the app shows the end date once a day with a way to pay,
+  which the site's FAQ already promised.
+
