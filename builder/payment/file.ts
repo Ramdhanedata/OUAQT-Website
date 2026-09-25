@@ -6,7 +6,8 @@ import { audit } from "@/builder/db/audit";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { getPublicSettings } from "@/builder/db/settings";
 import { payToFrom, type PaymentApp } from "./apps";
-import { checkPayment, type CheckFailure, type Extracted, type ReadBack } from "./checks";
+import { checkPayment, confirmsAlone, type CheckFailure, type Extracted, type ReadBack } from "./checks";
+import { grantLicence } from "./grant";
 import { priceFor, type Plan } from "./pricing";
 import { readReceipt } from "./read";
 
@@ -14,17 +15,21 @@ import { readReceipt } from "./read";
  * Filing a payment an owner says he made, whichever way he came: signed in
  * to his account, or with nothing but his numéro de série.
  *
- * Nothing here decides that he has paid. The screenshot is hashed, read when
- * the AI may read images, checked against what was expected and against
- * receipts already used, and filed for a person to confirm. The only status
- * this can write that means anything good is `pending_confirmation`.
+ * The screenshot is hashed, read when the AI may read images, checked
+ * against what was expected and against receipts already used, and filed.
+ * When it was read and everything on it matched, the payment is confirmed at
+ * once (0022), and a person looks at it afterwards. Otherwise it waits for a
+ * person, as every payment did before.
  */
+
+/* Confirmed only when the screenshot was read and matched, and the setting allows it. */
+type Decision = "pending_confirmation" | "rejected_auto" | "confirmed";
 
 export type Filed =
   | {
       ok: true;
       paymentId: string;
-      decision: string;
+      decision: Decision;
       failures: CheckFailure[];
       expected: number;
       read: ReadBack | null;
@@ -139,10 +144,41 @@ export async function filePayment(
     },
   });
 
+  /*
+   * Everything read and everything matched: the licence opens now, and the
+   * owner's software with it at its next check. A person still sees it in
+   * the admin area, and can undo it. Anything short of that waits for them.
+   */
+  let decision: Decision = outcome.decision;
+  if (secrets.payment_auto_confirm && confirmsAlone(outcome, extracted, price.amount)) {
+    const granted = await grantLicence(admin, { business_id: input.businessId, plan: input.plan });
+    if (granted.ok) {
+      await admin
+        .from("payments")
+        .update({ status: "confirmed", auto_confirmed: true, licence_before: granted.before })
+        .eq("id", payment.id);
+      decision = "confirmed";
+      await audit({
+        actorId: null,
+        subject: "payment",
+        subjectId: payment.id,
+        action: "confirmed_auto",
+        detail: { amount: price.amount, plan: input.plan },
+      });
+      await audit({
+        actorId: null,
+        subject: "licence",
+        subjectId: granted.licenceId,
+        action: "activated",
+        detail: { until: granted.endsAt, from: payment.id, automatically: true },
+      });
+    }
+  }
+
   return {
     ok: true,
     paymentId: payment.id,
-    decision: outcome.decision,
+    decision,
     failures: outcome.failures,
     expected: price.amount,
     read: extracted

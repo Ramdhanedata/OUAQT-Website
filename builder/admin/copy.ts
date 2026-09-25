@@ -113,6 +113,12 @@ const fr = {
     confirmed: "Confirmé",
     rejected: "Rejeté",
     failed: "Pas enregistré.",
+    automaticTitle: "Confirmés automatiquement, à vérifier",
+    automaticIntro: "La capture a été lue et tout correspondait, donc la licence s'est ouverte tout de suite. Regardez l'image : gardez le paiement, ou annulez-le si la capture n'est pas ce qu'elle paraît. Annuler remet la licence comme avant.",
+    keep: "C'est bon",
+    kept: "Gardé",
+    undo: "Annuler le paiement",
+    undoReasonLabel: "Raison, si vous annulez",
   },
 
   clients: {
@@ -330,6 +336,12 @@ const en: AdminCopy = {
     confirmed: "Confirmed",
     rejected: "Rejected",
     failed: "Not saved.",
+    automaticTitle: "Confirmed automatically, to check",
+    automaticIntro: "The screenshot was read and everything matched, so the licence opened straight away. Look at the image: keep the payment, or undo it if the screenshot is not what it seems. Undoing puts the licence back as it was.",
+    keep: "Keep",
+    kept: "Kept",
+    undo: "Undo the payment",
+    undoReasonLabel: "Reason, if you undo",
   },
 
   clients: {
@@ -544,6 +556,12 @@ const ar: AdminCopy = {
     confirmed: "تم التأكيد",
     rejected: "مرفوض",
     failed: "لم يسجل.",
+    automaticTitle: "مؤكدة تلقائيا، للمراجعة",
+    automaticIntro: "قرئت الصورة وتطابق كل شيء، ففتحت الرخصة في الحال. انظر إلى الصورة: أبق الدفعة، أو ألغها إن لم تكن الصورة كما تبدو. الإلغاء يعيد الرخصة كما كانت.",
+    keep: "لا بأس",
+    kept: "أبقيت",
+    undo: "إلغاء الدفعة",
+    undoReasonLabel: "السبب، إن ألغيت",
   },
 
   clients: {

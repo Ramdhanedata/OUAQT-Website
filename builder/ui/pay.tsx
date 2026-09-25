@@ -37,7 +37,8 @@ export function Pay({
   price: Price;
   /* The apps that have a number to pay to, in the order they are offered. */
   payTo: PayTo[];
-  onSent: (read: ReadBack | null) => void;
+  /* What was read, and whether it was confirmed on the spot. */
+  onSent: (read: ReadBack | null, confirmed: boolean) => void;
   /*
    * Paying with the numéro de série alone, with no account: the screenshot
    * goes up with the number, and the server files it under that shop.
@@ -121,7 +122,7 @@ export function Pay({
       if (body.decision === "rejected_auto") {
         return setError(explain(copy, body.failures ?? [], language));
       }
-      onSent(body.read ?? null);
+      onSent(body.read ?? null, body.decision === "confirmed");
     } catch (caught) {
       setError(
         caught instanceof ScreenshotError
@@ -255,18 +256,20 @@ export function Pay({
 }
 
 /*
- * After sending: the payment is with a person, and, when the screenshot was
- * read, what was read off it, so a misreading is seen by the one person who
- * knows what he sent.
+ * After sending: confirmed already, or with a person; and, when the
+ * screenshot was read, what was read off it, so a misreading is seen by the
+ * one person who knows what he sent.
  */
 export function PaymentReceived({
   copy,
   language,
   read,
+  confirmed = false,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
   read: ReadBack | null;
+  confirmed?: boolean;
 }) {
   const lines: [string, string][] = [];
   if (read?.amount != null) lines.push([copy.pay.readAmount as string, formatMoney(read.amount, language)]);
@@ -280,7 +283,11 @@ export function PaymentReceived({
 
   return (
     <div className="space-y-3">
-      <p className="text-base leading-relaxed text-muted-foreground">{copy.licence.pending}</p>
+      {confirmed ? (
+        <p className="text-base font-medium leading-relaxed text-foreground" role="status">{copy.pay.confirmedNow}</p>
+      ) : (
+        <p className="text-base leading-relaxed text-muted-foreground">{copy.licence.pending}</p>
+      )}
       {lines.length > 0 ? (
         <div className="rounded-xl border border-border p-4">
           <p className="text-base text-muted-foreground">{copy.pay.readTitle}</p>

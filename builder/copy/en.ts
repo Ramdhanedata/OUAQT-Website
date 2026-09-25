@@ -316,6 +316,7 @@ export const en: BuilderCopy = {
     failRecipient: "That transfer did not go to our number.",
     failTooOld: "That transfer is more than {expected} days old. Make a new one, or write to us.",
     failFuture: "The date on the screenshot has not come yet. Check the screenshot, or write to us.",
+    confirmedNow: "Payment confirmed. Your software opens again by itself within a minute, if it is open and connected to the internet.",
     readTitle: "Read on your screenshot",
     readAmount: "Amount",
     readDate: "Date",

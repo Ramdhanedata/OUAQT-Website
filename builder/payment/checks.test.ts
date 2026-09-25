@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { checkPayment } from "./checks";
+import { checkPayment, confirmsAlone } from "./checks";
 
 /* 18 000 MRU, stored in minor units as every amount is since 0009. */
 const EXPECTED = 1_800_000;
@@ -126,5 +126,39 @@ describe("what the checks can never do", () => {
       }
     }
     expect(Array.from(outcomes).sort()).toEqual(["pending_confirmation", "rejected_auto"]);
+  });
+});
+
+describe("confirming without a person", () => {
+  const complete = {
+    isReceipt: true,
+    amountMru: 18000,
+    recipient: "38087272",
+    date: "2026-09-19",
+    reference: "BNK-99",
+  };
+  const decide = (extracted: Parameters<typeof checkPayment>[0]["extracted"]) => {
+    const outcome = checkPayment({ ...base, extracted });
+    return confirmsAlone(outcome, extracted, EXPECTED);
+  };
+
+  it("confirms a screenshot where everything was read and matched", () => {
+    expect(decide(complete)).toBe(true);
+  });
+
+  it("waits for a person when nothing was read", () => {
+    expect(decide(null)).toBe(false);
+  });
+
+  it("waits for a person when any one field could not be read", () => {
+    for (const field of ["amountMru", "recipient", "date", "reference"] as const) {
+      expect(decide({ ...complete, [field]: null })).toBe(false);
+    }
+    expect(decide({ ...complete, isReceipt: null })).toBe(false);
+  });
+
+  it("never confirms a payment that was refused", () => {
+    expect(decide({ ...complete, amountMru: 100 })).toBe(false);
+    expect(decide({ ...complete, recipient: "22299999" })).toBe(false);
   });
 });

@@ -25,6 +25,8 @@ const privateSettings = z.object({
   bimbank_number: z.string().default(""),
   sedad_number: z.string().default(""),
   click_number: z.string().default(""),
+  /* Confirming a payment that checks out without waiting for a person. See 0022. */
+  payment_auto_confirm: z.boolean().default(false),
   payment_max_age_days: z.number().int().positive(),
   device_releases_per_year: z.number().int().nonnegative(),
   clock_grace_days: z.number().int().nonnegative(),

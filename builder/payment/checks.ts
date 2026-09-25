@@ -138,3 +138,26 @@ export function checkPayment(input: {
     reference,
   };
 }
+
+/*
+ * Whether a payment may be confirmed without waiting for a person (0022).
+ *
+ * Only when everything was read and everything matched: a transfer, at least
+ * the price, a date inside the window, a transaction number, and our number
+ * as the recipient. A field that could not be read is not a failure, but it
+ * is not a match either, so that payment waits for a person. A person still
+ * looks at every automatic confirmation afterwards and can undo it.
+ */
+export function confirmsAlone(outcome: PaymentDecision, read: Extracted, expectedAmount: number): boolean {
+  return (
+    outcome.decision === "pending_confirmation" &&
+    outcome.failures.length === 0 &&
+    read !== null &&
+    read.isReceipt === true &&
+    read.amountMru != null &&
+    toMinor(read.amountMru) >= expectedAmount &&
+    Boolean(read.date) &&
+    Boolean(outcome.reference) &&
+    Boolean(read.recipient)
+  );
+}

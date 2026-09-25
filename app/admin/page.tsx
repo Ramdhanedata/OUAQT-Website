@@ -23,16 +23,27 @@ export default async function AdminPage() {
     return <p className="text-base text-foreground">{t.noDatabase}</p>;
   }
 
-  const { data: payments } = await supabase
-    .from("payments")
-    .select("id, business_id, plan, app, expected_amount, reference, extracted, status, screenshot_path, created_at")
-    .in("status", ["submitted", "pending_confirmation"])
-    .order("created_at", { ascending: true })
-    .limit(50);
+  const COLUMNS = "id, business_id, plan, app, expected_amount, reference, extracted, status, screenshot_path, created_at";
+  const [{ data: waiting }, { data: automatic }] = await Promise.all([
+    supabase
+      .from("payments")
+      .select(COLUMNS)
+      .in("status", ["submitted", "pending_confirmation"])
+      .order("created_at", { ascending: true })
+      .limit(50),
+    /* Confirmed alone because the screenshot matched (0022), not yet looked at. */
+    supabase
+      .from("payments")
+      .select(COLUMNS)
+      .eq("status", "confirmed")
+      .eq("auto_confirmed", true)
+      .is("reviewed_at", null)
+      .order("created_at", { ascending: true })
+      .limit(50),
+  ]);
+  const payments = [...(waiting ?? []), ...(automatic ?? [])];
 
-  const businessIds = Array.from(
-    new Set((payments ?? []).map((payment) => payment.business_id))
-  );
+  const businessIds = Array.from(new Set(payments.map((payment) => payment.business_id)));
 
   const { data: businesses } = businessIds.length
     ? await supabase
@@ -49,7 +60,7 @@ export default async function AdminPage() {
    */
   const MINUTES = 10 * 60; // not-a-rule: how long a signed link lives
   const rows: PaymentRow[] = await Promise.all(
-    (payments ?? []).map(async (payment) => {
+    payments.map(async (payment) => {
       const signed = await supabase.storage
         .from("payments")
         .createSignedUrl(payment.screenshot_path, MINUTES);
@@ -81,9 +92,20 @@ export default async function AdminPage() {
       <AdminNav current="/admin" staff={gate.staff.name ?? t.staffFallback} />
       <h1 className="mb-6 text-2xl font-semibold text-foreground">{t.payments.title}</h1>
       <PaymentsToConfirm
-        rows={rows}
+        rows={rows.filter((row) => row.status !== "confirmed")}
         words={{ t: t.payments, packs: t.packs, plans: t.plans, lang, locale }}
       />
+      {rows.some((row) => row.status === "confirmed") ? (
+        <>
+          <h2 className="mb-2 mt-12 text-xl font-semibold text-foreground">{t.payments.automaticTitle}</h2>
+          <p className="mb-6 text-base leading-relaxed text-muted-foreground">{t.payments.automaticIntro}</p>
+          <PaymentsToConfirm
+            rows={rows.filter((row) => row.status === "confirmed")}
+            words={{ t: t.payments, packs: t.packs, plans: t.plans, lang, locale }}
+            review
+          />
+        </>
+      ) : null}
     </>
   );
 }

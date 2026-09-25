@@ -38,7 +38,7 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
   const [problem, setProblem] = useState<"unknown" | "expired" | "failed" | null>(null);
   const [wait, setWait] = useState(0);
   const [found, setFound] = useState<Lookup | null>(null);
-  const [sent, setSent] = useState<{ read: ReadBack | null } | null>(null);
+  const [sent, setSent] = useState<{ read: ReadBack | null; confirmed: boolean } | null>(null);
   const tried = useRef("");
 
   useEffect(() => {
@@ -84,14 +84,14 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
           <p className="mt-2 text-base leading-relaxed text-foreground">{licenceLine(copy, lang, found.licence)}</p>
         </div>
         {sent || found.pending ? (
-          <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} />
+          <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
         ) : owes(found.licence) && found.price ? (
           <Pay
             copy={copy}
             language={lang}
             price={found.price}
             payTo={found.payTo}
-            onSent={(read) => setSent({ read })}
+            onSent={(read, confirmed) => setSent({ read, confirmed })}
             serial={found.serial}
           />
         ) : null}

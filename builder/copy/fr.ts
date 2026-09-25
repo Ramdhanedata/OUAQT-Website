@@ -324,6 +324,7 @@ export const fr = {
     failRecipient: "Ce transfert n'est pas allé à notre numéro.",
     failTooOld: "Ce transfert a plus de {expected} jours. Refaites-en un, ou écrivez-nous.",
     failFuture: "La date sur la capture est à venir. Vérifiez la capture, ou écrivez-nous.",
+    confirmedNow: "Paiement confirmé. Votre logiciel se rouvre tout seul dans une minute, s'il est ouvert et relié à internet.",
     readTitle: "Lu sur votre capture",
     readAmount: "Montant",
     readDate: "Date",

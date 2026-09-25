@@ -286,7 +286,7 @@ function Subscription({
   state: Extract<AccountState, { kind: "signed_in" }>;
 }) {
   /* Sent from this page just now, with what was read off the screenshot. */
-  const [sent, setSent] = useState<{ read: ReadBack | null } | null>(null);
+  const [sent, setSent] = useState<{ read: ReadBack | null; confirmed: boolean } | null>(null);
   const licence = state.licence;
 
   const where = () => licenceLine(copy, lang, licence);
@@ -303,14 +303,14 @@ function Subscription({
       <p className="text-base leading-relaxed text-foreground">{where()}</p>
 
       {waiting ? (
-        <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} />
+        <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
       ) : due && state.price ? (
         <Pay
           copy={copy}
           language={lang}
           price={state.price}
           payTo={state.payTo}
-          onSent={(read) => setSent({ read })}
+          onSent={(read, confirmed) => setSent({ read, confirmed })}
         />
       ) : null}
     </section>
