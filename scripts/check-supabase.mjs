@@ -40,11 +40,16 @@ async function asVisitor(path) {
   return { status: response.status, body };
 }
 
+/*
+ * The public list as 0016 leaves it. enabled_packs is on the policy still but
+ * has no row since 0020, where opening a trade moved into the code.
+ */
+const TRADES = ["pharmacy", "bakery", "restaurant", "warehouse", "shop", "hotel", "transport", "general"];
+
 const publicKeys = [
   "trial_days",
   "renewal_grace_days",
   "max_devices",
-  "enabled_packs",
   "support_whatsapp",
   "price_installation_builder_mru",
   "price_annual_launch_mru",
@@ -64,6 +69,7 @@ const publicKeys = [
   "referral_free_months",
   "tutorial_video_windows_url",
   "tutorial_video_mac_url",
+  ...TRADES.flatMap((trade) => [`installer_url_windows_${trade}`, `installer_url_mac_${trade}`]),
 ];
 
 console.log("\nSettings a visitor may read\n");
@@ -77,12 +83,15 @@ record(
   Array.isArray(readable.body) ? `got ${readable.body.length}` : `status ${readable.status}`
 );
 
-const hidden = await asVisitor("settings?select=key&key=eq.bankily_number");
-record(
-  "bankily_number stays hidden",
-  Array.isArray(hidden.body) && hidden.body.length === 0,
-  Array.isArray(hidden.body) ? "" : `status ${hidden.status}`
-);
+/* The numbers owners pay to, one per app. See 0021. */
+for (const app of ["bankily", "masrvi", "bimbank", "sedad", "click"]) {
+  const hidden = await asVisitor(`settings?select=key&key=eq.${app}_number`);
+  record(
+    `${app}_number stays hidden`,
+    Array.isArray(hidden.body) && hidden.body.length === 0,
+    Array.isArray(hidden.body) ? "" : `status ${hidden.status}`
+  );
+}
 
 const everything = await asVisitor("settings?select=key");
 record(
