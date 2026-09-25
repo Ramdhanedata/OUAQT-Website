@@ -1,6 +1,7 @@
-import { adminGate } from "@/builder/admin/guard";
+import { adminGate, adminOpenForTesting } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
 import { AdminSignIn } from "@/builder/admin/sign-in";
+import { TestEndTrial } from "@/builder/admin/test-end-trial";
 import { TrialOverride } from "@/builder/admin/trial-override";
 import { adminClient } from "@/builder/db/server";
 import { wordFor } from "@/builder/admin/copy";
@@ -115,6 +116,18 @@ export default async function TrialsPage() {
           }))}
         />
       </section>
+
+      {/* The test version only: see the end of a trial without waiting thirty days. */}
+      {adminOpenForTesting() ? (
+        <section className="mt-10">
+          <h2 className="text-base font-medium text-foreground">{t.trials.testEndTitle}</h2>
+          <p className="mt-2 max-w-2xl text-base leading-relaxed text-muted-foreground">{t.trials.testEndIntro}</p>
+          <TestEndTrial
+            t={t.trials}
+            businesses={(businesses ?? []).map((one) => ({ id: one.id as string, name: one.name_latin as string }))}
+          />
+        </section>
+      ) : null}
 
       <section className="mt-10">
         <h2 className="text-base font-medium text-foreground">

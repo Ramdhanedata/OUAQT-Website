@@ -239,6 +239,12 @@ const fr = {
     grant: "Donner un essai",
     granted: "C'est fait. Son essai démarrera à la prochaine activation.",
     grantFailed: "Rien n'a été enregistré. Réessayez.",
+    testEndTitle: "Tester la fin de l'essai",
+    testEndIntro:
+      "Seulement sur la version de test. Termine tout de suite l'essai du commerce choisi : fermez puis rouvrez le logiciel, relié à internet, et la fenêtre de fin d'essai s'affiche, avec son numéro de série et son code QR.",
+    testEndButton: "Terminer l'essai maintenant",
+    testEndDone: "Essai terminé. Fermez puis rouvrez le logiciel.",
+    testEndNotTrial: "Ce commerce a déjà une licence payée : rien n'a été changé.",
     signals: {
       same_logo: "Même logo qu'un essai précédent",
       same_products: "Même liste de produits",
@@ -462,6 +468,12 @@ const en: AdminCopy = {
     grant: "Grant a trial",
     granted: "Done. Their trial starts at their next activation.",
     grantFailed: "Nothing was saved. Try again.",
+    testEndTitle: "Test the end of the trial",
+    testEndIntro:
+      "On the test version only. Ends the chosen shop's trial at once: close and reopen the software, connected to the internet, and the end-of-trial window shows, with its serial number and QR code.",
+    testEndButton: "End the trial now",
+    testEndDone: "Trial ended. Close and reopen the software.",
+    testEndNotTrial: "This shop already has a paid licence: nothing was changed.",
     signals: {
       same_logo: "Same logo as an earlier trial",
       same_products: "Same product list",
@@ -679,6 +691,12 @@ const ar: AdminCopy = {
     grant: "منح تجربة",
     granted: "تم. تبدأ تجربته عند تفعيله القادم.",
     grantFailed: "لم يسجل شيء. أعد المحاولة.",
+    testEndTitle: "تجربة نهاية الفترة التجريبية",
+    testEndIntro:
+      "في نسخة الاختبار فقط. ينهي الفترة التجريبية للمحل المختار فورا: أغلق البرنامج ثم افتحه وهو متصل بالإنترنت، فتظهر نافذة نهاية التجربة برقمه التسلسلي ورمز QR.",
+    testEndButton: "إنهاء التجربة الآن",
+    testEndDone: "انتهت التجربة. أغلق البرنامج ثم افتحه.",
+    testEndNotTrial: "لهذا المحل رخصة مدفوعة: لم يتغير شيء.",
     signals: {
       same_logo: "الشعار نفسه لتجربة سابقة",
       same_products: "قائمة المنتجات نفسها",
