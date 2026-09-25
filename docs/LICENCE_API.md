@@ -274,7 +274,7 @@ onto a third machine is the ordinary way a two device limit gets tested.
 | --- | --- | --- |
 | `trial` | everything | show days remaining |
 | `active` | everything | nothing |
-| `renewal_due` | everything | remind once a day, with the amount and the Bankily number |
+| `renewal_due` | everything | remind once a day, and offer the payment page |
 | `expired_trial` | read only | explain, and offer the payment page |
 | `expired` | read only | the same |
 | `suspended` | read only | say to contact us |

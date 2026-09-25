@@ -136,3 +136,29 @@ with B0b once the project exists.
   peer dependencies, which is the first half of publishing it for the desktop
   app. It changes nothing for the website: the build and the tests are clean
   either way.
+
+## 2026-09-25, paying from any app
+
+- **Five apps, one number, set per app.** The owner chooses Bankily, Masrvi,
+  BimBank, SEDAD or Click, and the page shows that app's number with the same
+  three steps. Each number is its own setting (`<app>_number`); an empty one
+  hides that app. Adel's answer: all five start with the Bankily number.
+- **No transaction number to type.** It is read off the screenshot with the
+  amount and the date. Adel's answer on who reads it: the AI, on the paid
+  tier only. The free-tier rule from B2 stands, so with `AI_TIER=free` the
+  screenshot is not sent anywhere and a person reads it in the admin area,
+  which now says so on each payment.
+- **What a reading can refuse on the spot:** an image that is not a transfer,
+  less than the price, a transfer to another number, one older than
+  `payment_max_age_days`, one dated more than a day ahead, and a screenshot or
+  transaction number already used. Paying more than the price is not
+  refused; the person confirming sees it. A field the reading could not make
+  out is never a refusal.
+- **A refusal on the spot reserves nothing.** The screenshot and the
+  transaction number were unique columns, so a duplicate was refused by the
+  check and then by the insert, and the owner read "it did not go through"
+  instead of why. They are unique now among payments that were not refused on
+  the spot (0021), which also lets a misread screenshot be sent again.
+- **The privacy page says the screenshot may go to the AI service**, on a
+  paid plan whose terms rule out training on it. It said receipts were never
+  sent, which stops being true the day `AI_TIER=paid` is set.

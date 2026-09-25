@@ -28,6 +28,12 @@ paying shop. Each one is a switch or a value, not a piece of work.
 - [ ] `AI_TIER=paid` and a paid key. On `free` the AI reads the owner's words
       only, so payment screenshots are never sent to it and every payment
       waits for a person. That is the right behaviour, but it does not scale.
+      On `paid` the screenshot is read for the amount, the date and the
+      transaction number, and a wrong one is refused while the owner is still
+      on the page (see ASSUMPTIONS, 2026-09-25).
+- [ ] The five payment numbers in Réglages (`bankily_number`,
+      `masrvi_number`, `bimbank_number`, `sedad_number`, `click_number`).
+      0021 starts the four new ones with the Bankily number.
 
 ## The installers
 

@@ -5,7 +5,8 @@ software ready to install on the shop computer, plus a serial number. This
 document is for whoever picks the work up next.
 
 Status: **B5**. An owner can build his software, import the spreadsheet he
-already has, create an account, get a serial, pay by Bankily, and have a
+already has, create an account, get a serial, pay from Bankily, Masrvi,
+BimBank, SEDAD or Click, and have a
 desktop computer activate against a signed licence. Staff confirm payments,
 free computers and issue renewal codes. The other three packs are B6.
 
