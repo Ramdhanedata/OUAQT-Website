@@ -132,6 +132,7 @@ export async function followAnswers(
   admin: SupabaseClient,
   businessId: string,
   data: ShopInput,
+  /* The logo the shop should have: null for none, left out to leave it as it is. */
   logo?: LogoPaths | null
 ): Promise<void> {
   const configuration = configurationFrom(data);
@@ -139,7 +140,13 @@ export async function followAnswers(
 
   /* A new logo is a new file (its name carries its content), so a new path is a new logo. */
   let logoChanged = false;
-  if (logo) {
+  if (logo === null) {
+    const { data: current } = await admin.from("logos").select("business_id").eq("business_id", businessId).maybeSingle();
+    if (current) {
+      await admin.from("logos").delete().eq("business_id", businessId);
+      logoChanged = true;
+    }
+  } else if (logo) {
     const { data: current } = await admin.from("logos").select("colour_path, mono_path").eq("business_id", businessId).maybeSingle();
     if (!current || current.colour_path !== logo.colourPath || current.mono_path !== logo.monoPath) {
       await admin.from("logos").upsert({ business_id: businessId, colour_path: logo.colourPath, mono_path: logo.monoPath });

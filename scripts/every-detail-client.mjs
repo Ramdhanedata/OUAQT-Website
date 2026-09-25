@@ -5,6 +5,7 @@
  *
  *   node --env-file=.env.local scripts/every-detail-client.mjs make   <state.json> [base-url]
  *   node --env-file=.env.local scripts/every-detail-client.mjs change <state.json> [base-url]
+ *   node --env-file=.env.local scripts/every-detail-client.mjs remove <state.json> [base-url]
  *   node --env-file=.env.local scripts/every-detail-client.mjs clean  <state.json>
  *
  * "make" answers on a phone session with a name in both scripts, a phone
@@ -174,6 +175,23 @@ if (step === "change") {
   check("and its staff has the third name", (staff ?? []).some((person) => person.name === "Khadija Sy") && staff.length === 3);
   const { data: files } = await admin.storage.from("logos").list(state.phone.id);
   check("the logo it replaced is not kept", (files ?? []).length === 2, (files ?? []).map((file) => file.name).join(", "));
+}
+
+if (step === "remove") {
+  const state = JSON.parse(readFileSync(stateFile, "utf8"));
+  const { data: before } = await admin.from("configurations").select("version").eq("business_id", state.businessId).order("version", { ascending: false }).limit(1).single();
+  /* He takes his logo away on the website and finishes again. */
+  const removed = await post("/api/builder/configuration-code", { language: "fr", removeLogo: true }, state.phone.token);
+  check("finishing without the logo he removed keeps the same number", removed.status === 200 && removed.json?.serial === state.serial);
+  const { data: logoRow } = await admin.from("logos").select("business_id").eq("business_id", state.businessId).maybeSingle();
+  check("the shop has no logo any more", !logoRow);
+  const { data: after } = await admin.from("configurations").select("version, created_by").eq("business_id", state.businessId).order("version", { ascending: false }).limit(1).single();
+  check("as a new version, so the app drops it at its next start", after.version === before.version + 1 && after.created_by === "logo_changed", JSON.stringify(after));
+  const { data: files } = await admin.storage.from("logos").list(state.phone.id);
+  check("and its files are gone", (files ?? []).length === 0);
+  const again = await post("/api/builder/configuration-code", { language: "fr" }, state.phone.token);
+  const { data: still } = await admin.from("configurations").select("version").eq("business_id", state.businessId).order("version", { ascending: false }).limit(1).single();
+  check("a later finish with no logo changes nothing more", again.status === 200 && still.version === after.version);
 }
 
 if (step === "fingerprints") {

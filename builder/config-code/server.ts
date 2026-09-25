@@ -249,7 +249,7 @@ export async function shopFor(
     const draft = found.draft;
     const shaped = draft ? shapeOf(draft, []) : null;
     if (shaped?.success) {
-      await followAnswers(admin, found.businessId, shaped.data, draft ? logoOf(draft) : null);
+      await followAnswers(admin, found.businessId, shaped.data, draft ? logoOf(draft) : undefined);
       return { ok: true, businessId: found.businessId, serial: found.serial, pack: shaped.data.pack };
     }
     return { ok: true, businessId: found.businessId, serial: found.serial, pack: found.pack };

@@ -142,7 +142,7 @@ function LogoStep({ copy, answers, update }: Props) {
     setWorking(true);
     try {
       const logo = await processLogo(file);
-      update({ logo: logo.colour, logoMono: logo.mono });
+      update({ logo: logo.colour, logoMono: logo.mono, logoRemoved: false });
     } catch (caught) {
       const reason = caught instanceof LogoError ? caught.reason : "unreadable";
       setError(
@@ -180,7 +180,7 @@ function LogoStep({ copy, answers, update }: Props) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => update({ logo: undefined, logoMono: undefined })}
+            onClick={() => update({ logo: undefined, logoMono: undefined, logoRemoved: true })}
           >
             {copy.logo.remove}
           </Button>

@@ -28,6 +28,8 @@ const body = z
     phone: z.string().trim().max(30).optional(),
     logo: z.string().max(2_000_000).optional(),
     logoMono: z.string().max(2_000_000).optional(),
+    /* He removed his logo. Sent only then: a logo missing because it stayed on another device is not a removal. */
+    removeLogo: z.boolean().optional(),
   })
   .strict();
 
@@ -81,6 +83,11 @@ export async function POST(request: Request) {
     if (kept && (kept.colourPath !== draft.logo_path || kept.monoPath !== draft.logo_mono_path)) {
       await admin.from("builder_drafts").update({ logo_path: kept.colourPath, logo_mono_path: kept.monoPath }).eq("id", draft.id);
     }
+  }
+  if (input.data.removeLogo && !input.data.logo && (draft.logo_path || draft.logo_mono_path)) {
+    const stale = [draft.logo_path, draft.logo_mono_path].filter((path): path is string => Boolean(path));
+    await admin.storage.from("logos").remove(stale);
+    await admin.from("builder_drafts").update({ logo_path: null, logo_mono_path: null }).eq("id", draft.id);
   }
   if (draft.business_id) await followDraft(admin, draft.business_id);
 

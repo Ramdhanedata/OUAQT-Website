@@ -361,6 +361,7 @@ function Wizard({
           language: locale,
           ...(phone ? { phone } : {}),
           ...(answers.logo && answers.logoMono ? { logo: answers.logo, logoMono: answers.logoMono } : {}),
+          ...(!answers.logo && answers.logoRemoved ? { removeLogo: true } : {}),
         }),
       });
       const body = (await response.json().catch(() => null)) as { serial?: string; sent?: boolean; hasPhone?: boolean } | null;
