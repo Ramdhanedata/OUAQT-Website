@@ -181,4 +181,13 @@ with B0b once the project exists.
 - **A paid licence does remind.** In its last five days and through the grace
   days after it, the app shows the end date once a day with a way to pay,
   which the site's FAQ already promised.
+- **A year or six months (0023).** Adel's word: the payment page offers
+  both, six months at half the year (15 000 launch is 7 500; 18 000
+  standard is 9 000). Each is its own setting, seeded at half and changed in
+  Réglages like any price. The pricing page shows the six-month licence in
+  place of the three-month one, which the payment page never offered.
+- **Two steps on the payment page:** pay from the chosen app, then send the
+  screenshot here. The result is said at once in a box: "Paiement réussi"
+  when it was read and matched, "Paiement reçu" when a person will look,
+  or what is wrong with the screenshot.
 
