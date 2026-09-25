@@ -31,6 +31,12 @@ const config: Config = {
           DEFAULT: "#C9A961",
           foreground: "#0A0A0A",
         },
+        /*
+         * What went wrong: a refused payment, a field to correct. Used by the
+         * builder and the admin area from the start and never defined, so
+         * every error read in plain black. A red that still reads on ivory.
+         */
+        destructive: "#B42318",
       },
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],
