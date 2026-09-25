@@ -52,7 +52,8 @@ POST /api/licence/activate
   "configuration": { /* the builder's configuration, same schema as app-ui */ },
   "products":      [ { "name": "...", "price": 12050, "quantity": 24, /* ... */ } ],
   "staff":         [ { "name": "...", "role": "manager | cashier" } ],
-  "logo":          { "colour": "<signed url>", "mono": "<signed url>" } | null
+  "logo":          { "colour": "<signed url>", "mono": "<signed url>" } | null,
+  "supportWhatsapp": "2222..."           // for the app's "contact OUAQT" button
 }
 404 { "error": "unknown_serial" }
 403 { "error": "bad_token" }           // wrong, already used, or expired
@@ -198,7 +199,8 @@ POST /api/licence/refresh
   "configuration": { /* ... */ } | null,
   "products":      [ /* ... */ ]  | null,
   "staff":         [ /* ... */ ]  | null,
-  "logo":          { "colour": "...", "mono": "..." } | null
+  "logo":          { "colour": "...", "mono": "..." } | null,
+  "supportWhatsapp": "2222..."
 }
 403 { "error": "wrong_token" }
 404 { "error": "unknown_device" }     // released, or never activated

@@ -145,5 +145,7 @@ export async function POST(request: Request) {
     products: unchanged ? null : setup.products,
     staff: unchanged ? null : setup.staff,
     logo: unchanged ? null : setup.logo,
+    /* Where the app sends the owner who needs us: its "contact OUAQT" button. */
+    supportWhatsapp: settings.support_whatsapp,
   });
 }

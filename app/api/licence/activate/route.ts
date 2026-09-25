@@ -322,6 +322,8 @@ export async function POST(request: Request) {
     products: setup.products,
     staff: setup.staff,
     logo: setup.logo,
+    /* Where the app sends the owner who needs us: its "contact OUAQT" button. */
+    supportWhatsapp: settings.support_whatsapp,
   });
   } finally {
     /*
