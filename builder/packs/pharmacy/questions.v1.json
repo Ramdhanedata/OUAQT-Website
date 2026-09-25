@@ -3,18 +3,6 @@
   "version": 1,
   "questions": [
     {
-      "id": "ph_unit",
-      "type": "yes_no",
-      "label": {
-        "fr": "Vendez-vous certains médicaments au détail, par plaquette ou à l'unité ?",
-        "ar": "هل تبيع بعض الأدوية بالتجزئة، بالشريط أو بالحبة؟",
-        "en": "Do you sell some medicines singly, by strip or by unit?"
-      },
-      "review": true,
-      "default": true,
-      "maps_to": [{ "path": "features.pharmacy.unitSale" }]
-    },
-    {
       "id": "ph_expiry",
       "type": "yes_no",
       "label": {
@@ -60,18 +48,6 @@
       "review": true,
       "default": true,
       "maps_to": [{ "path": "features.pharmacy.batchNumbers" }]
-    },
-    {
-      "id": "ph_suppliers",
-      "type": "yes_no",
-      "label": {
-        "fr": "Voulez-vous enregistrer vos achats par fournisseur ?",
-        "ar": "هل تريد تسجيل مشترياتك حسب المورّد؟",
-        "en": "Do you want to record your purchases by supplier?"
-      },
-      "review": true,
-      "default": true,
-      "maps_to": [{ "path": "features.pharmacy.trackSuppliers" }]
     },
     {
       "id": "ph_search",

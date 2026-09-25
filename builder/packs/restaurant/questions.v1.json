@@ -125,40 +125,6 @@
       ]
     },
     {
-      "id": "rs_pay_when",
-      "type": "single_choice",
-      "label": {
-        "fr": "Quand le client paie-t-il ?",
-        "ar": "متى يدفع الزبون؟",
-        "en": "When does the customer pay?"
-      },
-      "review": true,
-      "options": [
-        {
-          "id": "before",
-          "label": {
-            "fr": "Avant de manger",
-            "ar": "قبل الأكل",
-            "en": "Before eating"
-          }
-        },
-        {
-          "id": "after",
-          "label": {
-            "fr": "Après le repas",
-            "ar": "بعد الأكل",
-            "en": "After the meal"
-          }
-        }
-      ],
-      "default": "after",
-      "maps_to": [
-        {
-          "path": "features.restaurant.payWhen"
-        }
-      ]
-    },
-    {
       "id": "rs_options",
       "type": "yes_no",
       "label": {
