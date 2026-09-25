@@ -17,6 +17,14 @@ import { adminClient } from "./server";
 
 const privateSettings = z.object({
   bankily_number: z.string(),
+  /*
+   * The other apps owners pay from. See 0021. Empty until it has run, which
+   * only hides those apps, rather than failing every read of these settings.
+   */
+  masrvi_number: z.string().default(""),
+  bimbank_number: z.string().default(""),
+  sedad_number: z.string().default(""),
+  click_number: z.string().default(""),
   payment_max_age_days: z.number().int().positive(),
   device_releases_per_year: z.number().int().nonnegative(),
   clock_grace_days: z.number().int().nonnegative(),

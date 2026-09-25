@@ -3,16 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import type { BuilderCopy } from "@/builder/copy";
 import { formatAsTyped } from "@/builder/config-code/code";
+import type { PayTo } from "@/builder/payment/apps";
+import type { ReadBack } from "@/builder/payment/checks";
 import type { Price } from "@/builder/payment/pricing";
 import type { Locale } from "@/lib/i18n/config";
 import { fill } from "@/lib/utils";
 import { Field } from "./fields";
 import { licenceLine, owes, type LicenceShown } from "./licence-line";
-import { Pay } from "./pay";
+import { Pay, PaymentReceived } from "./pay";
 
 /*
  * Paying with the numéro de série: the number, then his shop and where its
- * licence stands, then the same Bankily steps as the account page. No
+ * licence stands, then the same payment steps as the account page. No
  * account, no password, no email: an owner who built his software from the
  * phone has none of those and needs none.
  */
@@ -25,8 +27,7 @@ type Lookup = {
   licence: LicenceShown | null;
   pending: boolean;
   price: Price | null;
-  bankilyNumber: string | null;
-  aiReadsImages: boolean;
+  payTo: PayTo[];
 };
 
 const COMPLETE = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
@@ -37,7 +38,7 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
   const [problem, setProblem] = useState<"unknown" | "expired" | "failed" | null>(null);
   const [wait, setWait] = useState(0);
   const [found, setFound] = useState<Lookup | null>(null);
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState<{ read: ReadBack | null } | null>(null);
   const tried = useRef("");
 
   useEffect(() => {
@@ -83,15 +84,14 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
           <p className="mt-2 text-base leading-relaxed text-foreground">{licenceLine(copy, lang, found.licence)}</p>
         </div>
         {sent || found.pending ? (
-          <p className="text-base leading-relaxed text-muted-foreground">{copy.licence.pending}</p>
+          <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} />
         ) : owes(found.licence) && found.price ? (
           <Pay
             copy={copy}
             language={lang}
             price={found.price}
-            bankilyNumber={found.bankilyNumber}
-            aiReadsImages={found.aiReadsImages}
-            onSent={() => setSent(true)}
+            payTo={found.payTo}
+            onSent={(read) => setSent({ read })}
             serial={found.serial}
           />
         ) : null}

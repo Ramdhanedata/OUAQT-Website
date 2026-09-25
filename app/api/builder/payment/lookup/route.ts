@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { mayReadImages } from "@/builder/ai";
 import { attemptKeys, clearFailures, describe, openByNumber, recordFailure, waitingFor } from "@/builder/config-code/server";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { daysLeft, graceDaysLeft, statusOf, type LicencePlan } from "@/builder/licence/status";
+import { payToFrom } from "@/builder/payment/apps";
 import { priceFor } from "@/builder/payment/pricing";
 
 /*
@@ -75,8 +75,7 @@ export async function POST(request: Request) {
       licence,
       pending,
       price: settings ? priceFor("annual", settings, launchClient) : null,
-      bankilyNumber: secrets?.bankily_number.trim() || null,
-      aiReadsImages: mayReadImages(),
+      payTo: secrets ? payToFrom(secrets) : [],
     },
     { headers: { "cache-control": "no-store" } }
   );

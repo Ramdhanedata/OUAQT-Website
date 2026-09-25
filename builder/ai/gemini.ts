@@ -2,6 +2,7 @@ import type {
   AiProvider,
   InterpretOutcome,
   InterpretRequest,
+  ReceiptOutcome,
 } from "./provider";
 import { shareable } from "./provider";
 
@@ -188,8 +189,139 @@ export function geminiProvider(apiKey: string, model: string): AiProvider {
         clearTimeout(timer);
       }
     },
+
+    readReceipt: (image) => readReceipt(apiKey, model, image),
   };
 }
+
+/*
+ * Reading a transfer confirmation. Longer than a sentence takes, since it is
+ * an image, and still short: the owner is on the page waiting, and a reading
+ * that does not come back in time only means a person reads it instead.
+ */
+const RECEIPT_TIMEOUT_MS = 20_000; // not-a-rule: an image takes longer than a sentence
+
+const receiptSchema = {
+  type: "object",
+  properties: {
+    is_receipt: {
+      type: "boolean",
+      description: "True when the image confirms a money transfer that went through",
+    },
+    amount: {
+      type: "number",
+      nullable: true,
+      description: "The amount sent, without fees, as a plain number",
+    },
+    currency: {
+      type: "string",
+      nullable: true,
+      description: "The currency as written next to the amount, for example MRU or MRO",
+    },
+    date: {
+      type: "string",
+      nullable: true,
+      description: "The date of the transfer, as YYYY-MM-DD",
+    },
+    reference: {
+      type: "string",
+      nullable: true,
+      description: "The transaction number or reference, exactly as written",
+    },
+    recipient: {
+      type: "string",
+      nullable: true,
+      description: "The phone or account number the money was sent to, digits only",
+    },
+  },
+  required: ["is_receipt"],
+};
+
+const RECEIPT_INSTRUCTIONS = [
+  "This image should be a screenshot of a money transfer confirmation from a Mauritanian payment app: Bankily, Masrvi, BimBank, SEDAD or Click.",
+  "Its text may be in French, Arabic or English. Read only what is written on it. Never guess.",
+  "Set is_receipt to false when the image is not a transfer confirmation, or when it shows a transfer that failed or is still waiting.",
+  "amount: the amount sent, not the fees and not a balance. Spaces, dots or commas between groups of three digits separate thousands.",
+  "date: these apps write the day before the month, so 05/09/2026 is the 5th of September 2026, written 2026-09-05.",
+  "recipient: the number the money went to, not the sender's.",
+  "Leave any field you cannot read as null.",
+].join("\n");
+
+async function readReceipt(
+  apiKey: string,
+  model: string,
+  image: { base64: string; mimeType: string }
+): Promise<ReceiptOutcome> {
+  const started = Date.now();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), RECEIPT_TIMEOUT_MS);
+  const done = (result: ReceiptOutcome["result"], usage: Usage = {}): ReceiptOutcome => ({
+    result,
+    tokensIn: usage.promptTokenCount ?? 0,
+    tokensOut: usage.candidatesTokenCount ?? 0,
+    latencyMs: Date.now() - started,
+  });
+
+  try {
+    const response = await fetch(`${ENDPOINT}/${model}:generateContent?key=${apiKey}`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      signal: controller.signal,
+      body: JSON.stringify({
+        contents: [
+          {
+            parts: [
+              { text: RECEIPT_INSTRUCTIONS },
+              { inline_data: { mime_type: image.mimeType, data: image.base64 } },
+            ],
+          },
+        ],
+        generationConfig: {
+          responseMimeType: "application/json",
+          responseSchema: receiptSchema,
+          temperature: 0,
+        },
+      }),
+    });
+    if (!response.ok) return done({ kind: "unavailable", why: `http_${response.status}` });
+
+    const body = await response.json();
+    const usage: Usage = body.usageMetadata ?? {};
+    const text = (body.candidates?.[0]?.content?.parts ?? [])
+      .map((part: { text?: string }) => part.text ?? "")
+      .join("");
+
+    let answer: Record<string, unknown>;
+    try {
+      answer = JSON.parse(text);
+    } catch {
+      return done({ kind: "unavailable", why: "unparsable" }, usage);
+    }
+
+    const asText = (value: unknown) => (typeof value === "string" ? value : null);
+    return done(
+      {
+        kind: "read",
+        reading: {
+          isReceipt: typeof answer.is_receipt === "boolean" ? answer.is_receipt : null,
+          amount: typeof answer.amount === "number" ? answer.amount : null,
+          currency: asText(answer.currency),
+          date: asText(answer.date),
+          reference: asText(answer.reference),
+          recipient: asText(answer.recipient),
+        },
+      },
+      usage
+    );
+  } catch (error) {
+    const why = error instanceof Error && error.name === "AbortError" ? "timeout" : "network";
+    return done({ kind: "unavailable", why });
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+type Usage = { promptTokenCount?: number; candidatesTokenCount?: number };
 
 function outcome(
   result: InterpretOutcome["result"],

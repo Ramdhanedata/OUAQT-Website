@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { mayReadImages } from "@/builder/ai";
 import { getBuilderCopy } from "@/builder/copy";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { sessionClient } from "@/builder/db/server";
 import { getPublicSettings, installersFor } from "@/builder/db/settings";
 import { statusOf, graceDaysLeft, daysLeft, type LicencePlan } from "@/builder/licence/status";
+import { payToFrom } from "@/builder/payment/apps";
 import { priceFor } from "@/builder/payment/pricing";
 import { decryptSerial } from "@/builder/serial/cipher";
 import { AccountArea } from "@/builder/ui/account";
@@ -159,8 +159,7 @@ export default async function AccountPage({ params }: Props) {
         price: settings
           ? priceFor("annual", settings, business.launch_client)
           : null,
-        bankilyNumber: secrets?.bankily_number || null,
-        aiReadsImages: mayReadImages(),
+        payTo: secrets ? payToFrom(secrets) : [],
         installers: installersFor(settings, business.pack),
       }}
     />

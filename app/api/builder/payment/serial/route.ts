@@ -4,6 +4,7 @@ import { z } from "zod";
 import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@/builder/config-code/server";
 import { adminClient } from "@/builder/db/server";
+import { PAYMENT_APPS } from "@/builder/payment/apps";
 import { filePayment } from "@/builder/payment/file";
 
 /*
@@ -11,7 +12,8 @@ import { filePayment } from "@/builder/payment/file";
  *
  * An owner who built his software from the phone never made an account and
  * never will, so this asks for none: the number says which shop, the
- * screenshot of the Bankily transfer comes with it, and a person confirms it
+ * screenshot of the transfer comes with it, from whichever app he paid
+ * with, and a person confirms it
  * in the admin area, which turns the trial into a full licence. Nothing here
  * decides that he has paid.
  *
@@ -22,10 +24,13 @@ import { filePayment } from "@/builder/payment/file";
 
 const MAX_BYTES = 2_000_000; // not-a-rule: a prepared screenshot is well under this
 
+/* Reading the screenshot can take a while, and he is on the page waiting. */
+export const maxDuration = 30; // not-a-rule: seconds a request may run
+
 const fields = z.object({
   number: z.string().max(400),
   plan: z.enum(["annual", "quarterly", "perpetual"]),
-  reference: z.string().trim().max(60).optional(),
+  app: z.enum(PAYMENT_APPS),
 });
 
 export async function POST(request: Request) {
@@ -34,7 +39,7 @@ export async function POST(request: Request) {
   const input = fields.safeParse({
     number: form.get("number"),
     plan: form.get("plan"),
-    reference: form.get("reference") || undefined,
+    app: form.get("app"),
   });
   const image = form.get("image");
   if (!input.success || !(image instanceof Blob)) return NextResponse.json({ error: "invalid" }, { status: 400 });
@@ -74,10 +79,10 @@ export async function POST(request: Request) {
     plan: input.data.plan,
     path,
     bytes,
-    reference: input.data.reference ?? null,
+    app: input.data.app,
     actorId: null,
   });
   if (!filed.ok) return NextResponse.json({ error: filed.error }, { status: filed.status });
 
-  return NextResponse.json({ decision: filed.decision, failures: filed.failures, expected: filed.expected });
+  return NextResponse.json({ decision: filed.decision, failures: filed.failures, expected: filed.expected, read: filed.read });
 }

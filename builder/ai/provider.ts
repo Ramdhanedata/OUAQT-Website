@@ -43,10 +43,36 @@ export type InterpretOutcome = {
   latencyMs: number;
 };
 
+/*
+ * What the model read off a payment screenshot, as it wrote it. Nothing here
+ * is trusted: builder/payment/receipt.ts tidies it, and a person still
+ * confirms every payment.
+ */
+export type ReceiptReading = {
+  isReceipt: boolean | null;
+  amount: number | null;
+  currency: string | null;
+  date: string | null;
+  reference: string | null;
+  recipient: string | null;
+};
+
+export type ReceiptOutcome = {
+  result: { kind: "read"; reading: ReceiptReading } | { kind: "unavailable"; why: string };
+  tokensIn: number;
+  tokensOut: number;
+  latencyMs: number;
+};
+
 export interface AiProvider {
   readonly name: string;
   readonly model: string;
   interpret(request: InterpretRequest): Promise<InterpretOutcome>;
+  /*
+   * The screenshot and nothing else: no shop name, no amount expected, no
+   * number it should have gone to. Called only when mayReadImages() says so.
+   */
+  readReceipt(image: { base64: string; mimeType: string }): Promise<ReceiptOutcome>;
 }
 
 /*

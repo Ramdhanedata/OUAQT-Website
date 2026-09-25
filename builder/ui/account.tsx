@@ -9,11 +9,13 @@ import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 import { CodeEntry, forgetOpened } from "./config-code";
 import type { LicenceStatus } from "@/builder/licence/status";
+import type { PayTo } from "@/builder/payment/apps";
+import type { ReadBack } from "@/builder/payment/checks";
 import type { Price } from "@/builder/payment/pricing";
 import { fill } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 import { licenceLine, owes } from "./licence-line";
-import { Pay } from "./pay";
+import { Pay, PaymentReceived } from "./pay";
 import { InstallHelp } from "./install-help";
 import { isPhone, loginFor } from "./step-account";
 
@@ -50,8 +52,7 @@ export type AccountState =
         lastSeen: string;
       }[];
       price: Price | null;
-      bankilyNumber: string | null;
-      aiReadsImages: boolean;
+      payTo: PayTo[];
     };
 
 export function AccountArea({
@@ -284,7 +285,8 @@ function Subscription({
   lang: Locale;
   state: Extract<AccountState, { kind: "signed_in" }>;
 }) {
-  const [sent, setSent] = useState(false);
+  /* Sent from this page just now, with what was read off the screenshot. */
+  const [sent, setSent] = useState<{ read: ReadBack | null } | null>(null);
   const licence = state.licence;
 
   const where = () => licenceLine(copy, lang, licence);
@@ -301,17 +303,14 @@ function Subscription({
       <p className="text-base leading-relaxed text-foreground">{where()}</p>
 
       {waiting ? (
-        <p className="text-base leading-relaxed text-muted-foreground">
-          {copy.licence.pending}
-        </p>
+        <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} />
       ) : due && state.price ? (
         <Pay
           copy={copy}
           language={lang}
           price={state.price}
-          bankilyNumber={state.bankilyNumber}
-          aiReadsImages={state.aiReadsImages}
-          onSent={() => setSent(true)}
+          payTo={state.payTo}
+          onSent={(read) => setSent({ read })}
         />
       ) : null}
     </section>

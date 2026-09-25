@@ -25,7 +25,7 @@ export default async function AdminPage() {
 
   const { data: payments } = await supabase
     .from("payments")
-    .select("id, business_id, plan, expected_amount, reference, status, screenshot_path, created_at")
+    .select("id, business_id, plan, app, expected_amount, reference, extracted, status, screenshot_path, created_at")
     .in("status", ["submitted", "pending_confirmation"])
     .order("created_at", { ascending: true })
     .limit(50);
@@ -61,8 +61,10 @@ export default async function AdminPage() {
         pack: business?.pack ?? "",
         launchClient: Boolean(business?.launch_client),
         plan: payment.plan,
+        app: payment.app,
         expected: Number(payment.expected_amount),
         reference: payment.reference,
+        extracted: payment.extracted ?? null,
         status: payment.status,
         receivedAt: payment.created_at,
         screenshotUrl: signed.data?.signedUrl ?? null,
