@@ -47,6 +47,22 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
     return () => clearTimeout(timer);
   }, [wait]);
 
+  /*
+   * Opened from the software itself, whose end-of-trial window adds the
+   * serial after the # so the owner has nothing to type. The part after the
+   * # never reaches a server, and it is taken off the address at once.
+   */
+  useEffect(() => {
+    const given = formatAsTyped(decodeURIComponent(window.location.hash.slice(1)));
+    if (!COMPLETE.test(given)) return;
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    setValue(given);
+    tried.current = given;
+    void look(given);
+    // Once, when the page opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   async function look(entry: string) {
     if (!entry.trim() || busy || wait > 0) return;
     setBusy(true);

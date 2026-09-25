@@ -283,7 +283,7 @@ export const en: BuilderCopy = {
     },
     expired: "Your licence has ended. The software keeps everything you recorded but takes no new sales. Once you pay, everything opens again.",
     suspended: "Your licence is suspended. Write to us on WhatsApp.",
-    pending: "Payment received, being checked. You can carry on using your software.",
+    pending: "Payment received, being checked. As soon as it is confirmed, your software works normally, with nothing for you to do.",
     rejected: "Your last payment could not be accepted.",
   },
 

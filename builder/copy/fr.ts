@@ -291,7 +291,7 @@ export const fr = {
     },
     expired: "Votre licence a pris fin. Le logiciel garde tout ce que vous avez enregistré, mais n'accepte plus de nouvelles ventes. Dès le paiement, tout se rouvre.",
     suspended: "Votre licence est suspendue. Écrivez-nous sur WhatsApp.",
-    pending: "Paiement reçu, en cours de vérification. Vous pouvez continuer à utiliser votre logiciel.",
+    pending: "Paiement reçu, en cours de vérification. Dès qu'il est confirmé, votre logiciel fonctionne normalement, sans rien faire de votre côté.",
     rejected: "Votre dernier paiement n'a pas pu être validé.",
   },
 
