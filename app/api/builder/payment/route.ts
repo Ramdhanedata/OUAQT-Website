@@ -26,7 +26,7 @@ const body = z.object({
   /* Where he put it: <his user id>/<something>. Checked, not trusted. */
   path: z.string().min(3).max(300),
   app: z.enum(PAYMENT_APPS),
-  plan: z.enum(["annual", "quarterly", "perpetual", "extra_device", "setup_visit"]),
+  plan: z.enum(["annual", "semiannual", "quarterly", "perpetual", "extra_device", "setup_visit"]),
 });
 
 export async function POST(request: Request) {

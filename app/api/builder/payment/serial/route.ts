@@ -29,7 +29,7 @@ export const maxDuration = 30; // not-a-rule: seconds a request may run
 
 const fields = z.object({
   number: z.string().max(400),
-  plan: z.enum(["annual", "quarterly", "perpetual"]),
+  plan: z.enum(["annual", "semiannual", "quarterly", "perpetual"]),
   app: z.enum(PAYMENT_APPS),
 });
 

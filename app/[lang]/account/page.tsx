@@ -5,7 +5,7 @@ import { sessionClient } from "@/builder/db/server";
 import { getPublicSettings, installersFor } from "@/builder/db/settings";
 import { statusOf, graceDaysLeft, daysLeft, type LicencePlan } from "@/builder/licence/status";
 import { payToFrom } from "@/builder/payment/apps";
-import { priceFor } from "@/builder/payment/pricing";
+import { licenceChoices } from "@/builder/payment/pricing";
 import { decryptSerial } from "@/builder/serial/cipher";
 import { AccountArea } from "@/builder/ui/account";
 import { getDictionary } from "@/lib/i18n";
@@ -156,9 +156,7 @@ export default async function AccountPage({ params }: Props) {
           role: device.role === "main" ? ("main" as const) : ("secondary" as const),
           lastSeen: device.last_seen,
         })),
-        price: settings
-          ? priceFor("annual", settings, business.launch_client)
-          : null,
+        prices: settings ? licenceChoices(settings, business.launch_client) : [],
         payTo: secrets ? payToFrom(secrets) : [],
         installers: installersFor(settings, business.pack),
       }}

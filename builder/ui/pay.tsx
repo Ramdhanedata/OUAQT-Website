@@ -7,8 +7,7 @@ import { browserClient } from "@/builder/db/client";
 import { appName, type PaymentApp, type PayTo } from "@/builder/payment/apps";
 import type { CheckFailure, ReadBack } from "@/builder/payment/checks";
 import { ACCEPTED_IMAGES, prepareScreenshot, ScreenshotError } from "@/builder/payment/image";
-import type { Price } from "@/builder/payment/pricing";
-import { monthlyEquivalent } from "@/builder/payment/pricing";
+import { perMonthOf, type Price } from "@/builder/payment/pricing";
 import { Button } from "./owner-button";
 import { fill } from "@/lib/utils";
 import { ChoiceButton } from "./fields";
@@ -17,24 +16,25 @@ import { ChoiceButton } from "./fields";
  * Paying, the way it actually happens here: the owner sends the money from
  * the app on his phone, then shows us the confirmation.
  *
- * The amount first, then which app he pays from, then that app's number
- * large enough to copy without squinting, and the same three steps whichever
- * app it is. He types nothing: the amount, the date and the transaction
- * number are on the screenshot. Nothing on this page decides that he has
- * paid; it files what he sends for a person to confirm, and says so.
+ * The amount first, and whether it pays for a year or six months; then which
+ * app he pays from, that app's number large enough to copy without
+ * squinting, and two steps: pay, then send the screenshot. He types nothing:
+ * the amount, the date and the transaction number are on the screenshot. It
+ * is checked while he waits, and he is told at once whether it went through.
  */
 
 export function Pay({
   copy,
   language,
-  price,
+  prices,
   payTo,
   onSent,
   serial,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
-  price: Price;
+  /* A year first, then six months: the lengths he may pay for, with their prices. */
+  prices: Price[];
   /* The apps that have a number to pay to, in the order they are offered. */
   payTo: PayTo[];
   /* What was read, and whether it was confirmed on the spot. */
@@ -53,6 +53,10 @@ export function Pay({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  /* Refused on sight: the screenshot shows something other than what was expected. */
+  const [refused, setRefused] = useState<string | null>(null);
+  const [plan, setPlan] = useState(prices[0]?.plan ?? "annual");
+  const price = prices.find((one) => one.plan === plan) ?? prices[0];
 
   /* The picture he chose, shown back so he can see it is the right one. */
   useEffect(() => {
@@ -70,7 +74,7 @@ export function Pay({
     );
   }
 
-  if (price.amount == null) {
+  if (!price || price.amount == null) {
     return (
       <p className="text-base leading-relaxed text-muted-foreground">
         {copy.pay.soonPrice}
@@ -86,6 +90,7 @@ export function Pay({
     if (!file) return setError(copy.pay.errorImage as string);
 
     setError(null);
+    setRefused(null);
     setBusy(true);
 
     try {
@@ -120,7 +125,7 @@ export function Pay({
       const body = await response.json().catch(() => null);
       if (!response.ok || !body) return setError(copy.pay.errorSend as string);
       if (body.decision === "rejected_auto") {
-        return setError(explain(copy, body.failures ?? [], language));
+        return setRefused(explain(copy, body.failures ?? [], language));
       }
       onSent(body.read ?? null, body.decision === "confirmed");
     } catch (caught) {
@@ -134,7 +139,8 @@ export function Pay({
     }
   }
 
-  const monthly = monthlyEquivalent(price.amount);
+  const monthly = perMonthOf(price.plan, price.amount);
+  const lengthOf = (one: Price) => (one.plan === "semiannual" ? copy.pay.sixMonths : copy.pay.year) as string;
 
   return (
     <div className="space-y-6">
@@ -145,11 +151,13 @@ export function Pay({
         <p className="mt-1 text-2xl font-semibold text-foreground">
           <bdi dir="ltr">{formatMoney(price.amount, language)}</bdi>
         </p>
-        <p className="mt-1 text-base text-muted-foreground">
-          {fill(copy.pay.perMonth as string, {
-            amount: formatMoney(monthly, language),
-          })}
-        </p>
+        {monthly != null ? (
+          <p className="mt-1 text-base text-muted-foreground">
+            {fill(copy.pay.perMonth as string, {
+              amount: formatMoney(monthly, language),
+            })}
+          </p>
+        ) : null}
         {price.launch && price.standard && price.standard !== price.amount ? (
           <p className="mt-2 text-base text-muted-foreground">
             {copy.pay.wasPrice}{" "}
@@ -159,6 +167,27 @@ export function Pay({
           </p>
         ) : null}
       </div>
+
+      {prices.length > 1 ? (
+        <div role="group" aria-label={copy.pay.duration as string}>
+          <p className="text-base font-medium text-foreground">{copy.pay.duration}</p>
+          <div className="mt-3 grid grid-cols-2 gap-3">
+            {prices.map((one) => (
+              <ChoiceButton
+                key={one.plan}
+                selected={one.plan === plan}
+                note={one.amount != null ? formatMoney(one.amount, language) : undefined}
+                onClick={() => {
+                  setPlan(one.plan);
+                  setRefused(null);
+                }}
+              >
+                {lengthOf(one)}
+              </ChoiceButton>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {payTo.length > 1 ? (
         <div role="group" aria-label={copy.pay.chooseApp as string}>
@@ -204,7 +233,7 @@ export function Pay({
           </div>
 
           <ol className="space-y-3">
-            {[fill(copy.pay.step1 as string, { app: name }), copy.pay.step2, copy.pay.step3].map((line, index) => (
+            {[fill(copy.pay.step1 as string, { app: name }), copy.pay.step2].map((line, index) => (
               <li key={index} className="flex gap-3">
                 <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border text-base text-muted-foreground">
                   {index + 1}
@@ -224,6 +253,7 @@ export function Pay({
             onChange={(event) => {
               setFile(event.target.files?.[0] ?? null);
               setError(null);
+              setRefused(null);
             }}
           />
 
@@ -242,13 +272,24 @@ export function Pay({
             </Button>
           </div>
 
+          {refused ? (
+            <div className="rounded-xl border-2 border-destructive/60 bg-destructive/5 p-4" role="alert">
+              <p className="text-base font-semibold text-destructive">{copy.pay.problemTitle}</p>
+              <p className="mt-1 text-base leading-relaxed text-foreground">{refused}</p>
+            </div>
+          ) : null}
           {error ? (
             <p className="text-base leading-relaxed text-destructive" role="alert">{error}</p>
           ) : null}
 
-          <Button type="button" variant="accent" onClick={() => void send()} disabled={busy}>
-            {busy ? copy.pay.sending : copy.pay.send}
-          </Button>
+          <div>
+            <Button type="button" variant="accent" onClick={() => void send()} disabled={busy}>
+              {busy ? copy.pay.checking : copy.pay.send}
+            </Button>
+            {busy ? (
+              <p className="mt-2 text-base text-muted-foreground" role="status">{copy.pay.checkingNote}</p>
+            ) : null}
+          </div>
         </>
       ) : null}
     </div>
@@ -283,11 +324,18 @@ export function PaymentReceived({
 
   return (
     <div className="space-y-3">
-      {confirmed ? (
-        <p className="text-base font-medium leading-relaxed text-foreground" role="status">{copy.pay.confirmedNow}</p>
-      ) : (
-        <p className="text-base leading-relaxed text-muted-foreground">{copy.licence.pending}</p>
-      )}
+      {/* Said at once and plainly: it went through, or it is with a person. */}
+      <div
+        role="status"
+        className={`rounded-xl border-2 p-4 ${confirmed ? "border-emerald-600/60 bg-emerald-600/5" : "border-border"}`}
+      >
+        <p className={`text-lg font-semibold ${confirmed ? "text-emerald-700 dark:text-emerald-400" : "text-foreground"}`}>
+          {confirmed ? copy.pay.successTitle : copy.pay.receivedTitle}
+        </p>
+        <p className="mt-1 text-base leading-relaxed text-foreground">
+          {confirmed ? copy.pay.confirmedNow : copy.pay.receivedBody}
+        </p>
+      </div>
       {lines.length > 0 ? (
         <div className="rounded-xl border border-border p-4">
           <p className="text-base text-muted-foreground">{copy.pay.readTitle}</p>

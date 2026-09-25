@@ -51,7 +51,8 @@ export type AccountState =
         role: "main" | "secondary";
         lastSeen: string;
       }[];
-      price: Price | null;
+      /* A year, and six months: the lengths he may pay for, with their prices. */
+      prices: Price[];
       payTo: PayTo[];
     };
 
@@ -304,11 +305,11 @@ function Subscription({
 
       {waiting ? (
         <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
-      ) : due && state.price ? (
+      ) : due && state.prices.length > 0 ? (
         <Pay
           copy={copy}
           language={lang}
-          price={state.price}
+          prices={state.prices}
           payTo={state.payTo}
           onSent={(read, confirmed) => setSent({ read, confirmed })}
         />

@@ -57,6 +57,7 @@ const fr = {
   plans: {
     trial: "Essai",
     annual: "Annuelle",
+    semiannual: "Semestrielle",
     quarterly: "Trimestrielle",
     perpetual: "Définitive",
     extra_device: "Poste supplémentaire",
@@ -286,6 +287,7 @@ const en: AdminCopy = {
   plans: {
     trial: "Trial",
     annual: "Annual",
+    semiannual: "Six months",
     quarterly: "Quarterly",
     perpetual: "Permanent",
     extra_device: "Extra computer",
@@ -513,6 +515,7 @@ const ar: AdminCopy = {
   plans: {
     trial: "تجربة",
     annual: "سنوية",
+    semiannual: "نصف سنوية",
     quarterly: "فصلية",
     perpetual: "دائمة",
     extra_device: "جهاز إضافي",

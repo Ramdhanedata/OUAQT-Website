@@ -55,6 +55,8 @@ const publicKeys = [
   "price_annual_launch_mru",
   "price_annual_standard_mru",
   "price_quarterly_standard_mru",
+  "price_semiannual_launch_mru",
+  "price_semiannual_standard_mru",
   "price_setup_visit_mru",
   "price_extra_device_launch_mru",
   "price_extra_device_standard_mru",

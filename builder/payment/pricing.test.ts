@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { PublicSettings } from "@/builder/db/settings";
-import { monthlyEquivalent, priceFor } from "./pricing";
+import { monthlyEquivalent, perMonthOf, priceFor } from "./pricing";
 
 /* Amounts as the database now holds them: the smallest unit. */
 const settings = {
@@ -12,6 +12,8 @@ const settings = {
   price_annual_launch_mru: 1500000,
   price_annual_standard_mru: 1800000,
   price_quarterly_standard_mru: 450000,
+  price_semiannual_launch_mru: 750000,
+  price_semiannual_standard_mru: 900000,
   price_setup_visit_mru: 1000000,
   price_extra_device_launch_mru: 600000,
   price_extra_device_standard_mru: 800000,
@@ -56,6 +58,21 @@ describe("what an owner owes", () => {
 
   it("charges everyone else the standard price", () => {
     expect(priceFor("annual", settings, false).amount).toBe(1800000);
+  });
+
+  it("prices six months at half the year, launch and standard", () => {
+    expect(priceFor("semiannual", settings, true)).toEqual({ plan: "semiannual", amount: 750000, standard: 900000, launch: true });
+    expect(priceFor("semiannual", settings, false).amount).toBe(900000);
+  });
+
+  it("says each renewing plan per month, and nothing for the others", () => {
+    expect(perMonthOf("annual", 1800000)).toBe(150000);
+    expect(perMonthOf("semiannual", 900000)).toBe(150000);
+    expect(perMonthOf("perpetual", 11000000)).toBeNull();
+  });
+
+  it("offers no six months when its price is not set", () => {
+    expect(priceFor("semiannual", { ...settings, price_semiannual_launch_mru: null, price_semiannual_standard_mru: null }, true).amount).toBeNull();
   });
 
   it("has no launch price for the quarterly option", () => {

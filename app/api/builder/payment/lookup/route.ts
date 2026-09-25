@@ -6,7 +6,7 @@ import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { daysLeft, graceDaysLeft, statusOf, type LicencePlan } from "@/builder/licence/status";
 import { payToFrom } from "@/builder/payment/apps";
-import { priceFor } from "@/builder/payment/pricing";
+import { licenceChoices } from "@/builder/payment/pricing";
 
 /*
  * Before paying with a numéro de série: which shop it is, where its licence
@@ -74,7 +74,7 @@ export async function POST(request: Request) {
       nameArabic: shown.nameArabic,
       licence,
       pending,
-      price: settings ? priceFor("annual", settings, launchClient) : null,
+      prices: settings ? licenceChoices(settings, launchClient) : [],
       payTo: secrets ? payToFrom(secrets) : [],
     },
     { headers: { "cache-control": "no-store" } }

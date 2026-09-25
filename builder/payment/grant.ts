@@ -16,6 +16,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  */
 const MONTHS: Record<string, number | null> = {
   annual: 12, // not-a-rule: a year
+  semiannual: 6, // not-a-rule: half a year
   quarterly: 3, // not-a-rule: a quarter
   extra_device: 12, // not-a-rule: runs with the annual licence
   perpetual: null,
@@ -61,7 +62,8 @@ export async function grantLicence(
   const endsAt = months ? addMonths(from, months).toISOString() : null;
 
   const shape = {
-    plan: payment.plan === "quarterly" ? "annual" : payment.plan,
+    /* A licence is annual in kind whatever the length paid for; the dates say how long. */
+    plan: payment.plan === "quarterly" || payment.plan === "semiannual" ? "annual" : payment.plan,
     status: "active",
     starts_at: licence?.starts_at ?? now.toISOString(),
     ends_at: endsAt,

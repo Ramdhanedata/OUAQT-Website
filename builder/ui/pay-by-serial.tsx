@@ -26,7 +26,7 @@ type Lookup = {
   nameArabic: string;
   licence: LicenceShown | null;
   pending: boolean;
-  price: Price | null;
+  prices: Price[];
   payTo: PayTo[];
 };
 
@@ -101,11 +101,11 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
         </div>
         {sent || found.pending ? (
           <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
-        ) : owes(found.licence) && found.price ? (
+        ) : owes(found.licence) && found.prices.length > 0 ? (
           <Pay
             copy={copy}
             language={lang}
-            price={found.price}
+            prices={found.prices}
             payTo={found.payTo}
             onSent={(read, confirmed) => setSent({ read, confirmed })}
             serial={found.serial}

@@ -34,6 +34,9 @@ const publicSettings = z.object({
   price_annual_launch_mru: money,
   price_annual_standard_mru: money,
   price_quarterly_standard_mru: money,
+  /* Six months, beside the year. See 0023: missing until it has run, and then simply not offered. */
+  price_semiannual_launch_mru: money.default(null),
+  price_semiannual_standard_mru: money.default(null),
   price_setup_visit_mru: money,
   price_extra_device_launch_mru: money,
   price_extra_device_standard_mru: money,
