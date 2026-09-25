@@ -447,7 +447,7 @@ export const fr: Dictionary = {
       },
       ai: {
         h: "L'intelligence artificielle",
-        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. La capture de votre paiement peut aussi lui être envoyée pour en relever le montant, la date et le numéro de la transaction, uniquement avec une offre payante de ce service, dont les conditions excluent de s'en servir pour entraîner ses modèles. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés. Le créateur fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
+        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. La capture de votre paiement lui est aussi envoyée pour en relever le montant, la date et le numéro de la transaction. Ce service peut conserver ce qu'il reçoit et s'en servir pour améliorer ses produits. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés. Le créateur fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
       },
       payments: {
         h: "Les paiements",

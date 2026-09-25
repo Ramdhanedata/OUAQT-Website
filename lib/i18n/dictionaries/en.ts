@@ -456,7 +456,7 @@ export const en = {
       },
       ai: {
         h: "Artificial intelligence",
-        b: "When you describe the way you work in your own words, that sentence may be sent to an artificial intelligence service to be turned into settings, and what it proposes is then checked against our own rules before anything is applied. The screenshot of your payment may also be sent to it to take down the amount, the date and the transaction number, only on a paid plan of that service, whose terms rule out using it to train its models. Nothing else is sent to it: not your product list, not your staff. The builder works entirely without this feature, and your tap answers never go through it.",
+        b: "When you describe the way you work in your own words, that sentence may be sent to an artificial intelligence service to be turned into settings, and what it proposes is then checked against our own rules before anything is applied. The screenshot of your payment is also sent to it to take down the amount, the date and the transaction number. That service may keep what it receives and use it to improve its products. Nothing else is sent to it: not your product list, not your staff. The builder works entirely without this feature, and your tap answers never go through it.",
       },
       payments: {
         h: "Payments",

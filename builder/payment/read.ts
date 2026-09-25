@@ -9,11 +9,10 @@ import { receiptFrom } from "./receipt";
  * Reading the screenshot: whether it is a transfer at all, the amount, the
  * date, the transaction number and the number the money went to.
  *
- * Only when mayReadImages() says so, which is the paid tier. On the free one
- * a transfer receipt does not go to a free endpoint, which is the brief's
- * rule: the image stays in our private storage and a person reads it in the
- * admin area. A reading that fails or runs out of time is not a refusal
- * either. The payment goes to a person, like any other.
+ * Whenever mayReadImages() says so, which is every tier since 2026-09-25.
+ * With no key there is nothing to read with, and the payment goes to a
+ * person. A reading that fails or runs out of time is not a refusal either:
+ * the payment goes to a person, like any other.
  */
 export async function readReceipt(bytes: ArrayBuffer): Promise<Extracted> {
   if (!mayReadImages()) return null;
