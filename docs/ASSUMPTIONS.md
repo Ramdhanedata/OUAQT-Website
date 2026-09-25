@@ -201,4 +201,14 @@ with B0b once the project exists.
 - **`destructive` is a colour now.** The builder and the admin used it for
   every error from the start and it was never defined, so errors read in
   plain black. A red that reads on ivory.
+- **The three rules a screenshot must pass (Adel, 2026-09-25).** The number
+  the money went to is OUAQT's number on the app chosen, the date is today's
+  (Mauritania keeps UTC), and the amount is exactly the price of the plan
+  chosen: 18 000 or 9 000 at the standard price, 15 000 or 7 500 at the
+  launch price. All three read and right, and nothing used before: the
+  payment succeeds on the spot. Any one wrong or not visible: it does not,
+  and the page lists which. The transaction number is not required, but one
+  already used is refused. Only a screenshot that could not be read at all
+  goes to a person; a busy reading service is asked twice more first.
+  `payment_max_age_days` no longer decides anything.
 
