@@ -292,7 +292,7 @@ export async function waitingFor(admin: SupabaseClient, keys: string[], now = ne
   if (keys.length === 0) return 0;
   const { data } = await admin.from("configuration_code_attempts").select("locked_until").in("key", keys);
   const latest = Math.max(0, ...(data ?? []).map((row) => (row.locked_until ? new Date(row.locked_until).getTime() : 0)));
-  return Math.max(0, Math.ceil((latest - now.getTime()) / 1000));
+  return Math.max(0, Math.ceil((latest - now.getTime()) / 1000)); // not-a-rule: milliseconds in a second
 }
 
 export async function recordFailure(admin: SupabaseClient, keys: string[], now = new Date()): Promise<number> {
@@ -306,7 +306,7 @@ export async function recordFailure(admin: SupabaseClient, keys: string[], now =
       key,
       failures,
       last_failure_at: now.toISOString(),
-      locked_until: wait > 0 ? new Date(now.getTime() + wait * 1000).toISOString() : null,
+      locked_until: wait > 0 ? new Date(now.getTime() + wait * 1000).toISOString() : null, // not-a-rule: milliseconds in a second
     });
   }
   return longest;

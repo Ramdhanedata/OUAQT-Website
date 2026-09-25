@@ -110,7 +110,7 @@ export function CodeEntry({
   /* After five wrong entries each try waits a little: the field says how long. */
   useEffect(() => {
     if (wait <= 0) return;
-    const timer = setTimeout(() => setWait(wait - 1), 1000);
+    const timer = setTimeout(() => setWait(wait - 1), 1000); // not-a-rule: a countdown by the second
     return () => clearTimeout(timer);
   }, [wait]);
 

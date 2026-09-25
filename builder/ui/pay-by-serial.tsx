@@ -43,7 +43,7 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
 
   useEffect(() => {
     if (wait <= 0) return;
-    const timer = setTimeout(() => setWait(wait - 1), 1000);
+    const timer = setTimeout(() => setWait(wait - 1), 1000); // not-a-rule: a countdown by the second
     return () => clearTimeout(timer);
   }, [wait]);
 

@@ -67,7 +67,7 @@ export const shopInput = z.object({
         role: z.enum(["manager", "cashier"]),
       })
     )
-    .max(50)
+    .max(50) // not-a-rule: a ceiling on what one request may carry, not a staff limit
     .default([]),
   products: z.array(product).max(10_000).default([]),
 });
