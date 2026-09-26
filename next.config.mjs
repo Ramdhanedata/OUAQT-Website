@@ -12,6 +12,13 @@ const nextConfig = {
   async headers() {
     return [
       {
+        // The desktop app built for the builder's preview. Its files are named
+        // after their contents, so a new build is a new name and the old one
+        // can be kept for good.
+        source: "/app-preview/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
         // Pictures change rarely, so let browsers keep them for a day and
         // keep showing the old one for a week while fetching a new one.
         source: "/:dir(images|og)/:path*",
