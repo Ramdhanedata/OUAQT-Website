@@ -87,9 +87,10 @@ export function ResumeDownload({
           copy={copy}
           language={language}
           serial={ready.serial}
+          pack={ready.pack}
+          shop={name ?? ""}
           installers={installers[ready.pack]}
           tutorials={tutorials}
-          link={ready.link}
         />
       </div>
     );

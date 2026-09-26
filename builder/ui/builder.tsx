@@ -695,7 +695,7 @@ function Wizard({
                 */}
               {step === total - 1 && currentSerial ? (
                 <div className="max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl">
-                  <GuideForTarget copy={copy} serial={currentSerial} />
+                  <GuideForTarget copy={copy} pack={pack} shop={(locale === "ar" && answers.nameArabic) || answers.nameLatin || ""} />
                 </div>
               ) : null}
               <div className={step === total - 1 && currentSerial ? "hidden" : undefined}>
@@ -729,9 +729,9 @@ function Wizard({
 }
 
 /* The install guide for the computer chosen at step 4, beside the download. */
-function GuideForTarget({ copy, serial }: { copy: BuilderCopy; serial: string }) {
-  const { target } = useInstallTarget();
-  return <InstallGuide copy={copy} target={target} serial={serial} />;
+function GuideForTarget({ copy, pack, shop }: { copy: BuilderCopy; pack: Pack; shop: string }) {
+  const { target, chip } = useInstallTarget();
+  return <InstallGuide copy={copy} target={target} chip={chip} pack={pack} shop={shop} />;
 }
 
 function SaveNote({ copy, state }: { copy: BuilderCopy; state: SaveState }) {

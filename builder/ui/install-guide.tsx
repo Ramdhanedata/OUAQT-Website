@@ -2,9 +2,11 @@
 
 import type { ReactNode } from "react";
 import { ArrowRight, Download, FileDown, Folder, Lock, ShieldAlert } from "lucide-react";
+import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
+import { packIcons } from "@/components/packs/pack-icons";
 import { cn } from "@/lib/utils";
-import type { InstallTarget } from "./install-target";
+import type { Chip, InstallTarget } from "./install-target";
 
 /*
  * How to install, for the computer the owner chose, one small step at a
@@ -17,7 +19,11 @@ import type { InstallTarget } from "./install-target";
  * system's own words, so what he reads here is what he sees there.
  *
  * The drawings are plain boxes, not pictures of the real windows: they only
- * have to show where to look.
+ * have to show where to look. The app wears its trade's icon, as the
+ * installed software does once it opens.
+ *
+ * There is no serial to type at the end: the software opens its shop by
+ * itself on the computer it was downloaded to.
  */
 
 type Step = { title: string; body: string; art: ReactNode };
@@ -25,31 +31,36 @@ type Step = { title: string; body: string; art: ReactNode };
 export function InstallGuide({
   copy,
   target,
-  serial,
+  chip,
+  pack,
+  shop,
   compact = false,
 }: {
   copy: BuilderCopy;
   target: InstallTarget;
-  serial: string | null;
+  chip: Chip | null;
+  pack: Pack;
+  shop: string;
   /* Under the download on a narrow screen: the drawings go under their sentence. */
   compact?: boolean;
 }) {
   const t = copy.install;
-  const mac = target !== "windows";
-  const file = target === "windows" ? "OUAQT-windows-setup.exe" : target === "mac-apple" ? "OUAQT-mac-arm64.dmg" : "OUAQT-mac-x64.dmg";
+  const mac = target === "mac";
+  const file = !mac ? "OUAQT-windows-setup.exe" : chip === "intel" ? "OUAQT-mac-x64.dmg" : "OUAQT-mac-arm64.dmg";
+  const icon = <AppIcon pack={pack} />;
 
   const steps: Step[] = mac
     ? [
         { title: t.macStep1Title, body: t.macStep1, art: <DownloadsArt label={t.artDownloads} file={file} /> },
-        { title: t.macStep2Title, body: t.macStep2, art: <DragArt applications={t.artApplications} /> },
-        { title: t.macStep3Title, body: t.macStep3, art: <MacAlertArt title={t.artMacTitle} body={t.artMacBody} trash={t.artTrash} done={t.artDone} /> },
+        { title: t.macStep2Title, body: t.macStep2, art: <DragArt applications={t.artApplications} icon={icon} /> },
+        { title: t.macStep3Title, body: t.macStep3, art: <MacAlertArt title={t.artMacTitle} body={t.artMacBody} trash={t.artTrash} done={t.artDone} icon={<AppIcon pack={pack} size={30} />} /> },
         {
           title: t.macStep4Title,
           body: t.macStep4,
           art: <PrivacyArt privacy={t.artPrivacy} general={t.artGeneral} blocked={t.artBlocked} openAnyway={t.artOpenAnyway} />,
         },
         { title: t.macStep5Title, body: t.macStep5, art: <ConfirmArt password={t.artPassword} open={t.artOpen} /> },
-        { title: t.lastTitle, body: t.last, art: <SerialArt label={t.artSerial} serial={serial} validate={t.artValidate} /> },
+        { title: t.lastTitle, body: t.last, art: <ReadyArt shop={shop} ready={t.artReady} trial={t.artTrial} pack={pack} /> },
       ]
     : [
         { title: t.winStep1Title, body: t.winStep1, art: <DownloadsArt label={t.artDownloads} file={file} /> },
@@ -59,8 +70,8 @@ export function InstallGuide({
           body: t.winStep3,
           art: <SmartScreenArt title={t.artWinTitle} app={t.artApp} file={file} run={t.artRunAnyway} dontRun={t.artDontRun} />,
         },
-        { title: t.winStep4Title, body: t.winStep4, art: <DesktopArt /> },
-        { title: t.lastTitle, body: t.last, art: <SerialArt label={t.artSerial} serial={serial} validate={t.artValidate} /> },
+        { title: t.winStep4Title, body: t.winStep4, art: <DesktopArt icon={icon} /> },
+        { title: t.lastTitle, body: t.last, art: <ReadyArt shop={shop} ready={t.artReady} trial={t.artTrial} pack={pack} /> },
       ];
 
   return (
@@ -105,13 +116,15 @@ function Frame({ children, className }: { children: ReactNode; className?: strin
   );
 }
 
-function AppIcon({ size = 36 }: { size?: number }) {
+/* The trade's icon, as the installed software wears it: the gold symbol on the black tile. */
+function AppIcon({ pack, size = 36 }: { pack: Pack; size?: number }) {
+  const Symbol = packIcons[pack];
   return (
     <span
-      className="flex shrink-0 items-center justify-center rounded-[22%] bg-[#0a0a0a] font-semibold text-accent"
-      style={{ width: size, height: size, fontSize: size * 0.42 }}
+      className="flex shrink-0 items-center justify-center rounded-[22%] bg-gradient-to-br from-[#24211c] to-[#0a0a0a] text-accent"
+      style={{ width: size, height: size }}
     >
-      O
+      <Symbol style={{ width: size * 0.56, height: size * 0.56 }} strokeWidth={1.75} />
     </span>
   );
 }
@@ -169,11 +182,11 @@ function SmartScreenArt({
   );
 }
 
-function DesktopArt() {
+function DesktopArt({ icon }: { icon: ReactNode }) {
   return (
     <Frame className="flex h-[96px] items-center justify-center bg-gradient-to-br from-[#1c4f8f] to-[#3b7dc4]">
       <div className={cn("flex flex-col items-center gap-1 rounded-lg p-1.5 text-white", MARK, "ring-offset-[#2a64a8]")}>
-        <AppIcon />
+        {icon}
         <span className="text-[11px]">OUAQT</span>
       </div>
     </Frame>
@@ -190,13 +203,13 @@ function MacBar() {
   );
 }
 
-function DragArt({ applications }: { applications: string }) {
+function DragArt({ applications, icon }: { applications: string; icon: ReactNode }) {
   return (
     <Frame>
       <MacBar />
       <div className="flex items-center justify-center gap-5 px-4 pb-4 pt-2">
         <div className="flex flex-col items-center gap-1">
-          <AppIcon />
+          {icon}
           <span className="text-[11px]">OUAQT</span>
         </div>
         <ArrowRight className="h-5 w-5 text-accent" />
@@ -209,11 +222,11 @@ function DragArt({ applications }: { applications: string }) {
   );
 }
 
-function MacAlertArt({ title, body, trash, done }: { title: string; body: string; trash: string; done: string }) {
+function MacAlertArt({ title, body, trash, done, icon }: { title: string; body: string; trash: string; done: string; icon: ReactNode }) {
   return (
     <Frame className="bg-[#f2f2f2] p-3.5 text-center">
       <div className="mx-auto mb-2 w-fit">
-        <AppIcon size={30} />
+        {icon}
       </div>
       <p className="text-[12.5px] font-semibold">{title}</p>
       <p className="mt-1 text-[10.5px] text-black/60">{body}</p>
@@ -261,12 +274,26 @@ function ConfirmArt({ password, open }: { password: string; open: string }) {
   );
 }
 
-function SerialArt({ label, serial, validate }: { label: string; serial: string | null; validate: string }) {
+/* The software, open on his shop, with nothing asked. */
+function ReadyArt({ shop, ready, trial, pack }: { shop: string; ready: string; trial: string; pack: Pack }) {
   return (
-    <Frame className="bg-[#f0eee6] p-3.5">
-      <p className="text-[12.5px] font-semibold">{label}</p>
-      <div className="mt-2 rounded-md border border-black/15 bg-white px-2 py-1.5 font-mono text-[13px] tracking-[0.15em]">{serial ?? "XXXX-XXXX"}</div>
-      <span className={cn("mt-2 block rounded-md bg-black py-1.5 text-center text-[11px] font-medium text-white", MARK, "ring-offset-[#f0eee6]")}>{validate}</span>
+    <Frame className="bg-[#f0eee6]">
+      <div className="flex h-6 items-center gap-1.5 border-b border-black/10 bg-[#e6e3d9] px-2.5">
+        <span className="h-2 w-2 rounded-full bg-black/20" />
+        <span className="h-2 w-2 rounded-full bg-black/20" />
+        <span className="h-2 w-2 rounded-full bg-black/20" />
+      </div>
+      <div className="flex items-center gap-3 p-3">
+        <AppIcon pack={pack} size={34} />
+        <div className="min-w-0">
+          <p className="truncate text-[12.5px] font-semibold">{shop}</p>
+          <p className="mt-0.5 flex items-center gap-1.5 text-[11px] text-black/60">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#2e6b34]" />
+            {ready}
+          </p>
+        </div>
+      </div>
+      <p className={cn("mx-3 mb-3 rounded-md bg-white px-2 py-1.5 text-center text-[11px] font-medium", MARK, "ring-offset-[#f0eee6]")}>{trial}</p>
     </Frame>
   );
 }

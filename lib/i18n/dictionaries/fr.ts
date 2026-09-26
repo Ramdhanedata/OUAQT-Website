@@ -227,7 +227,7 @@ export const fr: Dictionary = {
       },
       trial: {
         h: "L'essai gratuit",
-        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours. L'essai commence le jour où vous l'activez sur votre ordinateur, pas le jour où vous le téléchargez. Pendant l'essai, tout fonctionne. À la fin, tant que rien n'est payé, le logiciel passe en lecture seule : vous voyez et vous exportez vos données, vous n'en saisissez plus de nouvelles.",
+        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours. L'essai commence la première fois que le logiciel s'ouvre sur votre ordinateur, pas le jour où vous le téléchargez. Pendant l'essai, tout fonctionne. À la fin, tant que rien n'est payé, le logiciel s'arrête et affiche la fenêtre de paiement. Vos données ne sont pas effacées : elles restent sur votre ordinateur, vous pouvez en enregistrer une copie depuis cette fenêtre, et tout se rouvre dès que le paiement est confirmé.",
       },
       selfLicence: {
         h: "Ce que vous achetez",
@@ -316,7 +316,7 @@ export const fr: Dictionary = {
       },
       builder: {
         h: "Quand vous créez un logiciel",
-        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les ordinateurs que vous activez et vos paiements.",
+        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les ordinateurs que vous activez et vos paiements. Quand vous téléchargez le logiciel, nous gardons aussi, pendant quelques heures, une marque brouillée de votre connexion à internet (jamais l'adresse elle-même) et le système choisi, pour que le logiciel reconnaisse son téléchargement et s'ouvre sans vous demander votre numéro. Cette marque est effacée dès qu'elle a servi.",
       },
       neverReceived: {
         h: "Ce que nous ne recevons jamais",
@@ -586,7 +586,7 @@ export const fr: Dictionary = {
     faq3: "Sur combien d'ordinateurs puis-je l'installer ?",
     faq3Body: "Deux : la caisse et un deuxième poste. Les deux fonctionnent sans internet et se mettent d'accord entre eux sur votre réseau.",
     faq4: "Que se passe-t-il à la fin de l'essai gratuit ?",
-    faq4Body: "Tant que rien n'est payé, le logiciel passe en lecture seule : vous voyez et vous exportez vos données, vous n'en saisissez plus de nouvelles. Dès que la licence est payée, tout se rouvre.",
+    faq4Body: "Le logiciel s'arrête et affiche la fenêtre de paiement. Vos données restent sur votre ordinateur, et vous pouvez en enregistrer une copie depuis cette fenêtre. Dès que la licence est payée, il se rouvre tout seul.",
     faq5: "Et si mon métier n'est pas dans la liste ?",
     faq5Body: "Dites-le-nous depuis la liste des métiers, avec votre numéro. D'autres métiers arrivent, et si votre besoin est particulier, nous pouvons le construire sur mesure.",
     faq6: "Et si j'ai besoin d'aide ?",

@@ -42,6 +42,8 @@ const privateSettings = z.object({
 
   /* How long the one-click activation link lives. See 0013. */
   activation_token_hours: z.number().int().positive(),
+  /* How long after a download the software opens its shop by itself. See 0024. */
+  activation_nearby_hours: z.number().int().positive().default(6),
 
 });
 

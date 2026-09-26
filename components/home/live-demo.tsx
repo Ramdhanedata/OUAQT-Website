@@ -6,7 +6,7 @@ import type { Pack } from "@/app-ui/packs";
 import { APP_HEIGHT, APP_WIDTH, CANVAS_HEIGHT, Fit, TITLE_HEIGHT } from "@/builder/ui/preview/fit";
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
-import { packIcons } from "./pack-icons";
+import { packIcons } from "@/components/packs/pack-icons";
 
 /*
  * The software itself on the home page, for a visitor to try before

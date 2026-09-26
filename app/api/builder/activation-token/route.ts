@@ -1,20 +1,25 @@
 import { NextResponse } from "next/server";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { adminClient, requestClient } from "@/builder/db/server";
-import { mintActivationToken } from "@/builder/licence/activation-token";
+import { mintActivationToken, placeOfRequest } from "@/builder/licence/activation-token";
 
 /*
- * The one-click activation link, for an owner who built on the shop PC.
+ * The token that lets the software open its shop by itself.
  *
- * Step 4 asks for one when it sees a computer rather than a phone. It is his
- * own shop's, read through his own session, so nobody can ask for a token for
- * a business that is not theirs.
+ * Step 4 and the account page ask for one the moment the owner presses the
+ * download, saying which system it is for. It keeps a mark of the connection
+ * the download came from, so the software, starting on that connection,
+ * finds its shop without a serial (see 0024). It is his own shop's, read
+ * through his own session, so nobody can ask for a token for a business that
+ * is not theirs.
  *
  * The token goes back in this response and nowhere else. It is not logged and
  * it is not audited: an audit row that held it would be a second copy of the
  * thing we took care to keep only the hash of.
  */
 export async function POST(request: Request) {
+  const asked = (await request.json().catch(() => null)) as { platform?: unknown } | null;
+  const platform = asked?.platform === "windows" || asked?.platform === "mac" ? asked.platform : null;
   const supabase = requestClient(request);
   const admin = adminClient();
   if (!supabase || !admin) {
@@ -37,7 +42,10 @@ export async function POST(request: Request) {
   const secrets = await getPrivateSettings();
   if (!secrets) return NextResponse.json({ error: "not_available" }, { status: 503 });
 
-  const minted = await mintActivationToken(admin, business.id, secrets.activation_token_hours);
+  const minted = await mintActivationToken(admin, business.id, secrets.activation_token_hours, new Date(), {
+    hash: await placeOfRequest(request),
+    platform,
+  });
   if (!minted) return NextResponse.json({ error: "not_saved" }, { status: 502 });
 
   return NextResponse.json(

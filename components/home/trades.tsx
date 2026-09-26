@@ -8,7 +8,7 @@ import { Notify } from "@/components/packs/notify";
 import type { Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { ArrowRight, Plus } from "lucide-react";
-import { packIcons } from "./pack-icons";
+import { packIcons } from "@/components/packs/pack-icons";
 
 /*
  * The trades, and the honest state of each.

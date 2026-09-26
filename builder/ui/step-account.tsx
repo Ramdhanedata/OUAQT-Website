@@ -20,7 +20,7 @@ import { InstallHelp } from "./install-help";
 /*
  * Step 4: an account, then the number that makes it his.
  *
- * He has been answering questions for a quarter of an hour by now, so this
+ * He has been answering questions for a few minutes by now, so this
  * asks for the least that will let him come back: a phone number and a
  * password. No code by SMS, because that means an SMS provider, a cost per
  * message, and an owner stuck at a checkpoint with no signal.
@@ -86,6 +86,8 @@ export function StepAccount({
         copy={copy}
         language={language}
         serial={serial}
+        pack={pack}
+        shop={(language === "ar" && answers.nameArabic) || answers.nameLatin || ""}
         installers={installers[pack]}
         tutorials={tutorials}
       />
@@ -276,42 +278,56 @@ function AccountForm({
   );
 }
 
+/*
+ * Tells the website which system a download is for, the moment it starts.
+ * The token it makes keeps a mark of this connection, so the software,
+ * starting here, opens its shop by itself (see 0024). Nothing waits on it:
+ * if it fails, the software asks for the serial as it always has.
+ */
+export function registerDownload(platform: "windows" | "mac") {
+  void fetch("/api/builder/activation-token", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ platform }),
+    keepalive: true,
+  }).catch(() => undefined);
+}
+
+/*
+ * The download, once the shop exists: which computer, the file for it, and
+ * how to install, warnings included. There is nothing to type after: the
+ * software opens its shop by itself. The serial stays below, smaller, for a
+ * second computer or a reinstall. A phone gets the serial to take to the
+ * computer instead.
+ */
 export function SerialPanel({
   copy,
   language,
   serial,
+  pack,
+  shop,
   installers,
   tutorials,
-  link,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
   serial: string;
+  pack: Pack;
+  shop: string;
   installers: Installers;
   tutorials: Tutorials;
-  /*
-   * A one-click link made already, by the path from the computer, which
-   * has no account to ask for one with.
-   */
-  link?: string | null;
 }) {
   const [machine, setMachine] = useState<Machine>("other");
   useEffect(() => setMachine(machineOf()), []);
-  const { target, detected, choose } = useInstallTarget();
+  const { target, detected, chip, choose } = useInstallTarget();
 
   const anyInstaller = Boolean(installers.windows || installers.mac);
-  const href =
-    target === "windows" ? installers.windows : target === "mac-apple" ? installers.macApple ?? installers.mac : installers.mac;
-  const label =
-    target === "windows" ? copy.install.downloadWindows : target === "mac-apple" ? copy.install.downloadMacApple : copy.install.downloadMacIntel;
+  const appleFile = installers.macApple ?? installers.mac;
+  /* A Mac that says which chip it has gets its own file; otherwise the Apple chip, the Mac of the last five years, with the other one link away. */
+  const macFile = chip === "intel" ? installers.mac : appleFile;
+  const otherMac = chip ? null : installers.mac && appleFile !== installers.mac ? installers.mac : null;
+  const href = target === "windows" ? installers.windows : macFile;
 
-  /*
-   * Any computer: which one he is installing on, the download for it, and
-   * (on a narrow screen, where there is no room beside it) how to install.
-   * On a wide screen the guide sits in the space the live preview had.
-   * The serial is still here, smaller, as the thing to keep for a second
-   * computer. A phone gets the serial to take to the computer instead.
-   */
   if (machine !== "phone" && anyInstaller) {
     return (
       <div className="space-y-6">
@@ -319,12 +335,11 @@ export function SerialPanel({
 
         <fieldset>
           <legend className="text-base font-medium text-foreground">{copy.install.question}</legend>
-          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+          <div className="mt-3 grid grid-cols-2 gap-3">
             {(
               [
                 ["windows", copy.install.windows, copy.install.windowsHint, Boolean(installers.windows)],
-                ["mac-intel", copy.install.macIntel, copy.install.macIntelHint, Boolean(installers.mac)],
-                ["mac-apple", copy.install.macApple, copy.install.macAppleHint, Boolean(installers.macApple ?? installers.mac)],
+                ["mac", copy.install.mac, copy.install.macHint, Boolean(appleFile)],
               ] as const
             )
               .filter(([, , , available]) => available)
@@ -349,23 +364,30 @@ export function SerialPanel({
                 </button>
               ))}
           </div>
-          {target !== "windows" ? <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{copy.install.whichMac}</p> : null}
         </fieldset>
 
         {href ? (
           <a
             href={href}
+            onClick={() => registerDownload(target)}
             className="flex min-h-[56px] w-full items-center justify-center rounded-lg bg-accent px-5 text-lg font-semibold text-accent-foreground"
           >
-            {label}
+            {target === "windows" ? copy.install.downloadWindows : copy.install.downloadMac}
+          </a>
+        ) : null}
+        {target === "mac" && otherMac ? (
+          <a
+            href={otherMac}
+            onClick={() => registerDownload("mac")}
+            className="-mt-3 block text-sm text-muted-foreground underline underline-offset-4"
+          >
+            {copy.serial.otherMacIntel}
           </a>
         ) : null}
 
         <div className="wizard:hidden">
-          <InstallGuide copy={copy} target={target} serial={serial} compact />
+          <InstallGuide copy={copy} target={target} chip={chip} pack={pack} shop={shop} compact />
         </div>
-
-        <OpenMySoftware copy={copy} mac={target !== "windows"} link={link ?? null} />
 
         <div className="rounded-xl border border-border p-4">
           <p className="text-base leading-relaxed text-muted-foreground">{copy.serial.keepNumber}</p>
@@ -391,61 +413,6 @@ export function SerialPanel({
       tutorials={tutorials}
       showDownloads={machine === "other"}
     />
-  );
-}
-
-/*
- * "Ouvrir mon logiciel": a one-time link for the app that was just installed.
- *
- * Made when he presses the button, not before, so its twenty-four hours start
- * when he is ready. The link itself never appears on the page: it is handed
- * straight to the browser to open. Whatever goes wrong, the sentence under
- * the button tells him what to do instead, and the app itself falls back to
- * asking for the serial, so nobody is left stuck.
- */
-function OpenMySoftware({ copy, mac, link }: { copy: BuilderCopy; mac: boolean; link: string | null }) {
-  const [state, setState] = useState<"idle" | "opening" | "failed">("idle");
-
-  async function open() {
-    setState("opening");
-    if (link) {
-      window.location.href = link;
-      setState("idle");
-      return;
-    }
-    try {
-      const response = await fetch("/api/builder/activation-token", { method: "POST" });
-      const body = (await response.json().catch(() => null)) as { link?: string } | null;
-      if (!response.ok || !body?.link?.startsWith("ouaqt://")) {
-        setState("failed");
-        return;
-      }
-      window.location.href = body.link;
-      setState("idle");
-    } catch {
-      setState("failed");
-    }
-  }
-
-  return (
-    <div className="space-y-3 rounded-xl border-2 border-foreground p-5">
-      <p className="text-base font-medium text-foreground">{copy.serial.afterInstall}</p>
-      {mac ? (
-        <p className="text-base leading-relaxed text-muted-foreground">{copy.serial.macOpenFirst}</p>
-      ) : null}
-      <Button
-        type="button"
-        variant="primary"
-        className="min-h-[56px] w-full text-lg"
-        disabled={state === "opening"}
-        onClick={() => void open()}
-      >
-        {state === "opening" ? copy.serial.opening : copy.serial.open}
-      </Button>
-      <p className="text-base leading-relaxed text-muted-foreground" role={state === "failed" ? "alert" : undefined}>
-        {state === "failed" ? copy.serial.openFailed : copy.serial.openFallback}
-      </p>
-    </div>
   );
 }
 
@@ -528,6 +495,7 @@ function PhoneOrSoon({
             {installers.windows ? (
               <a
                 href={installers.windows}
+                onClick={() => registerDownload("windows")}
                 className="inline-flex min-h-[48px] items-center rounded-lg bg-accent px-5 text-base font-medium text-accent-foreground"
               >
                 {copy.serial.windows}
@@ -536,6 +504,7 @@ function PhoneOrSoon({
             {installers.macApple ? (
               <a
                 href={installers.macApple}
+                onClick={() => registerDownload("mac")}
                 className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
               >
                 {copy.serial.macApple}
@@ -544,6 +513,7 @@ function PhoneOrSoon({
             {installers.mac ? (
               <a
                 href={installers.mac}
+                onClick={() => registerDownload("mac")}
                 className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
               >
                 {installers.macApple ? copy.serial.macIntel : copy.serial.mac}

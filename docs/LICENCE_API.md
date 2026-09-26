@@ -97,11 +97,33 @@ window into another is a step we invented.
 | He built on | What he does |
 | --- | --- |
 | His phone | Step 4 shows the serial and the short address to open on the shop PC. He types the serial there, once. |
-| The shop PC | Step 4's main button installs. Afterwards, "Ouvrir mon logiciel" opens the app through a link and it activates with nothing typed. |
+| The shop PC | Step 4's download button installs. On its first start the app asks the website whether it was downloaded from where it stands, and opens its shop with nothing typed. |
 
 The serial is still the licence for everybody. A second device, a reinstall,
 a support call and an offline renewal all use it, which is why step 4 keeps
 showing it on the PC path, smaller, as the thing to keep.
+
+#### Opening by itself: `nearby`
+
+Pressing the download at step 4 (or on the account page) makes a one-time
+token as below, and the token keeps two more things: which system the
+download was for, and a mark of the connection it came from. The mark is an
+HMAC of the public address under the licence signing key, with an IPv6
+address cut to its /64 (`builder/licence/place.ts`); it is never the address
+itself, and it is cleared once the token is spent.
+
+On its first start, with no licence yet, the app sends `{ nearby: true }`
+in place of a serial or a token. The website takes the connection the
+request arrives from and looks for unspent tokens with the same mark, for
+the same system, made in the last `activation_nearby_hours` (6 by default).
+Only when they all belong to one shop is one taken, and activation carries
+on exactly as with a token. None, or tokens from two shops (a café's Wi-Fi),
+answer `404 no_nearby` or `409 nearby_ambiguous`, and the app shows the
+serial screen as before, without a message. A real refusal (the trial, a
+full shop, another shop's computer) is shown there, as it is for the link.
+
+The shop opened by its number on a computer (the configuration code path)
+makes its token with the mark too, for any system.
 
 #### The one-time token
 

@@ -6,7 +6,7 @@ import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@
 import { adminClient, requestClient } from "@/builder/db/server";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { product } from "@/builder/licence/create-shop";
-import { mintActivationToken } from "@/builder/licence/activation-token";
+import { mintActivationToken, placeOfRequest } from "@/builder/licence/activation-token";
 import { serialSecretIsSet } from "@/builder/serial/cipher";
 
 /*
@@ -55,7 +55,13 @@ export async function POST(request: Request) {
   if (!shop.ok) return NextResponse.json({ error: shop.error }, { status: shop.status });
 
   const secrets = await getPrivateSettings();
-  const minted = secrets ? await mintActivationToken(admin, shop.businessId, secrets.activation_token_hours) : null;
+  /* Opened on the computer that downloads: its connection is where the software will start. */
+  const minted = secrets
+    ? await mintActivationToken(admin, shop.businessId, secrets.activation_token_hours, new Date(), {
+        hash: await placeOfRequest(request),
+        platform: null,
+      })
+    : null;
 
   return NextResponse.json(
     {

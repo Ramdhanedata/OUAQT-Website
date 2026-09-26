@@ -9,7 +9,7 @@ import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 import { serialFor, setupFor } from "@/builder/licence/setup";
 import { claimTrial } from "@/builder/licence/trial-claim";
-import { claimActivationToken, releaseActivationToken } from "@/builder/licence/activation-token";
+import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 import { openByNumber, shopFor } from "@/builder/config-code/server";
@@ -17,8 +17,9 @@ import { openByNumber, shopFor } from "@/builder/config-code/server";
 /*
  * A shop computer coming to life for the first time.
  *
- * The owner types his serial, the app sends the number it uses to identify
- * itself, and it gets back a signed licence it can check on its own from then
+ * The software asks, on its first start, whether it was downloaded from the
+ * connection it stands on (see 0024), and failing that the owner types his
+ * serial. The app sends the number it uses to identify itself, and it gets back a signed licence it can check on its own from then
  * on. Nothing else is accepted: the schema is strict, so a body carrying a
  * day's sales is refused before anything looks at it.
  *
@@ -29,9 +30,13 @@ import { openByNumber, shopFor } from "@/builder/config-code/server";
 
 const body = z
   .object({
-    /* One of these two, never both: typed by the owner, or carried by the link. */
+    /*
+     * One of these three, never two: typed by the owner, carried by the
+     * link, or "was I downloaded from here?", asked by the software itself.
+     */
     serial: z.string().min(8).max(20).optional(),
     token: z.string().min(20).max(200).optional(),
+    nearby: z.literal(true).optional(),
     deviceId: z.string().min(8).max(200),
     deviceName: z.string().trim().max(60).optional(),
     platform: z.enum(["windows", "mac"]),
@@ -59,8 +64,8 @@ const body = z
     expectBusinessId: z.string().uuid().optional(),
   })
   .strict()
-  .refine((value) => Boolean(value.serial) !== Boolean(value.token), {
-    message: "a serial or a token, and only one of them",
+  .refine((value) => [value.serial, value.token, value.nearby].filter(Boolean).length === 1, {
+    message: "a serial, a token or nearby, and only one of them",
   });
 
 export async function POST(request: Request) {
@@ -83,7 +88,18 @@ export async function POST(request: Request) {
   let tokenId: string | null = null;
   let found: { business_id: string } | null = null;
 
-  if (input.data.token) {
+  if (input.data.nearby) {
+    /* Never a guess: one shop downloaded from this connection for this system, or the serial. */
+    const secrets = await getPrivateSettings();
+    const place = await placeOfRequest(request);
+    if (!secrets || !place) return NextResponse.json({ error: "no_nearby" }, { status: 404 });
+    const claim = await claimNearbyToken(supabase, place, input.data.platform, input.data.deviceId, secrets.activation_nearby_hours);
+    if (!claim.ok) {
+      return NextResponse.json({ error: claim.reason === "ambiguous" ? "nearby_ambiguous" : "no_nearby" }, { status: claim.reason === "ambiguous" ? 409 : 404 });
+    }
+    tokenId = claim.id;
+    found = { business_id: claim.businessId };
+  } else if (input.data.token) {
     const claim = await claimActivationToken(supabase, input.data.token, input.data.deviceId);
     if (!claim.ok) return NextResponse.json({ error: "bad_token" }, { status: 403 });
     tokenId = claim.id;
@@ -331,5 +347,6 @@ export async function POST(request: Request) {
      * link still works for his next try. Only a success spends it.
      */
     if (tokenId && !succeeded) await releaseActivationToken(supabase, tokenId);
+    if (tokenId && succeeded) await forgetPlace(supabase, tokenId);
   }
 }

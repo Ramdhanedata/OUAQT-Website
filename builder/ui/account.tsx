@@ -17,7 +17,7 @@ import { Field, TextInput } from "./fields";
 import { licenceLine, owes } from "./licence-line";
 import { Pay, PaymentReceived } from "./pay";
 import { InstallHelp } from "./install-help";
-import { isPhone, loginFor } from "./step-account";
+import { isPhone, loginFor, registerDownload } from "./step-account";
 
 /*
  * Where an owner comes back to.
@@ -227,6 +227,7 @@ function SignedIn({
           {state.installers.windows ? (
             <a
               href={state.installers.windows}
+              onClick={() => registerDownload("windows")}
               className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
             >
               {copy.serial.windows}
@@ -235,6 +236,7 @@ function SignedIn({
           {state.installers.macApple ? (
             <a
               href={state.installers.macApple}
+              onClick={() => registerDownload("mac")}
               className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
             >
               {copy.serial.macApple}
@@ -243,6 +245,7 @@ function SignedIn({
           {state.installers.mac ? (
             <a
               href={state.installers.mac}
+              onClick={() => registerDownload("mac")}
               className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
             >
               {state.installers.macApple ? copy.serial.macIntel : copy.serial.mac}

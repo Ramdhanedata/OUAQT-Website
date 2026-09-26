@@ -236,7 +236,7 @@ export const en = {
       },
       trial: {
         h: "The free trial",
-        b: "Your software can be tried free for {trialDays} days. The trial starts the day you activate it on your computer, not the day you download it. During the trial everything works. At the end, until anything is paid, the software turns read-only: you can see and export your data, you can no longer enter new data.",
+        b: "Your software can be tried free for {trialDays} days. The trial starts the first time the software opens on your computer, not the day you download it. During the trial everything works. At the end, until anything is paid, the software stops and shows the payment window. Your data is not erased: it stays on your computer, you can save a copy of it from that window, and everything opens again as soon as the payment is confirmed.",
       },
       selfLicence: {
         h: "What you are buying",
@@ -325,7 +325,7 @@ export const en = {
       },
       builder: {
         h: "When you build software",
-        b: "To build your software and manage your licence, we keep: the account you open, your answers to the questions, the configuration that comes out of them, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the computers you activate and your payments.",
+        b: "To build your software and manage your licence, we keep: the account you open, your answers to the questions, the configuration that comes out of them, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the computers you activate and your payments. When you download the software, we also keep, for a few hours, a scrambled mark of your internet connection (never the address itself) and the system you chose, so the software recognises its download and opens without asking for your number. The mark is erased as soon as it has been used.",
       },
       neverReceived: {
         h: "What we never receive",
@@ -591,7 +591,7 @@ export const en = {
     faq3: "How many computers can I install it on?",
     faq3Body: "Two: the till and a second machine. Both work without internet and agree with each other over your own network.",
     faq4: "What happens when the free trial ends?",
-    faq4Body: "Until you pay, the software becomes read only: you can see and export your data, but not enter new records. As soon as the licence is paid, everything opens again.",
+    faq4Body: "The software stops and shows the payment window. Your data stays on your computer, and you can save a copy of it from that window. As soon as the licence is paid, it opens again by itself.",
     faq5: "What if my trade is not on the list?",
     faq5Body: "Tell us from the list of trades, with your number. More trades are on the way, and if your need is particular we can build it to order.",
     faq6: "What if I need help?",
