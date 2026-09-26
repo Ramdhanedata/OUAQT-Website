@@ -101,18 +101,14 @@ export const en: BuilderCopy = {
 
   preview: {
     live: "Live",
-    app: "Software",
-    receipt: "Receipt",
     expand: "Enlarge",
     shrink: "Make smaller",
-    hint: "Tap the products and buttons: everything works as it will in your software.",
-    samples: "Sample products: you will put your own in the software.",
+    hint: "This is your software itself: tap the products and buttons, everything works. The products and figures are examples.",
     updated: "Updated: {section}",
     rotate: "Turn your phone sideways to see the screen larger.",
     actualSize: "Actual size",
     fitSize: "See it all",
-    lastReceipt: "The receipt of your last sale, as it will come out of the printer.",
-    sampleReceipt: "A sample receipt, as it will come out of the printer. Make a sale to see yours.",
+    loading: "Opening your software",
   },
 
   save: {

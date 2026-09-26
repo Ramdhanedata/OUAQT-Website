@@ -89,27 +89,10 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0) translateX(0)" },
           "50%": { transform: "translateY(-16px) translateX(8px)" },
         },
-        /* A receipt coming out of the printer, in the preview. */
-        "print-out": {
-          "0%": { transform: "translateY(-100%)" },
-          "100%": { transform: "translateY(0)" },
-        },
-        /* A section the owner's last answer just changed. */
-        "answer-glow": {
-          "0%, 60%": { boxShadow: "inset 0 0 0 4px #c9a961" },
-          "100%": { boxShadow: "inset 0 0 0 4px transparent" },
-        },
-        "fade-in": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out forwards",
         float: "float 12s ease-in-out infinite",
-        "print-out": "print-out 0.9s ease-out both",
-        "answer-glow": "answer-glow 2.4s ease-out both",
-        "fade-in": "fade-in 0.2s ease-out both",
       },
     },
   },

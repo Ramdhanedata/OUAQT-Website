@@ -345,6 +345,7 @@ function Wizard({
   flush: () => Promise<void>;
 }) {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewLarge, setPreviewLarge] = useState(false);
   /*
    * The numéro de série, given once, when the questions end, and shown
    * on its own screen before products and staff.
@@ -662,8 +663,13 @@ function Wizard({
             * re-rendering on every keystroke.
             */}
           {wide ? (
-            <aside className="self-start wizard:sticky wizard:top-24">
-              <Preview copy={copy} answers={answers} fallbackLanguage={locale} products={keptProducts} />
+            /*
+              * A sticky column keeps what it holds in its own layer, under the
+              * site's header; while the window is enlarged, the column is lifted
+              * above it.
+              */
+            <aside className={cn("self-start wizard:sticky wizard:top-24", previewLarge && "z-[70]")}>
+              <Preview copy={copy} answers={answers} fallbackLanguage={locale} onExpand={setPreviewLarge} />
             </aside>
           ) : null}
         </div>
@@ -681,7 +687,7 @@ function Wizard({
               {copy.shell.close}
             </button>
             <div className="min-h-0 flex-1">
-              <Preview copy={copy} answers={answers} fallbackLanguage={locale} products={keptProducts} fill />
+              <Preview copy={copy} answers={answers} fallbackLanguage={locale} fill />
             </div>
           </Container>
         </div>

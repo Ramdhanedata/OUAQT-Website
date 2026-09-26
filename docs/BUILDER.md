@@ -118,28 +118,25 @@ staff work is being done.
 
 ## The preview
 
-`builder/ui/preview/` is a working copy of the desktop app, running on the
-configuration the owner is building. It has the app's side menu, with the
-sections the desktop app's `sectionsFor` gives that configuration, and a
-screen for each: the till in its three shapes (a shop's, a restaurant's with
-tables, kitchen tickets and waiting orders, a hotel's extras charged to a
-room), the stock, the customers on credit, the till count, the reports, the
-settings, and each trade's own screens.
+The preview beside the questions is the desktop app itself, not a drawing of
+it. The desktop repository builds its own screens, database modules,
+migrations and handlers for a web page (`npm run build:web` there, see its
+`web/main.ts`): SQLite runs in WebAssembly and in memory, Electron is
+swapped for a small stand-in, and a printed receipt shows on screen. The
+build lands in `public/app-preview`, which this site serves as it is.
 
-It is laid out at 1200 by 750, the app's own size, and scaled as a whole to
-the space it is given. It never reflows: the old preview reflowed its screens
-to a 416px side panel and the product grid came out as a column of clipped
-letters.
+`builder/ui/preview/index.tsx` frames it: an iframe at a laptop's size,
+scaled as a whole to the space the page has, never reflowed. It sends the
+configuration the answers make each time they change it
+(`{ type: "ouaqt:configuration", configuration, section }`), and the app
+answers `ouaqt:ready` when it can take one and `ouaqt:started` once drawn.
+A new trade starts a new demo shop, with a week of invented sales behind
+it; any other answer reshapes the open one, and `focusFor` in `model.ts`
+names the screen that answer changed so the window opens it.
 
-It is live in two senses. Every answer reaches it at once, and when one
-changes something the window moves to the screen it changed and marks it
-(`focusFor` in `model.ts`). And it works: a sale prints its receipt, lowers
-the stock and lands in the report and the till count, a table sent to the
-kitchen waits at the bottom until it is paid. That state lives in `store.ts`
-and starts again when the trade changes.
-
-When a screen is added or renamed in the desktop app, `model.ts` and
-`words.ts` follow it; the section labels are the app's own.
+**After any change to the desktop app's screens, run `npm run build:web` in
+the desktop repository and commit `public/app-preview` here,** or the
+website shows the previous app.
 
 The 80mm receipt in `app-ui` is laid out at 576 pixels, which is 80mm at
 203 dpi, and scaled to fit. That is why `Scaled` measures instead of using a

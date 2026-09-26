@@ -1,14 +1,14 @@
-import type { AppLanguage, Configuration } from "@/app-ui";
-import type { ImportedProduct } from "@/builder/import/parse";
-import { sampleItems } from "./samples";
+import type { Configuration } from "@/app-ui";
 
 /*
- * What the preview works out from a configuration: which sections the app
- * has, what is on its shelves, and where to look when an answer changes.
+ * What the builder works out from a configuration for its preview: which
+ * sections the app has, and which of them an answer just changed, so the
+ * preview can open that one.
  *
- * The sections follow the desktop app's own rule (src/shell.tsx there), so
- * the side of the preview is the side of the software, section for section.
- * When one changes, the other has to.
+ * The sections follow the desktop app's own rule (src/shell.tsx there). The
+ * preview itself is the app, so a drift here does not change what the owner
+ * sees; it only sends the window to a section it does not have, which the
+ * app ignores.
  */
 
 export type Section =
@@ -92,80 +92,13 @@ export function tracksStock(configuration: Configuration): boolean {
   }
 }
 
-export type Item = {
-  id: string;
-  name: string;
-  price: number;
-  stock: number | null;
-  category?: string;
-  expiry?: Date;
-  batch?: string;
-  supplier?: string;
-  weighed?: boolean;
-  hasOptions?: boolean;
-};
-
-/* An imported list can hold thousands of rows; the screen only ever shows a page of them. */
-const SHOWN_AT_MOST = 60;
-
-/*
- * The shelves: the owner's own products once imported, the samples until
- * then. Either way the answers decide what each product shows: a shop that
- * does not sell by weight has no price per kilo, a restaurant that takes no
- * options has no options.
- */
-export function catalogueFor(
-  configuration: Configuration,
-  imported: ImportedProduct[] | null | undefined
-): Item[] {
-  const language = configuration.language.app;
-  const counted = tracksStock(configuration);
-  const sellBy =
-    configuration.features.bakery?.sellBy ?? configuration.features.shop?.sellBy ?? ["piece"];
-  const onlyWeight = !sellBy.includes("piece");
-  const byWeight = sellBy.includes("weight");
-  const options = configuration.features.restaurant?.options === true;
-
-  if (imported && imported.length > 0) {
-    return imported.slice(0, SHOWN_AT_MOST).map((product) => {
-      const expiry = product.expiry ? new Date(product.expiry) : undefined;
-      return {
-        id: `own-${product.row}`,
-        name: product.name,
-        price: product.price,
-        stock: counted ? product.quantity : null,
-        expiry: expiry && !Number.isNaN(expiry.getTime()) ? expiry : undefined,
-        batch: product.batch,
-        weighed: onlyWeight,
-      };
-    });
-  }
-
-  const today = new Date();
-  return sampleItems(configuration.pack).map((item) => ({
-    id: item.id,
-    name: item.name[language],
-    price: item.price,
-    stock: counted ? item.stock : null,
-    category: item.category?.[language],
-    expiry:
-      item.expiresInMonths === undefined
-        ? undefined
-        : new Date(today.getFullYear(), today.getMonth() + item.expiresInMonths, 4 + (item.price % 20)), // not-a-rule: a sample date, its day varied by the item
-    batch: item.batch,
-    supplier: item.supplier,
-    weighed: onlyWeight || (byWeight && item.weighed === true),
-    hasOptions: options && item.hasOptions === true,
-  }));
-}
-
 /*
  * Where an answer shows. When the owner changes one, the preview moves to
  * the screen it changed, so they see the effect rather than hunt for it.
  * Null means "stay where you are": a name, a phone number, a logo show on
  * every screen already.
  */
-export type Focus = { section: Section; detail?: "tables" };
+export type Focus = { section: Section };
 
 export function focusFor(path: string, configuration: Configuration): Focus | null {
   const sections = sectionsFor(configuration);
@@ -180,7 +113,6 @@ export function focusFor(path: string, configuration: Configuration): Focus | nu
   if (path === "common.lowStockAlert") return pick("stock");
   if (path.startsWith("common.")) return pick("sale", "counter", "extras");
 
-  if (path === "features.restaurant.tables") return { section: "counter", detail: "tables" };
   if (path.startsWith("features.restaurant")) return pick("counter");
 
   if (path === "features.bakery.trackProduction" || path === "features.bakery.unsold") return pick("production");
@@ -224,28 +156,4 @@ export function changedPaths(before: Configuration, after: Configuration): strin
   const now = read(after);
   const keys = new Set([...was.keys(), ...now.keys()]);
   return [...keys].filter((key) => was.get(key) !== now.get(key));
-}
-
-/** The shop's name as the staff will see it: Arabic on an Arabic screen when there is one. */
-export function shopName(configuration: Configuration, fallback: string): string {
-  const { business } = configuration;
-  return (configuration.language.app === "ar" && business.nameArabic) || business.nameLatin || fallback;
-}
-
-/** A date the way the app writes it: day first, digits only. */
-export function shortDate(date: Date, language: AppLanguage): string {
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return language === "en"
-    ? `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
-    : `${pad(date.getDate())}/${pad(date.getMonth() + 1)}/${date.getFullYear()}`;
-}
-
-export function clock(date: Date): string {
-  return `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
-}
-
-/** Whole months from today to a date; negative once it is past. */
-export function monthsUntil(date: Date): number {
-  const now = new Date();
-  return (date.getFullYear() - now.getFullYear()) * 12 + (date.getMonth() - now.getMonth()); // not-a-rule: months in a year
 }
