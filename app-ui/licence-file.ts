@@ -54,6 +54,12 @@ export type LicencePayload = {
    */
   trialSummaryDays: number;
   deviceReleasesPerYear: number;
+  /*
+   * How many of a machine's three parts must agree for it to be the one a
+   * device was activated on: the trial rule's setting. Absent in licences
+   * from before 2026-09-26, which then do not check the machine.
+   */
+  machinePartsToMatch?: number;
   devices: LicenceDevice[];
   /*
    * The secret this licence's renewal codes are checked against.
@@ -157,16 +163,17 @@ export function coversDevice(payload: LicencePayload, deviceId: string): boolean
 }
 
 /**
- * Whether two readings are the same computer: two parts agreeing, as the
- * trial rule has it, since any one part can change on a computer that is
- * honestly the same one (a disk replaced, a board swapped, a reinstall).
- * With fewer parts to compare, all of those that can be compared must agree;
- * with none, there is nothing to tell them apart and they are taken as one.
+ * Whether two readings are the same computer: enough parts agreeing, as the
+ * trial rule has it (its setting, trial_fingerprint_parts_to_match), since
+ * any one part can change on a computer that is honestly the same one: a
+ * disk replaced, a board swapped, a reinstall. With fewer parts to compare,
+ * all of those that can be compared must agree; with none, there is nothing
+ * to tell them apart and they are taken as one.
  */
-export function sameMachine(a: MachineMark, b: MachineMark): boolean {
+export function sameMachine(a: MachineMark, b: MachineMark, partsToMatch: number): boolean {
   const parts = (["board", "disk", "machine"] as const).filter((part) => a[part] && b[part]);
   const agreeing = parts.filter((part) => a[part] === b[part]).length;
-  return agreeing >= Math.min(2, parts.length);
+  return agreeing >= Math.min(partsToMatch, parts.length);
 }
 
 /**
@@ -177,5 +184,6 @@ export function sameMachine(a: MachineMark, b: MachineMark): boolean {
 export function coversMachine(payload: LicencePayload, deviceId: string, here: MachineMark): boolean {
   const device = payload.devices.find((one) => one.deviceId === deviceId);
   if (!device) return false;
-  return !device.machine || sameMachine(device.machine, here);
+  if (!device.machine || payload.machinePartsToMatch === undefined) return true;
+  return sameMachine(device.machine, here, payload.machinePartsToMatch);
 }

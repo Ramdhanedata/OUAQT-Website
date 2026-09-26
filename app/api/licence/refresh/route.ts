@@ -119,6 +119,7 @@ export async function POST(request: Request) {
       renewalGraceDays: settings.renewal_grace_days,
       clockGraceDays: secrets.clock_grace_days,
       deviceReleasesPerYear: secrets.device_releases_per_year,
+      machinePartsToMatch: secrets.trial_fingerprint_parts_to_match,
       trialSummaryDays: secrets.trial_summary_days,
     },
   });

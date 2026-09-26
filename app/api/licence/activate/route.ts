@@ -277,7 +277,7 @@ export async function POST(request: Request) {
      * computer. Past that, it is refused, and the owner talks to us.
      */
     const before = (already as { fingerprint?: MachineMark | null }).fingerprint ?? null;
-    if (before && here && !sameMachine(before, here)) {
+    if (before && here && !sameMachine(before, here, secrets.trial_fingerprint_parts_to_match)) {
       const yearAgo = new Date(Date.now() - 365 * 86_400_000).toISOString(); // not-a-rule: a year
       const { count } = await supabase
         .from("device_releases")
@@ -355,6 +355,7 @@ export async function POST(request: Request) {
       renewalGraceDays: settings.renewal_grace_days,
       clockGraceDays: secrets.clock_grace_days,
       deviceReleasesPerYear: secrets.device_releases_per_year,
+      machinePartsToMatch: secrets.trial_fingerprint_parts_to_match,
       trialSummaryDays: secrets.trial_summary_days,
     },
   });
