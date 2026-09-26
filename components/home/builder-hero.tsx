@@ -66,11 +66,19 @@ export function BuilderHero({
           </div>
 
           <p style={rise(0.28)} className="hero-enter mt-8 text-sm text-muted-foreground">
-            {[home.heroChipReady, ...reassurance].join("  ·  ")}
+            {reassurance.join("  ·  ")}
           </p>
         </div>
 
-        <div style={rise(0.18)} className="hero-enter mx-auto w-full max-w-2xl lg:max-w-none">
+        <div style={rise(0.18)} className="hero-enter relative mx-auto w-full max-w-2xl lg:max-w-none">
+          {/* A sticker on the picture's corner: how long it takes, said once and plainly. */}
+          <p
+            aria-label={home.heroChipReady}
+            className="absolute -end-3 -top-6 z-10 flex h-[104px] w-[104px] rotate-[8deg] flex-col items-center justify-center rounded-full bg-accent text-center text-accent-foreground shadow-[0_12px_28px_-14px_rgba(10,10,10,0.45)] ring-4 ring-background rtl:-rotate-[8deg] sm:-end-6 sm:-top-8 sm:h-[116px] sm:w-[116px]"
+          >
+            <span aria-hidden className="text-xs font-medium leading-none">{home.heroStickerTop}</span>
+            <span aria-hidden className="mt-1 text-2xl font-semibold leading-none tracking-tight sm:text-[1.7rem]">{home.heroStickerValue}</span>
+          </p>
           <div className="overflow-hidden rounded-2xl border border-border bg-app-background shadow-[0_30px_60px_-36px_rgba(10,10,10,0.35)]">
             <div className="flex h-7 items-center gap-1.5 border-b border-app-line bg-app-hover px-3" aria-hidden>
               <span className="h-2.5 w-2.5 rounded-full bg-app-strong" />

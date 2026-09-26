@@ -463,6 +463,8 @@ export const en = {
     heroReassuranceNoTrial: "Works without internet · Your data stays with you",
     heroShotAlt: "A cafe's till screen in OUAQT software: an order in progress, its total and the payment.",
     heroChipReady: "Ready in under 5 minutes",
+    heroStickerTop: "under",
+    heroStickerValue: "5 min",
 
     impactMinutes: "Under 5 minutes",
     impactMinutesLabel: "to build your software",

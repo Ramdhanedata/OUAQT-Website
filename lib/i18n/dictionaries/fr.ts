@@ -458,6 +458,8 @@ export const fr: Dictionary = {
     heroReassuranceNoTrial: "Sans internet · Vos données restent chez vous",
     heroShotAlt: "L'écran de caisse d'un café dans un logiciel OUAQT : une commande en cours, son total et le paiement.",
     heroChipReady: "Prêt en moins de 5 minutes",
+    heroStickerTop: "moins de",
+    heroStickerValue: "5 min",
 
     impactMinutes: "Moins de 5 minutes",
     impactMinutesLabel: "pour créer votre logiciel",

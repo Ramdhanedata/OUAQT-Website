@@ -457,6 +457,8 @@ export const ar: Dictionary = {
     heroReassuranceNoTrial: "يعمل بدون إنترنت · بياناتك تبقى عندك",
     heroShotAlt: "شاشة الصندوق لمقهى في برنامج من «وقت»: طلب جارٍ، ومجموعه، والدفع.",
     heroChipReady: "جاهز في أقل من 5 دقائق",
+    heroStickerTop: "أقل من",
+    heroStickerValue: "5 دقائق",
 
     impactMinutes: "أقل من 5 دقائق",
     impactMinutesLabel: "لإنشاء برنامجك",
