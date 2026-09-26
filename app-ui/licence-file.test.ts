@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { coversDevice, encodePayload, peek, verifyLicence, type LicencePayload } from "./licence-file";
+import { coversDevice, coversMachine, encodePayload, peek, sameMachine, verifyLicence, type LicencePayload } from "./licence-file";
 
 /*
  * The verifier is what stands between a shop and a licence somebody edited in
@@ -116,5 +116,33 @@ describe("which computers a licence covers", () => {
 
   it("does not cover a third machine the file was copied onto", () => {
     expect(coversDevice(payload, "device-three")).toBe(false);
+  });
+});
+
+describe("the machine a device runs on", () => {
+  const office = { board: "b1", disk: "d1", machine: "m1" };
+
+  it("is the same computer when two parts agree", () => {
+    expect(sameMachine(office, { board: "b1", disk: "d2", machine: "m1" })).toBe(true);
+    expect(sameMachine(office, { board: "b1", disk: "d2", machine: "m2" })).toBe(false);
+  });
+
+  it("compares only the parts both readings have", () => {
+    expect(sameMachine(office, { board: null, disk: "d1", machine: "m1" })).toBe(true);
+    expect(sameMachine(office, { board: null, disk: null, machine: "m1" })).toBe(true);
+    expect(sameMachine(office, { board: null, disk: null, machine: "m2" })).toBe(false);
+    expect(sameMachine(office, { board: null, disk: null, machine: null })).toBe(true);
+  });
+
+  it("covers a copied data folder only on the computer it was activated on", () => {
+    const payload = { devices: [{ deviceId: "dev-1", role: "main", machine: office }] } as unknown as LicencePayload;
+    expect(coversMachine(payload, "dev-1", office)).toBe(true);
+    expect(coversMachine(payload, "dev-1", { board: "b9", disk: "d9", machine: "m9" })).toBe(false);
+    expect(coversMachine(payload, "dev-2", office)).toBe(false);
+  });
+
+  it("covers the device id alone in a licence from before machines were kept", () => {
+    const payload = { devices: [{ deviceId: "dev-1", role: "main" }] } as unknown as LicencePayload;
+    expect(coversMachine(payload, "dev-1", { board: "b9", disk: "d9", machine: "m9" })).toBe(true);
   });
 });

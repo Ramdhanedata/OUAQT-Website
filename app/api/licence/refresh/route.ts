@@ -98,7 +98,7 @@ export async function POST(request: Request) {
 
   const { data: devices } = await supabase
     .from("devices")
-    .select("device_id, role")
+    .select("device_id, role, fingerprint")
     .eq("business_id", business.id)
     .eq("status", "active");
 

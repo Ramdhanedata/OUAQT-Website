@@ -12,6 +12,7 @@ import { claimTrial } from "@/builder/licence/trial-claim";
 import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
+import { sameMachine, type MachineMark } from "@/app-ui/licence-file";
 import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@/builder/config-code/server";
 import { limitPerCaller } from "@/lib/rate-limit";
 
@@ -172,7 +173,7 @@ export async function POST(request: Request) {
 
   const { data: devices } = await supabase
     .from("devices")
-    .select("id, device_id, role, status")
+    .select("id, device_id, role, status, fingerprint")
     .eq("business_id", business.id);
 
   const active = (devices ?? []).filter((device) => device.status === "active");
@@ -263,10 +264,36 @@ export async function POST(request: Request) {
    * device slots, so an owner refused twice on a second-hand PC and then
    * granted a trial by hand was told his licence had no room left.
    */
+  const here: MachineMark | null = input.data.fingerprint
+    ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
+    : null;
+
   if (already) {
+    /*
+     * The same device id from another computer: the shop's data folder was
+     * moved, or copied. A move is allowed as often as a device release is
+     * (device_releases_per_year), and is counted as one; the copy left
+     * behind stops at its next check, since its licence now names this
+     * computer. Past that, it is refused, and the owner talks to us.
+     */
+    const before = (already as { fingerprint?: MachineMark | null }).fingerprint ?? null;
+    if (before && here && !sameMachine(before, here)) {
+      const yearAgo = new Date(Date.now() - 365 * 86_400_000).toISOString(); // not-a-rule: a year
+      const { count } = await supabase
+        .from("device_releases")
+        .select("id", { count: "exact", head: true })
+        .eq("business_id", business.id)
+        .gt("released_at", yearAgo);
+      if ((count ?? 0) >= secrets.device_releases_per_year) {
+        await audit({ actorId: null, subject: "device", subjectId: input.data.deviceId, action: "move_refused", detail: { businessId: business.id } });
+        return NextResponse.json({ error: "moved_too_often", supportWhatsapp: settings.support_whatsapp }, { status: 409 });
+      }
+      await supabase.from("device_releases").insert({ business_id: business.id, device_id: input.data.deviceId, released_by: null });
+      await audit({ actorId: null, subject: "device", subjectId: input.data.deviceId, action: "moved", detail: { businessId: business.id } });
+    }
     await supabase
       .from("devices")
-      .update({ last_seen: new Date().toISOString(), token_hash: tokenHash })
+      .update({ last_seen: new Date().toISOString(), token_hash: tokenHash, ...(here ? { fingerprint: here } : {}) })
       .eq("id", already.id);
   } else {
     const { error } = await supabase.from("devices").insert({
@@ -276,6 +303,7 @@ export async function POST(request: Request) {
       platform: input.data.platform,
       role: active.length === 0 ? "main" : "secondary",
       token_hash: tokenHash,
+      ...(here ? { fingerprint: here } : {}),
     });
 
     if (error) {
@@ -306,7 +334,7 @@ export async function POST(request: Request) {
 
   const { data: fresh } = await supabase
     .from("devices")
-    .select("device_id, role")
+    .select("device_id, role, fingerprint")
     .eq("business_id", business.id)
     .eq("status", "active");
 

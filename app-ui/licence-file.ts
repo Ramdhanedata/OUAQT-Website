@@ -15,9 +15,21 @@
  * Nothing in this file touches a network, a database or a screen.
  */
 
+/* A machine in three hashed parts, as the app reads it (electron/licence/fingerprint.ts). */
+export type MachineMark = {
+  board: string | null;
+  disk: string | null;
+  machine: string | null;
+};
+
 export type LicenceDevice = {
   deviceId: string;
   role: "main" | "secondary";
+  /*
+   * The machine this device id last activated on. Absent in licences issued
+   * before 2026-09-26, which then cover the device id alone.
+   */
+  machine?: MachineMark;
 };
 
 export type LicencePayload = {
@@ -142,4 +154,28 @@ export async function verifyLicence(
  */
 export function coversDevice(payload: LicencePayload, deviceId: string): boolean {
   return payload.devices.some((device) => device.deviceId === deviceId);
+}
+
+/**
+ * Whether two readings are the same computer: two parts agreeing, as the
+ * trial rule has it, since any one part can change on a computer that is
+ * honestly the same one (a disk replaced, a board swapped, a reinstall).
+ * With fewer parts to compare, all of those that can be compared must agree;
+ * with none, there is nothing to tell them apart and they are taken as one.
+ */
+export function sameMachine(a: MachineMark, b: MachineMark): boolean {
+  const parts = (["board", "disk", "machine"] as const).filter((part) => a[part] && b[part]);
+  const agreeing = parts.filter((part) => a[part] === b[part]).length;
+  return agreeing >= Math.min(2, parts.length);
+}
+
+/**
+ * Whether the licence covers this device id on this computer. A shop's data
+ * folder copied onto another computer carries the device id with it; the
+ * machine it was activated on does not travel.
+ */
+export function coversMachine(payload: LicencePayload, deviceId: string, here: MachineMark): boolean {
+  const device = payload.devices.find((one) => one.deviceId === deviceId);
+  if (!device) return false;
+  return !device.machine || sameMachine(device.machine, here);
 }
