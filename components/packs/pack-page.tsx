@@ -103,7 +103,7 @@ export function PackPage({
                 <h2 className="text-xl font-medium text-foreground">
                   {copy.common.soonHeading}
                 </h2>
-                <Notify dict={dict} businessType={label} intro={copy.common.soonBody} />
+                <Notify dict={{ builderHome: dict.builderHome }} businessType={label} intro={copy.common.soonBody} />
               </div>
             )}
           </FadeIn>
@@ -180,7 +180,7 @@ export function PackPage({
               </div>
             </>
           ) : (
-            <Notify dict={dict} businessType={label} intro={copy.common.soonBody} />
+            <Notify dict={{ builderHome: dict.builderHome }} businessType={label} intro={copy.common.soonBody} />
           )}
 
           <div className="mt-10 flex flex-wrap gap-6">

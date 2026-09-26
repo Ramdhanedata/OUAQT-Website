@@ -4,26 +4,24 @@
  */
 export const en = {
   meta: {
-    siteTitle: "Build your shop's software | OUAQT",
-    siteDescription: "Answer a few questions and leave with the software your shop runs on, ready to install. It works without internet and your data stays on your computer.",
-    projectsTitle: "Projects: 22 systems in daily use | OUAQT",
-    projectsDescription: "Pharmacies, hotels, transport, restaurants, mines and schools. See what each system changed, then build your own from a few questions.",
+    siteTitle: "OUAQT | Management software for small businesses, ready in minutes",
+    siteDescription: "With the OUAQT Builder, small and medium-sized businesses build their own till, stock and reporting software in minutes. It works without internet and your data stays with you.",
+    projectsTitle: "Custom work: 22 systems in daily use | OUAQT",
+    projectsDescription: "Mines, pharmacies, hotels, transport, restaurants and schools: the systems we built to order, and what each one changed.",
     aboutTitle: "About OUAQT and its founder",
-    aboutDescription: "Why OUAQT builds management software for small businesses, from the online builder to custom projects. Founded by Elboumby Aumar Ramdhane.",
+    aboutDescription: "OUAQT is a startup that equips small and medium-sized businesses with management software: the online Builder, and custom projects. Founded by Elboumby Aumar Ramdhane.",
     contactTitle: "Contact | OUAQT",
-    contactDescription: "Tell us what takes your team too long. We usually reply within one business day, by email or on WhatsApp.",
+    contactDescription: "A question about the Builder, a demo or a custom project: write to us. We usually reply within one business day, by email or on WhatsApp.",
     termsTitle: "Licence and terms of use | OUAQT",
     termsDescription:
       "Who owns an OUAQT system, what your licence covers, and how it renews.",
     privacyTitle: "Privacy policy | OUAQT",
     privacyDescription:
       "What OUAQT does with personal information, on this website and inside the systems we build.",
-    pricingTitle: "Pricing: software you build online, and custom projects | OUAQT",
+    pricingTitle: "Pricing: the Builder and custom projects | OUAQT",
     pricingDescription:
       "Every OUAQT price in one place: the software you build online, then installation and the annual licence for custom projects.",
-    shareLine: "22 systems in daily use across mining, pharmacy, hospitality, transport, food service and education.",
-    shareAlt: "OUAQT: we find what slows your business down, and build the software that fixes it.",
-    shareReach: "We work on site or remotely.",
+    shareAlt: "OUAQT: management software for small businesses, built in minutes with the Builder.",
   },
 
   /*
@@ -42,68 +40,19 @@ export const en = {
   },
 
   nav: {
-    home: "Home",
-    custom: "Custom project",
-    projects: "Projects",
+    builder: "The Builder",
+    custom: "Custom work",
+    projects: "Our work",
     pricing: "Pricing",
     about: "About",
     contact: "Contact",
-    cta: "Talk to us",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     language: "Language",
     homeAria: "OUAQT home",
   },
 
-  hero: {
-    eyebrow: "OUAQT · Custom business software",
-    heading: "We find what slows your business down, and build the software that fixes it.",
-    body: "Typing the same record twice. Staying late because the till and the notebook don't match. We come to your business and watch how the work really gets done. Then we build software around it, so your team gets those hours back.",
-    primaryCta: "Tell us what's slowing you down",
-    secondaryCta: "See what we've built",
-    freeVisit: "Your first visit is free, with no commitment.",
-  },
-
-  impact: {
-    liveSystems: "Systems in daily use",
-    sectors: "Sectors we work in",
-    reduction: "Less time spent reconciling at GMM",
-    buildTime: "To working software, after our first visit",
-    buildTimeValue: "48-72h",
-  },
-
-  problem: {
-    eyebrow: "Sound familiar?",
-    heading: "Most businesses still run on paper, Excel and WhatsApp.",
-    body: "Usually that's because the software they were offered never fit the way they work, so the notebook stayed.",
-    items: {
-      mining: "Four hours every day spent reconciling figures by hand.",
-      pharmacy: "Hours of typing out medicine records, one line at a time.",
-      hospitality: "Taxes and commissions worked out by hand on every bill, and the billing mistakes that come with it.",
-      transport: "An hour of paperwork before every trip can leave.",
-    },
-  },
-
-  pillars: {
-    eyebrow: "How we fix it",
-    heading: "We shape the software around your business, so your team doesn't have to change how it works.",
-    workflow: {
-      title: "It works the way your team already works",
-      body: "We start from your real routine, down to the language your staff write in. At GMM the field crews log data in French, Arabic and English, so their system speaks all three.",
-    },
-    automation: {
-      title: "The computer does the repetitive part",
-      body: "At the pharmacy, the system fills in medicine records from past entries, so staff stopped retyping them. Your people keep the work that needs their judgment.",
-    },
-    migration: {
-      title: "Your old records come with you",
-      body: "We bring years of paper and spreadsheet history into the new system, so nobody starts from an empty screen. Your data stays yours, and it is never mixed with another client's.",
-    },
-  },
-
   proof: {
-    eyebrow: "A real result",
-    heading: "Four hours of daily work, now done in twenty-five minutes.",
     body: "GMM's field teams used to reconcile bloc movements by hand, across paper logs and three languages. Today the system does that work for them.",
     cta: "See how we did it",
     client: "GMM · Mining client",
@@ -116,23 +65,10 @@ export const en = {
     reductionNote: "Less time spent reconciling, a figure GMM confirmed.",
   },
 
-  featured: {
-    heading: "Some of our work",
-    body: "22 systems in daily use. Each one was built for a single business and the way it runs.",
-    cta: "See all projects",
-  },
-
-  homeCta: {
-    heading: "Tell us where your day goes.",
-    body: "Tell us how your business runs today, paper and WhatsApp groups included. One conversation is usually enough to see where software would save you the most time.",
-    primary: "Talk to us",
-    secondary: "Who we are",
-  },
-
   projectsPage: {
-    eyebrow: "Projects",
-    heading: "22 systems, in use every day.",
-    body: "Every project starts with a visit. We learn how the business runs, bring its old records across, and set the software up for that client alone. So far that has meant mines, pharmacies, hotels, transport companies, restaurants and schools. Here is a selection.",
+    eyebrow: "Custom work",
+    heading: "22 systems built to order, in use every day.",
+    body: "Before the Builder there were these projects, and there still are. Each one starts with a visit: we learn how the business runs, bring its old records across, and set the software up for that client alone. Mines, pharmacies, hotels, transport, restaurants and schools: here is a selection.",
     all: "All",
   },
 
@@ -143,7 +79,7 @@ export const en = {
   pricingPage: {
     /* The builder's own prices, read from settings, shown above the rest. */
     builderTrack: {
-      eyebrow: "The software you build online",
+      eyebrow: "The Builder",
       heading: "You build it yourself, you install it the same day",
       intro:
         "You answer the questions, you download your software and you install it on the shop PC. Nobody travels to you, so there is no installation fee to pay: the licence alone is enough.",
@@ -170,7 +106,7 @@ export const en = {
       eyebrow: "Bespoke project",
       heading: "Or we come and install it, and build what is missing",
       intro:
-        "For the trades the builder does not cover yet, and for businesses that want us to do the work on site.",
+        "For the trades the Builder does not cover yet, and for businesses that want us to do the work on site.",
     },
     eyebrow: "Pricing",
     heading: "The software you build yourself, and the software we build for you.",
@@ -287,65 +223,6 @@ export const en = {
     },
   },
 
-  process: {
-    eyebrow: "How we work",
-    heading: "It starts with a visit.",
-    body: "You don't need to fill in forms or write a specification. We come to you and start from what we see.",
-    steps: {
-      listen: {
-        title: "We sit with your team and listen",
-        body: "We spend time with the people doing the work and watch an ordinary day as it really goes. Where things go wrong, what gets done twice, which numbers nobody quite trusts. You know your business better than we do, so mostly we listen. This first visit is free.",
-      },
-      build: {
-        title: "We build it around your routine",
-        body: "The software follows the steps your team already knows, in the language they already use, and your existing records come along.",
-      },
-      stay: {
-        title: "We stay after it goes live",
-        body: "We train your staff in person. After that, for as long as the licence runs, we fix what goes wrong and adjust things when the way you work changes.",
-      },
-    },
-  },
-
-  faq: {
-    eyebrow: "Questions",
-    heading: "Questions people ask us before starting.",
-    items: {
-      visit: {
-        q: "Do you charge for the first visit?",
-        a: "No. We come to see how your business runs and tell you what we would build and what it would cost. You decide afterwards, with no commitment.",
-      },
-      duration: {
-        q: "How long does it take?",
-        a: "We spend the first day with you, understanding how the work actually runs. After that, most systems are ready in 48 to 72 hours. If yours is larger and needs longer, we say so before you commit to anything.",
-      },
-      offline: {
-        q: "What if the internet goes down?",
-        a: "Nothing changes. Our software runs on your own computers, and daily work happens without a connection.",
-      },
-      data: {
-        q: "Who owns the data?",
-        a: "You do. It stays on your own computers and never mixes with another client's. Ask for a copy at any time and we hand it over.",
-      },
-      changes: {
-        q: "What if I need something changed later?",
-        a: "For as long as the licence is renewed, changes to what you already have are included. Something new, like an extra screen or process, is a new module with its own quote, and we tell you which is which before we start.",
-      },
-      training: {
-        q: "Do you train my team?",
-        a: "Yes, in person, for as long as it takes them to feel confident. Training is part of the installation fee and is never billed on its own.",
-      },
-      migration: {
-        q: "What happens to my old records?",
-        a: "They come with you. We bring years of paper and spreadsheets into the new system, so nobody starts from an empty screen.",
-      },
-      broken: {
-        q: "What if something breaks?",
-        a: "We fix it. While the licence is renewed, anything wrong or slow in what we delivered is corrected at no charge, and you deal with the person who built it.",
-      },
-    },
-  },
-
   legal: {
     updated: "Last updated",
     updatedDate: "September 2026",
@@ -387,7 +264,7 @@ export const en = {
       },
       selfChanges: {
         h: "What the licence does not include",
-        b: "A trade the builder does not cover yet, or a way of working its questions do not provide for, is a bespoke project and is quoted separately.",
+        b: "A trade the Builder does not cover yet, or a way of working its questions do not provide for, is a bespoke project and is quoted separately.",
       },
       bespokePart: {
         h: "Part two: the projects we build and install",
@@ -441,7 +318,7 @@ export const en = {
     privacy: {
       title: "Privacy policy",
       intro:
-        "What OUAQT holds about you, and what it never has. This page covers this site, the software builder on it, and the systems we install at your premises.",
+        "What OUAQT holds about you, and what it never has. This page covers this site, the Builder on it, and the systems we install at your premises.",
       collect: {
         h: "What this site collects",
         b: "On ordinary pages, only what you type into the contact form: your name, your email address or phone, your message and the language you were reading. This site carries no advertising tracker and no third-party analytics.",
@@ -456,7 +333,7 @@ export const en = {
       },
       ai: {
         h: "Artificial intelligence",
-        b: "When you describe the way you work in your own words, that sentence may be sent to an artificial intelligence service to be turned into settings, and what it proposes is then checked against our own rules before anything is applied. The screenshot of your payment is also sent to it to take down the amount, the date and the transaction number. That service may keep what it receives and use it to improve its products. Nothing else is sent to it: not your product list, not your staff. The builder works entirely without this feature, and your tap answers never go through it.",
+        b: "When you describe the way you work in your own words, that sentence may be sent to an artificial intelligence service to be turned into settings, and what it proposes is then checked against our own rules before anything is applied. The screenshot of your payment is also sent to it to take down the amount, the date and the transaction number. That service may keep what it receives and use it to improve its products. Nothing else is sent to it: not your product list, not your staff. The Builder works entirely without this feature, and your tap answers never go through it.",
       },
       payments: {
         h: "Payments",
@@ -494,7 +371,7 @@ export const en = {
   },
 
   projectDetail: {
-    back: "All projects",
+    back: "All our work",
     overview: "Overview",
     problem: "The problem",
     solution: "What we built",
@@ -521,18 +398,18 @@ export const en = {
 
   about: {
     eyebrow: "About OUAQT",
-    heading: "The owner knows his business better than anyone.",
+    heading: "A startup that equips small businesses with software made to measure.",
     body1:
       "We built bespoke systems one client at a time: mining, pharmacies, hotels, transport, restaurants, schools. Every time, the same scene. A solid business, a team that knows what it is doing, and the most important work of the day resting on paper, spreadsheets and WhatsApp groups.",
     body2:
       "And every time, the same discovery. Nobody understood the problem better than the owner himself. Our job was never to teach him his trade, it was to turn what he already knew into software that looked like him.",
     storyHeading: "What we did about it",
     storyBody1:
-      "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into a builder: the owner answers questions about the way he works, and leaves with his software, ready to install, the same day.",
+      "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into the Builder, an online software builder: the owner answers questions about the way he works, and leaves with his software, ready to install, the same day.",
     storyBody2:
       "This is not a template touched up afterwards. It is the same software for everybody, set by his own answers: his products, his languages, his staff, the way he takes money. It runs on his own computers, with no internet, and his figures never reach us.",
     storyBody3:
-      "The trades the builder does not cover yet, and the businesses whose work falls outside it, we still build for one at a time, as before.",
+      "The Builder is now our main product. The trades it does not cover yet, and the businesses whose work falls outside it, we still build for one at a time, as before.",
     marketHeading: "The numbers behind it.",
     stat1: "of Mauritania's GDP runs through the informal sector",
     stat2: "of the workforce is in informal employment",
@@ -577,75 +454,160 @@ export const en = {
   },
 
   builderHome: {
-    heroHeading: "Describe your shop. Leave with your software.",
-    heroBody: "Nobody knows your shop better than you do. Answer a few questions about how you work, and the software that goes with it installs on the shop computer.",
+    heroEyebrow: "Management software for small and medium businesses",
+    heroHeading: "Your business management software, ready in minutes.",
+    heroBody: "OUAQT is a startup that equips small and medium-sized businesses. With the Builder, you describe how your business works and leave with your own till, stock and reporting software, installed on your own computers.",
     heroPrimary: "Build my software",
-    heroSecondary: "Custom project",
+    heroSecondary: "Try the demo",
     heroReassurance: "Works without internet · Your data stays with you · {days} day free trial",
     heroReassuranceNoTrial: "Works without internet · Your data stays with you",
+    heroShotAlt: "A cafe's till screen in OUAQT software: an order in progress, its total and the payment.",
+    heroChipOffline: "Works without internet",
+    heroChipOfflineLabel: "for the everyday work",
+    heroChipReady: "Ready in under 20 minutes",
 
     impactMinutes: "Under 20 minutes",
     impactMinutesLabel: "to build your software",
     impactOffline: "No internet",
-    impactOfflineLabel: "for the everyday work",
+    impactOfflineLabel: "needed for the everyday work",
     impactData: "Your data",
-    impactDataLabel: "stays on your computer",
+    impactDataLabel: "stays on your computers",
+    impactSystems: "22 systems",
+    impactSystemsLabel: "in daily use at our clients",
 
-    howHeading: "How it works",
-    howStep1: "You answer",
-    howStep1Body: "A few questions about your shop: what you sell, how you take payment, who works the till.",
-    howStep2: "You see the result",
-    howStep2Body: "The receipt and the sale screen change as you answer. Nothing is fixed.",
-    howStep3: "You install it",
-    howStep3Body: "You download the software and install it on the shop computer.",
+    builderEyebrow: "The Builder",
+    builderHeading: "The Builder makes your software from your answers.",
+    builderBody: "It is the heart of OUAQT. Instead of generic software you have to learn, the Builder puts together yours: your products, your prices, how you take payment, your staff and your receipts.",
+    builderStep1: "Describe your business",
+    builderStep1Body: "What you sell, how you take payment, who works the till. Simple questions, in French, Arabic or English.",
+    builderStep2: "Watch it work",
+    builderStep2Body: "The real software runs beside the questions and changes with every answer. You try it before you download it.",
+    builderStep3: "Install and start",
+    builderStep3Body: "Download it for Windows or Mac, activate it with your serial number, and your free trial begins.",
+    builderCta: "Build my software",
+    builderPricing: "See the prices",
 
-    tradesHeading: "For which trade",
+    demoEyebrow: "Live demo",
+    demoHeading: "Try it here. It is the real software.",
+    demoBody: "Pick a trade, ring up a sale, open the stock or the reports. What you see here is what you will install.",
+    demoLoading: "Opening the software",
+    demoNote: "Sample data, so you can try it without risking anything.",
+    demoPhone: "On a phone the demo shows small. Open this page on a computer to really try it.",
+    demoShops: {
+      pharmacy: "Central Pharmacy",
+      bakery: "Harbour Bakery",
+      restaurant: "Palm Tree Cafe",
+      warehouse: "Central Depot",
+      shop: "Al Amal Grocery",
+      hotel: "Dunes Hotel",
+      transport: "Sahel Express Travel",
+      general: "Nour Workshop",
+    },
+
+    featuresEyebrow: "In every piece of software",
+    featuresHeading: "Everything you need to run your business day to day.",
+    features: [
+      { title: "A fast till", body: "Take payment in a few taps, in cash or by mobile app, with a printed receipt." },
+      { title: "Stock kept up to date", body: "It goes down with every sale and warns you before a product runs out." },
+      { title: "Clear reports", body: "Today's, this week's and this month's takings, the best sellers, and an export for Excel." },
+      { title: "Customer credit", body: "Sales on credit and what each customer owes you, without a notebook." },
+      { title: "Closing the till", body: "At the end of the day or the shift: what should be in the till, and what is." },
+      { title: "Receipts for your trade", body: "The table for a restaurant, the room and dates for a hotel, the seat and departure for a ticket." },
+      { title: "Two computers together", body: "The till and a second computer work together over your own network, without internet." },
+      { title: "French and Arabic", body: "The software speaks your staff's language, receipts included." },
+    ],
+
+    tradesEyebrow: "Trades",
+    tradesHeading: "Software for every trade",
+    tradesBody: "Each trade has its own screens, questions and receipts. Pick yours to start.",
     tradesOpen: "Available",
     tradesSoon: "Coming soon",
+    tradesStart: "Start",
     tradesLearnMore: "Read more",
+    tradesNotifyMe: "Tell me when",
+    tradeLines: {
+      pharmacy: "Expiry dates, batches, suppliers and barcode search.",
+      bakery: "The day's production, orders taken ahead and unsold goods.",
+      restaurant: "Tables, orders to the kitchen, dine in, takeaway and delivery.",
+      warehouse: "Goods in, goods out, locations and units of sale.",
+      shop: "Sell by the piece or by weight, barcodes and customer credit.",
+      hotel: "Rooms, stays, advances and extras.",
+      transport: "Departures, numbered seats, tickets and parcels.",
+      general: "Products or services, stock and expenses.",
+    },
     tradesOther: "My business is not on this list",
+    tradesOtherBody: "No need to worry, more trades are on the way. Tell us what you do and leave your number: we will call you back.",
+    tradesBusiness: "Your business",
+    tradesBusinessPlaceholder: "For example: hardware store, hair salon, garage",
     tradesLeaveNumber: "Leave your number and we will tell you.",
     tradesPhone: "Your phone number",
     tradesSend: "Tell me",
+    tradesSendOther: "Send",
     tradesThanks: "Thank you. We will write as soon as it is ready.",
+    tradesOtherThanks: "Thank you. We have your request and we will call you very soon.",
     tradesError: "Your number did not go through. Try again, or write to us on WhatsApp.",
 
-    worriesHeading: "What worries owners, and what is actually true",
-    worry1: "What if the internet goes?",
-    worry1Body: "The software works on your computer. Internet is only for installing and updating.",
-    worry2: "Where does my data go?",
-    worry2Body: "Your sales, your stock and your customers' accounts stay with you. We never receive them.",
-    worry3: "How do I pay?",
-    worry3Body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year or every six months. You see the amount before you pay.",
-    worry4: "What if it does not suit me?",
-    worry4Body: "You try it free before paying anything.",
+    whyEyebrow: "Why OUAQT",
+    whyHeading: "Made for local small businesses, and for the way they work.",
+    why: [
+      { title: "No internet needed", body: "The software works on your computers. Internet is only for installing, updating and paying for the licence." },
+      { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts never leave your computers. We never receive them." },
+      { title: "Local payment", body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year or every six months. You see the amount before you pay." },
+      { title: "A team that answers", body: "A question or a problem: write to us on WhatsApp. We usually answer the same day, in French or Arabic." },
+    ],
 
-    customHeading: "Is your business unlike any other?",
-    customBody: "For mines, hotels, transport, schools and anything outside the usual, we build to order. It starts with a visit, free, at your place.",
-    customProjects: "See our projects",
-    customPricing: "See the prices",
-    customTalk: "Let us talk",
+    pricingEyebrow: "Prices",
+    pricingHeading: "Clear prices, shown before you pay.",
+    pricingBody: "You try it free first, then choose your licence. No installation fee: you install it yourself, in a few minutes.",
+    pricingAnnual: "Annual licence",
+    pricingPerYear: "per year",
+    pricingMonthly: "that is {amount} a month",
+    pricingLaunch: "Launch price",
+    pricingSoon: "Price coming soon",
+    pricingTrial: "{days} day free trial",
+    pricingDevices: "{devices} computers included",
+    pricingUpdates: "Updates and support included",
+    pricingPayment: "Pay by mobile app",
+    pricingCta: "See all prices",
 
+    customEyebrow: "Custom work",
+    customHeading: "A need outside the usual? We build it with you.",
+    customBody: "It is our second line of work, and the one the Builder grew out of. For businesses whose work fits no template, we come on site, learn how you work and build the system that matches it.",
+    customStep1: "A visit to understand",
+    customStep1Body: "We watch an ordinary day with your team. This first visit is free.",
+    customStep2: "A system around your routine",
+    customStep2Body: "It follows your steps and your language, and your old records come with you.",
+    customStep3: "Support after go-live",
+    customStep3Body: "We train your team and adjust the system as the way you work changes.",
+    customProjects: "See our work",
+    customTalk: "Ask for a quote",
+
+    faqEyebrow: "Questions",
     faqHeading: "What people ask us",
     faq1: "Does the software work without internet?",
-    faq1Body: "Yes. It installs on the shop computer and works there. Internet is only for installing, updating and paying.",
+    faq1Body: "Yes. It installs on the business computer and works there. Internet is only for installing, updating and paying.",
     faq2: "Who sees my sales and my customers?",
     faq2Body: "Only you. Your sales, your stock and your customers' accounts stay on your computers. We never receive them.",
     faq3: "How many computers can I install it on?",
     faq3Body: "Two: the till and a second machine. Both work without internet and agree with each other over your own network.",
-    faq4: "What if I need help?",
-    faq4Body: "Write to us on WhatsApp. We usually answer the same day, in French or Arabic.",
+    faq4: "What happens when the free trial ends?",
+    faq4Body: "Until you pay, the software becomes read only: you can see and export your data, but not enter new records. As soon as the licence is paid, everything opens again.",
+    faq5: "What if my trade is not on the list?",
+    faq5Body: "Tell us from the list of trades, with your number. More trades are on the way, and if your need is particular we can build it to order.",
+    faq6: "What if I need help?",
+    faq6Body: "Write to us on WhatsApp. We usually answer the same day, in French or Arabic.",
 
-    ctaHeading: "Your software, today",
-    ctaBody: "A few questions and you leave with it. You can also write to us first if you would rather.",
+    ctaHeading: "Equip your business today.",
+    ctaBody: "A few minutes of questions and your software is ready to install. For a custom project, let us talk first.",
     ctaButton: "Build my software",
+    ctaTalk: "Talk to the team",
     ctaWhatsapp: "Write on WhatsApp",
   },
 
   contact: {
     eyebrow: "Contact",
-    heading: "Tell us what takes your team too long.",
-    body: "You don't need the right words or a plan. Tell us in your own words where the day gets stuck, and we'll look at it with you and suggest the smallest system that saves the most time. The first visit is free.",
+    heading: "Let us talk about your business.",
+    body: "A question about the Builder, help installing it, or a custom project in mind: write to us in your own words. We usually reply within one business day. For a custom project, the first visit is free.",
     whatsapp: "WhatsApp",
     form: {
       name: "Name",
@@ -669,12 +631,12 @@ export const en = {
   },
 
   footer: {
-    tagline: "Software for businesses that still run on paper, Excel and WhatsApp.",
-    navigate: "Navigate",
+    tagline: "Management software for small and medium-sized businesses, built in minutes with the Builder, and built to order when your trade is outside the usual.",
+    product: "Product",
+    company: "Company",
     connect: "Connect",
     brand: "OUAQT",
     rights: "All rights reserved.",
-    legal: "Legal",
     terms: "Licence and terms",
     privacy: "Privacy policy",
   },
@@ -822,7 +784,7 @@ export const en = {
     },
     "restaurant-pos": {
       metaTitle: "Restaurant, cafe and bakery till",
-      metaDescription: "A till built for the real rhythm of the room, at the table and at the counter. Coming soon in the OUAQT software builder.",
+      metaDescription: "A till built for the real rhythm of the room, at the table and at the counter. Coming soon in the OUAQT Builder.",
       title: "Restaurant & Café Till",
       summary: "A till built around how the room really runs, for table service and the bakery counter.",
       description: "Orders, the kitchen and the day's takings were tracked in three different places. The till brings them together and adapts to the pace of each site.",

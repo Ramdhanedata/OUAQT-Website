@@ -178,7 +178,7 @@ export default function RootLayout({ children, params }: Props) {
             __html: JSON.stringify(businessData).replace(/</g, "\\u003c"),
           }}
         />
-        <Navbar dict={dict} lang={lang} />
+        <Navbar dict={{ nav: dict.nav, common: dict.common }} lang={lang} />
         <main className="min-h-screen pt-16 sm:pt-20">
           <PageTransition>{children}</PageTransition>
         </main>

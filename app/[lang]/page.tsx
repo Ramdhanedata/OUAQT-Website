@@ -3,14 +3,15 @@ import { BuilderCta } from "@/components/home/builder-cta";
 import { BuilderFaq } from "@/components/home/builder-faq";
 import { BuilderHero } from "@/components/home/builder-hero";
 import { BuilderImpact } from "@/components/home/builder-impact";
+import { BuilderProduct } from "@/components/home/builder-product";
 import { CustomPath } from "@/components/home/custom-path";
-import { HowItWorks } from "@/components/home/how-it-works";
-import { Problem } from "@/components/home/problem";
-import { Proof } from "@/components/home/proof";
+import { Features } from "@/components/home/features";
+import { PricingTeaser } from "@/components/home/pricing-teaser";
 import { Trades } from "@/components/home/trades";
-import { Worries } from "@/components/home/worries";
+import { Why } from "@/components/home/why";
 import { JsonLd } from "@/components/seo/json-ld";
 import { getPublicSettings } from "@/builder/db/settings";
+import { getLaunchOffer } from "@/builder/payment/launch";
 import { openPacks } from "@/builder/packs/opening";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -18,11 +19,12 @@ import { localisedHref, packRouteId } from "@/lib/i18n/routes";
 import { softwareApplicationData } from "@/lib/seo/software-application";
 
 /*
- * The home page, in the order an owner asks his questions.
+ * The home page of a company with one product and a second trade.
  *
- * What is my problem, what do you do about it, what will it cost me in time,
- * is it for my trade, what happens when the internet goes, has anyone else
- * done this, and only then: what if my business is unlike any other.
+ * The Builder first, because it is the product: what it is, the software
+ * itself running, what it does, which trades it serves, why a small business
+ * can trust it and what it costs. Then the custom work, set apart as the
+ * second offer, and the questions people ask.
  *
  * Which trades are open and how long the trial runs are read from settings,
  * so this page follows the admin area rather than a deploy.
@@ -30,6 +32,7 @@ import { softwareApplicationData } from "@/lib/seo/software-application";
 export default async function Home({ params }: { params: { lang: Locale } }) {
   const dict = getDictionary(params.lang);
   const settings = await getPublicSettings();
+  const offer = await getLaunchOffer();
 
   /* Which trades are open: builder/packs/opening.ts. */
   const enabled = openPacks();
@@ -53,17 +56,11 @@ export default async function Home({ params }: { params: { lang: Locale } }) {
       <JsonLd data={softwareApplicationData(params.lang, dict)} />
       <BuilderHero dict={dict} lang={params.lang} trialDays={settings?.trial_days ?? null} />
       <BuilderImpact dict={dict} />
-      <Problem dict={dict} />
-      <HowItWorks dict={dict} />
-      <Trades
-        dict={dict}
-        lang={params.lang}
-        enabledPacks={enabled}
-        packHrefs={packHrefs}
-        packPages={packPages}
-      />
-      <Worries dict={dict} />
-      <Proof dict={dict} lang={params.lang} />
+      <BuilderProduct dict={dict} lang={params.lang} demoPacks={enabled.length > 0 ? enabled : [...packs]} />
+      <Features dict={dict} />
+      <Trades dict={{ builderHome: dict.builderHome, packLabels: dict.packLabels }} enabledPacks={enabled} packHrefs={packHrefs} packPages={packPages} />
+      <Why dict={dict} />
+      <PricingTeaser dict={dict} lang={params.lang} settings={settings} offer={offer} />
       <CustomPath dict={dict} lang={params.lang} />
       <BuilderFaq dict={dict} />
       <BuilderCta dict={dict} lang={params.lang} />

@@ -2,26 +2,24 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "Créez le logiciel de votre commerce | OUAQT",
-    siteDescription: "Répondez à quelques questions et repartez avec le logiciel de votre commerce, prêt à installer. Il fonctionne sans internet, vos données restent chez vous.",
-    projectsTitle: "Projets : 22 systèmes utilisés chaque jour | OUAQT",
-    projectsDescription: "Pharmacies, hôtels, transport, restaurants, mines et écoles. Voyez ce que chaque système a changé, puis créez le vôtre en quelques questions.",
+    siteTitle: "OUAQT | Le logiciel de gestion des PME, prêt en quelques minutes",
+    siteDescription: "Avec le Builder d'OUAQT, les petites et moyennes entreprises créent en quelques minutes leur logiciel de caisse, de stock et de rapports. Il fonctionne sans internet et vos données restent chez vous.",
+    projectsTitle: "Réalisations sur mesure : 22 systèmes en service | OUAQT",
+    projectsDescription: "Mines, pharmacies, hôtels, transport, restaurants et écoles : les systèmes que nous avons construits sur mesure, et ce que chacun a changé.",
     aboutTitle: "À propos d'OUAQT et de son fondateur",
-    aboutDescription: "Pourquoi OUAQT construit des logiciels de gestion pour les commerces, du créateur en ligne aux projets sur mesure. Fondée par Elboumby Aumar Ramdhane.",
+    aboutDescription: "OUAQT est une startup qui équipe les PME d'un logiciel de gestion : le Builder en ligne, et des projets sur mesure. Fondée par Elboumby Aumar Ramdhane.",
     contactTitle: "Contact | OUAQT",
-    contactDescription: "Dites-nous ce qui prend trop de temps à votre équipe. Nous répondons en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
+    contactDescription: "Une question sur le Builder, une démonstration ou un projet sur mesure : écrivez-nous. Réponse en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
     termsDescription:
       "À qui appartient un logiciel OUAQT, ce que couvre votre licence et comment elle se renouvelle.",
     privacyTitle: "Politique de confidentialité | OUAQT",
     privacyDescription:
       "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
-    pricingTitle: "Tarifs : logiciel en ligne et projets sur mesure | OUAQT",
+    pricingTitle: "Tarifs : le Builder et les projets sur mesure | OUAQT",
     pricingDescription:
       "Les tarifs OUAQT au même endroit : le logiciel que vous créez en ligne, puis l'installation et la licence annuelle des projets sur mesure.",
-    shareLine: "22 systèmes utilisés au quotidien dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation.",
-    shareAlt: "OUAQT : nous repérons ce qui ralentit votre entreprise, et nous construisons le logiciel qui règle le problème.",
-    shareReach: "Nous travaillons sur place ou à distance.",
+    shareAlt: "OUAQT : le logiciel de gestion des PME, créé en quelques minutes avec le Builder.",
   },
 
   common: {
@@ -36,68 +34,19 @@ export const fr: Dictionary = {
   },
 
   nav: {
-    home: "Accueil",
-    custom: "Projet sur mesure",
-    projects: "Projets",
+    builder: "Le Builder",
+    custom: "Sur mesure",
+    projects: "Réalisations",
     pricing: "Tarifs",
     about: "À propos",
     contact: "Contact",
-    cta: "Parlons-en",
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
     language: "Langue",
     homeAria: "Accueil OUAQT",
   },
 
-  hero: {
-    eyebrow: "OUAQT · Logiciels sur mesure pour entreprises",
-    heading: "Nous repérons ce qui ralentit votre entreprise, et nous construisons le logiciel qui règle le problème.",
-    body: "Saisir deux fois la même information. Rester tard parce que la caisse et le cahier ne tombent pas juste. Nous venons chez vous et nous regardons comment le travail se fait vraiment. Ensuite, nous construisons le logiciel autour, pour que votre équipe récupère ces heures.",
-    primaryCta: "Dites-nous ce qui vous ralentit",
-    secondaryCta: "Voir nos réalisations",
-    freeVisit: "La première visite est gratuite et sans engagement.",
-  },
-
-  impact: {
-    liveSystems: "Systèmes utilisés au quotidien",
-    sectors: "Secteurs où nous travaillons",
-    reduction: "Temps de rapprochement en moins chez GMM",
-    buildTime: "Pour un logiciel en marche, après notre première visite",
-    buildTimeValue: "48-72 h",
-  },
-
-  problem: {
-    eyebrow: "Ça vous parle ?",
-    heading: "La plupart des entreprises tournent encore au papier, à Excel et à WhatsApp.",
-    body: "Le plus souvent, c'est parce que les logiciels qu'on leur a proposés ne collaient pas à leur façon de travailler. Alors le cahier est resté.",
-    items: {
-      mining: "Quatre heures par jour à rapprocher des chiffres à la main.",
-      pharmacy: "Des heures à recopier les registres de médicaments, ligne par ligne.",
-      hospitality: "Des taxes et des commissions calculées à la main sur chaque facture, avec les erreurs qui vont avec.",
-      transport: "Une heure de paperasse avant chaque départ.",
-    },
-  },
-
-  pillars: {
-    eyebrow: "Notre réponse",
-    heading: "Nous adaptons le logiciel à votre entreprise, pour que votre équipe n'ait pas à changer sa façon de travailler.",
-    workflow: {
-      title: "Il fonctionne comme votre équipe travaille déjà",
-      body: "Nous partons de votre routine réelle, jusqu'à la langue dans laquelle votre personnel écrit. Chez GMM, les équipes de terrain notent leurs données en français, en arabe et en anglais, alors leur système parle les trois.",
-    },
-    automation: {
-      title: "L'ordinateur s'occupe du répétitif",
-      body: "À la pharmacie, le système remplit les registres de médicaments à partir des saisies passées, et le personnel a arrêté de tout retaper. Vos équipes gardent le travail qui demande leur jugement.",
-    },
-    migration: {
-      title: "Vos anciens registres vous suivent",
-      body: "Nous reprenons des années d'historique papier et tableur dans le nouveau système, personne ne repart de zéro. Vos données restent à vous, et ne sont jamais mélangées à celles d'un autre client.",
-    },
-  },
-
   proof: {
-    eyebrow: "Un résultat concret",
-    heading: "Quatre heures de travail par jour, faites désormais en vingt-cinq minutes.",
     body: "Les équipes de terrain de GMM rapprochaient les mouvements de blocs à la main, entre carnets papier et trois langues. Aujourd'hui, c'est le système qui s'en charge.",
     cta: "Voir comment nous avons fait",
     client: "GMM · Client minier",
@@ -110,30 +59,17 @@ export const fr: Dictionary = {
     reductionNote: "Sur le temps de rapprochement, chiffre confirmé par GMM.",
   },
 
-  featured: {
-    heading: "Quelques réalisations",
-    body: "22 systèmes utilisés au quotidien. Chacun a été construit pour une seule entreprise et sa façon de fonctionner.",
-    cta: "Voir tous les projets",
-  },
-
-  homeCta: {
-    heading: "Racontez-nous où passe votre journée.",
-    body: "Expliquez-nous comment votre entreprise tourne aujourd'hui, papier et groupes WhatsApp compris. Une conversation suffit souvent pour voir où un logiciel vous ferait gagner le plus de temps.",
-    primary: "Parlons-en",
-    secondary: "Qui sommes-nous",
-  },
-
   projectsPage: {
-    eyebrow: "Projets",
-    heading: "22 systèmes, utilisés chaque jour.",
-    body: "Chaque projet commence par une visite. Nous apprenons comment l'entreprise fonctionne, nous reprenons ses anciens registres, et nous installons le logiciel pour ce client seul. À ce jour, cela concerne des mines, des pharmacies, des hôtels, des sociétés de transport, des restaurants et des écoles. En voici une sélection.",
+    eyebrow: "Réalisations sur mesure",
+    heading: "22 systèmes construits sur mesure, utilisés chaque jour.",
+    body: "Avant le Builder, il y a eu ces projets, et il y en a encore. Chacun commence par une visite : nous apprenons comment l'entreprise fonctionne, nous reprenons ses anciens registres, et nous installons le logiciel pour ce client seul. Mines, pharmacies, hôtels, transport, restaurants et écoles : en voici une sélection.",
     all: "Tous",
   },
 
   pricingPage: {
     /* The builder's own prices, read from settings, shown above the rest. */
     builderTrack: {
-      eyebrow: "Le logiciel que vous créez en ligne",
+      eyebrow: "Le Builder",
       heading: "Vous le créez vous-même, vous l'installez le jour même",
       intro:
         "Vous répondez aux questions, vous téléchargez votre logiciel et vous l'installez sur l'ordinateur de la boutique. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
@@ -160,7 +96,7 @@ export const fr: Dictionary = {
       eyebrow: "Projet sur mesure",
       heading: "Ou nous venons l'installer, et nous construisons ce qui manque",
       intro:
-        "Pour les métiers que le créateur ne couvre pas encore, et pour les entreprises qui veulent que nous venions faire le travail sur place.",
+        "Pour les métiers que le Builder ne couvre pas encore, et pour les entreprises qui veulent que nous venions faire le travail sur place.",
     },
     eyebrow: "Tarifs",
     heading: "Le logiciel que vous créez vous-même, et celui que nous construisons.",
@@ -278,65 +214,6 @@ export const fr: Dictionary = {
     },
   },
 
-  process: {
-    eyebrow: "Notre façon de travailler",
-    heading: "Tout commence par une visite.",
-    body: "Pas besoin de remplir un formulaire ni de rédiger un cahier des charges. Nous venons chez vous, et nous partons de ce que nous voyons.",
-    steps: {
-      listen: {
-        title: "Nous nous asseyons avec votre équipe et nous écoutons",
-        body: "Nous passons du temps avec les personnes qui font le travail, et nous observons une journée ordinaire telle qu'elle se passe vraiment. Là où ça coince, ce qui se fait deux fois, les chiffres dont personne n'est tout à fait sûr. Vous connaissez votre métier mieux que nous, alors nous écoutons surtout. Cette première visite est gratuite.",
-      },
-      build: {
-        title: "Nous construisons autour de votre routine",
-        body: "Le logiciel suit les étapes que votre équipe connaît déjà, dans la langue qu'elle utilise déjà, et vos registres existants sont repris.",
-      },
-      stay: {
-        title: "Nous restons après la mise en service",
-        body: "Nous formons vos employés sur place. Ensuite, tant que la licence court, nous corrigeons ce qui ne va pas et nous ajustons l'existant quand votre façon de travailler évolue.",
-      },
-    },
-  },
-
-  faq: {
-    eyebrow: "Questions",
-    heading: "Les questions qu'on nous pose avant de commencer.",
-    items: {
-      visit: {
-        q: "La première visite est-elle payante ?",
-        a: "Non. Nous venons voir comment votre entreprise fonctionne, puis nous vous disons ce que nous construirions et ce que cela coûterait. Vous décidez ensuite, sans aucun engagement.",
-      },
-      duration: {
-        q: "Combien de temps cela prend-il ?",
-        a: "Nous passons la première journée avec vous, à comprendre comment le travail se déroule vraiment. Ensuite, la plupart des systèmes sont prêts en 48 à 72 heures. Si le vôtre est plus grand et demande davantage, nous vous le disons avant tout engagement.",
-      },
-      offline: {
-        q: "Et si internet tombe ?",
-        a: "Rien ne change. Nos logiciels tournent sur vos propres ordinateurs, et le travail de tous les jours se fait sans connexion.",
-      },
-      data: {
-        q: "À qui appartiennent les données ?",
-        a: "À vous. Elles restent sur vos propres ordinateurs et ne se mélangent jamais à celles d'un autre client. Demandez-en une copie quand vous voulez, nous vous la remettons.",
-      },
-      changes: {
-        q: "Et si j'ai besoin d'un changement plus tard ?",
-        a: "Tant que la licence est renouvelée, les modifications de ce que vous avez déjà sont comprises. Une nouveauté, comme un écran ou un processus en plus, est un nouveau module avec son propre devis, et nous vous disons lequel des deux avant de commencer.",
-      },
-      training: {
-        q: "Formez-vous mon équipe ?",
-        a: "Oui, sur place, aussi longtemps qu'il le faut pour qu'elle soit en confiance. La formation fait partie des frais d'installation et n'est jamais facturée à part.",
-      },
-      migration: {
-        q: "Que deviennent mes anciens registres ?",
-        a: "Ils vous suivent. Nous reprenons des années de papier et de tableurs dans le nouveau système, personne ne repart d'un écran vide.",
-      },
-      broken: {
-        q: "Et si quelque chose casse ?",
-        a: "Nous le réparons. Tant que la licence est renouvelée, tout ce qui est faux ou lent dans ce que nous avons livré est corrigé sans frais, et vous parlez directement à la personne qui l'a construit.",
-      },
-    },
-  },
-
   legal: {
     updated: "Dernière mise à jour",
     updatedDate: "Septembre 2026",
@@ -378,7 +255,7 @@ export const fr: Dictionary = {
       },
       selfChanges: {
         h: "Ce que la licence ne comprend pas",
-        b: "Un métier que le créateur ne couvre pas encore, ou une façon de travailler que ses questions ne prévoient pas, relève d'un projet sur mesure et fait l'objet d'un devis séparé.",
+        b: "Un métier que le Builder ne couvre pas encore, ou une façon de travailler que ses questions ne prévoient pas, relève d'un projet sur mesure et fait l'objet d'un devis séparé.",
       },
       bespokePart: {
         h: "Deuxième partie : les projets que nous construisons et installons",
@@ -432,7 +309,7 @@ export const fr: Dictionary = {
     privacy: {
       title: "Politique de confidentialité",
       intro:
-        "Ce qu'OUAQT détient à votre sujet, et ce qu'il n'a jamais. Cette page couvre ce site, le créateur de logiciel qui s'y trouve, et les systèmes que nous installons chez vous.",
+        "Ce qu'OUAQT détient à votre sujet, et ce qu'il n'a jamais. Cette page couvre ce site, le Builder qui s'y trouve, et les systèmes que nous installons chez vous.",
       collect: {
         h: "Ce que ce site collecte",
         b: "Sur les pages ordinaires, uniquement ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail ou votre téléphone, votre message et la langue que vous lisiez. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
@@ -447,7 +324,7 @@ export const fr: Dictionary = {
       },
       ai: {
         h: "L'intelligence artificielle",
-        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. La capture de votre paiement lui est aussi envoyée pour en relever le montant, la date et le numéro de la transaction. Ce service peut conserver ce qu'il reçoit et s'en servir pour améliorer ses produits. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés. Le créateur fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
+        b: "Quand vous décrivez votre façon de travailler avec vos propres mots, cette phrase peut être envoyée à un service d'intelligence artificielle pour être traduite en réglages, et sa proposition est ensuite vérifiée par nos règles avant d'être appliquée. La capture de votre paiement lui est aussi envoyée pour en relever le montant, la date et le numéro de la transaction. Ce service peut conserver ce qu'il reçoit et s'en servir pour améliorer ses produits. Rien d'autre ne lui est transmis : ni votre liste de produits, ni vos employés. Le Builder fonctionne entièrement sans cette fonction, et vos réponses par boutons ne passent jamais par elle.",
       },
       payments: {
         h: "Les paiements",
@@ -485,7 +362,7 @@ export const fr: Dictionary = {
   },
 
   projectDetail: {
-    back: "Tous les projets",
+    back: "Toutes les réalisations",
     overview: "Aperçu",
     problem: "Le problème",
     solution: "Ce que nous avons construit",
@@ -512,18 +389,18 @@ export const fr: Dictionary = {
 
   about: {
     eyebrow: "À propos d'OUAQT",
-    heading: "Le patron connaît son commerce mieux que personne.",
+    heading: "Une startup qui équipe les PME d'un logiciel à leur mesure.",
     body1:
       "Nous avons construit des systèmes sur mesure, un client à la fois : mines, pharmacies, hôtels, transport, restaurants, écoles. À chaque fois la même scène. Une entreprise solide, une équipe qui sait ce qu'elle fait, et le travail le plus important posé sur du papier, des tableurs et des groupes WhatsApp.",
     body2:
       "Et à chaque fois, la même découverte. Personne ne comprenait le problème mieux que le patron lui-même. Notre travail n'était pas de lui apprendre son métier, c'était de traduire ce qu'il savait déjà en un logiciel qui lui ressemble.",
     storyHeading: "Ce que nous avons fait de ce constat",
     storyBody1:
-      "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait un créateur en ligne : le patron répond à des questions sur sa façon de travailler, et il repart avec son logiciel, prêt à installer, le jour même.",
+      "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait le Builder, un créateur de logiciel en ligne : le patron répond à des questions sur sa façon de travailler, et il repart avec son logiciel, prêt à installer, le jour même.",
     storyBody2:
       "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres ordinateurs, sans internet, et ses chiffres ne nous parviennent jamais.",
     storyBody3:
-      "Les métiers que le créateur ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
+      "Le Builder est aujourd'hui notre produit principal. Les métiers qu'il ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
     marketHeading: "Les chiffres derrière ce constat.",
     stat1: "du PIB mauritanien passe par le secteur informel",
     stat2: "de la population active occupe un emploi informel",
@@ -572,75 +449,160 @@ export const fr: Dictionary = {
   },
 
   builderHome: {
-    heroHeading: "Décrivez votre commerce. Repartez avec votre logiciel.",
-    heroBody: "Personne ne connaît votre commerce mieux que vous. Répondez à quelques questions sur votre façon de travailler, et le logiciel qui va avec s'installe sur l'ordinateur de la boutique.",
+    heroEyebrow: "Logiciels de gestion pour les PME",
+    heroHeading: "Le logiciel de gestion de votre entreprise, prêt en quelques minutes.",
+    heroBody: "OUAQT est une startup qui équipe les petites et moyennes entreprises. Avec le Builder, vous décrivez votre activité et vous repartez avec votre logiciel de caisse, de stock et de rapports, installé sur vos propres ordinateurs.",
     heroPrimary: "Créer mon logiciel",
-    heroSecondary: "Projet sur mesure",
+    heroSecondary: "Essayer la démo",
     heroReassurance: "Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
     heroReassuranceNoTrial: "Sans internet · Vos données restent chez vous",
+    heroShotAlt: "L'écran de caisse d'un café dans un logiciel OUAQT : une commande en cours, son total et le paiement.",
+    heroChipOffline: "Fonctionne sans internet",
+    heroChipOfflineLabel: "pour le travail de tous les jours",
+    heroChipReady: "Prêt en moins de 20 minutes",
 
     impactMinutes: "Moins de 20 minutes",
     impactMinutesLabel: "pour créer votre logiciel",
     impactOffline: "Sans internet",
     impactOfflineLabel: "pour le travail de tous les jours",
     impactData: "Vos données",
-    impactDataLabel: "restent sur votre ordinateur",
+    impactDataLabel: "restent sur vos ordinateurs",
+    impactSystems: "22 systèmes",
+    impactSystemsLabel: "en service chez nos clients",
 
-    howHeading: "Comment ça marche",
-    howStep1: "Vous répondez",
-    howStep1Body: "Quelques questions sur votre commerce : ce que vous vendez, comment vous encaissez, qui tient la caisse.",
-    howStep2: "Vous voyez le résultat",
-    howStep2Body: "Le reçu et l'écran de vente se règlent à mesure que vous répondez. Rien n'est figé.",
-    howStep3: "Vous installez",
-    howStep3Body: "Vous téléchargez le logiciel et vous l'installez sur l'ordinateur de la boutique.",
+    builderEyebrow: "Le Builder",
+    builderHeading: "Le Builder construit votre logiciel à partir de vos réponses.",
+    builderBody: "C'est le cœur d'OUAQT. Au lieu d'un logiciel générique qu'il faut apprendre, le Builder assemble le vôtre : vos produits, vos prix, votre façon d'encaisser, votre équipe et vos reçus.",
+    builderStep1: "Décrivez votre activité",
+    builderStep1Body: "Ce que vous vendez, comment vous encaissez, qui tient la caisse. Des questions simples, en français ou en arabe.",
+    builderStep2: "Voyez-le fonctionner",
+    builderStep2Body: "Le vrai logiciel tourne à côté des questions et change à chaque réponse. Vous l'essayez avant de le télécharger.",
+    builderStep3: "Installez et commencez",
+    builderStep3Body: "Téléchargez-le pour Windows ou Mac, activez-le avec votre numéro de série, et votre essai gratuit commence.",
+    builderCta: "Créer mon logiciel",
+    builderPricing: "Voir les tarifs",
 
-    tradesHeading: "Pour quel commerce",
+    demoEyebrow: "Démo en direct",
+    demoHeading: "Essayez-le ici. C'est le vrai logiciel.",
+    demoBody: "Choisissez un métier, encaissez une vente, ouvrez le stock ou les rapports. Ce que vous voyez ici est ce que vous installerez.",
+    demoLoading: "Ouverture du logiciel",
+    demoNote: "Données d'exemple, pour essayer sans rien risquer.",
+    demoPhone: "Sur un téléphone, la démo s'affiche en petit. Ouvrez cette page sur un ordinateur pour l'essayer vraiment.",
+    demoShops: {
+      pharmacy: "Pharmacie du Centre",
+      bakery: "Boulangerie du Port",
+      restaurant: "Café Le Palmier",
+      warehouse: "Dépôt Central",
+      shop: "Épicerie Al Amal",
+      hotel: "Hôtel Les Dunes",
+      transport: "Voyages Sahel Express",
+      general: "Atelier Nour",
+    },
+
+    featuresEyebrow: "Dans chaque logiciel",
+    featuresHeading: "Tout ce qu'il faut pour tenir votre entreprise au quotidien.",
+    features: [
+      { title: "Une caisse rapide", body: "Encaissez en quelques touches, en espèces ou par application, avec un reçu imprimé." },
+      { title: "Le stock à jour", body: "Il baisse à chaque vente et vous prévient avant qu'un produit ne manque." },
+      { title: "Des rapports clairs", body: "Le chiffre du jour, de la semaine et du mois, les meilleures ventes, et l'export pour Excel." },
+      { title: "Le crédit client", body: "Les ventes à crédit et ce que chaque client vous doit, sans cahier." },
+      { title: "La clôture de caisse", body: "À la fin de la journée ou du poste : ce qui devait être en caisse, et ce qui y est." },
+      { title: "Des reçus à votre métier", body: "La table pour un restaurant, la chambre et les dates pour un hôtel, la place et le départ pour un billet." },
+      { title: "Deux postes ensemble", body: "La caisse et un deuxième ordinateur travaillent ensemble sur votre réseau, sans internet." },
+      { title: "Français et arabe", body: "Le logiciel parle la langue de votre équipe, reçus compris." },
+    ],
+
+    tradesEyebrow: "Métiers",
+    tradesHeading: "Un logiciel pour chaque métier",
+    tradesBody: "Chaque métier a ses écrans, ses questions et ses reçus. Choisissez le vôtre pour commencer.",
     tradesOpen: "Disponible",
     tradesSoon: "Bientôt disponible",
+    tradesStart: "Commencer",
     tradesLearnMore: "En savoir plus",
+    tradesNotifyMe: "Me prévenir",
+    tradeLines: {
+      pharmacy: "Péremptions, lots, fournisseurs et recherche par code-barres.",
+      bakery: "Production du jour, commandes à l'avance et invendus.",
+      restaurant: "Tables, envoi en cuisine, sur place, à emporter et livraison.",
+      warehouse: "Entrées, sorties, emplacements et unités de vente.",
+      shop: "Vente à la pièce ou au poids, code-barres et crédit client.",
+      hotel: "Chambres, séjours, avances et extras.",
+      transport: "Départs, places numérotées, billets et colis.",
+      general: "Produits ou services, stock et dépenses.",
+    },
     tradesOther: "Mon activité n'est pas dans la liste",
+    tradesOtherBody: "Pas d'inquiétude, d'autres métiers arrivent. Dites-nous ce que vous faites et laissez votre numéro : nous vous rappelons.",
+    tradesBusiness: "Votre activité",
+    tradesBusinessPlaceholder: "Par exemple : quincaillerie, salon de coiffure, garage",
     tradesLeaveNumber: "Laissez votre numéro, nous vous prévenons.",
     tradesPhone: "Votre numéro de téléphone",
     tradesSend: "Me prévenir",
+    tradesSendOther: "Envoyer",
     tradesThanks: "Merci. Nous vous écrivons dès que c'est prêt.",
+    tradesOtherThanks: "Merci. Nous avons bien reçu votre demande et nous vous appelons très vite.",
     tradesError: "Votre numéro n'est pas parti. Réessayez, ou écrivez-nous sur WhatsApp.",
 
-    worriesHeading: "Ce qui inquiète, et ce qu'il en est",
-    worry1: "Et si internet coupe ?",
-    worry1Body: "Le logiciel travaille sur votre ordinateur. Internet ne sert qu'à l'installation et aux mises à jour.",
-    worry2: "Où vont mes données ?",
-    worry2Body: "Vos ventes, votre stock et les comptes de vos clients restent chez vous. Nous ne les recevons pas.",
-    worry3: "Comment je paie ?",
-    worry3Body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an ou tous les six mois. Vous voyez le montant avant de payer.",
-    worry4: "Et si ça ne me convient pas ?",
-    worry4Body: "Vous l'essayez gratuitement avant de payer quoi que ce soit.",
+    whyEyebrow: "Pourquoi OUAQT",
+    whyHeading: "Pensé pour les PME d'ici, et pour leur façon de travailler.",
+    why: [
+      { title: "Sans internet", body: "Le logiciel travaille sur vos ordinateurs. Internet ne sert qu'à l'installation, aux mises à jour et au paiement de la licence." },
+      { title: "Vos données restent chez vous", body: "Vos ventes, votre stock et les comptes de vos clients ne quittent pas vos ordinateurs. Nous ne les recevons jamais." },
+      { title: "Un paiement d'ici", body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an ou tous les six mois. Vous voyez le montant avant de payer." },
+      { title: "Une équipe qui répond", body: "Une question, un souci : écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe." },
+    ],
 
-    customHeading: "Votre activité ne ressemble à aucune autre ?",
-    customBody: "Pour les mines, les hôtels, le transport, les écoles et tout ce qui sort du cadre, nous construisons sur mesure. Ça commence par une visite, gratuite, chez vous.",
+    pricingEyebrow: "Tarifs",
+    pricingHeading: "Des tarifs clairs, affichés avant de payer.",
+    pricingBody: "Vous essayez d'abord gratuitement, puis vous choisissez votre licence. Pas de frais d'installation : vous installez vous-même, en quelques minutes.",
+    pricingAnnual: "Licence annuelle",
+    pricingPerYear: "par an",
+    pricingMonthly: "soit {amount} par mois",
+    pricingLaunch: "Tarif de lancement",
+    pricingSoon: "Tarif bientôt disponible",
+    pricingTrial: "Essai gratuit de {days} jours",
+    pricingDevices: "{devices} postes compris",
+    pricingUpdates: "Mises à jour et assistance comprises",
+    pricingPayment: "Paiement par application mobile",
+    pricingCta: "Voir tous les tarifs",
+
+    customEyebrow: "Sur mesure",
+    customHeading: "Un besoin qui sort du cadre ? Nous le construisons avec vous.",
+    customBody: "C'est notre deuxième métier, et celui d'où vient le Builder. Pour les entreprises dont le travail ne rentre dans aucun modèle, nous venons sur place, nous comprenons votre façon de travailler et nous construisons le système qui lui correspond.",
+    customStep1: "Une visite pour comprendre",
+    customStep1Body: "Nous observons une journée ordinaire avec votre équipe. Cette première visite est gratuite.",
+    customStep2: "Un système autour de votre routine",
+    customStep2Body: "Il suit vos étapes et votre langue, et vos anciens registres sont repris.",
+    customStep3: "Un suivi après la mise en service",
+    customStep3Body: "Nous formons votre équipe et nous ajustons le système quand votre façon de travailler évolue.",
     customProjects: "Voir nos réalisations",
-    customPricing: "Voir les tarifs",
-    customTalk: "Parlons-en",
+    customTalk: "Demander un devis",
 
+    faqEyebrow: "Questions",
     faqHeading: "Les questions qu'on nous pose",
     faq1: "Le logiciel marche-t-il sans internet ?",
-    faq1Body: "Oui. Il s'installe sur l'ordinateur de la boutique et travaille là. Internet ne sert qu'à l'installation, aux mises à jour et au paiement.",
+    faq1Body: "Oui. Il s'installe sur l'ordinateur de l'entreprise et travaille là. Internet ne sert qu'à l'installation, aux mises à jour et au paiement.",
     faq2: "Qui voit mes ventes et mes clients ?",
     faq2Body: "Vous seul. Vos ventes, votre stock et les comptes de vos clients restent sur vos ordinateurs. Nous ne les recevons jamais.",
     faq3: "Sur combien d'ordinateurs puis-je l'installer ?",
     faq3Body: "Deux : la caisse et un deuxième poste. Les deux fonctionnent sans internet et se mettent d'accord entre eux sur votre réseau.",
-    faq4: "Et si j'ai besoin d'aide ?",
-    faq4Body: "Écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe.",
+    faq4: "Que se passe-t-il à la fin de l'essai gratuit ?",
+    faq4Body: "Tant que rien n'est payé, le logiciel passe en lecture seule : vous voyez et vous exportez vos données, vous n'en saisissez plus de nouvelles. Dès que la licence est payée, tout se rouvre.",
+    faq5: "Et si mon métier n'est pas dans la liste ?",
+    faq5Body: "Dites-le-nous depuis la liste des métiers, avec votre numéro. D'autres métiers arrivent, et si votre besoin est particulier, nous pouvons le construire sur mesure.",
+    faq6: "Et si j'ai besoin d'aide ?",
+    faq6Body: "Écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe.",
 
-    ctaHeading: "Votre logiciel, aujourd'hui",
-    ctaBody: "Quelques questions, et vous repartez avec. Vous pouvez aussi nous écrire d'abord si vous préférez.",
+    ctaHeading: "Équipez votre entreprise dès aujourd'hui.",
+    ctaBody: "Quelques minutes de questions, et votre logiciel est prêt à installer. Pour un projet sur mesure, parlons-en d'abord.",
     ctaButton: "Créer mon logiciel",
+    ctaTalk: "Parler à l'équipe",
     ctaWhatsapp: "Écrire sur WhatsApp",
   },
 
   contact: {
     eyebrow: "Contact",
-    heading: "Dites-nous ce qui prend trop de temps à votre équipe.",
-    body: "Pas besoin des bons mots ni d'un plan. Racontez-nous avec vos mots où la journée se bloque : nous regardons ça avec vous et nous vous proposons le plus petit système qui fait gagner le plus de temps. La première visite est gratuite.",
+    heading: "Parlons de votre entreprise.",
+    body: "Une question sur le Builder, besoin d'aide pour l'installer, ou un projet sur mesure en tête : écrivez-nous avec vos mots. Nous répondons en général sous un jour ouvré. Pour un projet sur mesure, la première visite est gratuite.",
     whatsapp: "WhatsApp",
     form: {
       name: "Nom",
@@ -664,12 +626,12 @@ export const fr: Dictionary = {
   },
 
   footer: {
-    tagline: "Des logiciels pour les entreprises qui tournent encore au papier, à Excel et à WhatsApp.",
-    navigate: "Navigation",
+    tagline: "Le logiciel de gestion des PME, créé en quelques minutes avec le Builder, et construit sur mesure quand votre métier sort du cadre.",
+    product: "Produit",
+    company: "Entreprise",
     connect: "Nous joindre",
     brand: "OUAQT",
     rights: "Tous droits réservés.",
-    legal: "Mentions légales",
     terms: "Licence et conditions",
     privacy: "Politique de confidentialité",
   },
@@ -813,7 +775,7 @@ export const fr: Dictionary = {
     },
     "restaurant-pos": {
       metaTitle: "Caisse restaurant, café et boulangerie",
-      metaDescription: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir. Bientôt disponible dans le créateur de logiciels OUAQT.",
+      metaDescription: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir. Bientôt disponible dans le Builder d'OUAQT.",
       title: "Caisse restaurant & café",
       summary: "Une caisse pensée pour le vrai rythme de la salle, au service à table comme au comptoir de la boulangerie.",
       description: "Les commandes, la cuisine et la recette du jour étaient suivies à trois endroits différents. La caisse réunit tout et s'adapte au rythme de chaque établissement.",
