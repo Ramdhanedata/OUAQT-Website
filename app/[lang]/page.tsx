@@ -29,7 +29,8 @@ import { softwareApplicationData } from "@/lib/seo/software-application";
  * Which trades are open and how long the trial runs are read from settings,
  * so this page follows the admin area rather than a deploy.
  */
-export default async function Home({ params }: { params: { lang: Locale } }) {
+export default async function Home(props: { params: Promise<{ lang: Locale }> }) {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   const settings = await getPublicSettings();
   const offer = await getLaunchOffer();

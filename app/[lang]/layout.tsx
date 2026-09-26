@@ -46,7 +46,7 @@ const arabic = Cairo({
 
 type Props = {
   children: React.ReactNode;
-  params: { lang: string };
+  params: Promise<{ lang: string }>;
 };
 
 /* The phone's browser bar in the page's own ivory, see globals.css. */
@@ -56,7 +56,8 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const lang = params.lang as Locale;
   const dict = getDictionary(lang);
 
@@ -102,7 +103,13 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function RootLayout({ children, params }: Props) {
+export default async function RootLayout(props: Props) {
+  const params = await props.params;
+
+  const {
+    children
+  } = props;
+
   if (!locales.includes(params.lang as Locale)) notFound();
 
   const lang = params.lang as Locale;

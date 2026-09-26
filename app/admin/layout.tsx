@@ -43,8 +43,8 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
-export default function AdminLayout({ children }: { children: ReactNode }) {
-  const lang = adminLanguage();
+export default async function AdminLayout({ children }: { children: ReactNode }) {
+  const lang = await adminLanguage();
   const rtl = lang === "ar";
   return (
     <html

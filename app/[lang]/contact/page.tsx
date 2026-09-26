@@ -14,9 +14,10 @@ import { Mail, MapPin } from "lucide-react";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 
-type Props = { params: { lang: Locale } };
+type Props = { params: Promise<{ lang: Locale }> };
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   return {
     title: dict.meta.contactTitle,
@@ -25,7 +26,8 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function ContactPage({ params }: Props) {
+export default async function ContactPage(props: Props) {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
 
   return (

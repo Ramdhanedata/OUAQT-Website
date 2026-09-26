@@ -13,9 +13,10 @@ import { localisedHref, packRouteId } from "@/lib/i18n/routes";
  * lines: which trade, and the two exports Next.js looks for.
  */
 export function packRoute(pack: Pack) {
-  type Props = { params: { lang: Locale } };
+  type Props = { params: Promise<{ lang: Locale }> };
 
-  function generateMetadata({ params }: Props): Metadata {
+  async function generateMetadata(props: Props): Promise<Metadata> {
+    const params = await props.params;
     const copy = getPackPage(params.lang, pack);
     const id = packRouteId(pack);
     return {
@@ -31,7 +32,8 @@ export function packRoute(pack: Pack) {
   }
 
   /* Whether the trade is open: builder/packs/opening.ts, like the home page and the builder. */
-  async function Page({ params }: Props) {
+  async function Page(props: Props) {
+    const params = await props.params;
     const settings = await getPublicSettings();
     const open = OPENING[pack] === "open";
     return (

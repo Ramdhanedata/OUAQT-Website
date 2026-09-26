@@ -20,7 +20,7 @@ import { mintActivationToken, placeOfRequest } from "@/builder/licence/activatio
 export async function POST(request: Request) {
   const asked = (await request.json().catch(() => null)) as { platform?: unknown } | null;
   const platform = asked?.platform === "windows" || asked?.platform === "mac" ? asked.platform : null;
-  const supabase = requestClient(request);
+  const supabase = await requestClient(request);
   const admin = adminClient();
   if (!supabase || !admin) {
     return NextResponse.json({ error: "no_database" }, { status: 503 });

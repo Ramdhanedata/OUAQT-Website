@@ -25,7 +25,7 @@ const TRADE_OF: Partial<Record<string, Pack>> = {
 };
 
 type Props = {
-  params: { lang: Locale; slug: string };
+  params: Promise<{ lang: Locale; slug: string }>;
 };
 
 export function generateStaticParams() {
@@ -34,7 +34,8 @@ export function generateStaticParams() {
   );
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const project = getProjectBySlug(params.slug);
   if (!project) return {};
 
@@ -50,7 +51,8 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function ProjectDetailPage({ params }: Props) {
+export default async function ProjectDetailPage(props: Props) {
+  const params = await props.params;
   const project = getProjectBySlug(params.slug);
   if (!project) notFound();
 

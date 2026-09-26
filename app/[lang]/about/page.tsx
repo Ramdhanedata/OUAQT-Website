@@ -33,9 +33,10 @@ function findFounderPhoto(): string | undefined {
   return undefined;
 }
 
-type Props = { params: { lang: Locale } };
+type Props = { params: Promise<{ lang: Locale }> };
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   return {
     title: dict.meta.aboutTitle,
@@ -44,7 +45,8 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function AboutPage({ params }: Props) {
+export default async function AboutPage(props: Props) {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   const photo = findFounderPhoto();
   const initials = dict.common.founderName

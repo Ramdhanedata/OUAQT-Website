@@ -16,9 +16,10 @@ import { alternatesFor } from "@/lib/i18n/metadata";
 import { fill } from "@/lib/utils";
 import type { Metadata } from "next";
 
-type Props = { params: { lang: Locale } };
+type Props = { params: Promise<{ lang: Locale }> };
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   return {
     title: dict.meta.pricingTitle,
@@ -35,7 +36,8 @@ export function generateMetadata({ params }: Props): Metadata {
  * from the price book, because one is a product he buys today and the other
  * is a quotation for work. A price nobody has set yet says so.
  */
-export default async function PricingPage({ params }: Props) {
+export default async function PricingPage(props: Props) {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   const p = dict.pricingPage;
   const terms = pricingTerms(params.lang);

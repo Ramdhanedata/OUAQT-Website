@@ -4,9 +4,10 @@ import type { Locale } from "@/lib/i18n/config";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 
-type Props = { params: { lang: Locale } };
+type Props = { params: Promise<{ lang: Locale }> };
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   return {
     title: dict.meta.privacyTitle,
@@ -15,7 +16,8 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
-export default function PrivacyPage({ params }: Props) {
+export default async function PrivacyPage(props: Props) {
+  const params = await props.params;
   const dict = getDictionary(params.lang);
   const p = dict.legal.privacy;
 

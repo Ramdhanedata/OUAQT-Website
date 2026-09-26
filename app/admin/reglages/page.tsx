@@ -13,7 +13,7 @@ import { adminClient } from "@/builder/db/server";
  */
 export default async function SettingsPage() {
   const gate = await adminGate();
-  const { t } = adminWords();
+  const { t } = await adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
@@ -41,12 +41,16 @@ export default async function SettingsPage() {
         <p className="text-base leading-relaxed text-foreground">
           {t.settings.testPacks}
         </p>
+        {/* A request that sets a cookie and redirects, not a page: a full navigation on purpose. */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
           href="/api/admin/test-builder"
           className="inline-flex min-h-[44px] items-center rounded-md bg-foreground px-4 text-base font-medium text-background"
         >
           {t.settings.testBuilder}
         </a>
+        {/* A request that sets a cookie and redirects, not a page: a full navigation on purpose. */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
         <a
           href="/api/admin/test-builder?off=1"
           className="inline-flex min-h-[44px] items-center text-base text-muted-foreground underline"

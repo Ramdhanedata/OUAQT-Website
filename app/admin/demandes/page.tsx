@@ -36,7 +36,7 @@ function shownPhone(phone: string): string {
  */
 export default async function RequestsPage() {
   const gate = await adminGate();
-  const { t, locale } = adminWords();
+  const { t, locale } = await adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();

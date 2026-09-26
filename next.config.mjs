@@ -39,6 +39,8 @@ const nextConfig = {
   reactStrictMode: true,
   // No need to announce the framework to every visitor.
   poweredByHeader: false,
+  // This folder is the project, whatever lockfiles sit higher up on the machine.
+  outputFileTracingRoot: import.meta.dirname,
   // Lint the builder and the shared app code too, not only Next's default folders.
   eslint: { dirs: ["app", "components", "lib", "builder", "app-ui"] },
   images: {

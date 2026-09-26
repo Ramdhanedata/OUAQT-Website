@@ -15,7 +15,7 @@ import { adminClient } from "@/builder/db/server";
  */
 export default async function AdminPage() {
   const gate = await adminGate();
-  const { lang, t, locale } = adminWords();
+  const { lang, t, locale } = await adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();

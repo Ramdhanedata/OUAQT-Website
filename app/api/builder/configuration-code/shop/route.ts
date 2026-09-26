@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   if (!serialSecretIsSet()) return NextResponse.json({ error: "no_serial_secret" }, { status: 501 });
 
   /* The same slow-down as opening a number: a wrong one here is a guess too. */
-  const session = await requestClient(request)?.auth.getUser();
+  const session = await (await requestClient(request))?.auth.getUser();
   const keys = await attemptKeys(request, session?.data.user?.id ?? null, "resume");
   const wait = await waitingFor(admin, keys);
   if (wait > 0) return NextResponse.json({ error: "slow_down", wait }, { status: 429 });
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
   }
 
   const shop = await shopFor(admin, found, {
-    tester: isTester(cookies().get(TESTER_COOKIE)?.value),
+    tester: isTester((await cookies()).get(TESTER_COOKIE)?.value),
     products: input.data.products,
   });
   if (!shop.ok) return NextResponse.json({ error: shop.error }, { status: shop.status });

@@ -7,7 +7,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { locales } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 
-type Props = { params: { lang: Locale } };
+type Props = { params: Promise<{ lang: Locale }> };
 
 /* Never cached: what it shows depends on the number typed, and on nothing else. */
 export const dynamic = "force-dynamic";
@@ -16,7 +16,8 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const copy = getBuilderCopy(params.lang);
   const dict = getDictionary(params.lang);
   return {
@@ -30,7 +31,8 @@ export function generateMetadata({ params }: Props): Metadata {
  * Paying with the numéro de série, for an owner who built his software from
  * the phone and never made an account. See builder/ui/pay-by-serial.tsx.
  */
-export default function PayPage({ params }: Props) {
+export default async function PayPage(props: Props) {
+  const params = await props.params;
   const copy = getBuilderCopy(params.lang);
   return (
     <section className="py-12 sm:py-16" lang={params.lang}>

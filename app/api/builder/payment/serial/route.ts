@@ -62,7 +62,7 @@ export async function POST(request: Request) {
   if (found.kind === "expired") return NextResponse.json({ error: "expired" }, { status: 410 });
 
   /* Paying before the first download is allowed: the shop is made now. */
-  const shop = await shopFor(admin, found, { tester: isTester(cookies().get(TESTER_COOKIE)?.value) });
+  const shop = await shopFor(admin, found, { tester: isTester((await cookies()).get(TESTER_COOKIE)?.value) });
   if (!shop.ok) return NextResponse.json({ error: shop.error }, { status: shop.status });
 
   const { data: business } = await admin.from("businesses").select("id, launch_client").eq("id", shop.businessId).single();

@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
 
-  const supabase = requestClient(request);
+  const supabase = await requestClient(request);
   const admin = adminClient();
   if (!supabase || !admin) return NextResponse.json({ error: "no_database" }, { status: 503 });
   if (!serialSecretIsSet()) return NextResponse.json({ error: "no_serial_secret" }, { status: 501 });
@@ -66,7 +66,7 @@ export async function POST(request: Request) {
    * the same test-mode trial, on whichever computer. The cookie is signed by
    * the server and set only from the admin area.
    */
-  if (!draft.made_in_test_mode && isTester(cookies().get(TESTER_COOKIE)?.value)) {
+  if (!draft.made_in_test_mode && isTester((await cookies()).get(TESTER_COOKIE)?.value)) {
     await admin.from("builder_drafts").update({ made_in_test_mode: true }).eq("id", draft.id);
   }
 

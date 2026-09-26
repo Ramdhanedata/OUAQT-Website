@@ -65,7 +65,7 @@ export async function adminGate(): Promise<AdminGate> {
     if (first) return { allowed: true, staff: { id: first.user_id, name: null } };
   }
 
-  const supabase = sessionClient();
+  const supabase = await sessionClient();
   if (!supabase) return { allowed: false, reason: "signed_out" };
 
   const { data: auth } = await supabase.auth.getUser();

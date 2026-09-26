@@ -8,7 +8,7 @@ import { fill } from "@/lib/utils";
 
 export default async function RenewalCodesPage() {
   const gate = await adminGate();
-  const { t, locale } = adminWords();
+  const { t, locale } = await adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();
