@@ -1,6 +1,8 @@
 "use client";
 
-import { macChip, machineOf, type Machine } from "./machine";
+import { machineOf, type Machine } from "./machine";
+import { InstallGuide } from "./install-guide";
+import { useInstallTarget } from "./install-target";
 import { useEffect, useState } from "react";
 import type { AppLanguage } from "@/app-ui/config";
 import type { Pack } from "@/app-ui/packs";
@@ -9,7 +11,7 @@ import { browserClient } from "@/builder/db/client";
 import type { DraftAnswers } from "@/builder/draft/store";
 import type { ImportedProduct } from "@/builder/import/parse";
 import { Button } from "./owner-button";
-import { fill } from "@/lib/utils";
+import { cn, fill } from "@/lib/utils";
 import { localisedHref } from "@/lib/i18n/routes";
 import { Field, TextInput } from "./fields";
 import type { StaffMember } from "./step-products";
@@ -294,65 +296,76 @@ export function SerialPanel({
   link?: string | null;
 }) {
   const [machine, setMachine] = useState<Machine>("other");
-  const [chip, setChip] = useState<"apple" | "intel" | null>(null);
-  useEffect(() => {
-    const found = machineOf();
-    setMachine(found);
-    if (found === "mac") void macChip().then(setChip);
-  }, []);
+  useEffect(() => setMachine(machineOf()), []);
+  const { target, detected, choose } = useInstallTarget();
 
-  const onPc = machine === "windows" || machine === "mac";
-  /* A Mac with an Apple chip gets its own build; any other Mac, the Intel one, which runs on both. */
-  const appleMac = machine === "mac" && chip === "apple" && Boolean(installers.macApple);
-  const mine = machine === "windows" ? installers.windows : machine === "mac" ? (appleMac ? installers.macApple ?? null : installers.mac) : null;
-  const other = machine === "windows" ? installers.mac : machine === "mac" ? installers.windows : null;
-  const otherMac =
-    machine !== "mac"
-      ? null
-      : appleMac
-        ? { href: installers.mac, label: copy.serial.otherMacIntel }
-        : installers.macApple
-          ? { href: installers.macApple, label: copy.serial.otherMacApple }
-          : null;
+  const anyInstaller = Boolean(installers.windows || installers.mac);
+  const href =
+    target === "windows" ? installers.windows : target === "mac-apple" ? installers.macApple ?? installers.mac : installers.mac;
+  const label =
+    target === "windows" ? copy.install.downloadWindows : target === "mac-apple" ? copy.install.downloadMacApple : copy.install.downloadMacIntel;
 
   /*
-   * The owner who built on the shop PC itself. He installs, then opens, and
-   * never types his serial into the machine he built it on. The serial is
-   * still here, smaller, as the thing to keep for a second computer.
+   * Any computer: which one he is installing on, the download for it, and
+   * (on a narrow screen, where there is no room beside it) how to install.
+   * On a wide screen the guide sits in the space the live preview had.
+   * The serial is still here, smaller, as the thing to keep for a second
+   * computer. A phone gets the serial to take to the computer instead.
    */
-  if (onPc && mine) {
+  if (machine !== "phone" && anyInstaller) {
     return (
       <div className="space-y-6">
         <h2 className="text-xl font-semibold text-foreground">{copy.serial.pcHeading}</h2>
 
-        <a
-          href={mine}
-          className="flex min-h-[56px] w-full items-center justify-center rounded-lg bg-accent px-5 text-lg font-semibold text-accent-foreground"
-        >
-          {copy.serial.downloadInstall}
-        </a>
+        <fieldset>
+          <legend className="text-base font-medium text-foreground">{copy.install.question}</legend>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            {(
+              [
+                ["windows", copy.install.windows, copy.install.windowsHint, Boolean(installers.windows)],
+                ["mac-intel", copy.install.macIntel, copy.install.macIntelHint, Boolean(installers.mac)],
+                ["mac-apple", copy.install.macApple, copy.install.macAppleHint, Boolean(installers.macApple ?? installers.mac)],
+              ] as const
+            )
+              .filter(([, , , available]) => available)
+              .map(([value, name, hint]) => (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={target === value}
+                  onClick={() => choose(value)}
+                  className={cn(
+                    "flex min-h-[88px] flex-col items-start gap-1 rounded-xl border-2 p-3 text-start transition-colors",
+                    target === value ? "border-foreground bg-surface" : "border-border hover:border-foreground/40"
+                  )}
+                >
+                  <span className="text-base font-semibold text-foreground">{name}</span>
+                  <span className="text-sm leading-snug text-muted-foreground">{hint}</span>
+                  {detected === value ? (
+                    <span className="mt-1 rounded-full bg-accent/20 px-2 py-0.5 text-xs font-medium text-foreground">
+                      {copy.install.detected}
+                    </span>
+                  ) : null}
+                </button>
+              ))}
+          </div>
+          {target !== "windows" ? <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{copy.install.whichMac}</p> : null}
+        </fieldset>
 
-        <InstallHelp copy={copy} first={machine === "windows" ? "windows" : "mac"} />
-
-        <OpenMySoftware copy={copy} mac={machine === "mac"} link={link ?? null} />
-
-        {otherMac?.href ? (
+        {href ? (
           <a
-            href={otherMac.href}
-            className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4"
+            href={href}
+            className="flex min-h-[56px] w-full items-center justify-center rounded-lg bg-accent px-5 text-lg font-semibold text-accent-foreground"
           >
-            {otherMac.label}
+            {label}
           </a>
         ) : null}
 
-        {other ? (
-          <a
-            href={other}
-            className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4"
-          >
-            {machine === "windows" ? copy.serial.alsoMac : copy.serial.alsoWindows}
-          </a>
-        ) : null}
+        <div className="wizard:hidden">
+          <InstallGuide copy={copy} target={target} serial={serial} compact />
+        </div>
+
+        <OpenMySoftware copy={copy} mac={target !== "windows"} link={link ?? null} />
 
         <div className="rounded-xl border border-border p-4">
           <p className="text-base leading-relaxed text-muted-foreground">{copy.serial.keepNumber}</p>

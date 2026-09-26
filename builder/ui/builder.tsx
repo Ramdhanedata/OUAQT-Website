@@ -18,6 +18,8 @@ import { LeadForm } from "./lead-form";
 import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
 import { CodeEntry, CodeIssued, forgetOpened, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
 import { localisedHref } from "@/lib/i18n/routes";
+import { InstallGuide } from "./install-guide";
+import { InstallTargetProvider, useInstallTarget } from "./install-target";
 
 const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
 
@@ -123,6 +125,8 @@ export function Builder({
   };
 
   const codeEntry = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} />;
+  /* On the first page, the same entry as a button beside "Commencer", where a returning owner looks first. */
+  const codeButton = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} asButton />;
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
@@ -214,7 +218,7 @@ export function Builder({
         copy={copy}
         canResume={started && draft.restored}
         onStart={() => setStep(0)}
-        codeEntry={codeEntry}
+        codeEntry={codeButton}
       />
     );
   }
@@ -280,12 +284,16 @@ function Landing({
           ))}
         </ol>
 
-        <div className="mt-10 flex flex-wrap gap-3">
+        {/*
+          * Starting, or coming back with a number: two buttons side by side,
+          * so the owner who already has his serial sees his way in at once.
+          */}
+        <div className="mt-10 flex flex-wrap items-start gap-3">
           <Button type="button" variant="accent" onClick={onStart} className="min-h-[48px] text-base">
             {canResume ? copy.landing.resume : copy.landing.start}
           </Button>
+          {codeEntry}
         </div>
-        {codeEntry ? <div className="mt-6">{codeEntry}</div> : null}
       </Container>
     </section>
   );
@@ -401,6 +409,8 @@ function Wizard({
   }, [step, answers.pack]);
 
   const total = STEP_KEYS.length;
+  /* The number this owner has now: the one issued after the questions, or one he opened. */
+  const currentSerial = serial ?? issued?.serial ?? null;
   const whatsapp = supportWhatsapp
     ? `https://wa.me/${supportWhatsapp}`
     : organization.whatsappUrl;
@@ -551,12 +561,13 @@ function Wizard({
       installers={installers}
       tutorials={tutorials}
       /* The number issued after the questions is enough to download: no account needed first. */
-      serial={serial ?? issued?.serial ?? null}
+      serial={currentSerial}
       onSerial={setSerial}
     />
   );
 
   return (
+    <InstallTargetProvider>
     <div className="pb-28 wizard:pb-0" lang={locale}>
       {/*
         * Wider than the site's other pages: the preview is a laptop screen,
@@ -669,7 +680,20 @@ function Wizard({
               * above it.
               */
             <aside className={cn("self-start wizard:sticky wizard:top-24", previewLarge && "z-[70]")}>
-              <Preview copy={copy} answers={answers} fallbackLanguage={locale} onExpand={setPreviewLarge} />
+              {/*
+                * At the last step, with the serial issued, the software is
+                * made: the space goes to how to install it on the computer
+                * chosen on the left. The preview stays mounted underneath, so
+                * going back a step finds it as it was.
+                */}
+              {step === total - 1 && currentSerial ? (
+                <div className="max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl">
+                  <GuideForTarget copy={copy} serial={currentSerial} />
+                </div>
+              ) : null}
+              <div className={step === total - 1 && currentSerial ? "hidden" : undefined}>
+                <Preview copy={copy} answers={answers} fallbackLanguage={locale} onExpand={setPreviewLarge} />
+              </div>
             </aside>
           ) : null}
         </div>
@@ -693,7 +717,14 @@ function Wizard({
         </div>
       ) : null}
     </div>
+    </InstallTargetProvider>
   );
+}
+
+/* The install guide for the computer chosen at step 4, beside the download. */
+function GuideForTarget({ copy, serial }: { copy: BuilderCopy; serial: string }) {
+  const { target } = useInstallTarget();
+  return <InstallGuide copy={copy} target={target} serial={serial} />;
 }
 
 function SaveNote({ copy, state }: { copy: BuilderCopy; state: SaveState }) {

@@ -92,12 +92,18 @@ export function CodeEntry({
   locale,
   supportWhatsapp,
   onRestart,
+  asButton = false,
 }: {
   copy: BuilderCopy;
   locale: Locale;
   supportWhatsapp: string | null;
   /* An expired number: start a fresh configuration, never silently. */
   onRestart?: () => void;
+  /*
+   * A button beside "Commencer" on the builder's first page, where the owner
+   * coming back with a number must see it at once. Elsewhere, a quiet line.
+   */
+  asButton?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -115,6 +121,13 @@ export function CodeEntry({
   }, [wait]);
 
   if (!open) {
+    if (asButton) {
+      return (
+        <Button type="button" variant="outline" onClick={() => setOpen(true)} className="min-h-[48px] text-base">
+          {copy.code.have}
+        </Button>
+      );
+    }
     return (
       <button
         type="button"
@@ -171,7 +184,7 @@ export function CodeEntry({
   }
 
   return (
-    <div className="space-y-3 text-start">
+    <div className="w-full basis-full space-y-3 text-start">
       <Field label={copy.code.label}>
         <input
           type="text"
