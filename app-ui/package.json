@@ -16,7 +16,6 @@
     "./copy": "./copy.ts",
     "./sample-data": "./sample-data.ts",
     "./receipt": "./receipt.tsx",
-    "./sale-screen": "./sale-screen.tsx",
     "./scaled": "./scaled.tsx"
   },
   "peerDependencies": {
