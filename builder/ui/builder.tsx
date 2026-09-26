@@ -60,7 +60,9 @@ const WIDE = "(min-width: 900px)"; // not-a-rule: a layout breakpoint
  *
  * Two layouts, chosen by width alone, never by sniffing the device. Below
  * 900px the owner sees one question at a time with a fixed bar at the bottom.
- * From 900px the questions sit beside a live preview of his own software.
+ * From 900px the questions sit beside a live preview of his own software,
+ * which takes the larger share of the width and stays in view while he
+ * scrolls through the questions.
  *
  * Step 1 is built. Steps 2 to 4 say so plainly and offer WhatsApp, rather
  * than showing an empty frame.
@@ -555,14 +557,19 @@ function Wizard({
 
   return (
     <div className="pb-28 wizard:pb-0" lang={locale}>
-      <Container className="py-8 wizard:py-12">
+      {/*
+        * Wider than the site's other pages: the preview is a laptop screen,
+        * and every pixel it gets back is a bigger, more readable copy of the
+        * owner's software.
+        */}
+      <Container className="py-8 wizard:max-w-[1560px] wizard:py-12">
         {offline ? (
           <p className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-base text-foreground">
             {copy.shell.offline}
           </p>
         ) : null}
 
-        <div className="grid gap-10 wizard:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] wizard:gap-14">
+        <div className="grid gap-10 wizard:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] wizard:gap-10 xl:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] xl:gap-12">
           <div>
             <Progress copy={copy} step={step} total={total} stepName={stepName} />
 
@@ -655,10 +662,8 @@ function Wizard({
             * re-rendering on every keystroke.
             */}
           {wide ? (
-            <aside>
-              <div className="h-[36rem] overflow-hidden rounded-2xl border border-border bg-surface">
-                <Preview copy={copy} answers={answers} fallbackLanguage={locale} />
-              </div>
+            <aside className="self-start wizard:sticky wizard:top-24">
+              <Preview copy={copy} answers={answers} fallbackLanguage={locale} products={keptProducts} />
             </aside>
           ) : null}
         </div>
@@ -675,8 +680,8 @@ function Wizard({
               <X className="h-4 w-4" />
               {copy.shell.close}
             </button>
-            <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-border">
-              <Preview copy={copy} answers={answers} fallbackLanguage={locale} />
+            <div className="min-h-0 flex-1">
+              <Preview copy={copy} answers={answers} fallbackLanguage={locale} products={keptProducts} fill />
             </div>
           </Container>
         </div>

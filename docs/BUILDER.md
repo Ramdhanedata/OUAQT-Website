@@ -118,14 +118,32 @@ staff work is being done.
 
 ## The preview
 
-`app-ui` holds the screens the desktop app will import unchanged: the sale
-screen and the 80mm receipt so far. They take a configuration and sample data
-as props and render; they know nothing about the builder, the website or the
-database.
+`builder/ui/preview/` is a working copy of the desktop app, running on the
+configuration the owner is building. It has the app's side menu, with the
+sections the desktop app's `sectionsFor` gives that configuration, and a
+screen for each: the till in its three shapes (a shop's, a restaurant's with
+tables, kitchen tickets and waiting orders, a hotel's extras charged to a
+room), the stock, the customers on credit, the till count, the reports, the
+settings, and each trade's own screens.
 
-The receipt is laid out at 576 pixels, which is 80mm at 203 dpi, and scaled to
-fit. That is why `Scaled` measures instead of using a percentage: what the
-owner sees has to be what the printer cuts.
+It is laid out at 1200 by 750, the app's own size, and scaled as a whole to
+the space it is given. It never reflows: the old preview reflowed its screens
+to a 416px side panel and the product grid came out as a column of clipped
+letters.
+
+It is live in two senses. Every answer reaches it at once, and when one
+changes something the window moves to the screen it changed and marks it
+(`focusFor` in `model.ts`). And it works: a sale prints its receipt, lowers
+the stock and lands in the report and the till count, a table sent to the
+kitchen waits at the bottom until it is paid. That state lives in `store.ts`
+and starts again when the trade changes.
+
+When a screen is added or renamed in the desktop app, `model.ts` and
+`words.ts` follow it; the section labels are the app's own.
+
+The 80mm receipt in `app-ui` is laid out at 576 pixels, which is 80mm at
+203 dpi, and scaled to fit. That is why `Scaled` measures instead of using a
+percentage: what the owner sees has to be what the printer cuts.
 
 The preview is loaded separately from the questions. It carries the app
 screens and the schema with it, and on a slow phone that weight between the

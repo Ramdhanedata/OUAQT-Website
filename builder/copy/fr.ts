@@ -105,13 +105,19 @@ export const fr = {
   },
 
   preview: {
-    sale: "Écran de vente",
+    live: "En direct",
+    app: "Logiciel",
     receipt: "Reçu",
-    intro: "Voici votre logiciel avec ce que vous venez d'écrire.",
-    tables: "Les tables",
-    kitchen: "Ticket cuisine",
-    production: "Production",
-    moves: "Entrées et sorties",
+    expand: "Agrandir",
+    shrink: "Réduire",
+    hint: "Touchez les produits et les boutons : tout fonctionne comme dans votre logiciel.",
+    samples: "Produits d'exemple : vous mettrez les vôtres dans le logiciel.",
+    updated: "Mis à jour : {section}",
+    rotate: "Tournez votre téléphone pour voir l'écran en grand.",
+    actualSize: "Taille réelle",
+    fitSize: "Tout voir",
+    lastReceipt: "Le reçu de votre dernière vente, tel qu'il sortira de l'imprimante.",
+    sampleReceipt: "Un reçu d'exemple, tel qu'il sortira de l'imprimante. Faites une vente pour voir le vôtre.",
   },
 
   save: {

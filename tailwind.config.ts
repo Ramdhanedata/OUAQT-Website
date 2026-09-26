@@ -37,6 +37,31 @@ const config: Config = {
          * every error read in plain black. A red that still reads on ivory.
          */
         destructive: "#B42318",
+        /*
+         * The desktop app's own tokens (src/tokens.css there), for the
+         * builder's preview of it. The preview has to look like the app,
+         * not like the website around it.
+         */
+        app: {
+          background: "#f0eee6",
+          surface: "#faf9f5",
+          raised: "#fdfcf9",
+          hover: "#e6e3d9",
+          selected: "#dcd8cc",
+          line: "#e0ddd3",
+          strong: "#cfcbc0",
+          ink: "#0a0a0a",
+          ink2: "#3d3c38",
+          ink3: "#5f5d57",
+          gold: "#c9a961",
+          "gold-ink": "#735c24",
+          warning: "#8a5300",
+          "warning-soft": "#f5e4c3",
+          danger: "#b42318",
+          "danger-soft": "#f6dad5",
+          success: "#2e6b34",
+          "success-soft": "#d9ead5",
+        },
       },
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],
@@ -64,10 +89,27 @@ const config: Config = {
           "0%, 100%": { transform: "translateY(0) translateX(0)" },
           "50%": { transform: "translateY(-16px) translateX(8px)" },
         },
+        /* A receipt coming out of the printer, in the preview. */
+        "print-out": {
+          "0%": { transform: "translateY(-100%)" },
+          "100%": { transform: "translateY(0)" },
+        },
+        /* A section the owner's last answer just changed. */
+        "answer-glow": {
+          "0%, 60%": { boxShadow: "inset 0 0 0 4px #c9a961" },
+          "100%": { boxShadow: "inset 0 0 0 4px transparent" },
+        },
+        "fade-in": {
+          "0%": { opacity: "0" },
+          "100%": { opacity: "1" },
+        },
       },
       animation: {
         "fade-up": "fade-up 0.6s ease-out forwards",
         float: "float 12s ease-in-out infinite",
+        "print-out": "print-out 0.9s ease-out both",
+        "answer-glow": "answer-glow 2.4s ease-out both",
+        "fade-in": "fade-in 0.2s ease-out both",
       },
     },
   },
