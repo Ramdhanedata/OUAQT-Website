@@ -457,8 +457,6 @@ export const fr: Dictionary = {
     heroReassurance: "Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
     heroReassuranceNoTrial: "Sans internet · Vos données restent chez vous",
     heroShotAlt: "L'écran de caisse d'un café dans un logiciel OUAQT : une commande en cours, son total et le paiement.",
-    heroChipOffline: "Fonctionne sans internet",
-    heroChipOfflineLabel: "pour le travail de tous les jours",
     heroChipReady: "Prêt en moins de 5 minutes",
 
     impactMinutes: "Moins de 5 minutes",
@@ -532,6 +530,7 @@ export const fr: Dictionary = {
     },
     tradesOther: "Mon activité n'est pas dans la liste",
     tradesOtherBody: "Pas d'inquiétude, d'autres métiers arrivent. Dites-nous ce que vous faites et laissez votre numéro : nous vous rappelons.",
+    tradesOtherCta: "Laisser mon numéro",
     tradesBusiness: "Votre activité",
     tradesBusinessPlaceholder: "Par exemple : quincaillerie, salon de coiffure, garage",
     tradesLeaveNumber: "Laissez votre numéro, nous vous prévenons.",

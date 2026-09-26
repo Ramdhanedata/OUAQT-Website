@@ -5,7 +5,7 @@ import { Container } from "@/components/ui/container";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
-import { ArrowRight, Download, ListChecks, MonitorPlay } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { LiveDemo } from "./live-demo";
 
 /*
@@ -23,9 +23,9 @@ export function BuilderProduct({
 }) {
   const home = dict.builderHome;
   const steps = [
-    { icon: ListChecks, title: home.builderStep1, body: home.builderStep1Body },
-    { icon: MonitorPlay, title: home.builderStep2, body: home.builderStep2Body },
-    { icon: Download, title: home.builderStep3, body: home.builderStep3Body },
+    { title: home.builderStep1, body: home.builderStep1Body },
+    { title: home.builderStep2, body: home.builderStep2Body },
+    { title: home.builderStep3, body: home.builderStep3Body },
   ];
 
   return (
@@ -55,17 +55,12 @@ export function BuilderProduct({
           </div>
         </FadeIn>
 
-        <ol className="mt-14 grid gap-4 md:grid-cols-3">
+        <ol className="mt-14 grid gap-10 md:grid-cols-3 md:gap-8">
           {steps.map((step, index) => (
             <li key={step.title}>
-              <FadeIn delay={index * 0.06} className="h-full rounded-2xl border border-border bg-surface p-6 sm:p-7">
-                <div className="flex items-center justify-between">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-app-gold-ink">
-                    <step.icon className="h-5 w-5" />
-                  </span>
-                  <span className="text-sm font-medium tabular-nums text-muted-foreground">0{index + 1}</span>
-                </div>
-                <h3 className="mt-6 text-xl font-medium text-foreground">{step.title}</h3>
+              <FadeIn delay={index * 0.06} className="border-t border-border pt-6">
+                <span className="text-sm font-medium tabular-nums text-app-gold-ink">0{index + 1}</span>
+                <h3 className="mt-3 text-xl font-medium text-foreground">{step.title}</h3>
                 <p className="mt-2 text-base leading-relaxed text-muted-foreground">{step.body}</p>
               </FadeIn>
             </li>
@@ -75,10 +70,7 @@ export function BuilderProduct({
         <div id="demo" className="scroll-mt-24 pt-20 sm:pt-24">
           <FadeIn className="max-w-2xl">
             <p className="inline-flex items-center gap-2 text-xs font-medium uppercase tracking-[0.2em] text-accent">
-              <span className="relative flex h-2 w-2">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-app-success opacity-60" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-app-success" />
-              </span>
+              <span className="h-2 w-2 rounded-full bg-app-success" />
               {home.demoEyebrow}
             </p>
             <h3 className="mt-5 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">

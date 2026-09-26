@@ -1,15 +1,12 @@
 import { FadeIn } from "@/components/motion/fade-in";
 import { Container } from "@/components/ui/container";
 import type { Dictionary } from "@/lib/i18n";
-import { MessageCircle, ShieldCheck, Smartphone, WifiOff } from "lucide-react";
 
 /*
  * The four things an owner asks before trusting a young company with his
  * till: the internet, his figures, how he pays, and who answers when
  * something goes wrong.
  */
-const icons = [WifiOff, ShieldCheck, Smartphone, MessageCircle];
-
 export function Why({ dict }: { dict: Dictionary }) {
   const home = dict.builderHome;
 
@@ -23,17 +20,13 @@ export function Why({ dict }: { dict: Dictionary }) {
           </h2>
         </FadeIn>
 
-        <dl className="grid gap-4 sm:grid-cols-2">
-          {home.why.map((item, index) => {
-            const Icon = icons[index % icons.length];
-            return (
-              <FadeIn key={item.title} delay={(index % 2) * 0.06} className="rounded-2xl border border-border bg-surface p-6">
-                <Icon className="h-5 w-5 text-accent" />
-                <dt className="mt-4 text-lg font-medium text-foreground">{item.title}</dt>
-                <dd className="mt-2 text-base leading-relaxed text-muted-foreground">{item.body}</dd>
-              </FadeIn>
-            );
-          })}
+        <dl className="grid gap-x-10 gap-y-8 sm:grid-cols-2">
+          {home.why.map((item, index) => (
+            <FadeIn key={item.title} delay={(index % 2) * 0.06} className="border-t border-border pt-5">
+              <dt className="text-lg font-medium text-foreground">{item.title}</dt>
+              <dd className="mt-2 text-base leading-relaxed text-muted-foreground">{item.body}</dd>
+            </FadeIn>
+          ))}
         </dl>
       </Container>
     </section>

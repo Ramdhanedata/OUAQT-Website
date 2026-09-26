@@ -17,7 +17,7 @@ export function BuilderImpact({ dict }: { dict: Dictionary }) {
   ];
 
   return (
-    <section className="border-y border-border bg-surface">
+    <section className="border-y border-border">
       <Container className="grid grid-cols-2 gap-px lg:grid-cols-4">
         {facts.map((fact) => (
           <div key={fact.label} className="py-8 pe-4 sm:py-10">

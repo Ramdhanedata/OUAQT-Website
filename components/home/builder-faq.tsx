@@ -22,7 +22,7 @@ export function BuilderFaq({ dict }: { dict: Dictionary }) {
   ];
 
   return (
-    <section className="py-20 sm:py-28">
+    <section className="border-t border-border py-20 sm:py-28">
       <JsonLd
         data={{
           "@context": "https://schema.org",

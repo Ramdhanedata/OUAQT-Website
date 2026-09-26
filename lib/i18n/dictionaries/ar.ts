@@ -456,8 +456,6 @@ export const ar: Dictionary = {
     heroReassurance: "يعمل بدون إنترنت · بياناتك تبقى عندك · تجربة مجانية {days} يوماً",
     heroReassuranceNoTrial: "يعمل بدون إنترنت · بياناتك تبقى عندك",
     heroShotAlt: "شاشة الصندوق لمقهى في برنامج من «وقت»: طلب جارٍ، ومجموعه، والدفع.",
-    heroChipOffline: "يعمل بدون إنترنت",
-    heroChipOfflineLabel: "في العمل اليومي",
     heroChipReady: "جاهز في أقل من 5 دقائق",
 
     impactMinutes: "أقل من 5 دقائق",
@@ -531,6 +529,7 @@ export const ar: Dictionary = {
     },
     tradesOther: "نشاطي ليس في هذه القائمة",
     tradesOtherBody: "لا تقلق، أنشطة أخرى في الطريق. أخبرنا بما تعمل واترك رقمك: سنتصل بك.",
+    tradesOtherCta: "اترك رقمي",
     tradesBusiness: "نشاطك",
     tradesBusinessPlaceholder: "مثلاً: محل أدوات، صالون حلاقة، ورشة سيارات",
     tradesLeaveNumber: "اترك رقمك وسنخبرك.",

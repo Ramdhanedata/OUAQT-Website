@@ -6,7 +6,6 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { Container } from "@/components/ui/container";
 import { Notify } from "@/components/packs/notify";
 import type { Dictionary } from "@/lib/i18n";
-import { cn } from "@/lib/utils";
 import { ArrowRight, Plus } from "lucide-react";
 import { packIcons } from "@/components/packs/pack-icons";
 
@@ -45,29 +44,20 @@ export function Trades({
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{home.tradesBody}</p>
         </FadeIn>
 
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid gap-x-10 sm:grid-cols-2">
           {ordered.map((pack) => {
             const open = enabledPacks.includes(pack);
             const Icon = packIcons[pack];
             return (
-              <li key={pack}>
-                <div className="flex h-full flex-col rounded-2xl border border-border bg-surface p-6 transition-colors hover:border-foreground/30">
-                  <div className="flex items-start justify-between gap-3">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-accent/15 text-app-gold-ink">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <span
-                      className={cn(
-                        "rounded-full px-2.5 py-1 text-xs font-medium",
-                        open ? "bg-app-success-soft text-app-success" : "bg-muted text-muted-foreground"
-                      )}
-                    >
-                      {open ? home.tradesOpen : home.tradesSoon}
-                    </span>
-                  </div>
-                  <h3 className="mt-5 text-lg font-medium text-foreground">{dict.packLabels[pack]}</h3>
-                  <p className="mt-2 flex-1 text-base leading-relaxed text-muted-foreground">{home.tradeLines[pack]}</p>
-                  <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+              <li key={pack} className="flex gap-4 border-t border-border py-6">
+                <Icon className="mt-1 h-5 w-5 shrink-0 text-app-gold-ink" strokeWidth={1.75} />
+                <div className="min-w-0 flex-1">
+                  <h3 className="text-lg font-medium text-foreground">
+                    {dict.packLabels[pack]}
+                    {open ? null : <span className="ms-2 text-sm font-normal text-muted-foreground">· {home.tradesSoon}</span>}
+                  </h3>
+                  <p className="mt-1 text-base leading-relaxed text-muted-foreground">{home.tradeLines[pack]}</p>
+                  <div className="mt-2 flex flex-wrap items-center gap-x-5">
                     {open ? (
                       <a
                         href={packHrefs[pack]}
@@ -97,25 +87,24 @@ export function Trades({
               </li>
             );
           })}
-
-          <li>
-            <button
-              type="button"
-              onClick={() => setAsking(asking === "other" ? null : "other")}
-              aria-expanded={asking === "other"}
-              className={cn(
-                "flex h-full w-full flex-col items-start rounded-2xl border-2 border-dashed p-6 text-start transition-colors",
-                asking === "other" ? "border-accent bg-accent/5" : "border-border hover:border-foreground/40"
-              )}
-            >
-              <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-border bg-background text-foreground">
-                <Plus className="h-5 w-5" />
-              </span>
-              <span className="mt-5 text-lg font-medium text-foreground">{home.tradesOther}</span>
-              <span className="mt-2 text-base leading-relaxed text-muted-foreground">{home.tradesOtherBody}</span>
-            </button>
-          </li>
         </ul>
+
+        <div className="mt-4 flex flex-col gap-2 border-t border-border pt-6 sm:flex-row sm:items-baseline sm:gap-4">
+          <p className="text-base leading-relaxed text-muted-foreground">
+            <span className="font-medium text-foreground">{home.tradesOther}</span>
+            {" · "}
+            {home.tradesOtherBody}
+          </p>
+          <button
+            type="button"
+            onClick={() => setAsking(asking === "other" ? null : "other")}
+            aria-expanded={asking === "other"}
+            className="inline-flex min-h-[44px] shrink-0 items-center gap-1.5 text-base font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
+          >
+            <Plus className="h-4 w-4" />
+            {home.tradesOtherCta}
+          </button>
+        </div>
 
         {asking === "other" ? <Notify dict={dict} askBusiness /> : null}
         {asking && asking !== "other" ? <Notify dict={dict} businessType={dict.packLabels[asking]} /> : null}

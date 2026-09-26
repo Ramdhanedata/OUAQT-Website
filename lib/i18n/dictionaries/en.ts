@@ -462,8 +462,6 @@ export const en = {
     heroReassurance: "Works without internet · Your data stays with you · {days} day free trial",
     heroReassuranceNoTrial: "Works without internet · Your data stays with you",
     heroShotAlt: "A cafe's till screen in OUAQT software: an order in progress, its total and the payment.",
-    heroChipOffline: "Works without internet",
-    heroChipOfflineLabel: "for the everyday work",
     heroChipReady: "Ready in under 5 minutes",
 
     impactMinutes: "Under 5 minutes",
@@ -537,6 +535,7 @@ export const en = {
     },
     tradesOther: "My business is not on this list",
     tradesOtherBody: "No need to worry, more trades are on the way. Tell us what you do and leave your number: we will call you back.",
+    tradesOtherCta: "Leave my number",
     tradesBusiness: "Your business",
     tradesBusinessPlaceholder: "For example: hardware store, hair salon, garage",
     tradesLeaveNumber: "Leave your number and we will tell you.",

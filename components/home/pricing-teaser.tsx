@@ -54,7 +54,7 @@ export function PricingTeaser({
         </FadeIn>
 
         <FadeIn delay={0.08}>
-          <div className="rounded-3xl border border-border bg-surface p-7 shadow-[0_24px_48px_-32px_rgba(10,10,10,0.35)] sm:p-9">
+          <div className="rounded-2xl border border-border bg-surface p-7 sm:p-9">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-base font-medium text-foreground">{home.pricingAnnual}</p>
               {price?.amount && price.launch && struck !== null ? (
