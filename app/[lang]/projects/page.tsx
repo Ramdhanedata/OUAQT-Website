@@ -42,7 +42,7 @@ export default function ProjectsPage({ params }: Props) {
           <ProjectsGrid
             projects={projects}
             categories={categories}
-            dict={dict}
+            dict={{ projectsPage: dict.projectsPage, projects: dict.projects, projectDetail: dict.projectDetail, sectors: dict.sectors }}
             lang={params.lang}
           />
         </div>

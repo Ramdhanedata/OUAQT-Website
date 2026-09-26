@@ -39,7 +39,7 @@ function formSubmitFields(values: FormState, lang: Locale) {
   };
 }
 
-function validate(values: FormState, dict: Dictionary): Errors {
+function validate(values: FormState, dict: Pick<Dictionary, "contact">): Errors {
   const errors: Errors = {};
   const f = dict.contact.form;
 
@@ -61,7 +61,7 @@ export function ContactForm({
   dict,
   lang,
 }: {
-  dict: Dictionary;
+  dict: Pick<Dictionary, "common" | "contact">;
   lang: Locale;
 }) {
   const [values, setValues] = useState<FormState>(initialState);
