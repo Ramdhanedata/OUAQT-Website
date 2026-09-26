@@ -142,18 +142,25 @@ export function Builder({
   const started = Object.keys(draft.answers).length > 0;
 
   /*
-   * A trade's landing page sends the owner here with his trade already
-   * chosen, so he does not answer the same question twice. It is applied once
-   * the draft has been read back, and never over answers he already gave:
-   * arriving from a link is not a reason to lose an afternoon's work.
+   * The home page and each trade's page send the owner here with his trade
+   * already chosen. That choice is the one he gets, whatever this browser
+   * remembers: an older draft for another trade, or a shop opened earlier by
+   * its number, must never answer for him. Nothing is lost: his other
+   * answers stay in the draft, and the same trade simply carries on.
    */
   const [preselected, setPreselected] = useState(false);
   useEffect(() => {
     if (preselected || !draft.restored) return;
     if (!startPack || !enabledPacks.includes(startPack)) return;
     setPreselected(true);
-    if (Object.keys(draft.answers).length > 0) return;
-    draft.update({ pack: startPack });
+    const found = readOpened();
+    if (found && found.pack !== startPack) {
+      forgetOpened();
+      setOpened(null);
+    }
+    if (draft.answers.pack === startPack) return;
+    /* What the AI set was for the other trade's features, and would not fit this one. */
+    draft.update({ pack: startPack, patched: undefined });
     setStep(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preselected, draft.restored, startPack]);

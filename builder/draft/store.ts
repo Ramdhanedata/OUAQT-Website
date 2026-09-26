@@ -90,6 +90,8 @@ export function useDraft(locale: string) {
 
   const draftId = useRef<string | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* Something was answered or chosen on this visit, before the server's copy came back. */
+  const touched = useRef(false);
 
   /* What the device remembers comes back before anything is asked of the network. */
   useEffect(() => {
@@ -121,6 +123,20 @@ export function useDraft(locale: string) {
 
       if (cancelled || !data) return;
       draftId.current = data.id;
+
+      /*
+       * Something he did on this visit, a trade chosen from a link for one,
+       * is never undone by a copy arriving late: the server's answers are
+       * kept underneath it instead.
+       */
+      if (touched.current) {
+        setAnswers((current) => {
+          const merged = { ...(data.answers as DraftAnswers), ...current };
+          writeLocal({ answers: merged, step: readLocal()?.step ?? 0 });
+          return merged;
+        });
+        return;
+      }
 
       /*
        * The device copy wins when it has more in it: it holds the logo, and it
@@ -187,6 +203,7 @@ export function useDraft(locale: string) {
   /** Record an answer: the device now, the server once typing stops. */
   const update = useCallback(
     (patch: DraftAnswers, nextStep = step) => {
+      touched.current = true;
       setAnswers((current) => {
         const next = { ...current, ...patch };
         writeLocal({ answers: next, step: nextStep });
