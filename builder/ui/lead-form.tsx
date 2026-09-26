@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { Pack } from "@/app-ui/config";
 import type { BuilderCopy } from "@/builder/copy";
+import { sendLead } from "@/lib/send-lead";
 import { fill } from "@/lib/utils";
 import { Button } from "./owner-button";
 import { Field, TextInput } from "./fields";
@@ -15,6 +16,8 @@ import { Field, TextInput } from "./fields";
  *
  * A pack he tapped is named back to him, and only his number is asked: he
  * has just said what he does, and asking again reads as not listening.
+ *
+ * What he writes and his number go to OUAQT's inbox (lib/send-lead.ts).
  */
 export function LeadForm({
   copy,
@@ -40,12 +43,8 @@ export function LeadForm({
   async function send() {
     setState("sending");
     try {
-      const response = await fetch("/api/builder/lead", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ phone, ...(pack ? { pack } : { businessType }) }),
-      });
-      setState(response.ok ? "sent" : "failed");
+      const sent = await sendLead({ phone, ...(pack ? { pack } : { businessType }) });
+      setState(sent ? "sent" : "failed");
     } catch {
       setState("failed");
     }

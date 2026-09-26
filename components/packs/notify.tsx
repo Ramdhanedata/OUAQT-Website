@@ -3,12 +3,13 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { Dictionary } from "@/lib/i18n";
+import { sendLead } from "@/lib/send-lead";
 
 /*
  * A phone number for a trade that is not open yet, and nothing else.
  *
  * It goes through a server route because the leads table is closed to
- * browsers. The same form serves the home page's trade list and each trade's
+ * browsers, and lands in OUAQT's inbox as well (lib/send-lead.ts). The same form serves the home page's trade list and each trade's
  * own landing page, so the wording lives in one place.
  */
 export function Notify({
@@ -27,12 +28,7 @@ export function Notify({
   async function send() {
     setState("sending");
     try {
-      const response = await fetch("/api/builder/lead", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ businessType, phone }),
-      });
-      setState(response.ok ? "sent" : "failed");
+      setState((await sendLead({ businessType, phone })) ? "sent" : "failed");
     } catch {
       setState("failed");
     }

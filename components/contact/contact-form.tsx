@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
-import { organization } from "@/lib/data/contact";
 import { parseContact } from "@/lib/contact-channel";
+import { organization } from "@/lib/data/contact";
+import { sendViaFormSubmit } from "@/lib/formsubmit";
 import { CheckCircle2 } from "lucide-react";
 import { FormEvent, useState } from "react";
 
@@ -28,8 +29,6 @@ function formSubmitFields(values: FormState, lang: Locale) {
     _subject: `OUAQT enquiry from ${values.name.trim()}`,
     // Reply in Gmail goes straight to the visitor when they left an email.
     ...(channel?.kind === "email" ? { _replyto: channel.value } : {}),
-    _template: "table",
-    _captcha: "false",
     Name: values.name.trim(),
     [channel?.kind === "email" ? "Email" : "Phone / WhatsApp"]: values.contact.trim(),
     ...(channel?.kind === "phone" && channel.whatsappUrl
@@ -38,32 +37,6 @@ function formSubmitFields(values: FormState, lang: Locale) {
     Message: values.message.trim() || "(no message)",
     Language: lang,
   };
-}
-
-/*
- * Sends the enquiry to OUAQT's inbox through FormSubmit, straight from the
- * visitor's browser. FormSubmit refuses the same request when it comes from
- * Vercel's servers, so this runs client side, which is how FormSubmit is
- * meant to be used.
- *
- * Activation is tied to the page address FormSubmit sees, and the inbox was
- * activated for /en/contact. The referrer is set to that page on the current
- * host so the French and Arabic pages use the same activation.
- */
-async function sendViaFormSubmit(values: FormState, lang: Locale) {
-  const res = await fetch(
-    `https://formsubmit.co/ajax/${encodeURIComponent(organization.email)}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
-      referrer: `${window.location.origin}/en/contact`,
-      referrerPolicy: "no-referrer-when-downgrade",
-      body: JSON.stringify(formSubmitFields(values, lang)),
-    }
-  );
-  // FormSubmit answers 200 even when it refuses; the body says which.
-  const data = (await res.json().catch(() => null)) as { success?: string | boolean } | null;
-  return res.ok && String(data?.success) === "true";
 }
 
 function validate(values: FormState, dict: Dictionary): Errors {
@@ -129,7 +102,7 @@ export function ContactForm({
         // failed. Either way, send from the browser through FormSubmit so the
         // enquiry is not lost. Bots never get here: the server answers them
         // with a fake success before choosing a mailer.
-        if (!(await sendViaFormSubmit(values, lang))) {
+        if (!(await sendViaFormSubmit(formSubmitFields(values, lang)))) {
           throw new Error("formsubmit");
         }
       } else if (!res.ok) {
