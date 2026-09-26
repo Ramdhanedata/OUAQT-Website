@@ -44,6 +44,8 @@ const privateSettings = z.object({
   activation_token_hours: z.number().int().positive(),
   /* How long after a download the software opens its shop by itself. See 0024. */
   activation_nearby_hours: z.number().int().positive().default(6),
+  /* The most AI calls in a day, for the builder and payment screenshots together. See 0026. */
+  ai_calls_per_day: z.number().int().nonnegative().default(500),
 
 });
 

@@ -12,7 +12,8 @@ import { claimTrial } from "@/builder/licence/trial-claim";
 import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
-import { openByNumber, shopFor } from "@/builder/config-code/server";
+import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@/builder/config-code/server";
+import { limitPerCaller } from "@/lib/rate-limit";
 
 /*
  * A shop computer coming to life for the first time.
@@ -68,7 +69,11 @@ const body = z
     message: "a serial, a token or nearby, and only one of them",
   });
 
+/* A shop activates a few computers; a loop guessing serials sends thousands. */
+const tooMany = limitPerCaller(10 * 60_000, 30); // not-a-rule: ten minutes, thirty attempts
+
 export async function POST(request: Request) {
+  if (tooMany(request)) return NextResponse.json({ error: "slow_down" }, { status: 429 });
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) {
     return NextResponse.json({ error: "invalid_request" }, { status: 400 });
@@ -105,8 +110,18 @@ export async function POST(request: Request) {
     tokenId = claim.id;
     found = { business_id: claim.businessId };
   } else {
+    /*
+     * Wrong serials from one address make it wait longer each time, the
+     * same counter the payment page and the code page use: guessing a
+     * number is slower than anyone would bother with.
+     */
+    const keys = await attemptKeys(request, null, "activate");
+    if ((await waitingFor(supabase, keys)) > 0) return NextResponse.json({ error: "slow_down" }, { status: 429 });
     const serial = normaliseSerial(input.data.serial ?? "");
-    if (!serial) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+    if (!serial) {
+      await recordFailure(supabase, keys);
+      return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+    }
 
     const { data } = await supabase
       .from("serials")
@@ -129,7 +144,10 @@ export async function POST(request: Request) {
     }
   }
 
-  if (!found) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+  if (!found) {
+    if (input.data.serial) await recordFailure(supabase, await attemptKeys(request, null, "activate"));
+    return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+  }
 
   let succeeded = false;
   try {

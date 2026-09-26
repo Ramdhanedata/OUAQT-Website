@@ -1,6 +1,7 @@
 import "server-only";
 
 import { aiProvider, mayReadImages } from "@/builder/ai";
+import { aiBudgetLeft } from "@/builder/ai/budget";
 import { adminClient } from "@/builder/db/server";
 import type { Extracted } from "./checks";
 import { receiptFrom } from "./receipt";
@@ -18,6 +19,8 @@ export async function readReceipt(bytes: ArrayBuffer): Promise<Extracted> {
   if (!mayReadImages()) return null;
   const provider = aiProvider();
   if (!provider) return null;
+  /* Past the day's budget, a person reads it, as without a key. */
+  if (!(await aiBudgetLeft())) return null;
 
   const { result, tokensIn, tokensOut, latencyMs } = await provider.readReceipt({
     base64: Buffer.from(bytes).toString("base64"),

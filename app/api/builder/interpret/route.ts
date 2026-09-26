@@ -7,6 +7,8 @@ import {
 } from "@/app-ui/config";
 import { packs } from "@/app-ui/packs";
 import { aiProvider, applyPatch } from "@/builder/ai";
+import { aiBudgetLeft } from "@/builder/ai/budget";
+import { limitPerCaller } from "@/lib/rate-limit";
 import { adminClient } from "@/builder/db/server";
 import { applyAnswers } from "@/builder/packs/bank";
 import { interviewFor } from "@/builder/packs";
@@ -83,7 +85,11 @@ async function keep(
   });
 }
 
+/* An owner explains a handful of answers in his own words; a loop sends hundreds. */
+const tooMany = limitPerCaller(10 * 60_000, 20); // not-a-rule: ten minutes, twenty sentences
+
 export async function POST(request: Request) {
+  if (tooMany(request)) return NextResponse.json({ error: "slow_down" }, { status: 429 });
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
@@ -97,7 +103,8 @@ export async function POST(request: Request) {
   }
 
   const provider = aiProvider();
-  if (!provider) {
+  /* No key, or the day's budget spent: his sentence is kept for a person, and he carries on. */
+  if (!provider || !(await aiBudgetLeft())) {
     await keep(input.data.pack, question.id, input.data.freeText);
     return NextResponse.json({ outcome: "noted" });
   }

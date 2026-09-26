@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { packs } from "@/app-ui/packs";
 import { adminClient } from "@/builder/db/server";
+import { limitPerCaller } from "@/lib/rate-limit";
 
 /*
  * Where owners get to, and where they stop.
@@ -23,7 +24,11 @@ const body = z
   })
   .strict();
 
+/* A visit records a few steps; more than this from one address is not a visit. */
+const tooMany = limitPerCaller(10 * 60_000, 120); // not-a-rule: ten minutes, a hundred and twenty steps
+
 export async function POST(request: Request) {
+  if (tooMany(request)) return NextResponse.json({ ok: true });
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
