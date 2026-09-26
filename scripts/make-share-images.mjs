@@ -9,8 +9,7 @@
  *
  *   npm run build && node scripts/make-share-images.mjs
  *
- * Re-run it whenever the hero heading, the share line or the system count
- * changes. WhatsApp and Facebook cache previews, so after deploying, refresh
+ * Re-run it whenever the hero's words or its screenshot change. WhatsApp and Facebook cache previews, so after deploying, refresh
  * the link in Facebook's Sharing Debugger.
  */
 import { execFileSync } from "node:child_process";
@@ -39,7 +38,9 @@ function builtFonts() {
   const css = fs.readdirSync(cssDir).filter((f) => f.endsWith(".css")).map((f) => fs.readFileSync(path.join(cssDir, f), "utf8")).join("\n");
   const faces = [...css.matchAll(/@font-face\{([^}]*)\}/g)].map((m) => m[1]);
   const pick = (family, rangeStart) => {
-    const face = faces.find((f) => f.includes(family) && new RegExp(`unicode-range:${rangeStart}`).test(f));
+    /* Next.js 14 wrote "Source_Serif_4", 15 writes "Source Serif 4". */
+    const named = new RegExp(family.replace(/_/g, "[ _]"));
+    const face = faces.find((f) => named.test(f) && new RegExp(`unicode-range:${rangeStart}`).test(f));
     if (!face) throw new Error(`No built font for ${family} ${rangeStart}`);
     const url = face.match(/src:url\(([^)]+)\)/)[1];
     // Embedded as data URLs: Chrome will not load fonts from file:// pages.
@@ -55,7 +56,9 @@ function builtFonts() {
 
 function page(dict, lang, fonts) {
   const rtl = lang === "ar";
+  const home = dict.builderHome;
   const logo = "file://" + path.join(root, "public/logo-ouaqt-dark-ink.png");
+  const shot = "file://" + path.join(root, `public/images/product/till-${lang}.webp`);
   const esc = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;");
   return `<!doctype html><html lang="${lang}" dir="${rtl ? "rtl" : "ltr"}"><head><meta charset="utf-8">
 <style>
@@ -65,26 +68,27 @@ function page(dict, lang, fonts) {
 html,body{margin:0;width:1200px;height:630px;background:#f0eee6;overflow:hidden}
 /* Custom names on purpose: an unquoted "Serif" is the generic keyword, and the browser drops the rule. */
 body{font-family:${rtl ? '"OuaqtCairo"' : '"OuaqtSerif"'},Georgia,serif;color:#0a0a0a;-webkit-font-smoothing:antialiased}
-.frame{box-sizing:border-box;height:630px;padding:64px 76px;display:flex;flex-direction:column}
-.top{display:flex;align-items:center;justify-content:space-between}
-.logo{height:58px;width:auto}
-.pill{font-size:21px;padding:9px 20px;border:1.5px solid #C9A961;border-radius:999px;color:#7a6330;background:#faf9f5}
-h1{margin:44px 0 0;font-weight:${rtl ? 700 : 650};font-size:62px;line-height:${rtl ? 1.4 : 1.1};letter-spacing:${rtl ? "0" : "-0.012em"};max-width:1000px;text-wrap:balance}
-.bottom{margin-top:auto}
-.rule{width:150px;height:3px;background:#C9A961;margin-bottom:22px}
-.line{margin:0;font-size:25px;line-height:1.45;color:#6b6b68;max-width:900px;text-wrap:pretty}
-.place{margin:10px 0 0;font-size:22px;color:#b08f45}
+.frame{box-sizing:border-box;height:630px;padding:56px 64px;display:grid;grid-template-columns:540px 1fr;gap:44px;align-items:center}
+.text{display:flex;flex-direction:column;height:100%}
+.logo{height:46px;width:auto;align-self:flex-start}
+.eyebrow{margin:40px 0 0;font-size:21px;color:#735c24}
+h1{margin:14px 0 0;font-weight:${rtl ? 700 : 650};font-size:50px;line-height:${rtl ? 1.4 : 1.1};letter-spacing:${rtl ? "0" : "-0.012em"};text-wrap:balance}
+.line{margin:auto 0 0;font-size:20px;line-height:1.45;color:#6b6b68}
+.shot{position:relative}
+.shot img{display:block;width:100%;border-radius:14px;border:1px solid #e0ddd3;box-shadow:0 30px 60px -36px rgba(10,10,10,.4)}
+.sticker{position:absolute;top:-34px;inset-inline-end:-22px;width:124px;height:124px;border-radius:50%;background:#C9A961;color:#0a0a0a;display:flex;flex-direction:column;align-items:center;justify-content:center;transform:rotate(${rtl ? -8 : 8}deg);box-shadow:0 0 0 5px #f0eee6,0 14px 28px -14px rgba(10,10,10,.45)}
+.sticker span{font-size:16px;line-height:1}
+.sticker strong{margin-top:5px;font-size:31px;line-height:1;font-weight:700}
 </style></head><body><div class="frame">
-<div class="top"><img class="logo" src="${logo}"><span class="pill">${esc(dict.hero.freeVisit)}</span></div>
-<h1 id="h">${esc(dict.hero.heading)}</h1>
-<div class="bottom"><div class="rule"></div><p class="line">${esc(dict.meta.shareLine)}</p><p class="place">${esc(dict.meta.shareReach)}</p></div>
+<div class="text"><img class="logo" src="${logo}"><p class="eyebrow">${esc(home.heroEyebrow)}</p><h1 id="h">${esc(home.heroHeading)}</h1><p class="line">${esc(home.heroReassuranceNoTrial)}</p></div>
+<div class="shot"><img src="${shot}"><div class="sticker"><span>${esc(home.heroStickerTop)}</span><strong>${esc(home.heroStickerValue)}</strong></div></div>
 </div>
 <script>
-/* Shrink the heading until everything fits in 630px. */
+/* Shrink the heading until the text column fits. */
 Promise.all([...document.fonts].map((f) => f.load().catch(() => null))).then(() => document.fonts.ready).then(() => {
-  const h = document.getElementById("h"), frame = document.querySelector(".frame");
-  let size = 62;
-  const fits = () => frame.scrollHeight <= 630 && h.getBoundingClientRect().bottom < document.querySelector(".bottom").getBoundingClientRect().top - 24;
+  const h = document.getElementById("h"), line = document.querySelector(".line");
+  let size = 50;
+  const fits = () => h.getBoundingClientRect().bottom < line.getBoundingClientRect().top - 20;
   while (!fits() && size > 30) { size -= 2; h.style.fontSize = size + "px"; }
 });
 </script></body></html>`;

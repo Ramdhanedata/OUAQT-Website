@@ -1,3 +1,5 @@
+import "server-only";
+
 /*
  * Mail to OUAQT's own inbox, from the server.
  *
