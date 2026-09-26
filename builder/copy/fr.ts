@@ -12,7 +12,7 @@ export const fr = {
     title: "Créez le logiciel de votre commerce",
     intro:
       "Répondez à quelques questions sur votre commerce. Vous repartez avec votre logiciel, prêt à installer sur l'ordinateur de la boutique.",
-    duration: "10 à 20 minutes",
+    duration: "Moins de 5 minutes",
     noAccount: "Pas besoin de compte pour commencer",
     steps: [
       "Votre commerce, votre nom et votre logo",

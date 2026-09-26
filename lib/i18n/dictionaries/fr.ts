@@ -459,9 +459,9 @@ export const fr: Dictionary = {
     heroShotAlt: "L'écran de caisse d'un café dans un logiciel OUAQT : une commande en cours, son total et le paiement.",
     heroChipOffline: "Fonctionne sans internet",
     heroChipOfflineLabel: "pour le travail de tous les jours",
-    heroChipReady: "Prêt en moins de 20 minutes",
+    heroChipReady: "Prêt en moins de 5 minutes",
 
-    impactMinutes: "Moins de 20 minutes",
+    impactMinutes: "Moins de 5 minutes",
     impactMinutesLabel: "pour créer votre logiciel",
     impactOffline: "Sans internet",
     impactOfflineLabel: "pour le travail de tous les jours",

@@ -458,9 +458,9 @@ export const ar: Dictionary = {
     heroShotAlt: "شاشة الصندوق لمقهى في برنامج من «وقت»: طلب جارٍ، ومجموعه، والدفع.",
     heroChipOffline: "يعمل بدون إنترنت",
     heroChipOfflineLabel: "في العمل اليومي",
-    heroChipReady: "جاهز في أقل من 20 دقيقة",
+    heroChipReady: "جاهز في أقل من 5 دقائق",
 
-    impactMinutes: "أقل من 20 دقيقة",
+    impactMinutes: "أقل من 5 دقائق",
     impactMinutesLabel: "لإنشاء برنامجك",
     impactOffline: "بدون إنترنت",
     impactOfflineLabel: "للعمل اليومي",

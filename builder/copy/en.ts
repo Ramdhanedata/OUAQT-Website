@@ -8,7 +8,7 @@ export const en: BuilderCopy = {
     title: "Build the software for your shop",
     intro:
       "Answer a few questions about your shop. You leave with your software, ready to install on the shop computer.",
-    duration: "10 to 20 minutes",
+    duration: "Under 5 minutes",
     noAccount: "No account needed to start",
     steps: [
       "Your shop, your name and your logo",

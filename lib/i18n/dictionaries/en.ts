@@ -464,9 +464,9 @@ export const en = {
     heroShotAlt: "A cafe's till screen in OUAQT software: an order in progress, its total and the payment.",
     heroChipOffline: "Works without internet",
     heroChipOfflineLabel: "for the everyday work",
-    heroChipReady: "Ready in under 20 minutes",
+    heroChipReady: "Ready in under 5 minutes",
 
-    impactMinutes: "Under 20 minutes",
+    impactMinutes: "Under 5 minutes",
     impactMinutesLabel: "to build your software",
     impactOffline: "No internet",
     impactOfflineLabel: "needed for the everyday work",
