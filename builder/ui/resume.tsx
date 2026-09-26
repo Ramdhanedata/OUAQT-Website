@@ -8,7 +8,7 @@ import { fill } from "@/lib/utils";
 import { Button } from "./owner-button";
 import { SerialPanel } from "./step-account";
 
-type Installers = { windows: string | null; mac: string | null };
+type Installers = { windows: string | null; mac: string | null; macApple?: string | null };
 
 /*
  * Télécharger, on the computer, for a configuration answered on the phone:

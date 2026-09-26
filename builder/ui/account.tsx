@@ -37,7 +37,7 @@ export type AccountState =
       pack: string;
       serial: string | null;
       requests: { text: string; status: string }[];
-      installers: { windows: string | null; mac: string | null };
+      installers: { windows: string | null; mac: string | null; macApple?: string | null };
       licence: {
         status: LicenceStatus;
         endsAt: string | null;
@@ -232,12 +232,20 @@ function SignedIn({
               {copy.serial.windows}
             </a>
           ) : null}
+          {state.installers.macApple ? (
+            <a
+              href={state.installers.macApple}
+              className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
+            >
+              {copy.serial.macApple}
+            </a>
+          ) : null}
           {state.installers.mac ? (
             <a
               href={state.installers.mac}
               className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
             >
-              {copy.serial.mac}
+              {state.installers.macApple ? copy.serial.macIntel : copy.serial.mac}
             </a>
           ) : null}
           <a

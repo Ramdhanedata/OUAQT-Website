@@ -14,3 +14,35 @@ export function machineOf(): Machine {
   if (/Macintosh|Mac OS X/i.test(agent)) return "mac";
   return "other";
 }
+
+/*
+ * Which chip a Mac has, as far as its browser will say. Chrome and Edge say
+ * it outright. Safari hides it, but a Mac with an Apple chip draws with a GPU
+ * that decodes ASTC textures and an Intel one does not. Null when neither
+ * answer is clear: the Intel build is then offered first, because it also
+ * runs on an Apple chip, while the Apple one does not run on Intel at all.
+ */
+export async function macChip(): Promise<"apple" | "intel" | null> {
+  try {
+    const hints = (navigator as Navigator & { userAgentData?: { getHighEntropyValues?: (keys: string[]) => Promise<{ architecture?: string }> } }).userAgentData;
+    if (hints?.getHighEntropyValues) {
+      const { architecture } = await hints.getHighEntropyValues(["architecture"]);
+      if (architecture === "arm") return "apple";
+      if (architecture === "x86") return "intel";
+    }
+  } catch {
+    /* Asked and refused: try the other way. */
+  }
+  try {
+    const gl = document.createElement("canvas").getContext("webgl");
+    if (!gl) return null;
+    const info = gl.getExtension("WEBGL_debug_renderer_info");
+    const renderer = info ? String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL)) : "";
+    if (/Apple M\d/i.test(renderer)) return "apple";
+    if (/Intel|AMD|Radeon|NVIDIA/i.test(renderer)) return "intel";
+    if (/Apple/i.test(renderer)) return gl.getSupportedExtensions()?.includes("WEBGL_compressed_texture_astc") ? "apple" : "intel";
+  } catch {
+    /* No drawing context: nothing more to learn. */
+  }
+  return null;
+}

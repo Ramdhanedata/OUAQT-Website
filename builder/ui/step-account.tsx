@@ -1,6 +1,6 @@
 "use client";
 
-import { machineOf, type Machine } from "./machine";
+import { macChip, machineOf, type Machine } from "./machine";
 import { useEffect, useState } from "react";
 import type { AppLanguage } from "@/app-ui/config";
 import type { Pack } from "@/app-ui/packs";
@@ -50,7 +50,7 @@ export function isPhone(input: string): boolean {
   return digits.length >= 8 && digits.length <= 15;
 }
 
-type Installers = { windows: string | null; mac: string | null };
+type Installers = { windows: string | null; mac: string | null; macApple?: string | null };
 type Tutorials = { windows: string | null; mac: string | null };
 
 export function StepAccount({
@@ -294,11 +294,26 @@ export function SerialPanel({
   link?: string | null;
 }) {
   const [machine, setMachine] = useState<Machine>("other");
-  useEffect(() => setMachine(machineOf()), []);
+  const [chip, setChip] = useState<"apple" | "intel" | null>(null);
+  useEffect(() => {
+    const found = machineOf();
+    setMachine(found);
+    if (found === "mac") void macChip().then(setChip);
+  }, []);
 
   const onPc = machine === "windows" || machine === "mac";
-  const mine = machine === "windows" ? installers.windows : machine === "mac" ? installers.mac : null;
+  /* A Mac with an Apple chip gets its own build; any other Mac, the Intel one, which runs on both. */
+  const appleMac = machine === "mac" && chip === "apple" && Boolean(installers.macApple);
+  const mine = machine === "windows" ? installers.windows : machine === "mac" ? (appleMac ? installers.macApple ?? null : installers.mac) : null;
   const other = machine === "windows" ? installers.mac : machine === "mac" ? installers.windows : null;
+  const otherMac =
+    machine !== "mac"
+      ? null
+      : appleMac
+        ? { href: installers.mac, label: copy.serial.otherMacIntel }
+        : installers.macApple
+          ? { href: installers.macApple, label: copy.serial.otherMacApple }
+          : null;
 
   /*
    * The owner who built on the shop PC itself. He installs, then opens, and
@@ -320,6 +335,15 @@ export function SerialPanel({
         <InstallHelp copy={copy} first={machine === "windows" ? "windows" : "mac"} />
 
         <OpenMySoftware copy={copy} mac={machine === "mac"} link={link ?? null} />
+
+        {otherMac?.href ? (
+          <a
+            href={otherMac.href}
+            className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4"
+          >
+            {otherMac.label}
+          </a>
+        ) : null}
 
         {other ? (
           <a
@@ -496,12 +520,20 @@ function PhoneOrSoon({
                 {copy.serial.windows}
               </a>
             ) : null}
+            {installers.macApple ? (
+              <a
+                href={installers.macApple}
+                className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
+              >
+                {copy.serial.macApple}
+              </a>
+            ) : null}
             {installers.mac ? (
               <a
                 href={installers.mac}
                 className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
               >
-                {copy.serial.mac}
+                {installers.macApple ? copy.serial.macIntel : copy.serial.mac}
               </a>
             ) : null}
           </div>
