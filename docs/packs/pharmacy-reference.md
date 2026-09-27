@@ -75,29 +75,32 @@ pharmacy configuration written before this still validates and reads as not
 conventionnée. Screens ask `coverPayers(configuration)`, which returns no
 fund for those, for a pharmacy that answered no, and for every other trade.
 
-**On the till** (`app-ui/sale-screen.tsx`): a row of buttons above the total,
-"Sans assurance" and one per fund. Picking a fund asks for the member number
-and the fund's share in percent, then shows Sous-total, the fund's part, and
-Reste à payer in place of Total. "Encaisser" waits for the member number,
-because a claim without one comes back from the fund. `onCharge` receives the
-cover alongside the lines; the drawer takes only the customer's part.
+**Shared rule** (`app-ui/money.ts`, `app-ui/cover.ts`): the fund's part is
+its share of what is due, rounded once to the smallest unit; the customer
+pays the rest, so the two always add up to the sale.
 
-**On the receipt** (`app-ui/receipt.tsx`): Sous-total, the fund and its share,
-the member number, then Reste à payer.
+**In the desktop app** (`ouaqt-desktop`, which also runs as the builder's
+preview):
 
-**For the manager** (`app-ui/claims.tsx`): what each fund owes this month,
-one fund at a time, with the total to claim and "Imprimer le relevé".
-
-**What the desktop app has to do with it**
-
-- Keep each fund's usual share, set by the manager, and pass it as
-  `coverShares`. It is not in the configuration on purpose: a fund's share
-  depends on the medicine and on the fund's rules of the year (CNAM publishes
-  67 % on medicines with a cap per medicine; CNASS works by flat fees), and
-  the owner should not have to rebuild his software when they change.
-- Store the `Cover` with the sale, count only `customerPays()` in the cash
-  close, and feed the claims screen from the covered sales of the month.
-- Print the statement when `onPrint` is called.
+- The till (`src/screens/sell.tsx`, `src/cover.tsx`): "Prise en charge" with
+  Aucune and one button per fund the owner named. Picking one asks for the
+  member number and starts the share where the manager set it; the ticket
+  then shows Total, the fund's part and Reste à payer, and "Encaisser" takes
+  only the customer's part. It waits for the member number, because a claim
+  without one comes back from the fund.
+- The sale (`electron/db/sales.ts`, migration `011_health_cover.sql`) keeps
+  the fund, the member number, the share and the fund's part. The drawer
+  and credit count only the customer's part; a void reverses both.
+- The receipt (`electron/print.ts`): Total, "Part CNAM (67 %)", the member
+  number, then what the customer paid.
+- Reports: the funds' part as its own line, fund by fund, and "À réclamer
+  aux caisses": every covered sale of the period for one fund, with its
+  total, to print or export as the statement.
+- Settings: each fund's usual share, kept on the computer by the manager. It
+  is not in the configuration: a fund's share depends on the medicine and on
+  the fund's rules of the year (CNAM publishes 67 % on medicines with a cap
+  per medicine; CNASS works by flat fees), and the owner should not have to
+  rebuild his software when they change.
 
 **Not handled yet, and why**
 

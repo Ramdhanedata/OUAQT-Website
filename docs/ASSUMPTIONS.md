@@ -20,9 +20,10 @@ Each says how to undo it. Newest first.
 - **"Encaisser" is refused until the member number is typed** when a fund is
   picked. A claim without it is sent back by the fund, and the sale would
   have left the drawer short of the fund's part with nothing to claim it by.
-- **The preview's shares (67 %, 90 %, 80 %) are sample data.** CNAM's figure
+- **The demo's shares (67 %, 90 %, 80 %) are sample data.** CNAM's figure
   is its published rate on medicines; the other two are invented so the
-  preview shows a split.
+  preview shows a split. They live in the desktop app's demo seed, never in
+  a configuration.
 - **Arabic and English wording for the two questions and the till is marked
   for review**, like the rest of the banks.
 
