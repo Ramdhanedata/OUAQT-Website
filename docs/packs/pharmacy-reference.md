@@ -56,13 +56,55 @@ Proposals only. Nothing has been changed in the banks or the schema.
 | `ph_expiry_where` | Où voulez-vous être prévenu d'une date de péremption proche ? | single_choice | Au moment de la vente, Dans la page stock seulement, Les deux | Les deux | Follows `ph_expiry`; decides whether the warning interrupts a sale |
 | `ph_discount_line` | Faites-vous parfois une remise sur le montant total ? | yes_no | | Non | Explains the gap between sub-total and net to pay, if it is not insurance |
 
-**Needs your decision before I write it as a question**
+## Health cover: decided 2026-09-27
 
-The reference app has a payment mode for an insurance or third-party payer,
-with the rest left for the customer. That is health cover, and section 24 of
-the brief says to stop and ask on anything regulatory or about medicines.
+Adel's answer: the pharmacy pack handles health funds, and only for a
+pharmacy that says it is conventionnée. One that says no keeps the till it
+had, line for line.
 
-It changes more than one answer: the sale screen needs a second amount line,
-the receipt needs to show who pays what, and the pack needs somewhere to keep
-the payer's name. Tell me whether the pharmacy pack should handle third-party
-payers at all, and I will write the questions and the schema around your answer.
+**In the interview** (`builder/packs/pharmacy/questions.v1.json`)
+
+| id | Question (fr) | Type | Options | Default |
+| --- | --- | --- | --- | --- |
+| `ph_insurance` | Votre pharmacie est-elle conventionnée avec la CNAM, la CNASS ou une autre assurance maladie ? | yes_no | | Non |
+| `ph_insurance_payers` | Avec quelles caisses ou assurances ? Asked only after a yes | multi_choice | CNAM, CNASS, Une autre assurance ou une mutuelle | CNAM |
+
+**In the configuration** (`app-ui/config.ts`):
+`features.pharmacy.insurance = { enabled, payers }`. It is optional, so every
+pharmacy configuration written before this still validates and reads as not
+conventionnée. Screens ask `coverPayers(configuration)`, which returns no
+fund for those, for a pharmacy that answered no, and for every other trade.
+
+**On the till** (`app-ui/sale-screen.tsx`): a row of buttons above the total,
+"Sans assurance" and one per fund. Picking a fund asks for the member number
+and the fund's share in percent, then shows Sous-total, the fund's part, and
+Reste à payer in place of Total. "Encaisser" waits for the member number,
+because a claim without one comes back from the fund. `onCharge` receives the
+cover alongside the lines; the drawer takes only the customer's part.
+
+**On the receipt** (`app-ui/receipt.tsx`): Sous-total, the fund and its share,
+the member number, then Reste à payer.
+
+**For the manager** (`app-ui/claims.tsx`): what each fund owes this month,
+one fund at a time, with the total to claim and "Imprimer le relevé".
+
+**What the desktop app has to do with it**
+
+- Keep each fund's usual share, set by the manager, and pass it as
+  `coverShares`. It is not in the configuration on purpose: a fund's share
+  depends on the medicine and on the fund's rules of the year (CNAM publishes
+  67 % on medicines with a cap per medicine; CNASS works by flat fees), and
+  the owner should not have to rebuild his software when they change.
+- Store the `Cover` with the sale, count only `customerPays()` in the cash
+  close, and feed the claims screen from the covered sales of the month.
+- Print the statement when `onPrint` is called.
+
+**Not handled yet, and why**
+
+- The share applies to the whole ticket. A prescription mixing covered
+  medicines with counter items (soap, a thermometer) is split by typing a
+  lower share for that sale. Per-line cover needs a "remboursable" flag on
+  the product, which the import does not read yet.
+- Per-medicine caps and flat fees are not computed. The cashier adjusts the
+  share for that prescription.
+- Nothing is sent to a fund electronically. The statement is printed.

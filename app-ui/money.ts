@@ -36,6 +36,25 @@ export function lineTotal(quantity: number, unitPrice: Minor): Minor {
   return Math.round(quantity * unitPrice);
 }
 
+const PERCENT = 100;
+
+/** A fund's share as the cashier typed it, kept to a whole percent from 0 to 100. */
+export function clampShare(share: number): number {
+  if (!Number.isFinite(share)) return 0;
+  return Math.min(PERCENT, Math.max(0, Math.round(share)));
+}
+
+/*
+ * What a health fund pays on a sale, from the share it covers.
+ *
+ * Rounded to the smallest unit once, here, and the customer pays whatever is
+ * left: the two parts always add up to the total, so the drawer and the claim
+ * to the fund can never disagree by a rounding.
+ */
+export function coveredPart(total: Minor, share: number): Minor {
+  return Math.min(total, Math.round((total * clampShare(share)) / PERCENT));
+}
+
 /** What to hand back, never negative. */
 export function change(given: Minor, due: Minor): Minor {
   return Math.max(0, given - due);

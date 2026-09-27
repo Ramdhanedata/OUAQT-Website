@@ -44,6 +44,14 @@ export function formatQuantity(value: number, language: AppLanguage): string {
   }).format(value);
 }
 
+/** A whole percent, the way the language writes it: "67 %" in French, "67%" in English. */
+export function formatPercent(share: number, language: AppLanguage): string {
+  return new Intl.NumberFormat(numberLocale[language], {
+    style: "percent",
+    maximumFractionDigits: 0,
+  }).format(share / 100); // not-a-rule: a percent is a hundredth
+}
+
 /** Date and time as a receipt shows them: short, unambiguous, no month names. */
 export function formatDateTime(date: Date, language: AppLanguage): string {
   const pad = (n: number) => String(n).padStart(2, "0");

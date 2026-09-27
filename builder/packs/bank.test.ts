@@ -3,11 +3,12 @@ import { z } from "zod";
 import {
   appLanguages,
   configurationSchema,
+  coverPayers,
   defaultConfiguration,
   packs,
 } from "@/app-ui/config";
 import { applyAnswers, common, interviewFor, isAsked, packBank } from "./index";
-import type { Question } from "./bank";
+import type { Answers, Question } from "./bank";
 
 /*
  * Section 21: the JSON validates, every question exists in all three
@@ -137,6 +138,43 @@ describe("a single answer", () => {
     // The alert question is not asked, so the months keep the default rather
     // than quietly recording a preference the owner never expressed.
     expect(filled.features.pharmacy?.expiryAlertMonths).toBe(3);
+  });
+
+  it("keeps the till as it was for a pharmacy that is not conventionnée", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    const cases: Answers[] = [{}, { ph_insurance: false }, { ph_insurance: false, ph_insurance_payers: ["cnass"] }];
+    for (const answers of cases) {
+      const filled = applyAnswers(base, interviewFor("pharmacy"), answers);
+      expect(coverPayers(filled), JSON.stringify(answers)).toEqual([]);
+      expect(configurationSchema.safeParse(filled).success).toBe(true);
+    }
+  });
+
+  it("gives a conventionnée pharmacy the funds it named", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    const filled = applyAnswers(base, interviewFor("pharmacy"), {
+      ph_insurance: true,
+      ph_insurance_payers: ["cnam", "cnass", "other"],
+    });
+    expect(filled.features.pharmacy?.insurance).toEqual({
+      enabled: true,
+      payers: ["cnam", "cnass", "other"],
+    });
+    expect(coverPayers(filled)).toEqual(["cnam", "cnass", "other"]);
+    expect(configurationSchema.safeParse(filled).success).toBe(true);
+  });
+
+  it("takes CNAM when he says yes and then does not know which fund", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    const filled = applyAnswers(base, interviewFor("pharmacy"), { ph_insurance: true });
+    expect(coverPayers(filled)).toEqual(["cnam"]);
+  });
+
+  it("only asks which funds once he has said yes", () => {
+    const payers = packBank("pharmacy")!.questions.find((q) => q.id === "ph_insurance_payers")!;
+    expect(isAsked(payers, {})).toBe(false);
+    expect(isAsked(payers, { ph_insurance: false })).toBe(false);
+    expect(isAsked(payers, { ph_insurance: true })).toBe(true);
   });
 
   it("produces a configuration for every single answer on its own", () => {
