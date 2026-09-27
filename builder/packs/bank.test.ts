@@ -7,7 +7,7 @@ import {
   defaultConfiguration,
   packs,
 } from "@/app-ui/config";
-import { applyAnswers, common, interviewFor, isAsked, packBank } from "./index";
+import { applyAnswers, common, interviewFor, isAsked, packBank, patchedAfterAnswer } from "./index";
 import type { Answers, Question } from "./bank";
 
 /*
@@ -188,5 +188,25 @@ describe("a single answer", () => {
         `${item.id} alone`
       ).toBe(true);
     }
+  });
+});
+
+describe("an answer given after the AI read a sentence", () => {
+  it("still reaches the software", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    /* The AI read "je fais des remises" on c_discount: its result is the whole configuration of that moment. */
+    const snapshot = { common: { ...base.common, discounts: true }, features: base.features };
+    /* Then he answered the insurance question with the buttons. */
+    const interview = { ph_insurance: true };
+    const next = patchedAfterAnswer(snapshot, "pharmacy", "ph_insurance", interview);
+    const features = next.features as typeof base.features;
+    expect(features.pharmacy?.insurance?.enabled).toBe(true);
+    /* And what the AI set is kept. */
+    expect((next.common as typeof base.common).discounts).toBe(true);
+  });
+
+  it("leaves it alone for a question of another trade", () => {
+    const snapshot = { common: {}, features: {} };
+    expect(patchedAfterAnswer(snapshot, "pharmacy", "rs_tables", {})).toBe(snapshot);
   });
 });

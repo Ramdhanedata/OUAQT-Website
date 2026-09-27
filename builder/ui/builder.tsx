@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
+import { patchedAfterAnswer } from "@/builder/packs";
 import { record } from "@/builder/events";
 import dynamic from "next/dynamic";
 import type { ImportedProduct } from "@/builder/import/parse";
@@ -205,6 +206,22 @@ export function Builder({
               supportWhatsapp={supportWhatsapp}
             />
           </div>
+          {/*
+            * This browser remembers the shop whose number was typed here, and
+            * would show its download every time. Another trade starts from the
+            * questions, never from that shop.
+            */}
+          <button
+            type="button"
+            onClick={() => {
+              startOver();
+              setOpened(null);
+            }}
+            className="mt-6 inline-flex min-h-[48px] items-center text-base font-medium text-foreground underline decoration-border underline-offset-4"
+          >
+            {copy.code.another}
+          </button>
+          <br />
           <a
             href={help}
             target="_blank"
@@ -490,9 +507,15 @@ function Wizard({
   }
 
   function answerQuestion(id: string, answer: unknown) {
-    update({
-      interview: { ...(answers.interview ?? {}), [id]: answer as never },
-    });
+    const interview = { ...(answers.interview ?? {}), [id]: answer as never };
+    /*
+     * What the AI made of an earlier sentence is kept whole, common and
+     * features, and it is laid over the answers when the shop is made. An
+     * answer given after it has to reach it too, or the software he gets
+     * forgets every question he answered after that sentence.
+     */
+    const patched = answers.patched ? patchedAfterAnswer(answers.patched, pack, id, interview) : undefined;
+    update(patched ? { interview, patched } : { interview });
   }
 
   const questionsPane = showCode && issued ? (

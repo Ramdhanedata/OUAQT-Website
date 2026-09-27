@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { createShop, followAnswers, shopInput, type ImportedRow, type LogoPaths } from "@/builder/licence/create-shop";
+import { createShop, followAnswers, packOfShop, shopInput, type ImportedRow, type LogoPaths } from "@/builder/licence/create-shop";
 import { decryptSerial, encryptSerial } from "@/builder/serial/cipher";
 import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
 import { isExpired, readNumber, waitAfter } from "./code";
@@ -248,11 +248,14 @@ export async function shopFor(
   if (found.kind === "shop") {
     const draft = found.draft;
     const shaped = draft ? shapeOf(draft, []) : null;
-    if (shaped?.success) {
-      await followAnswers(admin, found.businessId, shaped.data, draft ? logoOf(draft) : undefined);
-      return { ok: true, businessId: found.businessId, serial: found.serial, pack: shaped.data.pack };
-    }
-    return { ok: true, businessId: found.businessId, serial: found.serial, pack: found.pack };
+    const followed = shaped?.success ? await followAnswers(admin, found.businessId, shaped.data, draft ? logoOf(draft) : undefined) : null;
+    /*
+     * The trade the download names is the one the shop's configuration now
+     * has, never merely the one asked for: the software opens on exactly
+     * what this page says.
+     */
+    const pack = followed ?? (await packOfShop(admin, found.businessId)) ?? found.pack;
+    return { ok: true, businessId: found.businessId, serial: found.serial, pack };
   }
 
   const draft = found.draft;

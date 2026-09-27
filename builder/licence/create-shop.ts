@@ -3,7 +3,7 @@ import "server-only";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { z } from "zod";
 import { appLanguages, configurationSchema, defaultConfiguration } from "@/app-ui/config";
-import { packs } from "@/app-ui/packs";
+import { packs, type Pack } from "@/app-ui/packs";
 import { audit } from "@/builder/db/audit";
 import { getPublicSettings } from "@/builder/db/settings";
 import { applyAnswers } from "@/builder/packs/bank";
@@ -79,7 +79,17 @@ export type CreatedShop =
   | { ok: true; businessId: string; serial: string; created: boolean }
   | { ok: false; error: "invalid_configuration" | "not_saved" | "no_serial"; status: number };
 
-/** The configuration his answers describe, checked against the schema. */
+/*
+ * The configuration his answers describe, checked against the schema.
+ *
+ * What the AI made of his own words is laid over the answers only when the
+ * result is still a configuration for the trade he chose. Features it set for
+ * another trade, before he changed his mind, would make this one invalid; the
+ * shop was then left on its old configuration without a word, and an owner
+ * who chose a pharmacy downloaded the hotel he had described before. The
+ * answers alone always make a valid configuration for the trade chosen, so
+ * that is what he gets instead.
+ */
 export function configurationFrom(data: ShopInput) {
   const base = {
     ...defaultConfiguration(data.pack, data.language),
@@ -91,11 +101,15 @@ export function configurationFrom(data: ShopInput) {
     },
   };
   const answered = applyAnswers(base, interviewFor(data.pack), data.answers as Record<string, never>);
-  return configurationSchema.safeParse({
-    ...answered,
-    common: (data.patched?.common ?? answered.common) as typeof answered.common,
-    features: (data.patched?.features ?? answered.features) as typeof answered.features,
-  });
+  if (data.patched) {
+    const withPatch = configurationSchema.safeParse({
+      ...answered,
+      common: (data.patched.common ?? answered.common) as typeof answered.common,
+      features: (data.patched.features ?? answered.features) as typeof answered.features,
+    });
+    if (withPatch.success) return withPatch;
+  }
+  return configurationSchema.safeParse(answered);
 }
 
 /*
@@ -128,15 +142,20 @@ export type LogoPaths = { colourPath: string; monoPath: string };
  * a new version of the configuration, which is the number the app asks
  * about, so the next refresh brings it to every computer in the shop.
  */
+/*
+ * The trade the shop runs after following, or null when the answers could
+ * not make a configuration and the shop was left as it was. Callers say what
+ * the shop is from this, never from what was asked for.
+ */
 export async function followAnswers(
   admin: SupabaseClient,
   businessId: string,
   data: ShopInput,
   /* The logo the shop should have: null for none, left out to leave it as it is. */
   logo?: LogoPaths | null
-): Promise<void> {
+): Promise<Pack | null> {
   const configuration = configurationFrom(data);
-  if (!configuration.success) return;
+  if (!configuration.success) return null;
 
   /* A new logo is a new file (its name carries its content), so a new path is a new logo. */
   let logoChanged = false;
@@ -187,7 +206,7 @@ export async function followAnswers(
     .limit(1)
     .maybeSingle();
   const answersChanged = !latest || !sameValue(latest.config, configuration.data);
-  if (!answersChanged && !logoChanged && !staffChanged) return;
+  if (!answersChanged && !logoChanged && !staffChanged) return configuration.data.pack;
 
   await admin.from("configurations").insert({
     business_id: businessId,
@@ -196,6 +215,20 @@ export async function followAnswers(
     config: configuration.data,
     created_by: answersChanged ? "answers_changed" : logoChanged ? "logo_changed" : "staff_changed",
   });
+  return configuration.data.pack;
+}
+
+/* The trade of the configuration a shop runs now, from its newest version. */
+export async function packOfShop(admin: SupabaseClient, businessId: string): Promise<Pack | null> {
+  const { data } = await admin
+    .from("configurations")
+    .select("config")
+    .eq("business_id", businessId)
+    .order("version", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  const pack = (data?.config as { pack?: unknown } | undefined)?.pack;
+  return typeof pack === "string" && (packs as readonly string[]).includes(pack) ? (pack as Pack) : null;
 }
 
 export async function createShop(

@@ -446,6 +446,7 @@ export const fr = {
     switched: "La page est passée en {language}, la langue de votre configuration.",
     switchBack: "Revenir en {language}",
     retry: "Réessayer",
+    another: "Créer un autre logiciel",
     preparing: "Préparation de votre logiciel…",
     downloadFailed: "Le logiciel n'a pas pu être préparé. Réessayez, ou écrivez-nous sur WhatsApp.",
     downloadIntro: "Essai gratuit de {days} jours. Après l'essai, vous payez sur ce site avec ce même numéro.",

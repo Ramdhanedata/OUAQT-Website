@@ -58,7 +58,8 @@ POST /api/licence/activate
 404 { "error": "unknown_serial" }
 403 { "error": "bad_token" }           // wrong, already used, or expired
 409 { "error": "device_limit", "maxDevices": 2 }
-409 { "error": "different_business" }  // this PC's database belongs to another shop
+409 { "error": "different_business",   // this PC's database belongs to another shop
+      "shop": { "id", "name", "nameArabic", "pack" } }  // the shop the proof is for
 403 { "error": "trial_not_available",  // only when a trial would start
       "because": "same_machine | same_phone | same_business | no_fingerprint",
       "supportWhatsapp": "2222..." }
@@ -144,15 +145,39 @@ activation path and not two.
 #### A computer that already holds a shop
 
 If this machine's database already belongs to a shop, the app sends that
-shop's id as `expectBusinessId`. A serial or token for any other shop is
-refused with `different_business` **before** anything happens on our side: no
-trial starts, no device is registered, no claim is written.
+shop's id as `expectBusinessId`. A serial, token or nearby proof for any other
+shop is refused with `different_business` **before** anything happens on our
+side: no trial starts, no device is registered, no claim is written, and a
+token is handed back unspent.
 
-The app then stops, and offers two ways out: pay for the licence the data
-belongs to, or talk to us. It never deletes, overwrites, renames or migrates
-the database it found. A shop's year of sales is the most valuable object on
-that machine, and this is the one moment the software is ever tempted to
-remove it.
+The refusal names the shop the proof is for, so the app can ask the owner:
+
+```jsonc
+409 {
+  "error": "different_business",
+  "shop": { "id": "uuid", "name": "Pharmacie Test", "nameArabic": null, "pack": "pharmacy" }
+}
+```
+
+Whoever holds the proof could activate that shop anyway, so naming it tells
+him nothing more.
+
+The app asks whether to open that shop (he chose a pharmacy on the website
+after trying a hotel on this computer, and the software he gets must be the
+one he chose). On yes, the other shop opens in **a folder of its own**
+beside the first, and activates there with the same proof. The database
+the computer already had is never deleted, overwritten, renamed or moved:
+it stays where it was, whole, and Settings opens it again without the
+network. If the new shop cannot open (a trial refused on this machine, no
+network), the app goes back to the shop it had, says why in one sentence,
+and removes only the empty folder it made for the attempt.
+
+The app asks this at three moments: when the link from step 4 arrives, at
+each start while a download from this connection is fresh (the nearby
+question, asked of an app that already has its shop), and when a serial is
+typed in Settings. A "no" to a nearby download is not asked again for a day.
+The same shop's own proof asks nothing: it brings that shop up to date, so a
+trade changed on the website is on screen at once.
 
 #### How the link opens the app
 
