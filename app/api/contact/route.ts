@@ -1,29 +1,13 @@
 import { NextResponse } from "next/server";
 import { parseContact } from "@/lib/contact-channel";
+import { escapeHtml, mailOuaqt } from "@/lib/mail";
 
 /*
- * Contact form endpoint. Delivers submissions to OUAQT's inbox.
- *
- * Sends through Resend's REST API directly, so there is no SDK dependency to
- * keep updated. When the visitor leaves an email it goes in reply_to, so
+ * Contact form endpoint. Delivers submissions to OUAQT's inbox through
+ * lib/mail.ts. When the visitor leaves an email it goes in reply_to, so
  * replying from Gmail goes straight back to them. When they leave a phone
  * number instead, the email carries a WhatsApp link.
- *
- * Required environment variables (set these in Vercel, and in .env.local for
- * local testing):
- *   RESEND_API_KEY    from resend.com/api-keys
- *   CONTACT_TO_EMAIL  defaults to ouaqt.mrt@gmail.com
- *   CONTACT_FROM_EMAIL  optional. Until a domain is verified with Resend this
- *                       must stay on their shared sender, onboarding@resend.dev.
- *
- * Note: with no verified domain, Resend only delivers to the address that owns
- * the account. Sign up with ouaqt.mrt@gmail.com and delivery works. Verifying
- * a domain later lifts that and lets mail come from, say, hello@ouaqt.com.
  */
-
-const TO = process.env.CONTACT_TO_EMAIL || "ouaqt.mrt@gmail.com";
-const FROM = process.env.CONTACT_FROM_EMAIL || "OUAQT Website <onboarding@resend.dev>";
-
 
 /* Coarse per-instance throttle. Serverless instances are not shared, so this
    slows a casual flood rather than stopping a determined one. Resend's own
@@ -38,14 +22,6 @@ function rateLimited(ip: string) {
   recent.push(now);
   hits.set(ip, recent);
   return recent.length > MAX_PER_WINDOW;
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
 }
 
 export async function POST(request: Request) {
@@ -84,8 +60,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "rate_limited" }, { status: 429 });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
-
   const html = `
     <h2 style="font:600 18px system-ui;margin:0 0 16px">New enquiry from the OUAQT website</h2>
     <p style="font:14px system-ui;margin:0 0 6px"><strong>Name:</strong> ${escapeHtml(name)}</p>
@@ -96,6 +70,13 @@ export async function POST(request: Request) {
     <p style="font:14px/1.6 system-ui;white-space:pre-wrap;margin:0">${escapeHtml(message || "(no message)")}</p>
   `;
 
+  const sent = await mailOuaqt({
+    subject: `OUAQT enquiry from ${name}`,
+    html,
+    text: `Name: ${name}\n${channel.kind === "email" ? "Email" : "Phone / WhatsApp"}: ${contact}\nLanguage: ${locale}\n\n${message || "(no message)"}`,
+    ...(channel.kind === "email" ? { replyTo: channel.value } : {}),
+  });
+
   /*
    * No Resend key: tell the browser to send through FormSubmit itself.
    * FormSubmit refuses requests from Vercel's servers (the same call works
@@ -103,33 +84,10 @@ export async function POST(request: Request) {
    * deliver. Adding RESEND_API_KEY in Vercel switches delivery back to this
    * route automatically, and that is the better path: mail goes direct.
    */
-  if (!apiKey) {
+  if (sent === "no_mailer") {
     return NextResponse.json({ error: "no_server_mailer" }, { status: 501 });
   }
-
-  try {
-    const res = await fetch("https://api.resend.com/emails", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        from: FROM,
-        to: [TO],
-        ...(channel.kind === "email" ? { reply_to: channel.value } : {}),
-        subject: `OUAQT enquiry from ${name}`,
-        html,
-        text: `Name: ${name}\n${channel.kind === "email" ? "Email" : "Phone / WhatsApp"}: ${contact}\nLanguage: ${locale}\n\n${message || "(no message)"}`,
-      }),
-    });
-
-    if (!res.ok) {
-      console.error("Resend rejected the message:", res.status, await res.text());
-      return NextResponse.json({ error: "send_failed" }, { status: 502 });
-    }
-  } catch (error) {
-    console.error("Could not reach Resend:", error);
+  if (sent === "failed") {
     return NextResponse.json({ error: "send_failed" }, { status: 502 });
   }
 

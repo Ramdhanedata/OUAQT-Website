@@ -2,6 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import {
+  languageCookie,
+  languageCookieSeconds,
   localeNames,
   localeShortNames,
   locales,
@@ -27,6 +29,7 @@ export function LanguageSwitcher({
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
+  const onHome = pathname === "/" || locales.some((option) => pathname === `/${option}`);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -66,27 +69,46 @@ export function LanguageSwitcher({
           role="menu"
           className="absolute end-0 top-11 z-50 min-w-[9rem] overflow-hidden rounded-xl border border-border bg-background p-1 shadow-xl shadow-black/20"
         >
-          {locales.map((option) => (
-            <Link
-              key={option}
-              role="menuitem"
-              href={withLocale(pathname, option)}
-              onClick={() => setOpen(false)}
-              lang={option}
-              dir={option === "ar" ? "rtl" : "ltr"}
-              className={cn(
+          {locales.map((option) => {
+            const props = {
+              role: "menuitem",
+              lang: option,
+              dir: option === "ar" ? "rtl" : "ltr",
+              className: cn(
                 "flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-sm transition-colors",
                 option === locale
                   ? "text-accent"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
-              )}
-            >
-              {localeNames[option]}
-              {option === locale && <Check className="h-3.5 w-3.5" />}
-            </Link>
-          ))}
+              ),
+            } as const;
+            const label = (
+              <>
+                {localeNames[option]}
+                {option === locale && <Check className="h-3.5 w-3.5" />}
+              </>
+            );
+            return onHome ? (
+              /*
+               * The home page stays at the bare address: the choice is
+               * remembered and the page loads again in it, rather than moving
+               * to ouaqt.com/ar.
+               */
+              // eslint-disable-next-line @next/next/no-html-link-for-pages -- a full load, so the middleware reads the new choice
+              <a key={option} {...props} href="/" onClick={() => rememberLanguage(option)}>
+                {label}
+              </a>
+            ) : (
+              <Link key={option} {...props} href={withLocale(pathname, option)} onClick={() => setOpen(false)}>
+                {label}
+              </Link>
+            );
+          })}
         </div>
       )}
     </div>
   );
+}
+
+function rememberLanguage(locale: Locale) {
+  document.cookie = `${languageCookie}=${locale}; path=/; max-age=${languageCookieSeconds}; samesite=lax`;
 }

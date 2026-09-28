@@ -5,7 +5,8 @@ software ready to install on the shop computer, plus a serial number. This
 document is for whoever picks the work up next.
 
 Status: **B5**. An owner can build his software, import the spreadsheet he
-already has, create an account, get a serial, pay by Bankily, and have a
+already has, create an account, get a serial, pay from Bankily, Masrvi,
+BimBank, SEDAD or Click, and have a
 desktop computer activate against a signed licence. Staff confirm payments,
 free computers and issue renewal codes. The other three packs are B6.
 
@@ -117,14 +118,29 @@ staff work is being done.
 
 ## The preview
 
-`app-ui` holds the screens the desktop app will import unchanged: the sale
-screen and the 80mm receipt so far. They take a configuration and sample data
-as props and render; they know nothing about the builder, the website or the
-database.
+The preview beside the questions is the desktop app itself, not a drawing of
+it. The desktop repository builds its own screens, database modules,
+migrations and handlers for a web page (`npm run build:web` there, see its
+`web/main.ts`): SQLite runs in WebAssembly and in memory, Electron is
+swapped for a small stand-in, and a printed receipt shows on screen. The
+build lands in `public/app-preview`, which this site serves as it is.
 
-The receipt is laid out at 576 pixels, which is 80mm at 203 dpi, and scaled to
-fit. That is why `Scaled` measures instead of using a percentage: what the
-owner sees has to be what the printer cuts.
+`builder/ui/preview/index.tsx` frames it: an iframe at a laptop's size,
+scaled as a whole to the space the page has, never reflowed. It sends the
+configuration the answers make each time they change it
+(`{ type: "ouaqt:configuration", configuration, section }`), and the app
+answers `ouaqt:ready` when it can take one and `ouaqt:started` once drawn.
+A new trade starts a new demo shop, with a week of invented sales behind
+it; any other answer reshapes the open one, and `focusFor` in `model.ts`
+names the screen that answer changed so the window opens it.
+
+**After any change to the desktop app's screens, run `npm run build:web` in
+the desktop repository and commit `public/app-preview` here,** or the
+website shows the previous app.
+
+The 80mm receipt in `app-ui` is laid out at 576 pixels, which is 80mm at
+203 dpi, and scaled to fit. That is why `Scaled` measures instead of using a
+percentage: what the owner sees has to be what the printer cuts.
 
 The preview is loaded separately from the questions. It carries the app
 screens and the schema with it, and on a slow phone that weight between the

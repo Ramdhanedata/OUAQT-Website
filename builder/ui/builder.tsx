@@ -1,5 +1,6 @@
 "use client";
 
+import { machineOf } from "./machine";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { organization } from "@/lib/data/contact";
@@ -10,6 +11,7 @@ import { useEffect, useState } from "react";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
+import { patchedAfterAnswer } from "@/builder/packs";
 import { record } from "@/builder/events";
 import dynamic from "next/dynamic";
 import type { ImportedProduct } from "@/builder/import/parse";
@@ -17,6 +19,8 @@ import { LeadForm } from "./lead-form";
 import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
 import { CodeEntry, CodeIssued, forgetOpened, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
 import { localisedHref } from "@/lib/i18n/routes";
+import { InstallGuide } from "./install-guide";
+import { InstallTargetProvider, useInstallTarget } from "./install-target";
 
 const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
 
@@ -59,7 +63,9 @@ const WIDE = "(min-width: 900px)"; // not-a-rule: a layout breakpoint
  *
  * Two layouts, chosen by width alone, never by sniffing the device. Below
  * 900px the owner sees one question at a time with a fixed bar at the bottom.
- * From 900px the questions sit beside a live preview of his own software.
+ * From 900px the questions sit beside a live preview of his own software,
+ * which takes the larger share of the width and stays in view while he
+ * scrolls through the questions.
  *
  * Step 1 is built. Steps 2 to 4 say so plainly and offer WhatsApp, rather
  * than showing an empty frame.
@@ -120,6 +126,8 @@ export function Builder({
   };
 
   const codeEntry = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} />;
+  /* On the first page, the same entry as a button beside "Commencer", where a returning owner looks first. */
+  const codeButton = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} asButton />;
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
@@ -135,18 +143,25 @@ export function Builder({
   const started = Object.keys(draft.answers).length > 0;
 
   /*
-   * A trade's landing page sends the owner here with his trade already
-   * chosen, so he does not answer the same question twice. It is applied once
-   * the draft has been read back, and never over answers he already gave:
-   * arriving from a link is not a reason to lose an afternoon's work.
+   * The home page and each trade's page send the owner here with his trade
+   * already chosen. That choice is the one he gets, whatever this browser
+   * remembers: an older draft for another trade, or a shop opened earlier by
+   * its number, must never answer for him. Nothing is lost: his other
+   * answers stay in the draft, and the same trade simply carries on.
    */
   const [preselected, setPreselected] = useState(false);
   useEffect(() => {
     if (preselected || !draft.restored) return;
     if (!startPack || !enabledPacks.includes(startPack)) return;
     setPreselected(true);
-    if (Object.keys(draft.answers).length > 0) return;
-    draft.update({ pack: startPack });
+    const found = readOpened();
+    if (found && found.pack !== startPack) {
+      forgetOpened();
+      setOpened(null);
+    }
+    if (draft.answers.pack === startPack) return;
+    /* What the AI set was for the other trade's features, and would not fit this one. */
+    draft.update({ pack: startPack, patched: undefined });
     setStep(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [preselected, draft.restored, startPack]);
@@ -191,6 +206,22 @@ export function Builder({
               supportWhatsapp={supportWhatsapp}
             />
           </div>
+          {/*
+            * This browser remembers the shop whose number was typed here, and
+            * would show its download every time. Another trade starts from the
+            * questions, never from that shop.
+            */}
+          <button
+            type="button"
+            onClick={() => {
+              startOver();
+              setOpened(null);
+            }}
+            className="mt-6 inline-flex min-h-[48px] items-center text-base font-medium text-foreground underline decoration-border underline-offset-4"
+          >
+            {copy.code.another}
+          </button>
+          <br />
           <a
             href={help}
             target="_blank"
@@ -211,7 +242,7 @@ export function Builder({
         copy={copy}
         canResume={started && draft.restored}
         onStart={() => setStep(0)}
-        codeEntry={codeEntry}
+        codeEntry={codeButton}
       />
     );
   }
@@ -277,12 +308,16 @@ function Landing({
           ))}
         </ol>
 
-        <div className="mt-10 flex flex-wrap gap-3">
+        {/*
+          * Starting, or coming back with a number: two buttons side by side,
+          * so the owner who already has his serial sees his way in at once.
+          */}
+        <div className="mt-10 flex flex-wrap items-start gap-3">
           <Button type="button" variant="accent" onClick={onStart} className="min-h-[48px] text-base">
             {canResume ? copy.landing.resume : copy.landing.start}
           </Button>
+          {codeEntry}
         </div>
-        {codeEntry ? <div className="mt-6">{codeEntry}</div> : null}
       </Container>
     </section>
   );
@@ -342,6 +377,7 @@ function Wizard({
   flush: () => Promise<void>;
 }) {
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewLarge, setPreviewLarge] = useState(false);
   /*
    * The numéro de série, given once, when the questions end, and shown
    * on its own screen before products and staff.
@@ -361,6 +397,7 @@ function Wizard({
           language: locale,
           ...(phone ? { phone } : {}),
           ...(answers.logo && answers.logoMono ? { logo: answers.logo, logoMono: answers.logoMono } : {}),
+          ...(!answers.logo && answers.logoRemoved ? { removeLogo: true } : {}),
         }),
       });
       const body = (await response.json().catch(() => null)) as { serial?: string; sent?: boolean; hasPhone?: boolean } | null;
@@ -396,6 +433,8 @@ function Wizard({
   }, [step, answers.pack]);
 
   const total = STEP_KEYS.length;
+  /* The number this owner has now: the one issued after the questions, or one he opened. */
+  const currentSerial = serial ?? issued?.serial ?? null;
   const whatsapp = supportWhatsapp
     ? `https://wa.me/${supportWhatsapp}`
     : organization.whatsappUrl;
@@ -404,7 +443,7 @@ function Wizard({
   )}`;
 
   /* The name is the one answer step 1 cannot finish without. */
-  const NAME_SCREEN = 2; // not-a-rule: which of the five screens asks the name
+  const NAME_SCREEN = 1; // not-a-rule: which of the four screens asks the name
   const named = Boolean((answers.nameLatin ?? "").trim());
 
   const pack = answers.pack ?? enabledPacks[0] ?? "pharmacy";
@@ -436,7 +475,15 @@ function Wizard({
         void issue().then((ok) => {
           setIssuing(false);
           setScreen(0);
-          if (ok) setShowCode(true);
+          /*
+           * On a phone, the number to type on the shop's computer, with the
+           * products still to add here if he wants. On a computer he is at
+           * the shop's computer already: straight to the download (Adel,
+           * 2026-09-25). His products can come back one step, or be
+           * imported in the software itself.
+           */
+          if (ok && machineOf() === "phone") setShowCode(true);
+          else if (ok) onStep(total - 1);
           else onStep(2);
         });
         return;
@@ -460,9 +507,15 @@ function Wizard({
   }
 
   function answerQuestion(id: string, answer: unknown) {
-    update({
-      interview: { ...(answers.interview ?? {}), [id]: answer as never },
-    });
+    const interview = { ...(answers.interview ?? {}), [id]: answer as never };
+    /*
+     * What the AI made of an earlier sentence is kept whole, common and
+     * features, and it is laid over the answers when the shop is made. An
+     * answer given after it has to reach it too, or the software he gets
+     * forgets every question he answered after that sentence.
+     */
+    const patched = answers.patched ? patchedAfterAnswer(answers.patched, pack, id, interview) : undefined;
+    update(patched ? { interview, patched } : { interview });
   }
 
   const questionsPane = showCode && issued ? (
@@ -537,21 +590,28 @@ function Wizard({
       termsHref={termsHref}
       installers={installers}
       tutorials={tutorials}
-      serial={serial}
+      /* The number issued after the questions is enough to download: no account needed first. */
+      serial={currentSerial}
       onSerial={setSerial}
     />
   );
 
   return (
+    <InstallTargetProvider>
     <div className="pb-28 wizard:pb-0" lang={locale}>
-      <Container className="py-8 wizard:py-12">
+      {/*
+        * Wider than the site's other pages: the preview is a laptop screen,
+        * and every pixel it gets back is a bigger, more readable copy of the
+        * owner's software.
+        */}
+      <Container className="py-8 wizard:max-w-[1560px] wizard:py-12">
         {offline ? (
           <p className="mb-6 rounded-xl border border-border bg-muted px-4 py-3 text-base text-foreground">
             {copy.shell.offline}
           </p>
         ) : null}
 
-        <div className="grid gap-10 wizard:grid-cols-[minmax(0,1fr)_minmax(0,26rem)] wizard:gap-14">
+        <div className="grid gap-10 wizard:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] wizard:gap-10 xl:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] xl:gap-12">
           <div>
             <Progress copy={copy} step={step} total={total} stepName={stepName} />
 
@@ -644,9 +704,25 @@ function Wizard({
             * re-rendering on every keystroke.
             */}
           {wide ? (
-            <aside>
-              <div className="h-[36rem] overflow-hidden rounded-2xl border border-border bg-surface">
-                <Preview copy={copy} answers={answers} fallbackLanguage={locale} />
+            /*
+              * A sticky column keeps what it holds in its own layer, under the
+              * site's header; while the window is enlarged, the column is lifted
+              * above it.
+              */
+            <aside className={cn("self-start wizard:sticky wizard:top-24", previewLarge && "z-[70]")}>
+              {/*
+                * At the last step, with the serial issued, the software is
+                * made: the space goes to how to install it on the computer
+                * chosen on the left. The preview stays mounted underneath, so
+                * going back a step finds it as it was.
+                */}
+              {step === total - 1 && currentSerial ? (
+                <div className="max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl">
+                  <GuideForTarget copy={copy} pack={pack} shop={(locale === "ar" && answers.nameArabic) || answers.nameLatin || ""} />
+                </div>
+              ) : null}
+              <div className={step === total - 1 && currentSerial ? "hidden" : undefined}>
+                <Preview copy={copy} answers={answers} fallbackLanguage={locale} onExpand={setPreviewLarge} />
               </div>
             </aside>
           ) : null}
@@ -664,14 +740,21 @@ function Wizard({
               <X className="h-4 w-4" />
               {copy.shell.close}
             </button>
-            <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-border">
-              <Preview copy={copy} answers={answers} fallbackLanguage={locale} />
+            <div className="min-h-0 flex-1">
+              <Preview copy={copy} answers={answers} fallbackLanguage={locale} fill />
             </div>
           </Container>
         </div>
       ) : null}
     </div>
+    </InstallTargetProvider>
   );
+}
+
+/* The install guide for the computer chosen at step 4, beside the download. */
+function GuideForTarget({ copy, pack, shop }: { copy: BuilderCopy; pack: Pack; shop: string }) {
+  const { target, chip } = useInstallTarget();
+  return <InstallGuide copy={copy} target={target} chip={chip} pack={pack} shop={shop} />;
 }
 
 function SaveNote({ copy, state }: { copy: BuilderCopy; state: SaveState }) {

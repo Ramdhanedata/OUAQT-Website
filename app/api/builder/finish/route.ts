@@ -30,7 +30,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
   }
 
-  const supabase = sessionClient();
+  const supabase = await sessionClient();
   const admin = adminClient();
   if (!supabase || !admin) {
     return NextResponse.json({ error: "no_database" }, { status: 501 });
@@ -62,7 +62,7 @@ export async function POST(request: Request) {
     .maybeSingle();
 
   const made = await createShop(admin, owner.id, input.data, {
-    tester: isTester(cookies().get(TESTER_COOKIE)?.value),
+    tester: isTester((await cookies()).get(TESTER_COOKIE)?.value),
     logo: draft?.logo_path && draft.logo_mono_path ? { colourPath: draft.logo_path, monoPath: draft.logo_mono_path } : null,
     serial: draft?.serial_cipher ? await decryptSerial(draft.serial_cipher) : null,
   });

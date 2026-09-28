@@ -1,7 +1,8 @@
+import { createHash } from "node:crypto";
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { createShop, followAnswers, shopInput, type ImportedRow } from "@/builder/licence/create-shop";
+import { createShop, followAnswers, packOfShop, shopInput, type ImportedRow, type LogoPaths } from "@/builder/licence/create-shop";
 import { decryptSerial, encryptSerial } from "@/builder/serial/cipher";
 import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
 import { isExpired, readNumber, waitAfter } from "./code";
@@ -190,7 +191,30 @@ export function describe(found: Extract<Found, { kind: "shop" | "draft" }>) {
   };
 }
 
-function shapeOf(draft: Draft, products: ImportedRow[]) {
+/* The logo the draft carries, as paths in the logos bucket, when it has one. */
+export function logoOf(draft: Pick<Draft, "logo_path" | "logo_mono_path">): LogoPaths | null {
+  return draft.logo_path && draft.logo_mono_path ? { colourPath: draft.logo_path, monoPath: draft.logo_mono_path } : null;
+}
+
+/*
+ * A running shop brought up to date with the draft its owner keeps editing
+ * on the website, if there is one. Called by the app's own refresh, so what
+ * he changes on his phone reaches the till without him doing anything else.
+ */
+export async function followDraft(admin: SupabaseClient, businessId: string): Promise<void> {
+  const { data: draft } = await admin
+    .from("builder_drafts")
+    .select(COLUMNS)
+    .eq("business_id", businessId)
+    .order("updated_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  if (!draft) return;
+  const shaped = shapeOf(draft as Draft, []);
+  if (shaped.success) await followAnswers(admin, businessId, shaped.data, logoOf(draft as Draft));
+}
+
+export function shapeOf(draft: Draft, products: ImportedRow[]) {
   const answers = draft.answers as Answers;
   return shopInput.safeParse({
     pack: answers.pack,
@@ -224,11 +248,14 @@ export async function shopFor(
   if (found.kind === "shop") {
     const draft = found.draft;
     const shaped = draft ? shapeOf(draft, []) : null;
-    if (shaped?.success) {
-      await followAnswers(admin, found.businessId, shaped.data);
-      return { ok: true, businessId: found.businessId, serial: found.serial, pack: shaped.data.pack };
-    }
-    return { ok: true, businessId: found.businessId, serial: found.serial, pack: found.pack };
+    const followed = shaped?.success ? await followAnswers(admin, found.businessId, shaped.data, draft ? logoOf(draft) : undefined) : null;
+    /*
+     * The trade the download names is the one the shop's configuration now
+     * has, never merely the one asked for: the software opens on exactly
+     * what this page says.
+     */
+    const pack = followed ?? (await packOfShop(admin, found.businessId)) ?? found.pack;
+    return { ok: true, businessId: found.businessId, serial: found.serial, pack };
   }
 
   const draft = found.draft;
@@ -237,7 +264,7 @@ export async function shopFor(
   const made = await createShop(admin, draft.session_owner, shaped.data, {
     /* In test mode on the phone that answered, or where this runs. */
     tester: draft.made_in_test_mode || options.tester,
-    logo: draft.logo_path && draft.logo_mono_path ? { colourPath: draft.logo_path, monoPath: draft.logo_mono_path } : null,
+    logo: logoOf(draft),
     serial: found.serial,
   });
   if (!made.ok) return { ok: false, error: made.error, status: made.status };
@@ -268,7 +295,7 @@ export async function waitingFor(admin: SupabaseClient, keys: string[], now = ne
   if (keys.length === 0) return 0;
   const { data } = await admin.from("configuration_code_attempts").select("locked_until").in("key", keys);
   const latest = Math.max(0, ...(data ?? []).map((row) => (row.locked_until ? new Date(row.locked_until).getTime() : 0)));
-  return Math.max(0, Math.ceil((latest - now.getTime()) / 1000));
+  return Math.max(0, Math.ceil((latest - now.getTime()) / 1000)); // not-a-rule: milliseconds in a second
 }
 
 export async function recordFailure(admin: SupabaseClient, keys: string[], now = new Date()): Promise<number> {
@@ -282,7 +309,7 @@ export async function recordFailure(admin: SupabaseClient, keys: string[], now =
       key,
       failures,
       last_failure_at: now.toISOString(),
-      locked_until: wait > 0 ? new Date(now.getTime() + wait * 1000).toISOString() : null,
+      locked_until: wait > 0 ? new Date(now.getTime() + wait * 1000).toISOString() : null, // not-a-rule: milliseconds in a second
     });
   }
   return longest;
@@ -306,7 +333,8 @@ export async function keepLogo(
   owner: string,
   draftId: string,
   colour: string | undefined,
-  mono: string | undefined
+  mono: string | undefined,
+  previous?: { colourPath: string | null; monoPath: string | null }
 ): Promise<{ colourPath: string; monoPath: string } | null> {
   const parse = (value: string | undefined) => {
     const match = value?.match(DATA_URL);
@@ -318,10 +346,20 @@ export async function keepLogo(
   const two = parse(mono);
   if (!one || !two) return null;
   const extension = (type: string) => (type === "image/png" ? "png" : "jpg");
-  const colourPath = `${owner}/draft-${draftId}-colour.${extension(one.type)}`;
-  const monoPath = `${owner}/draft-${draftId}-mono.${extension(two.type)}`;
+  /*
+   * The file's name carries a short fingerprint of the picture, so a new logo
+   * is a new path: that is how a running shop tells its logo has changed and
+   * sends it to the app. The same logo sent again lands on the same path.
+   */
+  const stamp = (bytes: Buffer) => createHash("sha256").update(bytes).digest("hex").slice(0, 12);
+  const colourPath = `${owner}/draft-${draftId}-colour-${stamp(one.bytes)}.${extension(one.type)}`;
+  const monoPath = `${owner}/draft-${draftId}-mono-${stamp(two.bytes)}.${extension(two.type)}`;
+  if (previous?.colourPath === colourPath && previous.monoPath === monoPath) return { colourPath, monoPath };
   const up1 = await admin.storage.from("logos").upload(colourPath, one.bytes, { contentType: one.type, upsert: true });
   const up2 = await admin.storage.from("logos").upload(monoPath, two.bytes, { contentType: two.type, upsert: true });
   if (up1.error || up2.error) return null;
+  /* The pictures it replaces are not kept: a draft has one logo. */
+  const stale = [previous?.colourPath, previous?.monoPath].filter((path): path is string => Boolean(path) && path !== colourPath && path !== monoPath);
+  if (stale.length > 0) await admin.storage.from("logos").remove(stale);
   return { colourPath, monoPath };
 }

@@ -5,7 +5,8 @@ import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
-import { setupFor } from "@/builder/licence/setup";
+import { serialFor, setupFor } from "@/builder/licence/setup";
+import { followDraft } from "@/builder/config-code/server";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 
 /*
@@ -97,7 +98,7 @@ export async function POST(request: Request) {
 
   const { data: devices } = await supabase
     .from("devices")
-    .select("device_id, role")
+    .select("device_id, role, fingerprint")
     .eq("business_id", business.id)
     .eq("status", "active");
 
@@ -118,6 +119,7 @@ export async function POST(request: Request) {
       renewalGraceDays: settings.renewal_grace_days,
       clockGraceDays: secrets.clock_grace_days,
       deviceReleasesPerYear: secrets.device_releases_per_year,
+      machinePartsToMatch: secrets.trial_fingerprint_parts_to_match,
       trialSummaryDays: secrets.trial_summary_days,
     },
   });
@@ -128,17 +130,23 @@ export async function POST(request: Request) {
    * anything that changes a product, a member of staff or a setting writes a
    * new configuration, so one number answers for all three.
    */
+  /* What the owner changed on the website since: his answers, name, logo and staff. */
+  await followDraft(supabase, business.id);
   const setup = await setupFor(supabase, business.id);
+  const serial = await serialFor(supabase, business.id);
   const unchanged =
     input.data.configurationVersion !== undefined &&
     setup.configurationVersion === input.data.configurationVersion;
 
   return NextResponse.json({
     licence: signed,
+    serial,
     configurationVersion: setup.configurationVersion,
     configuration: unchanged ? null : setup.configuration,
     products: unchanged ? null : setup.products,
     staff: unchanged ? null : setup.staff,
     logo: unchanged ? null : setup.logo,
+    /* Where the app sends the owner who needs us: its "contact OUAQT" button. */
+    supportWhatsapp: settings.support_whatsapp,
   });
 }

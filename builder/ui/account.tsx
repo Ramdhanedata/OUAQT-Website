@@ -9,13 +9,15 @@ import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 import { CodeEntry, forgetOpened } from "./config-code";
 import type { LicenceStatus } from "@/builder/licence/status";
+import type { PayTo } from "@/builder/payment/apps";
+import type { ReadBack } from "@/builder/payment/checks";
 import type { Price } from "@/builder/payment/pricing";
-import { fill, plural } from "@/lib/utils";
+import { fill } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 import { licenceLine, owes } from "./licence-line";
-import { Pay } from "./pay";
+import { Pay, PaymentReceived } from "./pay";
 import { InstallHelp } from "./install-help";
-import { isPhone, loginFor } from "./step-account";
+import { isPhone, loginFor, registerDownload } from "./step-account";
 
 /*
  * Where an owner comes back to.
@@ -35,7 +37,7 @@ export type AccountState =
       pack: string;
       serial: string | null;
       requests: { text: string; status: string }[];
-      installers: { windows: string | null; mac: string | null };
+      installers: { windows: string | null; mac: string | null; macApple?: string | null };
       licence: {
         status: LicenceStatus;
         endsAt: string | null;
@@ -49,9 +51,9 @@ export type AccountState =
         role: "main" | "secondary";
         lastSeen: string;
       }[];
-      price: Price | null;
-      bankilyNumber: string | null;
-      aiReadsImages: boolean;
+      /* A year, and six months: the lengths he may pay for, with their prices. */
+      prices: Price[];
+      payTo: PayTo[];
     };
 
 export function AccountArea({
@@ -225,17 +227,28 @@ function SignedIn({
           {state.installers.windows ? (
             <a
               href={state.installers.windows}
+              onClick={() => registerDownload("windows")}
               className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
             >
               {copy.serial.windows}
             </a>
           ) : null}
+          {state.installers.macApple ? (
+            <a
+              href={state.installers.macApple}
+              onClick={() => registerDownload("mac")}
+              className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
+            >
+              {copy.serial.macApple}
+            </a>
+          ) : null}
           {state.installers.mac ? (
             <a
               href={state.installers.mac}
+              onClick={() => registerDownload("mac")}
               className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
             >
-              {copy.serial.mac}
+              {state.installers.macApple ? copy.serial.macIntel : copy.serial.mac}
             </a>
           ) : null}
           <a
@@ -284,7 +297,8 @@ function Subscription({
   lang: Locale;
   state: Extract<AccountState, { kind: "signed_in" }>;
 }) {
-  const [sent, setSent] = useState(false);
+  /* Sent from this page just now, with what was read off the screenshot. */
+  const [sent, setSent] = useState<{ read: ReadBack | null; confirmed: boolean } | null>(null);
   const licence = state.licence;
 
   const where = () => licenceLine(copy, lang, licence);
@@ -301,17 +315,14 @@ function Subscription({
       <p className="text-base leading-relaxed text-foreground">{where()}</p>
 
       {waiting ? (
-        <p className="text-base leading-relaxed text-muted-foreground">
-          {copy.licence.pending}
-        </p>
-      ) : due && state.price ? (
+        <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
+      ) : due && state.prices.length > 0 ? (
         <Pay
           copy={copy}
           language={lang}
-          price={state.price}
-          bankilyNumber={state.bankilyNumber}
-          aiReadsImages={state.aiReadsImages}
-          onSent={() => setSent(true)}
+          prices={state.prices}
+          payTo={state.payTo}
+          onSent={(read, confirmed) => setSent({ read, confirmed })}
         />
       ) : null}
     </section>
@@ -415,18 +426,6 @@ function MyDevices({
           ))}
         </ul>
       )}
-    </section>
-  );
-}
-
-/* A part that is not built yet, said plainly rather than shown empty. */
-function Waiting({ copy, title }: { copy: BuilderCopy; title: string }) {
-  return (
-    <section className="space-y-2">
-      <h2 className="text-xl font-semibold text-foreground">{title}</h2>
-      <p className="text-base leading-relaxed text-muted-foreground">
-        {copy.myAccount.soon}
-      </p>
     </section>
   );
 }

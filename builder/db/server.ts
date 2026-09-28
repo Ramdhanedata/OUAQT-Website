@@ -30,9 +30,9 @@ import {
  */
 
 /** Acts as the signed-in visitor, anonymous session included. */
-export function sessionClient(): SupabaseClient | null {
+export async function sessionClient(): Promise<SupabaseClient | null> {
   if (!supabaseConfigured) return null;
-  const store = cookies();
+  const store = await cookies();
 
   return createServerClient(supabaseUrl, supabaseAnonKey, {
     cookies: {
@@ -59,7 +59,7 @@ export function sessionClient(): SupabaseClient | null {
  * later, sends a bearer token instead. Either way the request runs as him,
  * with every row level security policy applying exactly as before.
  */
-export function requestClient(request: Request): SupabaseClient | null {
+export async function requestClient(request: Request): Promise<SupabaseClient | null> {
   const header = request.headers.get("authorization") ?? "";
   if (!header.toLowerCase().startsWith("bearer ")) return sessionClient();
   if (!supabaseConfigured) return null;

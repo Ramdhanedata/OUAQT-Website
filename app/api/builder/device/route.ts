@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
   }
 
-  const supabase = requestClient(request);
+  const supabase = await requestClient(request);
   const admin = adminClient();
   if (!supabase || !admin) {
     return NextResponse.json({ error: "no_database" }, { status: 503 });

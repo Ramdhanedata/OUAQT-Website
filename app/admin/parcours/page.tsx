@@ -15,7 +15,7 @@ import { wordFor } from "@/builder/admin/copy";
 
 export default async function FunnelPage() {
   const gate = await adminGate();
-  const { t } = adminWords();
+  const { t } = await adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();

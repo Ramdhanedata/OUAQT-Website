@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
 
-  const supabase = requestClient(request);
+  const supabase = await requestClient(request);
   const admin = adminClient();
   if (!supabase || !admin) return NextResponse.json({ error: "no_database" }, { status: 503 });
   const { data: auth } = await supabase.auth.getUser();

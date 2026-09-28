@@ -31,6 +31,37 @@ const config: Config = {
           DEFAULT: "#C9A961",
           foreground: "#0A0A0A",
         },
+        /*
+         * What went wrong: a refused payment, a field to correct. Used by the
+         * builder and the admin area from the start and never defined, so
+         * every error read in plain black. A red that still reads on ivory.
+         */
+        destructive: "#B42318",
+        /*
+         * The desktop app's own tokens (src/tokens.css there), for the
+         * builder's preview of it. The preview has to look like the app,
+         * not like the website around it.
+         */
+        app: {
+          background: "#f0eee6",
+          surface: "#faf9f5",
+          raised: "#fdfcf9",
+          hover: "#e6e3d9",
+          selected: "#dcd8cc",
+          line: "#e0ddd3",
+          strong: "#cfcbc0",
+          ink: "#0a0a0a",
+          ink2: "#3d3c38",
+          ink3: "#5f5d57",
+          gold: "#c9a961",
+          "gold-ink": "#735c24",
+          warning: "#8a5300",
+          "warning-soft": "#f5e4c3",
+          danger: "#b42318",
+          "danger-soft": "#f6dad5",
+          success: "#2e6b34",
+          "success-soft": "#d9ead5",
+        },
       },
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],

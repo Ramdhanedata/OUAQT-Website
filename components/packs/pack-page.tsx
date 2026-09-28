@@ -103,7 +103,7 @@ export function PackPage({
                 <h2 className="text-xl font-medium text-foreground">
                   {copy.common.soonHeading}
                 </h2>
-                <Notify dict={dict} businessType={label} intro={copy.common.soonBody} />
+                <Notify dict={{ builderHome: dict.builderHome }} businessType={label} intro={copy.common.soonBody} />
               </div>
             )}
           </FadeIn>
@@ -180,7 +180,7 @@ export function PackPage({
               </div>
             </>
           ) : (
-            <Notify dict={dict} businessType={label} intro={copy.common.soonBody} />
+            <Notify dict={{ builderHome: dict.builderHome }} businessType={label} intro={copy.common.soonBody} />
           )}
 
           <div className="mt-10 flex flex-wrap gap-6">
@@ -190,8 +190,9 @@ export function PackPage({
             >
               {copy.common.pricing}
             </a>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- the bare address opens in the reader's language (middleware.ts) */}
             <a
-              href={localeHref(lang, "/")}
+              href="/"
               className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
             >
               {copy.common.otherTrades}

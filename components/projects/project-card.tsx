@@ -23,7 +23,7 @@ export function ProjectCard({
   lang,
 }: {
   project: Project;
-  dict: Dictionary;
+  dict: Pick<Dictionary, "projects" | "projectDetail" | "sectors">;
   lang: Locale;
 }) {
   const copy = dict.projects[project.slug];

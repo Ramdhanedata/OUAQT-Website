@@ -17,7 +17,7 @@ export const packPagesAr: PackPagesCopy = {
     worriesHeading: "ما يسألنا عنه أصحاب المحلات",
     closingHeading: "ابدأ بالسؤال الأول",
     closingBody:
-      "أقل من عشرين دقيقة، وترى النتيجة تتشكل مع كل إجابة.",
+      "أقل من خمس دقائق، وترى النتيجة تتشكل مع كل إجابة.",
     soonHeading: "هذا المجال لم يفتح بعد",
     soonBody: "اترك رقمك ونخبرك يوم أن يفتح.",
     pricing: "الأسعار",

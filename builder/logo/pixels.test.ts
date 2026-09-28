@@ -4,6 +4,7 @@ import {
   fitWithin,
   luminance,
   otsuThreshold,
+  removeBackground,
   toMonochrome,
 } from "./pixels";
 
@@ -100,3 +101,56 @@ describe("luminance", () => {
     expect(luminance(255, 0, 0)).toBeGreaterThan(luminance(0, 0, 255));
   });
 });
+
+describe("removeBackground", () => {
+  const alphaAt = (pixels: Uint8ClampedArray, width: number, x: number, y: number) => pixels[(y * width + x) * 4 + 3];
+
+  it("takes the white page away and keeps the ink", () => {
+    const { pixels, removed } = removeBackground(image(20, 20, { x: 5, y: 5, w: 6, h: 6 }), 20, 20);
+    expect(removed).toBe(true);
+    expect(alphaAt(pixels, 20, 0, 0)).toBe(0);
+    expect(alphaAt(pixels, 20, 7, 7)).toBe(255);
+  });
+
+  it("takes the inside of an O too, not only the margin", () => {
+    const ring = image(20, 20, { x: 4, y: 4, w: 12, h: 12 });
+    const inside = image(20, 20);
+    for (let y = 7; y < 13; y += 1) for (let x = 7; x < 13; x += 1) ring.set(inside.subarray(0, 4), (y * 20 + x) * 4);
+    const { pixels } = removeBackground(ring, 20, 20);
+    expect(alphaAt(pixels, 20, 10, 10)).toBe(0);
+    expect(alphaAt(pixels, 20, 5, 5)).toBe(255);
+  });
+
+  it("works on an off-white photographed page", () => {
+    const page = image(20, 20, { x: 5, y: 5, w: 6, h: 6 });
+    for (let i = 0; i < page.length; i += 4) if (page[i] === 255) { page[i] = 238; page[i + 1] = 236; page[i + 2] = 230; }
+    expect(alphaAt(removeBackground(page, 20, 20).pixels, 20, 1, 1)).toBe(0);
+  });
+
+  it("keeps a colour stroke that is not the page", () => {
+    const pixels = image(20, 20);
+    const red = (20 * 10 + 10) * 4;
+    pixels[red] = 237; pixels[red + 1] = 28; pixels[red + 2] = 36;
+    expect(alphaAt(removeBackground(pixels, 20, 20).pixels, 20, 10, 10)).toBe(255);
+  });
+
+  it("fades the pixels at the edge of the ink instead of leaving a fringe", () => {
+    const pixels = image(20, 20);
+    const grey = (20 * 10 + 10) * 4;
+    pixels[grey] = pixels[grey + 1] = pixels[grey + 2] = 225;
+    const alpha = alphaAt(removeBackground(pixels, 20, 20).pixels, 20, 10, 10);
+    expect(alpha).toBeGreaterThan(0);
+    expect(alpha).toBeLessThan(255);
+  });
+
+  it("leaves a logo on a dark or coloured square as it is", () => {
+    expect(removeBackground(image(20, 20, { x: 0, y: 0, w: 20, h: 20, value: 20 }), 20, 20).removed).toBe(false);
+  });
+
+  it("leaves a file that already has its own transparency", () => {
+    const pixels = image(20, 20, { x: 5, y: 5, w: 6, h: 6 });
+    for (let i = 3; i < pixels.length; i += 4) if (pixels[i - 1] === 255) pixels[i] = 0;
+    expect(removeBackground(pixels, 20, 20).removed).toBe(false);
+  });
+});
+

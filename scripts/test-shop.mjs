@@ -3,6 +3,7 @@
  *
  *   npm run test-shop -- create [--ar]     a shop, its serial, invented stock
  *   npm run test-shop -- link <businessId> a one-click link for that shop
+ *   npm run test-shop -- expire <businessId> its free trial, already over
  *   npm run test-shop -- remove <businessId>
  *
  * Everything in it is invented: the name, the products, the prices, the
@@ -143,6 +144,30 @@ async function link(businessId) {
   console.log(`ouaqt://activate?token=${token}`);
 }
 
+/*
+ * A trial that started a month ago and ended yesterday, to see what the
+ * software shows when the trial is over and to pay for it. Activating it
+ * starts no new trial, so the one-trial-per-computer rule does not get in
+ * the way on a machine that has had one.
+ */
+async function expire(businessId) {
+  const day = 86_400_000;
+  const { data, error } = await admin
+    .from("licences")
+    .update({
+      starts_at: new Date(Date.now() - 31 * day).toISOString(),
+      ends_at: new Date(Date.now() - day).toISOString(),
+    })
+    .eq("business_id", businessId)
+    .eq("plan", "trial")
+    .select("id");
+  if (error || !data?.length) {
+    console.error("No trial licence found for that shop.");
+    process.exit(1);
+  }
+  console.log("the trial ended yesterday");
+}
+
 async function remove(businessId) {
   const { data: business } = await admin.from("businesses").select("owner_id").eq("id", businessId).maybeSingle();
   await admin.from("businesses").delete().eq("id", businessId);
@@ -152,8 +177,9 @@ async function remove(businessId) {
 
 if (command === "create") await create(rest.includes("--ar"));
 else if (command === "link" && rest[0]) await link(rest[0]);
+else if (command === "expire" && rest[0]) await expire(rest[0]);
 else if (command === "remove" && rest[0]) await remove(rest[0]);
 else {
-  console.log("create [--ar] | link <businessId> | remove <businessId>");
+  console.log("create [--ar] | link <businessId> | expire <businessId> | remove <businessId>");
   process.exit(1);
 }

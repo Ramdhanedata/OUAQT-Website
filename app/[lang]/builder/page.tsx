@@ -12,15 +12,16 @@ import { locales } from "@/lib/i18n/config";
 import type { Metadata } from "next";
 
 type Props = {
-  params: { lang: Locale };
-  searchParams?: { pack?: string };
+  params: Promise<{ lang: Locale }>;
+  searchParams?: Promise<{ pack?: string }>;
 };
 
 export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const copy = getBuilderCopy(params.lang);
   const dict = getDictionary(params.lang);
   return {
@@ -44,7 +45,9 @@ export function generateMetadata({ params }: Props): Metadata {
  * shows "coming soon" and takes a phone number, which is the honest state of
  * a builder that cannot save anything anyway.
  */
-export default async function BuilderPage({ params, searchParams }: Props) {
+export default async function BuilderPage(props: Props) {
+  const searchParams = await props.searchParams;
+  const params = await props.params;
   const settings = await getPublicSettings();
 
   /*
@@ -52,7 +55,7 @@ export default async function BuilderPage({ params, searchParams }: Props) {
    * trades that are not open to owners yet. Everybody else sees the open
    * ones. Which is which: builder/packs/opening.ts.
    */
-  const tester = isTester(cookies().get(TESTER_COOKIE)?.value);
+  const tester = isTester((await cookies()).get(TESTER_COOKIE)?.value);
   const enabled = choosablePacks(tester);
 
   /* ?pack=pharmacy, the way the four trade pages link here. */

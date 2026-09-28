@@ -43,6 +43,7 @@ POST /api/licence/activate
 ```jsonc
 200 {
   "licence":              "<signed>",   // see below
+  "serial":               "XXXX-XXXX",   // the shop's own numéro de série, to show when the trial ends
   "deviceToken":          "<keep this>", // shown once, needed to refresh
   "configurationVersion": 3,             // name it back on every refresh
 
@@ -51,12 +52,14 @@ POST /api/licence/activate
   "configuration": { /* the builder's configuration, same schema as app-ui */ },
   "products":      [ { "name": "...", "price": 12050, "quantity": 24, /* ... */ } ],
   "staff":         [ { "name": "...", "role": "manager | cashier" } ],
-  "logo":          { "colour": "<signed url>", "mono": "<signed url>" } | null
+  "logo":          { "colour": "<signed url>", "mono": "<signed url>" } | null,
+  "supportWhatsapp": "2222..."           // for the app's "contact OUAQT" button
 }
 404 { "error": "unknown_serial" }
 403 { "error": "bad_token" }           // wrong, already used, or expired
 409 { "error": "device_limit", "maxDevices": 2 }
-409 { "error": "different_business" }  // this PC's database belongs to another shop
+409 { "error": "different_business",   // this PC's database belongs to another shop
+      "shop": { "id", "name", "nameArabic", "pack" } }  // the shop the proof is for
 403 { "error": "trial_not_available",  // only when a trial would start
       "because": "same_machine | same_phone | same_business | no_fingerprint",
       "supportWhatsapp": "2222..." }
@@ -95,11 +98,33 @@ window into another is a step we invented.
 | He built on | What he does |
 | --- | --- |
 | His phone | Step 4 shows the serial and the short address to open on the shop PC. He types the serial there, once. |
-| The shop PC | Step 4's main button installs. Afterwards, "Ouvrir mon logiciel" opens the app through a link and it activates with nothing typed. |
+| The shop PC | Step 4's download button installs. On its first start the app asks the website whether it was downloaded from where it stands, and opens its shop with nothing typed. |
 
 The serial is still the licence for everybody. A second device, a reinstall,
 a support call and an offline renewal all use it, which is why step 4 keeps
 showing it on the PC path, smaller, as the thing to keep.
+
+#### Opening by itself: `nearby`
+
+Pressing the download at step 4 (or on the account page) makes a one-time
+token as below, and the token keeps two more things: which system the
+download was for, and a mark of the connection it came from. The mark is an
+HMAC of the public address under the licence signing key, with an IPv6
+address cut to its /64 (`builder/licence/place.ts`); it is never the address
+itself, and it is cleared once the token is spent.
+
+On its first start, with no licence yet, the app sends `{ nearby: true }`
+in place of a serial or a token. The website takes the connection the
+request arrives from and looks for unspent tokens with the same mark, for
+the same system, made in the last `activation_nearby_hours` (6 by default).
+Only when they all belong to one shop is one taken, and activation carries
+on exactly as with a token. None, or tokens from two shops (a café's Wi-Fi),
+answer `404 no_nearby` or `409 nearby_ambiguous`, and the app shows the
+serial screen as before, without a message. A real refusal (the trial, a
+full shop, another shop's computer) is shown there, as it is for the link.
+
+The shop opened by its number on a computer (the configuration code path)
+makes its token with the mark too, for any system.
 
 #### The one-time token
 
@@ -120,15 +145,39 @@ activation path and not two.
 #### A computer that already holds a shop
 
 If this machine's database already belongs to a shop, the app sends that
-shop's id as `expectBusinessId`. A serial or token for any other shop is
-refused with `different_business` **before** anything happens on our side: no
-trial starts, no device is registered, no claim is written.
+shop's id as `expectBusinessId`. A serial, token or nearby proof for any other
+shop is refused with `different_business` **before** anything happens on our
+side: no trial starts, no device is registered, no claim is written, and a
+token is handed back unspent.
 
-The app then stops, and offers two ways out: pay for the licence the data
-belongs to, or talk to us. It never deletes, overwrites, renames or migrates
-the database it found. A shop's year of sales is the most valuable object on
-that machine, and this is the one moment the software is ever tempted to
-remove it.
+The refusal names the shop the proof is for, so the app can ask the owner:
+
+```jsonc
+409 {
+  "error": "different_business",
+  "shop": { "id": "uuid", "name": "Pharmacie Test", "nameArabic": null, "pack": "pharmacy" }
+}
+```
+
+Whoever holds the proof could activate that shop anyway, so naming it tells
+him nothing more.
+
+The app asks whether to open that shop (he chose a pharmacy on the website
+after trying a hotel on this computer, and the software he gets must be the
+one he chose). On yes, the other shop opens in **a folder of its own**
+beside the first, and activates there with the same proof. The database
+the computer already had is never deleted, overwritten, renamed or moved:
+it stays where it was, whole, and Settings opens it again without the
+network. If the new shop cannot open (a trial refused on this machine, no
+network), the app goes back to the shop it had, says why in one sentence,
+and removes only the empty folder it made for the attempt.
+
+The app asks this at three moments: when the link from step 4 arrives, at
+each start while a download from this connection is fresh (the nearby
+question, asked of an app that already has its shop), and when a serial is
+typed in Settings. A "no" to a nearby download is not asked again for a day.
+The same shop's own proof asks nothing: it brings that shop up to date, so a
+trade changed on the website is on screen at once.
 
 #### How the link opens the app
 
@@ -191,12 +240,14 @@ POST /api/licence/refresh
 ```jsonc
 200 {
   "licence":              "<signed>",
+  "serial":               "XXXX-XXXX",   // the same, for a computer activated by a link
   "configurationVersion": 4,
   // Null when the version the app named is still the current one.
   "configuration": { /* ... */ } | null,
   "products":      [ /* ... */ ]  | null,
   "staff":         [ /* ... */ ]  | null,
-  "logo":          { "colour": "...", "mono": "..." } | null
+  "logo":          { "colour": "...", "mono": "..." } | null,
+  "supportWhatsapp": "2222..."
 }
 403 { "error": "wrong_token" }
 404 { "error": "unknown_device" }     // released, or never activated
@@ -214,6 +265,14 @@ changes a product, a member of staff or a setting writes a new configuration,
 so one number answers for all of them. An app that names the current version
 gets four nulls and a small response; one that names nothing, or an older
 number, gets the lot.
+
+Before answering, the route brings the shop up to date with what its owner
+last did on the website: his answers, his shop's name, his logo and his staff
+list. A difference in any of them is a new configuration version, so the app
+picks it up on this call. A new logo is a new file whose name carries its
+fingerprint, which is how the change is seen. The app keeps the logo it has
+when a new one fails to download, and adds staff names it does not have yet;
+it never removes one.
 
 Omitting `configurationVersion` is always safe. It costs a larger response
 and never a wrong one, which is the right way round for a first install or a
@@ -264,7 +323,7 @@ onto a third machine is the ordinary way a two device limit gets tested.
 | --- | --- | --- |
 | `trial` | everything | show days remaining |
 | `active` | everything | nothing |
-| `renewal_due` | everything | remind once a day, with the amount and the Bankily number |
+| `renewal_due` | everything | remind once a day, and offer the payment page |
 | `expired_trial` | read only | explain, and offer the payment page |
 | `expired` | read only | the same |
 | `suspended` | read only | say to contact us |

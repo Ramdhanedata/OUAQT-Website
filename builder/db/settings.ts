@@ -34,6 +34,9 @@ const publicSettings = z.object({
   price_annual_launch_mru: money,
   price_annual_standard_mru: money,
   price_quarterly_standard_mru: money,
+  /* Six months, beside the year. See 0023: missing until it has run, and then simply not offered. */
+  price_semiannual_launch_mru: money.default(null),
+  price_semiannual_standard_mru: money.default(null),
   price_setup_visit_mru: money,
   price_extra_device_launch_mru: money,
   price_extra_device_standard_mru: money,
@@ -132,19 +135,29 @@ export async function getTrialDays(): Promise<number | null> {
 }
 
 /** One trade's downloads, or nulls where there is nothing to download yet. */
-export type Installers = { windows: string | null; mac: string | null };
+/*
+ * A Mac with an Apple chip has its own build, published beside the Intel one
+ * in the same release: its address is the Intel one's with the other file
+ * name, so the settings keep one Mac address per trade.
+ */
+export type Installers = { windows: string | null; mac: string | null; macApple: string | null };
+
+const INTEL_FILE = "OUAQT-mac-x64.dmg";
+const APPLE_FILE = "OUAQT-mac-arm64.dmg";
 
 export function installersFor(
   settings: PublicSettings | null,
   pack: string
 ): Installers {
-  if (!settings) return { windows: null, mac: null };
+  if (!settings) return { windows: null, mac: null, macApple: null };
   const read = (key: string) => {
     const value = (settings as Record<string, unknown>)[key];
     return typeof value === "string" && value.trim() ? value.trim() : null;
   };
+  const mac = read(`installer_url_mac_${pack}`);
   return {
     windows: read(`installer_url_windows_${pack}`),
-    mac: read(`installer_url_mac_${pack}`),
+    mac,
+    macApple: mac && mac.endsWith(INTEL_FILE) ? mac.slice(0, -INTEL_FILE.length) + APPLE_FILE : null,
   };
 }

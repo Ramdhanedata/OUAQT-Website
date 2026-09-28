@@ -14,33 +14,31 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
-export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
+/* Only the groups it reads: a client component's props travel to every page. */
+export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common">; lang: Locale }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
-  /*
-   * The builder sits in the action button rather than as a sixth link: in
-   * French the six labels do not fit the header at 1024px. Contact stays a
-   * link, so nothing is lost.
-   */
+  /* Building the software is the action button, beside the links. */
   const builder = {
     href: localisedHref(lang, "builder"),
     label: getBuilderCopy(lang).nav,
   };
 
   /*
-   * The builder first, the custom path second, then the rest.
+   * The product first, the custom work second, then the company.
    *
-   * "Accueil" is gone: the logo has always gone home and a second way to do
-   * the same thing cost a slot. "À propos" moved to the footer, which is
-   * where people look for it, and which leaves five links that fit at
-   * 1024px in French without shrinking anything.
+   * Pricing left the menu: it is a question an owner asks once he has seen
+   * the product, so it sits in the Builder's section, in its own block on
+   * the home page and in the footer. "Accueil" is not here either: the logo
+   * goes home. Five short labels fit the header at 1024px in French.
    */
   const links = [
+    { href: "/#builder", label: dict.nav.builder },
     { href: "/#sur-mesure", label: dict.nav.custom },
     { href: "/projects", label: dict.nav.projects },
-    { href: "/pricing", label: dict.nav.pricing },
+    { href: "/about", label: dict.nav.about },
     { href: "/contact", label: dict.nav.contact },
   ];
 
@@ -65,13 +63,16 @@ export function Navbar({ dict, lang }: { dict: Dictionary; lang: Locale }) {
       )}
     >
       <Container className="flex h-16 items-center justify-between sm:h-20">
-        <Link
-          href={localeHref(lang, "/")}
-          aria-label={dict.nav.homeAria}
-          className="shrink-0"
-        >
+        {/*
+          The bare address, which opens in the language being read (see
+          middleware.ts). A full load rather than a client navigation, because
+          the router would otherwise reuse the home page it prefetched in the
+          language the visitor has just switched away from.
+        */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- a full load on purpose, see above */}
+        <a href="/" aria-label={dict.nav.homeAria} className="shrink-0">
           <Logo priority className="h-6 sm:h-7" alt={dict.common.brand} />
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-8 lg:flex">
           {links.map((link) => (

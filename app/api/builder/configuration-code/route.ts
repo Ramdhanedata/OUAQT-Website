@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { phoneKey } from "@/builder/config-code/code";
-import { keepLogo, numberFor } from "@/builder/config-code/server";
+import { followDraft, keepLogo, numberFor } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
 import { sendNumber } from "@/builder/notify/whatsapp";
 import { serialSecretIsSet } from "@/builder/serial/cipher";
@@ -28,6 +28,8 @@ const body = z
     phone: z.string().trim().max(30).optional(),
     logo: z.string().max(2_000_000).optional(),
     logoMono: z.string().max(2_000_000).optional(),
+    /* He removed his logo. Sent only then: a logo missing because it stayed on another device is not a removal. */
+    removeLogo: z.boolean().optional(),
   })
   .strict();
 
@@ -35,7 +37,7 @@ export async function POST(request: Request) {
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) return NextResponse.json({ error: "invalid" }, { status: 400 });
 
-  const supabase = requestClient(request);
+  const supabase = await requestClient(request);
   const admin = adminClient();
   if (!supabase || !admin) return NextResponse.json({ error: "no_database" }, { status: 503 });
   if (!serialSecretIsSet()) return NextResponse.json({ error: "no_serial_secret" }, { status: 501 });
@@ -45,7 +47,7 @@ export async function POST(request: Request) {
 
   const { data: draft } = await admin
     .from("builder_drafts")
-    .select("id, session_owner, serial_cipher, answers, phone, logo_path, made_in_test_mode")
+    .select("id, session_owner, serial_cipher, answers, phone, logo_path, logo_mono_path, made_in_test_mode, business_id")
     .eq("session_owner", auth.user.id)
     .order("updated_at", { ascending: false })
     .limit(1)
@@ -64,14 +66,30 @@ export async function POST(request: Request) {
    * the same test-mode trial, on whichever computer. The cookie is signed by
    * the server and set only from the admin area.
    */
-  if (!draft.made_in_test_mode && isTester(cookies().get(TESTER_COOKIE)?.value)) {
+  if (!draft.made_in_test_mode && isTester((await cookies()).get(TESTER_COOKIE)?.value)) {
     await admin.from("builder_drafts").update({ made_in_test_mode: true }).eq("id", draft.id);
   }
 
-  if (!draft.logo_path && input.data.logo && input.data.logoMono) {
-    const kept = await keepLogo(admin, auth.user.id, draft.id, input.data.logo, input.data.logoMono);
-    if (kept) await admin.from("builder_drafts").update({ logo_path: kept.colourPath, logo_mono_path: kept.monoPath }).eq("id", draft.id);
+  /*
+   * The logo he has now, kept every time the number is asked for: an owner
+   * who changes his logo and finishes again gets the new one, on the draft
+   * and, when his shop already exists, on the shop, for the app to pick up.
+   */
+  if (input.data.logo && input.data.logoMono) {
+    const kept = await keepLogo(admin, auth.user.id, draft.id, input.data.logo, input.data.logoMono, {
+      colourPath: draft.logo_path,
+      monoPath: draft.logo_mono_path,
+    });
+    if (kept && (kept.colourPath !== draft.logo_path || kept.monoPath !== draft.logo_mono_path)) {
+      await admin.from("builder_drafts").update({ logo_path: kept.colourPath, logo_mono_path: kept.monoPath }).eq("id", draft.id);
+    }
   }
+  if (input.data.removeLogo && !input.data.logo && (draft.logo_path || draft.logo_mono_path)) {
+    const stale = [draft.logo_path, draft.logo_mono_path].filter((path): path is string => Boolean(path));
+    await admin.storage.from("logos").remove(stale);
+    await admin.from("builder_drafts").update({ logo_path: null, logo_mono_path: null }).eq("id", draft.id);
+  }
+  if (draft.business_id) await followDraft(admin, draft.business_id);
 
   const sent = await sendNumber({ phone, serial, language: input.data.language });
 

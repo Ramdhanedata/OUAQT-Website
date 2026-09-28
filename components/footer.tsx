@@ -5,14 +5,22 @@ import Link from "next/link";
 import { organization, socialLinks } from "@/lib/data/contact";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
+import { localisedHref } from "@/lib/i18n/routes";
+import { getBuilderCopy } from "@/builder/copy";
 
 export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
-  const nav = [
-    { href: "/", label: dict.nav.home },
-    { href: "/projects", label: dict.nav.projects },
-    { href: "/pricing", label: dict.nav.pricing },
-    { href: "/about", label: dict.nav.about },
-    { href: "/contact", label: dict.nav.contact },
+  /* The product and what it costs, then the company behind it. */
+  const product = [
+    { href: localisedHref(lang, "builder"), label: getBuilderCopy(lang).nav },
+    { href: localeHref(lang, "/#builder"), label: dict.nav.builder },
+    { href: localeHref(lang, "/#metiers"), label: dict.builderHome.tradesEyebrow },
+    { href: localeHref(lang, "/pricing"), label: dict.nav.pricing },
+  ];
+  const company = [
+    { href: localeHref(lang, "/#sur-mesure"), label: dict.nav.custom },
+    { href: localeHref(lang, "/projects"), label: dict.nav.projects },
+    { href: localeHref(lang, "/about"), label: dict.nav.about },
+    { href: localeHref(lang, "/contact"), label: dict.nav.contact },
   ];
 
   const legal = [
@@ -22,8 +30,8 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
 
   return (
     <footer className="border-t border-border">
-      <Container className="grid grid-cols-1 gap-12 py-16 sm:grid-cols-3">
-        <div>
+      <Container className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
+        <div className="col-span-2 lg:col-span-1">
           <Logo className="h-6" alt={dict.common.brand} />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">
             {dict.footer.tagline}
@@ -34,16 +42,24 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
         </div>
 
         <div>
-          <p className="text-sm font-medium text-foreground">
-            {dict.footer.navigate}
-          </p>
+          <p className="text-sm font-medium text-foreground">{dict.footer.product}</p>
           <ul className="mt-4 space-y-3">
-            {nav.map((item) => (
+            {product.map((item) => (
               <li key={item.href}>
-                <Link
-                  href={localeHref(lang, item.href)}
-                  className="text-sm text-muted-foreground transition-colors hover:text-foreground"
-                >
+                <Link href={item.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <p className="text-sm font-medium text-foreground">{dict.footer.company}</p>
+          <ul className="mt-4 space-y-3">
+            {company.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   {item.label}
                 </Link>
               </li>

@@ -16,13 +16,14 @@ import { wordFor } from "@/builder/admin/copy";
  * clear. That is not an obstacle to look around: it is the same lookup the
  * desktop app will do when it activates.
  */
-export default async function ClientsPage({
-  searchParams,
-}: {
-  searchParams: { q?: string };
-}) {
+export default async function ClientsPage(
+  props: {
+    searchParams: Promise<{ q?: string }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const gate = await adminGate();
-  const { t, locale } = adminWords();
+  const { t, locale } = await adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
 
   const supabase = adminClient();

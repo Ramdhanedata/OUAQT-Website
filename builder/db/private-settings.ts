@@ -17,6 +17,16 @@ import { adminClient } from "./server";
 
 const privateSettings = z.object({
   bankily_number: z.string(),
+  /*
+   * The other apps owners pay from. See 0021. Empty until it has run, which
+   * only hides those apps, rather than failing every read of these settings.
+   */
+  masrvi_number: z.string().default(""),
+  bimbank_number: z.string().default(""),
+  sedad_number: z.string().default(""),
+  click_number: z.string().default(""),
+  /* Confirming a payment that checks out without waiting for a person. See 0022. */
+  payment_auto_confirm: z.boolean().default(false),
   payment_max_age_days: z.number().int().positive(),
   device_releases_per_year: z.number().int().nonnegative(),
   clock_grace_days: z.number().int().nonnegative(),
@@ -32,6 +42,10 @@ const privateSettings = z.object({
 
   /* How long the one-click activation link lives. See 0013. */
   activation_token_hours: z.number().int().positive(),
+  /* How long after a download the software opens its shop by itself. See 0024. */
+  activation_nearby_hours: z.number().int().positive().default(6),
+  /* The most AI calls in a day, for the builder and payment screenshots together. See 0026. */
+  ai_calls_per_day: z.number().int().nonnegative().default(500),
 
 });
 

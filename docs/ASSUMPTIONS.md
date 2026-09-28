@@ -3,6 +3,30 @@
 Every decision taken without an answer from Adel, with the date and the reason.
 Each says how to undo it. Newest first.
 
+## 2026-09-27, health cover for pharmacies
+
+- **A fund's share is kept by the manager in the app, not asked in the
+  builder.** CNAM, CNASS and private insurers each have their own share,
+  which varies by medicine and changes with the fund's rules; asking for a
+  number during the interview would have meant writing a regulatory rate into
+  a default. The configuration says which funds; the app keeps the rates.
+  Undo: add a `number` question per fund with `show_if.includes`, and a
+  `shares` field beside `payers`.
+- **The insurance block is optional in the version 1 schema.** Pharmacies
+  already running have no block, and a required field would have made their
+  configuration invalid for the next desktop app that reads it. Absent means
+  not conventionnée. Undo: make it required in a version 2 of the
+  configuration and migrate the stored ones.
+- **"Encaisser" is refused until the member number is typed** when a fund is
+  picked. A claim without it is sent back by the fund, and the sale would
+  have left the drawer short of the fund's part with nothing to claim it by.
+- **The demo's shares (67 %, 90 %, 80 %) are sample data.** CNAM's figure
+  is its published rate on medicines; the other two are invented so the
+  preview shows a split. They live in the desktop app's demo seed, never in
+  a configuration.
+- **Arabic and English wording for the two questions and the till is marked
+  for review**, like the rest of the banks.
+
 ## 2026-09-20, B0
 
 **The builder sits in the header's action button, not as a sixth menu link.**
@@ -136,3 +160,86 @@ with B0b once the project exists.
   peer dependencies, which is the first half of publishing it for the desktop
   app. It changes nothing for the website: the build and the tests are clean
   either way.
+
+## 2026-09-25, paying from any app
+
+- **Five apps, one number, set per app.** The owner chooses Bankily, Masrvi,
+  BimBank, SEDAD or Click, and the page shows that app's number with the same
+  three steps. Each number is its own setting (`<app>_number`); an empty one
+  hides that app. Adel's answer: all five start with the Bankily number.
+- **No transaction number to type.** It is read off the screenshot with the
+  amount and the date. Adel's answer on who reads it: the AI, on the paid
+  tier only. The free-tier rule from B2 stands, so with `AI_TIER=free` the
+  screenshot is not sent anywhere and a person reads it in the admin area,
+  which now says so on each payment.
+- **What a reading can refuse on the spot:** an image that is not a transfer,
+  less than the price, a transfer to another number, one older than
+  `payment_max_age_days`, one dated more than a day ahead, and a screenshot or
+  transaction number already used. Paying more than the price is not
+  refused; the person confirming sees it. A field the reading could not make
+  out is never a refusal.
+- **A refusal on the spot reserves nothing.** The screenshot and the
+  transaction number were unique columns, so a duplicate was refused by the
+  check and then by the insert, and the owner read "it did not go through"
+  instead of why. They are unique now among payments that were not refused on
+  the spot (0021), which also lets a misread screenshot be sent again.
+- **The privacy page says the screenshot may go to the AI service**, on a
+  paid plan whose terms rule out training on it. It said receipts were never
+  sent, which stops being true the day `AI_TIER=paid` is set.
+- **A payment that checks out is confirmed at once (0022).** Adel's word:
+  after a payment the software should open straight away. So when the
+  screenshot was read and every field matched (a transfer, at least the price,
+  a date inside the window, a transaction number not used before, our number
+  as the recipient), the licence opens without waiting, and the app, which
+  asks every 30 seconds while it shows the end of its trial, opens with it.
+  A field that could not be read sends the payment to a person instead. Every
+  automatic confirmation still reaches the admin area, to be kept or undone;
+  undoing puts the licence back as it was. `payment_auto_confirm` turns it
+  off. On the free AI tier nothing is read, so a person confirms every
+  payment and the app opens as soon as they do.
+- **The trial counts down out of sight.** No notice in the last days any
+  more; Réglages still says how many days are left, for an owner who looks.
+  When it ends the app stops selling and says so kindly each time it opens,
+  with the serial number, how to pay from the phone, and a WhatsApp button to
+  OUAQT, whose number now comes with every licence check.
+- **A paid licence does remind.** In its last five days and through the grace
+  days after it, the app shows the end date once a day with a way to pay,
+  which the site's FAQ already promised.
+- **A year or six months (0023).** Adel's word: the payment page offers
+  both, six months at half the year (15 000 launch is 7 500; 18 000
+  standard is 9 000). Each is its own setting, seeded at half and changed in
+  Réglages like any price. The pricing page shows the six-month licence in
+  place of the three-month one, which the payment page never offered.
+- **Two steps on the payment page:** pay from the chosen app, then send the
+  screenshot here. The result is said at once in a box: "Paiement réussi"
+  when it was read and matched, "Paiement reçu" when a person will look,
+  or what is wrong with the screenshot.
+- **Screenshots are read on every tier (Adel's decision, 2026-09-25).** He
+  wants the owner told at once: "Paiement réussi. Merci." or "Vérifiez
+  votre paiement". That needs the screenshot read, and he chose the free
+  Gemini tier over waiting for a paid key, knowing the provider may keep
+  what it is sent and use it to improve its products. `mayReadImages()` now
+  says yes everywhere, and the privacy page says what is sent and why.
+  Tested end to end with invented Bankily confirmations: the right amount
+  was confirmed on the spot, 15 000 against 18 000 was refused.
+- **`destructive` is a colour now.** The builder and the admin used it for
+  every error from the start and it was never defined, so errors read in
+  plain black. A red that reads on ivory.
+- **The three rules a screenshot must pass (Adel, 2026-09-25).** The number
+  the money went to is OUAQT's number on the app chosen, the date is today's
+  (Mauritania keeps UTC), and the amount is exactly the price of the plan
+  chosen: 18 000 or 9 000 at the standard price, 15 000 or 7 500 at the
+  launch price. All three read and right, and nothing used before: the
+  payment succeeds on the spot. Any one wrong or not visible: it does not,
+  and the page lists which. The transaction number is not required, but one
+  already used is refused. Only a screenshot that could not be read at all
+  goes to a person; a busy reading service is asked twice more first.
+  `payment_max_age_days` no longer decides anything.
+- **All eight trades are open (Adel, 2026-09-25).** `OPENING` says "open"
+  for every one. Three questions are no longer asked because the apps do
+  the same whatever the answer: selling medicines by the strip (ph_unit), a
+  pharmacy's purchases by supplier (ph_suppliers) and a restaurant's "pay
+  before or after" (rs_pay_when). Their settings keep their defaults, so no
+  configuration changes shape. The other answers that were being ignored
+  now drive the apps: lot numbers, selling by weight, suppliers, units.
+

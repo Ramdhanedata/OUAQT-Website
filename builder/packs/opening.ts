@@ -10,17 +10,18 @@ import { packs, type Pack } from "@/app-ui/packs";
  *
  * A trade becomes "open" once Adel has tried it in test mode and approved
  * it, and not before. Changing a word below is the whole change: every page
- * reads this, and nothing else decides it.
+ * reads this, and nothing else decides it. All eight opened on 2026-09-25,
+ * on Adel's word that the apps are ready.
  */
 export const OPENING: Record<Pack, "open" | "test"> = {
-  pharmacy: "test",
-  shop: "test",
-  restaurant: "test",
-  bakery: "test",
-  warehouse: "test",
-  hotel: "test",
-  transport: "test",
-  general: "test",
+  pharmacy: "open",
+  shop: "open",
+  restaurant: "open",
+  bakery: "open",
+  warehouse: "open",
+  hotel: "open",
+  transport: "open",
+  general: "open",
 };
 
 /** The trades every visitor can choose. */

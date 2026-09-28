@@ -18,7 +18,7 @@ import { Button } from "@/components/ui/button";
  * his.
  */
 
-export const BUSINESS_SCREENS = 5;
+export const BUSINESS_SCREENS = 4;
 
 type Props = {
   copy: BuilderCopy;
@@ -36,7 +36,7 @@ type Props = {
 
 export function StepBusiness(props: Props) {
   const { wide, screen } = props;
-  const parts = [PackChoice, Languages, BusinessName, ReceiptDetails, LogoStep];
+  const parts = [PackChoice, BusinessName, ReceiptDetails, LogoStep];
 
   if (wide) {
     return (
@@ -63,7 +63,11 @@ function PackChoice({ copy, enabledPacks, answers, update, onLead, codeEntry }: 
             key={pack}
             selected={open && answers.pack === pack}
             note={open ? undefined : copy.packs.soon}
-            onClick={() => (open ? update({ pack }) : onLead(pack))}
+            /*
+             * Another trade drops what the AI set for the last one: those
+             * features belong to the other trade and would not fit this one.
+             */
+            onClick={() => (open ? update(answers.pack === pack ? { pack } : { pack, patched: undefined }) : onLead(pack))}
           >
             {copy.packs[pack]}
           </ChoiceButton>
@@ -73,46 +77,6 @@ function PackChoice({ copy, enabledPacks, answers, update, onLead, codeEntry }: 
     </Fieldset>
     {codeEntry ? <div className="mt-6">{codeEntry}</div> : null}
     </>
-  );
-}
-
-const languageOptions: AppLanguage[] = ["fr", "ar", "en"];
-
-function Languages({ copy, locale, answers, update }: Props) {
-  const builder = answers.builderLanguage ?? locale;
-  const app = answers.appLanguage ?? builder;
-
-  return (
-    <div className="space-y-8">
-      <Fieldset legend={copy.language.heading}>
-        {languageOptions.map((option) => (
-          <ChoiceButton
-            key={option}
-            selected={builder === option}
-            onClick={() =>
-              update({
-                builderLanguage: option,
-                appLanguage: answers.appLanguage ?? option,
-              })
-            }
-          >
-            {copy.language[option]}
-          </ChoiceButton>
-        ))}
-      </Fieldset>
-
-      <Fieldset legend={copy.language.appHeading}>
-        {languageOptions.map((option) => (
-          <ChoiceButton
-            key={option}
-            selected={app === option}
-            onClick={() => update({ appLanguage: option })}
-          >
-            {copy.language[option]}
-          </ChoiceButton>
-        ))}
-      </Fieldset>
-    </div>
   );
 }
 
@@ -182,7 +146,7 @@ function LogoStep({ copy, answers, update }: Props) {
     setWorking(true);
     try {
       const logo = await processLogo(file);
-      update({ logo: logo.colour, logoMono: logo.mono });
+      update({ logo: logo.colour, logoMono: logo.mono, logoRemoved: false });
     } catch (caught) {
       const reason = caught instanceof LogoError ? caught.reason : "unreadable";
       setError(
@@ -220,7 +184,7 @@ function LogoStep({ copy, answers, update }: Props) {
           <Button
             type="button"
             variant="outline"
-            onClick={() => update({ logo: undefined, logoMono: undefined })}
+            onClick={() => update({ logo: undefined, logoMono: undefined, logoRemoved: true })}
           >
             {copy.logo.remove}
           </Button>
@@ -234,18 +198,23 @@ function LogoStep({ copy, answers, update }: Props) {
 
       {answers.logo && answers.logoMono ? (
         <div className="grid grid-cols-2 gap-4">
-          <LogoCard label={copy.logo.colour} src={answers.logo} />
-          <LogoCard label={copy.logo.mono} src={answers.logoMono} />
+          <LogoCard label={copy.logo.colour} src={answers.logo} surface="screen" />
+          <LogoCard label={copy.logo.mono} src={answers.logoMono} surface="paper" />
         </div>
       ) : null}
     </div>
   );
 }
 
-function LogoCard({ label, src }: { label: string; src: string }) {
+/*
+ * Each logo shown where it will live: the screen one on the software's own
+ * ivory, so the owner sees his logo without its page around it, and the
+ * receipt one on white, the colour of the paper.
+ */
+function LogoCard({ label, src, surface }: { label: string; src: string; surface: "screen" | "paper" }) {
   return (
     <figure className="rounded-lg border border-border p-3">
-      <div className="flex h-28 items-center justify-center bg-white">
+      <div className={`flex h-28 items-center justify-center rounded-md ${surface === "screen" ? "bg-background" : "bg-white"}`}>
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={src} alt="" className="max-h-28 max-w-full object-contain" />
       </div>

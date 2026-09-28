@@ -1,6 +1,6 @@
 import "server-only";
 
-import type { LicencePayload } from "@/app-ui/licence-file";
+import type { LicencePayload, MachineMark } from "@/app-ui/licence-file";
 import { signLicence } from "./sign";
 import { statusOf, type Licence, type LicencePlan } from "./status";
 
@@ -32,12 +32,13 @@ export type IssueInput = {
     updatesUntil: string | null;
     renewalSecret: string;
   };
-  devices: { device_id: string; role: string }[];
+  devices: { device_id: string; role: string; fingerprint?: MachineMark | null }[];
   rules: {
     maxDevices: number;
     renewalGraceDays: number;
     clockGraceDays: number;
     deviceReleasesPerYear: number;
+    machinePartsToMatch: number;
     trialSummaryDays: number;
   };
   now?: Date;
@@ -71,11 +72,13 @@ export function licencePayload(input: IssueInput): LicencePayload {
     renewalGraceDays: input.rules.renewalGraceDays,
     clockGraceDays: input.rules.clockGraceDays,
     deviceReleasesPerYear: input.rules.deviceReleasesPerYear,
+    machinePartsToMatch: input.rules.machinePartsToMatch,
     trialSummaryDays: input.rules.trialSummaryDays,
     renewalSecret: input.licence.renewalSecret,
     devices: input.devices.map((device) => ({
       deviceId: device.device_id,
       role: device.role === "main" ? "main" : "secondary",
+      ...(device.fingerprint ? { machine: device.fingerprint } : {}),
     })),
     issuedAt: now.toISOString(),
     refreshAfter: new Date(now.getTime() + REFRESH_AFTER_DAYS * MS_IN_A_DAY).toISOString(),

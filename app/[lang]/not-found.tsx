@@ -5,7 +5,8 @@ import { defaultLocale } from "@/lib/i18n/config";
 
 /*
  * not-found.tsx cannot read route params in Next 14, so this falls back to the
- * default locale. Everything else on the site is properly localised.
+ * default locale. Everything else on the site is properly localised, and the
+ * button opens the home page in the visitor's own language.
  */
 export default function NotFound() {
   const dict = getDictionary(defaultLocale);
@@ -18,7 +19,7 @@ export default function NotFound() {
       </h1>
       <p className="mt-4 max-w-sm text-muted-foreground">{dict.notFound.body}</p>
       <div className="mt-8">
-        <Button href={`/${defaultLocale}`} variant="accent">
+        <Button href="/" variant="accent">
           {dict.notFound.cta}
         </Button>
       </div>

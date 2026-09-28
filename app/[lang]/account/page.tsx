@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { mayReadImages } from "@/builder/ai";
 import { getBuilderCopy } from "@/builder/copy";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { sessionClient } from "@/builder/db/server";
 import { getPublicSettings, installersFor } from "@/builder/db/settings";
 import { statusOf, graceDaysLeft, daysLeft, type LicencePlan } from "@/builder/licence/status";
-import { priceFor } from "@/builder/payment/pricing";
+import { payToFrom } from "@/builder/payment/apps";
+import { licenceChoices } from "@/builder/payment/pricing";
 import { decryptSerial } from "@/builder/serial/cipher";
 import { AccountArea } from "@/builder/ui/account";
 import { getDictionary } from "@/lib/i18n";
@@ -13,7 +13,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { locales } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 
-type Props = { params: { lang: Locale } };
+type Props = { params: Promise<{ lang: Locale }> };
 
 /*
  * Never prerendered and never cached. This page is one owner's business,
@@ -27,7 +27,8 @@ export function generateStaticParams() {
   return locales.map((lang) => ({ lang }));
 }
 
-export function generateMetadata({ params }: Props): Metadata {
+export async function generateMetadata(props: Props): Promise<Metadata> {
+  const params = await props.params;
   const copy = getBuilderCopy(params.lang);
   const dict = getDictionary(params.lang);
   return {
@@ -45,9 +46,10 @@ export function generateMetadata({ params }: Props): Metadata {
  * show one owner another's business even if the query were wrong. The serial
  * is decrypted here, on the server, and the key never reaches the browser.
  */
-export default async function AccountPage({ params }: Props) {
+export default async function AccountPage(props: Props) {
+  const params = await props.params;
   const copy = getBuilderCopy(params.lang);
-  const supabase = sessionClient();
+  const supabase = await sessionClient();
 
   if (!supabase) {
     return <AccountArea copy={copy} lang={params.lang} state={{ kind: "signed_out" }} />;
@@ -156,11 +158,8 @@ export default async function AccountPage({ params }: Props) {
           role: device.role === "main" ? ("main" as const) : ("secondary" as const),
           lastSeen: device.last_seen,
         })),
-        price: settings
-          ? priceFor("annual", settings, business.launch_client)
-          : null,
-        bankilyNumber: secrets?.bankily_number || null,
-        aiReadsImages: mayReadImages(),
+        prices: settings ? licenceChoices(settings, business.launch_client) : [],
+        payTo: secrets ? payToFrom(secrets) : [],
         installers: installersFor(settings, business.pack),
       }}
     />

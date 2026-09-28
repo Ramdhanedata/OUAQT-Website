@@ -1,5 +1,5 @@
 import { toMajor } from "@/app-ui/money";
-import { monthlyEquivalent, priceFor, type Plan } from "@/builder/payment/pricing";
+import { perMonthOf, priceFor, type Plan } from "@/builder/payment/pricing";
 import type { LaunchOffer } from "@/builder/payment/launch";
 import type { PublicSettings } from "@/builder/db/settings";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -43,7 +43,8 @@ export function BuilderPrices({
 
   const rows: { plan: Plan; label: string; cadence: string; lead?: boolean }[] = [
     { plan: "annual", label: b.annual.label, cadence: b.annual.cadence, lead: true },
-    { plan: "quarterly", label: b.quarterly.label, cadence: b.quarterly.cadence },
+    /* The two lengths the payment page offers: a year, or six months at half. */
+    { plan: "semiannual", label: b.semiannual.label, cadence: b.semiannual.cadence },
     { plan: "perpetual", label: b.perpetual.label, cadence: b.perpetual.cadence },
     { plan: "extra_device", label: b.extraDevice.label, cadence: b.extraDevice.cadence },
     { plan: "setup_visit", label: b.setupVisit.label, cadence: b.setupVisit.cadence },
@@ -82,10 +83,7 @@ export function BuilderPrices({
             <dl className="divide-y divide-border">
               {rows.map((row) => {
                 const price = settings ? priceFor(row.plan, settings, launchApplies) : null;
-                const monthly =
-                  row.plan === "annual" && price?.amount
-                    ? monthlyEquivalent(price.amount)
-                    : null;
+                const monthly = price?.amount ? perMonthOf(row.plan, price.amount) : null;
 
                 return (
                   <div

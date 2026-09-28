@@ -14,9 +14,9 @@
     "./licence-file": "./licence-file.ts",
     "./format": "./format.ts",
     "./copy": "./copy.ts",
+    "./cover": "./cover.ts",
     "./sample-data": "./sample-data.ts",
     "./receipt": "./receipt.tsx",
-    "./sale-screen": "./sale-screen.tsx",
     "./scaled": "./scaled.tsx"
   },
   "peerDependencies": {

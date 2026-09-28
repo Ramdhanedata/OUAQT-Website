@@ -3,16 +3,18 @@
 import { useEffect, useRef, useState } from "react";
 import type { BuilderCopy } from "@/builder/copy";
 import { formatAsTyped } from "@/builder/config-code/code";
+import type { PayTo } from "@/builder/payment/apps";
+import type { ReadBack } from "@/builder/payment/checks";
 import type { Price } from "@/builder/payment/pricing";
 import type { Locale } from "@/lib/i18n/config";
 import { fill } from "@/lib/utils";
 import { Field } from "./fields";
 import { licenceLine, owes, type LicenceShown } from "./licence-line";
-import { Pay } from "./pay";
+import { Pay, PaymentReceived } from "./pay";
 
 /*
  * Paying with the numéro de série: the number, then his shop and where its
- * licence stands, then the same Bankily steps as the account page. No
+ * licence stands, then the same payment steps as the account page. No
  * account, no password, no email: an owner who built his software from the
  * phone has none of those and needs none.
  */
@@ -24,9 +26,8 @@ type Lookup = {
   nameArabic: string;
   licence: LicenceShown | null;
   pending: boolean;
-  price: Price | null;
-  bankilyNumber: string | null;
-  aiReadsImages: boolean;
+  prices: Price[];
+  payTo: PayTo[];
 };
 
 const COMPLETE = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
@@ -37,14 +38,30 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
   const [problem, setProblem] = useState<"unknown" | "expired" | "failed" | null>(null);
   const [wait, setWait] = useState(0);
   const [found, setFound] = useState<Lookup | null>(null);
-  const [sent, setSent] = useState(false);
+  const [sent, setSent] = useState<{ read: ReadBack | null; confirmed: boolean } | null>(null);
   const tried = useRef("");
 
   useEffect(() => {
     if (wait <= 0) return;
-    const timer = setTimeout(() => setWait(wait - 1), 1000);
+    const timer = setTimeout(() => setWait(wait - 1), 1000); // not-a-rule: a countdown by the second
     return () => clearTimeout(timer);
   }, [wait]);
+
+  /*
+   * Opened from the software itself, whose end-of-trial window adds the
+   * serial after the # so the owner has nothing to type. The part after the
+   * # never reaches a server, and it is taken off the address at once.
+   */
+  useEffect(() => {
+    const given = formatAsTyped(decodeURIComponent(window.location.hash.slice(1)));
+    if (!COMPLETE.test(given)) return;
+    window.history.replaceState(null, "", window.location.pathname + window.location.search);
+    setValue(given);
+    tried.current = given;
+    void look(given);
+    // Once, when the page opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function look(entry: string) {
     if (!entry.trim() || busy || wait > 0) return;
@@ -83,15 +100,14 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
           <p className="mt-2 text-base leading-relaxed text-foreground">{licenceLine(copy, lang, found.licence)}</p>
         </div>
         {sent || found.pending ? (
-          <p className="text-base leading-relaxed text-muted-foreground">{copy.licence.pending}</p>
-        ) : owes(found.licence) && found.price ? (
+          <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
+        ) : owes(found.licence) && found.prices.length > 0 ? (
           <Pay
             copy={copy}
             language={lang}
-            price={found.price}
-            bankilyNumber={found.bankilyNumber}
-            aiReadsImages={found.aiReadsImages}
-            onSent={() => setSent(true)}
+            prices={found.prices}
+            payTo={found.payTo}
+            onSent={(read, confirmed) => setSent({ read, confirmed })}
             serial={found.serial}
           />
         ) : null}

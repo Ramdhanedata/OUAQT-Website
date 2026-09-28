@@ -16,8 +16,8 @@ const pages = [
   { href: "/admin/cout-ia", key: "aiCost" },
 ] as const;
 
-export function AdminNav({ current, staff }: { current: string; staff: string }) {
-  const { lang, t } = adminWords();
+export async function AdminNav({ current, staff }: { current: string; staff: string }) {
+  const { lang, t } = await adminWords();
   /* Switching language comes back to this same page. */
   const here = current;
 

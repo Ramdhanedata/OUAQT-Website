@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { adminClient, sessionClient } from "@/builder/db/server";
+import { PAYMENT_APPS } from "@/builder/payment/apps";
 import { filePayment } from "@/builder/payment/file";
 import type { Plan } from "@/builder/payment/pricing";
 
@@ -13,15 +14,19 @@ import type { Plan } from "@/builder/payment/pricing";
  * status this route can write that means anything good is
  * `pending_confirmation`.
  *
- * On the free AI tier the screenshot is never read by a model, so the typed
- * reference is required and is the only thing there is to check against.
+ * He types nothing: he says which app he paid from, and the amount, the date
+ * and the transaction number are read off the screenshot, by the AI on the
+ * paid tier and by a person otherwise.
  */
+
+/* Reading the screenshot can take a while, and he is on the page waiting. */
+export const maxDuration = 30; // not-a-rule: seconds a request may run
 
 const body = z.object({
   /* Where he put it: <his user id>/<something>. Checked, not trusted. */
   path: z.string().min(3).max(300),
-  reference: z.string().trim().max(60).optional(),
-  plan: z.enum(["annual", "quarterly", "perpetual", "extra_device", "setup_visit"]),
+  app: z.enum(PAYMENT_APPS),
+  plan: z.enum(["annual", "semiannual", "quarterly", "perpetual", "extra_device", "setup_visit"]),
 });
 
 export async function POST(request: Request) {
@@ -30,7 +35,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
   }
 
-  const supabase = sessionClient();
+  const supabase = await sessionClient();
   const admin = adminClient();
   if (!supabase || !admin) {
     return NextResponse.json({ error: "no_database" }, { status: 501 });
@@ -68,7 +73,7 @@ export async function POST(request: Request) {
     plan: input.data.plan as Plan,
     path: input.data.path,
     bytes: await file.data.arrayBuffer(),
-    reference: input.data.reference ?? null,
+    app: input.data.app,
     actorId: owner.id,
   });
   if (!filed.ok) return NextResponse.json({ error: filed.error }, { status: filed.status });
@@ -78,5 +83,6 @@ export async function POST(request: Request) {
     decision: filed.decision,
     failures: filed.failures,
     expected: filed.expected,
+    read: filed.read,
   });
 }

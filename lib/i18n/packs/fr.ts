@@ -17,7 +17,7 @@ export const packPagesFr: PackPagesCopy = {
     worriesHeading: "Ce qu'on nous demande",
     closingHeading: "Commencez par la première question",
     closingBody:
-      "Il faut moins de vingt minutes, et le logiciel prend forme à chaque réponse.",
+      "Il faut moins de cinq minutes, et le logiciel prend forme à chaque réponse.",
     soonHeading: "Ce métier n'est pas encore ouvert",
     soonBody: "Laissez votre numéro, nous vous prévenons le jour où il l'est.",
     pricing: "Voir les tarifs",

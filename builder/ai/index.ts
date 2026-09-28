@@ -24,13 +24,15 @@ export function aiTier(): AiTier {
 }
 
 /*
- * On the free tier the model reads the owner's words and nothing else. A
- * payment screenshot is an image of a bank transfer, and it is not going to a
- * free endpoint, so B4 asks for the transaction reference instead and sends
- * the payment to be confirmed by hand.
+ * Whether a payment screenshot may be sent to the model to be read.
+ *
+ * Until 2026-09-25 only on the paid tier. Adel's decision that day: on every
+ * tier, so an owner is told at once whether his payment went through. On the
+ * free tier the provider may keep what it is sent and use it to improve its
+ * products, and the privacy page says so. The one switch stays here.
  */
 export function mayReadImages(): boolean {
-  return aiTier() === "paid";
+  return true;
 }
 
 export function aiProvider(): AiProvider | null {

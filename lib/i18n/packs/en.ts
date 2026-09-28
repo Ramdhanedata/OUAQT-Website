@@ -48,7 +48,7 @@ export const packPagesEn: PackPagesCopy = {
     worriesHeading: "What owners ask us",
     closingHeading: "Start with the first question",
     closingBody:
-      "It takes under twenty minutes, and you watch the result settle as you answer.",
+      "It takes under five minutes, and you watch the result settle as you answer.",
     soonHeading: "This trade is not open yet",
     soonBody: "Leave your number and we will tell you the day it is.",
     pricing: "See the prices",

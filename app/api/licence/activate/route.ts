@@ -7,18 +7,21 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken, newDeviceToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
-import { setupFor } from "@/builder/licence/setup";
+import { serialFor, setupFor } from "@/builder/licence/setup";
 import { claimTrial } from "@/builder/licence/trial-claim";
-import { claimActivationToken, releaseActivationToken } from "@/builder/licence/activation-token";
+import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
-import { openByNumber, shopFor } from "@/builder/config-code/server";
+import { sameMachine, type MachineMark } from "@/app-ui/licence-file";
+import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@/builder/config-code/server";
+import { limitPerCaller } from "@/lib/rate-limit";
 
 /*
  * A shop computer coming to life for the first time.
  *
- * The owner types his serial, the app sends the number it uses to identify
- * itself, and it gets back a signed licence it can check on its own from then
+ * The software asks, on its first start, whether it was downloaded from the
+ * connection it stands on (see 0024), and failing that the owner types his
+ * serial. The app sends the number it uses to identify itself, and it gets back a signed licence it can check on its own from then
  * on. Nothing else is accepted: the schema is strict, so a body carrying a
  * day's sales is refused before anything looks at it.
  *
@@ -29,9 +32,13 @@ import { openByNumber, shopFor } from "@/builder/config-code/server";
 
 const body = z
   .object({
-    /* One of these two, never both: typed by the owner, or carried by the link. */
+    /*
+     * One of these three, never two: typed by the owner, carried by the
+     * link, or "was I downloaded from here?", asked by the software itself.
+     */
     serial: z.string().min(8).max(20).optional(),
     token: z.string().min(20).max(200).optional(),
+    nearby: z.literal(true).optional(),
     deviceId: z.string().min(8).max(200),
     deviceName: z.string().trim().max(60).optional(),
     platform: z.enum(["windows", "mac"]),
@@ -59,11 +66,15 @@ const body = z
     expectBusinessId: z.string().uuid().optional(),
   })
   .strict()
-  .refine((value) => Boolean(value.serial) !== Boolean(value.token), {
-    message: "a serial or a token, and only one of them",
+  .refine((value) => [value.serial, value.token, value.nearby].filter(Boolean).length === 1, {
+    message: "a serial, a token or nearby, and only one of them",
   });
 
+/* A shop activates a few computers; a loop guessing serials sends thousands. */
+const tooMany = limitPerCaller(10 * 60_000, 30); // not-a-rule: ten minutes, thirty attempts
+
 export async function POST(request: Request) {
+  if (tooMany(request)) return NextResponse.json({ error: "slow_down" }, { status: 429 });
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) {
     return NextResponse.json({ error: "invalid_request" }, { status: 400 });
@@ -83,14 +94,35 @@ export async function POST(request: Request) {
   let tokenId: string | null = null;
   let found: { business_id: string } | null = null;
 
-  if (input.data.token) {
+  if (input.data.nearby) {
+    /* Never a guess: one shop downloaded from this connection for this system, or the serial. */
+    const secrets = await getPrivateSettings();
+    const place = await placeOfRequest(request);
+    if (!secrets || !place) return NextResponse.json({ error: "no_nearby" }, { status: 404 });
+    const claim = await claimNearbyToken(supabase, place, input.data.platform, input.data.deviceId, secrets.activation_nearby_hours);
+    if (!claim.ok) {
+      return NextResponse.json({ error: claim.reason === "ambiguous" ? "nearby_ambiguous" : "no_nearby" }, { status: claim.reason === "ambiguous" ? 409 : 404 });
+    }
+    tokenId = claim.id;
+    found = { business_id: claim.businessId };
+  } else if (input.data.token) {
     const claim = await claimActivationToken(supabase, input.data.token, input.data.deviceId);
     if (!claim.ok) return NextResponse.json({ error: "bad_token" }, { status: 403 });
     tokenId = claim.id;
     found = { business_id: claim.businessId };
   } else {
+    /*
+     * Wrong serials from one address make it wait longer each time, the
+     * same counter the payment page and the code page use: guessing a
+     * number is slower than anyone would bother with.
+     */
+    const keys = await attemptKeys(request, null, "activate");
+    if ((await waitingFor(supabase, keys)) > 0) return NextResponse.json({ error: "slow_down" }, { status: 429 });
     const serial = normaliseSerial(input.data.serial ?? "");
-    if (!serial) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+    if (!serial) {
+      await recordFailure(supabase, keys);
+      return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+    }
 
     const { data } = await supabase
       .from("serials")
@@ -113,7 +145,10 @@ export async function POST(request: Request) {
     }
   }
 
-  if (!found) return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+  if (!found) {
+    if (input.data.serial) await recordFailure(supabase, await attemptKeys(request, null, "activate"));
+    return NextResponse.json({ error: "unknown_serial" }, { status: 404 });
+  }
 
   let succeeded = false;
   try {
@@ -121,7 +156,7 @@ export async function POST(request: Request) {
   const [{ data: business }, settings, secrets] = await Promise.all([
     supabase
       .from("businesses")
-      .select("id, owner_id, name_latin, receipt_address")
+      .select("id, owner_id, name_latin, name_arabic, pack, receipt_address")
       .eq("id", found.business_id)
       .maybeSingle(),
     getPublicSettings(),
@@ -132,13 +167,27 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "not_available" }, { status: 503 });
   }
 
+  /*
+   * This computer runs another shop. Refused as before, but the app is told
+   * which shop the proof is for, its name and trade, so it can ask the owner
+   * whether to open that one instead: he just downloaded it, and a software
+   * that keeps opening the old shop without a word is the one he did not ask
+   * for. Whoever holds the proof may already activate this shop, so naming
+   * it tells him nothing more than that would.
+   */
   if (input.data.expectBusinessId && input.data.expectBusinessId !== business.id) {
-    return NextResponse.json({ error: "different_business" }, { status: 409 });
+    return NextResponse.json(
+      {
+        error: "different_business",
+        shop: { id: business.id, name: business.name_latin, nameArabic: business.name_arabic ?? null, pack: business.pack },
+      },
+      { status: 409 }
+    );
   }
 
   const { data: devices } = await supabase
     .from("devices")
-    .select("id, device_id, role, status")
+    .select("id, device_id, role, status, fingerprint")
     .eq("business_id", business.id);
 
   const active = (devices ?? []).filter((device) => device.status === "active");
@@ -229,10 +278,36 @@ export async function POST(request: Request) {
    * device slots, so an owner refused twice on a second-hand PC and then
    * granted a trial by hand was told his licence had no room left.
    */
+  const here: MachineMark | null = input.data.fingerprint
+    ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
+    : null;
+
   if (already) {
+    /*
+     * The same device id from another computer: the shop's data folder was
+     * moved, or copied. A move is allowed as often as a device release is
+     * (device_releases_per_year), and is counted as one; the copy left
+     * behind stops at its next check, since its licence now names this
+     * computer. Past that, it is refused, and the owner talks to us.
+     */
+    const before = (already as { fingerprint?: MachineMark | null }).fingerprint ?? null;
+    if (before && here && !sameMachine(before, here, secrets.trial_fingerprint_parts_to_match)) {
+      const yearAgo = new Date(Date.now() - 365 * 86_400_000).toISOString(); // not-a-rule: a year
+      const { count } = await supabase
+        .from("device_releases")
+        .select("id", { count: "exact", head: true })
+        .eq("business_id", business.id)
+        .gt("released_at", yearAgo);
+      if ((count ?? 0) >= secrets.device_releases_per_year) {
+        await audit({ actorId: null, subject: "device", subjectId: input.data.deviceId, action: "move_refused", detail: { businessId: business.id } });
+        return NextResponse.json({ error: "moved_too_often", supportWhatsapp: settings.support_whatsapp }, { status: 409 });
+      }
+      await supabase.from("device_releases").insert({ business_id: business.id, device_id: input.data.deviceId, released_by: null });
+      await audit({ actorId: null, subject: "device", subjectId: input.data.deviceId, action: "moved", detail: { businessId: business.id } });
+    }
     await supabase
       .from("devices")
-      .update({ last_seen: new Date().toISOString(), token_hash: tokenHash })
+      .update({ last_seen: new Date().toISOString(), token_hash: tokenHash, ...(here ? { fingerprint: here } : {}) })
       .eq("id", already.id);
   } else {
     const { error } = await supabase.from("devices").insert({
@@ -242,6 +317,7 @@ export async function POST(request: Request) {
       platform: input.data.platform,
       role: active.length === 0 ? "main" : "secondary",
       token_hash: tokenHash,
+      ...(here ? { fingerprint: here } : {}),
     });
 
     if (error) {
@@ -272,7 +348,7 @@ export async function POST(request: Request) {
 
   const { data: fresh } = await supabase
     .from("devices")
-    .select("device_id, role")
+    .select("device_id, role, fingerprint")
     .eq("business_id", business.id)
     .eq("status", "active");
 
@@ -293,6 +369,7 @@ export async function POST(request: Request) {
       renewalGraceDays: settings.renewal_grace_days,
       clockGraceDays: secrets.clock_grace_days,
       deviceReleasesPerYear: secrets.device_releases_per_year,
+      machinePartsToMatch: secrets.trial_fingerprint_parts_to_match,
       trialSummaryDays: secrets.trial_summary_days,
     },
   });
@@ -310,16 +387,20 @@ export async function POST(request: Request) {
    * computer that is online for one call has everything it needs afterwards.
    */
   const setup = await setupFor(supabase, business.id);
+  const serial = await serialFor(supabase, business.id);
 
   succeeded = true;
   return NextResponse.json({
     licence: signed,
+    serial,
     deviceToken: token,
     configuration: setup.configuration,
     configurationVersion: setup.configurationVersion,
     products: setup.products,
     staff: setup.staff,
     logo: setup.logo,
+    /* Where the app sends the owner who needs us: its "contact OUAQT" button. */
+    supportWhatsapp: settings.support_whatsapp,
   });
   } finally {
     /*
@@ -327,5 +408,6 @@ export async function POST(request: Request) {
      * link still works for his next try. Only a success spends it.
      */
     if (tokenId && !succeeded) await releaseActivationToken(supabase, tokenId);
+    if (tokenId && succeeded) await forgetPlace(supabase, tokenId);
   }
 }

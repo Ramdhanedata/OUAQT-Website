@@ -6,7 +6,7 @@ import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@
 import { adminClient, requestClient } from "@/builder/db/server";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { product } from "@/builder/licence/create-shop";
-import { mintActivationToken } from "@/builder/licence/activation-token";
+import { mintActivationToken, placeOfRequest } from "@/builder/licence/activation-token";
 import { serialSecretIsSet } from "@/builder/serial/cipher";
 
 /*
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   if (!serialSecretIsSet()) return NextResponse.json({ error: "no_serial_secret" }, { status: 501 });
 
   /* The same slow-down as opening a number: a wrong one here is a guess too. */
-  const session = await requestClient(request)?.auth.getUser();
+  const session = await (await requestClient(request))?.auth.getUser();
   const keys = await attemptKeys(request, session?.data.user?.id ?? null, "resume");
   const wait = await waitingFor(admin, keys);
   if (wait > 0) return NextResponse.json({ error: "slow_down", wait }, { status: 429 });
@@ -49,13 +49,19 @@ export async function POST(request: Request) {
   }
 
   const shop = await shopFor(admin, found, {
-    tester: isTester(cookies().get(TESTER_COOKIE)?.value),
+    tester: isTester((await cookies()).get(TESTER_COOKIE)?.value),
     products: input.data.products,
   });
   if (!shop.ok) return NextResponse.json({ error: shop.error }, { status: shop.status });
 
   const secrets = await getPrivateSettings();
-  const minted = secrets ? await mintActivationToken(admin, shop.businessId, secrets.activation_token_hours) : null;
+  /* Opened on the computer that downloads: its connection is where the software will start. */
+  const minted = secrets
+    ? await mintActivationToken(admin, shop.businessId, secrets.activation_token_hours, new Date(), {
+        hash: await placeOfRequest(request),
+        platform: null,
+      })
+    : null;
 
   return NextResponse.json(
     {

@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { decryptSerial } from "@/builder/serial/cipher";
 
 /* not-a-rule: how long a logo link stays good, long enough for one install. */
 const LOGO_URL_SECONDS = 60 * 60;
@@ -79,4 +80,15 @@ async function signLogo(
    */
   if (!colour.data?.signedUrl || !mono.data?.signedUrl) return null;
   return { colour: colour.data.signedUrl, mono: mono.data.signedUrl };
+}
+
+/*
+ * The shop's own numéro de série, for its own computer: shown in the app
+ * when the trial ends, so the owner has it in front of him when he pays.
+ * Only ever sent to a computer that has already proved itself, with the
+ * serial, a one-time link or its device key.
+ */
+export async function serialFor(supabase: SupabaseClient, businessId: string): Promise<string | null> {
+  const { data } = await supabase.from("serials").select("serial_cipher").eq("business_id", businessId).maybeSingle();
+  return data?.serial_cipher ? decryptSerial(data.serial_cipher) : null;
 }

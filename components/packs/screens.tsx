@@ -16,7 +16,7 @@ const Preview = dynamic(
   () => import("@/builder/ui/preview").then((m) => m.Preview),
   {
     ssr: false,
-    loading: () => <div className="h-[520px] animate-pulse rounded-xl bg-muted/40" />,
+    loading: () => <div className="aspect-[1200/790] animate-pulse rounded-xl bg-muted/40" />,
   }
 );
 
@@ -30,7 +30,7 @@ export function PackScreens({
   shopName: string;
 }) {
   return (
-    <div className="h-[520px] overflow-hidden rounded-xl border border-border">
+    <div>
       <Preview
         copy={getBuilderCopy(lang)}
         answers={{

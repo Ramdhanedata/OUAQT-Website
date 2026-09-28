@@ -16,7 +16,7 @@ export function ProjectsGrid({
 }: {
   projects: Project[];
   categories: Sector[];
-  dict: Dictionary;
+  dict: Pick<Dictionary, "projectsPage" | "projects" | "projectDetail" | "sectors">;
   lang: Locale;
 }) {
   const [active, setActive] = useState<Sector | "All">("All");
