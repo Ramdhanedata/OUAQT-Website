@@ -101,6 +101,22 @@ const builderList: Record<
 };
 
 /*
+ * The builder licence's other published terms, decided alongside the prices
+ * (migrations 0002, 0006 and 0011). Like the list above, only what the
+ * marketing and legal pages print when settings cannot be read, so they never
+ * show a blank where a number belongs. The licence API still reads settings.
+ */
+const builderListedTerms = { trialDays: 30, graceDays: 30, devices: 2 };
+
+export function builderTerms(settings: PublicSettings | null) {
+  return {
+    trialDays: settings?.trial_days ?? builderListedTerms.trialDays,
+    graceDays: settings?.renewal_grace_days ?? builderListedTerms.graceDays,
+    devices: settings?.max_devices ?? builderListedTerms.devices,
+  };
+}
+
+/*
  * One builder price as the marketing pages show it: from settings when they
  * hold it, otherwise from the list above. Amounts are in the smallest unit,
  * like everything priceFor returns.
@@ -172,6 +188,7 @@ export function pricingTerms(locale: Locale): Record<string, string | number> {
     clients: pricing.launchOffer.clients,
     years: pricing.launchOffer.freezeYears,
     devices: pricing.devicesIncluded,
+    builderDevices: builderListedTerms.devices,
     months: pricing.perpetualServiceMonths,
     rate: formatPercent(pricing.bespoke.maintenancePercent, locale),
     month: pricing.bespoke.maintenanceFromMonth,

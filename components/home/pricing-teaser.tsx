@@ -5,7 +5,7 @@ import { perMonthOf } from "@/builder/payment/pricing";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { formatPrice, shownPrice } from "@/lib/data/pricing";
+import { builderTerms, formatPrice, shownPrice } from "@/lib/data/pricing";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
 import { fill } from "@/lib/utils";
@@ -34,10 +34,11 @@ export function PricingTeaser({
   const monthly = price?.amount ? perMonthOf("annual", price.amount) : null;
   const struck = price?.launch && price.standard !== null && price.standard !== price.amount ? price.standard : null;
   const dir = lang === "ar" ? "rtl" : "ltr";
+  const terms = builderTerms(settings);
 
   const included = [
-    settings?.trial_days ? fill(home.pricingTrial, { days: settings.trial_days }) : null,
-    settings?.max_devices ? fill(home.pricingDevices, { devices: settings.max_devices }) : null,
+    fill(home.pricingTrial, { days: terms.trialDays }),
+    fill(home.pricingDevices, { devices: terms.devices }),
     home.pricingUpdates,
     home.pricingPayment,
   ].filter((line): line is string => Boolean(line));

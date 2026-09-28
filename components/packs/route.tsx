@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { packs, type Pack } from "@/app-ui/packs";
+import { builderTerms } from "@/lib/data/pricing";
 import { getPublicSettings } from "@/builder/db/settings";
 import { OPENING } from "@/builder/packs/opening";
 import { PackPage } from "@/components/packs/pack-page";
@@ -41,7 +42,7 @@ export function packRoute(pack: Pack) {
         lang={params.lang}
         pack={pack}
         open={open}
-        trialDays={settings?.trial_days ?? null}
+        trialDays={builderTerms(settings).trialDays}
       />
     );
   }

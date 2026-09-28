@@ -6,7 +6,7 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
-import { formatPrice, shownPrice } from "@/lib/data/pricing";
+import { builderTerms, formatPrice, shownPrice } from "@/lib/data/pricing";
 import type { Dictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
@@ -40,6 +40,7 @@ export function BuilderPrices({
 
   /* Until we know the offer has closed, the launch price is the one shown. */
   const launchApplies = offer.open !== false;
+  const terms = builderTerms(settings);
 
   const rows: { plan: Exclude<Plan, "quarterly">; label: string; cadence: string; lead?: boolean }[] = [
     { plan: "annual", label: b.annual.label, cadence: b.annual.cadence, lead: true },
@@ -120,16 +121,12 @@ export function BuilderPrices({
             </dl>
 
             <div className="border-t border-border px-6 py-6 sm:px-8">
-              {settings?.trial_days ? (
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  {fill(b.trial, { days: settings.trial_days })}
-                </p>
-              ) : null}
-              {settings?.max_devices ? (
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {fill(b.devices, { devices: settings.max_devices })}
-                </p>
-              ) : null}
+              <p className="text-sm leading-relaxed text-muted-foreground">
+                {fill(b.trial, { days: terms.trialDays })}
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                {fill(b.devices, { devices: terms.devices })}
+              </p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                 {b.payment}
               </p>
