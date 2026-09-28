@@ -2,11 +2,11 @@ import { locales, type Locale } from "./config";
 
 /**
  * The public origin. Falls back to the Vercel deployment URL so canonical and
- * og:url are correct before a custom domain exists, rather than pointing at
- * ouaqt.com, which nobody owns yet.
+ * og:url are correct wherever the site runs.
  *
- * TODO(adel): once you buy the domain, set NEXT_PUBLIC_SITE_URL=https://ouaqt.com
- * in Vercel and this follows automatically.
+ * The site is served at www.ouaqt.com, and ouaqt.com redirects there, so
+ * NEXT_PUBLIC_SITE_URL=https://www.ouaqt.com in Vercel (Production) is what
+ * puts the domain in canonical addresses and share previews.
  */
 export function siteUrl(): string {
   const explicit = process.env.NEXT_PUBLIC_SITE_URL;
