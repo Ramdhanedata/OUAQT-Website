@@ -1,11 +1,11 @@
 import { toMajor } from "@/app-ui/money";
 import type { PublicSettings } from "@/builder/db/settings";
 import type { LaunchOffer } from "@/builder/payment/launch";
-import { perMonthOf, priceFor } from "@/builder/payment/pricing";
+import { perMonthOf } from "@/builder/payment/pricing";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { formatPrice } from "@/lib/data/pricing";
+import { formatPrice, shownPrice } from "@/lib/data/pricing";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
 import { fill } from "@/lib/utils";
@@ -30,7 +30,7 @@ export function PricingTeaser({
 }) {
   const home = dict.builderHome;
   const launch = offer.open !== false;
-  const price = settings ? priceFor("annual", settings, launch) : null;
+  const price = shownPrice("annual", settings, launch);
   const monthly = price?.amount ? perMonthOf("annual", price.amount) : null;
   const struck = price?.launch && price.standard !== null && price.standard !== price.amount ? price.standard : null;
   const dir = lang === "ar" ? "rtl" : "ltr";
