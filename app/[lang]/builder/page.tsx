@@ -1,5 +1,6 @@
 import { packs, type Pack } from "@/app-ui/packs";
 import { Builder } from "@/builder/ui/builder";
+import { builderTerms } from "@/lib/data/pricing";
 import { getPublicSettings, installersFor, type Installers } from "@/builder/db/settings";
 import { choosablePacks } from "@/builder/packs/opening";
 import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
@@ -64,13 +65,13 @@ export default async function BuilderPage(props: Props) {
 
   return (
     <Builder
-      trialDays={settings?.trial_days ?? null}
+      trialDays={builderTerms(settings).trialDays}
       copy={getBuilderCopy(params.lang)}
       locale={params.lang}
       enabledPacks={enabled}
       startPack={startPack}
       supportWhatsapp={settings?.support_whatsapp ?? null}
-      maxDevices={settings?.max_devices ?? null}
+      maxDevices={builderTerms(settings).devices}
       installers={
         Object.fromEntries(
           packs.map((pack) => [pack, installersFor(settings, pack)])

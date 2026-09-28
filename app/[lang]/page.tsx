@@ -10,6 +10,7 @@ import { PricingTeaser } from "@/components/home/pricing-teaser";
 import { Trades } from "@/components/home/trades";
 import { Why } from "@/components/home/why";
 import { JsonLd } from "@/components/seo/json-ld";
+import { builderTerms } from "@/lib/data/pricing";
 import { getPublicSettings } from "@/builder/db/settings";
 import { getLaunchOffer } from "@/builder/payment/launch";
 import { openPacks } from "@/builder/packs/opening";
@@ -55,7 +56,7 @@ export default async function Home(props: { params: Promise<{ lang: Locale }> })
   return (
     <>
       <JsonLd data={softwareApplicationData(params.lang, dict)} />
-      <BuilderHero dict={dict} lang={params.lang} trialDays={settings?.trial_days ?? null} />
+      <BuilderHero dict={dict} lang={params.lang} trialDays={builderTerms(settings).trialDays} />
       <BuilderImpact dict={dict} />
       <BuilderProduct dict={dict} lang={params.lang} demoPacks={enabled.length > 0 ? enabled : [...packs]} />
       <Features dict={dict} />
