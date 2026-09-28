@@ -156,7 +156,7 @@ export async function POST(request: Request) {
   const [{ data: business }, settings, secrets] = await Promise.all([
     supabase
       .from("businesses")
-      .select("id, owner_id, name_latin, receipt_address")
+      .select("id, owner_id, name_latin, name_arabic, pack, receipt_address")
       .eq("id", found.business_id)
       .maybeSingle(),
     getPublicSettings(),
@@ -167,8 +167,22 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "not_available" }, { status: 503 });
   }
 
+  /*
+   * This computer runs another shop. Refused as before, but the app is told
+   * which shop the proof is for, its name and trade, so it can ask the owner
+   * whether to open that one instead: he just downloaded it, and a software
+   * that keeps opening the old shop without a word is the one he did not ask
+   * for. Whoever holds the proof may already activate this shop, so naming
+   * it tells him nothing more than that would.
+   */
   if (input.data.expectBusinessId && input.data.expectBusinessId !== business.id) {
-    return NextResponse.json({ error: "different_business" }, { status: 409 });
+    return NextResponse.json(
+      {
+        error: "different_business",
+        shop: { id: business.id, name: business.name_latin, nameArabic: business.name_arabic ?? null, pack: business.pack },
+      },
+      { status: 409 }
+    );
   }
 
   const { data: devices } = await supabase

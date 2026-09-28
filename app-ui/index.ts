@@ -10,6 +10,7 @@ export * from "./config";
 export * from "./copy";
 export * from "./format";
 export * from "./money";
+export * from "./cover";
 export * from "./licence-status";
 export * from "./licence-file";
 export * from "./sample-data";

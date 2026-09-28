@@ -74,6 +74,62 @@
       ],
       "default": ["name"],
       "maps_to": [{ "path": "features.pharmacy.search" }]
+    },
+    {
+      "id": "ph_insurance",
+      "type": "yes_no",
+      "label": {
+        "fr": "Votre pharmacie est-elle conventionnée avec la CNAM, la CNASS ou une autre assurance maladie ?",
+        "ar": "هل صيدليتك معتمدة لدى CNAM أو CNASS أو تأمين صحي آخر؟",
+        "en": "Is your pharmacy approved by CNAM, CNASS or another health insurer?"
+      },
+      "help": {
+        "fr": "Si oui, chaque vente sépare ce que paie la caisse et ce que paie le client, et le logiciel tient le compte de ce que chaque caisse vous doit.",
+        "ar": "إذا كان الجواب نعم، يفصل كل بيع بين ما يدفعه الصندوق وما يدفعه الزبون، ويحسب البرنامج ما يدين لك به كل صندوق.",
+        "en": "If so, every sale splits what the fund pays from what the customer pays, and the software keeps count of what each fund owes you."
+      },
+      "review": true,
+      "default": false,
+      "maps_to": [{ "path": "features.pharmacy.insurance.enabled" }]
+    },
+    {
+      "id": "ph_insurance_payers",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Avec quelles caisses ou assurances ?",
+        "ar": "لدى أي صناديق أو شركات تأمين؟",
+        "en": "With which funds or insurers?"
+      },
+      "review": true,
+      "show_if": { "question": "ph_insurance", "equals": true },
+      "options": [
+        {
+          "id": "cnam",
+          "label": {
+            "fr": "CNAM, la Caisse nationale d'assurance maladie",
+            "ar": "CNAM، الصندوق الوطني للتأمين الصحي",
+            "en": "CNAM, the National Health Insurance Fund"
+          }
+        },
+        {
+          "id": "cnass",
+          "label": {
+            "fr": "CNASS, la Caisse nationale de solidarité en santé",
+            "ar": "CNASS، الصندوق الوطني للتضامن الصحي",
+            "en": "CNASS, the National Health Solidarity Fund"
+          }
+        },
+        {
+          "id": "other",
+          "label": {
+            "fr": "Une autre assurance ou une mutuelle",
+            "ar": "شركة تأمين أخرى أو تعاضدية",
+            "en": "Another insurer or a mutual"
+          }
+        }
+      ],
+      "default": ["cnam"],
+      "maps_to": [{ "path": "features.pharmacy.insurance.payers" }]
     }
   ]
 }

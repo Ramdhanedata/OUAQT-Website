@@ -8,7 +8,7 @@ import restaurantJson from "./restaurant/questions.v1.json";
 import shopJson from "./shop/questions.v1.json";
 import transportJson from "./transport/questions.v1.json";
 import warehouseJson from "./warehouse/questions.v1.json";
-import { questionBank, type Question, type QuestionBank } from "./bank";
+import { applyAnswers, questionBank, type Answers, type Question, type QuestionBank } from "./bank";
 
 /*
  * The question banks, loaded and checked.
@@ -47,6 +47,24 @@ export function packBank(pack: Pack): QuestionBank | null {
 export function interviewFor(pack: Pack): Question[] {
   const own = packBank(pack);
   return [...(own?.questions ?? []), ...common.questions];
+}
+
+/*
+ * What the AI made of an earlier sentence, with one later answer written
+ * into it the same way answers are written. The AI's result is kept whole
+ * (common and features) and laid over the answers when the shop is made, so
+ * without this every question answered after that sentence was lost.
+ */
+export function patchedAfterAnswer(
+  patched: { common?: unknown; features?: unknown },
+  pack: Pack,
+  id: string,
+  interview: Answers
+): { common?: unknown; features?: unknown } {
+  const question = interviewFor(pack).find((one) => one.id === id);
+  if (!question) return patched;
+  const next = applyAnswers({ common: patched.common ?? {}, features: patched.features ?? {} } as Record<string, unknown>, [question], interview);
+  return { common: next.common, features: next.features };
 }
 
 export { questionBank, type Question, type QuestionBank };

@@ -3,11 +3,12 @@ import { z } from "zod";
 import {
   appLanguages,
   configurationSchema,
+  coverPayers,
   defaultConfiguration,
   packs,
 } from "@/app-ui/config";
-import { applyAnswers, common, interviewFor, isAsked, packBank } from "./index";
-import type { Question } from "./bank";
+import { applyAnswers, common, interviewFor, isAsked, packBank, patchedAfterAnswer } from "./index";
+import type { Answers, Question } from "./bank";
 
 /*
  * Section 21: the JSON validates, every question exists in all three
@@ -139,6 +140,43 @@ describe("a single answer", () => {
     expect(filled.features.pharmacy?.expiryAlertMonths).toBe(3);
   });
 
+  it("keeps the till as it was for a pharmacy that is not conventionnée", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    const cases: Answers[] = [{}, { ph_insurance: false }, { ph_insurance: false, ph_insurance_payers: ["cnass"] }];
+    for (const answers of cases) {
+      const filled = applyAnswers(base, interviewFor("pharmacy"), answers);
+      expect(coverPayers(filled), JSON.stringify(answers)).toEqual([]);
+      expect(configurationSchema.safeParse(filled).success).toBe(true);
+    }
+  });
+
+  it("gives a conventionnée pharmacy the funds it named", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    const filled = applyAnswers(base, interviewFor("pharmacy"), {
+      ph_insurance: true,
+      ph_insurance_payers: ["cnam", "cnass", "other"],
+    });
+    expect(filled.features.pharmacy?.insurance).toEqual({
+      enabled: true,
+      payers: ["cnam", "cnass", "other"],
+    });
+    expect(coverPayers(filled)).toEqual(["cnam", "cnass", "other"]);
+    expect(configurationSchema.safeParse(filled).success).toBe(true);
+  });
+
+  it("takes CNAM when he says yes and then does not know which fund", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    const filled = applyAnswers(base, interviewFor("pharmacy"), { ph_insurance: true });
+    expect(coverPayers(filled)).toEqual(["cnam"]);
+  });
+
+  it("only asks which funds once he has said yes", () => {
+    const payers = packBank("pharmacy")!.questions.find((q) => q.id === "ph_insurance_payers")!;
+    expect(isAsked(payers, {})).toBe(false);
+    expect(isAsked(payers, { ph_insurance: false })).toBe(false);
+    expect(isAsked(payers, { ph_insurance: true })).toBe(true);
+  });
+
   it("produces a configuration for every single answer on its own", () => {
     const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
     for (const item of interviewFor("pharmacy")) {
@@ -150,5 +188,25 @@ describe("a single answer", () => {
         `${item.id} alone`
       ).toBe(true);
     }
+  });
+});
+
+describe("an answer given after the AI read a sentence", () => {
+  it("still reaches the software", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    /* The AI read "je fais des remises" on c_discount: its result is the whole configuration of that moment. */
+    const snapshot = { common: { ...base.common, discounts: true }, features: base.features };
+    /* Then he answered the insurance question with the buttons. */
+    const interview = { ph_insurance: true };
+    const next = patchedAfterAnswer(snapshot, "pharmacy", "ph_insurance", interview);
+    const features = next.features as typeof base.features;
+    expect(features.pharmacy?.insurance?.enabled).toBe(true);
+    /* And what the AI set is kept. */
+    expect((next.common as typeof base.common).discounts).toBe(true);
+  });
+
+  it("leaves it alone for a question of another trade", () => {
+    const snapshot = { common: {}, features: {} };
+    expect(patchedAfterAnswer(snapshot, "pharmacy", "rs_tables", {})).toBe(snapshot);
   });
 });

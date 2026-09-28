@@ -45,8 +45,13 @@ paying shop. Each one is a switch or a value, not a piece of work.
 - [ ] **The Facebook link** in `lib/data/contact.ts` is marked as doubtful.
 - [ ] **`RESEND_API_KEY`** in Vercel, so leads and enquiries are mailed by
       the server rather than through FormSubmit from the visitor's browser.
-- [ ] **`NEXT_PUBLIC_SITE_URL`** once the domain exists, so share previews
-      and the sitemap carry it.
+- [ ] **`NEXT_PUBLIC_SITE_URL` = `https://www.ouaqt.com`** in Vercel
+      (Production), then a redeploy, so share previews, canonical addresses
+      and the sitemap carry the domain. The domain was bought on Spaceship on
+      2026-09-28 and pointed at the Vercel project: `www.ouaqt.com` serves the
+      site and `ouaqt.com` redirects to it (308). `ouaqtcom.vercel.app` keeps
+      serving the same site and must stay that way, without a redirect,
+      because every desktop app built before the domain activates through it.
 
 ## Supabase dashboard
 
@@ -64,7 +69,8 @@ paying shop. Each one is a switch or a value, not a piece of work.
       Changing it later makes every existing serial unreadable to its owner.
 - [ ] `NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN` decided **before** the first owner.
       Changing it afterwards locks every one of them out of their account.
-      It currently points at the Vercel address because ouaqt.com has no DNS.
+      It still points at the Vercel address. ouaqt.com has DNS since
+      2026-09-28, so it could move there, but only while no owner exists.
 - [ ] The `installer_url_windows_<trade>` and `installer_url_mac_<trade>`
       settings pointing at the real installers, for every trade that is open.
       A trade whose addresses are empty says the software is coming, which is

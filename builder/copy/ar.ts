@@ -448,6 +448,7 @@ export const ar: BuilderCopy = {
     switched: "تحولت الصفحة إلى {language}، وهي لغة إعدادك.",
     switchBack: "العودة إلى {language}",
     retry: "أعد المحاولة",
+    another: "إنشاء برنامج آخر",
     preparing: "نجهز برنامجك…",
     downloadFailed: "تعذر تجهيز البرنامج. أعد المحاولة، أو راسلنا على واتساب.",
     downloadIntro: "تجربة مجانية لمدة {days} يوما. بعد التجربة، تدفع على هذا الموقع بهذا الرقم نفسه.",

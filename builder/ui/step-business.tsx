@@ -63,7 +63,11 @@ function PackChoice({ copy, enabledPacks, answers, update, onLead, codeEntry }: 
             key={pack}
             selected={open && answers.pack === pack}
             note={open ? undefined : copy.packs.soon}
-            onClick={() => (open ? update({ pack }) : onLead(pack))}
+            /*
+             * Another trade drops what the AI set for the last one: those
+             * features belong to the other trade and would not fit this one.
+             */
+            onClick={() => (open ? update(answers.pack === pack ? { pack } : { pack, patched: undefined }) : onLead(pack))}
           >
             {copy.packs[pack]}
           </ChoiceButton>
