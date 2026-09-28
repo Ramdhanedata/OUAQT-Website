@@ -1,13 +1,28 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, locales, type Locale } from "@/lib/i18n/config";
+import {
+  defaultLocale,
+  isLocale,
+  languageCookie,
+  languageCookieSeconds,
+  locales,
+  type Locale,
+} from "@/lib/i18n/config";
 import { localisedHref, localisedRoutes, routeIdForSlug } from "@/lib/i18n/routes";
 
 /*
- * Every page lives under a locale prefix (/en, /fr, /ar). This redirects any
- * path that is missing one, so "/" and "/projects" still work and land on the
- * visitor's best-guess language.
+ * Every page lives under a locale prefix (/en, /fr, /ar), except the front
+ * door. "/" shows the home page in the visitor's language and keeps the
+ * address as it was typed, so the bar reads ouaqt.com and not ouaqt.com/fr.
+ * Any other path missing a prefix ("/projects") is redirected to one.
+ *
+ * The language is the one the visitor last read the site in, remembered in a
+ * cookie, so the logo brings an Arabic reader back to the Arabic home page.
+ * Failing that, the browser's stated preference, and failing that, French.
  */
 function pickLocale(request: NextRequest): string {
+  const remembered = request.cookies.get(languageCookie)?.value;
+  if (remembered && isLocale(remembered)) return remembered;
+
   const header = request.headers.get("accept-language");
   if (!header) return defaultLocale;
 
@@ -32,15 +47,27 @@ function pickLocale(request: NextRequest): string {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  const hasLocale = locales.some(
+  const current = locales.find(
     (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
   );
-  if (hasLocale) return localisedSlugs(request);
+  if (current) return remember(request, localisedSlugs(request), current);
 
   const locale = pickLocale(request);
   const url = request.nextUrl.clone();
   url.pathname = pathname === "/" ? `/${locale}` : `/${locale}${pathname}`;
-  return NextResponse.redirect(url);
+  return pathname === "/" ? NextResponse.rewrite(url) : NextResponse.redirect(url);
+}
+
+/* The language of the page being read becomes the one "/" opens in next time. */
+function remember(request: NextRequest, response: NextResponse, locale: Locale) {
+  if (request.cookies.get(languageCookie)?.value !== locale) {
+    response.cookies.set(languageCookie, locale, {
+      path: "/",
+      maxAge: languageCookieSeconds,
+      sameSite: "lax",
+    });
+  }
+  return response;
 }
 
 export const config = {

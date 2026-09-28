@@ -31,10 +31,11 @@ export function siteUrl(): string {
  */
 export function alternatesFor(lang: Locale, path = "/") {
   const clean = path === "/" ? "" : path;
-  return {
-    canonical: `/${lang}${clean}`,
-    languages: Object.fromEntries(
-      locales.map((l) => [l, `/${l}${clean}`])
-    ) as Record<Locale, string>,
-  };
+  const languages: Record<string, string> = Object.fromEntries(
+    locales.map((l) => [l, `/${l}${clean}`])
+  );
+  // The bare address picks a language for each visitor, which is what
+  // x-default tells search engines it does.
+  if (path === "/") languages["x-default"] = "/";
+  return { canonical: `/${lang}${clean}`, languages };
 }

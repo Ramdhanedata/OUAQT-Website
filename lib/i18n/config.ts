@@ -9,6 +9,14 @@ export type Locale = (typeof locales)[number];
 // land on English.
 export const defaultLocale: Locale = "fr";
 
+/*
+ * The language the bare address (ouaqt.com) opens in: the one the visitor
+ * last read the site in. Set by the middleware on every page, and by the
+ * switcher on the home page, which stays at the bare address.
+ */
+export const languageCookie = "NEXT_LOCALE";
+export const languageCookieSeconds = 60 * 60 * 24 * 365;
+
 /** Short code shown inside the navbar switcher. */
 export const localeShortNames: Record<Locale, string> = {
   en: "EN",

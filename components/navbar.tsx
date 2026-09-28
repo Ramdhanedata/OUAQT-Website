@@ -63,13 +63,16 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
       )}
     >
       <Container className="flex h-16 items-center justify-between sm:h-20">
-        <Link
-          href={localeHref(lang, "/")}
-          aria-label={dict.nav.homeAria}
-          className="shrink-0"
-        >
+        {/*
+          The bare address, which opens in the language being read (see
+          middleware.ts). A full load rather than a client navigation, because
+          the router would otherwise reuse the home page it prefetched in the
+          language the visitor has just switched away from.
+        */}
+        {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- a full load on purpose, see above */}
+        <a href="/" aria-label={dict.nav.homeAria} className="shrink-0">
           <Logo priority className="h-6 sm:h-7" alt={dict.common.brand} />
-        </Link>
+        </a>
 
         <nav className="hidden items-center gap-8 lg:flex">
           {links.map((link) => (
