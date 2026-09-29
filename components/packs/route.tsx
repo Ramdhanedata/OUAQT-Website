@@ -1,12 +1,13 @@
+import { localisedAlternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 import { packs, type Pack } from "@/app-ui/packs";
 import { builderTerms } from "@/lib/data/pricing";
 import { getPublicSettings } from "@/builder/db/settings";
 import { OPENING } from "@/builder/packs/opening";
 import { PackPage } from "@/components/packs/pack-page";
-import { locales, type Locale } from "@/lib/i18n/config";
+import type { Locale } from "@/lib/i18n/config";
 import { getPackPage } from "@/lib/i18n/packs";
-import { localisedHref, packRouteId } from "@/lib/i18n/routes";
+import { packRouteId } from "@/lib/i18n/routes";
 import { getDictionary } from "@/lib/i18n";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 
@@ -25,12 +26,7 @@ export function packRoute(pack: Pack) {
     return pageMetadata(params.lang, getDictionary(params.lang), {
       title: copy.title,
       description: copy.description,
-      alternates: {
-        canonical: localisedHref(params.lang, id),
-        languages: Object.fromEntries(
-          locales.map((locale) => [locale, localisedHref(locale, id)])
-        ) as Record<Locale, string>,
-      },
+      alternates: localisedAlternatesFor(params.lang, id),
     });
   }
 

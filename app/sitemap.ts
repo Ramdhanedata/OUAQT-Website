@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 import { projects } from "@/lib/data/projects";
-import { locales } from "@/lib/i18n/config";
+import { defaultLocale, locales } from "@/lib/i18n/config";
 import { siteUrl } from "@/lib/i18n/metadata";
 import { packs } from "@/app-ui/packs";
 import { localisedHref, packRouteId } from "@/lib/i18n/routes";
@@ -36,9 +36,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: "monthly" as const,
     priority: 0.9,
     alternates: {
-      languages: Object.fromEntries(
-        locales.map((l) => [l, `${base}${localisedHref(l, "builder")}`])
-      ),
+      languages: {
+        ...Object.fromEntries(
+          locales.map((l) => [l, `${base}${localisedHref(l, "builder")}`])
+        ),
+        "x-default": `${base}${localisedHref(defaultLocale, "builder")}`,
+      },
     },
   }));
 
@@ -49,12 +52,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const tradePages = packs.flatMap((pack) =>
     locales.map((lang) => ({
       url: `${base}${localisedHref(lang, packRouteId(pack))}`,
-        changeFrequency: "monthly" as const,
+      changeFrequency: "monthly" as const,
       priority: 0.9,
       alternates: {
-        languages: Object.fromEntries(
-          locales.map((l) => [l, `${base}${localisedHref(l, packRouteId(pack))}`])
-        ),
+        languages: {
+          ...Object.fromEntries(
+            locales.map((l) => [l, `${base}${localisedHref(l, packRouteId(pack))}`])
+          ),
+          "x-default": `${base}${localisedHref(defaultLocale, packRouteId(pack))}`,
+        },
       },
     }))
   );
@@ -62,7 +68,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages = locales.flatMap((lang) =>
     paths.map(({ path, priority }) => ({
       url: `${base}/${lang}${path}`,
-        changeFrequency: "monthly" as const,
+      changeFrequency: "monthly" as const,
       priority,
       alternates: {
         languages: Object.fromEntries(

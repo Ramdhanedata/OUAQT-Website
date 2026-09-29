@@ -1,3 +1,4 @@
+import { localisedAlternatesFor } from "@/lib/i18n/metadata";
 import { pageMetadata } from "@/lib/seo/page-metadata";
 import { packs, type Pack } from "@/app-ui/packs";
 import { Builder } from "@/builder/ui/builder";
@@ -9,7 +10,6 @@ import { cookies } from "next/headers";
 import { getBuilderCopy } from "@/builder/copy";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
-import { localisedHref } from "@/lib/i18n/routes";
 import { locales } from "@/lib/i18n/config";
 import type { Metadata } from "next";
 
@@ -29,12 +29,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return pageMetadata(params.lang, dict, {
     title: `${copy.landing.title} | ${dict.common.brand}`,
     description: copy.landing.intro,
-    alternates: {
-      canonical: localisedHref(params.lang, "builder"),
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, localisedHref(locale, "builder")])
-      ) as Record<Locale, string>,
-    },
+    alternates: localisedAlternatesFor(params.lang, "builder"),
   });
 }
 
