@@ -126,7 +126,7 @@ export const fr: Dictionary = {
     renewal:
       "La licence se renouvelle d'elle-même chaque année. Vous pouvez l'arrêter avant la date de renouvellement.",
     lateRenewal:
-      "Si la licence n'est pas renouvelée, le logiciel s'arrête à la fin de la période payée, jusqu'au début d'un nouvel abonnement. Vos données ne sont jamais effacées.",
+      "Si la licence n'est pas renouvelée, le logiciel continue de fonctionner {graceDays} jours après la fin de la période payée, puis s'arrête jusqu'au début d'un nouvel abonnement. Vos données ne sont jamais effacées.",
     contact: "Nous contacter",
     whatsapp: "WhatsApp",
     products: "Ces tarifs valent pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, les ateliers et les dépôts.",
@@ -196,7 +196,7 @@ export const fr: Dictionary = {
         },
         {
           q: "Que se passe-t-il si je ne renouvelle pas ?",
-          a: "Votre abonnement court jusqu'à la fin de la période payée. À son expiration, le logiciel cesse de fonctionner jusqu'au début d'un nouvel abonnement. Vos données ne sont jamais effacées : elles restent sur votre ordinateur, et tout se rouvre dès que vous renouvelez.",
+          a: "Votre abonnement court jusqu'à la fin de la période payée. Vous disposez ensuite de {graceDays} jours pendant lesquels le logiciel continue de fonctionner, avec un rappel quotidien pour renouveler. Si aucun nouvel abonnement n'a commencé d'ici là, le logiciel cesse de fonctionner jusqu'au renouvellement. Vos données ne sont jamais effacées : elles restent sur votre ordinateur, et tout se rouvre dès que vous payez.",
         },
         {
           q: "Puis-je payer en plusieurs fois ?",
@@ -239,7 +239,7 @@ export const fr: Dictionary = {
       },
       grace: {
         h: "Si le renouvellement est payé en retard",
-        b: "Votre licence ne s'arrête pas le jour de son échéance. Vous disposez de {graceDays} jours pendant lesquels le logiciel continue de fonctionner normalement, avec un rappel quotidien pour payer sur ce site. Passé ce délai, le logiciel passe en lecture seule, comme à la fin d'un essai. Dès que le paiement est confirmé, tout se rouvre immédiatement. Vos données ne sont jamais effacées, quel que soit le retard.",
+        b: "Votre licence ne s'arrête pas le jour de son échéance. Vous disposez de {graceDays} jours pendant lesquels le logiciel continue de fonctionner normalement, avec un rappel quotidien pour payer sur ce site. Si aucun nouvel abonnement n'a commencé d'ici là, le logiciel cesse de fonctionner. Dès que le paiement est confirmé, tout se rouvre immédiatement. Vos données ne sont jamais effacées, quel que soit le retard.",
       },
       devices: {
         h: "Vos postes",
@@ -279,7 +279,7 @@ export const fr: Dictionary = {
       },
       termination: {
         h: "Retard de renouvellement et fin de la licence",
-        b: "Si la licence annuelle est renouvelée en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués. La licence peut aussi prendre fin si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement. Dans tous les cas, nous vous remettons une copie complète de vos données.",
+        b: "Si la licence annuelle n'est pas renouvelée, le logiciel continue de fonctionner {graceDays} jours après sa date de fin, puis cesse de fonctionner jusqu'au renouvellement. Vos données ne sont jamais effacées. La licence peut aussi prendre fin si ces conditions sont gravement enfreintes et que la situation n'est pas corrigée après notre signalement. Dans tous les cas, nous vous remettons une copie complète de vos données.",
       },
       commonPart: {
         h: "Troisième partie : ce qui vaut dans les deux cas",

@@ -341,10 +341,10 @@ export const fr = {
     trialOver: "Votre essai est terminé. Le logiciel est arrêté jusqu'au paiement ; tout ce que vous avez enregistré reste sur votre ordinateur. Dès le paiement, il se rouvre tout seul.",
     active: "Licence active jusqu'au {date}.",
     renewalDue: {
-      one: "Votre licence a pris fin. Il vous reste {count} jour avant que le logiciel passe en lecture seule.",
-      other: "Votre licence a pris fin. Il vous reste {count} jours avant que le logiciel passe en lecture seule.",
+      one: "Votre licence a pris fin. Il vous reste {count} jour avant que le logiciel cesse de fonctionner.",
+      other: "Votre licence a pris fin. Il vous reste {count} jours avant que le logiciel cesse de fonctionner.",
     },
-    expired: "Votre licence a pris fin. Le logiciel garde tout ce que vous avez enregistré, mais n'accepte plus de nouvelles ventes. Dès le paiement, tout se rouvre.",
+    expired: "Votre licence a pris fin. Le logiciel est arrêté jusqu'au paiement ; tout ce que vous avez enregistré reste sur votre ordinateur. Dès le paiement, il se rouvre tout seul.",
     suspended: "Votre licence est suspendue. Écrivez-nous sur WhatsApp.",
     pending: "Paiement reçu, en cours de vérification. Dès qu'il est confirmé, votre logiciel fonctionne normalement, sans rien faire de votre côté.",
     rejected: "Votre dernier paiement n'a pas pu être validé.",

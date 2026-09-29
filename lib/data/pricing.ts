@@ -183,12 +183,17 @@ export function formatPercent(value: number, locale: Locale): string {
 }
 
 /** Values the pricing copy interpolates, so no term is typed into a translation. */
-export function pricingTerms(locale: Locale): Record<string, string | number> {
+/* Settings, when given, supply the renewal grace the software actually allows. */
+export function pricingTerms(
+  locale: Locale,
+  settings: PublicSettings | null = null
+): Record<string, string | number> {
   return {
     clients: pricing.launchOffer.clients,
     years: pricing.launchOffer.freezeYears,
     devices: pricing.devicesIncluded,
     months: pricing.perpetualServiceMonths,
+    graceDays: builderTerms(settings).graceDays,
     rate: formatPercent(pricing.bespoke.maintenancePercent, locale),
     month: pricing.bespoke.maintenanceFromMonth,
   };

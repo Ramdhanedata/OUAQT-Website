@@ -135,7 +135,7 @@ export const en = {
     renewal:
       "The licence renews automatically each year unless you cancel it before the renewal date.",
     lateRenewal:
-      "If the licence is not renewed, the software stops at the end of the period you paid for, until a new subscription begins. Your data is never deleted.",
+      "If the licence is not renewed, the software keeps working for {graceDays} days after the end of the period you paid for, then stops working until a new subscription begins. Your data is never deleted.",
     contact: "Contact us",
     whatsapp: "WhatsApp",
     products: "Current pricing covers systems for {pharmacy}, {hotel}, {transport}, {restaurant}, bakeries, as well as workshop and warehouse management systems.",
@@ -205,7 +205,7 @@ export const en = {
         },
         {
           q: "What happens if I do not renew?",
-          a: "Your subscription runs until the end of the period you paid for. When it expires, the software stops working until a new subscription begins. Your data is never deleted: it stays on your computer, and everything opens again as soon as you renew.",
+          a: "Your subscription runs until the end of the period you paid for. After that you have {graceDays} more days during which the software keeps working, with a daily reminder to renew. If no new subscription has begun by then, the software stops working until you renew. Your data is never deleted: it stays on your computer, and everything opens again as soon as you pay.",
         },
         {
           q: "Can I pay in instalments?",
@@ -248,7 +248,7 @@ export const en = {
       },
       grace: {
         h: "If a renewal is paid late",
-        b: "Your licence does not stop on its due date. You have {graceDays} days during which the software keeps working normally, with a daily reminder to pay on this site. After that the software turns read-only, as at the end of a trial. As soon as the payment is confirmed, everything opens again immediately. Your data is never deleted, however late the payment.",
+        b: "Your licence does not stop on its due date. You have {graceDays} days during which the software keeps working normally, with a daily reminder to pay on this site. If no new subscription has begun by then, the software stops working. As soon as the payment is confirmed, everything opens again immediately. Your data is never deleted, however late the payment.",
       },
       devices: {
         h: "Your devices",
@@ -288,7 +288,7 @@ export const en = {
       },
       termination: {
         h: "Late renewal and the end of the licence",
-        b: "If the annual licence is renewed late, entering new data is suspended until payment. Reading and exporting your data is never blocked. The licence can also end if these terms are seriously breached and the situation is not put right after we raise it. In every case, we hand you a full copy of your data.",
+        b: "If the annual licence is not renewed, the software keeps working for {graceDays} days after its end date, then stops working until it is renewed. Your data is never deleted. The licence can also end if these terms are seriously breached and the situation is not put right after we raise it. In every case, we hand you a full copy of your data.",
       },
       commonPart: {
         h: "Part three: what applies in both cases",

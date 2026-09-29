@@ -40,8 +40,8 @@ export default async function PricingPage(props: Props) {
   const params = await props.params;
   const dict = getDictionary(params.lang);
   const p = dict.pricingPage;
-  const terms = pricingTerms(params.lang);
   const settings = await getPublicSettings();
+  const terms = pricingTerms(params.lang, settings);
   const offer = await getLaunchOffer();
 
   return (
@@ -88,7 +88,7 @@ export default async function PricingPage(props: Props) {
         </Container>
       </Section>
 
-      <PriceBook dict={dict} lang={params.lang} />
+      <PriceBook dict={dict} lang={params.lang} settings={settings} />
       <Bespoke dict={dict} lang={params.lang} />
       <Perpetual dict={dict} lang={params.lang} />
       <Coverage dict={dict} lang={params.lang} />
