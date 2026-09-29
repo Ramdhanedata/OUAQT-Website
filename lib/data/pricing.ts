@@ -66,7 +66,7 @@ export const pricing: PriceBook = {
   annualLicence: { standard: 18_000, launch: 15_000 },
   extraDevice: { standard: 8_000, launch: 6_000 },
   perpetualLicence: { standard: 110_000, launch: 95_000 },
-  devicesIncluded: 3,
+  devicesIncluded: 2,
   perpetualServiceMonths: 12,
   bespoke: {
     maintenancePercent: 18,
@@ -188,7 +188,6 @@ export function pricingTerms(locale: Locale): Record<string, string | number> {
     clients: pricing.launchOffer.clients,
     years: pricing.launchOffer.freezeYears,
     devices: pricing.devicesIncluded,
-    builderDevices: builderListedTerms.devices,
     months: pricing.perpetualServiceMonths,
     rate: formatPercent(pricing.bespoke.maintenancePercent, locale),
     month: pricing.bespoke.maintenanceFromMonth,

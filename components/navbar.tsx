@@ -12,7 +12,7 @@ import { getBuilderCopy } from "@/builder/copy";
 import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ReactNode, useEffect, useState } from "react";
+import { MouseEvent, ReactNode, useEffect, useState } from "react";
 
 /* Only the groups it reads: a client component's props travel to every page. */
 export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common">; lang: Locale }) {
@@ -24,6 +24,18 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
   const builder = {
     href: localisedHref(lang, "builder"),
     label: getBuilderCopy(lang).nav,
+  };
+
+  /*
+   * Inside the builder the button points at the page already open, so a
+   * client navigation does nothing and the owner thinks it is broken. There
+   * it reloads instead, which brings back the builder's first page; his
+   * answers are kept in the draft and "continue" picks them up.
+   */
+  const reloadBuilder = (event: MouseEvent<HTMLAnchorElement>) => {
+    if (pathname !== builder.href) return;
+    event.preventDefault();
+    window.location.assign(builder.href);
   };
 
   /*
@@ -95,6 +107,7 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
           <LanguageSwitcher locale={lang} label={dict.nav.language} />
           <Button
             href={builder.href}
+            onClick={reloadBuilder}
             variant="accent"
             className="whitespace-nowrap text-sm"
           >
@@ -135,6 +148,7 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
               <div className="mt-2 px-3">
                 <Button
                   href={builder.href}
+                  onClick={reloadBuilder}
                   variant="accent"
                   className="w-full justify-center text-sm"
                 >

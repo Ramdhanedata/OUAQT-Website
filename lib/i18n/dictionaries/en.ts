@@ -135,7 +135,7 @@ export const en = {
     renewal:
       "The licence renews automatically each year unless you cancel it before the renewal date.",
     lateRenewal:
-      "If a renewal is paid late, entering new data is paused until it is paid. Reading and exporting the data you already have is never blocked.",
+      "If the licence is not renewed, the software stops at the end of the period you paid for, until a new subscription begins. Your data is never deleted.",
     contact: "Contact us",
     whatsapp: "WhatsApp",
     products: "Current pricing covers systems for {pharmacy}, {hotel}, {transport}, {restaurant}, bakeries, as well as workshop and warehouse management systems.",
@@ -197,7 +197,7 @@ export const en = {
         },
         {
           q: "On how many computers can I install it, and what happens if a machine breaks or is replaced?",
-          a: "Software you build yourself runs on {builderDevices} computers. A project we install covers up to {devices} at the same site. Either way, each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
+          a: "Up to {devices} at the same site, whether you build the software yourself or we install it, and each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
         },
         {
           q: "Where is my data stored?",
@@ -205,7 +205,7 @@ export const en = {
         },
         {
           q: "What happens if I do not renew?",
-          a: "Entering new data is suspended, and updates and support stop. You can always read and export everything already recorded.",
+          a: "Your subscription runs until the end of the period you paid for. When it expires, the software stops working until a new subscription begins. Your data is never deleted: it stays on your computer, and everything opens again as soon as you renew.",
         },
         {
           q: "Can I pay in instalments?",

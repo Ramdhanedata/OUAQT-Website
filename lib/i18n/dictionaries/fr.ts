@@ -126,7 +126,7 @@ export const fr: Dictionary = {
     renewal:
       "La licence se renouvelle d'elle-même chaque année. Vous pouvez l'arrêter avant la date de renouvellement.",
     lateRenewal:
-      "Si le renouvellement est payé en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués.",
+      "Si la licence n'est pas renouvelée, le logiciel s'arrête à la fin de la période payée, jusqu'au début d'un nouvel abonnement. Vos données ne sont jamais effacées.",
     contact: "Nous contacter",
     whatsapp: "WhatsApp",
     products: "Ces tarifs valent pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, les ateliers et les dépôts.",
@@ -188,7 +188,7 @@ export const fr: Dictionary = {
         },
         {
           q: "Sur combien d'ordinateurs puis-je l'installer, et que se passe-t-il si une machine tombe en panne ou est remplacée ?",
-          a: "Le logiciel que vous créez vous-même tourne sur {builderDevices} ordinateurs. Un projet que nous installons couvre {devices} postes au maximum, sur le même site. Dans les deux cas, chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
+          a: "Sur {devices} postes au maximum, sur le même site, que vous créiez le logiciel vous-même ou que nous l'installions, et chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
         },
         {
           q: "Où sont stockées mes données ?",
@@ -196,7 +196,7 @@ export const fr: Dictionary = {
         },
         {
           q: "Que se passe-t-il si je ne renouvelle pas ?",
-          a: "La saisie de nouvelles données est suspendue, et les mises à jour et l'assistance s'arrêtent. Vous pouvez toujours consulter et exporter tout ce qui est déjà enregistré.",
+          a: "Votre abonnement court jusqu'à la fin de la période payée. À son expiration, le logiciel cesse de fonctionner jusqu'au début d'un nouvel abonnement. Vos données ne sont jamais effacées : elles restent sur votre ordinateur, et tout se rouvre dès que vous renouvelez.",
         },
         {
           q: "Puis-je payer en plusieurs fois ?",

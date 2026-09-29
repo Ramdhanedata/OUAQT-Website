@@ -46,9 +46,17 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           <ul className="mt-4 space-y-3">
             {product.map((item) => (
               <li key={item.href}>
-                <Link href={item.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
-                  {item.label}
-                </Link>
+                {item.href === localisedHref(lang, "builder") ? (
+                  /* A full load, so it also works from inside the builder, where a client link to the same page does nothing. */
+                  // eslint-disable-next-line @next/next/no-html-link-for-pages -- a full load on purpose, see above
+                  <a href={item.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                    {item.label}
+                  </a>
+                ) : (
+                  <Link href={item.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                    {item.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>
