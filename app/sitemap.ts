@@ -9,6 +9,9 @@ import { localisedHref, packRouteId } from "@/lib/i18n/routes";
  * Lists every localised page so search engines can find all of them, and
  * declares the language alternates for each so they are understood as
  * translations rather than duplicates.
+ *
+ * No lastModified: stamping every page with the time of the request tells
+ * Google the dates are meaningless, and it then ignores them for good.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = siteUrl();
@@ -30,7 +33,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
    */
   const builder = locales.map((lang) => ({
     url: `${base}${localisedHref(lang, "builder")}`,
-    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority: 0.9,
     alternates: {
@@ -47,8 +49,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const tradePages = packs.flatMap((pack) =>
     locales.map((lang) => ({
       url: `${base}${localisedHref(lang, packRouteId(pack))}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
+        changeFrequency: "monthly" as const,
       priority: 0.9,
       alternates: {
         languages: Object.fromEntries(
@@ -61,8 +62,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const pages = locales.flatMap((lang) =>
     paths.map(({ path, priority }) => ({
       url: `${base}/${lang}${path}`,
-      lastModified: new Date(),
-      changeFrequency: "monthly" as const,
+        changeFrequency: "monthly" as const,
       priority,
       alternates: {
         languages: Object.fromEntries(

@@ -4,13 +4,13 @@
  */
 export const en = {
   meta: {
-    siteTitle: "OUAQT | Management software for small businesses, ready in minutes",
-    siteDescription: "With the OUAQT Builder, small and medium-sized businesses build their own till, stock and reporting software in minutes. It works without internet and your data stays with you.",
-    projectsTitle: "Custom work: 22 systems in daily use | OUAQT",
+    siteTitle: "OUAQT | Business management and POS software in Mauritania",
+    siteDescription: "Till, stock and management software for shops and small businesses in Mauritania, built online in minutes. Pharmacy, shop, restaurant, hotel. Works without internet.",
+    projectsTitle: "Custom software in Mauritania: 22 systems in daily use | OUAQT",
     projectsDescription: "Mines, pharmacies, hotels, transport, restaurants and schools: the systems we built to order, and what each one changed.",
-    aboutTitle: "About OUAQT and its founder",
+    aboutTitle: "About OUAQT, a software company in Nouakchott",
     aboutDescription: "OUAQT is a startup that equips small and medium-sized businesses with management software: the online Builder, and custom projects. Founded by Elboumby Aumar Ramdhane.",
-    contactTitle: "Contact | OUAQT",
+    contactTitle: "Contact: business software in Nouakchott | OUAQT",
     contactDescription: "A question about the Builder, a demo or a custom project: write to us. We usually reply within one business day, by email or on WhatsApp.",
     termsTitle: "Licence and terms of use | OUAQT",
     termsDescription:
@@ -18,7 +18,7 @@ export const en = {
     privacyTitle: "Privacy policy | OUAQT",
     privacyDescription:
       "What OUAQT does with personal information, on this website and inside the systems we build.",
-    pricingTitle: "Pricing: the Builder and custom projects | OUAQT",
+    pricingTitle: "Business and POS software pricing in Mauritania | OUAQT",
     pricingDescription:
       "Every OUAQT price in one place: the software you build online, then installation and the annual licence for custom projects.",
     shareAlt: "OUAQT: management software for small businesses, built in minutes with the Builder.",

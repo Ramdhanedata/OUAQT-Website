@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo/page-metadata";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -21,11 +22,11 @@ type Props = { params: Promise<{ lang: Locale }> };
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
   const dict = getDictionary(params.lang);
-  return {
+  return pageMetadata(params.lang, dict, {
     title: dict.meta.pricingTitle,
     description: dict.meta.pricingDescription,
     alternates: alternatesFor(params.lang, "/pricing"),
-  };
+  });
 }
 
 /*
