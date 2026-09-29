@@ -2,13 +2,13 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "OUAQT | Le logiciel de gestion des PME, prêt en quelques minutes",
-    siteDescription: "Avec le Builder d'OUAQT, les petites et moyennes entreprises créent en quelques minutes leur logiciel de caisse, de stock et de rapports. Il fonctionne sans internet et vos données restent chez vous.",
-    projectsTitle: "Réalisations sur mesure : 22 systèmes en service | OUAQT",
+    siteTitle: "OUAQT | Logiciel de gestion et de caisse pour PME en Mauritanie",
+    siteDescription: "Logiciel de caisse, de stock et de gestion pour les commerces et PME en Mauritanie, créé en ligne en quelques minutes. Pharmacie, boutique, restaurant, hôtel. Fonctionne sans internet.",
+    projectsTitle: "Logiciels sur mesure en Mauritanie : 22 systèmes en service | OUAQT",
     projectsDescription: "Mines, pharmacies, hôtels, transport, restaurants et écoles : les systèmes que nous avons construits sur mesure, et ce que chacun a changé.",
-    aboutTitle: "À propos d'OUAQT et de son fondateur",
+    aboutTitle: "À propos d'OUAQT, éditeur de logiciels à Nouakchott",
     aboutDescription: "OUAQT est une startup qui équipe les PME d'un logiciel de gestion : le Builder en ligne, et des projets sur mesure. Fondée par Elboumby Aumar Ramdhane.",
-    contactTitle: "Contact | OUAQT",
+    contactTitle: "Contact : logiciel de gestion à Nouakchott | OUAQT",
     contactDescription: "Une question sur le Builder, une démonstration ou un projet sur mesure : écrivez-nous. Réponse en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
     termsDescription:
@@ -16,7 +16,7 @@ export const fr: Dictionary = {
     privacyTitle: "Politique de confidentialité | OUAQT",
     privacyDescription:
       "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
-    pricingTitle: "Tarifs : le Builder et les projets sur mesure | OUAQT",
+    pricingTitle: "Prix du logiciel de gestion et de caisse en Mauritanie | OUAQT",
     pricingDescription:
       "Les tarifs OUAQT au même endroit : le logiciel que vous créez en ligne, puis l'installation et la licence annuelle des projets sur mesure.",
     shareAlt: "OUAQT : le logiciel de gestion des PME, créé en quelques minutes avec le Builder.",

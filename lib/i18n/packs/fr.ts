@@ -26,7 +26,7 @@ export const packPagesFr: PackPagesCopy = {
   },
 
   pharmacy: {
-    title: "Logiciel de gestion pour pharmacie, créé en ligne | OUAQT",
+    title: "Logiciel de gestion de pharmacie en Mauritanie | OUAQT",
     description:
       "Créez le logiciel de votre pharmacie en répondant à quelques questions. Péremption, numéros de lot, vente à la boîte ou à la plaquette, crédit clients. Il fonctionne sans internet.",
     heading: "Le logiciel de votre pharmacie, fait à votre façon de travailler",
@@ -84,7 +84,7 @@ export const packPagesFr: PackPagesCopy = {
   },
 
   restaurant: {
-    title: "Logiciel de caisse pour restaurant | OUAQT",
+    title: "Logiciel de caisse pour restaurant en Mauritanie | OUAQT",
     description:
       "Le logiciel de caisse de votre restaurant : les tables, les commandes qui restent ouvertes pendant le repas, le ticket de cuisine et l'addition.",
     heading: "Le logiciel de caisse de votre restaurant",
@@ -141,7 +141,7 @@ export const packPagesFr: PackPagesCopy = {
   },
 
   bakery: {
-    title: "Logiciel de gestion pour boulangerie | OUAQT",
+    title: "Logiciel de gestion de boulangerie en Mauritanie | OUAQT",
     description:
       "Le logiciel de votre boulangerie : la production du jour, les commandes à l'avance avec acompte, la vente au comptoir et le crédit des habitués.",
     heading: "Le logiciel de votre boulangerie",
@@ -198,7 +198,7 @@ export const packPagesFr: PackPagesCopy = {
   },
 
   warehouse: {
-    title: "Logiciel de gestion de stock pour dépôt | OUAQT",
+    title: "Logiciel de gestion de stock en Mauritanie | OUAQT",
     description:
       "Le logiciel de votre dépôt : les entrées, les sorties, plusieurs emplacements, et un stock qui se tient tout seul.",
     heading: "Le logiciel de gestion de stock de votre dépôt",
@@ -256,7 +256,7 @@ export const packPagesFr: PackPagesCopy = {
 
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   shop: {
-    title: "Logiciel de caisse pour boutique et épicerie | OUAQT",
+    title: "Logiciel de caisse boutique et épicerie en Mauritanie | OUAQT",
     description: "Le logiciel de caisse de votre boutique : vente au code-barres ou en cases, stock, crédit des clients, caisse du soir.",
     heading: "Le logiciel de caisse de votre boutique",
     intro: "Vous scannez ou vous touchez l'article, le client paie, le stock baisse tout seul. Le crédit des habitués et la caisse du soir sont au même endroit. Sur votre ordinateur, sans internet.",
@@ -304,7 +304,7 @@ export const packPagesFr: PackPagesCopy = {
   },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   hotel: {
-    title: "Logiciel de gestion pour hôtel et auberge | OUAQT",
+    title: "Logiciel de gestion d'hôtel en Mauritanie | OUAQT",
     description: "Le logiciel de votre hôtel : le tableau des chambres, les réservations, l'arrivée et le départ, les extras sur la note.",
     heading: "Le logiciel de gestion de votre hôtel",
     intro: "Vos chambres sur un seul écran, libres, occupées ou à nettoyer. La réservation, l'arrivée, les extras, et la note au départ. Sur l'ordinateur de la réception, sans internet.",
@@ -352,7 +352,7 @@ export const packPagesFr: PackPagesCopy = {
   },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   transport: {
-    title: "Logiciel pour compagnie de transport et envoi de colis | OUAQT",
+    title: "Logiciel de transport et colis en Mauritanie | OUAQT",
     description: "Le logiciel de votre compagnie de transport : les départs, les billets par place, les colis avec leur code, la liste des passagers.",
     heading: "Le logiciel de votre compagnie de transport",
     intro: "Les départs du jour, les places vendues, les colis reçus et remis. Chaque billet et chaque colis est payé et noté. Sur l'ordinateur du guichet, sans internet.",
@@ -400,7 +400,7 @@ export const packPagesFr: PackPagesCopy = {
   },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   general: {
-    title: "Logiciel de ventes, stock et rapports pour toute activité | OUAQT",
+    title: "Logiciel de gestion commerciale en Mauritanie | OUAQT",
     description: "Un logiciel simple pour toute activité : les ventes, le stock si vous en avez, les dépenses, et les rapports du jour et du mois.",
     heading: "Ventes, stock et rapports, pour votre activité",
     intro: "Un salon, un atelier, une société de services, un petit commerce : vous vendez, vous notez vos dépenses, et vous voyez ce que la journée et le mois ont rapporté. Vous gardez seulement ce qui vous sert.",

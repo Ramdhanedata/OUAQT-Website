@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo/page-metadata";
 import { packs, type Pack } from "@/app-ui/packs";
 import { Builder } from "@/builder/ui/builder";
 import { builderTerms } from "@/lib/data/pricing";
@@ -25,7 +26,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
   const copy = getBuilderCopy(params.lang);
   const dict = getDictionary(params.lang);
-  return {
+  return pageMetadata(params.lang, dict, {
     title: `${copy.landing.title} | ${dict.common.brand}`,
     description: copy.landing.intro,
     alternates: {
@@ -34,7 +35,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
         locales.map((locale) => [locale, localisedHref(locale, "builder")])
       ) as Record<Locale, string>,
     },
-  };
+  });
 }
 
 /*

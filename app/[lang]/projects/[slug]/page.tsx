@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo/page-metadata";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
@@ -42,13 +43,13 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const dict = getDictionary(params.lang);
   const copy = dict.projects[project.slug];
 
-  return {
+  return pageMetadata(params.lang, dict, {
     // The visible heading tells the story; the search result has to earn the
     // click in sixty characters, so each case study carries its own pair.
     title: `${copy.metaTitle} | ${dict.common.brand}`,
     description: copy.metaDescription,
     alternates: alternatesFor(params.lang, `/projects/${project.slug}`),
-  };
+  });
 }
 
 export default async function ProjectDetailPage(props: Props) {

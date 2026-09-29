@@ -1,3 +1,4 @@
+import { pageMetadata } from "@/lib/seo/page-metadata";
 import { LegalPage } from "@/components/legal/legal-page";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
@@ -9,11 +10,11 @@ type Props = { params: Promise<{ lang: Locale }> };
 export async function generateMetadata(props: Props): Promise<Metadata> {
   const params = await props.params;
   const dict = getDictionary(params.lang);
-  return {
+  return pageMetadata(params.lang, dict, {
     title: dict.meta.privacyTitle,
     description: dict.meta.privacyDescription,
     alternates: alternatesFor(params.lang, "/privacy"),
-  };
+  });
 }
 
 export default async function PrivacyPage(props: Props) {

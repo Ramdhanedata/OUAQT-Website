@@ -10,6 +10,9 @@ import { alternatesFor, siteUrl } from "@/lib/i18n/metadata";
 import { organization } from "@/lib/data/contact";
 import { founder } from "@/lib/data/founder";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/seo/json-ld";
+import { pageMetadata } from "@/lib/seo/page-metadata";
+import { seoKeywords } from "@/lib/seo/keywords";
 
 /*
  * Source Serif 4 stands in for a transitional serif in the style of
@@ -62,43 +65,31 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   const dict = getDictionary(lang);
 
   return {
-    title: dict.meta.siteTitle,
-    description: dict.meta.siteDescription,
+    ...pageMetadata(lang, dict, {
+      title: dict.meta.siteTitle,
+      description: dict.meta.siteDescription,
+      alternates: alternatesFor(lang, "/"),
+    }),
     metadataBase: new URL(siteUrl()),
+    applicationName: dict.common.brand,
+    /*
+     * Google ignores this tag; Bing and Yandex still read it a little. The
+     * words that rank are the ones in titles, headings and body copy.
+     */
+    keywords: [...seoKeywords[lang]],
     /*
      * Google Search Console ownership check. Set GOOGLE_SITE_VERIFICATION in
      * Vercel to the content value of the HTML tag Search Console gives you,
      * then redeploy. The value is public by design; it is not a secret.
+     * BING_SITE_VERIFICATION does the same for Bing Webmaster Tools.
      */
-    verification: process.env.GOOGLE_SITE_VERIFICATION
-      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
-      : undefined,
-    alternates: alternatesFor(lang, "/"),
-    /*
-     * Link previews on WhatsApp, Facebook and X use a picture per language,
-     * built by scripts/make-share-images.mjs from the dictionaries.
-     */
-    openGraph: {
-      title: dict.meta.siteTitle,
-      description: dict.meta.siteDescription,
-      url: `${siteUrl()}/${lang}`,
-      siteName: dict.common.brand,
-      locale: lang,
-      type: "website",
-      images: [
-        {
-          url: `/og/${lang}.png`,
-          width: 1200,
-          height: 630,
-          alt: dict.meta.shareAlt,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: dict.meta.siteTitle,
-      description: dict.meta.siteDescription,
-      images: [`/og/${lang}.png`],
+    verification: {
+      ...(process.env.GOOGLE_SITE_VERIFICATION
+        ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+        : {}),
+      ...(process.env.BING_SITE_VERIFICATION
+        ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
+        : {}),
     },
   };
 }
@@ -117,11 +108,10 @@ export default async function RootLayout(props: Props) {
   const rtl = isRtl(lang);
 
   /*
-   * Structured data describing the business for search engines. OUAQT works
-   * with businesses across the region, on site or remotely, so this is an
-   * Organization with no address or service area that would pin it to one
-   * city. Contact details, languages and what it works on are included.
-   * Only verified links go in sameAs.
+   * Structured data describing the business for search engines: an
+   * Organization with its head office in Nouakchott, as the site states, and
+   * Mauritania as the country it serves. Contact details, languages and what
+   * it works on are included. Only verified links go in sameAs.
    */
   const base = siteUrl();
   const businessData = {
@@ -143,6 +133,12 @@ export default async function RootLayout(props: Props) {
       email: organization.email,
       availableLanguage: ["French", "Arabic", "English"],
     },
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Nouakchott",
+      addressCountry: "MR",
+    },
+    areaServed: { "@type": "Country", name: "Mauritania" },
     knowsLanguage: ["fr", "ar", "en"],
     knowsAbout: [
       "Business process bottlenecks",
@@ -155,6 +151,21 @@ export default async function RootLayout(props: Props) {
     ],
     founder: { "@type": "Person", name: founder.name },
     sameAs: [organization.linkedin],
+  };
+
+  /*
+   * Names the site for Google, which otherwise shows the bare domain
+   * ("ouaqt.com") above each result instead of "OUAQT".
+   */
+  const websiteData = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": `${base}/#website`,
+    name: "OUAQT",
+    alternateName: ["وقت", "ouaqt.com"],
+    url: `${base}/`,
+    inLanguage: lang,
+    publisher: { "@id": `${base}/#business` },
   };
 
   return (
@@ -185,6 +196,7 @@ export default async function RootLayout(props: Props) {
             __html: JSON.stringify(businessData).replace(/</g, "\\u003c"),
           }}
         />
+        <JsonLd data={websiteData} />
         <Navbar dict={{ nav: dict.nav, common: dict.common }} lang={lang} />
         <main className="min-h-screen pt-16 sm:pt-20">
           <PageTransition>{children}</PageTransition>
