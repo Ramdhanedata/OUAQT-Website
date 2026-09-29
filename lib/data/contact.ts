@@ -12,16 +12,9 @@ export const organization = {
 
   linkedin: "https://www.linkedin.com/company/ouaqt/",
 
-  /*
-   * TODO(adel): please double check this one. You sent a Facebook share link
-   * full of tracking parameters (mibextid, rdid, share_url). Stripping those
-   * leaves the handle below, but "ngoulk.something" looks unusual for a page
-   * URL, so open it once and confirm it lands on the OUAQT page. The share
-   * link also pointed at facebook.com/share/1bF8Lx5ps8/ if this one is wrong.
-   */
-  facebook: "https://www.facebook.com/ngoulk.something",
+  facebook: "https://www.facebook.com/ouaqt",
 
-  // Headquarters. Shown on the site; deliberately left out of search structured data.
+  // Headquarters. Shown on the site, and the Organization's address in search structured data.
   location: "Nouakchott, Mauritania",
 };
 
