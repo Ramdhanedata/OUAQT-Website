@@ -1,19 +1,19 @@
 import { Container } from "@/components/ui/container";
 import type { Dictionary } from "@/lib/i18n";
+import { fill } from "@/lib/utils";
 
 /*
  * Four facts under the hero: how long the Builder takes, that it needs no
- * internet, where the figures end up, and how much software we already run
- * for clients. The last one is the custom work's, and it is what tells a
- * business owner meeting a young company that it has done this before.
+ * internet, where the figures end up, and how long it can be tried for
+ * nothing. The trial's length is the setting's, never a number written here.
  */
-export function BuilderImpact({ dict }: { dict: Dictionary }) {
+export function BuilderImpact({ dict, trialDays }: { dict: Dictionary; trialDays: number | null }) {
   const home = dict.builderHome;
   const facts = [
     { value: home.impactMinutes, label: home.impactMinutesLabel },
     { value: home.impactOffline, label: home.impactOfflineLabel },
     { value: home.impactData, label: home.impactDataLabel },
-    { value: home.impactSystems, label: home.impactSystemsLabel },
+    { value: trialDays ? fill(home.impactTrial, { days: trialDays }) : home.impactTrialNoDays, label: home.impactTrialLabel },
   ];
 
   return (

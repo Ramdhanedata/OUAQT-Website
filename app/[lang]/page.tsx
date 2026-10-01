@@ -57,7 +57,7 @@ export default async function Home(props: { params: Promise<{ lang: Locale }> })
     <>
       <JsonLd data={softwareApplicationData(params.lang, dict)} />
       <BuilderHero dict={dict} lang={params.lang} trialDays={builderTerms(settings).trialDays} />
-      <BuilderImpact dict={dict} />
+      <BuilderImpact dict={dict} trialDays={builderTerms(settings).trialDays} />
       <BuilderProduct dict={dict} lang={params.lang} demoPacks={enabled.length > 0 ? enabled : [...packs]} />
       <Features dict={dict} />
       <Trades dict={{ builderHome: dict.builderHome, packLabels: dict.packLabels }} enabledPacks={enabled} packHrefs={packHrefs} packPages={packPages} />

@@ -5,7 +5,7 @@
 export const en = {
   meta: {
     siteTitle: "OUAQT | Business management and POS software in Mauritania",
-    siteDescription: "Till, stock and management software for shops and small businesses in Mauritania, built online in minutes. Pharmacy, shop, restaurant, hotel. Works without internet.",
+    siteDescription: "Till, stock and management software for shops and small and medium businesses in Mauritania, built online in minutes. Pharmacy, shop, restaurant, hotel. Works without internet.",
     projectsTitle: "Custom software in Mauritania: 22 systems in daily use | OUAQT",
     projectsDescription: "Mines, pharmacies, hotels, transport, restaurants and schools: the systems we built to order, and what each one changed.",
     aboutTitle: "About OUAQT, a software company in Nouakchott",
@@ -21,7 +21,7 @@ export const en = {
     pricingTitle: "Business and POS software pricing in Mauritania | OUAQT",
     pricingDescription:
       "Every OUAQT price in one place: the software you build online, then installation and the annual licence for custom projects.",
-    shareAlt: "OUAQT: management software for small businesses, built in minutes with the Builder.",
+    shareAlt: "OUAQT: management software for small and medium businesses, built in minutes with the Builder.",
   },
 
   /*
@@ -398,7 +398,7 @@ export const en = {
 
   about: {
     eyebrow: "About OUAQT",
-    heading: "A startup that equips small businesses with software made to measure.",
+    heading: "A startup that equips small and medium businesses with software made to measure.",
     body1:
       "We built bespoke systems one client at a time: mining, pharmacies, hotels, transport, restaurants, schools. Every time, the same scene. A solid business, a team that knows what it is doing, and the most important work of the day resting on paper, spreadsheets and WhatsApp groups.",
     body2:
@@ -472,8 +472,9 @@ export const en = {
     impactOfflineLabel: "needed for the everyday work",
     impactData: "Your data",
     impactDataLabel: "stays on your computers",
-    impactSystems: "22 systems",
-    impactSystemsLabel: "in daily use at our clients",
+    impactTrial: "{days} days free",
+    impactTrialNoDays: "Free trial",
+    impactTrialLabel: "to try everything, with nothing to pay",
 
     builderEyebrow: "The Builder",
     builderHeading: "The Builder makes your software from your answers.",
@@ -549,7 +550,7 @@ export const en = {
     tradesError: "Your number did not go through. Try again, or write to us on WhatsApp.",
 
     whyEyebrow: "Why OUAQT",
-    whyHeading: "Made for local small businesses, and for the way they work.",
+    whyHeading: "Made for local small and medium businesses, and for the way they work.",
     why: [
       { title: "No internet needed", body: "The software works on your computers. Internet is only for installing, updating and paying for the licence." },
       { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts never leave your computers. We never receive them." },

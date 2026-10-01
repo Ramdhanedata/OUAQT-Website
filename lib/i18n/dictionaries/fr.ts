@@ -467,8 +467,9 @@ export const fr: Dictionary = {
     impactOfflineLabel: "pour le travail de tous les jours",
     impactData: "Vos données",
     impactDataLabel: "restent sur vos ordinateurs",
-    impactSystems: "22 systèmes",
-    impactSystemsLabel: "en service chez nos clients",
+    impactTrial: "{days} jours gratuits",
+    impactTrialNoDays: "Essai gratuit",
+    impactTrialLabel: "pour tout essayer, sans rien payer",
 
     builderEyebrow: "Le Builder",
     builderHeading: "Le Builder construit votre logiciel à partir de vos réponses.",
