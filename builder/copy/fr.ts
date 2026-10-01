@@ -47,6 +47,23 @@ export const fr = {
     serial: "Votre logiciel",
   },
 
+  /* Where Continue was, once the last step has the serial: the end of the journey. */
+  thanks: {
+    title: "Merci d'avoir choisi {app} !",
+    body: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement sur {shop}. Nous vous souhaitons de belles affaires.",
+    bodyNoShop: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement sur votre commerce. Nous vous souhaitons de belles affaires.",
+    names: {
+      pharmacy: "OUAQT Pharmacie",
+      bakery: "OUAQT Boulangerie",
+      restaurant: "OUAQT Restaurant",
+      warehouse: "OUAQT Dépôt",
+      shop: "OUAQT Boutique",
+      hotel: "OUAQT Hôtel",
+      transport: "OUAQT Transport",
+      general: "OUAQT",
+    },
+  },
+
   packs: {
     heading: "Quel est votre commerce ?",
     pharmacy: "Pharmacie",

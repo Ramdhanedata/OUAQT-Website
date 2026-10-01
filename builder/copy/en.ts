@@ -42,6 +42,22 @@ export const en: BuilderCopy = {
     serial: "Your software",
   },
 
+  thanks: {
+    title: "Thank you for choosing {app}!",
+    body: "Thank you for your trust. Install your software on your computer: it opens straight on {shop}. We wish you every success.",
+    bodyNoShop: "Thank you for your trust. Install your software on your computer: it opens straight on your shop. We wish you every success.",
+    names: {
+      pharmacy: "OUAQT Pharmacy",
+      bakery: "OUAQT Bakery",
+      restaurant: "OUAQT Restaurant",
+      warehouse: "OUAQT Warehouse",
+      shop: "OUAQT Shop",
+      hotel: "OUAQT Hotel",
+      transport: "OUAQT Transport",
+      general: "OUAQT",
+    },
+  },
+
   packs: {
     heading: "What kind of business do you run?",
     pharmacy: "Pharmacy",

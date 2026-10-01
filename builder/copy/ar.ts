@@ -41,6 +41,22 @@ export const ar: BuilderCopy = {
     serial: "برنامجك",
   },
 
+  thanks: {
+    title: "شكرا لاختيارك {app}!",
+    body: "شكرا لثقتك. ثبت برنامجك على حاسوبك: سيفتح مباشرة على {shop}. نتمنى لك تجارة موفقة.",
+    bodyNoShop: "شكرا لثقتك. ثبت برنامجك على حاسوبك: سيفتح مباشرة على محلك. نتمنى لك تجارة موفقة.",
+    names: {
+      pharmacy: "OUAQT للصيدليات",
+      bakery: "OUAQT للمخابز",
+      restaurant: "OUAQT للمطاعم",
+      warehouse: "OUAQT للمستودعات",
+      shop: "OUAQT للمتاجر",
+      hotel: "OUAQT للفنادق",
+      transport: "OUAQT للنقل",
+      general: "OUAQT",
+    },
+  },
+
   packs: {
     heading: "ما نوع نشاطك التجاري؟",
     pharmacy: "صيدلية",

@@ -6,7 +6,7 @@ import { Container } from "@/components/ui/container";
 import { organization } from "@/lib/data/contact";
 import type { Locale } from "@/lib/i18n/config";
 import { cn, fill } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, MessageCircle, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, HeartHandshake, MessageCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
@@ -435,6 +435,8 @@ function Wizard({
   const total = STEP_KEYS.length;
   /* The number this owner has now: the one issued after the questions, or one he opened. */
   const currentSerial = serial ?? issued?.serial ?? null;
+  /* The journey's end: the last step, with a serial issued now or brought back from an earlier visit. */
+  const finished = step === total - 1 && Boolean(currentSerial) && !lead && !showCode;
   const whatsapp = supportWhatsapp
     ? `https://wa.me/${supportWhatsapp}`
     : organization.whatsappUrl;
@@ -645,9 +647,10 @@ function Wizard({
                 /*
                  * The last step keeps Retour until the serial exists: until
                  * then he may still want to fix a product or a name. Once it
-                 * is issued there is nothing after it to continue to.
+                 * is issued, here or on an earlier visit, there is nothing
+                 * after it to continue to: a thank-you takes their place.
                  */
-                (lead || showCode || (step === 3 && serial)) && "hidden"
+                (lead || showCode || finished) && "hidden"
               )}
             >
               <Container className="py-3">
@@ -679,11 +682,19 @@ function Wizard({
               </Container>
             </div>
 
+            {finished ? (
+              <Thanks
+                copy={copy}
+                pack={pack}
+                shop={(locale === "ar" && answers.nameArabic) || answers.nameLatin || ""}
+              />
+            ) : null}
+
             {/* From 900px the same two actions sit under the question. */}
             <div
               className={cn(
                 "mt-8 hidden items-center gap-3 wizard:flex",
-                (lead || showCode || (step === 3 && serial)) && "wizard:hidden"
+                (lead || showCode || finished) && "wizard:hidden"
               )}
             >
               <Button type="button" variant="outline" onClick={goBack} className="min-h-[48px] text-base">
@@ -748,6 +759,25 @@ function Wizard({
       ) : null}
     </div>
     </InstallTargetProvider>
+  );
+}
+
+/*
+ * Where Continue was, once there is nothing left to continue to: thanks, by
+ * the name of the software they are about to install.
+ */
+function Thanks({ copy, pack, shop }: { copy: BuilderCopy; pack: Pack; shop: string }) {
+  const app = copy.thanks.names[pack] ?? copy.thanks.names.general;
+  return (
+    <div className="mt-8 flex gap-4 rounded-2xl border border-accent/40 bg-accent/10 p-6">
+      <HeartHandshake aria-hidden className="mt-1 h-6 w-6 shrink-0 text-accent" />
+      <div>
+        <p className="text-xl font-semibold text-foreground">{fill(copy.thanks.title, { app })}</p>
+        <p className="mt-2 text-base leading-relaxed text-muted-foreground">
+          {shop.trim() ? fill(copy.thanks.body, { shop: shop.trim() }) : copy.thanks.bodyNoShop}
+        </p>
+      </div>
+    </div>
   );
 }
 
