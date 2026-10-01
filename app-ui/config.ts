@@ -57,6 +57,14 @@ export const commonFeatures = z.object({
   discounts: z.boolean(),
 });
 
+/*
+ * The health funds a pharmacy can be conventionnée with. "other" covers a
+ * private insurer or a mutual: the till names it the same way whichever one
+ * it is, and the owner tells them apart by the member number.
+ */
+export const insurancePayers = ["cnam", "cnass", "other"] as const;
+export type InsurancePayer = (typeof insurancePayers)[number];
+
 export const pharmacyFeatures = z.object({
   /** Selling a strip or a single tablet rather than the whole box. */
   unitSale: z.boolean(),
@@ -65,6 +73,25 @@ export const pharmacyFeatures = z.object({
   batchNumbers: z.boolean(),
   trackSuppliers: z.boolean(),
   search: z.array(z.enum(["name", "barcode"])).min(1),
+  /*
+   * A pharmacy conventionnée with a health fund: part of a sale is paid by
+   * the fund, the customer pays the rest, and the pharmacy claims the fund's
+   * part later.
+   *
+   * Optional because every pharmacy built before the question existed has no
+   * block at all, and it must keep running as it does today. Absent reads
+   * exactly like `enabled: false`: see `coverPayers()`.
+   *
+   * What share a fund pays is not here. It depends on the fund, the medicine
+   * and the fund's own rules of the year, so the manager keeps it in the app
+   * and the cashier can change it for one prescription.
+   */
+  insurance: z
+    .object({
+      enabled: z.boolean(),
+      payers: z.array(z.enum(insurancePayers)).min(1),
+    })
+    .optional(),
 });
 
 export const bakeryFeatures = z.object({
@@ -233,6 +260,16 @@ export type HotelFeatures = z.infer<typeof hotelFeatures>;
 export type TransportFeatures = z.infer<typeof transportFeatures>;
 export type GeneralFeatures = z.infer<typeof generalFeatures>;
 
+/**
+ * The funds this shop takes at the till, or none. Every screen asks here
+ * rather than reading the block itself, so a pharmacy built before insurance
+ * existed, one that answered no, and every other trade all read the same way.
+ */
+export function coverPayers(configuration: Configuration): InsurancePayer[] {
+  const insurance = configuration.features.pharmacy?.insurance;
+  return insurance?.enabled ? [...new Set(insurance.payers)] : [];
+}
+
 /*
  * The configuration an owner has when he has answered nothing at all.
  *
@@ -279,6 +316,12 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
           batchNumbers: true,
           trackSuppliers: true,
           search: ["name"],
+          /*
+           * Not conventionnée until the owner says so: the till then stays
+           * exactly as it was. CNAM is the fund most pharmacies here work
+           * with, so it is the one ticked if he says yes and no more.
+           */
+          insurance: { enabled: false, payers: ["cnam"] },
         },
       };
     case "bakery":

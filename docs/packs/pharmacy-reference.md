@@ -56,13 +56,58 @@ Proposals only. Nothing has been changed in the banks or the schema.
 | `ph_expiry_where` | Où voulez-vous être prévenu d'une date de péremption proche ? | single_choice | Au moment de la vente, Dans la page stock seulement, Les deux | Les deux | Follows `ph_expiry`; decides whether the warning interrupts a sale |
 | `ph_discount_line` | Faites-vous parfois une remise sur le montant total ? | yes_no | | Non | Explains the gap between sub-total and net to pay, if it is not insurance |
 
-**Needs your decision before I write it as a question**
+## Health cover: decided 2026-09-27
 
-The reference app has a payment mode for an insurance or third-party payer,
-with the rest left for the customer. That is health cover, and section 24 of
-the brief says to stop and ask on anything regulatory or about medicines.
+Adel's answer: the pharmacy pack handles health funds, and only for a
+pharmacy that says it is conventionnée. One that says no keeps the till it
+had, line for line.
 
-It changes more than one answer: the sale screen needs a second amount line,
-the receipt needs to show who pays what, and the pack needs somewhere to keep
-the payer's name. Tell me whether the pharmacy pack should handle third-party
-payers at all, and I will write the questions and the schema around your answer.
+**In the interview** (`builder/packs/pharmacy/questions.v1.json`)
+
+| id | Question (fr) | Type | Options | Default |
+| --- | --- | --- | --- | --- |
+| `ph_insurance` | Votre pharmacie est-elle conventionnée avec la CNAM, la CNASS ou une autre assurance maladie ? | yes_no | | Non |
+| `ph_insurance_payers` | Avec quelles caisses ou assurances ? Asked only after a yes | multi_choice | CNAM, CNASS, Une autre assurance ou une mutuelle | CNAM |
+
+**In the configuration** (`app-ui/config.ts`):
+`features.pharmacy.insurance = { enabled, payers }`. It is optional, so every
+pharmacy configuration written before this still validates and reads as not
+conventionnée. Screens ask `coverPayers(configuration)`, which returns no
+fund for those, for a pharmacy that answered no, and for every other trade.
+
+**Shared rule** (`app-ui/money.ts`, `app-ui/cover.ts`): the fund's part is
+its share of what is due, rounded once to the smallest unit; the customer
+pays the rest, so the two always add up to the sale.
+
+**In the desktop app** (`ouaqt-desktop`, which also runs as the builder's
+preview):
+
+- The till (`src/screens/sell.tsx`, `src/cover.tsx`): "Prise en charge" with
+  Aucune and one button per fund the owner named. Picking one asks for the
+  member number and starts the share where the manager set it; the ticket
+  then shows Total, the fund's part and Reste à payer, and "Encaisser" takes
+  only the customer's part. It waits for the member number, because a claim
+  without one comes back from the fund.
+- The sale (`electron/db/sales.ts`, migration `011_health_cover.sql`) keeps
+  the fund, the member number, the share and the fund's part. The drawer
+  and credit count only the customer's part; a void reverses both.
+- The receipt (`electron/print.ts`): Total, "Part CNAM (67 %)", the member
+  number, then what the customer paid.
+- Reports: the funds' part as its own line, fund by fund, and "À réclamer
+  aux caisses": every covered sale of the period for one fund, with its
+  total, to print or export as the statement.
+- Settings: each fund's usual share, kept on the computer by the manager. It
+  is not in the configuration: a fund's share depends on the medicine and on
+  the fund's rules of the year (CNAM publishes 67 % on medicines with a cap
+  per medicine; CNASS works by flat fees), and the owner should not have to
+  rebuild his software when they change.
+
+**Not handled yet, and why**
+
+- The share applies to the whole ticket. A prescription mixing covered
+  medicines with counter items (soap, a thermometer) is split by typing a
+  lower share for that sale. Per-line cover needs a "remboursable" flag on
+  the product, which the import does not read yet.
+- Per-medicine caps and flat fees are not computed. The cashier adjusts the
+  share for that prescription.
+- Nothing is sent to a fund electronically. The statement is printed.

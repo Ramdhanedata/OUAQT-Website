@@ -60,6 +60,16 @@ export function PackPage({
       <JsonLd
         data={{
           "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: dict.common.brand, item: `${base}${localeHref(lang, "/")}` },
+            { "@type": "ListItem", position: 2, name: label, item: `${base}${localisedHref(lang, packRouteId(pack))}` },
+          ],
+        }}
+      />
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
           "@type": "FAQPage",
           mainEntity: copy.worries.map((worry) => ({
             "@type": "Question",
@@ -190,8 +200,9 @@ export function PackPage({
             >
               {copy.common.pricing}
             </a>
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- the bare address opens in the reader's language (middleware.ts) */}
             <a
-              href={localeHref(lang, "/")}
+              href="/"
               className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
             >
               {copy.common.otherTrades}

@@ -1,3 +1,6 @@
+import { toMinor } from "@/app-ui/money";
+import type { PublicSettings } from "@/builder/db/settings";
+import { priceFor, type Plan, type Price } from "@/builder/payment/pricing";
 import type { Locale } from "@/lib/i18n/config";
 
 /*
@@ -78,6 +81,65 @@ export const pricing: PriceBook = {
 };
 
 /*
+ * The builder track's list prices, in whole ouguiyas: the figures decided on
+ * 2026-09-20 and 2026-09-25 (migrations 0004 and 0023).
+ *
+ * The settings table is still where these are changed. This list is only what
+ * a visitor sees when settings cannot be read or a price in them is empty, so
+ * the pricing pages never fall back to "price coming soon" for a price that
+ * has in fact been decided. The payment page does not read it.
+ */
+const builderList: Record<
+  Exclude<Plan, "quarterly">,
+  { standard: number; launch: number | null }
+> = {
+  annual: pricing.annualLicence,
+  semiannual: { standard: 9_000, launch: 7_500 },
+  perpetual: pricing.perpetualLicence,
+  extra_device: pricing.extraDevice,
+  setup_visit: { standard: 10_000, launch: null },
+};
+
+/*
+ * The builder licence's other published terms, decided alongside the prices
+ * (migrations 0002, 0006 and 0011). Like the list above, only what the
+ * marketing and legal pages print when settings cannot be read, so they never
+ * show a blank where a number belongs. The licence API still reads settings.
+ */
+const builderListedTerms = { trialDays: 30, graceDays: 30, devices: 2 };
+
+export function builderTerms(settings: PublicSettings | null) {
+  return {
+    trialDays: settings?.trial_days ?? builderListedTerms.trialDays,
+    graceDays: settings?.renewal_grace_days ?? builderListedTerms.graceDays,
+    devices: settings?.max_devices ?? builderListedTerms.devices,
+  };
+}
+
+/*
+ * One builder price as the marketing pages show it: from settings when they
+ * hold it, otherwise from the list above. Amounts are in the smallest unit,
+ * like everything priceFor returns.
+ */
+export function shownPrice(
+  plan: Exclude<Plan, "quarterly">,
+  settings: PublicSettings | null,
+  launchClient: boolean
+): Price {
+  const fromSettings = settings ? priceFor(plan, settings, launchClient) : null;
+  if (fromSettings && fromSettings.amount !== null) return fromSettings;
+
+  const listed = builderList[plan];
+  const amount = launchClient && listed.launch !== null ? listed.launch : listed.standard;
+  return {
+    plan,
+    amount: toMinor(amount),
+    standard: toMinor(listed.standard),
+    launch: launchClient && listed.launch !== null,
+  };
+}
+
+/*
  * Thousands separators by locale. French uses a space, English a comma, and
  * Arabic keeps Western digits with the comma the Arabic pages already use.
  *
@@ -126,6 +188,7 @@ export function pricingTerms(locale: Locale): Record<string, string | number> {
     clients: pricing.launchOffer.clients,
     years: pricing.launchOffer.freezeYears,
     devices: pricing.devicesIncluded,
+    builderDevices: builderListedTerms.devices,
     months: pricing.perpetualServiceMonths,
     rate: formatPercent(pricing.bespoke.maintenancePercent, locale),
     month: pricing.bespoke.maintenanceFromMonth,

@@ -3,6 +3,30 @@
 Every decision taken without an answer from Adel, with the date and the reason.
 Each says how to undo it. Newest first.
 
+## 2026-09-27, health cover for pharmacies
+
+- **A fund's share is kept by the manager in the app, not asked in the
+  builder.** CNAM, CNASS and private insurers each have their own share,
+  which varies by medicine and changes with the fund's rules; asking for a
+  number during the interview would have meant writing a regulatory rate into
+  a default. The configuration says which funds; the app keeps the rates.
+  Undo: add a `number` question per fund with `show_if.includes`, and a
+  `shares` field beside `payers`.
+- **The insurance block is optional in the version 1 schema.** Pharmacies
+  already running have no block, and a required field would have made their
+  configuration invalid for the next desktop app that reads it. Absent means
+  not conventionnée. Undo: make it required in a version 2 of the
+  configuration and migrate the stored ones.
+- **"Encaisser" is refused until the member number is typed** when a fund is
+  picked. A claim without it is sent back by the fund, and the sale would
+  have left the drawer short of the fund's part with nothing to claim it by.
+- **The demo's shares (67 %, 90 %, 80 %) are sample data.** CNAM's figure
+  is its published rate on medicines; the other two are invented so the
+  preview shows a split. They live in the desktop app's demo seed, never in
+  a configuration.
+- **Arabic and English wording for the two questions and the till is marked
+  for review**, like the rest of the banks.
+
 ## 2026-09-20, B0
 
 **The builder sits in the header's action button, not as a sixth menu link.**

@@ -57,7 +57,7 @@ export const packPagesEn: PackPagesCopy = {
   },
 
   pharmacy: {
-    title: "Pharmacy management software, built online | OUAQT",
+    title: "Pharmacy management software in Mauritania | OUAQT",
     description:
       "Build your pharmacy's software by answering a few questions. Expiry dates, batch numbers, selling by box or by strip, customer credit. It works with no internet.",
     heading: "Your pharmacy's software, built around the way you work",
@@ -115,7 +115,7 @@ export const packPagesEn: PackPagesCopy = {
   },
 
   restaurant: {
-    title: "Restaurant POS software | OUAQT",
+    title: "Restaurant POS software in Mauritania | OUAQT",
     description:
       "Your restaurant's till software: the tables, orders held open while the table eats, the kitchen ticket and the bill at the end.",
     heading: "The till software for your restaurant",
@@ -171,7 +171,7 @@ export const packPagesEn: PackPagesCopy = {
   },
 
   bakery: {
-    title: "Bakery management software | OUAQT",
+    title: "Bakery management software in Mauritania | OUAQT",
     description:
       "Your bakery's software: the day's production, orders placed ahead with a deposit, the counter sale and regulars' credit.",
     heading: "Your bakery's software",
@@ -227,7 +227,7 @@ export const packPagesEn: PackPagesCopy = {
   },
 
   warehouse: {
-    title: "Warehouse stock management software | OUAQT",
+    title: "Stock management software in Mauritania | OUAQT",
     description:
       "Your warehouse's software: goods in, goods out, several locations, and stock that keeps itself.",
     heading: "Stock management software for your warehouse",
@@ -284,7 +284,7 @@ export const packPagesEn: PackPagesCopy = {
 
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   shop: {
-    title: "POS software for shops and groceries | OUAQT",
+    title: "Shop and grocery POS software in Mauritania | OUAQT",
     description: "Your shop's till: sell by barcode or tiles, stock, customer credit, the evening count.",
     heading: "Till software for your shop",
     intro: "You scan or tap the item, the customer pays, and the stock goes down by itself. Your regulars' credit and the evening count are in the same place. On your computer, with no internet.",
@@ -332,7 +332,7 @@ export const packPagesEn: PackPagesCopy = {
   },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   hotel: {
-    title: "Management software for hotels and guest houses | OUAQT",
+    title: "Hotel management software in Mauritania | OUAQT",
     description: "Your hotel's software: the room board, bookings, check-in and check-out, extras on the bill.",
     heading: "Management software for your hotel",
     intro: "Your rooms on one screen, free, occupied or to be cleaned. The booking, the arrival, the extras, and the bill at departure. On the front desk computer, with no internet.",
@@ -380,7 +380,7 @@ export const packPagesEn: PackPagesCopy = {
   },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   transport: {
-    title: "Software for transport and parcel companies | OUAQT",
+    title: "Transport and parcel software in Mauritania | OUAQT",
     description: "Your transport company's software: departures, tickets by seat, parcels with their code, the passenger list.",
     heading: "Software for your transport company",
     intro: "Today's departures, the seats sold, the parcels received and handed over. Every ticket and every parcel is paid and recorded. On the counter's computer, with no internet.",
@@ -428,7 +428,7 @@ export const packPagesEn: PackPagesCopy = {
   },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   general: {
-    title: "Sales, stock and reports software for any business | OUAQT",
+    title: "Small business software in Mauritania | OUAQT",
     description: "Simple software for any business: sales, stock if you have any, expenses, and the day's and month's reports.",
     heading: "Sales, stock and reports, for your business",
     intro: "A salon, a workshop, a service company, a small trader: you sell, you note your expenses, and you see what the day and the month brought in. You keep only what you use.",

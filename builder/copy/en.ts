@@ -433,6 +433,7 @@ export const en: BuilderCopy = {
     switched: "The page has switched to {language}, the language of your configuration.",
     switchBack: "Back to {language}",
     retry: "Try again",
+    another: "Build different software",
     preparing: "Preparing your software…",
     downloadFailed: "The software could not be prepared. Try again, or write to us on WhatsApp.",
     downloadIntro: "Free trial of {days} days. After the trial, you pay on this site with this same number.",

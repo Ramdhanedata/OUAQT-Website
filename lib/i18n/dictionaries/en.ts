@@ -4,13 +4,13 @@
  */
 export const en = {
   meta: {
-    siteTitle: "OUAQT | Management software for small businesses, ready in minutes",
-    siteDescription: "With the OUAQT Builder, small and medium-sized businesses build their own till, stock and reporting software in minutes. It works without internet and your data stays with you.",
-    projectsTitle: "Custom work: 22 systems in daily use | OUAQT",
+    siteTitle: "OUAQT | Business management and POS software in Mauritania",
+    siteDescription: "Till, stock and management software for shops and small businesses in Mauritania, built online in minutes. Pharmacy, shop, restaurant, hotel. Works without internet.",
+    projectsTitle: "Custom software in Mauritania: 22 systems in daily use | OUAQT",
     projectsDescription: "Mines, pharmacies, hotels, transport, restaurants and schools: the systems we built to order, and what each one changed.",
-    aboutTitle: "About OUAQT and its founder",
+    aboutTitle: "About OUAQT, a software company in Nouakchott",
     aboutDescription: "OUAQT is a startup that equips small and medium-sized businesses with management software: the online Builder, and custom projects. Founded by Elboumby Aumar Ramdhane.",
-    contactTitle: "Contact | OUAQT",
+    contactTitle: "Contact: business software in Nouakchott | OUAQT",
     contactDescription: "A question about the Builder, a demo or a custom project: write to us. We usually reply within one business day, by email or on WhatsApp.",
     termsTitle: "Licence and terms of use | OUAQT",
     termsDescription:
@@ -18,7 +18,7 @@ export const en = {
     privacyTitle: "Privacy policy | OUAQT",
     privacyDescription:
       "What OUAQT does with personal information, on this website and inside the systems we build.",
-    pricingTitle: "Pricing: the Builder and custom projects | OUAQT",
+    pricingTitle: "Business and POS software pricing in Mauritania | OUAQT",
     pricingDescription:
       "Every OUAQT price in one place: the software you build online, then installation and the annual licence for custom projects.",
     shareAlt: "OUAQT: management software for small businesses, built in minutes with the Builder.",
@@ -95,7 +95,7 @@ export const en = {
       monthly: "{amount} a month",
       annual: { label: "Annual licence", cadence: "Per year" },
       semiannual: { label: "Six-month licence", cadence: "Every 6 months" },
-      perpetual: { label: "Permanent licence", cadence: "Paid once" },
+      perpetual: { label: "Perpetual licence", cadence: "Paid once" },
       extraDevice: { label: "Extra device", cadence: "Per year" },
       setupVisit: {
         label: "Installation visit, if you want one",
@@ -197,7 +197,7 @@ export const en = {
         },
         {
           q: "On how many computers can I install it, and what happens if a machine breaks or is replaced?",
-          a: "Up to {devices} at the same site, and each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
+          a: "Software you build yourself runs on {builderDevices} computers. A project we install covers up to {devices} at the same site. Either way, each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
         },
         {
           q: "Where is my data stored?",
@@ -205,11 +205,11 @@ export const en = {
         },
         {
           q: "What happens if I do not renew?",
-          a: "Entering new data is suspended, and updates, backup and support stop. You can always read and export everything already recorded.",
+          a: "Entering new data is suspended, and updates and support stop. You can always read and export everything already recorded.",
         },
         {
           q: "Can I pay in instalments?",
-          a: "Yes for installation, in two payments, the first at signature and the second when the software goes live. The licence, annual or perpetual, is paid in one go.",
+          a: "Yes for installation, in two payments, the first at signature and the second when the software goes live. The perpetual licence is paid in one go, and the annual licence once a year, or every six months for software you build yourself.",
         },
         {
           q: "What is the difference between a modification and a new module?",
@@ -240,7 +240,7 @@ export const en = {
       },
       selfLicence: {
         h: "What you are buying",
-        b: "You are not buying the software, you are buying the right to use it in your business, on at most {devices} devices. The annual licence renews each year and can be cancelled before the renewal date. The quarterly licence works the same way, by quarter. The permanent licence is paid once and does not renew.",
+        b: "You are not buying the software, you are buying the right to use it in your business, on at most {devices} devices. The annual licence renews each year and can be cancelled before the renewal date. The six-month licence works the same way, every six months. The perpetual licence is paid once and does not renew.",
       },
       payment: {
         h: "Payment",
@@ -418,7 +418,7 @@ export const en = {
     founderEyebrow: "Founder",
     founderRole: "Founder & Solutions Engineer / Forward Deployed Engineer",
     founderBio1: "I started OUAQT because I kept meeting capable teams who lost hours every day to work their software should have done for them. Counting stock, copying figures between files, checking the same numbers twice. The tools they'd paid for didn't match how they actually worked, so people made up the difference by hand.",
-    founderBio2: "I come from data analytics and software engineering, and I build on site with the people who'll use the system. I stay from the first conversation until nobody opens the old spreadsheet. For one client, a reconciliation that took four hours a day now takes 25 minutes. We've gone on to build systems for teams in mining, pharmacy, hospitality and transport across Mauritania.",
+    founderBio2: "I come from data analytics and software engineering, and I build on site with the people who'll use the system. I stay from the first conversation until nobody opens the old spreadsheet. For one client, a reconciliation that took four hours a day now takes 25 minutes. We've gone on to build systems for teams in mining, pharmacy, hospitality, transport, food service and education across Mauritania.",
     credentials: {
       analytics: {
         title: "Data analytics at Deloitte and MyAiPathways",

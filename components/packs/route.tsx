@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import { packs, type Pack } from "@/app-ui/packs";
+import { builderTerms } from "@/lib/data/pricing";
 import { getPublicSettings } from "@/builder/db/settings";
 import { OPENING } from "@/builder/packs/opening";
 import { PackPage } from "@/components/packs/pack-page";
 import { locales, type Locale } from "@/lib/i18n/config";
 import { getPackPage } from "@/lib/i18n/packs";
 import { localisedHref, packRouteId } from "@/lib/i18n/routes";
+import { getDictionary } from "@/lib/i18n";
+import { pageMetadata } from "@/lib/seo/page-metadata";
 
 /*
  * The four trade pages are the same page with different words, so the route
@@ -19,7 +22,7 @@ export function packRoute(pack: Pack) {
     const params = await props.params;
     const copy = getPackPage(params.lang, pack);
     const id = packRouteId(pack);
-    return {
+    return pageMetadata(params.lang, getDictionary(params.lang), {
       title: copy.title,
       description: copy.description,
       alternates: {
@@ -28,7 +31,7 @@ export function packRoute(pack: Pack) {
           locales.map((locale) => [locale, localisedHref(locale, id)])
         ) as Record<Locale, string>,
       },
-    };
+    });
   }
 
   /* Whether the trade is open: builder/packs/opening.ts, like the home page and the builder. */
@@ -41,7 +44,7 @@ export function packRoute(pack: Pack) {
         lang={params.lang}
         pack={pack}
         open={open}
-        trialDays={settings?.trial_days ?? null}
+        trialDays={builderTerms(settings).trialDays}
       />
     );
   }
