@@ -42,7 +42,7 @@ paying shop. Each one is a switch or a value, not a piece of work.
       the client. The pharmacy, hotel, transport, school and restaurant pages
       give figures ("over 90% fewer errors", "60 hours a month"): confirm
       them with the clients or take them off, as `lib/data/projects.ts` asks.
-- [ ] **The Facebook link** in `lib/data/contact.ts` is marked as doubtful.
+- [x] **The Facebook link** is facebook.com/ouaqt (2026-09-29).
 - [ ] **`RESEND_API_KEY`** in Vercel, so leads and enquiries are mailed by
       the server rather than through FormSubmit from the visitor's browser.
 - [ ] **`NEXT_PUBLIC_SITE_URL` = `https://www.ouaqt.com`** in Vercel

@@ -66,7 +66,7 @@ export const pricing: PriceBook = {
   annualLicence: { standard: 18_000, launch: 15_000 },
   extraDevice: { standard: 8_000, launch: 6_000 },
   perpetualLicence: { standard: 110_000, launch: 95_000 },
-  devicesIncluded: 3,
+  devicesIncluded: 2,
   perpetualServiceMonths: 12,
   bespoke: {
     maintenancePercent: 18,
@@ -183,13 +183,17 @@ export function formatPercent(value: number, locale: Locale): string {
 }
 
 /** Values the pricing copy interpolates, so no term is typed into a translation. */
-export function pricingTerms(locale: Locale): Record<string, string | number> {
+/* Settings, when given, supply the renewal grace the software actually allows. */
+export function pricingTerms(
+  locale: Locale,
+  settings: PublicSettings | null = null
+): Record<string, string | number> {
   return {
     clients: pricing.launchOffer.clients,
     years: pricing.launchOffer.freezeYears,
     devices: pricing.devicesIncluded,
-    builderDevices: builderListedTerms.devices,
     months: pricing.perpetualServiceMonths,
+    graceDays: builderTerms(settings).graceDays,
     rate: formatPercent(pricing.bespoke.maintenancePercent, locale),
     month: pricing.bespoke.maintenanceFromMonth,
   };

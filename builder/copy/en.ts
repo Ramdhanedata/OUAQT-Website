@@ -349,10 +349,10 @@ export const en: BuilderCopy = {
     trialOver: "Your trial has ended. The software is stopped until you pay; everything you recorded stays on your computer. Once you pay, it opens again by itself.",
     active: "Licence active until {date}.",
     renewalDue: {
-      one: "Your licence has ended. You have {count} day before the software becomes read only.",
-      other: "Your licence has ended. You have {count} days before the software becomes read only.",
+      one: "Your licence has ended. You have {count} day before the software stops working.",
+      other: "Your licence has ended. You have {count} days before the software stops working.",
     },
-    expired: "Your licence has ended. The software keeps everything you recorded but takes no new sales. Once you pay, everything opens again.",
+    expired: "Your licence has ended. The software is stopped until you pay; everything you recorded stays on your computer. Once you pay, it opens again by itself.",
     suspended: "Your licence is suspended. Write to us on WhatsApp.",
     pending: "Payment received, being checked. As soon as it is confirmed, your software works normally, with nothing for you to do.",
     rejected: "Your last payment could not be accepted.",

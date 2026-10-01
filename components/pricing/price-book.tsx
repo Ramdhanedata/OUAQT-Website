@@ -1,3 +1,4 @@
+import type { PublicSettings } from "@/builder/db/settings";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
@@ -23,9 +24,17 @@ type Row = {
  * Installation and the annual licence together. The same prices apply to every
  * packaged product, so this block is rendered once and never per product.
  */
-export function PriceBook({ dict, lang }: { dict: Dictionary; lang: Locale }) {
+export function PriceBook({
+  dict,
+  lang,
+  settings,
+}: {
+  dict: Dictionary;
+  lang: Locale;
+  settings: PublicSettings | null;
+}) {
   const p = dict.pricingPage;
-  const terms = pricingTerms(lang);
+  const terms = pricingTerms(lang, settings);
   const launch = pricing.launchOffer.active;
   const labels = { standard: p.standardLabel, launch: p.launchLabel };
 
@@ -106,7 +115,7 @@ export function PriceBook({ dict, lang }: { dict: Dictionary; lang: Locale }) {
                 {p.renewal}
               </p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                {p.lateRenewal}
+                {fill(p.lateRenewal, terms)}
               </p>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Button
