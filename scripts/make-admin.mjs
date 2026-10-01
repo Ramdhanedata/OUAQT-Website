@@ -2,6 +2,7 @@
  * Give someone a way into the admin area, with a password only they know.
  *
  *   npm run make-admin -- you@example.com "Your name"
+ *   npm run make-admin -- ouaqtadmin1 "Your name"
  *
  * The password is typed here, hidden, twice, and goes straight to Supabase.
  * It is never printed, never logged and never written to a file, so nobody
@@ -25,14 +26,25 @@ if (!url || !service) {
   process.exit(1);
 }
 
-const [email, ...nameParts] = process.argv.slice(2);
+const [login, ...nameParts] = process.argv.slice(2);
 const name = nameParts.join(" ").trim() || null;
 
-if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+/*
+ * An email, or a short name such as "ouaqtadmin1". A name becomes an address
+ * on the domain owners' phone logins use, the same way the sign-in page turns
+ * it into one: builder/ui/login-domain.ts, whose rules these repeat.
+ */
+const DOMAIN = process.env.NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN?.trim() || "ouaqtcom.vercel.app";
+const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(login ?? "");
+const isName = /^(?=.*[a-z])[a-z0-9._-]{3,40}$/.test((login ?? "").toLowerCase());
+
+if (!login || (!isEmail && !isName)) {
   console.error('Usage: npm run make-admin -- you@example.com "Your name"');
-  console.error("The login has to be a real email address: Supabase refuses anything else.");
+  console.error('   or: npm run make-admin -- ouaqtadmin1 "Your name"');
+  console.error("A name is 3 to 40 letters, digits, dots, dashes or underscores, with at least one letter.");
   process.exit(1);
 }
+const email = isEmail ? login.trim() : `${login.trim().toLowerCase()}@${DOMAIN}`;
 
 /*
  * Read a line without showing what is typed. Characters that arrive after
@@ -152,4 +164,4 @@ if (staffError) {
   process.exit(1);
 }
 
-console.log("It can sign in to /admin. The first sign-in shows a QR code for the authenticator app.");
+console.log(`It can sign in to /admin as ${isEmail ? email : login.trim().toLowerCase()}. The first sign-in shows a QR code for the authenticator app.`);

@@ -1,5 +1,6 @@
 "use client";
 
+import { PHONE_DOMAIN } from "./login-domain";
 import { machineOf, type Machine } from "./machine";
 import { InstallGuide } from "./install-guide";
 import { useInstallTarget } from "./install-target";
@@ -29,18 +30,6 @@ import { InstallHelp } from "./install-help";
  * number is turned into one; he never sees it and never types it.
  */
 
-/*
- * The phone number becomes a login address, because Supabase signs people in
- * with one and phone sign-in would mean paying for an SMS on every account.
- * The owner never sees it and never types it.
- *
- * The domain has to exist in DNS or Supabase refuses the address outright,
- * which rules out ouaqt.com until it is pointed somewhere. It is a variable
- * so it can be changed before real owners exist. Changing it afterwards locks
- * every one of them out, so it belongs in the launch checklist.
- */
-const PHONE_DOMAIN =
-  process.env.NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN?.trim() || "ouaqtcom.vercel.app";
 const SHORTEST_PASSWORD = 8; // not-a-rule: a floor, not a policy anyone administers
 
 export function loginFor(phone: string): string {

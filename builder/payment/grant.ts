@@ -64,7 +64,12 @@ export async function grantLicence(
   const shape = {
     /* A licence is annual in kind whatever the length paid for; the dates say how long. */
     plan: payment.plan === "quarterly" || payment.plan === "semiannual" ? "annual" : payment.plan,
-    status: "active",
+    /*
+     * A suspension is a person's decision about a breach, and a payment is
+     * not an answer to it: the time is bought, the software stays suspended
+     * until staff reactivate it.
+     */
+    status: licence?.status === "suspended" ? "suspended" : "active",
     starts_at: licence?.starts_at ?? now.toISOString(),
     ends_at: endsAt,
   };

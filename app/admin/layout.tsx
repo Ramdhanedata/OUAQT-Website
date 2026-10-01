@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Cairo, Source_Serif_4 } from "next/font/google";
+import { Cairo, Inter, Source_Serif_4 } from "next/font/google";
 import { adminLanguage } from "@/builder/admin/language";
 import type { ReactNode } from "react";
 import "../globals.css";
@@ -21,6 +21,17 @@ import "../globals.css";
 const serif = Source_Serif_4({
   subsets: ["latin"],
   variable: "--font-serif",
+  display: "swap",
+});
+
+/*
+ * Staff read numbers here all day, and figures read best in a plain sans:
+ * the admin area takes Inter for its Latin text, and Cairo, already a sans,
+ * for Arabic. The public site keeps its serif.
+ */
+const sans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
   display: "swap",
 });
 
@@ -50,12 +61,18 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <html
       lang={lang}
       dir={rtl ? "rtl" : "ltr"}
-      className={`${serif.variable} ${arabic.variable}`}
+      className={`${serif.variable} ${sans.variable} ${arabic.variable}`}
       suppressHydrationWarning
     >
-      <body className={`${rtl ? "font-arabic" : "font-serif"} antialiased`}>
-        <div className="mx-auto min-h-screen max-w-4xl px-4 py-8 sm:px-6">
-          {children}
+      <body
+        className={`${rtl ? "font-arabic" : "[font-family:var(--font-sans),system-ui,sans-serif]"} bg-background antialiased`}
+      >
+        {/*
+          * The menu is a fixed column on a wide screen. Pages that draw it
+          * make room for it; the sign-in screen, which has no menu, does not.
+          */}
+        <div className="min-h-screen lg:has-[.admin-sidebar]:ps-64">
+          <div className="mx-auto max-w-6xl px-4 py-6 sm:px-8 sm:py-8">{children}</div>
         </div>
       </body>
     </html>

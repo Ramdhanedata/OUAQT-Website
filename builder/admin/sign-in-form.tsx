@@ -4,6 +4,7 @@ import { useState } from "react";
 import { browserClient } from "@/builder/db/client";
 import { Button } from "@/builder/ui/owner-button";
 import { Field, TextInput } from "@/builder/ui/fields";
+import { loginAddress } from "@/builder/ui/login-domain";
 import type { AdminCopy } from "./copy";
 
 /*
@@ -61,7 +62,7 @@ export function SignInForm({
     setBusy(true);
     setError(null);
     const supabase = await browserClient();
-    const failed = await supabase?.auth.signInWithPassword({ email, password });
+    const failed = await supabase?.auth.signInWithPassword({ email: loginAddress(email), password });
     setBusy(false);
 
     if (!supabase || failed?.error) return setError(t.wrong);

@@ -8,12 +8,12 @@ import { adminClient } from "@/builder/db/server";
 /*
  * Payments waiting for a person.
  *
- * This is the page that matters most in the admin area, so it is the one at
- * the address staff will type. Everything is read here, on the server, with
+ * The overview at /admin counts them first of everything it shows and links
+ * here. Everything is read here, on the server, with
  * the service role. The browser is handed what it needs to draw the screen
  * and a short-lived link to each image, never a key.
  */
-export default async function AdminPage() {
+export default async function PaymentsPage() {
   const gate = await adminGate();
   const { lang, t, locale } = await adminWords();
   if (!gate.allowed) return <AdminSignIn reason={gate.reason} />;
@@ -89,7 +89,7 @@ export default async function AdminPage() {
         * The same menu as every other admin page. This one drew its own
         * header, so the page staff land on first had no way to the others.
         */}
-      <AdminNav current="/admin" staff={gate.staff.name ?? t.staffFallback} />
+      <AdminNav current="/admin/paiements" staff={gate.staff.name ?? t.staffFallback} />
       <h1 className="mb-6 text-2xl font-semibold text-foreground">{t.payments.title}</h1>
       <PaymentsToConfirm
         rows={rows.filter((row) => row.status !== "confirmed")}
