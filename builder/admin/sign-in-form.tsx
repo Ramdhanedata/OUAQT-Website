@@ -15,7 +15,7 @@ import type { AdminCopy } from "./copy";
  * confirming their own payments.
  */
 
-type Stage = "password" | "checking" | "code" | "enrol";
+type Stage = "password" | "checking" | "code" | "enrol" | "failed";
 
 export function SignInForm({
   reason,
@@ -92,6 +92,7 @@ export function SignInForm({
    * never satisfy.
    */
   async function goToSecondFactor() {
+    setError(null);
     const supabase = await browserClient();
     const { data } = (await supabase?.auth.mfa.listFactors()) ?? { data: null };
     const verified = data?.totp?.find((factor) => factor.status === "verified");
@@ -108,8 +109,10 @@ export function SignInForm({
       }
     }
 
-    const enrolled = await supabase?.auth.mfa.enroll({ factorType: "totp" });
+    /* The app on the phone lists this entry as OUAQT, which is what the steps tell staff to look for. */
+    const enrolled = await supabase?.auth.mfa.enroll({ factorType: "totp", issuer: "OUAQT" });
     if (enrolled?.error || !enrolled?.data) {
+      setStage("failed");
       return setError(t.setupFailed);
     }
     setFactorId(enrolled.data.id);
@@ -175,19 +178,30 @@ export function SignInForm({
         </>
       ) : null}
 
-      {stage === "enrol" && qr ? (
+      {stage === "checking" ? <p className="text-base text-muted-foreground">{t.checking}</p> : null}
+
+      {stage === "enrol" ? (
         <div className="space-y-4">
-          <p className="text-base leading-relaxed text-muted-foreground">
-            {t.scan}
-          </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={qr} alt="" className="h-48 w-48 bg-white p-2" />
-          {secret ? (
-            <p className="text-base text-muted-foreground">
-              {t.orKey}{" "}
-              <code data-totp-secret className="text-foreground">{secret}</code>
-            </p>
-          ) : null}
+          <h2 className="text-lg font-semibold text-foreground">{t.setupTitle}</h2>
+          <ol className="list-decimal space-y-3 ps-5 text-base leading-relaxed text-foreground">
+            <li>{t.step1}</li>
+            <li>
+              {t.step2}
+              {qr ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={qr} alt="" className="mt-3 h-48 w-48 rounded-lg bg-white p-2" />
+              ) : null}
+              {secret ? (
+                <span className="mt-2 block text-sm text-muted-foreground">
+                  {t.orKey}{" "}
+                  <code data-totp-secret dir="ltr" className="break-all text-foreground">
+                    {secret}
+                  </code>
+                </span>
+              ) : null}
+            </li>
+            <li>{t.step3}</li>
+          </ol>
         </div>
       ) : null}
 
@@ -196,17 +210,27 @@ export function SignInForm({
           <Field label={t.code}>
             <TextInput dir="ltr" inputMode="tel" value={code} onChange={setCode} />
           </Field>
+          {stage === "code" ? <p className="-mt-3 text-sm text-muted-foreground">{t.codeHint}</p> : null}
           <Button type="button" variant="accent" disabled={busy} onClick={() => void withCode()}>
             {t.signIn}
           </Button>
-          <button
-            type="button"
-            onClick={() => void signOut()}
-            className="block min-h-[44px] text-sm text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
-          >
-            {t.signOut}
-          </button>
         </>
+      ) : null}
+
+      {stage === "failed" ? (
+        <Button type="button" variant="accent" onClick={() => void goToSecondFactor()}>
+          {t.retry}
+        </Button>
+      ) : null}
+
+      {stage !== "password" ? (
+        <button
+          type="button"
+          onClick={() => void signOut()}
+          className="block min-h-[44px] text-sm text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+        >
+          {t.signOut}
+        </button>
       ) : null}
 
       {error ? <p className="text-base text-destructive">{error}</p> : null}
