@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { adminGate, adminOpenForTesting } from "@/builder/admin/guard";
+import { adminGate, testToolsAvailable } from "@/builder/admin/guard";
 import { audit } from "@/builder/db/audit";
 import { adminClient } from "@/builder/db/server";
 
@@ -19,7 +19,7 @@ const body = z.object({ businessId: z.string().uuid() }).strict();
 const ONE_MINUTE_MS = 60_000; // not-a-rule: just in the past
 
 export async function POST(request: Request) {
-  if (!adminOpenForTesting()) return NextResponse.json({ error: "test_only" }, { status: 403 });
+  if (!testToolsAvailable()) return NextResponse.json({ error: "test_only" }, { status: 403 });
   const gate = await adminGate();
   if (!gate.allowed) return NextResponse.json({ error: gate.reason }, { status: 403 });
 

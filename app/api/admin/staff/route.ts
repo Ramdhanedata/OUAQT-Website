@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { adminGate, adminOpenForTesting } from "@/builder/admin/guard";
+import { adminGate } from "@/builder/admin/guard";
 import { passwordProblem, staffLogin } from "@/builder/admin/staff-rules";
 import { audit } from "@/builder/db/audit";
 import { adminClient } from "@/builder/db/server";
@@ -19,9 +19,8 @@ import { adminClient } from "@/builder/db/server";
  * The password is typed by the person in the form and passed straight to
  * Supabase. It is never logged, never written to the trail, never returned.
  *
- * An admin area left open for testing on a Vercel preview may not touch the
- * team: anyone with that link could otherwise make themselves staff. Open on
- * the developer's own computer is the developer, and that is allowed.
+ * Only staff who signed in reach it, or the developer on their own machine,
+ * the one place the admin area opens without a login (see guard.ts).
  */
 
 const body = z.discriminatedUnion("action", [
@@ -38,9 +37,6 @@ const body = z.discriminatedUnion("action", [
 export async function POST(request: Request) {
   const gate = await adminGate();
   if (!gate.allowed) return NextResponse.json({ error: gate.reason }, { status: 403 });
-  if (adminOpenForTesting() && process.env.VERCEL_ENV) {
-    return NextResponse.json({ error: "open_preview" }, { status: 403 });
-  }
 
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) return NextResponse.json({ error: "invalid" }, { status: 400 });

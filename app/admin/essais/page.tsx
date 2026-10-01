@@ -1,4 +1,4 @@
-import { adminGate, adminOpenForTesting } from "@/builder/admin/guard";
+import { adminGate, testToolsAvailable } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { TestEndTrial } from "@/builder/admin/test-end-trial";
@@ -118,7 +118,7 @@ export default async function TrialsPage() {
       </section>
 
       {/* The test version only: see the end of a trial without waiting thirty days. */}
-      {adminOpenForTesting() ? (
+      {testToolsAvailable() ? (
         <section className="mt-10">
           <h2 className="text-base font-medium text-foreground">{t.trials.testEndTitle}</h2>
           <p className="mt-2 max-w-2xl text-base leading-relaxed text-muted-foreground">{t.trials.testEndIntro}</p>

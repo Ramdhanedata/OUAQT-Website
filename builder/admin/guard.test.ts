@@ -10,17 +10,27 @@ afterEach(() => {
   process.env = { ...saved };
 });
 
-async function openWith(vercelEnv: string | undefined, url: string) {
+function deployment(vercelEnv: string | undefined, url: string) {
   if (vercelEnv === undefined) delete process.env.VERCEL_ENV;
   else process.env.VERCEL_ENV = vercelEnv;
   process.env.NEXT_PUBLIC_SUPABASE_URL = url;
+}
+
+async function openWith(vercelEnv: string | undefined, url: string) {
+  deployment(vercelEnv, url);
   const { adminOpenForTesting } = await import("./guard");
   return adminOpenForTesting();
 }
 
+async function toolsWith(vercelEnv: string | undefined, url: string) {
+  deployment(vercelEnv, url);
+  const { testToolsAvailable } = await import("./guard");
+  return testToolsAvailable();
+}
+
 describe("the admin area opens without a login only where it cannot hurt", () => {
-  it("opens on a preview of the test project", async () => {
-    expect(await openWith("preview", TEST_URL)).toBe(true);
+  it("stays locked on a preview, which anyone with the link can reach", async () => {
+    expect(await openWith("preview", TEST_URL)).toBe(false);
   });
 
   it("opens on a developer's machine against the test project", async () => {
@@ -37,5 +47,23 @@ describe("the admin area opens without a login only where it cannot hurt", () =>
 
   it("is not fooled by the test project's name inside another address", async () => {
     expect(await openWith("preview", "https://evil.example/vpdbkhykiylhigkwacvp.supabase.co")).toBe(false);
+  });
+});
+
+describe("the test tools", () => {
+  it("are offered on a preview of the test project, to staff who signed in", async () => {
+    expect(await toolsWith("preview", TEST_URL)).toBe(true);
+  });
+
+  it("and on a developer's machine", async () => {
+    expect(await toolsWith(undefined, TEST_URL)).toBe(true);
+  });
+
+  it("never on the live site, whatever database it uses", async () => {
+    expect(await toolsWith("production", TEST_URL)).toBe(false);
+  });
+
+  it("never against another database", async () => {
+    expect(await toolsWith("preview", "https://abcdefghijklmnop.supabase.co")).toBe(false);
   });
 });

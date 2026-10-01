@@ -25,25 +25,39 @@ import { sessionClient } from "@/builder/db/server";
 export type Staff = { id: string; name: string | null };
 
 /*
- * Test deployments, open without a login. Decided 2026-09-23 so the builder
- * can be tested without an email, a password and an authenticator.
- *
- * Open only when all of these hold, so it can never reach a real shop:
- *
- *   - the deployment is not production. Vercel says "production" for main,
- *     "preview" for branches, and nothing at all on a developer's machine.
- *   - the database is the test project, ouaqt-builder-test. A preview
- *     pointed at the production database stays locked, whatever else is true.
- *
- * The test project holds invented shops only. Anyone who has the preview link
- * can use this admin area while it is open, which is the price of no login.
+ * The test project, ouaqt-builder-test. Its address is public in the site's
+ * own pages, so naming it here gives nothing away.
  */
-const TEST_PROJECT_REF = "vpdbkhykiylhigkwacvp"; // ouaqt-builder-test, public in its own URL
+const TEST_PROJECT_REF = "vpdbkhykiylhigkwacvp";
 
-export function adminOpenForTesting(): boolean {
-  if (process.env.VERCEL_ENV === "production") return false;
+function onTestDatabase(): boolean {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
   return url.includes(`//${TEST_PROJECT_REF}.supabase.co`);
+}
+
+/*
+ * Open without a login: on a developer's own machine against the test
+ * project, and nowhere else.
+ *
+ * Decided 2026-09-23 for Vercel previews too, so the builder could be tested
+ * without an email, a password and an authenticator. Closed 2026-10-01: the
+ * live site runs on the test project as well, so an open preview link was
+ * full control of every live shop for anyone who found its address. Vercel
+ * says "production" or "preview" on every deployment and nothing at all on a
+ * developer's machine, which is the one place still open.
+ */
+export function adminOpenForTesting(): boolean {
+  if (process.env.VERCEL_ENV) return false;
+  return onTestDatabase();
+}
+
+/*
+ * The test tools, such as ending a trial at once: anywhere on the test
+ * project except the live site. On a preview staff sign in to reach them.
+ */
+export function testToolsAvailable(): boolean {
+  if (process.env.VERCEL_ENV === "production") return false;
+  return onTestDatabase();
 }
 
 export type AdminGate =
