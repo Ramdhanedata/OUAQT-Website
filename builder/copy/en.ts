@@ -43,9 +43,9 @@ export const en: BuilderCopy = {
   },
 
   thanks: {
-    title: "Thank you for choosing {app}!",
-    body: "Thank you for your trust. Install your software on your computer: it opens straight on {shop}. We wish you every success.",
-    bodyNoShop: "Thank you for your trust. Install your software on your computer: it opens straight on your shop. We wish you every success.",
+    title: "Thank you for choosing OUAQT",
+    body: "Thank you for your trust. Install your software on your computer: it opens straight away once you have followed the steps of the installation guide. We wish you a great experience.",
+    bodyNoShop: "Thank you for your trust. Install your software on your computer: it opens straight away once you have followed the steps of the installation guide. We wish you a great experience.",
     names: {
       pharmacy: "OUAQT Pharmacy",
       bakery: "OUAQT Bakery",

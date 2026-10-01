@@ -49,9 +49,9 @@ export const fr = {
 
   /* Where Continue was, once the last step has the serial: the end of the journey. */
   thanks: {
-    title: "Merci d'avoir choisi {app} !",
-    body: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement sur {shop}. Nous vous souhaitons de belles affaires.",
-    bodyNoShop: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement sur votre commerce. Nous vous souhaitons de belles affaires.",
+    title: "Merci d'avoir choisi OUAQT",
+    body: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement après avoir suivi les étapes du guide d'installation. Nous vous souhaitons une excellente expérience.",
+    bodyNoShop: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement après avoir suivi les étapes du guide d'installation. Nous vous souhaitons une excellente expérience.",
     names: {
       pharmacy: "OUAQT Pharmacie",
       bakery: "OUAQT Boulangerie",
