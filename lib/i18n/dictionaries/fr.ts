@@ -451,7 +451,7 @@ export const fr: Dictionary = {
   builderHome: {
     heroEyebrow: "Logiciels de gestion pour les PME",
     heroHeading: "Le logiciel de gestion de votre entreprise, prêt en quelques minutes.",
-    heroBody: "OUAQT est une startup qui équipe les petites et moyennes entreprises. Avec le Builder, vous décrivez votre activité et vous repartez avec votre logiciel de caisse, de stock et de rapports, installé sur vos propres ordinateurs.",
+    heroBody: "OUAQT est une startup mauritanienne qui équipe les petites et moyennes entreprises. Avec le Builder, vous décrivez votre activité et vous repartez avec votre logiciel de caisse, de stock et de rapports, installé sur vos propres ordinateurs.",
     heroPrimary: "Créer mon logiciel",
     heroSecondary: "Essayer la démo",
     heroReassurance: "Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
@@ -628,6 +628,17 @@ export const fr: Dictionary = {
   },
 
   footer: {
+    trades: "Logiciels par métier",
+    tradeLinks: {
+      pharmacy: "Logiciel de pharmacie",
+      shop: "Logiciel de caisse boutique",
+      restaurant: "Logiciel de caisse restaurant",
+      bakery: "Logiciel de boulangerie",
+      warehouse: "Logiciel de gestion de stock",
+      hotel: "Logiciel de gestion d'hôtel",
+      transport: "Logiciel de transport",
+      general: "Logiciel de gestion commerciale",
+    },
     tagline: "Le logiciel de gestion des PME, créé en quelques minutes avec le Builder, et construit sur mesure quand votre métier sort du cadre.",
     product: "Produit",
     company: "Entreprise",

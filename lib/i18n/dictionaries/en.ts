@@ -456,7 +456,7 @@ export const en = {
   builderHome: {
     heroEyebrow: "Management software for small and medium businesses",
     heroHeading: "Your business management software, ready in minutes.",
-    heroBody: "OUAQT is a startup that equips small and medium-sized businesses. With the Builder, you describe how your business works and leave with your own till, stock and reporting software, installed on your own computers.",
+    heroBody: "OUAQT is a Mauritanian startup that equips small and medium-sized businesses. With the Builder, you describe how your business works and leave with your own till, stock and reporting software, installed on your own computers.",
     heroPrimary: "Build my software",
     heroSecondary: "Try the demo",
     heroReassurance: "Works without internet · Your data stays with you · {days} day free trial",
@@ -633,6 +633,17 @@ export const en = {
   },
 
   footer: {
+    trades: "Software by trade",
+    tradeLinks: {
+      pharmacy: "Pharmacy software",
+      shop: "Shop POS software",
+      restaurant: "Restaurant POS software",
+      bakery: "Bakery software",
+      warehouse: "Stock management software",
+      hotel: "Hotel management software",
+      transport: "Transport company software",
+      general: "Small business software",
+    },
     tagline: "Management software for small and medium-sized businesses, built in minutes with the Builder, and built to order when your trade is outside the usual.",
     product: "Product",
     company: "Company",

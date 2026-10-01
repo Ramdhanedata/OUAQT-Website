@@ -1,4 +1,5 @@
-import { locales, type Locale } from "./config";
+import { defaultLocale, locales, type Locale } from "./config";
+import { localisedHref, type LocalisedRouteId } from "./routes";
 
 /**
  * The public origin. Falls back to the Vercel deployment URL so canonical and
@@ -38,4 +39,17 @@ export function alternatesFor(lang: Locale, path = "/") {
   // x-default tells search engines it does.
   if (path === "/") languages["x-default"] = "/";
   return { canonical: `/${lang}${clean}`, languages };
+}
+
+/**
+ * Canonical and hreflang for a page whose slug differs per language (the
+ * builder, the trade pages). x-default is the French page: French is the
+ * language a visitor with no stated preference gets, see config.ts.
+ */
+export function localisedAlternatesFor(lang: Locale, id: LocalisedRouteId) {
+  const languages: Record<string, string> = Object.fromEntries(
+    locales.map((l) => [l, localisedHref(l, id)])
+  );
+  languages["x-default"] = localisedHref(defaultLocale, id);
+  return { canonical: localisedHref(lang, id), languages };
 }
