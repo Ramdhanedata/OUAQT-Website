@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { browserClient } from "@/builder/db/client";
 import { Button } from "@/builder/ui/owner-button";
 import { Field, TextInput } from "@/builder/ui/fields";
@@ -15,7 +15,7 @@ import type { AdminCopy } from "./copy";
  * confirming their own payments.
  */
 
-type Stage = "password" | "code" | "enrol";
+type Stage = "password" | "checking" | "code" | "enrol";
 
 export function SignInForm({
   reason,
@@ -26,8 +26,15 @@ export function SignInForm({
   t: AdminCopy["signIn"];
   brand: string;
 }) {
+  /*
+   * Signed in with a password but not yet with a code: whether that means a
+   * code box or a QR code depends on whether this account has an
+   * authenticator yet, so it is asked before anything is shown. Showing the
+   * code box straight away left a first-time admin, back on the page after a
+   * reload, asked for a code from an app that had never been set up.
+   */
   const [stage, setStage] = useState<Stage>(
-    reason === "needs_second_factor" ? "code" : "password"
+    reason === "needs_second_factor" ? "checking" : "password"
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -37,6 +44,16 @@ export function SignInForm({
   const [factorId, setFactorId] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  /* Asked once on arrival; goToSecondFactor is declared below and hoisted. */
+  const checked = useRef(false);
+  useEffect(() => {
+    if (checked.current || reason !== "needs_second_factor") return;
+    checked.current = true;
+    void goToSecondFactor();
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on arrival
+  }, []);
+
 
   if (reason === "not_staff") {
     return (
@@ -84,6 +101,13 @@ export function SignInForm({
       return setStage("code");
     }
 
+    /* A QR code shown earlier and never confirmed is dropped, so the new one is the only one. */
+    for (const stale of data?.all ?? []) {
+      if (stale.factor_type === "totp" && stale.status === "unverified") {
+        await supabase?.auth.mfa.unenroll({ factorId: stale.id });
+      }
+    }
+
     const enrolled = await supabase?.auth.mfa.enroll({ factorType: "totp" });
     if (enrolled?.error || !enrolled?.data) {
       return setError(t.setupFailed);
@@ -97,6 +121,12 @@ export function SignInForm({
      */
     setSecret(enrolled.data.totp.secret);
     setStage("enrol");
+  }
+
+  async function signOut() {
+    const supabase = await browserClient();
+    await supabase?.auth.signOut();
+    window.location.reload();
   }
 
   async function withCode() {
@@ -169,6 +199,13 @@ export function SignInForm({
           <Button type="button" variant="accent" disabled={busy} onClick={() => void withCode()}>
             {t.signIn}
           </Button>
+          <button
+            type="button"
+            onClick={() => void signOut()}
+            className="block min-h-[44px] text-sm text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+          >
+            {t.signOut}
+          </button>
         </>
       ) : null}
 
