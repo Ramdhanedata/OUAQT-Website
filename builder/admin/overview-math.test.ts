@@ -10,6 +10,8 @@ import {
   niceMax,
   presenceOf,
   shopStatus,
+  SITE_LIVE_MINUTES,
+  visitorsSince,
   type LicenceRow,
 } from "./overview-math";
 
@@ -115,6 +117,30 @@ describe("people in the builder now", () => {
       { session_hash: "old", event: "reached", created_at: at(90) },
     ];
     expect(liveSessions(events, now)).toBe(1);
+  });
+});
+
+describe("visitors to the site", () => {
+  const at = (minutes: number) => new Date(now.getTime() - minutes * 60_000).toISOString();
+  const visits = [
+    { session_hash: "reader", created_at: at(2) },
+    { session_hash: "reader", created_at: at(4) },
+    { session_hash: "reader", created_at: at(6) },
+    { session_hash: "earlier", created_at: at(SITE_LIVE_MINUTES + 5) },
+    { session_hash: "yesterday", created_at: days(-1) },
+  ];
+
+  it("counts a tab once however many pages it opened", () => {
+    expect(visitorsSince(visits, new Date(now.getTime() - SITE_LIVE_MINUTES * 60_000))).toBe(1);
+  });
+
+  it("counts everybody since a given moment", () => {
+    expect(visitorsSince(visits, new Date(now.getTime() - 60 * 60_000))).toBe(2);
+    expect(visitorsSince(visits, new Date(now.getTime() - 2 * 86_400_000))).toBe(3);
+  });
+
+  it("is nobody with no visits", () => {
+    expect(visitorsSince([], now)).toBe(0);
   });
 });
 

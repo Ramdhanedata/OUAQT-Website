@@ -355,7 +355,7 @@ export const en = {
         "What OUAQT holds about you, and what it never has. This page covers this site, the Builder on it, and the systems we install at your premises.",
       collect: {
         h: "What this site collects",
-        b: "On ordinary pages, only what you type into the contact form: your name, your email address or phone, your message and the language you were reading. This site carries no advertising tracker and no third-party analytics.",
+        b: "On ordinary pages, what you type into the contact form: your name, your email address or phone, your message and the language you were reading. To know how many people visit, each page shown is counted with a random number your browser tab makes up and forgets when it closes, the page and whether it is a phone or a computer; a press on a download button is counted the same way, with the system it is for. No IP address, no cookie, nothing that says who you are. This site carries no advertising tracker and no third-party analytics.",
       },
       builder: {
         h: "When you build software",

@@ -161,6 +161,18 @@ export function liveSessions(events: { session_hash: string; event: string; crea
   return [...latest.values()].filter((one) => one.at >= since && one.event !== "left" && one.event !== "finished").length;
 }
 
+/*
+ * Visitors to the site: a tab counts once however many pages it opens. A
+ * page reports only when it opens, so somebody counts as here now for a
+ * while after the last page they opened, reading or not.
+ */
+export const SITE_LIVE_MINUTES = 10; // not-a-rule: how long after opening a page a visitor counts as here now
+
+export function visitorsSince(visits: { session_hash: string; created_at: string }[], since: Date): number {
+  const from = since.getTime();
+  return new Set(visits.filter((one) => new Date(one.created_at).getTime() >= from).map((one) => one.session_hash)).size;
+}
+
 /** A clean top for a chart's scale: 1, 2 or 5 times a power of ten, at least the largest value. */
 export function niceMax(value: number): number {
   if (value <= 4) return Math.max(1, Math.ceil(value));

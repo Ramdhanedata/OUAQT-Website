@@ -4,6 +4,7 @@ import "../globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
 import { PageTransition } from "@/components/motion/page-transition";
+import { SiteVisits } from "@/components/site-visits";
 import { getDictionary } from "@/lib/i18n";
 import { isRtl, locales, type Locale } from "@/lib/i18n/config";
 import { alternatesFor, siteUrl } from "@/lib/i18n/metadata";
@@ -202,6 +203,7 @@ export default async function RootLayout(props: Props) {
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer dict={dict} lang={lang} />
+        <SiteVisits lang={lang} />
       </body>
     </html>
   );

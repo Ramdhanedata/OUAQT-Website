@@ -346,7 +346,7 @@ export const fr: Dictionary = {
         "Ce qu'OUAQT détient à votre sujet, et ce qu'il n'a jamais. Cette page couvre ce site, le Builder qui s'y trouve, et les systèmes que nous installons chez vous.",
       collect: {
         h: "Ce que ce site collecte",
-        b: "Sur les pages ordinaires, uniquement ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail ou votre téléphone, votre message et la langue que vous lisiez. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
+        b: "Sur les pages ordinaires, ce que vous saisissez dans le formulaire de contact : votre nom, votre adresse e-mail ou votre téléphone, votre message et la langue que vous lisiez. Pour savoir combien de personnes le visitent, chaque page affichée est comptée avec un numéro tiré au hasard par l'onglet de votre navigateur, oublié à sa fermeture, la page et le type d'appareil, téléphone ou ordinateur ; un clic sur un bouton de téléchargement est compté de la même façon, avec le système choisi. Ni adresse IP, ni cookie, rien qui dise qui vous êtes. Ce site ne comporte ni traceur publicitaire ni outil d'analyse tiers.",
       },
       builder: {
         h: "Quand vous créez un logiciel",

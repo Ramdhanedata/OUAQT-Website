@@ -17,6 +17,7 @@ import { localisedHref } from "@/lib/i18n/routes";
 import { Field, TextInput } from "./fields";
 import type { StaffMember } from "./step-products";
 import { InstallHelp } from "./install-help";
+import { countDownload } from "@/lib/site-count";
 
 /*
  * Step 4: an account, then the number that makes it his.
@@ -271,9 +272,11 @@ function AccountForm({
  * Tells the website which system a download is for, the moment it starts.
  * The token it makes keeps a mark of this connection, so the software,
  * starting here, opens its shop by itself (see 0024). Nothing waits on it:
- * if it fails, the software asks for the serial as it always has.
+ * if it fails, the software asks for the serial as it always has. The press
+ * is also counted, by system and trade, for the overview's downloads.
  */
-export function registerDownload(platform: "windows" | "mac") {
+export function registerDownload(platform: "windows" | "mac", pack?: Pack) {
+  countDownload(platform, pack);
   void fetch("/api/builder/activation-token", {
     method: "POST",
     headers: { "content-type": "application/json" },
@@ -361,7 +364,7 @@ export function SerialPanel({
         {href ? (
           <a
             href={href}
-            onClick={() => registerDownload(target)}
+            onClick={() => registerDownload(target, pack)}
             className="flex min-h-[56px] w-full items-center justify-center rounded-lg bg-accent px-5 text-lg font-semibold text-accent-foreground"
           >
             {target === "windows" ? copy.install.downloadWindows : copy.install.downloadMac}
@@ -370,7 +373,7 @@ export function SerialPanel({
         {target === "mac" && otherMac ? (
           <a
             href={otherMac}
-            onClick={() => registerDownload("mac")}
+            onClick={() => registerDownload("mac", pack)}
             className="-mt-3 block text-sm text-muted-foreground underline underline-offset-4"
           >
             {copy.serial.otherMacIntel}

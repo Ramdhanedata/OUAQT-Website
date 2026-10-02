@@ -14,7 +14,9 @@ import {
   liveSessions,
   presenceOf,
   shopStatus,
+  SITE_LIVE_MINUTES,
   statusGroups,
+  visitorsSince,
   type DayCount,
   type LicenceRow,
   type Presence,
@@ -37,6 +39,7 @@ import {
 
 const MANY = 5_000; // not-a-rule: a ceiling on each read, far above today's shop count
 const DAY = 86_400_000;
+const WEEK = 7 * DAY; // not-a-rule: the overview's "last 7 days"
 export const ENDING_DAYS = 7; // not-a-rule: how far ahead "ending soon" looks
 export const CHART_DAYS = 30; // not-a-rule: the longest range the activity chart offers
 
@@ -65,6 +68,15 @@ export type Overview = {
     monthPayments: number;
     visitorsNow: number;
     visitorsToday: number;
+    /* The whole site, not only the builder: tabs, each counted once. */
+    siteNow: number;
+    siteToday: number;
+    siteWeek: number;
+    /* Presses on a download button, since counting began. */
+    downloads: number;
+    downloadsToday: number;
+    downloadsWindows: number;
+    downloadsMac: number;
   };
   /* Activated computers by how recently each checked in; the four add up to all of them. */
   presence: Record<Exclude<Presence, "never">, number>;
@@ -103,6 +115,11 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     { data: activations },
     { count: aiCalls },
     { data: trail },
+    { data: siteVisits },
+    { count: downloadsAll },
+    { count: downloadsToday },
+    { count: downloadsWindows },
+    { count: downloadsMac },
   ] = await Promise.all([
     getPublicSettings(),
     getPrivateSettings(),
@@ -143,6 +160,18 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
       .select("id, actor_id, subject, subject_id, action, detail, created_at")
       .order("created_at", { ascending: false })
       .limit(10),
+    /* A week of pages shown: enough for "here now", "today" and "these 7 days". */
+    supabase
+      .from("site_events")
+      .select("session_hash, created_at")
+      .eq("kind", "visit")
+      .gte("created_at", since(WEEK))
+      .order("created_at", { ascending: false })
+      .limit(50_000),
+    supabase.from("site_events").select("id", count).eq("kind", "download"),
+    supabase.from("site_events").select("id", count).eq("kind", "download").gte("created_at", todayStart),
+    supabase.from("site_events").select("id", count).eq("kind", "download").eq("platform", "windows"),
+    supabase.from("site_events").select("id", count).eq("kind", "download").eq("platform", "mac"),
   ]);
 
   const rules = { renewalGraceDays: publicSettings?.renewal_grace_days ?? 0 };
@@ -203,7 +232,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     },
     clients,
     kpi: {
-      newShops7: (businesses ?? []).filter((one) => one.created_at >= since(7 * DAY)).length,
+      newShops7: (businesses ?? []).filter((one) => one.created_at >= since(WEEK)).length,
       onlineApps: presence.now,
       onlineShops: onlineShops.size,
       activatedApps: (devices ?? []).length,
@@ -212,6 +241,13 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
       monthPayments: (monthPayments ?? []).length,
       visitorsNow: liveSessions(events, now),
       visitorsToday: new Set(events.filter((one) => one.created_at >= todayStart).map((one) => one.session_hash)).size,
+      siteNow: visitorsSince(siteVisits ?? [], new Date(now.getTime() - SITE_LIVE_MINUTES * 60_000)),
+      siteToday: visitorsSince(siteVisits ?? [], new Date(todayStart)),
+      siteWeek: visitorsSince(siteVisits ?? [], new Date(now.getTime() - WEEK)),
+      downloads: downloadsAll ?? 0,
+      downloadsToday: downloadsToday ?? 0,
+      downloadsWindows: downloadsWindows ?? 0,
+      downloadsMac: downloadsMac ?? 0,
     },
     presence,
     platforms,

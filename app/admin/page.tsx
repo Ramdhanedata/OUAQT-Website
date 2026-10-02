@@ -20,9 +20,9 @@ import { fill } from "@/lib/utils";
 /*
  * The overview: the page staff land on, and the one left open on a screen.
  *
- * Read top to bottom it answers: is anything waiting for me; the four
- * numbers that matter (customers, software running, paying licences, people
- * on the site now); where every customer stands; which copies of the
+ * Read top to bottom it answers: is anything waiting for me; the six
+ * numbers that matter (customers, software running, paying licences, then
+ * visitors to the site, people in the builder now, and downloads); where every customer stands; which copies of the
  * software are running; what happened day by day; what ends this week; what
  * was last done; and whether the machinery is healthy. Every number opens
  * the page where something can be done about it, and the page re-reads
@@ -114,8 +114,8 @@ export default async function OverviewPage() {
         )}
       </div>
 
-      {/* The four numbers. */}
-      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      {/* The numbers: the business on the first row, the traffic that feeds it on the second. */}
+      <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-3">
         <Kpi
           href="/admin/clients"
           label={o.kpi.clients}
@@ -136,11 +136,26 @@ export default async function OverviewPage() {
           sub={fill(o.kpi.payingSub, { amount: formatMoney(data.kpi.monthAmount, lang) })}
         />
         <Kpi
+          label={o.kpi.site}
+          live={data.kpi.siteNow > 0}
+          value={number.format(data.kpi.siteToday)}
+          sub={fill(o.kpi.siteSub, { now: number.format(data.kpi.siteNow), week: number.format(data.kpi.siteWeek) })}
+        />
+        <Kpi
           href="/admin/parcours"
           label={o.kpi.visitors}
           live={data.kpi.visitorsNow > 0}
           value={number.format(data.kpi.visitorsNow)}
           sub={fill(o.kpi.visitorsSub, { count: number.format(data.kpi.visitorsToday) })}
+        />
+        <Kpi
+          label={o.kpi.downloads}
+          value={number.format(data.kpi.downloads)}
+          sub={fill(o.kpi.downloadsSub, {
+            today: number.format(data.kpi.downloadsToday),
+            windows: number.format(data.kpi.downloadsWindows),
+            mac: number.format(data.kpi.downloadsMac),
+          })}
         />
       </ul>
 
@@ -308,25 +323,35 @@ function Card({
   );
 }
 
-/* One headline figure: what it counts, the number, and one line of context. */
-function Kpi({ href, label, value, sub, live }: { href: string; label: string; value: string; sub: string; live?: boolean }) {
+/* One headline figure: what it counts, the number, and one line of context. It opens its page when it has one. */
+function Kpi({ href, label, value, sub, live }: { href?: string; label: string; value: string; sub: string; live?: boolean }) {
+  const inside = (
+    <>
+      <span className="flex items-center gap-2 text-sm text-muted-foreground">
+        {live ? (
+          <span aria-hidden className="relative flex h-2 w-2">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-app-success opacity-60" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-app-success" />
+          </span>
+        ) : null}
+        {label}
+      </span>
+      <span className="mt-2 block text-4xl font-semibold tracking-tight text-foreground">
+        <bdi dir="ltr">{value}</bdi>
+      </span>
+      <span className="mt-1 block text-sm leading-snug text-muted-foreground">{sub}</span>
+    </>
+  );
+  const box = "block h-full rounded-2xl border border-border bg-surface p-5";
   return (
     <li>
-      <Link href={href} className="block h-full rounded-2xl border border-border bg-surface p-5 transition-colors hover:border-foreground/40">
-        <span className="flex items-center gap-2 text-sm text-muted-foreground">
-          {live ? (
-            <span aria-hidden className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-app-success opacity-60" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-app-success" />
-            </span>
-          ) : null}
-          {label}
-        </span>
-        <span className="mt-2 block text-4xl font-semibold tracking-tight text-foreground">
-          <bdi dir="ltr">{value}</bdi>
-        </span>
-        <span className="mt-1 block text-sm leading-snug text-muted-foreground">{sub}</span>
-      </Link>
+      {href ? (
+        <Link href={href} className={`${box} transition-colors hover:border-foreground/40`}>
+          {inside}
+        </Link>
+      ) : (
+        <div className={box}>{inside}</div>
+      )}
     </li>
   );
 }
