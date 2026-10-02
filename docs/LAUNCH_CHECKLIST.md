@@ -5,7 +5,10 @@ paying shop. Each one is a switch or a value, not a piece of work.
 
 ## Blocking, from the launch audit (2026-09-26)
 
-- [ ] **Production installers.** Every installer released so far is a test
+- [x] **Production installers.** Done 2026-10-02: the production key pair
+      exists (private half in Vercel production only), `keys.ts` trusts it in
+      production builds, and installers built from `main` build with
+      `OUAQT_RELEASE=production`. Before that, every installer released was a test
       build: it activates against the builder branch's site and the test
       project, trusts the test licence key, and obeys the test switches. For
       launch:
@@ -18,13 +21,16 @@ paying shop. Each one is a switch or a value, not a piece of work.
          `OUAQT_` switch on start (`electron/lockdown.ts`).
       3. The `installer_url_*` settings in production point at those
          releases.
-- [ ] **Production database migrations.** `npm run db:push` against the
+- [x] **Production database migrations.** Done 2026-10-01 on `ouaqt-production`
+      (tgxqnherxxdplmxntupj), 0001 to 0028, checked identical to the test
+      project. Was: `npm run db:push` against the
       production project, which I never touch. 0024 to 0027 are new this
       week: the download that opens the software by itself, owners reading
       but not writing their rows (a real hole until it runs: an owner could
       give himself the launch price), the AI's daily budget, and the machine
       named in each licence.
-- [ ] **The builder branch's preview.** On the test project its admin area
+- [x] **The builder branch's preview.** Locked 2026-10-01: no Vercel
+      deployment opens the admin area without a login any more. Was: on the test project its admin area
       opens without signing in, by design, for testing. No real shop may ever
       activate against it. After launch, turn Vercel Authentication back on
       for previews.
@@ -45,7 +51,7 @@ paying shop. Each one is a switch or a value, not a piece of work.
 - [ ] **The Facebook link** in `lib/data/contact.ts` is marked as doubtful.
 - [ ] **`RESEND_API_KEY`** in Vercel, so leads and enquiries are mailed by
       the server rather than through FormSubmit from the visitor's browser.
-- [ ] **`NEXT_PUBLIC_SITE_URL` = `https://www.ouaqt.com`** in Vercel
+- [x] **`NEXT_PUBLIC_SITE_URL` = `https://www.ouaqt.com`** in Vercel
       (Production), then a redeploy, so share previews, canonical addresses
       and the sitemap carry the domain. The domain was bought on Spaceship on
       2026-09-28 and pointed at the Vercel project: `www.ouaqt.com` serves the
@@ -55,23 +61,26 @@ paying shop. Each one is a switch or a value, not a piece of work.
 
 ## Supabase dashboard
 
-- [ ] **Anonymous sign-ins: on.** Authentication, Sign In / Providers.
+- [x] **Anonymous sign-ins: on.** Authentication, Sign In / Providers. (Production: on, 2026-10-02.)
       Without it a draft has no owner and nothing saves to the server.
-- [ ] **Confirm email: off.** Authentication, Sign In / Providers, Email.
+- [x] **Confirm email: off.** Authentication, Sign In / Providers, Email. (Production: off, 2026-10-02.)
       Owners sign in with a phone number turned into an address. There is no
       mailbox behind it, so a confirmation email is one nobody can ever open,
       and on the free tier it also hits the sending limit within minutes.
-- [ ] A production project of its own, separate from `ouaqt-builder-test`.
+- [x] A production project of its own, separate from `ouaqt-builder-test`:
+      `ouaqt-production`, eu-west-1, free plan. www.ouaqt.com runs on it since
+      2026-10-02; previews and test installers stay on the test project.
 
 ## Environment
 
-- [ ] `SERIAL_SECRET` set in production, and **different** from the test one.
+- [x] `SERIAL_SECRET` set in production, and **different** from the test one.
       Changing it later makes every existing serial unreadable to its owner.
-- [ ] `NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN` decided **before** the first owner.
+- [x] `NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN` decided **before** the first owner:
+      `ouaqt.com` in production (2026-10-01), the Vercel address on previews.
       Changing it afterwards locks every one of them out of their account.
       It still points at the Vercel address. ouaqt.com has DNS since
       2026-09-28, so it could move there, but only while no owner exists.
-- [ ] The `installer_url_windows_<trade>` and `installer_url_mac_<trade>`
+- [x] The `installer_url_windows_<trade>` and `installer_url_mac_<trade>`
       settings pointing at the real installers, for every trade that is open.
       A trade whose addresses are empty says the software is coming, which is
       honest but is not a launch. They point at the public
