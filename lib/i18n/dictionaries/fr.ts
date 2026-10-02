@@ -216,7 +216,7 @@ export const fr: Dictionary = {
 
   legal: {
     updated: "Dernière mise à jour",
-    updatedDate: "Septembre 2026",
+    updatedDate: "Octobre 2026",
     terms: {
       title: "Licence et conditions d'utilisation",
       intro:
@@ -227,7 +227,7 @@ export const fr: Dictionary = {
       },
       trial: {
         h: "L'essai gratuit",
-        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours. L'essai commence la première fois que le logiciel s'ouvre sur votre ordinateur, pas le jour où vous le téléchargez. Pendant l'essai, tout fonctionne. À la fin, tant que rien n'est payé, le logiciel s'arrête et affiche la fenêtre de paiement. Vos données ne sont pas effacées : elles restent sur votre ordinateur, vous pouvez en enregistrer une copie depuis cette fenêtre, et tout se rouvre dès que le paiement est confirmé.",
+        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours, avec toutes ses fonctions. L'essai commence la première fois que le logiciel s'ouvre sur votre ordinateur, pas le jour où vous le téléchargez, et chaque ordinateur n'a droit qu'à un seul essai gratuit. À la fin, tant qu'aucune licence n'est payée, le logiciel passe en lecture seule : tout ce que vous avez enregistré reste affiché et vous pouvez toujours en enregistrer une copie, mais aucune nouvelle vente ne peut être saisie. Rien n'est effacé, et tout se rouvre dès que le paiement est confirmé.",
       },
       selfLicence: {
         h: "Ce que vous achetez",
@@ -235,7 +235,7 @@ export const fr: Dictionary = {
       },
       payment: {
         h: "Le paiement",
-        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous envoyez la capture d'écran de la confirmation avec votre numéro de série. Quand tout y correspond, le paiement est confirmé tout de suite et votre logiciel se rouvre de lui-même. Sinon, nous le confirmons à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
+        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous envoyez la capture d'écran de la confirmation avec votre numéro de série. Quand la capture peut être lue et que tout y correspond, le paiement peut être confirmé tout de suite et votre logiciel se rouvre de lui-même. Sinon, nous le vérifions à la main, en général le jour même. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
       },
       grace: {
         h: "Si le renouvellement est payé en retard",
@@ -244,6 +244,18 @@ export const fr: Dictionary = {
       devices: {
         h: "Vos postes",
         b: "Votre licence couvre {devices} ordinateurs. Si vous changez de machine, vous libérez l'ancienne depuis votre compte, dans la limite d'un nombre de libérations par an indiqué dans votre compte. Au-delà, écrivez-nous et nous le faisons pour vous. Réinstaller le logiciel sur le même ordinateur ne consomme pas de poste.",
+      },
+      refunds: {
+        h: "Remboursement",
+        b: "L'essai gratuit est là pour que vous vérifiiez, avant de payer quoi que ce soit, que le logiciel convient à votre commerce. Une licence confirmée n'est donc pas remboursée, ni en tout ni en partie, y compris si vous cessez de l'utiliser avant son terme. Deux exceptions : un paiement envoyé deux fois ou par erreur pour la même période, et un montant supérieur au prix dû. Dans ces deux cas, écrivez-nous dans les 30 jours et nous renvoyons la différence au numéro d'où elle est venue.",
+      },
+      serial: {
+        h: "Votre numéro de série",
+        b: "Votre numéro de série est ce qui active votre logiciel. Gardez-le au sein de votre entreprise, comme une clé : toute personne qui l'a peut activer un ordinateur à votre nom, dans la limite de votre licence. Si vous pensez qu'il a circulé, prévenez-nous tout de suite. Nous passons en revue avec vous les ordinateurs activés avec ce numéro et nous libérons ceux que vous ne reconnaissez pas.",
+      },
+      install: {
+        h: "L'installation sur Windows et sur Mac",
+        b: "Vous téléchargez le logiciel sur ce site et vous l'installez vous-même, en suivant le guide d'installation affiché sur la page de téléchargement. À la première ouverture, Windows ou macOS peut vous demander une confirmation, parce que le logiciel n'est pas encore signé par Microsoft ou par Apple. Le guide montre comment faire (sur Mac : clic droit sur l'application, puis Ouvrir). Cette confirmation n'est demandée qu'une fois et ne change rien au fonctionnement du logiciel ni à la façon dont vos données sont gardées. Si vous êtes bloqué, écrivez-nous sur WhatsApp et nous vous guidons.",
       },
       selfData: {
         h: "Vos données ne nous parviennent pas",
@@ -256,6 +268,16 @@ export const fr: Dictionary = {
       selfChanges: {
         h: "Ce que la licence ne comprend pas",
         b: "Un métier que le Builder ne couvre pas encore, ou une façon de travailler que ses questions ne prévoient pas, relève d'un projet sur mesure et fait l'objet d'un devis séparé.",
+      },
+      suspension: {
+        h: "La suspension d'une licence",
+        b: "Nous pouvons suspendre une licence qui ne respecte pas ces conditions. Une licence suspendue fait passer le logiciel en lecture seule, comme à la fin d'un essai : tout ce qui est déjà enregistré reste visible et rien n'est effacé. Nous vous en donnons la raison, sur WhatsApp ou par téléphone, et nous levons la suspension dès que la situation est corrigée. Un manquement grave ou répété peut mettre fin à la licence, sans remboursement. Sont notamment des motifs de suspension :",
+        items: [
+          "une capture de paiement fausse, retouchée ou correspondant à un autre paiement",
+          "le numéro de série ou le logiciel utilisé par une autre entreprise",
+          "une tentative de contourner la licence : reculer l'horloge de l'ordinateur, copier le logiciel sur un ordinateur qu'elle ne couvre pas, ou le modifier",
+          "l'utilisation du logiciel pour une activité interdite par la loi",
+        ],
       },
       bespokePart: {
         h: "Deuxième partie : les projets que nous construisons et installons",
@@ -301,9 +323,21 @@ export const fr: Dictionary = {
           "l'utiliser pour créer ou aider un produit concurrent",
         ],
       },
+      liability: {
+        h: "Responsabilité",
+        b: "Nous faisons de notre mieux pour que le logiciel fonctionne sans erreur, et nous corrigeons ce qui ne fonctionne pas comme annoncé. Il reste un outil : les prix, le stock et les informations que vous saisissez, les reçus que vous remettez et les obligations de votre métier (fiscalité, règles sanitaires et, pour une pharmacie, la délivrance et la péremption des médicaments) restent les vôtres. OUAQT ne répond pas des pertes indirectes, comme un manque à gagner, ni des données perdues lors d'une panne d'ordinateur sans sauvegarde. Dans tous les cas, notre responsabilité est limitée à ce que vous nous avez payé pour la licence au cours des douze derniers mois.",
+      },
+      termsChanges: {
+        h: "Modification de ces conditions",
+        b: "Nous pouvons mettre ces conditions à jour à mesure que le logiciel évolue, et la date en haut de cette page indique la version en vigueur. Quand une modification touche à ce que vous payez ou à ce que votre licence permet, nous vous prévenons au moins 30 jours à l'avance, sur ce site ou sur WhatsApp, et elle s'applique à vous à partir de votre prochain renouvellement.",
+      },
       law: {
         h: "Droit applicable",
         b: "Ces conditions relèvent du droit de la République Islamique de Mauritanie, et tout litige est porté devant les tribunaux de Nouakchott.",
+      },
+      contact: {
+        h: "Nous écrire",
+        b: "Toute question sur ces conditions : sur WhatsApp au {phone}, ou par e-mail à {email}.",
       },
     },
     privacy: {

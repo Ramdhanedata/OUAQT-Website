@@ -4,6 +4,7 @@ import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import { getPublicSettings } from "@/builder/db/settings";
+import { organization } from "@/lib/data/contact";
 import { builderTerms, pricingTerms } from "@/lib/data/pricing";
 import { fill } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -39,6 +40,9 @@ export default async function TermsPage(props: Props) {
     ...pricingTerms(params.lang),
     trialDays: builder.trialDays,
     graceDays: builder.graceDays,
+    /* Isolated, or an Arabic paragraph reverses the groups of digits. */
+    phone: `\u2066${organization.phoneDisplay}\u2069`,
+    email: organization.email,
   };
   /* Part one is the builder licence, part two a project we install: each states its own device count. */
   const selfServe = { ...values, devices: builder.devices };
@@ -55,11 +59,15 @@ export default async function TermsPage(props: Props) {
           { ...t.trial, self: true },
           { ...t.selfLicence, self: true },
           { ...t.payment, self: true },
+          { ...t.refunds, self: true },
           { ...t.grace, self: true },
           { ...t.devices, self: true },
+          { ...t.serial, self: true },
+          { ...t.install, self: true },
           { ...t.selfData, self: true },
           { ...t.selfSupport, self: true },
           { ...t.selfChanges, self: true },
+          { ...t.suspension, self: true },
           { ...t.bespokePart, part: true },
           t.licence,
           t.corrections,
@@ -69,7 +77,10 @@ export default async function TermsPage(props: Props) {
           { ...t.commonPart, part: true },
           t.ownership,
           t.restrictions,
+          t.liability,
+          t.termsChanges,
           t.law,
+          t.contact,
         ] as { h: string; b: string; items?: string[]; part?: boolean; self?: boolean }[]
       ).map((section) => {
         const terms = section.self ? selfServe : values;

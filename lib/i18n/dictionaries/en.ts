@@ -225,7 +225,7 @@ export const en = {
 
   legal: {
     updated: "Last updated",
-    updatedDate: "September 2026",
+    updatedDate: "October 2026",
     terms: {
       title: "Licence and terms of use",
       intro:
@@ -236,7 +236,7 @@ export const en = {
       },
       trial: {
         h: "The free trial",
-        b: "Your software can be tried free for {trialDays} days. The trial starts the first time the software opens on your computer, not the day you download it. During the trial everything works. At the end, until anything is paid, the software stops and shows the payment window. Your data is not erased: it stays on your computer, you can save a copy of it from that window, and everything opens again as soon as the payment is confirmed.",
+        b: "Your software can be tried free for {trialDays} days, with every feature. The trial starts the first time the software opens on your computer, not the day you download it, and each computer has one free trial only. At the end, until a licence is paid, the software turns read-only: everything you recorded stays on screen and you can still save a copy of it, but no new sale can be entered. Nothing is erased, and everything opens again as soon as the payment is confirmed.",
       },
       selfLicence: {
         h: "What you are buying",
@@ -244,7 +244,7 @@ export const en = {
       },
       payment: {
         h: "Payment",
-        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation with your serial number. When everything on it matches, the payment is confirmed straight away and your software opens again by itself. Otherwise we confirm it by hand, usually the same day. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
+        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation with your serial number. When the screenshot can be read and everything on it matches, the payment can be confirmed straight away and your software opens again by itself. Otherwise we check it by hand, usually the same day. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
       },
       grace: {
         h: "If a renewal is paid late",
@@ -253,6 +253,18 @@ export const en = {
       devices: {
         h: "Your devices",
         b: "Your licence covers {devices} computers. If you change machine, you release the old one from your account, up to the number of releases a year shown in your account. Beyond that, write to us and we will do it for you. Reinstalling the software on the same computer does not use up a device.",
+      },
+      refunds: {
+        h: "Refunds",
+        b: "The free trial is there so you can check, before paying anything, that the software suits your business. A confirmed licence is therefore not refunded, in full or in part, including when you stop using it before it ends. Two exceptions: a payment sent twice or by mistake for the same period, and an amount above the price due. In both cases, write to us within 30 days and we send the difference back to the number it came from.",
+      },
+      serial: {
+        h: "Your serial number",
+        b: "Your serial number is what activates your software. Keep it within your business, the way you would a key: anyone who has it can activate a computer in your name, within the limit of your licence. If you think it has got out, tell us at once. We go through the computers activated on it with you and release the ones you do not recognise.",
+      },
+      install: {
+        h: "Installing on Windows and Mac",
+        b: "You download the software from this site and install it yourself, following the installation guide shown on the download page. The first time it opens, Windows or macOS may ask you to confirm, because the software is not yet signed by Microsoft or Apple. The guide shows the steps (on a Mac: right-click the app, then Open). This confirmation is asked once, and it changes nothing about how the software works or how your data is kept. If you get stuck, write to us on WhatsApp and we will walk you through it.",
       },
       selfData: {
         h: "Your data does not reach us",
@@ -265,6 +277,16 @@ export const en = {
       selfChanges: {
         h: "What the licence does not include",
         b: "A trade the Builder does not cover yet, or a way of working its questions do not provide for, is a bespoke project and is quoted separately.",
+      },
+      suspension: {
+        h: "Suspension of a licence",
+        b: "We may suspend a licence that does not respect these terms. A suspended licence turns the software read-only, as at the end of a trial: everything already recorded stays visible and nothing is erased. We tell you why, on WhatsApp or by phone, and lift the suspension as soon as the situation is put right. A serious or repeated breach can end the licence, with no refund. Grounds for suspension include:",
+        items: [
+          "a payment screenshot that is false, altered or belongs to another payment",
+          "the serial number or the software being used by another business",
+          "an attempt to get round the licence: winding back the computer's clock, copying the software onto a computer it does not cover, or modifying it",
+          "using the software for an activity the law forbids",
+        ],
       },
       bespokePart: {
         h: "Part two: the projects we build and install",
@@ -310,9 +332,21 @@ export const en = {
           "use it to create or assist a competing product",
         ],
       },
+      liability: {
+        h: "Responsibility",
+        b: "We do our best for the software to work without error, and we fix what does not work as stated. It remains a tool: the prices, stock and information you enter, the receipts you hand out and the obligations of your trade (tax, health rules, and for a pharmacy the dispensing and expiry of medicines) remain yours. OUAQT is not liable for indirect losses, such as lost profit, or data lost through a computer failure with no backup. In every case, our liability is limited to what you paid us for the licence over the last twelve months.",
+      },
+      termsChanges: {
+        h: "Changes to these terms",
+        b: "We may update these terms as the software evolves, and the date at the top of this page shows the current version. When a change affects what you pay or what your licence allows, we tell you at least 30 days ahead, on this site or on WhatsApp, and it applies to you from your next renewal.",
+      },
       law: {
         h: "Governing law",
         b: "These terms are governed by the law of the Islamic Republic of Mauritania, and any dispute goes before the courts of Nouakchott.",
+      },
+      contact: {
+        h: "Contact us",
+        b: "Any question about these terms: on WhatsApp at {phone}, or by email at {email}.",
       },
     },
     privacy: {

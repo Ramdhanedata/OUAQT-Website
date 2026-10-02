@@ -48,7 +48,7 @@ paying shop. Each one is a switch or a value, not a piece of work.
       the client. The pharmacy, hotel, transport, school and restaurant pages
       give figures ("over 90% fewer errors", "60 hours a month"): confirm
       them with the clients or take them off, as `lib/data/projects.ts` asks.
-- [ ] **The Facebook link** in `lib/data/contact.ts` is marked as doubtful.
+- [x] **The Facebook link** in `lib/data/contact.ts`: https://www.facebook.com/ouaqt/ (confirmed 2026-10-02).
 - [ ] **`RESEND_API_KEY`** in Vercel, so leads and enquiries are mailed by
       the server rather than through FormSubmit from the visitor's browser.
 - [x] **`NEXT_PUBLIC_SITE_URL` = `https://www.ouaqt.com`** in Vercel
@@ -90,15 +90,20 @@ paying shop. Each one is a switch or a value, not a piece of work.
       at once whether a payment went through. On `free` the provider may keep
       the receipts it reads and use them; a paid key keeps them out of its
       training, and the privacy page would then say so again.
-- [ ] The five payment numbers in Réglages (`bankily_number`,
+- [x] The five payment numbers in Réglages (`bankily_number`,
       `masrvi_number`, `bimbank_number`, `sedad_number`, `click_number`).
-      0021 starts the four new ones with the Bankily number.
+      Decided 2026-10-02: all five receive on the same number, 38087272,
+      which is what production holds.
 
 ## The installers
 
-- [ ] **macOS notarisation, before the first real owner.** Unsigned, macOS
+- [ ] **macOS notarisation, at 100 active clients.** Unsigned, macOS
   refuses the first open, and the way through is a right-click and "Open"
-  that most people do not know exists. Decided 2026-09-22: buy it.
+  that most people do not know exists. Decided 2026-10-02 (replacing the
+  2026-09-22 decision to buy it before launch): launch unsigned, with the
+  download step's Mac guide and a word in the terms of use, guide owners
+  who get stuck on WhatsApp, and join the Apple programme once 100 clients
+  are active. Then:
   1. Join the Apple Developer Program (99 USD a year) with the OUAQT Apple ID.
   2. In Xcode or at developer.apple.com, create a **Developer ID
      Application** certificate and export it as a `.p12` with a password.
@@ -129,4 +134,7 @@ paying shop. Each one is a switch or a value, not a piece of work.
 - [ ] Arabic and English copy reviewed. Everything added by the builder is
       marked for it: `TODO(adel)` in `builder/copy/`, `"review": true` in the
       question banks.
-- [ ] The terms of use, in their final form, linked from the account step.
+- [x] The terms of use, in their final form, linked from the account step.
+      2026-10-02: refunds, the serial number, installing on Windows and Mac,
+      suspension, responsibility, changes to the terms and contact added in
+      the three languages; the account step's box links to them.
