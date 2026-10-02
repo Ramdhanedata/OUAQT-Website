@@ -187,7 +187,13 @@ export function Builder({
       fill(copy.shell.helpMessage as string, { step: STEP_KEYS.length, name: stepName })
     )}`;
     const name = (locale === "ar" && opened.nameArabic) || opened.nameLatin;
+    /*
+     * The way most owners now reach their download: the number from the
+     * phone, typed on the shop computer. It chooses Windows or Mac as step 4
+     * does, or a Mac would be offered Windows with no way to change it.
+     */
     return (
+      <InstallTargetProvider>
       <div lang={locale}>
         <Container className="max-w-3xl py-8 wizard:py-12">
           {offline ? (
@@ -238,6 +244,7 @@ export function Builder({
           </a>
         </Container>
       </div>
+      </InstallTargetProvider>
     );
   }
 
@@ -434,6 +441,11 @@ function Wizard({
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [step, screen]);
+
+  /* The last step's code, fetched while he answers, so a slow phone network never shows it an empty box. */
+  useEffect(() => {
+    void import("./step-account");
+  }, []);
 
   /* Which step he reached, so we can see where owners stop. */
   useEffect(() => {

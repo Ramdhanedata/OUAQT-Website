@@ -297,6 +297,7 @@ export function SerialPanel({
   shop,
   installers,
   tutorials,
+  guideAlways = false,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
@@ -305,6 +306,8 @@ export function SerialPanel({
   shop: string;
   installers: Installers;
   tutorials: Tutorials;
+  /* The install guide on every screen: no aside beside a resumed download to hold it. */
+  guideAlways?: boolean;
 }) {
   const [machine, setMachine] = useState<Machine>("other");
   useEffect(() => setMachine(machineOf()), []);
@@ -375,7 +378,7 @@ export function SerialPanel({
         ) : null}
         {href ? <TermsNote copy={copy} language={language} /> : null}
 
-        <div className="wizard:hidden">
+        <div className={guideAlways ? undefined : "wizard:hidden"}>
           <InstallGuide copy={copy} target={target} chip={chip} pack={pack} shop={shop} compact />
         </div>
 

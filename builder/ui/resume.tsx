@@ -91,6 +91,7 @@ export function ResumeDownload({
           shop={name ?? ""}
           installers={installers[ready.pack]}
           tutorials={tutorials}
+          guideAlways
         />
       </div>
     );
