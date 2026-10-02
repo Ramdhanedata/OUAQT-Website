@@ -20,6 +20,8 @@ import { adminClient } from "@/builder/db/server";
 import { PHONE_DOMAIN } from "@/builder/ui/login-domain";
 import { getPublicSettings } from "@/builder/db/settings";
 import { fill } from "@/lib/utils";
+import { growthCopy } from "@/builder/admin/copy-growth";
+import { AssignRep } from "@/builder/admin/rep-forms";
 
 /*
  * One client, everything we hold about it on one page, and the decisions
@@ -55,7 +57,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
   const { data: business } = UUID.test(id)
     ? await supabase
         .from("businesses")
-        .select("id, owner_id, name_latin, name_arabic, pack, app_language, receipt_phone, receipt_address, launch_client, created_at")
+        .select("id, owner_id, name_latin, name_arabic, pack, app_language, receipt_phone, receipt_address, launch_client, created_at, representative_id")
         .eq("id", id)
         .maybeSingle()
     : { data: null };
@@ -70,7 +72,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
     );
   }
 
-  const [settings, { data: licenceRows }, { data: devices }, { data: payments }, { data: draft }, { data: owner }] = await Promise.all([
+  const [settings, { data: licenceRows }, { data: devices }, { data: payments }, { data: draft }, { data: owner }, { data: reps }] = await Promise.all([
     getPublicSettings(),
     supabase
       .from("licences")
@@ -90,6 +92,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
       .limit(50),
     supabase.from("builder_drafts").select("phone").eq("business_id", business.id).not("phone", "is", null).limit(1).maybeSingle(),
     supabase.auth.admin.getUserById(business.owner_id),
+    supabase.from("representatives").select("id, name, code, active").order("name"),
   ]);
 
   const now = new Date();
@@ -264,6 +267,16 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
             <p className="text-sm text-muted-foreground">{c.noContact}</p>
           )}
           {business.receipt_address ? <p className="mt-3 text-sm text-muted-foreground">{business.receipt_address}</p> : null}
+          {/* Who brought this shop: set by their QR code, or here by hand. */}
+          <div className="mt-5 border-t border-border pt-4">
+            <h3 className="mb-2 text-sm font-semibold text-foreground">{growthCopy[lang].reps.assignTitle}</h3>
+            <AssignRep
+              t={growthCopy[lang].reps}
+              businessId={business.id}
+              current={(business.representative_id as string | null) ?? null}
+              reps={(reps ?? []).map((one) => ({ id: one.id as string, name: one.name as string, code: one.code as string, active: Boolean(one.active) }))}
+            />
+          </div>
         </Card>
       </div>
 

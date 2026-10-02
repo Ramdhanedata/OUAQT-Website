@@ -6,6 +6,7 @@ import { createShop, followAnswers, packOfShop, shopInput, type ImportedRow, typ
 import { decryptSerial, encryptSerial } from "@/builder/serial/cipher";
 import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
 import { isExpired, readNumber, waitAfter } from "./code";
+import { carryCredit } from "@/builder/referral";
 
 /*
  * The server's side of the owner's one number, his numéro de série: giving
@@ -269,6 +270,8 @@ export async function shopFor(
   });
   if (!made.ok) return { ok: false, error: made.error, status: made.status };
   await admin.from("builder_drafts").update({ business_id: made.businessId }).eq("id", draft.id);
+  /* Whoever brought this draft brought this shop. */
+  await carryCredit(admin, draft.id, made.businessId);
   return { ok: true, businessId: made.businessId, serial: made.serial, pack: shaped.data.pack };
 }
 

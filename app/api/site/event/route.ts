@@ -1,7 +1,9 @@
+import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { packs } from "@/app-ui/packs";
 import { adminClient } from "@/builder/db/server";
+import { REF_COOKIE, repCodeOf } from "@/builder/referral";
 import { limitPerCaller } from "@/lib/rate-limit";
 
 /*
@@ -49,6 +51,8 @@ export async function POST(request: Request) {
     platform: input.data.platform ?? null,
     pack: input.data.pack ?? null,
     device_class: input.data.deviceClass ?? null,
+    /* Arrived through a representative's QR code (the cookie the middleware keeps). */
+    rep_code: repCodeOf((await cookies()).get(REF_COOKIE)?.value),
   });
 
   return NextResponse.json({ ok: true });

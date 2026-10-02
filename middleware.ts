@@ -8,6 +8,7 @@ import {
   type Locale,
 } from "@/lib/i18n/config";
 import { localisedHref, localisedRoutes, routeIdForSlug } from "@/lib/i18n/routes";
+import { REF_COOKIE, REF_COOKIE_DAYS, repCodeOf } from "@/builder/referral";
 
 /*
  * Every page lives under a locale prefix (/en, /fr, /ar), except the front
@@ -45,6 +46,10 @@ function pickLocale(request: NextRequest): string {
 }
 
 export function middleware(request: NextRequest) {
+  return referral(request, route(request));
+}
+
+function route(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
   const current = locales.find(
@@ -56,6 +61,26 @@ export function middleware(request: NextRequest) {
   const url = request.nextUrl.clone();
   url.pathname = pathname === "/" ? `/${locale}` : `/${locale}${pathname}`;
   return pathname === "/" ? NextResponse.rewrite(url) : NextResponse.redirect(url);
+}
+
+/*
+ * A representative's QR code: ?ref=CODE on any page. The code is kept for
+ * 30 days, and only the first one, so the person who made the introduction
+ * keeps it (builder/referral.ts). Whether it names a real representative is
+ * checked when it is used, not here.
+ */
+function referral(request: NextRequest, response: NextResponse) {
+  const code = repCodeOf(request.nextUrl.searchParams.get("ref"));
+  if (code && !repCodeOf(request.cookies.get(REF_COOKIE)?.value)) {
+    response.cookies.set(REF_COOKIE, code, {
+      path: "/",
+      maxAge: REF_COOKIE_DAYS * 24 * 60 * 60,
+      sameSite: "lax",
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    });
+  }
+  return response;
 }
 
 /* The language of the page being read becomes the one "/" opens in next time. */

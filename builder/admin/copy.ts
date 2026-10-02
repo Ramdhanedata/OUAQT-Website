@@ -33,6 +33,7 @@ const fr = {
 
   nav: {
     overview: "Vue d'ensemble",
+    stats: "Statistiques",
     payments: "Paiements",
     clients: "Clients",
     devices: "Postes",
@@ -43,6 +44,7 @@ const fr = {
     settings: "Réglages",
     aiCost: "Coût IA",
     staff: "Équipe",
+    reps: "Commerciaux",
   },
 
   navGroups: { follow: "Suivi", setup: "Configuration" },
@@ -346,6 +348,12 @@ const fr = {
     staff_password_set: "Mot de passe d'un membre changé",
     staff_factor_reset: "Authentificateur d'un membre effacé",
     staff_removed: "Membre retiré de l'équipe",
+    "representative:created": "Commercial ajouté",
+    "representative:updated": "Bonus d'un commercial modifié",
+    "representative:deactivated": "Commercial désactivé",
+    "representative:reactivated": "Commercial réactivé",
+    "representative:paid": "Bonus versé à un commercial",
+    representative_set: "Commercial attribué à un commerce",
   } as Record<string, string>,
 
   staff: {
@@ -514,6 +522,7 @@ const en: AdminCopy = {
 
   nav: {
     overview: "Overview",
+    stats: "Statistics",
     payments: "Payments",
     clients: "Customers",
     devices: "Computers",
@@ -524,6 +533,7 @@ const en: AdminCopy = {
     settings: "Settings",
     aiCost: "AI cost",
     staff: "Team",
+    reps: "Sales reps",
   },
 
   navGroups: { follow: "Follow-up", setup: "Setup" },
@@ -816,6 +826,12 @@ const en: AdminCopy = {
     staff_password_set: "Team member's password changed",
     staff_factor_reset: "Team member's authenticator cleared",
     staff_removed: "Team member removed",
+    "representative:created": "Sales representative added",
+    "representative:updated": "Representative's bonus changed",
+    "representative:deactivated": "Sales representative deactivated",
+    "representative:reactivated": "Sales representative reactivated",
+    "representative:paid": "Bonus paid to a representative",
+    representative_set: "Representative credited with a shop",
   },
 
   staff: {
@@ -982,6 +998,7 @@ const ar: AdminCopy = {
 
   nav: {
     overview: "نظرة عامة",
+    stats: "الإحصائيات",
     payments: "المدفوعات",
     clients: "الزبائن",
     devices: "الأجهزة",
@@ -992,6 +1009,7 @@ const ar: AdminCopy = {
     settings: "الإعدادات",
     aiCost: "تكلفة الذكاء الاصطناعي",
     staff: "الفريق",
+    reps: "المندوبون",
   },
 
   navGroups: { follow: "المتابعة", setup: "الإعداد" },
@@ -1283,6 +1301,12 @@ const ar: AdminCopy = {
     staff_password_set: "غيرت كلمة مرور عضو",
     staff_factor_reset: "مسح تطبيق المصادقة لعضو",
     staff_removed: "أزيل عضو من الفريق",
+    "representative:created": "أضيف مندوب",
+    "representative:updated": "عُدّلت مكافأة مندوب",
+    "representative:deactivated": "أوقف مندوب",
+    "representative:reactivated": "أعيد تفعيل مندوب",
+    "representative:paid": "دُفعت مكافأة لمندوب",
+    representative_set: "نُسب محل إلى مندوب",
   },
 
   staff: {

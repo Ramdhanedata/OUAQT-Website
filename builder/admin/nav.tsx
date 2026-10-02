@@ -1,6 +1,8 @@
 import {
+  ChartColumn,
   CreditCard,
   FlaskConical,
+  Handshake,
   Inbox,
   KeyRound,
   LayoutDashboard,
@@ -30,6 +32,8 @@ import { adminWords } from "./language";
 
 type Key =
   | "overview"
+  | "stats"
+  | "reps"
   | "clients"
   | "payments"
   | "devices"
@@ -48,6 +52,7 @@ const groups: { title: "follow" | "setup" | null; items: Item[] }[] = [
     title: null,
     items: [
       { href: "/admin", key: "overview", icon: LayoutDashboard },
+      { href: "/admin/statistiques", key: "stats", icon: ChartColumn },
       { href: "/admin/clients", key: "clients", icon: Users },
       { href: "/admin/paiements", key: "payments", icon: CreditCard },
       { href: "/admin/postes", key: "devices", icon: Monitor },
@@ -67,6 +72,7 @@ const groups: { title: "follow" | "setup" | null; items: Item[] }[] = [
       { href: "/admin/codes", key: "codes", icon: KeyRound },
       { href: "/admin/reglages", key: "settings", icon: Settings },
       { href: "/admin/equipe", key: "staff", icon: UserCog },
+      { href: "/admin/commerciaux", key: "reps", icon: Handshake },
       { href: "/admin/cout-ia", key: "aiCost", icon: Sparkles },
     ],
   },

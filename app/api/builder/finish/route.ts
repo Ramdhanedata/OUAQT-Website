@@ -4,6 +4,7 @@ import { isTester, TESTER_COOKIE } from "@/builder/admin/tester";
 import { adminClient, sessionClient } from "@/builder/db/server";
 import { createShop, shopInput } from "@/builder/licence/create-shop";
 import { decryptSerial, serialSecretIsSet } from "@/builder/serial/cipher";
+import { carryCredit, creditDraft, REF_COOKIE } from "@/builder/referral";
 
 /*
  * The end of the interview: a business, a configuration, and the number he
@@ -70,6 +71,9 @@ export async function POST(request: Request) {
 
   if (draft && made.created) {
     await admin.from("builder_drafts").update({ business_id: made.businessId }).eq("id", draft.id);
+    /* A representative's QR code in this browser credits the draft, and the shop takes it on. */
+    await creditDraft(admin, draft.id, (await cookies()).get(REF_COOKIE)?.value);
+    await carryCredit(admin, draft.id, made.businessId);
   }
 
   return NextResponse.json({ businessId: made.businessId, serial: made.serial });

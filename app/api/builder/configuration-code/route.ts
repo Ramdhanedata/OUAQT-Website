@@ -7,6 +7,7 @@ import { followDraft, keepLogo, numberFor } from "@/builder/config-code/server";
 import { adminClient, requestClient } from "@/builder/db/server";
 import { sendNumber } from "@/builder/notify/whatsapp";
 import { serialSecretIsSet } from "@/builder/serial/cipher";
+import { creditDraft, REF_COOKIE } from "@/builder/referral";
 
 /*
  * The owner's numéro de série, the moment the questions are done.
@@ -60,6 +61,9 @@ export async function POST(request: Request) {
   const answers = (draft.answers ?? {}) as { phone?: string };
   const phone = phoneKey(input.data.phone) ?? phoneKey(answers.phone) ?? draft.phone ?? null;
   if (phone && phone !== draft.phone) await admin.from("builder_drafts").update({ phone }).eq("id", draft.id);
+
+  /* Came through a representative's QR code: the draft is theirs from here, and the shop it makes. */
+  await creditDraft(admin, draft.id, (await cookies()).get(REF_COOKIE)?.value);
 
   /*
    * Staff answering on a phone in test mode: the shop this number makes gets

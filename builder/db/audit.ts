@@ -14,7 +14,7 @@ import { adminClient } from "./server";
  * admin area through server code.
  */
 
-export type AuditSubject = "payment" | "licence" | "device" | "settings" | "business" | "configuration_code" | "staff";
+export type AuditSubject = "payment" | "licence" | "device" | "settings" | "business" | "configuration_code" | "staff" | "representative";
 
 export async function audit(entry: {
   actorId: string | null;
