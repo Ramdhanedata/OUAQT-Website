@@ -73,7 +73,7 @@ export function BuilderHero({
             * builder with the box for the number already open.
             */}
           <a
-            href={`${localisedHref(lang, "builder")}?serial`}
+            href={`${localisedHref(lang, "builder")}?serial=1`}
             style={rise(0.24)}
             className="hero-enter mt-4 flex min-h-[48px] items-center justify-center text-base text-muted-foreground underline sm:inline-flex decoration-border underline-offset-4 transition-colors hover:text-foreground"
           >

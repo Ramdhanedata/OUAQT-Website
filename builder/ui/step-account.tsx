@@ -456,7 +456,7 @@ function PhoneOrSoon({
   const site = typeof window === "undefined" ? "" : window.location.host;
   const origin = typeof window === "undefined" ? "" : window.location.origin;
   const share = `https://wa.me/?text=${encodeURIComponent(
-    fill(copy.serial.shareMessage as string, { serial, url: `${origin}${localisedHref(language, "builder")}?serial` })
+    fill(copy.serial.shareMessage as string, { serial, url: `${origin}${localisedHref(language, "builder")}?serial=1` })
   )}`;
   const [before, after = ""] = fill(copy.serial.onPhone as string, { have: copy.code.have }).split("{site}");
   const anyInstaller = Boolean(installers.windows || installers.mac);
