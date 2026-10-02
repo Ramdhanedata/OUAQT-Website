@@ -373,6 +373,7 @@ export function SerialPanel({
             {copy.serial.otherMacIntel}
           </a>
         ) : null}
+        {href ? <TermsNote copy={copy} language={language} /> : null}
 
         <div className="wizard:hidden">
           <InstallGuide copy={copy} target={target} chip={chip} pack={pack} shop={shop} compact />
@@ -406,6 +407,24 @@ export function SerialPanel({
 }
 
 /*
+ * The terms, where the owner meets them. Most never see the account form and
+ * its box: the serial comes after the questions and the download straight
+ * after it, so the download is where the terms are put in front of him.
+ */
+function TermsNote({ copy, language }: { copy: BuilderCopy; language: AppLanguage }) {
+  const [before, after = ""] = (copy.serial.termsNote as string).split("{terms}");
+  return (
+    <p className="text-sm leading-relaxed text-muted-foreground">
+      {before}
+      <a href={`/${language}/terms`} target="_blank" rel="noreferrer" className="underline underline-offset-4">
+        {copy.serial.termsLink}
+      </a>
+      {after}
+    </p>
+  );
+}
+
+/*
  * A phone, or a trade with nothing to download yet. On a phone there is
  * nothing to install, so it shows the serial and where to go on the shop
  * computer. With no installer yet, it says so plainly.
@@ -426,12 +445,17 @@ function PhoneOrSoon({
   showDownloads: boolean;
 }) {
   const [copied, setCopied] = useState(false);
+  /*
+   * The site as he would type it on the shop computer: www.ouaqt.com, where
+   * "I already have my serial number" sits under the first button. The link
+   * he shares to himself goes one step further, to the box for the number.
+   */
+  const site = typeof window === "undefined" ? "" : window.location.host;
   const origin = typeof window === "undefined" ? "" : window.location.origin;
-  /* Where he signs in on the shop PC: his account page, which has the downloads. */
-  const address = `${origin}${localisedHref(language, "account")}`;
   const share = `https://wa.me/?text=${encodeURIComponent(
-    fill(copy.serial.shareMessage as string, { serial, url: address })
+    fill(copy.serial.shareMessage as string, { serial, url: `${origin}${localisedHref(language, "builder")}?serial` })
   )}`;
+  const [before, after = ""] = fill(copy.serial.onPhone as string, { have: copy.code.have }).split("{site}");
   const anyInstaller = Boolean(installers.windows || installers.mac);
 
   return (
@@ -509,13 +533,17 @@ function PhoneOrSoon({
               </a>
             ) : null}
           </div>
+          <TermsNote copy={copy} language={language} />
           <InstallHelp copy={copy} first="windows" />
         </div>
       ) : (
         <div className="rounded-xl border-2 border-foreground p-5">
-          <p className="text-base leading-relaxed text-foreground">{copy.serial.onPhone}</p>
-          <p dir="ltr" className="mt-2 break-all text-lg font-medium text-foreground">
-            {address}
+          <p className="text-lg leading-relaxed text-foreground">
+            {before}
+            <bdi dir="ltr" className="font-semibold">
+              {site}
+            </bdi>
+            {after}
           </p>
         </div>
       )}

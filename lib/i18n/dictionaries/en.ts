@@ -264,7 +264,7 @@ export const en = {
       },
       install: {
         h: "Installing on Windows and Mac",
-        b: "You download the software from this site and install it yourself, following the installation guide shown on the download page. The first time it opens, Windows or macOS may ask you to confirm, because the software is not yet signed by Microsoft or Apple. The guide shows the steps (on a Mac: right-click the app, then Open). This confirmation is asked once, and it changes nothing about how the software works or how your data is kept. If you get stuck, write to us on WhatsApp and we will walk you through it.",
+        b: "You download the software from this site and install it yourself, following the installation guide shown on the download page. The first time it opens, Windows or macOS may ask you to confirm, because the software is not yet signed by Microsoft or Apple. The guide shows the steps: on Windows, \"More info\" then \"Run anyway\"; on a Mac, System Settings, Privacy & Security, then \"Open Anyway\". This confirmation is asked once, and it changes nothing about how the software works or how your data is kept. If you get stuck, write to us on WhatsApp and we will walk you through it.",
       },
       selfData: {
         h: "Your data does not reach us",

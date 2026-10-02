@@ -17,7 +17,7 @@ import dynamic from "next/dynamic";
 import type { ImportedProduct } from "@/builder/import/parse";
 import { LeadForm } from "./lead-form";
 import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
-import { CodeEntry, CodeIssued, forgetOpened, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
+import { CodeEntry, forgetOpened, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
 import { localisedHref } from "@/lib/i18n/routes";
 import { InstallGuide } from "./install-guide";
 import { InstallTargetProvider, useInstallTarget } from "./install-target";
@@ -75,6 +75,7 @@ export function Builder({
   locale,
   enabledPacks,
   startPack,
+  askSerial,
   supportWhatsapp,
   maxDevices,
   installers,
@@ -86,6 +87,8 @@ export function Builder({
   locale: Locale;
   enabledPacks: Pack[];
   startPack: Pack | null;
+  /* Sent from the home page's "I already have my serial number": the field is open. */
+  askSerial: boolean;
   supportWhatsapp: string | null;
   maxDevices: number | null;
   installers: Record<Pack, { windows: string | null; mac: string | null }>;
@@ -127,7 +130,9 @@ export function Builder({
 
   const codeEntry = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} />;
   /* On the first page, the same entry as a button beside "Commencer", where a returning owner looks first. */
-  const codeButton = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} asButton />;
+  const codeButton = (
+    <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} asButton startOpen={askSerial} />
+  );
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
@@ -379,15 +384,15 @@ function Wizard({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLarge, setPreviewLarge] = useState(false);
   /*
-   * The numéro de série, given once, when the questions end, and shown
-   * on its own screen before products and staff.
+   * The numéro de série, given once: on a computer when the questions end,
+   * on a phone when products and staff are done. Either way it opens the
+   * last step.
    */
-  const [issued, setIssued] = useState<{ serial: string; sent: boolean; hasPhone: boolean } | null>(null);
-  const [showCode, setShowCode] = useState(false);
+  const [issued, setIssued] = useState<{ serial: string } | null>(null);
   /* While the code is being fetched the screen holds still, and taps wait. */
   const [issuing, setIssuing] = useState(false);
 
-  async function issue(phone?: string): Promise<boolean> {
+  async function issue(): Promise<boolean> {
     try {
       await flush();
       const response = await fetch("/api/builder/configuration-code", {
@@ -395,14 +400,13 @@ function Wizard({
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
           language: locale,
-          ...(phone ? { phone } : {}),
           ...(answers.logo && answers.logoMono ? { logo: answers.logo, logoMono: answers.logoMono } : {}),
           ...(!answers.logo && answers.logoRemoved ? { removeLogo: true } : {}),
         }),
       });
-      const body = (await response.json().catch(() => null)) as { serial?: string; sent?: boolean; hasPhone?: boolean } | null;
+      const body = (await response.json().catch(() => null)) as { serial?: string } | null;
       if (!response.ok || !body?.serial) return false;
-      setIssued({ serial: body.serial, sent: Boolean(body.sent), hasPhone: Boolean(body.hasPhone) });
+      setIssued({ serial: body.serial });
       return true;
     } catch {
       return false;
@@ -422,10 +426,14 @@ function Wizard({
   const [serial, setSerial] = useState<string | null>(null);
   const wide = useWide();
 
-  /* The code arrives after a long summary he scrolled to the end of: it opens at the top, where the code is. */
+  /*
+   * A new step opens at its own top. The button that brought him here sat at
+   * the bottom of the last one, and left where it was the page would open on
+   * the fifth question with the first four above the fold, unseen.
+   */
   useEffect(() => {
-    if (showCode) window.scrollTo({ top: 0 });
-  }, [showCode]);
+    window.scrollTo({ top: 0 });
+  }, [step, screen]);
 
   /* Which step he reached, so we can see where owners stop. */
   useEffect(() => {
@@ -433,10 +441,10 @@ function Wizard({
   }, [step, answers.pack]);
 
   const total = STEP_KEYS.length;
-  /* The number this owner has now: the one issued after the questions, or one he opened. */
+  /* The number this owner has now: the one issued as the last step opened, or one he opened. */
   const currentSerial = serial ?? issued?.serial ?? null;
   /* The journey's end: the last step, with a serial issued now or brought back from an earlier visit. */
-  const finished = step === total - 1 && Boolean(currentSerial) && !lead && !showCode;
+  const finished = step === total - 1 && Boolean(currentSerial) && !lead;
   const whatsapp = supportWhatsapp
     ? `https://wa.me/${supportWhatsapp}`
     : organization.whatsappUrl;
@@ -458,41 +466,45 @@ function Wizard({
     onStep(step - 1);
   }
 
+  /*
+   * The numéro de série, once, as the last step opens, so it is the last
+   * thing he sees. If it cannot be issued (no network, no database), the last
+   * step offers the account form instead and nothing blocks him.
+   */
+  function finish() {
+    setScreen(0);
+    if (issued) return onStep(total - 1);
+    setIssuing(true);
+    void issue().then(() => {
+      setIssuing(false);
+      onStep(total - 1);
+    });
+  }
+
   function goNext() {
     if (issuing) return;
-    if (showCode) {
-      setShowCode(false);
-      setScreen(0);
-      return onStep(2);
-    }
     if (step === 1) {
       if (!wide && screen < interviewScreens - 1) return setScreen(screen + 1);
       /*
-       * The questions are done: the numéro de série, once, before
-       * anything else. If it cannot be issued (no network, no database), the
-       * owner carries on and nothing blocks him.
+       * On a computer he is at the shop's computer already: the questions
+       * done, straight to the serial and the download (Adel, 2026-09-25). His
+       * products can come back one step, or be imported in the software
+       * itself. On a phone, products and staff first, and the serial after
+       * them, with nothing to continue to (Adel, 2026-10-02).
        */
-      if (!issued) {
-        setIssuing(true);
-        void issue().then((ok) => {
-          setIssuing(false);
-          setScreen(0);
-          /*
-           * On a phone, the number to type on the shop's computer, with the
-           * products still to add here if he wants. On a computer he is at
-           * the shop's computer already: straight to the download (Adel,
-           * 2026-09-25). His products can come back one step, or be
-           * imported in the software itself.
-           */
-          if (ok && machineOf() === "phone") setShowCode(true);
-          else if (ok) onStep(total - 1);
-          else onStep(2);
-        });
-        return;
+      if (issued || machineOf() === "phone") {
+        setScreen(0);
+        return onStep(2);
       }
       setScreen(0);
-      return onStep(2);
+      setIssuing(true);
+      void issue().then((ok) => {
+        setIssuing(false);
+        onStep(ok ? total - 1 : 2);
+      });
+      return;
     }
+    if (step === 2) return finish();
     if (step !== 0) return onStep(Math.min(step + 1, total - 1));
 
     const leavingName = wide || screen >= NAME_SCREEN;
@@ -520,20 +532,7 @@ function Wizard({
     update(patched ? { interview, patched } : { interview });
   }
 
-  const questionsPane = showCode && issued ? (
-    <CodeIssued
-      copy={copy}
-      serial={issued.serial}
-      sent={issued.sent}
-      hasPhone={issued.hasPhone}
-      onPhone={(phone) => issue(phone)}
-      onContinue={() => {
-        setShowCode(false);
-        setScreen(0);
-        onStep(2);
-      }}
-    />
-  ) : lead ? (
+  const questionsPane = lead ? (
     <LeadForm
       copy={copy}
       pack={lead.pack}
@@ -650,7 +649,7 @@ function Wizard({
                  * is issued, here or on an earlier visit, there is nothing
                  * after it to continue to: a thank-you takes their place.
                  */
-                (lead || showCode || finished) && "hidden"
+                (lead || finished) && "hidden"
               )}
             >
               <Container className="py-3">
@@ -694,7 +693,7 @@ function Wizard({
             <div
               className={cn(
                 "mt-8 hidden items-center gap-3 wizard:flex",
-                (lead || showCode || finished) && "wizard:hidden"
+                (lead || finished) && "wizard:hidden"
               )}
             >
               <Button type="button" variant="outline" onClick={goBack} className="min-h-[48px] text-base">

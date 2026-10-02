@@ -1,15 +1,18 @@
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
+import { cookies } from "next/headers";
 import { getDictionary } from "@/lib/i18n";
-import { defaultLocale } from "@/lib/i18n/config";
+import { defaultLocale, isLocale, languageCookie } from "@/lib/i18n/config";
 
 /*
- * not-found.tsx cannot read route params in Next 14, so this falls back to the
- * default locale. Everything else on the site is properly localised, and the
- * button opens the home page in the visitor's own language.
+ * not-found.tsx cannot read route params, so it speaks the language the
+ * visitor last read the site in, which the middleware remembers, and the
+ * default one on a first visit. The header and footer around it follow the
+ * address, and the button opens the home page in the visitor's own language.
  */
-export default function NotFound() {
-  const dict = getDictionary(defaultLocale);
+export default async function NotFound() {
+  const remembered = (await cookies()).get(languageCookie)?.value ?? "";
+  const dict = getDictionary(isLocale(remembered) ? remembered : defaultLocale);
 
   return (
     <Container className="flex min-h-[70vh] flex-col items-center justify-center text-center">

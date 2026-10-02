@@ -108,7 +108,10 @@ export function Preview({
     const heard = (event: MessageEvent) => {
       if (event.source !== frame.current?.contentWindow) return;
       const type = (event.data as { type?: string })?.type;
-      if (type === "ouaqt:ready") setReady(true);
+      if (type === "ouaqt:ready") {
+        focusWithoutScrolling(frame.current);
+        setReady(true);
+      }
       if (type === "ouaqt:started") setStarted(true);
     };
     window.addEventListener("message", heard);
@@ -222,6 +225,7 @@ export function Preview({
               <iframe
                 ref={frame}
                 src={APP_SOURCE}
+                onLoad={() => focusWithoutScrolling(frame.current)}
                 title={copy.shell.previewTitle}
                 style={{ width: APP_WIDTH, height: APP_HEIGHT, border: 0, display: "block" }}
               />
@@ -277,3 +281,27 @@ function RotateHint({ copy, hidden }: { copy: BuilderCopy; hidden: boolean }) {
     </p>
   );
 }
+
+/*
+ * The app puts the cursor in a search box when a screen opens. In its own
+ * window that is right; inside this page the browser scrolls the page to
+ * show it, and the questions jump away from the owner, the step's title and
+ * first questions above the fold. The window is ours, same origin, so its
+ * focus is told not to scroll.
+ */
+function focusWithoutScrolling(frame: HTMLIFrameElement | null) {
+  try {
+    const inner = frame?.contentWindow as (Window & typeof globalThis) | null | undefined;
+    const proto = inner?.HTMLElement?.prototype;
+    if (!proto || STILL in proto.focus) return;
+    const focus = proto.focus;
+    const still = function (this: HTMLElement, options?: FocusOptions) {
+      focus.call(this, { ...options, preventScroll: true });
+    };
+    proto.focus = Object.assign(still, { [STILL]: true });
+  } catch {
+    /* Another origin, which the preview never is: its focus stays as it was. */
+  }
+}
+
+const STILL = "ouaqtStill";

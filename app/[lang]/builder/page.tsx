@@ -15,7 +15,7 @@ import type { Metadata } from "next";
 
 type Props = {
   params: Promise<{ lang: Locale }>;
-  searchParams?: Promise<{ pack?: string }>;
+  searchParams?: Promise<{ pack?: string; serial?: string }>;
 };
 
 export function generateStaticParams() {
@@ -64,6 +64,9 @@ export default async function BuilderPage(props: Props) {
   const asked = searchParams?.pack;
   const startPack = enabled.find((name) => name === asked) ?? null;
 
+  /* ?serial, the way the home page links here for the owner who has his number. */
+  const askSerial = searchParams?.serial !== undefined;
+
   return (
     <Builder
       trialDays={builderTerms(settings).trialDays}
@@ -71,6 +74,7 @@ export default async function BuilderPage(props: Props) {
       locale={params.lang}
       enabledPacks={enabled}
       startPack={startPack}
+      askSerial={askSerial}
       supportWhatsapp={settings?.support_whatsapp ?? null}
       maxDevices={builderTerms(settings).devices}
       installers={

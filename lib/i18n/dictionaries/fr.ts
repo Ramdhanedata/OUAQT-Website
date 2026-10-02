@@ -255,7 +255,7 @@ export const fr: Dictionary = {
       },
       install: {
         h: "L'installation sur Windows et sur Mac",
-        b: "Vous téléchargez le logiciel sur ce site et vous l'installez vous-même, en suivant le guide d'installation affiché sur la page de téléchargement. À la première ouverture, Windows ou macOS peut vous demander une confirmation, parce que le logiciel n'est pas encore signé par Microsoft ou par Apple. Le guide montre comment faire (sur Mac : clic droit sur l'application, puis Ouvrir). Cette confirmation n'est demandée qu'une fois et ne change rien au fonctionnement du logiciel ni à la façon dont vos données sont gardées. Si vous êtes bloqué, écrivez-nous sur WhatsApp et nous vous guidons.",
+        b: "Vous téléchargez le logiciel sur ce site et vous l'installez vous-même, en suivant le guide d'installation affiché sur la page de téléchargement. À la première ouverture, Windows ou macOS peut vous demander une confirmation, parce que le logiciel n'est pas encore signé par Microsoft ou par Apple. Le guide montre comment faire : sur Windows, « Informations complémentaires » puis « Exécuter quand même » ; sur Mac, Réglages Système, Confidentialité et sécurité, puis « Ouvrir quand même ». Cette confirmation n'est demandée qu'une fois et ne change rien au fonctionnement du logiciel ni à la façon dont vos données sont gardées. Si vous êtes bloqué, écrivez-nous sur WhatsApp et nous vous guidons.",
       },
       selfData: {
         h: "Vos données ne nous parviennent pas",

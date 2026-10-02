@@ -11,9 +11,8 @@ import { Field, TextInput } from "./fields";
 import { Button } from "./owner-button";
 
 /*
- * The owner's numéro de série on screen: shown once when the questions end,
- * typed on the shop computer to download the software, and asked for again
- * by phone number when it is lost.
+ * The owner's numéro de série, typed on the shop computer to download the
+ * software, and asked for again by phone number when it is lost.
  *
  * The entry is a quiet line that opens a single field in place. Most people
  * who arrive here are new, and a screen asking everyone "new or returning?"
@@ -93,6 +92,7 @@ export function CodeEntry({
   supportWhatsapp,
   onRestart,
   asButton = false,
+  startOpen = false,
 }: {
   copy: BuilderCopy;
   locale: Locale;
@@ -104,14 +104,28 @@ export function CodeEntry({
    * coming back with a number must see it at once. Elsewhere, a quiet line.
    */
   asButton?: boolean;
+  /* Opened already, for the owner sent here from the home page to type his number. */
+  startOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(startOpen);
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<Problem | null>(null);
   const [wait, setWait] = useState(0);
   const [lost, setLost] = useState(false);
   const tried = useRef("");
+  const field = useRef<HTMLInputElement>(null);
+
+  /*
+   * Arriving from the home page, the box is drawn with the page, where
+   * autoFocus does nothing, and on a short screen below the fold: the cursor
+   * is put in it, ready for the number to be pasted.
+   */
+  useEffect(() => {
+    if (!startOpen) return;
+    field.current?.focus({ preventScroll: true });
+    field.current?.scrollIntoView({ block: "center" });
+  }, [startOpen]);
 
   /* After five wrong entries each try waits a little: the field says how long. */
   useEffect(() => {
@@ -187,6 +201,7 @@ export function CodeEntry({
     <div className="w-full basis-full space-y-3 text-start">
       <Field label={copy.code.label}>
         <input
+          ref={field}
           type="text"
           dir="ltr"
           value={value}
@@ -320,82 +335,6 @@ function LostCode({ copy }: { copy: BuilderCopy }) {
       {wait > 0 ? <p className="text-base text-muted-foreground">{fill(copy.code.wait, { seconds: wait })}</p> : null}
       <Button type="button" variant="outline" className="min-h-[48px] text-base" disabled={state === "sending"} onClick={() => void send()}>
         {copy.code.lostSend}
-      </Button>
-    </div>
-  );
-}
-
-/*
- * The number, the moment the questions are done: large, with a copy button,
- * and a plain sentence on what it is for. Sent on WhatsApp too once that is
- * connected; until then the screen asks him to keep it, and never claims a
- * message went out.
- */
-export function CodeIssued({
-  copy,
-  serial,
-  sent,
-  hasPhone,
-  onPhone,
-  onContinue,
-}: {
-  copy: BuilderCopy;
-  serial: string;
-  sent: boolean;
-  hasPhone: boolean;
-  onPhone: (phone: string) => Promise<boolean>;
-  onContinue: () => void;
-}) {
-  const [copied, setCopied] = useState(false);
-  const [phone, setPhone] = useState("");
-  const [savedPhone, setSavedPhone] = useState(hasPhone);
-
-  return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-foreground">{copy.code.issuedHeading}</h2>
-      <p className="whitespace-nowrap text-xl font-semibold tracking-wider min-[360px]:text-2xl text-foreground sm:text-4xl sm:tracking-widest">
-        <bdi dir="ltr">{serial}</bdi>
-      </p>
-      <Button
-        type="button"
-        variant="accent"
-        className="min-h-[48px] text-base"
-        onClick={() => {
-          void navigator.clipboard?.writeText(serial).then(() => setCopied(true));
-        }}
-      >
-        {copied ? copy.code.copied : copy.code.copy}
-      </Button>
-      <p className="text-base leading-relaxed text-foreground">{copy.code.issuedIntro}</p>
-      <p className="text-base leading-relaxed text-muted-foreground">{sent ? copy.code.issuedSent : copy.code.issuedKeep}</p>
-
-      {!savedPhone ? (
-        <div className="space-y-3">
-          <Field label={copy.code.issuedPhone}>
-            <TextInput value={phone} onChange={setPhone} dir="ltr" inputMode="tel" autoComplete="tel" />
-          </Field>
-          <Button
-            type="button"
-            variant="outline"
-            className="min-h-[48px] text-base"
-            disabled={!phone.trim()}
-            onClick={() => void onPhone(phone).then((ok) => ok && setSavedPhone(true))}
-          >
-            {copy.code.issuedPhoneSave}
-          </Button>
-        </div>
-      ) : phone ? (
-        <p className="text-base text-muted-foreground">{copy.code.issuedPhoneSaved}</p>
-      ) : null}
-
-      {/*
-        * Quiet on purpose: the software is installed on the computer, so the
-        * phone's part ends here for most owners. Carrying on gives him steps 3
-        * and 4 on the phone, and the numéro de série they end with also opens
-        * the download on the computer.
-        */}
-      <Button type="button" variant="outline" className="min-h-[48px] text-base" onClick={onContinue}>
-        {copy.code.issuedContinue}
       </Button>
     </div>
   );
