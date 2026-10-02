@@ -80,6 +80,7 @@ export function StepAccount({
         shop={(language === "ar" && answers.nameArabic) || answers.nameLatin || ""}
         installers={installers[pack]}
         tutorials={tutorials}
+        makeShop={{ products }}
       />
     );
   }
@@ -286,9 +287,26 @@ export function registerDownload(platform: "windows" | "mac", pack?: Pack) {
 }
 
 /*
- * The download, once the shop exists: which computer, the file for it, and
+ * The shop, from its number, on the computer that downloads: what the
+ * "I already have my serial number" page does on opening (resume.tsx), here
+ * on the press of the download. The same number always finds the same shop,
+ * so a second press only leaves a second mark for it. Not keepalive: a
+ * product list can be larger than a closing page may send, and a download
+ * does not close the page.
+ */
+function makeShopFrom(serial: string, products: ImportedProduct[]) {
+  void fetch("/api/builder/configuration-code/shop", {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ number: serial, products }),
+  }).catch(() => undefined);
+}
+
+/*
+ * The download, once there is a serial: which computer, the file for it, and
  * how to install, warnings included. There is nothing to type after: the
- * software opens its shop by itself. The serial stays below, smaller, for a
+ * software opens its shop by itself, made at the latest by the press of the
+ * download (makeShop). The serial stays below, smaller, for a
  * second computer or a reinstall. A phone gets the serial to take to the
  * computer instead.
  */
@@ -301,6 +319,7 @@ export function SerialPanel({
   installers,
   tutorials,
   guideAlways = false,
+  makeShop,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
@@ -311,6 +330,13 @@ export function SerialPanel({
   tutorials: Tutorials;
   /* The install guide on every screen: no aside beside a resumed download to hold it. */
   guideAlways?: boolean;
+  /*
+   * Step 4: only the number exists, not the shop. The download makes it, with
+   * the products he kept, and so leaves the mark of this connection that the
+   * software looks for when it first starts (0024): it opens by itself, as
+   * the guide says. A resumed download made its shop on opening: nothing.
+   */
+  makeShop?: { products: ImportedProduct[] };
 }) {
   const [machine, setMachine] = useState<Machine>("other");
   useEffect(() => setMachine(machineOf()), []);
@@ -364,7 +390,10 @@ export function SerialPanel({
         {href ? (
           <a
             href={href}
-            onClick={() => registerDownload(target, pack)}
+            onClick={() => {
+              registerDownload(target, pack);
+              if (makeShop) makeShopFrom(serial, makeShop.products);
+            }}
             className="flex min-h-[56px] w-full items-center justify-center rounded-lg bg-accent px-5 text-lg font-semibold text-accent-foreground"
           >
             {target === "windows" ? copy.install.downloadWindows : copy.install.downloadMac}
@@ -373,7 +402,10 @@ export function SerialPanel({
         {target === "mac" && otherMac ? (
           <a
             href={otherMac}
-            onClick={() => registerDownload("mac", pack)}
+            onClick={() => {
+              registerDownload("mac", pack);
+              if (makeShop) makeShopFrom(serial, makeShop.products);
+            }}
             className="-mt-3 block text-sm text-muted-foreground underline underline-offset-4"
           >
             {copy.serial.otherMacIntel}
@@ -408,6 +440,7 @@ export function SerialPanel({
       installers={installers}
       tutorials={tutorials}
       showDownloads={machine === "other"}
+      onDownload={makeShop ? () => makeShopFrom(serial, makeShop.products) : undefined}
     />
   );
 }
@@ -442,6 +475,7 @@ function PhoneOrSoon({
   installers,
   tutorials,
   showDownloads,
+  onDownload,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
@@ -449,6 +483,7 @@ function PhoneOrSoon({
   installers: Installers;
   tutorials: Tutorials;
   showDownloads: boolean;
+  onDownload?: () => void;
 }) {
   const [copied, setCopied] = useState(false);
   /*
@@ -514,7 +549,10 @@ function PhoneOrSoon({
             {installers.windows ? (
               <a
                 href={installers.windows}
-                onClick={() => registerDownload("windows")}
+                onClick={() => {
+                  registerDownload("windows");
+                  onDownload?.();
+                }}
                 className="inline-flex min-h-[48px] items-center rounded-lg bg-accent px-5 text-base font-medium text-accent-foreground"
               >
                 {copy.serial.windows}
@@ -523,7 +561,10 @@ function PhoneOrSoon({
             {installers.macApple ? (
               <a
                 href={installers.macApple}
-                onClick={() => registerDownload("mac")}
+                onClick={() => {
+                  registerDownload("mac");
+                  onDownload?.();
+                }}
                 className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
               >
                 {copy.serial.macApple}
@@ -532,7 +573,10 @@ function PhoneOrSoon({
             {installers.mac ? (
               <a
                 href={installers.mac}
-                onClick={() => registerDownload("mac")}
+                onClick={() => {
+                  registerDownload("mac");
+                  onDownload?.();
+                }}
                 className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-5 text-base text-foreground"
               >
                 {installers.macApple ? copy.serial.macIntel : copy.serial.mac}
