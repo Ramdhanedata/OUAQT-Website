@@ -76,7 +76,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
     getPublicSettings(),
     supabase
       .from("licences")
-      .select("id, business_id, plan, status, starts_at, ends_at, created_at")
+      .select("id, business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift")
       .eq("business_id", business.id)
       .order("created_at", { ascending: false }),
     supabase

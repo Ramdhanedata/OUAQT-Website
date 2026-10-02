@@ -18,6 +18,10 @@ export type LicenceRow = {
   starts_at: string | null;
   ends_at: string | null;
   created_at?: string;
+  /* A licence's own grace, 0 for one staff cancelled (0031); the setting's otherwise. */
+  grace_days?: number | null;
+  /* Given free by staff (0031). */
+  gift?: boolean | null;
 };
 
 /*
@@ -41,7 +45,7 @@ export function shopStatus(licence: LicenceRow | undefined, now: Date, rules: Li
       suspended: licence.status === "suspended",
     },
     now,
-    rules
+    { renewalGraceDays: licence.grace_days ?? rules.renewalGraceDays }
   );
 }
 

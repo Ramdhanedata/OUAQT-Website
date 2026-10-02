@@ -87,7 +87,7 @@ export default async function AccountPage(props: Props) {
     await Promise.all([
       supabase
         .from("licences")
-        .select("plan, status, starts_at, ends_at")
+        .select("plan, status, starts_at, ends_at, grace_days")
         .eq("business_id", business.id)
         .order("created_at", { ascending: false })
         .limit(1)
@@ -124,7 +124,8 @@ export default async function AccountPage(props: Props) {
     : null;
 
   const now = new Date();
-  const rules = { renewalGraceDays: settings?.renewal_grace_days ?? 0 };
+  /* A licence staff cancelled has no grace of its own (0031). */
+  const rules = { renewalGraceDays: licenceRow?.grace_days ?? settings?.renewal_grace_days ?? 0 };
   const status = licence ? statusOf(licence, now, rules) : null;
 
   return (

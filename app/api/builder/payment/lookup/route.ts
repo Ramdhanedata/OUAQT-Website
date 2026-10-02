@@ -42,7 +42,7 @@ export async function POST(request: Request) {
   let launchClient = false;
   if (found.kind === "shop") {
     const [{ data: row }, { data: lastPayment }, { data: business }] = await Promise.all([
-      admin.from("licences").select("plan, status, starts_at, ends_at").eq("business_id", found.businessId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
+      admin.from("licences").select("plan, status, starts_at, ends_at, grace_days").eq("business_id", found.businessId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       admin.from("payments").select("status").eq("business_id", found.businessId).order("created_at", { ascending: false }).limit(1).maybeSingle(),
       admin.from("businesses").select("launch_client").eq("id", found.businessId).single(),
     ]);
@@ -56,7 +56,8 @@ export async function POST(request: Request) {
         suspended: row.status === "suspended",
       };
       const now = new Date();
-      const rules = { renewalGraceDays: settings?.renewal_grace_days ?? 0 };
+      /* A licence staff cancelled has no grace of its own (0031). */
+      const rules = { renewalGraceDays: row.grace_days ?? settings?.renewal_grace_days ?? 0 };
       licence = {
         status: statusOf(shape, now, rules),
         endsAt: shape.endsAt ? shape.endsAt.toISOString() : null,

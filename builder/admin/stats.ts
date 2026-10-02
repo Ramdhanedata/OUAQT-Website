@@ -105,7 +105,7 @@ export async function loadStats(supabase: SupabaseClient, period: Period, now = 
     supabase.from("builder_events").select("session_hash, created_at").eq("event", "reached").eq("step", 0).gte("created_at", back).limit(MANY),
     supabase.from("builder_drafts").select("pack, representative_id, serial_hash, created_at").gte("created_at", back).limit(MANY),
     supabase.from("businesses").select("id, pack, representative_id, created_at").limit(MANY),
-    supabase.from("licences").select("id, business_id, plan, status, starts_at, ends_at, created_at").order("created_at", { ascending: false }).limit(MANY),
+    supabase.from("licences").select("id, business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift").order("created_at", { ascending: false }).limit(MANY),
     supabase.from("devices").select("business_id, platform, status, first_seen, last_seen").limit(MANY),
     supabase.from("payments").select("business_id, plan, app, expected_amount, created_at").eq("status", "confirmed").limit(MANY),
     supabase.from("leads_other_business").select("business_type, created_at").gte("created_at", back).limit(MANY),

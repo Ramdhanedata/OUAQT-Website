@@ -37,6 +37,9 @@ export type LicenceBefore = {
   status: string | null;
   starts_at: string | null;
   ends_at: string | null;
+  /* Kept since 0031; absent from a licence saved before it. */
+  grace_days?: number | null;
+  gift?: boolean;
 };
 
 export async function grantLicence(
@@ -46,7 +49,7 @@ export async function grantLicence(
 ): Promise<{ ok: true; endsAt: string | null; licenceId: string; before: LicenceBefore } | { ok: false }> {
   const { data: licence } = await admin
     .from("licences")
-    .select("id, plan, status, starts_at, ends_at")
+    .select("id, plan, status, starts_at, ends_at, grace_days, gift")
     .eq("business_id", payment.business_id)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -72,6 +75,9 @@ export async function grantLicence(
     status: licence?.status === "suspended" ? "suspended" : "active",
     starts_at: licence?.starts_at ?? now.toISOString(),
     ends_at: endsAt,
+    /* Paid for: the setting's grace again, and not a gift (0031). */
+    grace_days: null,
+    gift: false,
   };
 
   if (licence) {
@@ -81,7 +87,16 @@ export async function grantLicence(
       ok: true,
       endsAt,
       licenceId: licence.id,
-      before: { id: licence.id, existed: true, plan: licence.plan, status: licence.status, starts_at: licence.starts_at, ends_at: licence.ends_at },
+      before: {
+        id: licence.id,
+        existed: true,
+        plan: licence.plan,
+        status: licence.status,
+        starts_at: licence.starts_at,
+        ends_at: licence.ends_at,
+        grace_days: licence.grace_days ?? null,
+        gift: Boolean(licence.gift),
+      },
     };
   }
 
@@ -111,7 +126,13 @@ export async function restoreLicence(admin: SupabaseClient, before: LicenceBefor
   }
   const { error } = await admin
     .from("licences")
-    .update({ plan: before.plan, status: before.status, starts_at: before.starts_at, ends_at: before.ends_at })
+    .update({
+      plan: before.plan,
+      status: before.status,
+      starts_at: before.starts_at,
+      ends_at: before.ends_at,
+      ...("grace_days" in before ? { grace_days: before.grace_days ?? null, gift: Boolean(before.gift) } : {}),
+    })
     .eq("id", before.id);
   return !error;
 }

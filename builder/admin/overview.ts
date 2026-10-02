@@ -126,7 +126,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     supabase.from("businesses").select("id, name_latin, created_at").limit(MANY),
     supabase
       .from("licences")
-      .select("id, business_id, plan, status, starts_at, ends_at, created_at")
+      .select("id, business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift")
       .order("created_at", { ascending: false })
       .limit(MANY),
     supabase

@@ -156,7 +156,7 @@ export async function POST(request: Request) {
   const [{ data: business }, settings, secrets] = await Promise.all([
     supabase
       .from("businesses")
-      .select("id, owner_id, name_latin, name_arabic, pack, receipt_address")
+      .select("id, owner_id, name_latin, name_arabic, pack, receipt_address, banned_at")
       .eq("id", found.business_id)
       .maybeSingle(),
     getPublicSettings(),
@@ -185,6 +185,32 @@ export async function POST(request: Request) {
     );
   }
 
+  /*
+   * Banned by staff (0031): the decision is about the person, not one serial.
+   * The shop activates no computer, and a computer that ran a banned shop
+   * starts no other shop. Its own computers keep their suspended licence.
+   */
+  if (business.banned_at) return NextResponse.json({ error: "banned" }, { status: 403 });
+  const machine: MachineMark | null = input.data.fingerprint
+    ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
+    : null;
+  if (machine) {
+    const { data: banned } = await supabase.from("businesses").select("id").not("banned_at", "is", null).limit(1000);
+    const bannedIds = (banned ?? []).map((one) => one.id as string);
+    if (bannedIds.length) {
+      const { data: theirs } = await supabase.from("devices").select("fingerprint").in("business_id", bannedIds).limit(5000);
+      const ran = (theirs ?? []).some(
+        (one) => {
+          /* Only parts both computers report can match: two empty marks are not the same machine. */
+          const mark = one.fingerprint as MachineMark | null;
+          const shared = mark ? (["board", "disk", "machine"] as const).filter((part) => mark[part] && machine[part]).length : 0;
+          return shared > 0 && sameMachine(mark as MachineMark, machine, secrets.trial_fingerprint_parts_to_match);
+        }
+      );
+      if (ran) return NextResponse.json({ error: "banned" }, { status: 403 });
+    }
+  }
+
   const { data: devices } = await supabase
     .from("devices")
     .select("id, device_id, role, status, fingerprint")
@@ -211,7 +237,7 @@ export async function POST(request: Request) {
 
   const { data: licence } = await supabase
     .from("licences")
-    .select("id, plan, status, starts_at, ends_at, updates_until, renewal_secret")
+    .select("id, plan, status, starts_at, ends_at, updates_until, renewal_secret, grace_days")
     .eq("business_id", business.id)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -366,7 +392,8 @@ export async function POST(request: Request) {
     devices: fresh ?? [],
     rules: {
       maxDevices: settings.max_devices,
-      renewalGraceDays: settings.renewal_grace_days,
+      /* A licence staff cancelled carries no grace (0031): read-only at once. */
+      renewalGraceDays: current?.grace_days ?? settings.renewal_grace_days,
       clockGraceDays: secrets.clock_grace_days,
       deviceReleasesPerYear: secrets.device_releases_per_year,
       machinePartsToMatch: secrets.trial_fingerprint_parts_to_match,

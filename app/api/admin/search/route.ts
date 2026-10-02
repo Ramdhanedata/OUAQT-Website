@@ -34,7 +34,7 @@ export async function GET(request: Request) {
     ids.length
       ? supabase
           .from("licences")
-          .select("business_id, plan, status, starts_at, ends_at, created_at")
+          .select("business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift")
           .in("business_id", ids)
           .order("created_at", { ascending: false })
       : Promise.resolve({ data: [] }),

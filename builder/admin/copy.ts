@@ -36,6 +36,7 @@ const fr = {
     stats: "Statistiques",
     payments: "Paiements",
     clients: "Clients",
+    control: "Contrôle",
     devices: "Postes",
     codes: "Codes",
     funnel: "Parcours",
@@ -354,6 +355,11 @@ const fr = {
     "representative:reactivated": "Commercial réactivé",
     "representative:paid": "Bonus versé à un commercial",
     representative_set: "Commercial attribué à un commerce",
+    gifted_for_life: "Licence offerte à vie",
+    cancelled: "Licence annulée",
+    extended: "Licence prolongée",
+    banned: "Commerce banni",
+    unbanned: "Bannissement levé",
   } as Record<string, string>,
 
   staff: {
@@ -525,6 +531,7 @@ const en: AdminCopy = {
     stats: "Statistics",
     payments: "Payments",
     clients: "Customers",
+    control: "Software control",
     devices: "Computers",
     codes: "Codes",
     funnel: "Funnel",
@@ -832,6 +839,11 @@ const en: AdminCopy = {
     "representative:reactivated": "Sales representative reactivated",
     "representative:paid": "Bonus paid to a representative",
     representative_set: "Representative credited with a shop",
+    gifted_for_life: "Licence given for life",
+    cancelled: "Licence cancelled",
+    extended: "Licence extended",
+    banned: "Shop banned",
+    unbanned: "Ban lifted",
   },
 
   staff: {
@@ -1001,6 +1013,7 @@ const ar: AdminCopy = {
     stats: "الإحصائيات",
     payments: "المدفوعات",
     clients: "الزبائن",
+    control: "التحكم",
     devices: "الأجهزة",
     codes: "الرموز",
     funnel: "المسار",
@@ -1307,6 +1320,11 @@ const ar: AdminCopy = {
     "representative:reactivated": "أعيد تفعيل مندوب",
     "representative:paid": "دُفعت مكافأة لمندوب",
     representative_set: "نُسب محل إلى مندوب",
+    gifted_for_life: "رخصة ممنوحة مدى الحياة",
+    cancelled: "أُلغيت الرخصة",
+    extended: "مُدّدت الرخصة",
+    banned: "حُظر المحل",
+    unbanned: "رُفع الحظر",
   },
 
   staff: {

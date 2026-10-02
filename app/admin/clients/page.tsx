@@ -55,7 +55,7 @@ export default async function ClientsPage(props: { searchParams: Promise<{ q?: s
     findShops(supabase, query),
     supabase
       .from("licences")
-      .select("business_id, plan, status, starts_at, ends_at, created_at")
+      .select("business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift")
       .order("created_at", { ascending: false })
       .limit(MANY),
     supabase

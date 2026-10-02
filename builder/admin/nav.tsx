@@ -9,6 +9,7 @@ import {
   Monitor,
   Route,
   Settings,
+  SlidersHorizontal,
   Sparkles,
   UserCog,
   Users,
@@ -34,6 +35,7 @@ type Key =
   | "overview"
   | "stats"
   | "reps"
+  | "control"
   | "clients"
   | "payments"
   | "devices"
@@ -54,6 +56,7 @@ const groups: { title: "follow" | "setup" | null; items: Item[] }[] = [
       { href: "/admin", key: "overview", icon: LayoutDashboard },
       { href: "/admin/statistiques", key: "stats", icon: ChartColumn },
       { href: "/admin/clients", key: "clients", icon: Users },
+      { href: "/admin/controle", key: "control", icon: SlidersHorizontal },
       { href: "/admin/paiements", key: "payments", icon: CreditCard },
       { href: "/admin/postes", key: "devices", icon: Monitor },
     ],

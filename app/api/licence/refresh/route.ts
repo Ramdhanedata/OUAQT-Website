@@ -78,7 +78,7 @@ export async function POST(request: Request) {
       .maybeSingle(),
     supabase
       .from("licences")
-      .select("plan, status, starts_at, ends_at, updates_until, renewal_secret")
+      .select("plan, status, starts_at, ends_at, updates_until, renewal_secret, grace_days")
       .eq("business_id", input.data.businessId)
       .order("created_at", { ascending: false })
       .limit(1)
@@ -116,7 +116,8 @@ export async function POST(request: Request) {
     devices: devices ?? [],
     rules: {
       maxDevices: settings.max_devices,
-      renewalGraceDays: settings.renewal_grace_days,
+      /* A licence staff cancelled carries no grace (0031): read-only at once. */
+      renewalGraceDays: licence?.grace_days ?? settings.renewal_grace_days,
       clockGraceDays: secrets.clock_grace_days,
       deviceReleasesPerYear: secrets.device_releases_per_year,
       machinePartsToMatch: secrets.trial_fingerprint_parts_to_match,
