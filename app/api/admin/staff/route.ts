@@ -26,7 +26,7 @@ import { adminClient } from "@/builder/db/server";
 const body = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("save"),
-    login: z.string().trim().min(3).max(200),
+    login: z.string().trim().min(1).max(200),
     name: z.string().trim().max(80).optional(),
     password: z.string().min(1).max(200),
   }).strict(),
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   if (!supabase) return NextResponse.json({ error: "no_database" }, { status: 503 });
 
   if (input.data.action === "save") {
-    const login = staffLogin(input.data.login);
+    const login = await staffLogin(input.data.login);
     if (!login) return NextResponse.json({ error: "bad_login" }, { status: 400 });
     const problem = passwordProblem(input.data.password);
     if (problem) return NextResponse.json({ error: problem }, { status: 400 });
@@ -61,13 +61,18 @@ export async function POST(request: Request) {
 
     const existed = Boolean(userId);
     if (userId) {
-      const { error } = await supabase.auth.admin.updateUserById(userId, { password: input.data.password });
+      const { error } = await supabase.auth.admin.updateUserById(userId, {
+        password: input.data.password,
+        user_metadata: { login: login.shown },
+      });
       if (error) return NextResponse.json({ error: "not_saved" }, { status: 502 });
     } else {
       const { data, error } = await supabase.auth.admin.createUser({
         email: login.email,
         password: input.data.password,
         email_confirm: true,
+        /* The name as it was typed, for the Team page: the address may be a fingerprint of it. */
+        user_metadata: { login: login.shown },
       });
       if (error || !data.user) return NextResponse.json({ error: "not_saved" }, { status: 502 });
       userId = data.user.id;

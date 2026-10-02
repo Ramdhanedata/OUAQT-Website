@@ -17,6 +17,7 @@
  */
 
 import { createClient } from "@supabase/supabase-js";
+import { createHash } from "node:crypto";
 import { stdin, stdout } from "node:process";
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -30,21 +31,26 @@ const [login, ...nameParts] = process.argv.slice(2);
 const name = nameParts.join(" ").trim() || null;
 
 /*
- * An email, or a short name such as "ouaqtadmin1". A name becomes an address
- * on the domain owners' phone logins use, the same way the sign-in page turns
- * it into one: builder/ui/login-domain.ts, whose rules these repeat.
+ * An email, or any username at all, turned into a login address exactly as
+ * builder/ui/login-domain.ts does it for the sign-in page: a plain name keeps
+ * its own address, anything else becomes "staff-<fingerprint>@…", and the
+ * name as typed is kept on the account for the Team page.
  */
 const DOMAIN = process.env.NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN?.trim() || "ouaqtcom.vercel.app";
-const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(login ?? "");
-const isName = /^(?=.*[a-z])[a-z0-9._-]{3,40}$/.test((login ?? "").toLowerCase());
+const shown = (login ?? "").normalize("NFC").trim().replace(/\s+/g, " ");
+const lower = shown.toLowerCase();
+const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(lower);
 
-if (!login || (!isEmail && !isName)) {
+if (!shown || shown.length > 100) {
   console.error('Usage: npm run make-admin -- you@example.com "Your name"');
-  console.error('   or: npm run make-admin -- ouaqtadmin1 "Your name"');
-  console.error("A name is 3 to 40 letters, digits, dots, dashes or underscores, with at least one letter.");
+  console.error('   or: npm run make-admin -- "Any username" "Your name"');
   process.exit(1);
 }
-const email = isEmail ? login.trim() : `${login.trim().toLowerCase()}@${DOMAIN}`;
+const email = isEmail
+  ? lower
+  : /^(?=.*[a-z])[a-z0-9._-]{3,40}$/.test(lower)
+    ? `${lower}@${DOMAIN}`
+    : `staff-${createHash("sha256").update(lower).digest("hex").slice(0, 24)}@${DOMAIN}`;
 
 /*
  * Read a line without showing what is typed. Characters that arrive after
@@ -140,14 +146,19 @@ for (let page = 1; page < 50 && !userId; page += 1) {
 }
 
 if (userId) {
-  const { error } = await admin.auth.admin.updateUserById(userId, { password });
+  const { error } = await admin.auth.admin.updateUserById(userId, { password, ...(isEmail ? {} : { user_metadata: { login: shown } }) });
   if (error) {
     console.error("Could not set the password:", error.message);
     process.exit(1);
   }
   console.log(`Password set for ${email}.`);
 } else {
-  const { data, error } = await admin.auth.admin.createUser({ email, password, email_confirm: true });
+  const { data, error } = await admin.auth.admin.createUser({
+    email,
+    password,
+    email_confirm: true,
+    ...(isEmail ? {} : { user_metadata: { login: shown } }),
+  });
   if (error || !data.user) {
     console.error("Could not create the account:", error?.message);
     process.exit(1);
@@ -164,4 +175,4 @@ if (staffError) {
   process.exit(1);
 }
 
-console.log(`It can sign in to /admin as ${isEmail ? email : login.trim().toLowerCase()}. The first sign-in shows a QR code for the authenticator app.`);
+console.log(`It can sign in to /admin as ${isEmail ? email : shown}. The first sign-in shows a QR code for the authenticator app.`);

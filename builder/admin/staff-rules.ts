@@ -1,25 +1,31 @@
-import { PHONE_DOMAIN, STAFF_NAME } from "@/builder/ui/login-domain";
+import { cleanStaffLogin, loginAddress, PHONE_DOMAIN } from "@/builder/ui/login-domain";
 
 /*
  * Who may be staff, and with what password: the rules the Team page and
  * scripts/make-admin.mjs both apply.
  *
- * A login is an email or a short name such as "ouaqtadmin1"; a name becomes
- * an address on the domain owners' phone logins use, which is what the
- * sign-in page turns it into as well.
+ * A login is an email or any username at all; login-domain.ts says how a
+ * name becomes an address, which the sign-in page does the same way.
  */
 
 export type StaffLogin = { email: string; shown: string };
 
-export function staffLogin(login: string): StaffLogin | null {
-  const clean = login.trim().toLowerCase();
-  if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(clean)) return { email: clean, shown: clean };
-  if (STAFF_NAME.test(clean)) return { email: `${clean}@${PHONE_DOMAIN}`, shown: clean };
-  return null;
+const LOGIN_MAX = 100; // not-a-rule: a name, not a paragraph
+
+export async function staffLogin(login: string): Promise<StaffLogin | null> {
+  const shown = cleanStaffLogin(login);
+  if (!shown || shown.length > LOGIN_MAX) return null;
+  const email = await loginAddress(shown);
+  return email ? { email, shown } : null;
 }
 
-/** What an address looks like on the Team page: the name, when it is one of ours. */
-export function shownLogin(email: string | null | undefined): string {
+/*
+ * What a staff account is called on the Team page: the name as it was typed
+ * when it was made, kept on the account, or the address's own name part for
+ * an account made before names were kept.
+ */
+export function shownLogin(email: string | null | undefined, typed?: unknown): string {
+  if (typeof typed === "string" && typed.trim()) return typed;
   if (!email) return "";
   const suffix = `@${PHONE_DOMAIN}`;
   return email.endsWith(suffix) ? email.slice(0, -suffix.length) : email;

@@ -29,7 +29,7 @@ export default async function TeamPage() {
       return {
         userId: row.user_id as string,
         name: (row.name as string | null) ?? null,
-        login: shownLogin(data?.user?.email),
+        login: shownLogin(data?.user?.email, data?.user?.user_metadata?.login),
         since: row.created_at as string,
         ready: factors.length > 0,
       };

@@ -79,7 +79,12 @@ export function SignInForm({
     setBusy(true);
     setError(null);
     const supabase = await browserClient();
-    const failed = await supabase?.auth.signInWithPassword({ email: loginAddress(email), password });
+    const address = await loginAddress(email);
+    const failed = address ? await supabase?.auth.signInWithPassword({ email: address, password }) : null;
+    if (!address) {
+      setBusy(false);
+      return setError(t.wrong);
+    }
     setBusy(false);
 
     if (!supabase || failed?.error) return setError(t.wrong);
