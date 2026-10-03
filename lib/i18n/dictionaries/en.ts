@@ -244,7 +244,7 @@ export const en = {
       },
       payment: {
         h: "Payment",
-        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation with your serial number. When the screenshot can be read and everything on it matches, the payment can be confirmed straight away and your software opens again by itself. Otherwise we check it by hand, usually the same day. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
+        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation with your serial number. When the screenshot can be read and everything on it matches, the payment can be confirmed straight away and your software opens again by itself. Otherwise we check it by hand, usually the same day. The amount sent decides the length: from the 6-month price, 6 months; from the year's price, a year. Anything above that price is refunded to you on request, and an amount below the lowest price buys nothing and is refunded to you. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
       },
       grace: {
         h: "If a renewal is paid late",

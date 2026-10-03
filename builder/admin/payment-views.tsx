@@ -7,7 +7,7 @@ import { wordFor, type AdminLanguage } from "./copy";
 import type { PaymentsCopy } from "./copy-payments";
 import { ago } from "./overview-math";
 import type { ActivityEntry, PaymentLine } from "./payment-history";
-import { overpaid, refundOwed, stateOf, type PaymentState } from "./payment-rules";
+import { owedBack, refundOwed, stateOf, type PaymentState } from "./payment-rules";
 
 /*
  * The pieces the payments pages share: a payment's state as a badge, one
@@ -66,7 +66,7 @@ export function checkWords(failure: CheckFailure, words: Words): string {
 export function PaymentListItem({ line, words, now }: { line: PaymentLine; words: Words; now: Date }) {
   const state = stateOf(line);
   const owed = refundOwed(line);
-  const extra = overpaid(line);
+  const extra = owedBack(line);
   const when = new Date(line.createdAt).toLocaleString(words.locale, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
   return (
     <li className="rounded-2xl border border-border bg-surface p-4 sm:p-5">

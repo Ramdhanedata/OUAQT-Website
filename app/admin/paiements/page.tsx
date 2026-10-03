@@ -6,7 +6,7 @@ import { adminGate } from "@/builder/admin/guard";
 import { AdminNav } from "@/builder/admin/nav";
 import { adminWords } from "@/builder/admin/language";
 import { AdminSignIn } from "@/builder/admin/sign-in";
-import { loadPaymentActivity, loadPaymentLines } from "@/builder/admin/payment-history";
+import { loadConfirmed, loadPaymentActivity, loadPaymentLines } from "@/builder/admin/payment-history";
 import { isPaymentFilter, matchesFilter, PAYMENT_FILTERS, summaryOf, type PaymentFilter } from "@/builder/admin/payment-rules";
 import { ActivityList, money, PaymentListItem, type Words } from "@/builder/admin/payment-views";
 import { PaymentsToConfirm } from "@/builder/admin/payments";
@@ -53,8 +53,8 @@ export default async function PaymentsPage(props: Props) {
   const typed = (params.q ?? "").trim().slice(0, 80);
   const now = new Date();
 
-  const lines = await loadPaymentLines(supabase);
-  const summary = summaryOf(lines, now);
+  const [lines, confirmed] = await Promise.all([loadPaymentLines(supabase), loadConfirmed(supabase)]);
+  const summary = summaryOf(lines, now, confirmed);
 
   /* Only what the open view needs: the cards to decide, or the activity. */
   const toHandle = view === "traiter" ? await rowsToHandle() : [];

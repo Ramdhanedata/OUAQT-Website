@@ -17,7 +17,10 @@
  * And what is owed back: a payment by serial takes any amount from the
  * smallest price up and buys the longest length it covers (2026-10-03), so
  * what was sent beyond that price is the owner's until staff send it back
- * and say so.
+ * and say so. One refused only because it was less than the smallest price
+ * bought nothing, and the page told the owner to ask for it back: all of it
+ * is owed. Refused for anything else (another number, another day, a
+ * screenshot used before), nothing is: it may not be a payment to us at all.
  */
 
 export const PAYMENT_FILTERS = ["pending", "confirmed", "refund", "refused", "undone"] as const;
@@ -46,6 +49,8 @@ export type PaymentFacts = {
   read: number | null;
   /* What staff said they sent back, when they did. */
   refunded: number | null;
+  /* The checks the screenshot failed when it was filed, by code. */
+  failures: string[];
 };
 
 export function stateOf(payment: PaymentFacts): PaymentState {
@@ -58,15 +63,26 @@ export function stateOf(payment: PaymentFacts): PaymentState {
   return "pending";
 }
 
-/** What was sent beyond the price of what a confirmed payment bought. */
-export function overpaid(payment: PaymentFacts): number {
-  if (payment.status !== "confirmed" || payment.read == null) return 0;
-  return Math.max(0, payment.read - payment.expected);
+/** Whether it was refused for being too little, and for nothing else. */
+export function refusedAsTooLittle(payment: PaymentFacts): boolean {
+  return payment.status === "rejected_auto" && payment.failures.length > 0 && payment.failures.every((code) => code === "amount_too_low");
+}
+
+/*
+ * What the owner is owed back for it, whether or not it was sent yet: what
+ * a confirmed payment sent beyond its price, or all of one refused as too
+ * little.
+ */
+export function owedBack(payment: PaymentFacts): number {
+  if (payment.read == null) return 0;
+  if (payment.status === "confirmed") return Math.max(0, payment.read - payment.expected);
+  if (refusedAsTooLittle(payment)) return payment.read;
+  return 0;
 }
 
 /** What is still owed back to the owner: nothing once staff said it was sent. */
 export function refundOwed(payment: PaymentFacts): number {
-  return payment.refunded != null ? 0 : overpaid(payment);
+  return payment.refunded != null ? 0 : owedBack(payment);
 }
 
 /** Whether a person still has something to do about it. */
@@ -110,7 +126,17 @@ function sameMonth(iso: string, now: Date): boolean {
   return at.getUTCFullYear() === now.getUTCFullYear() && at.getUTCMonth() === now.getUTCMonth();
 }
 
-export function summaryOf(payments: (PaymentFacts & { createdAt: string })[], now: Date): PaymentSummary {
+/*
+ * The figures. What came in is added up from every confirmed payment when
+ * they are given (the list itself holds only the newest), so the sum since
+ * the start is the statistics' own; what is left to handle and to refund
+ * comes from the list.
+ */
+export function summaryOf(
+  payments: (PaymentFacts & { createdAt: string })[],
+  now: Date,
+  confirmed: { expected: number; createdAt: string }[] = payments.filter((one) => one.status === "confirmed")
+): PaymentSummary {
   const summary: PaymentSummary = { monthCount: 0, monthAmount: 0, allAmount: 0, toHandle: 0, refundCount: 0, refundAmount: 0 };
   for (const payment of payments) {
     if (needsAPerson(payment)) summary.toHandle += 1;
@@ -119,7 +145,8 @@ export function summaryOf(payments: (PaymentFacts & { createdAt: string })[], no
       summary.refundCount += 1;
       summary.refundAmount += owed;
     }
-    if (payment.status !== "confirmed") continue;
+  }
+  for (const payment of confirmed) {
     summary.allAmount += payment.expected;
     if (sameMonth(payment.createdAt, now)) {
       summary.monthCount += 1;

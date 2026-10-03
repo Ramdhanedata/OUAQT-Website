@@ -7,7 +7,8 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { grantLicence, restoreLicence, type LicenceBefore } from "@/builder/payment/grant";
 import { priceFor } from "@/builder/payment/pricing";
 import { toMinor } from "@/app-ui/money";
-import type { Extracted } from "@/builder/payment/checks";
+import type { CheckFailure, Extracted } from "@/builder/payment/checks";
+import { owedBack } from "@/builder/admin/payment-rules";
 
 /*
  * A person deciding about a payment.
@@ -58,10 +59,31 @@ export async function POST(request: Request) {
 
   if (!payment) return NextResponse.json({ error: "not_found" }, { status: 404 });
 
-  /* The rest of an overpayment, sent back by a person: written down once, at what was owed. */
+  /*
+   * What was owed back, sent back by a person: written down once, at what was
+   * owed. The same rule as the pages that show it (payment-rules.ts): the
+   * rest of an overpayment, or all of one refused only as too little.
+   */
   if (input.data.action === "refunded") {
     const read = (payment.extracted as Extracted)?.amountMru;
-    const owed = payment.status === "confirmed" && read != null ? toMinor(read) - Number(payment.expected_amount) : 0;
+    const { data: filing } = await supabase
+      .from("audit_events")
+      .select("detail")
+      .eq("subject", "payment")
+      .eq("subject_id", payment.id)
+      .in("action", ["pending_confirmation", "rejected_auto"])
+      .limit(1)
+      .maybeSingle();
+    const failures = ((filing?.detail as { failures?: CheckFailure[] } | null)?.failures ?? []).map((one) => one.code);
+    const owed = owedBack({
+      status: payment.status,
+      autoConfirmed: Boolean(payment.auto_confirmed),
+      reviewedAt: payment.reviewed_at,
+      expected: Number(payment.expected_amount),
+      read: read != null ? toMinor(read) : null,
+      refunded: null,
+      failures,
+    });
     if (owed <= 0) return NextResponse.json({ error: "nothing_owed" }, { status: 409 });
     const { data: already } = await supabase
       .from("audit_events")

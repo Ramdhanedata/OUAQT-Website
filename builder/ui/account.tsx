@@ -10,12 +10,11 @@ import { localisedHref } from "@/lib/i18n/routes";
 import { CodeEntry, forgetOpened } from "./config-code";
 import type { LicenceStatus } from "@/builder/licence/status";
 import type { PayTo } from "@/builder/payment/apps";
-import type { ReadBack } from "@/builder/payment/checks";
 import type { Price } from "@/builder/payment/pricing";
 import { fill } from "@/lib/utils";
 import { Field, TextInput } from "./fields";
 import { licenceLine, owes } from "./licence-line";
-import { Pay, PaymentReceived } from "./pay";
+import { Pay, PaymentReceived, SendScreenshot, type Sent } from "./pay";
 import { InstallHelp } from "./install-help";
 import { isPhone, loginFor, registerDownload } from "./step-account";
 
@@ -298,7 +297,7 @@ function Subscription({
   state: Extract<AccountState, { kind: "signed_in" }>;
 }) {
   /* Sent from this page just now, with what was read off the screenshot. */
-  const [sent, setSent] = useState<{ read: ReadBack | null; confirmed: boolean } | null>(null);
+  const [sent, setSent] = useState<Sent | null>(null);
   const licence = state.licence;
 
   const where = () => licenceLine(copy, lang, licence);
@@ -315,15 +314,34 @@ function Subscription({
       <p className="text-base leading-relaxed text-foreground">{where()}</p>
 
       {waiting ? (
-        <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
-      ) : due && state.prices.length > 0 ? (
-        <Pay
+        <PaymentReceived
           copy={copy}
           language={lang}
-          prices={state.prices}
-          payTo={state.payTo}
-          onSent={(read, confirmed) => setSent({ read, confirmed })}
+          read={sent?.read ?? null}
+          confirmed={sent?.confirmed ?? false}
+          plan={sent?.plan ?? null}
+          endsAt={sent?.endsAt ?? null}
+          refundDue={sent?.refundDue ?? 0}
+          serial={state.serial}
         />
+      ) : due && state.prices.length > 0 ? (
+        /*
+         * The same as the page the software's code opens: the screenshot, and
+         * the amount on it says a year or six months, the rest refunded. One
+         * rule wherever he pays (2026-10-03). Choosing the plan and the app is
+         * left for an account whose serial cannot be read.
+         */
+        state.serial ? (
+          <SendScreenshot copy={copy} language={lang} serial={state.serial} prices={state.prices} payTo={state.payTo} onSent={setSent} />
+        ) : (
+          <Pay
+            copy={copy}
+            language={lang}
+            prices={state.prices}
+            payTo={state.payTo}
+            onSent={(read, confirmed) => setSent({ read, confirmed })}
+          />
+        )
       ) : null}
     </section>
   );

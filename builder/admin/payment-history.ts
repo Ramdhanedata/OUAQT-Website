@@ -132,6 +132,7 @@ function lineOf(
     expected: Number(row.expected_amount),
     read: row.extracted?.amountMru != null ? toMinor(row.extracted.amountMru) : null,
     refunded: refund ? Number((refund.detail as { amount?: number } | null)?.amount ?? 0) : null,
+    failures: failuresOf(filing).map((one) => one.code),
     refundedAt: refund?.created_at ?? null,
     refundedBy: refund?.actor_id ? names.staff.get(refund.actor_id) ?? "" : null,
     reference: row.reference,
@@ -181,6 +182,20 @@ export async function loadPaymentLines(supabase: SupabaseClient): Promise<Paymen
     [...rows.map((one) => one.reviewer_id).filter((one): one is string => Boolean(one)), ...staffIds]
   );
   return rows.map((row) => lineOf(row, names, refunds, filings));
+}
+
+/*
+ * Every confirmed payment's price and date, however many: what the totals
+ * add up, the same rows the statistics count as received, so the two pages
+ * never give two different sums.
+ */
+export async function loadConfirmed(supabase: SupabaseClient): Promise<{ expected: number; createdAt: string }[]> {
+  const { data } = await supabase
+    .from("payments")
+    .select("expected_amount, created_at")
+    .eq("status", "confirmed")
+    .limit(100_000); // not-a-rule: every one, as the statistics read them
+  return (data ?? []).map((one) => ({ expected: Number(one.expected_amount), createdAt: one.created_at as string }));
 }
 
 /** One payment, or null. */

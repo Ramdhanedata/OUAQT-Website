@@ -294,14 +294,20 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
           ) : (
             <ul className="divide-y divide-border">
               {(payments ?? []).map((payment) => (
-                <li key={payment.id} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3">
-                  <span className="text-[15px] text-foreground">
-                    <span className="font-semibold">{formatMoney(Number(payment.expected_amount), lang)}</span>
-                    <span className="text-muted-foreground"> · {wordFor(t.plans, payment.plan)}</span>
-                  </span>
-                  <span className="text-sm text-muted-foreground">
-                    {wordFor(c.paymentStatuses, payment.status)} · {date(payment.created_at)}
-                  </span>
+                <li key={payment.id}>
+                  {/* Each one opens its own page: the screenshot, the checks, the refund, its history. */}
+                  <Link
+                    href={`/admin/paiements/${payment.id}`}
+                    className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 py-3 hover:bg-muted/40"
+                  >
+                    <span className="text-[15px] text-foreground">
+                      <span className="font-semibold">{formatMoney(Number(payment.expected_amount), lang)}</span>
+                      <span className="text-muted-foreground"> · {wordFor(t.plans, payment.plan)}</span>
+                    </span>
+                    <span className="text-sm text-muted-foreground">
+                      {wordFor(c.paymentStatuses, payment.status)} · {date(payment.created_at)}
+                    </span>
+                  </Link>
                 </li>
               ))}
             </ul>

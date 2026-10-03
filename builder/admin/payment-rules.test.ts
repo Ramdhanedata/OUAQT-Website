@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { matchesFilter, overpaid, refundOwed, stateOf, summaryOf, type PaymentFacts } from "./payment-rules";
+import { matchesFilter, owedBack, refundOwed, stateOf, summaryOf, type PaymentFacts } from "./payment-rules";
 
-const paid: PaymentFacts = { status: "confirmed", autoConfirmed: true, reviewedAt: null, expected: 750_000, read: 750_000, refunded: null };
+const paid: PaymentFacts = { status: "confirmed", autoConfirmed: true, reviewedAt: null, expected: 750_000, read: 750_000, refunded: null, failures: [] };
 
 describe("where a payment stands", () => {
   it("tells apart a confirmation by the screenshot, looked at or not, from one by a person", () => {
@@ -21,16 +21,24 @@ describe("where a payment stands", () => {
 describe("what is owed back", () => {
   it("is what a confirmed payment sent beyond its price, until staff say they sent it", () => {
     const more = { ...paid, read: 1_000_000 };
-    expect(overpaid(more)).toBe(250_000);
+    expect(owedBack(more)).toBe(250_000);
     expect(refundOwed(more)).toBe(250_000);
     expect(refundOwed({ ...more, refunded: 250_000 })).toBe(0);
     expect(matchesFilter("refund", more)).toBe(true);
     expect(matchesFilter("refund", { ...more, refunded: 250_000 })).toBe(false);
   });
 
-  it("is nothing for a payment that was refused, or whose amount nobody read", () => {
-    expect(overpaid({ ...paid, read: 1_000_000, status: "rejected_auto" })).toBe(0);
-    expect(overpaid({ ...paid, read: null })).toBe(0);
+  it("is all of a payment refused only for being less than the smallest price", () => {
+    const tooLittle = { ...paid, status: "rejected_auto", autoConfirmed: false, read: 500_000, failures: ["amount_too_low"] };
+    expect(owedBack(tooLittle)).toBe(500_000);
+    expect(matchesFilter("refund", tooLittle)).toBe(true);
+    expect(matchesFilter("refused", tooLittle)).toBe(true);
+  });
+
+  it("is nothing for one refused for anything else, or whose amount nobody read", () => {
+    expect(owedBack({ ...paid, read: 1_000_000, status: "rejected_auto", failures: ["wrong_recipient"] })).toBe(0);
+    expect(owedBack({ ...paid, read: 500_000, status: "rejected_auto", failures: ["amount_too_low", "wrong_date"] })).toBe(0);
+    expect(owedBack({ ...paid, read: null })).toBe(0);
   });
 });
 

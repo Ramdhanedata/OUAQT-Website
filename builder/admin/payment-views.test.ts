@@ -39,6 +39,7 @@ const line: PaymentLine = {
   reason: null,
   screenshotPath: "serial/x/y.jpg",
   extracted: { isReceipt: true, amountMru: 10000, recipient: "38087272", date: "2026-10-03", reference: "BK-555" },
+  failures: [],
   filed: { bySerial: true, planChosen: false, failures: [] },
 };
 
@@ -65,6 +66,7 @@ describe("a payment as a line of the list", () => {
           ...line,
           status: "rejected_auto",
           autoConfirmed: false,
+          failures: ["amount_too_low", "wrong_date"],
           filed: { ...line.filed, failures: [{ code: "amount_too_low", expected: 750_000, found: 500_000 }] },
         },
         words,
@@ -73,7 +75,23 @@ describe("a payment as a line of the list", () => {
     );
     expect(refused).toContain("Refusé automatiquement");
     expect(refused).toContain("moins que le prix le plus bas");
+    /* Refused for another reason than too little, nothing is owed. */
     expect(refused).not.toContain("À rembourser");
+    const tooLittle = text(
+      createElement(PaymentListItem, {
+        line: {
+          ...line,
+          status: "rejected_auto",
+          autoConfirmed: false,
+          read: 500_000,
+          failures: ["amount_too_low"],
+          filed: { ...line.filed, failures: [{ code: "amount_too_low", expected: 750_000, found: 500_000 }] },
+        },
+        words,
+        now,
+      })
+    );
+    expect(tooLittle).toContain("À rembourser : 5");
   });
 });
 

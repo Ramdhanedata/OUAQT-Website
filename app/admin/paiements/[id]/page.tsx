@@ -7,7 +7,7 @@ import { adminGate } from "@/builder/admin/guard";
 import { adminWords } from "@/builder/admin/language";
 import { AdminNav } from "@/builder/admin/nav";
 import { loadPaymentActivity, loadPaymentLine } from "@/builder/admin/payment-history";
-import { needsAPerson, overpaid, refundOwed, stateOf } from "@/builder/admin/payment-rules";
+import { needsAPerson, owedBack, refundOwed, refusedAsTooLittle, stateOf } from "@/builder/admin/payment-rules";
 import { ActivityList, checkWords, money, PaymentBadge, type Words } from "@/builder/admin/payment-views";
 import { PaymentsToConfirm } from "@/builder/admin/payments";
 import { RefundButton } from "@/builder/admin/refund-button";
@@ -61,7 +61,7 @@ export default async function PaymentPage(props: Props) {
   const now = new Date();
   const state = stateOf(line);
   const owed = refundOwed(line);
-  const extra = overpaid(line);
+  const extra = owedBack(line);
   const [screenshot, activity, toDecide] = await Promise.all([
     signedScreenshot(supabase, line.screenshotPath),
     loadPaymentActivity(supabase, line.id),
@@ -99,7 +99,7 @@ export default async function PaymentPage(props: Props) {
         <Figure
           label={p.figures.refunds}
           value={money(owed > 0 ? owed : line.refunded ?? 0, words)}
-          sub={owed > 0 ? p.states.pending : line.refunded != null ? fill(p.row.refunded, { amount: money(line.refunded, words) }) : undefined}
+          sub={owed > 0 ? p.detail.refundWaiting : line.refunded != null ? fill(p.row.refunded, { amount: money(line.refunded, words) }) : undefined}
           strong={owed > 0}
         />
       </ul>
@@ -120,7 +120,7 @@ export default async function PaymentPage(props: Props) {
             {owed > 0 ? (
               <>
                 <p className="mb-4 text-base leading-relaxed text-foreground">
-                  {fill(p.detail.refundIntro, {
+                  {fill(refusedAsTooLittle(line) ? p.detail.refundIntroRefused : p.detail.refundIntro, {
                     sent: money(line.read ?? 0, words),
                     price: money(line.expected, words),
                     amount: money(owed, words),
