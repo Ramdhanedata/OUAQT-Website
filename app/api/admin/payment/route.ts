@@ -6,6 +6,8 @@ import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { grantLicence, restoreLicence, type LicenceBefore } from "@/builder/payment/grant";
 import { priceFor } from "@/builder/payment/pricing";
+import { toMinor } from "@/app-ui/money";
+import type { Extracted } from "@/builder/payment/checks";
 
 /*
  * A person deciding about a payment.
@@ -15,11 +17,16 @@ import { priceFor } from "@/builder/payment/pricing";
  * automatic reaches this route. A person looked at the screenshot and
  * decided, and both the decision and the person are written down before the
  * licence moves.
+ *
+ * And one thing after: an owner who sent more than the price of what he
+ * bought is owed the rest (2026-10-03). Staff send it back themselves, by
+ * the app it came from, and say so here, so the payment stops showing as
+ * owed and the trail says who sent it and when.
  */
 
 const body = z.object({
   paymentId: z.string().uuid(),
-  action: z.enum(["confirm", "reject", "keep", "undo"]),
+  action: z.enum(["confirm", "reject", "keep", "undo", "refunded"]),
   reason: z.string().trim().max(300).optional(),
   /*
    * Confirming, the length the person grants: what the amount on the image
@@ -45,11 +52,35 @@ export async function POST(request: Request) {
 
   const { data: payment } = await supabase
     .from("payments")
-    .select("id, business_id, plan, expected_amount, status, auto_confirmed, licence_before, reviewed_at")
+    .select("id, business_id, plan, expected_amount, status, auto_confirmed, licence_before, reviewed_at, extracted")
     .eq("id", input.data.paymentId)
     .maybeSingle();
 
   if (!payment) return NextResponse.json({ error: "not_found" }, { status: 404 });
+
+  /* The rest of an overpayment, sent back by a person: written down once, at what was owed. */
+  if (input.data.action === "refunded") {
+    const read = (payment.extracted as Extracted)?.amountMru;
+    const owed = payment.status === "confirmed" && read != null ? toMinor(read) - Number(payment.expected_amount) : 0;
+    if (owed <= 0) return NextResponse.json({ error: "nothing_owed" }, { status: 409 });
+    const { data: already } = await supabase
+      .from("audit_events")
+      .select("id")
+      .eq("subject", "payment")
+      .eq("subject_id", payment.id)
+      .eq("action", "refunded")
+      .limit(1)
+      .maybeSingle();
+    if (already) return NextResponse.json({ error: "already_refunded" }, { status: 409 });
+    await audit({
+      actorId: gate.staff.id,
+      subject: "payment",
+      subjectId: payment.id,
+      action: "refunded",
+      detail: { amount: owed, business: payment.business_id },
+    });
+    return NextResponse.json({ status: "refunded", amount: owed });
+  }
 
   /* An automatic confirmation, looked at by a person: kept, or undone. */
   if (input.data.action === "keep" || input.data.action === "undo") {
