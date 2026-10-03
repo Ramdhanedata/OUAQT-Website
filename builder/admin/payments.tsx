@@ -99,6 +99,9 @@ function Payment({
   const [plan, setPlan] = useState(row.plan);
   const choosing = !review && row.choices.length > 1;
   const expected = row.choices.find((one) => one.plan === plan)?.amount ?? row.expected;
+  /* More on the image than the price of what is granted: the owner was told to ask for it back. */
+  const readAmount = row.extracted?.amountMru != null ? toMinor(row.extracted.amountMru) : null;
+  const refund = readAmount != null && readAmount > expected ? readAmount - expected : 0;
 
   async function decide(action: "confirm" | "reject" | "keep" | "undo") {
     if ((action === "reject" || action === "undo") && reason.trim() === "") {
@@ -159,6 +162,7 @@ function Payment({
             />
             <Line label={words.t.readDate} value={row.extracted.date ?? words.t.none} />
             <Line label={words.t.readRecipient} value={row.extracted.recipient ?? words.t.none} />
+            {refund > 0 ? <Line label={words.t.refundDue} value={formatMoney(refund, words.lang)} /> : null}
           </>
         ) : null}
       </dl>

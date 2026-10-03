@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { PublicSettings } from "@/builder/db/settings";
-import { licenceChoices, monthlyEquivalent, perMonthOf, planPaidFor, priceFor } from "./pricing";
+import { licenceChoices, monthlyEquivalent, perMonthOf, planPaidFor, priceFor, refundFor } from "./pricing";
 
 /* Amounts as the database now holds them: the smallest unit. */
 const settings = {
@@ -111,9 +111,21 @@ describe("the length an amount paid for", () => {
     expect(planPaidFor(750000, offered)?.plan).toBe("semiannual");
   });
 
-  it("is nothing for an amount that is neither, or that could not be read", () => {
-    expect(planPaidFor(1000000, offered)).toBeNull();
-    expect(planPaidFor(1800000, offered)).toBeNull();
+  it("is six months between the two prices, and a year above the year's", () => {
+    expect(planPaidFor(1000000, offered)?.plan).toBe("semiannual");
+    expect(planPaidFor(1499900, offered)?.plan).toBe("semiannual");
+    expect(planPaidFor(1800000, offered)?.plan).toBe("annual");
+  });
+
+  it("is nothing below the smallest price, or when the amount could not be read", () => {
+    expect(planPaidFor(749900, offered)).toBeNull();
     expect(planPaidFor(null, offered)).toBeNull();
+  });
+
+  it("owes back what was sent beyond the price of what it bought", () => {
+    expect(refundFor(1000000, planPaidFor(1000000, offered))).toBe(250000);
+    expect(refundFor(1800000, planPaidFor(1800000, offered))).toBe(300000);
+    expect(refundFor(1500000, planPaidFor(1500000, offered))).toBe(0);
+    expect(refundFor(null, null)).toBe(0);
   });
 });

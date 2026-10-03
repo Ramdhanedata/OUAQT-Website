@@ -38,12 +38,14 @@ describe("the three rules", () => {
     expect(codes({ ...right, amountMru: 9000 }, { expectedAmounts: [900_000] })).toEqual([]);
   });
 
-  it("takes either price when the amount is what says the plan, and names both when it is neither", () => {
-    const either = { expectedAmounts: [YEAR, 900_000] };
-    expect(codes({ ...right, amountMru: 18000 }, either)).toEqual([]);
-    expect(codes({ ...right, amountMru: 9000 }, either)).toEqual([]);
-    expect(checkPayment({ ...base, ...either, extracted: { ...right, amountMru: 10000 } }).failures).toEqual([
-      { code: "wrong_amount", expected: [YEAR, 900_000], found: 1_000_000 },
+  it("takes any amount from the smallest price up when the amount is what says the plan", () => {
+    const fromAmount = { expectedAmounts: [YEAR, 900_000], atLeast: true };
+    expect(codes({ ...right, amountMru: 18000 }, fromAmount)).toEqual([]);
+    expect(codes({ ...right, amountMru: 9000 }, fromAmount)).toEqual([]);
+    expect(codes({ ...right, amountMru: 10000 }, fromAmount)).toEqual([]);
+    expect(codes({ ...right, amountMru: 25000 }, fromAmount)).toEqual([]);
+    expect(checkPayment({ ...base, ...fromAmount, extracted: { ...right, amountMru: 5000 } }).failures).toEqual([
+      { code: "amount_too_low", expected: 900_000, found: 500_000 },
     ]);
   });
 

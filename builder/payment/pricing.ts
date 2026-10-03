@@ -104,10 +104,23 @@ export function licenceChoices(settings: PublicSettings, launchClient: boolean):
 /*
  * Which length an amount paid for, among the ones on offer: the screenshot
  * says how much he sent, and that alone says whether he bought a year or six
- * months (Adel, 2026-10-03). Exactly a price, or none: an amount between the
- * two buys nothing on its own, and he is told so.
+ * months (Adel, 2026-10-03). The longest one it covers: between the two
+ * prices it is six months, above the year's it is a year, and what was sent
+ * beyond that price is his to get back (see refundFor). Below the smallest
+ * price it buys nothing, and he is told so.
  */
 export function planPaidFor(amount: number | null, prices: Price[]): Price | null {
   if (amount == null) return null;
-  return prices.find((one) => one.amount === amount) ?? null;
+  let best: Price | null = null;
+  for (const one of prices) {
+    if (one.amount == null || one.amount > amount) continue;
+    if (!best || (best.amount ?? 0) < one.amount) best = one;
+  }
+  return best;
+}
+
+/** What was sent beyond the price of what it bought, in minor units: OUAQT owes it back. */
+export function refundFor(amount: number | null, price: Price | null): number {
+  if (amount == null || price?.amount == null) return 0;
+  return Math.max(0, amount - price.amount);
 }

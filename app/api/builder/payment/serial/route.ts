@@ -13,7 +13,8 @@ import { filePayment } from "@/builder/payment/file";
  * An owner who built his software from the phone never made an account and
  * never will, so this asks for none: the number says which shop, and the
  * screenshot of the transfer comes with it. He chooses nothing else. The
- * amount on the screenshot says whether he paid for a year or six months,
+ * amount on the screenshot says whether he paid for a year or six months
+ * (the longest it covers; anything beyond its price is owed back to him),
  * and the number it went to says which app (2026-10-03); a page that still
  * sends a plan and an app is taken at its word. When every check passes the
  * licence opens at once (see file.ts); otherwise a person decides.
@@ -93,5 +94,7 @@ export async function POST(request: Request) {
     /* What it paid for, and until when, for the page to say so. */
     plan: filed.plan,
     endsAt: filed.endsAt,
+    /* Sent beyond the price of what it bought: the page tells him to ask for it back. */
+    refundDue: filed.refundDue,
   });
 }

@@ -424,6 +424,12 @@ export const fr = {
     successSixMonths: "Votre paiement pour 6 mois est réussi. Merci !",
     activeUntil: "Votre licence est active jusqu'au {date}.",
     reopensSoon: "Votre logiciel se rouvre tout seul dans une minute, s'il est ouvert et relié à internet.",
+    refundTitle: "Vous avez envoyé {extra} de trop",
+    refundBody: "Vous avez envoyé {sent} ; le prix pour {plan} est de {price}. Votre paiement est validé. Écrivez-nous sur WhatsApp ou depuis le site pour récupérer les {extra} restants.",
+    refundMessage: "Bonjour, j'ai payé {sent} pour {plan} (numéro de série {serial}, transaction {reference}). Merci de me rembourser les {extra} en trop.",
+    refundWhatsapp: "Demander le remboursement sur WhatsApp",
+    refundContact: "Page contact",
+    failAmountTooLow: "Le montant sur la capture est {found} MRU, moins que le prix le plus bas ({expected} MRU). Écrivez-nous sur WhatsApp pour récupérer ce montant.",
   },
 
   devices: {

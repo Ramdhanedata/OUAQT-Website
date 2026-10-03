@@ -118,6 +118,8 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
               confirmed={sent?.confirmed ?? false}
               plan={sent?.plan ?? null}
               endsAt={sent?.endsAt ?? null}
+              refundDue={sent?.refundDue ?? 0}
+              serial={found.serial}
             />
           </div>
         ) : owes(found.licence) && found.prices.length > 0 ? (

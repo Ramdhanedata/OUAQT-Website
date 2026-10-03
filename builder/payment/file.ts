@@ -8,7 +8,7 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { payToFrom, type PaymentApp } from "./apps";
 import { checkPayment, confirmsAlone, sameNumber, type CheckFailure, type Extracted, type ReadBack } from "./checks";
 import { grantLicence } from "./grant";
-import { licenceChoices, planPaidFor, priceFor, type Plan } from "./pricing";
+import { licenceChoices, planPaidFor, priceFor, refundFor, type Plan } from "./pricing";
 import { readReceipt } from "./read";
 
 /*
@@ -37,6 +37,8 @@ export type Filed =
       plan: Plan;
       /* When the licence now ends, once confirmed. */
       endsAt: string | null;
+      /* What he sent beyond the price of what it bought, in minor units: OUAQT owes it back. */
+      refundDue: number;
     }
   | { ok: false; error: "no_settings" | "no_number" | "no_price" | "not_saved"; status: number };
 
@@ -110,10 +112,11 @@ export async function filePayment(
 
   /*
    * Which plan, and which app. Chosen, they are what he said. Not chosen, the
-   * amount read says the plan, and the number the money went to says the
-   * app. What cannot be told (nothing read, or an amount that is no price)
-   * is filed as the first on offer, and a person decides; nothing is granted
-   * on it by itself, because the checks below cannot all pass.
+   * amount read says the plan (the longest one it covers, the rest owed back
+   * to him), and the number the money went to says the app. What cannot be
+   * told (nothing read, or less than the smallest price) is filed as the
+   * first on offer, and a person decides; nothing is granted on it by
+   * itself, because the checks below cannot all pass.
    */
   const amountRead = extracted?.amountMru != null ? toMinor(extracted.amountMru) : null;
   const price = offered.length === 1 ? offered[0] : (planPaidFor(amountRead, offered) ?? offered[0]);
@@ -124,12 +127,16 @@ export async function filePayment(
 
   const outcome = checkPayment({
     expectedAmounts: offered.map((one) => one.amount as number),
+    atLeast: input.plan === null,
     payToNumber: payTo.number,
     now: new Date(),
     extracted,
     referenceAlreadyUsed: Boolean(sameReference),
     imageAlreadyUsed: Boolean(sameImage),
   });
+
+  /* Sent more than the price of what it bought: said to him now, and to staff in the admin area. */
+  const refundDue = input.plan === null && outcome.failures.length === 0 ? refundFor(amountRead, price) : 0;
 
   const { data: payment, error } = await admin
     .from("payments")
@@ -163,6 +170,7 @@ export async function filePayment(
       /* Whether he chose them, or the screenshot said. */
       chosen: { plan: input.plan !== null, app: input.app !== null },
       expected: price.amount,
+      refundDue,
       read: extracted !== null,
       failures: outcome.failures,
       bySerial: input.actorId === null,
@@ -210,6 +218,7 @@ export async function filePayment(
     expected: price.amount as number,
     plan: price.plan,
     endsAt,
+    refundDue,
     read: extracted
       ? {
           amount: extracted.amountMru != null ? toMinor(extracted.amountMru) : null,

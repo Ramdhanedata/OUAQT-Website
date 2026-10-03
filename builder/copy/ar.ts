@@ -430,6 +430,12 @@ export const ar: BuilderCopy = {
     successSixMonths: "تم دفع اشتراك 6 أشهر بنجاح. شكرا لك!",
     activeUntil: "رخصتك مفعلة حتى {date}.",
     reopensSoon: "سيعود برنامجك إلى العمل وحده خلال دقيقة، إن كان مفتوحا ومتصلا بالإنترنت.",
+    refundTitle: "أرسلت {extra} زيادة",
+    refundBody: "أرسلت {sent}، وسعر {plan} هو {price}. تم قبول دفعك. راسلنا على واتساب أو من الموقع لاسترجاع {extra} المتبقية.",
+    refundMessage: "مرحبا، دفعت {sent} مقابل {plan} (الرقم التسلسلي {serial}، رقم العملية {reference}). أرجو أن تعيدوا لي {extra} الزائدة.",
+    refundWhatsapp: "اطلب الاسترجاع على واتساب",
+    refundContact: "صفحة الاتصال",
+    failAmountTooLow: "المبلغ في الصورة هو {found} MRU، وهو أقل من أدنى سعر ({expected} MRU). راسلنا على واتساب لاسترجاع هذا المبلغ.",
   },
 
   devices: {

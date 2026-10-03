@@ -355,8 +355,11 @@ When the licence ends, the app's window tells the owner how to pay, from
 his phone, in the app he pays with: send the amount to the number, write his
 serial in the payment's note, take a screenshot, and scan the window's code.
 The page it opens (`/payer#SERIAL`) asks for the screenshot and nothing
-else: the amount read off it says whether he paid for a year or six months,
-and the number it went to says which app. When every check passes the
+else: the amount read off it says whether he paid for a year or six months
+(the longest it covers: between the two prices six months, above the year's
+a year, and the page tells him to ask OUAQT for what he sent beyond that
+price), and the number it went to says which app. Less than the smallest
+price buys nothing and is refused. When every check passes the
 licence opens at once, and the app, which asks every few seconds while that
 window is open, says what was bought and opens again.
 

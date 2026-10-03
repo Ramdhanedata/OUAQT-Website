@@ -5,6 +5,7 @@ import { formatMoney, type AppLanguage } from "@/app-ui";
 import type { BuilderCopy } from "@/builder/copy";
 import { browserClient } from "@/builder/db/client";
 import { appName, type PaymentApp, type PayTo } from "@/builder/payment/apps";
+import { organization } from "@/lib/data/contact";
 import type { CheckFailure, ReadBack } from "@/builder/payment/checks";
 import { ACCEPTED_IMAGES, prepareScreenshot, ScreenshotError } from "@/builder/payment/image";
 import { perMonthOf, type Price } from "@/builder/payment/pricing";
@@ -310,6 +311,8 @@ export type Sent = {
   /* What it paid for and until when, when the server said. */
   plan?: string | null;
   endsAt?: string | null;
+  /* Sent beyond the price of what it bought, in minor units: owed back to him. */
+  refundDue?: number;
 };
 
 /*
@@ -375,6 +378,7 @@ export function SendScreenshot({
         confirmed: body.decision === "confirmed",
         plan: typeof body.plan === "string" ? body.plan : null,
         endsAt: typeof body.endsAt === "string" ? body.endsAt : null,
+        refundDue: typeof body.refundDue === "number" ? body.refundDue : 0,
       });
     } catch (caught) {
       setError(caught instanceof ScreenshotError ? (copy.pay.errorImage as string) : (copy.pay.errorSend as string));
@@ -487,6 +491,8 @@ export function PaymentReceived({
   confirmed = false,
   plan = null,
   endsAt = null,
+  refundDue = 0,
+  serial = null,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
@@ -494,6 +500,9 @@ export function PaymentReceived({
   confirmed?: boolean;
   plan?: string | null;
   endsAt?: string | null;
+  refundDue?: number;
+  /* For the message asking for the refund, so we know whose it is. */
+  serial?: string | null;
 }) {
   const lines: [string, string][] = [];
   if (read?.amount != null) lines.push([copy.pay.readAmount as string, formatMoney(read.amount, language)]);
@@ -529,6 +538,9 @@ export function PaymentReceived({
               : copy.pay.confirmedNow}
         </p>
       </div>
+      {confirmed && refundDue > 0 && read?.amount != null ? (
+        <Refund copy={copy} language={language} sent={read.amount} extra={refundDue} plan={plan} serial={serial} reference={read.reference} />
+      ) : null}
       {lines.length > 0 ? (
         <div className="rounded-xl border border-border p-4">
           <p className="text-base text-muted-foreground">{copy.pay.readTitle}</p>
@@ -544,6 +556,54 @@ export function PaymentReceived({
           </dl>
         </div>
       ) : null}
+    </div>
+  );
+}
+
+/*
+ * Sent more than the price of what it bought (2026-10-03): the time is his
+ * already, and what is left over is his to get back. One press opens WhatsApp
+ * with a message that says whose payment it is and how much, so the person
+ * reading it has nothing to ask.
+ */
+function Refund({
+  copy,
+  language,
+  sent,
+  extra,
+  plan,
+  serial,
+  reference,
+}: {
+  copy: BuilderCopy;
+  language: AppLanguage;
+  sent: number;
+  extra: number;
+  plan: string | null;
+  serial: string | null;
+  reference: string | null;
+}) {
+  const words = {
+    sent: formatMoney(sent, language),
+    extra: formatMoney(extra, language),
+    price: formatMoney(sent - extra, language),
+    plan: (plan === "semiannual" ? copy.pay.sixMonths : copy.pay.year) as string,
+    serial: serial ?? "",
+    reference: reference ?? "",
+  };
+  const message = fill(copy.pay.refundMessage as string, words);
+  return (
+    <div className="rounded-xl border-2 border-amber-500/60 bg-amber-500/5 p-4" role="note">
+      <p className="text-base font-semibold text-foreground">{fill(copy.pay.refundTitle as string, words)}</p>
+      <p className="mt-1 text-base leading-relaxed text-foreground">{fill(copy.pay.refundBody as string, words)}</p>
+      <div className="mt-3 flex flex-wrap gap-3">
+        <Button href={`${organization.whatsappUrl}?text=${encodeURIComponent(message)}`} target="_blank" rel="noreferrer" variant="accent">
+          {copy.pay.refundWhatsapp}
+        </Button>
+        <Button href={`/${language}/contact`} variant="outline">
+          {copy.pay.refundContact}
+        </Button>
+      </div>
     </div>
   );
 }
@@ -571,6 +631,8 @@ function explain(
           found: money(failure.found),
           expected: amounts(failure.expected),
         });
+      case "amount_too_low":
+        return fill(copy.pay.failAmountTooLow as string, { found: money(failure.found), expected: money(failure.expected) });
       case "amount_unread":
         return fill(copy.pay.failAmountUnread as string, { expected: amounts(failure.expected) });
       case "wrong_recipient":

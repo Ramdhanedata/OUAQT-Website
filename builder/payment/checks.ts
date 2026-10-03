@@ -5,8 +5,9 @@
  * must be right: the number the money went to is OUAQT's number on the app
  * he chose, the date is today's, and the amount is exactly the price of the
  * plan he chose (a year or six months). Paying with his serial, he chooses
- * nothing: the amount must be exactly one of the two prices, and which one
- * says the plan (2026-10-03). All three right, and nothing used
+ * nothing: the amount must be at least the smallest price, and the longest
+ * length it covers is what he bought; anything above that price is owed back
+ * to him (2026-10-03). All three right, and nothing used
  * before: the payment succeeds (see confirmsAlone). Any one wrong or missing:
  * it does not, and he is told which, while he is still on the page.
  *
@@ -24,6 +25,7 @@ export type CheckCode =
   | "reference_used"
   | "image_used"
   | "wrong_amount"
+  | "amount_too_low"
   | "amount_unread"
   | "wrong_recipient"
   | "recipient_unread"
@@ -80,6 +82,12 @@ export function checkPayment(input: {
    * amount is what says which plan, the price of each one on offer.
    */
   expectedAmounts: number[];
+  /*
+   * Paying with his serial, where the amount says the plan: anything from
+   * the smallest price up passes, and what is above the price is refunded.
+   * Otherwise it must be exactly the price of the plan he chose.
+   */
+  atLeast?: boolean;
   /** OUAQT's number on the app he chose. */
   payToNumber: string;
   now: Date;
@@ -116,12 +124,15 @@ export function checkPayment(input: {
   if (!read.date) failures.push({ code: "date_unread" });
   else if (read.date !== today(input.now)) failures.push({ code: "wrong_date", expected: today(input.now), found: read.date });
 
-  /* Exactly the price of the plan he chose, or of one of those on offer. */
+  /* Exactly the price of the plan he chose, or at least the smallest of those on offer. */
   const expected = input.expectedAmounts.length === 1 ? input.expectedAmounts[0] : input.expectedAmounts;
   if (read.amountMru == null) failures.push({ code: "amount_unread", expected });
   else {
     const found = toMinor(read.amountMru);
-    if (!input.expectedAmounts.includes(found)) failures.push({ code: "wrong_amount", expected, found });
+    if (input.atLeast) {
+      const least = Math.min(...input.expectedAmounts);
+      if (found < least) failures.push({ code: "amount_too_low", expected: least, found });
+    } else if (!input.expectedAmounts.includes(found)) failures.push({ code: "wrong_amount", expected, found });
   }
 
   return {

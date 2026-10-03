@@ -415,6 +415,12 @@ export const en: BuilderCopy = {
     successSixMonths: "Your 6-month payment was successful. Thank you!",
     activeUntil: "Your licence is active until {date}.",
     reopensSoon: "Your software opens again by itself within a minute, if it is open and connected to the internet.",
+    refundTitle: "You sent {extra} too much",
+    refundBody: "You sent {sent}; the price for {plan} is {price}. Your payment is accepted. Write to us on WhatsApp or from the website to get the remaining {extra} back.",
+    refundMessage: "Hello, I paid {sent} for {plan} (serial number {serial}, transaction {reference}). Please refund me the extra {extra}.",
+    refundWhatsapp: "Ask for the refund on WhatsApp",
+    refundContact: "Contact page",
+    failAmountTooLow: "The amount on the screenshot is {found} MRU, less than the lowest price ({expected} MRU). Write to us on WhatsApp to get it back.",
   },
 
   devices: {
