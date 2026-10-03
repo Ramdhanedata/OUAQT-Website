@@ -404,6 +404,17 @@ export const en: BuilderCopy = {
     readAmount: "Amount",
     readDate: "Date",
     readReference: "Transaction",
+    /* The page the software's code opens: the screenshot first, nothing to choose (2026-10-03). */
+    uploadHeading: "Send the screenshot of your payment",
+    uploadIntro: "Choose the screenshot of the confirmation. We check it straight away: the amount says whether you paid for 1 year or 6 months.",
+    notPaidTitle: "Not paid yet?",
+    notPaidBody: "Send {amounts} to {number} from {apps}, and write your serial number {serial} in the note. Then take a screenshot of the confirmation and send it here.",
+    planAmount: "{amount} for {plan}",
+    failAmountEither: "The amount on the screenshot is {found} MRU. It must be exactly {expected} MRU.",
+    successYear: "Your 1-year payment was successful. Thank you!",
+    successSixMonths: "Your 6-month payment was successful. Thank you!",
+    activeUntil: "Your licence is active until {date}.",
+    reopensSoon: "Your software opens again by itself within a minute, if it is open and connected to the internet.",
   },
 
   devices: {
@@ -423,7 +434,7 @@ export const en: BuilderCopy = {
   code: {
     have: "I already have my serial number",
     label: "Your serial number",
-    placeholder: "XXXX-XXXX",
+    placeholder: "XXXXXXXX",
     open: "Continue",
     opening: "One moment…",
     unknown: "Number not found. Check the characters, or ask for it to be sent again.",

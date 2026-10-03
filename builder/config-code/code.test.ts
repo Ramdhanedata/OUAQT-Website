@@ -3,15 +3,21 @@ import { formatAsTyped, isExpired, phoneKey, readNumber, waitAfter } from "./cod
 
 describe("reading the number the owner typed", () => {
   it.each([
-    ["as printed", "GM6S-FUNN"],
-    ["lowercase", "gm6s-funn"],
-    ["no hyphen", "GM6SFUNN"],
+    ["as printed", "GM6SFUNN"],
+    ["lowercase", "gm6sfunn"],
+    ["with the hyphen serials had before", "GM6S-FUNN"],
     ["spaces around and inside", "  gm6s funn  "],
-    ["pasted from the WhatsApp message", "OUAQT. Votre numéro de série : GM6S-FUNN. Tapez-le sur le site."],
-    ["pasted as a link", "https://ouaqt.com/fr/creer-mon-logiciel?n=GM6S-FUNN"],
+    ["pasted from the WhatsApp message", "OUAQT. Votre numéro de série : GM6SFUNN. Tapez-le sur le site."],
+    ["pasted from an old WhatsApp message", "OUAQT. Votre numéro de série : GM6S-FUNN. Tapez-le sur le site."],
+    ["pasted as a link", "https://ouaqt.com/fr/creer-mon-logiciel?n=GM6SFUNN"],
     ["pasted as an encoded link", "https://ouaqt.com/fr/x?n=gm6s%2Dfunn"],
   ])("%s gives the same number", (_what, typed) => {
-    expect(readNumber(typed)).toBe("GM6S-FUNN");
+    expect(readNumber(typed)).toBe("GM6SFUNN");
+  });
+
+  it("does not take a word of eight letters for the number", () => {
+    expect(readNumber("PHARMACY ESSAI, numéro de série : GM6SFUNN")).toBe("GM6SFUNN");
+    expect(readNumber("Numéro de série : HQWZKMPT, pour PHARMACY")).toBe("HQWZKMPT");
   });
 
   it("finds no number where there is none, and leaves the lookup to say so", () => {
@@ -21,16 +27,18 @@ describe("reading the number the owner typed", () => {
 });
 
 describe("the field as it is typed", () => {
-  it("adds nothing to what he types, only a hyphen after four", () => {
+  it("adds nothing to what he types, and takes out an old hyphen or a space", () => {
     expect(formatAsTyped("g")).toBe("G");
     expect(formatAsTyped("gm6s")).toBe("GM6S");
-    expect(formatAsTyped("gm6sf")).toBe("GM6S-F");
-    expect(formatAsTyped("gm6s funn")).toBe("GM6S-FUNN");
+    expect(formatAsTyped("gm6sf")).toBe("GM6SF");
+    expect(formatAsTyped("gm6s funn")).toBe("GM6SFUNN");
+    expect(formatAsTyped("GM6S-FUNN")).toBe("GM6SFUNN");
   });
 
   it("reads a pasted message or link whole", () => {
-    expect(formatAsTyped("https://ouaqt.com/fr/x?n=GM6S-FUNN")).toBe("GM6S-FUNN");
-    expect(formatAsTyped("Votre numéro de série : GM6S-FUNN.")).toBe("GM6S-FUNN");
+    expect(formatAsTyped("https://ouaqt.com/fr/x?n=GM6SFUNN")).toBe("GM6SFUNN");
+    expect(formatAsTyped("Votre numéro de série : GM6SFUNN.")).toBe("GM6SFUNN");
+    expect(formatAsTyped("Votre numéro de série : GM6S-FUNN.")).toBe("GM6SFUNN");
   });
 
   it("empties to nothing", () => {

@@ -1,5 +1,7 @@
 import "server-only";
 
+import { normaliseSerial } from "./serial";
+
 /*
  * The serial is stored twice, and neither copy is readable by accident.
  *
@@ -61,7 +63,12 @@ export async function decryptSerial(stored: string): Promise<string | null> {
       await key(),
       bytes(body)
     );
-    return new TextDecoder().decode(opened);
+    /*
+     * Shown as serials are written now, with no hyphen, whatever form it was
+     * sealed in: those issued before 2026-10-03 were sealed with one.
+     */
+    const serial = new TextDecoder().decode(opened);
+    return normaliseSerial(serial) ?? serial;
   } catch {
     // A wrong key, or a row written under an older one. Not a crash: the
     // account area simply cannot show that serial.

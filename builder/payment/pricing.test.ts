@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { PublicSettings } from "@/builder/db/settings";
-import { monthlyEquivalent, perMonthOf, priceFor } from "./pricing";
+import { licenceChoices, monthlyEquivalent, perMonthOf, planPaidFor, priceFor } from "./pricing";
 
 /* Amounts as the database now holds them: the smallest unit. */
 const settings = {
@@ -100,5 +100,20 @@ describe("what an owner owes", () => {
   it("works out the monthly figure an owner compares against", () => {
     expect(monthlyEquivalent(1800000)).toBe(150000);
     expect(monthlyEquivalent(1500000)).toBe(125000);
+  });
+});
+
+describe("the length an amount paid for", () => {
+  const offered = licenceChoices(settings, true);
+
+  it("is the year for the year's price and six months for the half year's", () => {
+    expect(planPaidFor(1500000, offered)?.plan).toBe("annual");
+    expect(planPaidFor(750000, offered)?.plan).toBe("semiannual");
+  });
+
+  it("is nothing for an amount that is neither, or that could not be read", () => {
+    expect(planPaidFor(1000000, offered)).toBeNull();
+    expect(planPaidFor(1800000, offered)).toBeNull();
+    expect(planPaidFor(null, offered)).toBeNull();
   });
 });

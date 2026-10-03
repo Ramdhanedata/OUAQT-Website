@@ -25,7 +25,7 @@ because there is no field to store it in.
 POST /api/licence/activate
 {
   // One of these two, never both. See "Two ways in" below.
-  "serial":     "RXVE-7DV3",        // what the owner types
+  "serial":     "RXVE7DV3",         // what the owner types (an old one with a hyphen is the same)
   "token":      "<one-time, from the website>",
   "deviceId":   "a-stable-id",      // the app's own id for this computer
   "deviceName": "Caisse",           // optional, shown to the owner
@@ -43,7 +43,7 @@ POST /api/licence/activate
 ```jsonc
 200 {
   "licence":              "<signed>",   // see below
-  "serial":               "XXXX-XXXX",   // the shop's own numéro de série, to show when the trial ends
+  "serial":               "XXXXXXXX",   // the shop's own numéro de série, to show when the trial ends
   "deviceToken":          "<keep this>", // shown once, needed to refresh
   "configurationVersion": 3,             // name it back on every refresh
 
@@ -53,7 +53,11 @@ POST /api/licence/activate
   "products":      [ { "name": "...", "price": 12050, "quantity": 24, /* ... */ } ],
   "staff":         [ { "name": "...", "role": "manager | cashier" } ],
   "logo":          { "colour": "<signed url>", "mono": "<signed url>" } | null,
-  "supportWhatsapp": "2222..."           // for the app's "contact OUAQT" button
+  "supportWhatsapp": "2222...",          // for the app's "contact OUAQT" button
+
+  // How to pay, for the end-of-licence window. See "Paying" below.
+  "payTo":  [ { "app": "bankily", "name": "Bankily", "nameArabic": "بنكيلي", "number": "38087272" } ],
+  "prices": [ { "plan": "annual", "amount": 1800000 }, { "plan": "semiannual", "amount": 900000 } ]
 }
 404 { "error": "unknown_serial" }
 403 { "error": "bad_token" }           // wrong, already used, or expired
@@ -240,14 +244,16 @@ POST /api/licence/refresh
 ```jsonc
 200 {
   "licence":              "<signed>",
-  "serial":               "XXXX-XXXX",   // the same, for a computer activated by a link
+  "serial":               "XXXXXXXX",   // the same, for a computer activated by a link
   "configurationVersion": 4,
   // Null when the version the app named is still the current one.
   "configuration": { /* ... */ } | null,
   "products":      [ /* ... */ ]  | null,
   "staff":         [ /* ... */ ]  | null,
   "logo":          { "colour": "...", "mono": "..." } | null,
-  "supportWhatsapp": "2222..."
+  "supportWhatsapp": "2222...",
+  "payTo":  [ /* as at activation */ ],
+  "prices": [ /* as at activation */ ]
 }
 403 { "error": "wrong_token" }
 404 { "error": "unknown_device" }     // released, or never activated
@@ -342,6 +348,32 @@ the till did not match. **Those figures are computed on his machine from his
 own data and never leave it.** There is no field in this API that could carry
 them and no endpoint that would take them, and there must never be one. Only
 the timing travels, and only in this direction.
+
+## Paying
+
+When the licence ends, the app's window tells the owner how to pay, from
+his phone, in the app he pays with: send the amount to the number, write his
+serial in the payment's note, take a screenshot, and scan the window's code.
+The page it opens (`/payer#SERIAL`) asks for the screenshot and nothing
+else: the amount read off it says whether he paid for a year or six months,
+and the number it went to says which app. When every check passes the
+licence opens at once, and the app, which asks every few seconds while that
+window is open, says what was bought and opens again.
+
+`payTo` and `prices` are what that window needs, and they come with every
+activation and refresh, like `supportWhatsapp`, so a new number or a new
+price reaches every shop at its next refresh with no new installer. They are
+read from the same settings as the payment page (`payHelpFor` in
+`builder/payment/pay-help.ts`), so the window and the page never disagree.
+
+- `payTo`: the apps that have a receiving number, in the page's order, each
+  named in Latin and Arabic script. Empty when no number is set.
+- `prices`: what this shop pays for a year and for six months, in minor
+  units, at its own price (launch or standard). A price that is not set is
+  left out, never sent as zero.
+
+Keep the last ones received. An app that has none yet, from a website older
+than these fields, shows the payment page's number and no amount.
 
 ## Renewal codes, for a shop with no network
 

@@ -79,7 +79,7 @@ export function openInBuilder(opened: Opened, from: Locale): void {
 }
 
 /* All eight characters: enough to look the number up. */
-const COMPLETE = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+const COMPLETE = /^[A-Z0-9]{8}$/;
 
 type Problem =
   | { kind: "unknown" }

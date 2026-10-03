@@ -3,7 +3,9 @@ import { z } from "zod";
 import { adminGate } from "@/builder/admin/guard";
 import { audit } from "@/builder/db/audit";
 import { adminClient } from "@/builder/db/server";
+import { getPublicSettings } from "@/builder/db/settings";
 import { grantLicence, restoreLicence, type LicenceBefore } from "@/builder/payment/grant";
+import { priceFor } from "@/builder/payment/pricing";
 
 /*
  * A person deciding about a payment.
@@ -19,6 +21,12 @@ const body = z.object({
   paymentId: z.string().uuid(),
   action: z.enum(["confirm", "reject", "keep", "undo"]),
   reason: z.string().trim().max(300).optional(),
+  /*
+   * Confirming, the length the person grants: what the amount on the image
+   * paid for. A payment filed without a plan chosen is filed as what its
+   * amount said, or as a year when nothing could be read.
+   */
+  plan: z.enum(["annual", "semiannual"]).optional(),
 });
 
 export async function POST(request: Request) {
@@ -104,6 +112,26 @@ export async function POST(request: Request) {
     });
 
     return NextResponse.json({ status: "rejected_manual" });
+  }
+
+  /* Another length than it was filed as: the payment says so before the licence moves. */
+  if (input.data.plan && input.data.plan !== payment.plan) {
+    if (payment.plan !== "annual" && payment.plan !== "semiannual") {
+      return NextResponse.json({ error: "plan_fixed" }, { status: 400 });
+    }
+    const [settings, { data: business }] = await Promise.all([
+      getPublicSettings(),
+      supabase.from("businesses").select("launch_client").eq("id", payment.business_id).maybeSingle(),
+    ]);
+    const price = settings ? priceFor(input.data.plan, settings, Boolean(business?.launch_client)) : null;
+    if (!price || price.amount == null) return NextResponse.json({ error: "no_price" }, { status: 503 });
+    const { error } = await supabase
+      .from("payments")
+      .update({ plan: input.data.plan, expected_amount: price.amount })
+      .eq("id", payment.id);
+    if (error) return NextResponse.json({ error: "not_saved" }, { status: 502 });
+    payment.plan = input.data.plan;
+    payment.expected_amount = price.amount;
   }
 
   const granted = await grantLicence(supabase, payment);

@@ -110,10 +110,11 @@ function makeSerial() {
   const bytes = crypto.getRandomValues(new Uint8Array(8));
   let out = "";
   for (const byte of bytes) out += ALPHABET[byte % ALPHABET.length];
-  return `${out.slice(0, 4)}-${out.slice(4)}`;
+  return out;
 }
+/* Hashed with the hyphen serials had at first, as the website hashes every one. */
 async function hashSerial(serial) {
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(serial));
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`${serial.slice(0, 4)}-${serial.slice(4)}`));
   return Buffer.from(digest).toString("hex");
 }
 

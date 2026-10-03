@@ -413,6 +413,17 @@ export const fr = {
     readAmount: "Montant",
     readDate: "Date",
     readReference: "Transaction",
+    /* The page the software's code opens: the screenshot first, nothing to choose (2026-10-03). */
+    uploadHeading: "Envoyez la capture d'écran de votre paiement",
+    uploadIntro: "Choisissez la capture de la confirmation. Nous la vérifions tout de suite : le montant dit si vous avez payé 1 an ou 6 mois.",
+    notPaidTitle: "Pas encore payé ?",
+    notPaidBody: "Envoyez {amounts} au {number} depuis {apps}, et écrivez votre numéro de série {serial} dans la note. Puis faites une capture d'écran de la confirmation et envoyez-la ici.",
+    planAmount: "{amount} pour {plan}",
+    failAmountEither: "Le montant sur la capture est {found} MRU. Il doit être exactement {expected} MRU.",
+    successYear: "Votre paiement pour 1 an est réussi. Merci !",
+    successSixMonths: "Votre paiement pour 6 mois est réussi. Merci !",
+    activeUntil: "Votre licence est active jusqu'au {date}.",
+    reopensSoon: "Votre logiciel se rouvre tout seul dans une minute, s'il est ouvert et relié à internet.",
   },
 
   devices: {
@@ -437,7 +448,7 @@ export const fr = {
   code: {
     have: "J'ai déjà mon numéro de série",
     label: "Votre numéro de série",
-    placeholder: "XXXX-XXXX",
+    placeholder: "XXXXXXXX",
     open: "Continuer",
     opening: "Un instant…",
     unknown: "Numéro introuvable. Vérifiez les caractères, ou demandez un nouvel envoi.",

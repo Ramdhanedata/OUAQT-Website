@@ -7,6 +7,7 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { hashToken, newDeviceToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
+import { payHelpFor } from "@/builder/payment/pay-help";
 import { serialFor, setupFor } from "@/builder/licence/setup";
 import { claimTrial } from "@/builder/licence/trial-claim";
 import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
@@ -156,7 +157,7 @@ export async function POST(request: Request) {
   const [{ data: business }, settings, secrets] = await Promise.all([
     supabase
       .from("businesses")
-      .select("id, owner_id, name_latin, name_arabic, pack, receipt_address, banned_at")
+      .select("id, owner_id, name_latin, name_arabic, pack, receipt_address, banned_at, launch_client")
       .eq("id", found.business_id)
       .maybeSingle(),
     getPublicSettings(),
@@ -428,6 +429,8 @@ export async function POST(request: Request) {
     logo: setup.logo,
     /* Where the app sends the owner who needs us: its "contact OUAQT" button. */
     supportWhatsapp: settings.support_whatsapp,
+    /* Where to send the money and how much, for its end-of-licence window. */
+    ...payHelpFor(settings, secrets, Boolean(business.launch_client)),
   });
   } finally {
     /*

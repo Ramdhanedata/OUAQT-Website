@@ -4,6 +4,8 @@ import { adminWords } from "@/builder/admin/language";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { PaymentsToConfirm, type PaymentRow } from "@/builder/admin/payments";
 import { adminClient } from "@/builder/db/server";
+import { getPublicSettings } from "@/builder/db/settings";
+import { licenceChoices } from "@/builder/payment/pricing";
 
 /*
  * Payments waiting for a person.
@@ -53,6 +55,7 @@ export default async function PaymentsPage() {
     : { data: [] };
 
   const byId = new Map((businesses ?? []).map((one) => [one.id, one]));
+  const settings = await getPublicSettings();
 
   /*
    * A link that works for a few minutes and then stops. The bucket is private
@@ -72,6 +75,14 @@ export default async function PaymentsPage() {
         pack: business?.pack ?? "",
         launchClient: Boolean(business?.launch_client),
         plan: payment.plan,
+        /*
+         * A year or six months, at this shop's prices: the length a person
+         * grants is the one the amount on the image paid for.
+         */
+        choices:
+          settings && (payment.plan === "annual" || payment.plan === "semiannual")
+            ? licenceChoices(settings, Boolean(business?.launch_client)).map((one) => ({ plan: one.plan, amount: one.amount as number }))
+            : [],
         app: payment.app,
         expected: Number(payment.expected_amount),
         reference: payment.reference,

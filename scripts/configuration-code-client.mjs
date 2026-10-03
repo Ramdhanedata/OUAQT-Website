@@ -25,7 +25,7 @@ const post = async (path, body, token, ip, cookie) => {
   const res = await fetch(`${base}${path}`, { method: "POST", headers: { "content-type": "application/json", ...(token ? { authorization: `Bearer ${token}` } : {}), ...(cookie ? { cookie } : {}), "x-forwarded-for": ip ?? "10.0.0.1" }, body: JSON.stringify(body) });
   return { status: res.status, json: await res.json().catch(() => null) };
 };
-const SERIAL = /^[2-9A-HJKMNP-Z]{4}-[2-9A-HJKMNP-Z]{4}$/;
+const SERIAL = /^[2-9A-HJKMNP-Z]{8}$/;
 let failures = 0;
 const check = (what, ok, detail = "") => { if (!ok) failures += 1; console.log(`  ${ok ? "pass" : "FAIL"}  ${what}${detail ? "  " + detail : ""}`); };
 const answers = (name, pack = "pharmacy", locale = "ar") => ({ pack, builderLanguage: locale, appLanguage: locale, nameLatin: name, nameArabic: "صيدلية الرمز", phone: "+222 22 99 88 77", interview: {} });

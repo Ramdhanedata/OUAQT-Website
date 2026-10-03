@@ -11,11 +11,12 @@ import { filePayment } from "@/builder/payment/file";
  * Paying with nothing but the numéro de série.
  *
  * An owner who built his software from the phone never made an account and
- * never will, so this asks for none: the number says which shop, the
- * screenshot of the transfer comes with it, from whichever app he paid
- * with, and a person confirms it
- * in the admin area, which turns the trial into a full licence. Nothing here
- * decides that he has paid.
+ * never will, so this asks for none: the number says which shop, and the
+ * screenshot of the transfer comes with it. He chooses nothing else. The
+ * amount on the screenshot says whether he paid for a year or six months,
+ * and the number it went to says which app (2026-10-03); a page that still
+ * sends a plan and an app is taken at its word. When every check passes the
+ * licence opens at once (see file.ts); otherwise a person decides.
  *
  * The screenshot is put in the payments bucket by the server, under the
  * shop's own folder, since there is no session for the browser to upload
@@ -29,8 +30,8 @@ export const maxDuration = 30; // not-a-rule: seconds a request may run
 
 const fields = z.object({
   number: z.string().max(400),
-  plan: z.enum(["annual", "semiannual", "quarterly", "perpetual"]),
-  app: z.enum(PAYMENT_APPS),
+  plan: z.enum(["annual", "semiannual", "quarterly", "perpetual"]).optional(),
+  app: z.enum(PAYMENT_APPS).optional(),
 });
 
 export async function POST(request: Request) {
@@ -38,8 +39,8 @@ export async function POST(request: Request) {
   if (!form) return NextResponse.json({ error: "invalid" }, { status: 400 });
   const input = fields.safeParse({
     number: form.get("number"),
-    plan: form.get("plan"),
-    app: form.get("app"),
+    plan: form.get("plan") ?? undefined,
+    app: form.get("app") ?? undefined,
   });
   const image = form.get("image");
   if (!input.success || !(image instanceof Blob)) return NextResponse.json({ error: "invalid" }, { status: 400 });
@@ -76,13 +77,21 @@ export async function POST(request: Request) {
   const filed = await filePayment(admin, {
     businessId: business.id,
     launchClient: business.launch_client,
-    plan: input.data.plan,
+    plan: input.data.plan ?? null,
     path,
     bytes,
-    app: input.data.app,
+    app: input.data.app ?? null,
     actorId: null,
   });
   if (!filed.ok) return NextResponse.json({ error: filed.error }, { status: filed.status });
 
-  return NextResponse.json({ decision: filed.decision, failures: filed.failures, expected: filed.expected, read: filed.read });
+  return NextResponse.json({
+    decision: filed.decision,
+    failures: filed.failures,
+    expected: filed.expected,
+    read: filed.read,
+    /* What it paid for, and until when, for the page to say so. */
+    plan: filed.plan,
+    endsAt: filed.endsAt,
+  });
 }

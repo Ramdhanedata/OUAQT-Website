@@ -96,7 +96,7 @@ export function ReviveCode({ t, days }: { t: Words; days: number }) {
             setCode(event.target.value);
             setState("idle");
           }}
-          placeholder="XXXX-XXXX"
+          placeholder="XXXXXXXX"
           className="mt-1 min-h-[44px] w-full rounded-lg border border-border bg-background px-3 text-base text-foreground"
         />
       </label>

@@ -419,6 +419,17 @@ export const ar: BuilderCopy = {
     readAmount: "المبلغ",
     readDate: "التاريخ",
     readReference: "رقم العملية",
+    /* The page the software's code opens: the screenshot first, nothing to choose (2026-10-03). */
+    uploadHeading: "أرسل صورة شاشة دفعك",
+    uploadIntro: "اختر صورة شاشة التأكيد. نتحقق منها فورا: المبلغ يحدد إن كنت دفعت سنة أو 6 أشهر.",
+    notPaidTitle: "لم تدفع بعد؟",
+    notPaidBody: "أرسل {amounts} إلى الرقم {number} عبر {apps}، واكتب رقمك التسلسلي {serial} في خانة الملاحظة. ثم التقط صورة شاشة التأكيد وأرسلها هنا.",
+    planAmount: "{amount} مقابل {plan}",
+    failAmountEither: "المبلغ في الصورة هو {found} MRU، ويجب أن يكون بالضبط {expected} MRU.",
+    successYear: "تم دفع اشتراك سنة بنجاح. شكرا لك!",
+    successSixMonths: "تم دفع اشتراك 6 أشهر بنجاح. شكرا لك!",
+    activeUntil: "رخصتك مفعلة حتى {date}.",
+    reopensSoon: "سيعود برنامجك إلى العمل وحده خلال دقيقة، إن كان مفتوحا ومتصلا بالإنترنت.",
   },
 
   devices: {
@@ -438,7 +449,7 @@ export const ar: BuilderCopy = {
   code: {
     have: "لدي رقمي التسلسلي",
     label: "رقمك التسلسلي",
-    placeholder: "XXXX-XXXX",
+    placeholder: "XXXXXXXX",
     open: "متابعة",
     opening: "لحظة…",
     unknown: "لم نجد هذا الرقم. تحقق من الحروف، أو اطلب إرساله من جديد.",

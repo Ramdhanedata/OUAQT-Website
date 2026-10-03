@@ -4,19 +4,20 @@ import { useEffect, useRef, useState } from "react";
 import type { BuilderCopy } from "@/builder/copy";
 import { formatAsTyped } from "@/builder/config-code/code";
 import type { PayTo } from "@/builder/payment/apps";
-import type { ReadBack } from "@/builder/payment/checks";
 import type { Price } from "@/builder/payment/pricing";
 import type { Locale } from "@/lib/i18n/config";
 import { fill } from "@/lib/utils";
 import { Field } from "./fields";
 import { licenceLine, owes, type LicenceShown } from "./licence-line";
-import { Pay, PaymentReceived } from "./pay";
+import { PaymentReceived, SendScreenshot, type Sent } from "./pay";
 
 /*
  * Paying with the numéro de série: the number, then his shop and where its
- * licence stands, then the same payment steps as the account page. No
- * account, no password, no email: an owner who built his software from the
- * phone has none of those and needs none.
+ * licence stands, then the screenshot of his payment, and nothing to choose:
+ * the amount on it says a year or six months (2026-10-03). No account, no
+ * password, no email: an owner who built his software from the phone has
+ * none of those and needs none. Opened from his software's code, the number
+ * is already there and the page asks for the screenshot straight away.
  */
 
 type Lookup = {
@@ -30,7 +31,7 @@ type Lookup = {
   payTo: PayTo[];
 };
 
-const COMPLETE = /^[A-Z0-9]{4}-[A-Z0-9]{4}$/;
+const COMPLETE = /^[A-Z0-9]{8}$/;
 
 export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale }) {
   const [value, setValue] = useState("");
@@ -38,8 +39,14 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
   const [problem, setProblem] = useState<"unknown" | "expired" | "failed" | null>(null);
   const [wait, setWait] = useState(0);
   const [found, setFound] = useState<Lookup | null>(null);
-  const [sent, setSent] = useState<{ read: ReadBack | null; confirmed: boolean } | null>(null);
+  const [sent, setSent] = useState<Sent | null>(null);
   const tried = useRef("");
+  const result = useRef<HTMLDivElement>(null);
+
+  /* Sent from a phone, the answer comes back below where he pressed: it is brought into view. */
+  useEffect(() => {
+    if (sent) result.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+  }, [sent]);
 
   useEffect(() => {
     if (wait <= 0) return;
@@ -97,17 +104,29 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
           <p className="text-base font-medium text-foreground">
             {[name, trade].filter(Boolean).join(" · ")} <bdi dir="ltr" className="text-muted-foreground">{found.serial}</bdi>
           </p>
-          <p className="mt-2 text-base leading-relaxed text-foreground">{licenceLine(copy, lang, found.licence)}</p>
+          {/* Paid just now, the line that said it had stopped would say the opposite of the answer below. */}
+          {sent?.confirmed ? null : (
+            <p className="mt-2 text-base leading-relaxed text-foreground">{licenceLine(copy, lang, found.licence)}</p>
+          )}
         </div>
         {sent || found.pending ? (
-          <PaymentReceived copy={copy} language={lang} read={sent?.read ?? null} confirmed={sent?.confirmed ?? false} />
+          <div ref={result}>
+            <PaymentReceived
+              copy={copy}
+              language={lang}
+              read={sent?.read ?? null}
+              confirmed={sent?.confirmed ?? false}
+              plan={sent?.plan ?? null}
+              endsAt={sent?.endsAt ?? null}
+            />
+          </div>
         ) : owes(found.licence) && found.prices.length > 0 ? (
-          <Pay
+          <SendScreenshot
             copy={copy}
             language={lang}
             prices={found.prices}
             payTo={found.payTo}
-            onSent={(read, confirmed) => setSent({ read, confirmed })}
+            onSent={setSent}
             serial={found.serial}
           />
         ) : null}

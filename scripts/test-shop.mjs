@@ -30,7 +30,7 @@ function makeSerial() {
   const bytes = crypto.getRandomValues(new Uint8Array(8));
   let out = "";
   for (const byte of bytes) out += ALPHABET[byte % ALPHABET.length];
-  return `${out.slice(0, 4)}-${out.slice(4)}`;
+  return out;
 }
 
 async function create(arabic) {
@@ -123,7 +123,8 @@ async function create(arabic) {
   const serial = makeSerial();
   await admin.from("serials").insert({
     business_id: business.id,
-    serial_hash: sha(serial),
+    /* Hashed with the hyphen serials had at first, as the website hashes every one. */
+    serial_hash: sha(`${serial.slice(0, 4)}-${serial.slice(4)}`),
     serial_cipher: "test-shop-does-not-decrypt",
   });
 

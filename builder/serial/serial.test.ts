@@ -10,7 +10,7 @@ import {
 
 describe("a serial", () => {
   it("is eight characters in two groups", () => {
-    expect(makeSerial()).toMatch(/^[A-Z0-9]{4}-[A-Z0-9]{4}$/);
+    expect(makeSerial()).toMatch(/^[A-Z0-9]{8}$/);
   });
 
   // Generating serials in bulk is slow on purpose: it is real randomness, not
@@ -19,7 +19,7 @@ describe("a serial", () => {
   it("never uses a character that gets misread", () => {
     const forbidden = ["0", "O", "1", "I", "L"];
     for (let i = 0; i < 2000; i += 1) {
-      for (const character of makeSerial().replace("-", "")) {
+      for (const character of makeSerial()) {
         expect(SERIAL_ALPHABET).toContain(character);
         expect(forbidden).not.toContain(character);
       }
@@ -29,7 +29,7 @@ describe("a serial", () => {
   it("uses the whole alphabet, not just the start of it", () => {
     const seen = new Set<string>();
     for (let i = 0; i < 5000; i += 1) {
-      for (const character of makeSerial().replace("-", "")) seen.add(character);
+      for (const character of makeSerial()) seen.add(character);
     }
     expect(seen.size).toBe(SERIAL_ALPHABET.length);
   }, 20_000);
@@ -67,10 +67,10 @@ describe("a serial", () => {
 });
 
 describe("a serial typed back in", () => {
-  it("forgives lower case, missing dashes and spaces", () => {
+  it("forgives lower case, spaces and the hyphen serials used to have", () => {
     const serial = makeSerial();
-    const messy = serial.toLowerCase().replace("-", " ");
-    expect(normaliseSerial(messy)).toBe(serial);
+    expect(normaliseSerial(` ${serial.toLowerCase().slice(0, 4)} ${serial.slice(4)} `)).toBe(serial);
+    expect(normaliseSerial(`${serial.slice(0, 4)}-${serial.slice(4)}`)).toBe(serial);
   });
 
   it("refuses a character that is not in the alphabet", () => {
@@ -93,6 +93,17 @@ describe("what the database stores", () => {
   });
 
   it("differs for different serials", async () => {
-    expect(await hashSerial("ABCD-EFGH")).not.toBe(await hashSerial("ABCD-EFGJ"));
+    expect(await hashSerial("ABCDEFGH")).not.toBe(await hashSerial("ABCDEFGJ"));
+  });
+
+  /*
+   * Every hash stored before 2026-10-03 was made from the serial with its
+   * hyphen. Written without one now, the same serial must find the same row.
+   */
+  it("is still the hash of the serial as it was first written, hyphen and all", async () => {
+    const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode("GM6S-FUNN"));
+    const before = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+    expect(await hashSerial("GM6SFUNN")).toBe(before);
+    expect(await hashSerial("GM6S-FUNN")).toBe(before);
   });
 });

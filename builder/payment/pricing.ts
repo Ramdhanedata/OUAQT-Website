@@ -100,3 +100,14 @@ export function licenceChoices(settings: PublicSettings, launchClient: boolean):
     .map((plan) => priceFor(plan, settings, launchClient))
     .filter((price) => price.amount != null);
 }
+
+/*
+ * Which length an amount paid for, among the ones on offer: the screenshot
+ * says how much he sent, and that alone says whether he bought a year or six
+ * months (Adel, 2026-10-03). Exactly a price, or none: an amount between the
+ * two buys nothing on its own, and he is told so.
+ */
+export function planPaidFor(amount: number | null, prices: Price[]): Price | null {
+  if (amount == null) return null;
+  return prices.find((one) => one.amount === amount) ?? null;
+}

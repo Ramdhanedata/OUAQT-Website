@@ -4,7 +4,9 @@
  * Adel's rules, 2026-09-25. Three things are read off the screenshot and each
  * must be right: the number the money went to is OUAQT's number on the app
  * he chose, the date is today's, and the amount is exactly the price of the
- * plan he chose (a year or six months). All three right, and nothing used
+ * plan he chose (a year or six months). Paying with his serial, he chooses
+ * nothing: the amount must be exactly one of the two prices, and which one
+ * says the plan (2026-10-03). All three right, and nothing used
  * before: the payment succeeds (see confirmsAlone). Any one wrong or missing:
  * it does not, and he is told which, while he is still on the page.
  *
@@ -30,7 +32,8 @@ export type CheckCode =
 
 export type CheckFailure = {
   code: CheckCode;
-  expected?: string | number;
+  /* For an amount, every price it could have been when there is more than one. */
+  expected?: string | number | number[];
   found?: string | number;
 };
 
@@ -58,7 +61,7 @@ export type PaymentDecision = {
 };
 
 /** Phone numbers are compared as digits: spaces and a country code are noise. */
-function sameNumber(a: string, b: string): boolean {
+export function sameNumber(a: string, b: string): boolean {
   const digits = (value: string) => value.replace(/\D/g, "");
   const left = digits(a);
   const right = digits(b);
@@ -72,8 +75,11 @@ function today(now: Date): string {
 }
 
 export function checkPayment(input: {
-  /** In minor units, as stored: the price of the plan he chose. */
-  expectedAmount: number;
+  /**
+   * In minor units, as stored: the price of the plan he chose, or, when the
+   * amount is what says which plan, the price of each one on offer.
+   */
+  expectedAmounts: number[];
   /** OUAQT's number on the app he chose. */
   payToNumber: string;
   now: Date;
@@ -110,11 +116,12 @@ export function checkPayment(input: {
   if (!read.date) failures.push({ code: "date_unread" });
   else if (read.date !== today(input.now)) failures.push({ code: "wrong_date", expected: today(input.now), found: read.date });
 
-  /* Exactly the price of the plan he chose. */
-  if (read.amountMru == null) failures.push({ code: "amount_unread", expected: input.expectedAmount });
+  /* Exactly the price of the plan he chose, or of one of those on offer. */
+  const expected = input.expectedAmounts.length === 1 ? input.expectedAmounts[0] : input.expectedAmounts;
+  if (read.amountMru == null) failures.push({ code: "amount_unread", expected });
   else {
     const found = toMinor(read.amountMru);
-    if (found !== input.expectedAmount) failures.push({ code: "wrong_amount", expected: input.expectedAmount, found });
+    if (!input.expectedAmounts.includes(found)) failures.push({ code: "wrong_amount", expected, found });
   }
 
   return {

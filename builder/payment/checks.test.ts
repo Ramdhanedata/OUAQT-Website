@@ -5,7 +5,7 @@ import { checkPayment, confirmsAlone } from "./checks";
 const YEAR = 1_800_000;
 
 const base = {
-  expectedAmount: YEAR,
+  expectedAmounts: [YEAR],
   payToNumber: "38087272",
   now: new Date("2026-09-25T14:00:00Z"),
   extracted: null,
@@ -35,7 +35,16 @@ describe("the three rules", () => {
   it("wants exactly the price of the plan chosen, no less and no more", () => {
     expect(codes({ ...right, amountMru: 9000 })).toEqual(["wrong_amount"]);
     expect(codes({ ...right, amountMru: 20000 })).toEqual(["wrong_amount"]);
-    expect(codes({ ...right, amountMru: 9000 }, { expectedAmount: 900_000 })).toEqual([]);
+    expect(codes({ ...right, amountMru: 9000 }, { expectedAmounts: [900_000] })).toEqual([]);
+  });
+
+  it("takes either price when the amount is what says the plan, and names both when it is neither", () => {
+    const either = { expectedAmounts: [YEAR, 900_000] };
+    expect(codes({ ...right, amountMru: 18000 }, either)).toEqual([]);
+    expect(codes({ ...right, amountMru: 9000 }, either)).toEqual([]);
+    expect(checkPayment({ ...base, ...either, extracted: { ...right, amountMru: 10000 } }).failures).toEqual([
+      { code: "wrong_amount", expected: [YEAR, 900_000], found: 1_000_000 },
+    ]);
   });
 
   it("says what the amount was and what it should have been", () => {

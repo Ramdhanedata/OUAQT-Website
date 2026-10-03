@@ -23,6 +23,8 @@ export type PaymentRow = {
   pack: string;
   launchClient: boolean;
   plan: string;
+  /* The lengths a person may grant instead, with their price; empty when there is no choice. */
+  choices: { plan: string; amount: number }[];
   app: PaymentApp;
   expected: number;
   reference: string | null;
@@ -90,6 +92,13 @@ function Payment({
   const [busy, setBusy] = useState(false);
   const [reason, setReason] = useState("");
   const [error, setError] = useState<string | null>(null);
+  /*
+   * A year or six months. Filed as what its amount paid for, or as a year
+   * when nothing could be read: the person looking at the image says which.
+   */
+  const [plan, setPlan] = useState(row.plan);
+  const choosing = !review && row.choices.length > 1;
+  const expected = row.choices.find((one) => one.plan === plan)?.amount ?? row.expected;
 
   async function decide(action: "confirm" | "reject" | "keep" | "undo") {
     if ((action === "reject" || action === "undo") && reason.trim() === "") {
@@ -101,7 +110,12 @@ function Payment({
     const response = await fetch("/api/admin/payment", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ paymentId: row.id, action, reason: reason.trim() || undefined }),
+      body: JSON.stringify({
+        paymentId: row.id,
+        action,
+        reason: reason.trim() || undefined,
+        plan: action === "confirm" && choosing ? plan : undefined,
+      }),
     });
     const body = await response.json().catch(() => null);
     setBusy(false);
@@ -129,7 +143,7 @@ function Payment({
       </div>
 
       <dl className="grid grid-cols-2 gap-x-6 gap-y-2">
-        <Line label={words.t.expected} value={formatMoney(row.expected, words.lang)} />
+        <Line label={words.t.expected} value={formatMoney(expected, words.lang)} />
         <Line label={words.t.plan} value={wordFor(words.plans, row.plan)} />
         <Line label={words.t.app} value={appName(row.app, words.lang)} />
         <Line label={words.t.reference} value={row.reference ?? words.t.none} />
@@ -150,6 +164,25 @@ function Payment({
       </dl>
 
       {row.extracted ? null : <p className="text-base text-muted-foreground">{words.t.notRead}</p>}
+
+      {choosing ? (
+        <div role="group" aria-label={words.t.grantFor}>
+          <p className="text-base text-muted-foreground">{words.t.grantFor}</p>
+          <div className="mt-2 flex flex-wrap gap-3">
+            {row.choices.map((one) => (
+              <Button
+                key={one.plan}
+                type="button"
+                variant={one.plan === plan ? "accent" : "outline"}
+                aria-pressed={one.plan === plan}
+                onClick={() => setPlan(one.plan)}
+              >
+                {wordFor(words.plans, one.plan)} · {formatMoney(one.amount, words.lang)}
+              </Button>
+            ))}
+          </div>
+        </div>
+      ) : null}
 
       {row.screenshotUrl ? (
         <a href={row.screenshotUrl} target="_blank" rel="noreferrer" className="block">

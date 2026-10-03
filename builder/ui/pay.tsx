@@ -303,21 +303,197 @@ export function Pay({
   );
 }
 
+/* What came back from sending a screenshot, for the page to say. */
+export type Sent = {
+  read: ReadBack | null;
+  confirmed: boolean;
+  /* What it paid for and until when, when the server said. */
+  plan?: string | null;
+  endsAt?: string | null;
+};
+
+/*
+ * Sending the screenshot, and nothing else: the page the software's code
+ * opens once he has paid from his phone (Adel, 2026-10-03). He chooses no
+ * plan and no app. The amount on the screenshot says whether it is a year or
+ * six months, and the number it went to says which app. For an owner who
+ * has not paid yet, how to, under it, in the same words as the software.
+ */
+export function SendScreenshot({
+  copy,
+  language,
+  serial,
+  prices,
+  payTo,
+  onSent,
+}: {
+  copy: BuilderCopy;
+  language: AppLanguage;
+  serial: string;
+  /* The lengths on offer with their prices: what the amount is matched against. */
+  prices: Price[];
+  payTo: PayTo[];
+  onSent: (sent: Sent) => void;
+}) {
+  const input = useRef<HTMLInputElement>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [refused, setRefused] = useState<string[] | null>(null);
+
+  useEffect(() => {
+    if (!file) return setPreview(null);
+    const url = URL.createObjectURL(file);
+    setPreview(url);
+    return () => URL.revokeObjectURL(url);
+  }, [file]);
+
+  if (payTo.length === 0) {
+    return <p className="text-base leading-relaxed text-muted-foreground">{copy.pay.noNumber}</p>;
+  }
+  const priced = prices.filter((one) => one.amount != null);
+  if (priced.length === 0) {
+    return <p className="text-base leading-relaxed text-muted-foreground">{copy.pay.soonPrice}</p>;
+  }
+
+  async function send() {
+    if (!file) return setError(copy.pay.errorImage as string);
+    setError(null);
+    setRefused(null);
+    setBusy(true);
+    try {
+      const form = new FormData();
+      form.set("number", serial);
+      form.set("image", await prepareScreenshot(file), "screenshot.jpg");
+      const response = await fetch("/api/builder/payment/serial", { method: "POST", body: form });
+      const body = await response.json().catch(() => null);
+      if (!response.ok || !body) return setError(copy.pay.errorSend as string);
+      if (body.decision === "rejected_auto") return setRefused(explain(copy, body.failures ?? [], language));
+      onSent({
+        read: body.read ?? null,
+        confirmed: body.decision === "confirmed",
+        plan: typeof body.plan === "string" ? body.plan : null,
+        endsAt: typeof body.endsAt === "string" ? body.endsAt : null,
+      });
+    } catch (caught) {
+      setError(caught instanceof ScreenshotError ? (copy.pay.errorImage as string) : (copy.pay.errorSend as string));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const amounts = anyOf(
+    priced.map((one) =>
+      fill(copy.pay.planAmount as string, {
+        amount: formatMoney(one.amount as number, language),
+        plan: (one.plan === "semiannual" ? copy.pay.sixMonths : copy.pay.year) as string,
+      })
+    ),
+    language
+  );
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-xl font-semibold text-foreground">{copy.pay.uploadHeading}</h2>
+        <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.pay.uploadIntro}</p>
+      </div>
+
+      <input
+        ref={input}
+        type="file"
+        accept={ACCEPTED_IMAGES.join(",")}
+        className="sr-only"
+        onChange={(event) => {
+          setFile(event.target.files?.[0] ?? null);
+          setError(null);
+          setRefused(null);
+        }}
+      />
+      <div>
+        {preview ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={preview}
+            alt={copy.pay.screenshotAlt as string}
+            className="mb-3 max-h-72 rounded-lg border border-border object-contain"
+          />
+        ) : null}
+        {/* Choosing is the one thing to do until there is a picture; then sending is. */}
+        <Button type="button" variant={file ? "outline" : "accent"} onClick={() => input.current?.click()}>
+          {file ? copy.pay.replace : copy.pay.choose}
+        </Button>
+      </div>
+
+      {refused ? (
+        <div className="rounded-xl border-2 border-destructive/60 bg-destructive/5 p-4" role="alert">
+          <p className="text-base font-semibold text-destructive">{copy.pay.problemTitle}</p>
+          <ul className="mt-2 space-y-2">
+            {refused.map((reason, index) => (
+              <li key={index} className="text-base leading-relaxed text-foreground">
+                {reason}
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-base text-muted-foreground">{copy.pay.problemHelp}</p>
+        </div>
+      ) : null}
+      {error ? (
+        <p className="text-base leading-relaxed text-destructive" role="alert">{error}</p>
+      ) : null}
+
+      {file ? (
+        <div>
+          <Button type="button" variant="accent" onClick={() => void send()} disabled={busy}>
+            {busy ? copy.pay.checking : copy.pay.send}
+          </Button>
+          {busy ? (
+            <p className="mt-2 text-base text-muted-foreground" role="status">{copy.pay.checkingNote}</p>
+          ) : null}
+        </div>
+      ) : null}
+
+      <div className="rounded-xl border border-border p-4">
+        <p className="text-base font-medium text-foreground">{copy.pay.notPaidTitle}</p>
+        <p className="mt-1 text-base leading-relaxed text-muted-foreground">
+          {fill(copy.pay.notPaidBody as string, {
+            amounts,
+            number: [...new Set(payTo.map((one) => one.number))].join(" / "),
+            apps: anyOf(payTo.map((one) => appName(one.app, language)), language),
+            serial,
+          })}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+/* "Bankily, Masrvi or Click", the way each language says it. */
+function anyOf(items: string[], language: AppLanguage): string {
+  return new Intl.ListFormat(language, { type: "disjunction" }).format(items);
+}
+
 /*
  * After sending: confirmed already, or with a person; and, when the
  * screenshot was read, what was read off it, so a misreading is seen by the
- * one person who knows what he sent.
+ * one person who knows what he sent. Confirmed, it says what was bought: a
+ * year or six months, and until when.
  */
 export function PaymentReceived({
   copy,
   language,
   read,
   confirmed = false,
+  plan = null,
+  endsAt = null,
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
   read: ReadBack | null;
   confirmed?: boolean;
+  plan?: string | null;
+  endsAt?: string | null;
 }) {
   const lines: [string, string][] = [];
   if (read?.amount != null) lines.push([copy.pay.readAmount as string, formatMoney(read.amount, language)]);
@@ -336,11 +512,21 @@ export function PaymentReceived({
         role="status"
         className={`rounded-xl border-2 p-4 ${confirmed ? "border-emerald-600/60 bg-emerald-600/5" : "border-border"}`}
       >
-        <p className={`text-lg font-semibold ${confirmed ? "text-emerald-700 dark:text-emerald-400" : "text-foreground"}`}>
-          {confirmed ? copy.pay.successTitle : copy.pay.receivedTitle}
+        <p className={`font-semibold ${confirmed ? "text-xl text-emerald-700 dark:text-emerald-400" : "text-lg text-foreground"}`}>
+          {!confirmed
+            ? copy.pay.receivedTitle
+            : plan === "annual"
+              ? copy.pay.successYear
+              : plan === "semiannual"
+                ? copy.pay.successSixMonths
+                : copy.pay.successTitle}
         </p>
         <p className="mt-1 text-base leading-relaxed text-foreground">
-          {confirmed ? copy.pay.confirmedNow : copy.pay.receivedBody}
+          {!confirmed
+            ? copy.pay.receivedBody
+            : endsAt
+              ? `${fill(copy.pay.activeUntil as string, { date: new Date(endsAt).toLocaleDateString(language, { timeZone: "UTC" }) })} ${copy.pay.reopensSoon}`
+              : copy.pay.confirmedNow}
         </p>
       </div>
       {lines.length > 0 ? (
@@ -369,6 +555,8 @@ function explain(
   language: AppLanguage
 ): string[] {
   const money = (minor: unknown) => formatMoney(Number(minor ?? 0), language).replace(" MRU", "");
+  /* One price, or every price it could have been: "15 000 or 7 500". */
+  const amounts = (minor: unknown) => (Array.isArray(minor) ? anyOf(minor.map(money), language) : money(minor));
   const day = (iso: unknown) => new Date(`${String(iso)}T00:00:00Z`).toLocaleDateString(language, { timeZone: "UTC" });
   return failures.map((failure) => {
     switch (failure.code) {
@@ -379,9 +567,12 @@ function explain(
       case "image_used":
         return copy.pay.failImageUsed as string;
       case "wrong_amount":
-        return fill(copy.pay.failAmount as string, { found: money(failure.found), expected: money(failure.expected) });
+        return fill((Array.isArray(failure.expected) ? copy.pay.failAmountEither : copy.pay.failAmount) as string, {
+          found: money(failure.found),
+          expected: amounts(failure.expected),
+        });
       case "amount_unread":
-        return fill(copy.pay.failAmountUnread as string, { expected: money(failure.expected) });
+        return fill(copy.pay.failAmountUnread as string, { expected: amounts(failure.expected) });
       case "wrong_recipient":
         return fill(copy.pay.failRecipient as string, { expected: String(failure.expected ?? "") });
       case "recipient_unread":

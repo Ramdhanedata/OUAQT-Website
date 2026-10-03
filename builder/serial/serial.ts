@@ -4,8 +4,10 @@
  *
  * That single sentence explains every choice here. The alphabet has no 0, O,
  * 1, I or L, because those are the characters people get wrong when reading
- * handwriting aloud. Eight characters in two groups of four, because that is
- * how a person reads a number back without losing their place.
+ * handwriting aloud. Eight characters in one run, with no hyphen and no space:
+ * the hyphen in the middle was read out, typed, left out and argued about,
+ * so since 2026-10-03 there is none (Adel's decision). One written with it,
+ * on an old message or a scrap of paper, is still the same number.
  *
  * not-a-rule-file: the numbers below are an alphabet and a length, not
  * anything anybody administers.
@@ -32,7 +34,7 @@ function randomBytes(count: number): Uint8Array {
   return bytes;
 }
 
-/** A fresh serial, formatted as the owner will see it: XXXX-XXXX. */
+/** A fresh serial, as the owner will see it: XXXXXXXX. */
 export function makeSerial(): string {
   let out = "";
   while (out.length < LENGTH) {
@@ -43,12 +45,12 @@ export function makeSerial(): string {
       if (out.length === LENGTH) break;
     }
   }
-  return `${out.slice(0, GROUP)}-${out.slice(GROUP)}`;
+  return out;
 }
 
 /**
  * A serial as it was typed, turned into the one true form, or null if it
- * cannot be one. Lower case, missing dash, stray spaces: all fine. A letter
+ * cannot be one. Lower case, an old hyphen, stray spaces: all fine. A letter
  * that is not in the alphabet is not.
  */
 export function normaliseSerial(input: string): string | null {
@@ -57,7 +59,7 @@ export function normaliseSerial(input: string): string | null {
   for (const character of cleaned) {
     if (!SERIAL_ALPHABET.includes(character)) return null;
   }
-  return `${cleaned.slice(0, GROUP)}-${cleaned.slice(GROUP)}`;
+  return cleaned;
 }
 
 export function isSerial(input: string): boolean {
@@ -83,14 +85,22 @@ export async function makeUniqueSerial(
   throw new Error("could not find an unused serial");
 }
 
-/** What the database stores for lookup. The serial itself is never stored in the clear. */
+/**
+ * What the database stores for lookup. The serial itself is never stored in
+ * the clear.
+ *
+ * Digested in the form serials had when the first ones were issued, with a
+ * hyphen after the fourth character. Every hash already stored was made that
+ * way, so this keeps making it that way: the hyphen left what the owner sees,
+ * not what is looked up, and a serial issued before still opens its shop.
+ */
 export async function hashSerial(serial: string): Promise<string> {
   const normalised = normaliseSerial(serial);
   if (!normalised) throw new Error("not a serial");
 
   const digest = await crypto.subtle.digest(
     "SHA-256",
-    new TextEncoder().encode(normalised)
+    new TextEncoder().encode(`${normalised.slice(0, GROUP)}-${normalised.slice(GROUP)}`)
   );
   return Array.from(new Uint8Array(digest))
     .map((byte) => byte.toString(16).padStart(2, "0"))

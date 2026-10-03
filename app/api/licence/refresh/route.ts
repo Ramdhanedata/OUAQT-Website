@@ -8,6 +8,7 @@ import { issueLicence } from "@/builder/licence/issue";
 import { serialFor, setupFor } from "@/builder/licence/setup";
 import { followDraft } from "@/builder/config-code/server";
 import { signingKeyIsSet } from "@/builder/licence/sign";
+import { payHelpFor } from "@/builder/payment/pay-help";
 
 /*
  * A shop asking whether anything has changed.
@@ -73,7 +74,7 @@ export async function POST(request: Request) {
   const [{ data: business }, { data: licence }, settings, secrets] = await Promise.all([
     supabase
       .from("businesses")
-      .select("id, name_latin")
+      .select("id, name_latin, launch_client")
       .eq("id", input.data.businessId)
       .maybeSingle(),
     supabase
@@ -149,5 +150,7 @@ export async function POST(request: Request) {
     logo: unchanged ? null : setup.logo,
     /* Where the app sends the owner who needs us: its "contact OUAQT" button. */
     supportWhatsapp: settings.support_whatsapp,
+    /* Where to send the money and how much, for its end-of-licence window. */
+    ...payHelpFor(settings, secrets, Boolean(business.launch_client)),
   });
 }

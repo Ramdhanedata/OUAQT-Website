@@ -6,9 +6,9 @@ import { audit } from "@/builder/db/audit";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { getPublicSettings } from "@/builder/db/settings";
 import { payToFrom, type PaymentApp } from "./apps";
-import { checkPayment, confirmsAlone, type CheckFailure, type Extracted, type ReadBack } from "./checks";
+import { checkPayment, confirmsAlone, sameNumber, type CheckFailure, type Extracted, type ReadBack } from "./checks";
 import { grantLicence } from "./grant";
-import { priceFor, type Plan } from "./pricing";
+import { licenceChoices, planPaidFor, priceFor, type Plan } from "./pricing";
 import { readReceipt } from "./read";
 
 /*
@@ -33,6 +33,10 @@ export type Filed =
       failures: CheckFailure[];
       expected: number;
       read: ReadBack | null;
+      /* What it was filed as: the plan chosen, or the one its amount paid for. */
+      plan: Plan;
+      /* When the licence now ends, once confirmed. */
+      endsAt: string | null;
     }
   | { ok: false; error: "no_settings" | "no_number" | "no_price" | "not_saved"; status: number };
 
@@ -48,9 +52,13 @@ export async function filePayment(
   input: {
     businessId: string;
     launchClient: boolean;
-    plan: Plan;
-    /* The app he says he paid from. */
-    app: PaymentApp;
+    /*
+     * The plan he chose, or null when he chose none: the amount on the
+     * screenshot then says whether it is a year or six months.
+     */
+    plan: Plan | null;
+    /* The app he says he paid from, or null: the number the money went to says which. */
+    app: PaymentApp | null;
     /* Where the screenshot already is, in the payments bucket. */
     path: string;
     bytes: ArrayBuffer;
@@ -62,12 +70,14 @@ export async function filePayment(
   if (!settings || !secrets) return { ok: false, error: "no_settings", status: 503 };
 
   // An app with no number to pay to is not offered, so a payment on it is not taken.
-  const payTo = payToFrom(secrets).find((one) => one.app === input.app);
-  if (!payTo) return { ok: false, error: "no_number", status: 503 };
+  const numbers = payToFrom(secrets);
+  if (input.app && !numbers.some((one) => one.app === input.app)) return { ok: false, error: "no_number", status: 503 };
+  if (numbers.length === 0) return { ok: false, error: "no_number", status: 503 };
 
-  const price = priceFor(input.plan, settings, input.launchClient);
+  /* The plan he chose, or every one on offer when the amount is to say which. */
+  const offered = input.plan ? [priceFor(input.plan, settings, input.launchClient)] : licenceChoices(settings, input.launchClient);
   // A price nobody has decided is how a refund conversation starts.
-  if (price.amount == null) return { ok: false, error: "no_price", status: 503 };
+  if (offered.length === 0 || offered.some((one) => one.amount == null)) return { ok: false, error: "no_price", status: 503 };
 
   /*
    * Hashed here rather than in the browser. A hash sent up with the request
@@ -98,8 +108,22 @@ export async function filePayment(
         .maybeSingle()
     : { data: null };
 
+  /*
+   * Which plan, and which app. Chosen, they are what he said. Not chosen, the
+   * amount read says the plan, and the number the money went to says the
+   * app. What cannot be told (nothing read, or an amount that is no price)
+   * is filed as the first on offer, and a person decides; nothing is granted
+   * on it by itself, because the checks below cannot all pass.
+   */
+  const amountRead = extracted?.amountMru != null ? toMinor(extracted.amountMru) : null;
+  const price = offered.length === 1 ? offered[0] : (planPaidFor(amountRead, offered) ?? offered[0]);
+  const payTo =
+    numbers.find((one) => one.app === input.app) ??
+    numbers.find((one) => extracted?.recipient && sameNumber(extracted.recipient, one.number)) ??
+    numbers[0];
+
   const outcome = checkPayment({
-    expectedAmount: price.amount,
+    expectedAmounts: offered.map((one) => one.amount as number),
     payToNumber: payTo.number,
     now: new Date(),
     extracted,
@@ -111,8 +135,8 @@ export async function filePayment(
     .from("payments")
     .insert({
       business_id: input.businessId,
-      plan: input.plan,
-      app: input.app,
+      plan: price.plan,
+      app: payTo.app,
       expected_amount: price.amount,
       screenshot_path: input.path,
       image_hash: imageHash,
@@ -134,8 +158,10 @@ export async function filePayment(
     subjectId: payment.id,
     action: outcome.decision,
     detail: {
-      plan: input.plan,
-      app: input.app,
+      plan: price.plan,
+      app: payTo.app,
+      /* Whether he chose them, or the screenshot said. */
+      chosen: { plan: input.plan !== null, app: input.app !== null },
       expected: price.amount,
       read: extracted !== null,
       failures: outcome.failures,
@@ -149,20 +175,22 @@ export async function filePayment(
    * the admin area, and can undo it. Anything short of that waits for them.
    */
   let decision: Decision = outcome.decision;
+  let endsAt: string | null = null;
   if (secrets.payment_auto_confirm && confirmsAlone(outcome, extracted)) {
-    const granted = await grantLicence(admin, { business_id: input.businessId, plan: input.plan });
+    const granted = await grantLicence(admin, { business_id: input.businessId, plan: price.plan });
     if (granted.ok) {
       await admin
         .from("payments")
         .update({ status: "confirmed", auto_confirmed: true, licence_before: granted.before })
         .eq("id", payment.id);
       decision = "confirmed";
+      endsAt = granted.endsAt;
       await audit({
         actorId: null,
         subject: "payment",
         subjectId: payment.id,
         action: "confirmed_auto",
-        detail: { amount: price.amount, plan: input.plan },
+        detail: { amount: price.amount, plan: price.plan },
       });
       await audit({
         actorId: null,
@@ -179,7 +207,9 @@ export async function filePayment(
     paymentId: payment.id,
     decision,
     failures: outcome.failures,
-    expected: price.amount,
+    expected: price.amount as number,
+    plan: price.plan,
+    endsAt,
     read: extracted
       ? {
           amount: extracted.amountMru != null ? toMinor(extracted.amountMru) : null,
