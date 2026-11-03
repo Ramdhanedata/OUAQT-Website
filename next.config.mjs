@@ -47,6 +47,18 @@ const nextConfig = {
     // AVIF first: roughly a third smaller than WebP for these photos.
     formats: ["image/avif", "image/webp"],
   },
+  /*
+   * The phone app (public/app, built in the desktop repository). Its page is
+   * /app/index.html, named in full: the phone keeps that page for when there
+   * is no network, and a redirect cannot be followed then. /app and /app/
+   * send there, keeping the #serial= a link may carry.
+   */
+  async redirects() {
+    return [
+      { source: "/app", destination: "/app/index.html", permanent: false },
+      { source: "/app/", destination: "/app/index.html", permanent: false },
+    ];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: security },
@@ -56,6 +68,17 @@ const nextConfig = {
         // can be kept for good.
         source: "/app-preview/assets/:path*",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        // The phone app's files are named after their contents, like the preview's.
+        source: "/app/assets/:path*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        // Its page, its service worker and its manifests are asked for again
+        // each time, so a new build reaches phones at their next opening.
+        source: "/app/:file(index.html|sw.js|manifest.webmanifest|manifest-[a-z]+\\.webmanifest)",
+        headers: [{ key: "Cache-Control", value: "no-cache" }],
       },
       {
         // Pictures change rarely, so let browsers keep them for a day and

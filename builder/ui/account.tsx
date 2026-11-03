@@ -16,6 +16,7 @@ import { Field, TextInput } from "./fields";
 import { licenceLine, owes } from "./licence-line";
 import { Pay, PaymentReceived, SendScreenshot, type Sent } from "./pay";
 import { InstallHelp } from "./install-help";
+import { PhoneApp } from "./phone-app";
 import { isPhone, loginFor, registerDownload } from "./step-account";
 
 /*
@@ -259,6 +260,8 @@ function SignedIn({
         </div>
         {state.installers.windows || state.installers.mac ? <InstallHelp copy={copy} first="windows" /> : null}
       </section>
+
+      {state.serial ? <PhoneApp copy={copy} serial={state.serial} /> : null}
 
       <Subscription copy={copy} lang={lang} state={state} />
       <MyDevices copy={copy} lang={lang} devices={state.devices} />
