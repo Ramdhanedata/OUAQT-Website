@@ -29,7 +29,7 @@ POST /api/licence/activate
   "token":      "<one-time, from the website>",
   "deviceId":   "a-stable-id",      // the app's own id for this computer
   "deviceName": "Caisse",           // optional, shown to the owner
-  "platform":   "windows",          // or "mac"
+  "platform":   "windows",          // or "mac", or "phone" (the app in a phone's browser, see below)
 
   // The machine, in three salted hashes. Never a serial number.
   "fingerprint": {
@@ -228,6 +228,24 @@ rather than telling him he was refused.
 None of the softer signals (the same logo, the same product list, a shop name
 that looks like an earlier one) ever refuse anything. They are written down
 for a person to look at.
+
+### A phone
+
+The same software also runs in a phone's browser, served from `/app` (built
+in the desktop repository, see its `docs/PHONE.md`). It activates exactly
+as a computer does, with `platform: "phone"`, and counts against the same
+`maxDevices`. Two differences:
+
+- Its fingerprint has only `machine`: a random id the phone keeps, hashed
+  the way a computer's parts are. `board` and `disk` are null, which
+  `sameMachine` reads as "not reported", never as a match.
+- It never asks `nearby`. A phone opens from a link carrying the serial
+  after the `#` (`/app/index.html#serial=XXXXXXXX`, from the account page)
+  or from the serial typed. `nearby` with `platform: "phone"` answers
+  `404 no_nearby`.
+
+Applying `0032_phone_devices.sql` is what lets a phone register; before it,
+the database refuses the row and activation answers `502 not_activated`.
 
 ## Refresh
 

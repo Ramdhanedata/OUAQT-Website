@@ -101,7 +101,7 @@ export function AppsList({
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[15px] font-medium text-foreground">{app.businessName || "?"}</span>
                   <span className="block truncate text-sm text-muted-foreground">
-                    {[app.deviceName, app.platform === "mac" ? "Mac" : app.platform === "windows" ? "Windows" : null].filter(Boolean).join(" · ")}
+                    {[app.deviceName, app.platform === "mac" ? "Mac" : app.platform === "windows" ? "Windows" : app.platform === "phone" ? (lang === "ar" ? "هاتف" : lang === "en" ? "Phone" : "Téléphone") : null].filter(Boolean).join(" · ")}
                   </span>
                 </span>
                 <span className="shrink-0 text-sm text-muted-foreground">{ago(app.lastSeen, now, lang)}</span>
