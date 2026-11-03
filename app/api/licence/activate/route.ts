@@ -42,7 +42,8 @@ const body = z
     nearby: z.literal(true).optional(),
     deviceId: z.string().min(8).max(200),
     deviceName: z.string().trim().max(60).optional(),
-    platform: z.enum(["windows", "mac"]),
+    /* "phone": the software in a phone's browser, installed from /app. */
+    platform: z.enum(["windows", "mac", "phone"]),
     /*
      * The machine, in three salted hashes the app computes from its
      * motherboard, its system disk and the operating system's machine id. We
@@ -95,12 +96,16 @@ export async function POST(request: Request) {
   let tokenId: string | null = null;
   let found: { business_id: string } | null = null;
 
-  if (input.data.nearby) {
+  /* A phone opens from a link with its serial; "downloaded from here" is a computer's question. */
+  const computer = input.data.platform === "phone" ? null : input.data.platform;
+  if (input.data.nearby && !computer) {
+    return NextResponse.json({ error: "no_nearby" }, { status: 404 });
+  } else if (input.data.nearby && computer) {
     /* Never a guess: one shop downloaded from this connection for this system, or the serial. */
     const secrets = await getPrivateSettings();
     const place = await placeOfRequest(request);
     if (!secrets || !place) return NextResponse.json({ error: "no_nearby" }, { status: 404 });
-    const claim = await claimNearbyToken(supabase, place, input.data.platform, input.data.deviceId, secrets.activation_nearby_hours);
+    const claim = await claimNearbyToken(supabase, place, computer, input.data.deviceId, secrets.activation_nearby_hours);
     if (!claim.ok) {
       return NextResponse.json({ error: claim.reason === "ambiguous" ? "nearby_ambiguous" : "no_nearby" }, { status: claim.reason === "ambiguous" ? 409 : 404 });
     }

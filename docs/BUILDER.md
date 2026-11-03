@@ -146,6 +146,19 @@ The preview is loaded separately from the questions. It carries the app
 screens and the schema with it, and on a slow phone that weight between the
 owner and the first question is the difference between answering and leaving.
 
+## The phone app
+
+`public/app` is the same desktop app built for a phone's browser
+(`npm run build:phone` in the desktop repository, see its `docs/PHONE.md`).
+The owner opens it once, adds it to his home screen, and it works with no
+internet from its own icon. His account page shows a code to scan, or on a
+phone a button, that opens it on his shop with the serial after the `#`.
+
+`/app` and `/app/` redirect to `/app/index.html` (`next.config.mjs`): the
+service worker keeps that page for when there is no network, and cannot
+follow a redirect then. **After any change to the desktop app's screens, run
+`npm run build:phone` there too, and commit `public/app` here.**
+
 ## Questions and the AI
 
 A pack's questions live in `builder/packs/<pack>/questions.v*.json`, validated

@@ -325,6 +325,15 @@ export const en: BuilderCopy = {
     artTrial: "Free trial running",
   },
 
+  phoneApp: {
+    heading: "On your phone",
+    intro: "Your software also runs on an Android phone or an iPhone, with nothing to download from a store. It needs internet once, to open it. After that it works without.",
+    open: "Open on this phone",
+    scan: "Scan this code with your phone's camera. Your business opens straight away, with no number to type.",
+    iphone: "On iPhone: in Safari, tap the Share button, then \"Add to Home Screen\".",
+    android: "On Android: in Chrome, tap \"Install\" or the ⋮ menu, then \"Add to Home screen\".",
+    note: "The phone counts as one of your devices. Its sales stay on the phone for now: they do not reach the computer yet.",
+  },
   myAccount: {
     title: "My account",
     signInHeading: "Open my account",

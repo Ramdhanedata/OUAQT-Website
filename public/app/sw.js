@@ -1,0 +1,111 @@
+/*
+ * The phone app's service worker, written by scripts/build-phone.mjs in the
+ * ouaqt-desktop repository. Do not edit it here: build again.
+ *
+ * It keeps every file of the app on the phone, so the app opens with no
+ * network. It never touches the licence calls (/api/), which must reach the
+ * website or fail, and it never stores anything of the shop: the shop's data
+ * is in the page's own storage, not in this cache.
+ */
+const CACHE = "ouaqt-phone-b7d8e2977988";
+const FILES = [
+  "./assets/cairo-arabic-BW4_w4rE.woff2",
+  "./assets/cairo-latin-Br-HIwGC.woff2",
+  "./assets/cairo-latin-ext-BzTkPeNP.woff2",
+  "./assets/index-Br5jRi2N.js",
+  "./assets/main-CC7HMOqP.js",
+  "./assets/main-CIpgl61i.css",
+  "./assets/pay-example-DgSWHWNK.webp",
+  "./assets/preload-CaI5hZj0.js",
+  "./assets/source-serif-4-latin-ext-iEVfbfSw.woff2",
+  "./assets/source-serif-4-latin-l1vr9vou.woff2",
+  "./assets/sqlite3-Con_VOcu.wasm",
+  "./assets/sqlite3-opfs-async-proxy-Ck-yCayi.js",
+  "./assets/sqlite3-worker1-BXnajhSw.js",
+  "./assets/xlsx-DZ8bO3Pv.js",
+  "./icons/bakery-180.png",
+  "./icons/bakery-192.png",
+  "./icons/bakery-512.png",
+  "./icons/general-180.png",
+  "./icons/general-192.png",
+  "./icons/general-512.png",
+  "./icons/hotel-180.png",
+  "./icons/hotel-192.png",
+  "./icons/hotel-512.png",
+  "./icons/ouaqt-180.png",
+  "./icons/ouaqt-192.png",
+  "./icons/ouaqt-512.png",
+  "./icons/pharmacy-180.png",
+  "./icons/pharmacy-192.png",
+  "./icons/pharmacy-512.png",
+  "./icons/restaurant-180.png",
+  "./icons/restaurant-192.png",
+  "./icons/restaurant-512.png",
+  "./icons/shop-180.png",
+  "./icons/shop-192.png",
+  "./icons/shop-512.png",
+  "./icons/transport-180.png",
+  "./icons/transport-192.png",
+  "./icons/transport-512.png",
+  "./icons/warehouse-180.png",
+  "./icons/warehouse-192.png",
+  "./icons/warehouse-512.png",
+  "./index.html",
+  "./manifest-bakery.webmanifest",
+  "./manifest-general.webmanifest",
+  "./manifest-hotel.webmanifest",
+  "./manifest-pharmacy.webmanifest",
+  "./manifest-restaurant.webmanifest",
+  "./manifest-shop.webmanifest",
+  "./manifest-transport.webmanifest",
+  "./manifest-warehouse.webmanifest",
+  "./manifest.webmanifest"
+];
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(FILES)));
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((names) =>
+      Promise.all(names.filter((name) => name.startsWith("ouaqt-phone-") && name !== CACHE).map((name) => caches.delete(name)))
+    ).then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener("fetch", (event) => {
+  const request = event.request;
+  if (request.method !== "GET") return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin || url.pathname.startsWith("/api/")) return;
+  const scope = new URL(self.registration.scope);
+  if (!url.pathname.startsWith(scope.pathname)) return;
+
+  /*
+   * Opening the app: the page kept on the phone, whatever follows the
+   * address. It is /app/index.html, named in full, because the website sends
+   * /app and /app/ there with a redirect, and a redirect is not something a
+   * page opened with no network can follow.
+   */
+  if (request.mode === "navigate") {
+    event.respondWith(
+      caches.match("./index.html").then((kept) => kept || fetch(request))
+    );
+    return;
+  }
+
+  event.respondWith(
+    caches.match(request, { ignoreSearch: true }).then(
+      (kept) =>
+        kept ||
+        fetch(request).then((response) => {
+          if (response.ok) {
+            const copy = response.clone();
+            void caches.open(CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+    )
+  );
+});

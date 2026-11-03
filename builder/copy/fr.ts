@@ -334,6 +334,16 @@ export const fr = {
     artTrial: "Essai gratuit en cours",
   },
 
+  /* The software on the owner's phone, from his account. See the desktop repository's docs/PHONE.md. */
+  phoneApp: {
+    heading: "Sur votre téléphone",
+    intro: "Votre logiciel marche aussi sur un téléphone Android ou un iPhone, sans rien télécharger depuis un store. Il faut internet une seule fois, pour l'ouvrir. Ensuite il marche sans.",
+    open: "Ouvrir sur ce téléphone",
+    scan: "Scannez ce code avec l'appareil photo de votre téléphone. Votre commerce s'ouvre directement, sans numéro à taper.",
+    iphone: "Sur iPhone : dans Safari, touchez le bouton Partager, puis « Sur l'écran d'accueil ».",
+    android: "Sur Android : dans Chrome, touchez « Installer » ou le menu ⋮, puis « Ajouter à l'écran d'accueil ».",
+    note: "Le téléphone compte comme un de vos appareils. Ses ventes restent sur le téléphone pour l'instant : elles ne passent pas encore sur l'ordinateur.",
+  },
   myAccount: {
     title: "Mon compte",
     signInHeading: "Ouvrir mon compte",
