@@ -17,6 +17,7 @@ import { localisedHref } from "@/lib/i18n/routes";
 import { Field, TextInput } from "./fields";
 import type { StaffMember } from "./step-products";
 import { InstallHelp } from "./install-help";
+import { PhoneApp } from "./phone-app";
 import { countDownload } from "@/lib/site-count";
 
 /*
@@ -427,6 +428,8 @@ export function SerialPanel({
           </p>
         </div>
 
+        <PhoneApp copy={copy} serial={serial} />
+
         <Tutorials copy={copy} tutorials={tutorials} />
       </div>
     );
@@ -533,6 +536,8 @@ function PhoneOrSoon({
           {copy.serial.share}
         </a>
       </div>
+
+      <PhoneApp copy={copy} serial={serial} />
 
       {!anyInstaller ? (
         /*

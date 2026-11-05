@@ -63,7 +63,7 @@ export type Stats = {
     byStatus: Record<StatusGroup | "none", number>;
     computers: number;
     online: { now: number; today: number; week: number };
-    platforms: { windows: number; mac: number };
+    platforms: { windows: number; mac: number; phone: number };
   };
   revenue: { allTime: number; payingShops: number; byPlan: [string, number][]; byApp: [string, number][]; average: number | null };
   breakdown: {
@@ -243,6 +243,7 @@ export async function loadStats(supabase: SupabaseClient, period: Period, now = 
       platforms: {
         windows: activeDevices.filter((one) => one.platform === "windows").length,
         mac: activeDevices.filter((one) => one.platform === "mac").length,
+        phone: activeDevices.filter((one) => one.platform === "phone").length,
       },
     },
     revenue: {

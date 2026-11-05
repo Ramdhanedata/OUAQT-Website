@@ -85,7 +85,7 @@ export const en = {
         "You answer the questions, you download your software and you install it on the shop PC. Nobody travels to you, so there is no installation fee to pay: the licence alone is enough.",
       soon: "Price coming soon",
       trial: "Free trial of {days} days before you pay anything.",
-      devices: "{devices} devices included: the till and a second computer.",
+      devices: "{devices} devices included, computer or phone: for example the shop computer and your phone. Each one works on its own.",
       launchNote:
         "Launch price, for our first {clients} clients. Your price then stays the same for {years} years.",
       launchCondition:
@@ -111,7 +111,7 @@ export const en = {
     eyebrow: "Pricing",
     heading: "The software you build yourself, and the software we build for you.",
     intro:
-      "The first is built online, in a few questions, and installed the same day. The second we build and install at your site. Either way the software runs on your own computers and needs no internet connection for daily work.",
+      "The first is built online, in a few questions, and installed the same day. The second we build and install at your site. Either way the software runs on your own devices and needs no internet connection for daily work.",
     freeVisit: "Before anything is agreed, our first visit to understand how you work is free.",
     scope: "These prices are the same for every ready-to-install OUAQT product.",
     launchScope:
@@ -193,15 +193,15 @@ export const en = {
       items: [
         {
           q: "Does the software need an internet connection?",
-          a: "No. It runs on your own computers, and daily work happens without a connection.",
+          a: "No. It runs on your own devices, and daily work happens without a connection.",
         },
         {
-          q: "On how many computers can I install it, and what happens if a machine breaks or is replaced?",
-          a: "Software you build yourself runs on {builderDevices} computers. A project we install covers up to {devices} at the same site. Either way, each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
+          q: "On how many devices can I use it, and what happens if a device breaks or is replaced?",
+          a: "Software you build yourself runs on {builderDevices} devices: each computer and each phone counts as one, and each keeps its own data. A project we install covers up to {devices} at the same site. Either way, each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
         },
         {
           q: "Where is my data stored?",
-          a: "On your own computers, at your premises. They do not come to us, and backing them up happens on your own media.",
+          a: "On your own devices. They do not come to us, and backing them up happens on your own media.",
         },
         {
           q: "What happens if I do not renew?",
@@ -236,7 +236,7 @@ export const en = {
       },
       trial: {
         h: "The free trial",
-        b: "Your software can be tried free for {trialDays} days, with every feature. The trial starts the first time the software opens on your computer, not the day you download it, and each computer has one free trial only. At the end, until a licence is paid, the software turns read-only: everything you recorded stays on screen and you can still save a copy of it, but no new sale can be entered. Nothing is erased, and everything opens again as soon as the payment is confirmed.",
+        b: "Your software can be tried free for {trialDays} days, with every feature. The trial starts the first time the software opens on one of your devices, not the day you download it, and each device has one free trial only. Adding a device to the same business does not restart the trial. At the end, until a licence is paid, the software turns read-only: everything you recorded stays on screen and you can still save a copy of it, but no new sale can be entered. Nothing is erased, and everything opens again as soon as the payment is confirmed.",
       },
       selfLicence: {
         h: "What you are buying",
@@ -252,7 +252,7 @@ export const en = {
       },
       devices: {
         h: "Your devices",
-        b: "Your licence covers {devices} computers. If you change machine, you release the old one from your account, up to the number of releases a year shown in your account. Beyond that, write to us and we will do it for you. Reinstalling the software on the same computer does not use up a device.",
+        b: "Your licence covers {devices} devices. Each computer and each phone counts as one separate device, in any mix: one computer and one phone, two computers or two phones. Each device works on its own and keeps its own data: what is entered on one does not appear on the other. If you change device, you release the old one from your account, up to the number of releases a year shown in your account. Beyond that, write to us and we will do it for you. Reinstalling the software on the same computer does not use up a device.",
       },
       refunds: {
         h: "Refunds",
@@ -260,15 +260,15 @@ export const en = {
       },
       serial: {
         h: "Your serial number",
-        b: "Your serial number is what activates your software. Keep it within your business, the way you would a key: anyone who has it can activate a computer in your name, within the limit of your licence. If you think it has got out, tell us at once. We go through the computers activated on it with you and release the ones you do not recognise.",
+        b: "Your serial number is what activates your software. Keep it within your business, the way you would a key: anyone who has it can activate a device in your name, within the limit of your licence. If you think it has got out, tell us at once. We go through the devices activated on it with you and release the ones you do not recognise.",
       },
       install: {
         h: "Installing on Windows and Mac",
-        b: "You download the software from this site and install it yourself, following the installation guide shown on the download page. The first time it opens, Windows or macOS may ask you to confirm, because the software is not yet signed by Microsoft or Apple. The guide shows the steps: on Windows, \"More info\" then \"Run anyway\"; on a Mac, System Settings, Privacy & Security, then \"Open Anyway\". This confirmation is asked once, and it changes nothing about how the software works or how your data is kept. If you get stuck, write to us on WhatsApp and we will walk you through it.",
+        b: "You download the software from this site and install it yourself, following the installation guide shown on the download page. The first time it opens, Windows or macOS may ask you to confirm, because the software is not yet signed by Microsoft or Apple. The guide shows the steps: on Windows, \"More info\" then \"Run anyway\"; on a Mac, System Settings, Privacy & Security, then \"Open Anyway\". This confirmation is asked once, and it changes nothing about how the software works or how your data is kept. If you get stuck, write to us on WhatsApp and we will walk you through it. On an Android phone or an iPhone there is nothing to download: the software opens in the browser from your account, and you add it to your home screen. Clearing this site's data in the browser also erases the business saved on that phone: save a copy regularly from Settings.",
       },
       selfData: {
         h: "Your data does not reach us",
-        b: "Your sales, your stock, your movements and your customers' accounts stay on your computers. Our servers do not receive them, and no part of the software sends them. What we hold is limited to what it takes to build your software and manage your licence: your account, your answers to the questions, the configuration that comes out of them, your logo, the product list you imported at the start, your serial numbers, your devices and your payments.",
+        b: "Your sales, your stock, your movements and your customers' accounts stay on your devices. Our servers do not receive them, and no part of the software sends them. What we hold is limited to what it takes to build your software and manage your licence: your account, your answers to the questions, the configuration that comes out of them, your logo, the product list you imported at the start, your serial numbers, your devices and your payments.",
       },
       selfSupport: {
         h: "What the licence includes",
@@ -284,7 +284,7 @@ export const en = {
         items: [
           "a payment screenshot that is false, altered or belongs to another payment",
           "the serial number or the software being used by another business",
-          "an attempt to get round the licence: winding back the computer's clock, copying the software onto a computer it does not cover, or modifying it",
+          "an attempt to get round the licence: winding back the device's clock, copying the software onto a device it does not cover, or modifying it",
           "using the software for an activity the law forbids",
         ],
       },
@@ -334,7 +334,7 @@ export const en = {
       },
       liability: {
         h: "Responsibility",
-        b: "We do our best for the software to work without error, and we fix what does not work as stated. It remains a tool: the prices, stock and information you enter, the receipts you hand out and the obligations of your trade (tax, health rules, and for a pharmacy the dispensing and expiry of medicines) remain yours. OUAQT is not liable for indirect losses, such as lost profit, or data lost through a computer failure with no backup. In every case, our liability is limited to what you paid us for the licence over the last twelve months.",
+        b: "We do our best for the software to work without error, and we fix what does not work as stated. It remains a tool: the prices, stock and information you enter, the receipts you hand out and the obligations of your trade (tax, health rules, and for a pharmacy the dispensing and expiry of medicines) remain yours. OUAQT is not liable for indirect losses, such as lost profit, or data lost through a broken or lost device with no backup. In every case, our liability is limited to what you paid us for the licence over the last twelve months.",
       },
       termsChanges: {
         h: "Changes to these terms",
@@ -359,11 +359,11 @@ export const en = {
       },
       builder: {
         h: "When you build software",
-        b: "To build your software and manage your licence, we keep: the account you open, your answers to the questions, the configuration that comes out of them, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the computers you activate and your payments. When you download the software, we also keep, for a few hours, a scrambled mark of your internet connection (never the address itself) and the system you chose, so the software recognises its download and opens without asking for your number. The mark is erased as soon as it has been used.",
+        b: "To build your software and manage your licence, we keep: the account you open, your answers to the questions, the configuration that comes out of them, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the devices you activate and your payments. When you download the software, we also keep, for a few hours, a scrambled mark of your internet connection (never the address itself) and the system you chose, so the software recognises its download and opens without asking for your number. The mark is erased as soon as it has been used.",
       },
       neverReceived: {
         h: "What we never receive",
-        b: "Once the software is installed, your sales, your stock, your movements and your customers' accounts stay on your computers. Our servers do not receive them and no part of the software sends them. The product list you import at the start is there to prepare your software; what you sell afterwards never reaches us.",
+        b: "Once the software is installed, your sales, your stock, your movements and your customers' accounts stay on your devices. Our servers do not receive them and no part of the software sends them. The product list you import at the start is there to prepare your software; what you sell afterwards never reaches us.",
       },
       ai: {
         h: "Artificial intelligence",
@@ -374,8 +374,8 @@ export const en = {
         b: "You pay with Bankily, Masrvi, BimBank, SEDAD or Click, straight from your phone. We never see your secret code. We keep the screenshot you send, what is taken down from it (the amount, the date and the transaction number) and the amount expected, for as long as it takes to confirm the payment and account for your licence.",
       },
       fingerprint: {
-        h: "Your computer's fingerprint",
-        b: "So that one computer cannot take one free trial after another, the software works out a fingerprint from your motherboard, your system disk and your operating system's own identifier. It sends us hashed fingerprints only, never the numbers themselves, and we cannot work the numbers back out from what reaches us. It is used for one thing: knowing whether this machine has already had a trial. If you bought your computer second-hand, or had it repaired, write to us and we will open the trial by hand.",
+        h: "Your device's fingerprint",
+        b: "So that one device cannot take one free trial after another, the software works out a fingerprint: on a computer, from your motherboard, your system disk and your operating system's own identifier; on a phone, from a random number kept on that phone. It sends us hashed fingerprints only, never the numbers themselves, and we cannot work the numbers back out from what reaches us. It is used for one thing: knowing whether this device has already had a trial. If you bought your computer second-hand, or had it repaired, write to us and we will open the trial by hand.",
       },
       where: {
         h: "Where this is kept",
@@ -441,7 +441,7 @@ export const en = {
     storyBody1:
       "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into the Builder, an online software builder: the owner answers questions about the way he works, and leaves with his software, ready to install, the same day.",
     storyBody2:
-      "This is not a template touched up afterwards. It is the same software for everybody, set by his own answers: his products, his languages, his staff, the way he takes money. It runs on his own computers, with no internet, and his figures never reach us.",
+      "This is not a template touched up afterwards. It is the same software for everybody, set by his own answers: his products, his languages, his staff, the way he takes money. It runs on his own devices, computer or phone, with no internet, and his figures never reach us.",
     storyBody3:
       "The Builder is now our main product. The trades it does not cover yet, and the businesses whose work falls outside it, we still build for one at a time, as before.",
     marketHeading: "The numbers behind it.",
@@ -490,7 +490,7 @@ export const en = {
   builderHome: {
     heroEyebrow: "Management software for small and medium businesses",
     heroHeading: "Your business management software, ready in minutes.",
-    heroBody: "OUAQT is a startup that equips small and medium-sized businesses. With the Builder, you describe how your business works and leave with your own till, stock and reporting software, installed on your own computers.",
+    heroBody: "OUAQT is a startup that equips small and medium-sized businesses. With the Builder, you describe how your business works and leave with your own till, stock and reporting software, on your own computers and phones.",
     heroPrimary: "Build my software",
     heroSecondary: "Try the demo",
     heroReassurance: "Works without internet · Your data stays with you · {days} day free trial",
@@ -505,7 +505,7 @@ export const en = {
     impactOffline: "No internet",
     impactOfflineLabel: "needed for the everyday work",
     impactData: "Your data",
-    impactDataLabel: "stays on your computers",
+    impactDataLabel: "stays on your devices",
     impactTrial: "{days} days free",
     impactTrialNoDays: "Free trial",
     impactTrialLabel: "to try everything, with nothing to pay",
@@ -518,7 +518,7 @@ export const en = {
     builderStep2: "Watch it work",
     builderStep2Body: "The real software runs beside the questions and changes with every answer. You try it before you download it.",
     builderStep3: "Install and start",
-    builderStep3Body: "Download it for Windows or Mac, activate it with your serial number, and your free trial begins.",
+    builderStep3Body: "Download it for Windows or Mac, or open it on your phone. Your serial number activates it, and your free trial begins.",
     builderCta: "Build my software",
     builderPricing: "See the prices",
 
@@ -527,7 +527,7 @@ export const en = {
     demoBody: "Pick a trade, ring up a sale, open the stock or the reports. What you see here is what you will install.",
     demoLoading: "Opening the software",
     demoNote: "Sample data, so you can try it without risking anything.",
-    demoPhone: "On a phone the demo shows small. Open this page on a computer to really try it.",
+    demoPhone: "On a phone this demo shows small. Your own software fits your phone's screen.",
     demoShops: {
       pharmacy: "Central Pharmacy",
       bakery: "Harbour Bakery",
@@ -548,7 +548,7 @@ export const en = {
       { title: "Customer credit", body: "Sales on credit and what each customer owes you, without a notebook." },
       { title: "Closing the till", body: "At the end of the day or the shift: what should be in the till, and what is." },
       { title: "Receipts for your trade", body: "The table for a restaurant, the room and dates for a hotel, the seat and departure for a ticket." },
-      { title: "Two computers together", body: "The till and a second computer work together over your own network, without internet." },
+      { title: "On your phone too", body: "Your software opens on a computer or on a phone, with no app store. Each counts as one device and keeps its own data." },
       { title: "French and Arabic", body: "The software speaks your staff's language, receipts included." },
     ],
 
@@ -586,8 +586,8 @@ export const en = {
     whyEyebrow: "Why OUAQT",
     whyHeading: "Made for local small and medium businesses, and for the way they work.",
     why: [
-      { title: "No internet needed", body: "The software works on your computers. Internet is only for installing, updating and paying for the licence." },
-      { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts never leave your computers. We never receive them." },
+      { title: "No internet needed", body: "The software works on your devices. Internet is only for installing, updating and paying for the licence." },
+      { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts never leave your devices. We never receive them." },
       { title: "Local payment", body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year or every six months. You see the amount before you pay." },
       { title: "A team that answers", body: "A question or a problem: write to us on WhatsApp. We usually answer the same day, in French or Arabic." },
     ],
@@ -601,7 +601,7 @@ export const en = {
     pricingLaunch: "Launch price",
     pricingSoon: "Price coming soon",
     pricingTrial: "{days} day free trial",
-    pricingDevices: "{devices} computers included",
+    pricingDevices: "{devices} devices included, computer or phone",
     pricingUpdates: "Updates and support included",
     pricingPayment: "Pay by mobile app",
     pricingCta: "See all prices",
@@ -621,13 +621,13 @@ export const en = {
     faqEyebrow: "Questions",
     faqHeading: "What people ask us",
     faq1: "Does the software work without internet?",
-    faq1Body: "Yes. It installs on the business computer and works there. Internet is only for installing, updating and paying.",
+    faq1Body: "Yes. It installs on the business computer or opens on your phone, and works there. Internet is only for installing, updating and paying.",
     faq2: "Who sees my sales and my customers?",
-    faq2Body: "Only you. Your sales, your stock and your customers' accounts stay on your computers. We never receive them.",
-    faq3: "How many computers can I install it on?",
-    faq3Body: "Two: the till and a second machine. Both work without internet and agree with each other over your own network.",
+    faq2Body: "Only you. Your sales, your stock and your customers' accounts stay on your devices. We never receive them.",
+    faq3: "How many devices can I use it on?",
+    faq3Body: "Two, computers or phones: for example the shop computer and your phone. Each counts as one device, works without internet and keeps its own data: what is entered on one does not appear on the other.",
     faq4: "What happens when the free trial ends?",
-    faq4Body: "The software stops and shows the payment window. Your data stays on your computer, and you can save a copy of it from that window. As soon as the licence is paid, it opens again by itself.",
+    faq4Body: "The software stops and shows the payment window. Your data stays on your device, and you can save a copy of it from that window. As soon as the licence is paid, it opens again by itself.",
     faq5: "What if my trade is not on the list?",
     faq5Body: "Tell us from the list of trades, with your number. More trades are on the way, and if your need is particular we can build it to order.",
     faq6: "What if I need help?",

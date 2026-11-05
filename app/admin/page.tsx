@@ -192,7 +192,7 @@ export default async function OverviewPage() {
             })}
           </ul>
           <p className="mt-5 text-sm text-muted-foreground">
-            {fill(o.platforms, { windows: number.format(data.platforms.windows), mac: number.format(data.platforms.mac) })}
+            {fill(o.platforms, { windows: number.format(data.platforms.windows), mac: number.format(data.platforms.mac), phone: number.format(data.platforms.phone) })}
           </p>
         </Card>
       </div>

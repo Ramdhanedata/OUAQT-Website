@@ -11,7 +11,7 @@ export const fr = {
   landing: {
     title: "Créez le logiciel de votre commerce",
     intro:
-      "Répondez à quelques questions sur votre commerce. Vous repartez avec votre logiciel, prêt à installer sur l'ordinateur de la boutique.",
+      "Répondez à quelques questions sur votre commerce. Vous repartez avec votre logiciel, prêt à installer sur un ordinateur ou à ouvrir sur un téléphone.",
     duration: "Moins de 5 minutes",
     noAccount: "Pas besoin de compte pour commencer",
     steps: [
@@ -50,8 +50,8 @@ export const fr = {
   /* Where Continue was, once the last step has the serial: the end of the journey. */
   thanks: {
     title: "Merci d'avoir choisi OUAQT",
-    body: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement après avoir suivi les étapes du guide d'installation. Nous vous souhaitons une excellente expérience.",
-    bodyNoShop: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur : il s'ouvrira directement après avoir suivi les étapes du guide d'installation. Nous vous souhaitons une excellente expérience.",
+    body: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur en suivant le guide d'installation, ou ouvrez-le sur votre téléphone. Nous vous souhaitons une excellente expérience.",
+    bodyNoShop: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur en suivant le guide d'installation, ou ouvrez-le sur votre téléphone. Nous vous souhaitons une excellente expérience.",
     names: {
       pharmacy: "OUAQT Pharmacie",
       bakery: "OUAQT Boulangerie",
@@ -245,7 +245,7 @@ export const fr = {
 
   serial: {
     heading: "Votre numéro de série",
-    intro: "Gardez-le. Il vous servira à installer votre logiciel sur l'ordinateur du commerce.",
+    intro: "Gardez-le. Il vous servira à ouvrir votre logiciel sur chacun de vos appareils.",
     copy: "Copier",
     copied: "Copié",
     share: "Partager sur WhatsApp",
@@ -257,7 +257,7 @@ export const fr = {
     otherMacApple: "Votre Mac a une puce Apple (M1 ou plus récent) ? Télécharger cette version",
     otherMacIntel: "Votre Mac a une puce Intel ? Télécharger cette version",
     soon: "Le logiciel à installer sera bientôt disponible. Gardez votre numéro de série.",
-    onPhone: "Pour installer, sur l'ordinateur du commerce, ouvrez {site}, choisissez « {have} » et tapez ou collez ce numéro.",
+    onPhone: "Pour l'installer aussi sur un ordinateur, ouvrez {site} sur cet ordinateur, choisissez « {have} » et tapez ou collez ce numéro.",
     tutorialWindows: "Voir la vidéo d'installation sur Windows",
     tutorialMac: "Voir la vidéo d'installation sur Mac",
 
@@ -268,7 +268,7 @@ export const fr = {
     alsoWindows: "Vous êtes sur Windows ? Télécharger pour Windows",
     termsNote: "En téléchargeant le logiciel, vous acceptez ses {terms}.",
     termsLink: "conditions d'utilisation",
-    keepNumber: "Votre numéro de série. Gardez-le : il sert pour un deuxième poste, une réinstallation, ou si le logiciel vous le demande.",
+    keepNumber: "Votre numéro de série. Gardez-le : il sert pour un autre appareil, une réinstallation, ou si le logiciel vous le demande.",
     windowsWarning:
       "Windows peut afficher « Windows a protégé votre ordinateur ». Cliquez sur « Informations complémentaires », puis sur « Exécuter quand même ».",
     macWarning:
@@ -342,7 +342,7 @@ export const fr = {
     scan: "Scannez ce code avec l'appareil photo de votre téléphone. Votre commerce s'ouvre directement, sans numéro à taper.",
     iphone: "Sur iPhone : dans Safari, touchez le bouton Partager, puis « Sur l'écran d'accueil ».",
     android: "Sur Android : dans Chrome, touchez « Installer » ou le menu ⋮, puis « Ajouter à l'écran d'accueil ».",
-    note: "Le téléphone compte comme un de vos appareils. Ses ventes restent sur le téléphone pour l'instant : elles ne passent pas encore sur l'ordinateur.",
+    note: "Chaque téléphone et chaque ordinateur compte pour un appareil. Chacun garde ses propres ventes et son propre stock : ce qui est saisi sur l'un n'apparaît pas sur l'autre.",
   },
   myAccount: {
     title: "Mon compte",
@@ -352,7 +352,7 @@ export const fr = {
     signInError: "Numéro ou mot de passe incorrect.",
     mySoftware: "Mon logiciel",
     mySubscription: "Mon abonnement",
-    myDevices: "Mes postes",
+    myDevices: "Mes appareils",
     myRequests: "Mes demandes",
     edit: "Modifier mon logiciel",
     noBusiness: "Vous n'avez pas encore créé votre logiciel.",
@@ -362,12 +362,12 @@ export const fr = {
   },
 
   licence: {
-    notStarted: "Votre essai commencera quand vous installerez le logiciel sur l'ordinateur du commerce.",
+    notStarted: "Votre essai commencera à la première ouverture du logiciel, sur un ordinateur ou sur un téléphone.",
     trial: {
       one: "Essai gratuit, {count} jour restant.",
       other: "Essai gratuit, {count} jours restants.",
     },
-    trialOver: "Votre essai est terminé. Le logiciel est arrêté jusqu'au paiement ; tout ce que vous avez enregistré reste sur votre ordinateur. Dès le paiement, il se rouvre tout seul.",
+    trialOver: "Votre essai est terminé. Le logiciel est arrêté jusqu'au paiement ; tout ce que vous avez enregistré reste sur votre appareil. Dès le paiement, il se rouvre tout seul.",
     active: "Licence active jusqu'au {date}.",
     renewalDue: {
       one: "Votre licence a pris fin. Il vous reste {count} jour avant que le logiciel passe en lecture seule.",
@@ -443,16 +443,16 @@ export const fr = {
   },
 
   devices: {
-    none: "Aucun ordinateur pour l'instant. Le vôtre apparaît ici dès que vous installez le logiciel.",
-    main: "Ordinateur principal",
-    secondary: "Deuxième ordinateur",
+    none: "Aucun appareil pour l'instant. Le vôtre apparaît ici dès que vous ouvrez le logiciel.",
+    main: "Appareil principal",
+    secondary: "Deuxième appareil",
     lastSeen: "Vu le {date}",
-    release: "Cet ordinateur ne fonctionne plus",
-    confirm: "Libérer cet ordinateur ? Vous pourrez installer le logiciel sur un autre.",
+    release: "Cet appareil ne fonctionne plus",
+    confirm: "Libérer cet appareil ? Vous pourrez ouvrir le logiciel sur un autre.",
     cancel: "Non, garder",
     releasing: "Un instant",
-    released: "Libéré. Vous pouvez installer le logiciel sur un autre ordinateur.",
-    tooMany: "Vous avez déjà libéré tous les postes permis cette année. Écrivez-nous sur WhatsApp et nous le ferons pour vous.",
+    released: "Libéré. Vous pouvez ouvrir le logiciel sur un autre appareil.",
+    tooMany: "Vous avez déjà libéré tous les appareils permis cette année. Écrivez-nous sur WhatsApp et nous le ferons pour vous.",
     failed: "Pas libéré. Réessayez, ou écrivez-nous sur WhatsApp.",
   },
 
