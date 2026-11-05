@@ -1,13 +1,19 @@
 -- The wash: cars, upholstery and carpets, or both.
 --
--- Decided 2026-11-05. One app serves every trade, so its download addresses
--- are the same release as the others', and they are the only thing a new
--- trade needs from the database. The Mac address is the Intel build, which
--- also runs on Apple-chip Macs; the site offers the Apple one from it.
+-- Decided 2026-11-05. One app serves every trade, so a new trade needs only
+-- its download addresses from the database. They start empty: the installers
+-- on the release page cannot open a wash yet, and a shop told to download one
+-- would be stuck. With no address, the site says the computer version is
+-- coming and offers the phone. When a release that knows the wash is out:
+--
+--   update settings set value = '"https://github.com/Ramdhanedata/ouaqt-releases/releases/latest/download/OUAQT-windows-setup.exe"'
+--    where key = 'installer_url_windows_wash';
+--   update settings set value = '"https://github.com/Ramdhanedata/ouaqt-releases/releases/latest/download/OUAQT-mac-x64.dmg"'
+--    where key = 'installer_url_mac_wash';
 
 insert into settings (key, value, description) values
-  ('installer_url_windows_wash', '"https://github.com/Ramdhanedata/ouaqt-releases/releases/latest/download/OUAQT-windows-setup.exe"', 'Download address for a wash, on Windows'),
-  ('installer_url_mac_wash', '"https://github.com/Ramdhanedata/ouaqt-releases/releases/latest/download/OUAQT-mac-x64.dmg"', 'Download address for a wash, on a Mac')
+  ('installer_url_windows_wash', '""', 'Download address for a wash, on Windows'),
+  ('installer_url_mac_wash', '""', 'Download address for a wash, on a Mac')
 on conflict (key) do nothing;
 
 -- Visitors read the download addresses before signing in, like the others.
