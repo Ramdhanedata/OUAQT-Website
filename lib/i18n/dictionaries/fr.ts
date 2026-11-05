@@ -497,6 +497,8 @@ export const fr: Dictionary = {
 
     impactMinutes: "Moins de 5 minutes",
     impactMinutesLabel: "pour créer votre logiciel",
+    impactWhere: "Téléphone ou ordinateur",
+    impactWhereLabel: "votre logiciel tourne sur les deux",
     impactOffline: "Sans internet",
     impactOfflineLabel: "pour le travail de tous les jours",
     impactData: "Vos données",
@@ -519,10 +521,12 @@ export const fr: Dictionary = {
 
     demoEyebrow: "Démo en direct",
     demoHeading: "Essayez-le ici. C'est le vrai logiciel.",
-    demoBody: "Choisissez un métier, encaissez une vente, ouvrez le stock ou les rapports. Ce que vous voyez ici est ce que vous installerez.",
+    demoBody: "Choisissez un métier, encaissez une vente, ouvrez le stock ou les rapports. Ce que vous voyez ici est votre logiciel, sur votre ordinateur comme sur votre téléphone.",
     demoLoading: "Ouverture du logiciel",
     demoNote: "Données d'exemple, pour essayer sans rien risquer.",
-    demoPhone: "Sur un téléphone, cette démo s'affiche en petit. Votre propre logiciel, lui, s'adapte à l'écran de votre téléphone.",
+    demoOnComputer: "Sur ordinateur",
+    demoOnPhone: "Sur téléphone",
+    demoPhone: "Sur un téléphone, la version ordinateur s'affiche en petit. Choisissez « Sur téléphone » pour l'essayer en grand.",
     demoShops: {
       pharmacy: "Pharmacie du Centre",
       bakery: "Boulangerie du Port",

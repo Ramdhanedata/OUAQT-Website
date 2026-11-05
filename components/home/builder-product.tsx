@@ -88,6 +88,8 @@ export function BuilderProduct({
               loading={home.demoLoading}
               note={home.demoNote}
               phone={home.demoPhone}
+              onComputer={home.demoOnComputer}
+              onPhone={home.demoOnPhone}
             />
           </div>
         </div>
