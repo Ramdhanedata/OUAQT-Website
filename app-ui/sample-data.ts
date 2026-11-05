@@ -87,6 +87,15 @@ const transport: SampleProduct[] = [
   { id: "t6", name: { fr: "Bagage en plus", ar: "أمتعة إضافية", en: "Extra luggage" }, price: 10000, inStock: 0 },
 ];
 
+const wash: SampleProduct[] = [
+  { id: "w1", name: { fr: "Lavage extérieur", ar: "غسيل خارجي", en: "Exterior wash" }, price: 15000, inStock: 0 },
+  { id: "w2", name: { fr: "Lavage complet", ar: "غسيل كامل", en: "Full wash" }, price: 30000, inStock: 0 },
+  { id: "w3", name: { fr: "Lavage 4x4", ar: "غسيل سيارة دفع رباعي", en: "4x4 wash" }, price: 40000, inStock: 0 },
+  { id: "w4", name: { fr: "Canapé, par place", ar: "أريكة، لكل مقعد", en: "Sofa, per seat" }, price: 15000, inStock: 0 },
+  { id: "w5", name: { fr: "Tapis, au m²", ar: "سجاد، للمتر المربع", en: "Carpet, per m²" }, price: 5000, inStock: 0 },
+  { id: "w6", name: { fr: "Matelas", ar: "مرتبة", en: "Mattress" }, price: 30000, inStock: 0 },
+];
+
 const general: SampleProduct[] = [
   { id: "g1", name: { fr: "Coupe de cheveux", ar: "قص الشعر", en: "Haircut" }, price: 30000, inStock: 0 },
   { id: "g2", name: { fr: "Réparation", ar: "إصلاح", en: "Repair" }, price: 50000, inStock: 0 },
@@ -104,6 +113,7 @@ const byPack: Record<Pack, SampleProduct[]> = {
   warehouse,
   hotel,
   transport,
+  wash,
   general,
 };
 

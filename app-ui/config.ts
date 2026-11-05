@@ -173,6 +173,17 @@ export const transportFeatures = z.object({
 });
 
 /*
+ * A wash: cars, upholstery and carpets, or both. A car waits, is washed and
+ * leaves the same hour; a sofa is left for days, with a date to come back and
+ * often an advance. The owner may note who did each wash.
+ */
+export const washFeatures = z.object({
+  washes: z.array(z.enum(["cars", "upholstery"])).min(1),
+  washers: z.boolean(),
+  deposit: z.boolean(),
+});
+
+/*
  * Any business that is none of the above: a salon, a workshop, a service
  * company, a small trader. The owner switches on what he uses, and the
  * software shows nothing else.
@@ -191,6 +202,7 @@ export const packFeatures = z.object({
   warehouse: warehouseFeatures.optional(),
   hotel: hotelFeatures.optional(),
   transport: transportFeatures.optional(),
+  wash: washFeatures.optional(),
   general: generalFeatures.optional(),
 });
 
@@ -258,6 +270,7 @@ export type WarehouseFeatures = z.infer<typeof warehouseFeatures>;
 export type ShopFeatures = z.infer<typeof shopFeatures>;
 export type HotelFeatures = z.infer<typeof hotelFeatures>;
 export type TransportFeatures = z.infer<typeof transportFeatures>;
+export type WashFeatures = z.infer<typeof washFeatures>;
 export type GeneralFeatures = z.infer<typeof generalFeatures>;
 
 /**
@@ -368,6 +381,8 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
       };
     case "transport":
       return { transport: { carries: ["passengers", "parcels"], seatNumbers: true, parcelPayer: "either" } };
+    case "wash":
+      return { wash: { washes: ["cars", "upholstery"], washers: true, deposit: true } };
     case "general":
       return { general: { sells: ["products", "services"], trackStock: true, expenses: true } };
   }
