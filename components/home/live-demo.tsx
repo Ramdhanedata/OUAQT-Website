@@ -220,9 +220,13 @@ export function LiveDemo({
 
         <div className={view === "phone" ? undefined : "hidden"}>
           <div
-            className="mx-auto overflow-hidden rounded-[40px] border-foreground bg-app-background shadow-[0_40px_80px_-30px_rgba(10,10,10,0.4)]"
+            className="mx-auto overflow-hidden rounded-[40px] border-foreground bg-surface shadow-[0_40px_80px_-30px_rgba(10,10,10,0.4)]"
             style={{ maxWidth: PHONE_WIDTH + 2 * PHONE_BEZEL, borderWidth: PHONE_BEZEL, borderStyle: "solid" }}
           >
+            {/* A phone's edges, so its round corners cut nothing off the app. */}
+            <div className="flex h-5 items-center justify-center" aria-hidden>
+              <span className="h-1.5 w-14 rounded-full bg-app-strong" />
+            </div>
             <div className="relative" style={{ height: `min(80vh, ${PHONE_HEIGHT}px)` }}>
               {seen.phone ? (
                 <AppFrame pack={pack} lang={lang} shops={shops} loading={loading} loadingClass="text-base" />
@@ -231,6 +235,9 @@ export function LiveDemo({
                   <p className="animate-pulse text-base text-app-ink3">{loading}</p>
                 </div>
               )}
+            </div>
+            <div className="flex h-5 items-center justify-center" aria-hidden>
+              <span className="h-1 w-24 rounded-full bg-app-strong" />
             </div>
           </div>
         </div>
