@@ -1,6 +1,5 @@
 "use client";
 
-import { machineOf } from "./machine";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { organization } from "@/lib/data/contact";
@@ -23,6 +22,9 @@ import { InstallGuide } from "./install-guide";
 import { InstallTargetProvider, useInstallTarget } from "./install-target";
 
 const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
+/* What the owner counts: his shop, the questions, his software. "products" is only the way back when a serial could not be issued, and it reads as the third. */
+const SHOWN_STEPS = 3;
+const shownStep = (step: number) => Math.min(step, SHOWN_STEPS - 1);
 
 /*
  * The preview carries the app screens, the receipt and the schema with it.
@@ -59,7 +61,7 @@ const LANGUAGE_NAMES: Record<Locale, string> = { fr: "Français", ar: "العر�
 const WIDE = "(min-width: 900px)"; // not-a-rule: a layout breakpoint
 
 /*
- * The builder shell: the landing, then the four steps.
+ * The builder shell: the landing, then the steps.
  *
  * Two layouts, chosen by width alone, never by sniffing the device. Below
  * 900px the owner sees one question at a time with a fixed bar at the bottom.
@@ -77,7 +79,6 @@ export function Builder({
   startPack,
   askSerial,
   supportWhatsapp,
-  maxDevices,
   installers,
   tutorials,
   termsHref,
@@ -90,7 +91,6 @@ export function Builder({
   /* Sent from the home page's "I already have my serial number": the field is open. */
   askSerial: boolean;
   supportWhatsapp: string | null;
-  maxDevices: number | null;
   installers: Record<Pack, { windows: string | null; mac: string | null }>;
   tutorials: { windows: string | null; mac: string | null };
   termsHref: string;
@@ -184,7 +184,7 @@ export function Builder({
     const whatsapp = supportWhatsapp ? `https://wa.me/${supportWhatsapp}` : organization.whatsappUrl;
     const stepName = copy.steps.serial as string;
     const help = `${whatsapp}?text=${encodeURIComponent(
-      fill(copy.shell.helpMessage as string, { step: STEP_KEYS.length, name: stepName })
+      fill(copy.shell.helpMessage as string, { step: SHOWN_STEPS, name: stepName })
     )}`;
     const name = (locale === "ar" && opened.nameArabic) || opened.nameLatin;
     /*
@@ -202,7 +202,7 @@ export function Builder({
             </p>
           ) : null}
           {switchedNote}
-          <Progress copy={copy} step={STEP_KEYS.length - 1} total={STEP_KEYS.length} stepName={stepName} />
+          <Progress copy={copy} step={SHOWN_STEPS - 1} total={SHOWN_STEPS} stepName={stepName} />
           <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
             <ResumeDownload
               copy={copy}
@@ -270,7 +270,6 @@ export function Builder({
       offline={offline}
       enabledPacks={enabledPacks}
       supportWhatsapp={supportWhatsapp}
-      maxDevices={maxDevices}
       installers={installers}
       tutorials={tutorials}
       termsHref={termsHref}
@@ -359,7 +358,6 @@ function Wizard({
   offline,
   enabledPacks,
   supportWhatsapp,
-  maxDevices,
   installers,
   tutorials,
   termsHref,
@@ -376,7 +374,6 @@ function Wizard({
   offline: boolean;
   enabledPacks: Pack[];
   supportWhatsapp: string | null;
-  maxDevices: number | null;
   installers: Record<Pack, { windows: string | null; mac: string | null }>;
   tutorials: { windows: string | null; mac: string | null };
   termsHref: string;
@@ -391,8 +388,7 @@ function Wizard({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLarge, setPreviewLarge] = useState(false);
   /*
-   * The numéro de série, given once: on a computer when the questions end,
-   * on a phone when products and staff are done. Either way it opens the
+   * The numéro de série, given once, when the questions end. It opens the
    * last step.
    */
   const [issued, setIssued] = useState<{ serial: string } | null>(null);
@@ -422,7 +418,7 @@ function Wizard({
   const [screen, setScreen] = useState(0);
   const [lead, setLead] = useState<{ pack: Pack | null } | null>(null);
   const [nameError, setNameError] = useState(false);
-  /* Step 2 reports how many screens it has, since that depends on the answers. */
+  /* Step 2 reports how many questions it has, since that depends on the answers. */
   const [interviewScreens, setInterviewScreens] = useState(1);
   /*
    * The product list is held here rather than in the draft. Ten thousand rows
@@ -461,11 +457,11 @@ function Wizard({
     ? `https://wa.me/${supportWhatsapp}`
     : organization.whatsappUrl;
   const help = `${whatsapp}?text=${encodeURIComponent(
-    fill(copy.shell.helpMessage as string, { step: step + 1, name: stepName })
+    fill(copy.shell.helpMessage as string, { step: shownStep(step) + 1, name: stepName })
   )}`;
 
   /* The name is the one answer step 1 cannot finish without. */
-  const NAME_SCREEN = 1; // not-a-rule: which of the four screens asks the name
+  const NAME_SCREEN = 1; // not-a-rule: which of the two screens asks the name
   const named = Boolean((answers.nameLatin ?? "").trim());
 
   const pack = answers.pack ?? enabledPacks[0] ?? "pharmacy";
@@ -498,17 +494,14 @@ function Wizard({
     if (step === 1) {
       if (!wide && screen < interviewScreens - 1) return setScreen(screen + 1);
       /*
-       * On a computer he is at the shop's computer already: the questions
-       * done, straight to the serial and the download (Adel, 2026-09-25). His
-       * products can come back one step, or be imported in the software
-       * itself. On a phone, products and staff first, and the serial after
-       * them, with nothing to continue to (Adel, 2026-10-02).
+       * The questions done, straight to the serial and the download, on a
+       * computer and on a phone alike (Adel, 2026-11-05). His products are
+       * imported in the software itself, from Stock, when he has the file to
+       * hand. Step 3 only opens if the serial could not be issued, as the way
+       * back to trying again.
        */
-      if (issued || machineOf() === "phone") {
-        setScreen(0);
-        return onStep(2);
-      }
       setScreen(0);
+      if (issued) return onStep(total - 1);
       setIssuing(true);
       void issue().then((ok) => {
         setIssuing(false);
@@ -572,13 +565,7 @@ function Wizard({
       pack={pack}
       answers={answers}
       onAnswer={answerQuestion}
-      onFeatures={(patch) => update({ patched: patch })}
-      onEdit={(target) => {
-        setScreen(0);
-        onStep(target);
-      }}
       onCount={setInterviewScreens}
-      maxDevices={maxDevices}
       screen={screen}
       wide={wide}
     />
@@ -626,7 +613,7 @@ function Wizard({
 
         <div className="grid gap-10 wizard:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] wizard:gap-10 xl:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] xl:gap-12">
           <div>
-            <Progress copy={copy} step={step} total={total} stepName={stepName} />
+            <Progress copy={copy} step={shownStep(step)} total={SHOWN_STEPS} stepName={stepName} />
 
             <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
               {questionsPane}

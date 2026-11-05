@@ -307,7 +307,8 @@ export function defaultConfiguration(
       credit: { enabled: true, limitPerCustomer: false },
       printedReceipt: true,
       lowStockAlert: true,
-      discounts: false,
+      /* Not asked any more: the till keeps a discount one tap away, closed until wanted. */
+      discounts: true,
     },
     /*
      * Each pack's own floor, taken from the defaults in its question bank.
@@ -328,7 +329,8 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
           expiryAlertMonths: 3, // not-a-rule: the question's own default, and the owner can change it
           batchNumbers: true,
           trackSuppliers: true,
-          search: ["name"],
+          /* Not asked any more: a barcode reader works from the first day, and the name always does. */
+          search: ["name", "barcode"],
           /*
            * Not conventionnée until the owner says so: the till then stays
            * exactly as it was. CNAM is the fund most pharmacies here work

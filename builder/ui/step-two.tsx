@@ -8,7 +8,6 @@ import type { DraftAnswers } from "@/builder/draft/store";
 import { interviewFor } from "@/builder/packs";
 import type { Answer } from "@/builder/packs/bank";
 import { askedQuestions, StepInterview } from "./step-interview";
-import { Summary } from "./summary";
 
 /*
  * Everything step 2 needs, behind one door.
@@ -28,10 +27,7 @@ export function StepTwo({
   pack,
   answers,
   onAnswer,
-  onFeatures,
-  onEdit,
   onCount,
-  maxDevices,
   screen,
   wide,
 }: {
@@ -40,10 +36,7 @@ export function StepTwo({
   pack: Pack;
   answers: DraftAnswers;
   onAnswer: (id: string, answer: Answer) => void;
-  onFeatures: (patch: { common?: unknown; features?: unknown }) => void;
-  onEdit: (step: number) => void;
   onCount: (screens: number) => void;
-  maxDevices: number | null;
   screen: number;
   wide: boolean;
 }) {
@@ -51,38 +44,20 @@ export function StepTwo({
   const given = answers.interview ?? {};
   const asked = askedQuestions(questions, given);
 
-  /* One screen per question, then the read back. */
+  /* One screen per question. */
   useEffect(() => {
-    onCount(asked.length + 1);
+    onCount(asked.length);
   }, [asked.length, onCount]);
 
-  const interview = (
+  return (
     <StepInterview
       copy={copy}
       language={language}
-      pack={pack}
       questions={questions}
       answers={given}
       onAnswer={onAnswer}
-      onFeatures={onFeatures}
-      maxDevices={maxDevices}
       screen={screen}
       wide={wide}
     />
-  );
-
-  if (!wide && screen < asked.length) return interview;
-
-  return (
-    <>
-      {wide ? <div className="mb-10">{interview}</div> : null}
-      <Summary
-        copy={copy}
-        language={language}
-        answers={answers}
-        questions={questions}
-        onEdit={onEdit}
-      />
-    </>
   );
 }

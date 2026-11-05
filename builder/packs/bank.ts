@@ -8,8 +8,10 @@ import { z } from "zod";
  * writing a component, which is the only way four packs and three languages
  * stay maintainable.
  *
- * Every question carries its own default, because every question offers "Je ne
- * sais pas". A complete set of defaults has to produce working software, and
+ * Only what changes how the software works for that owner is asked, two or
+ * three questions a trade: the rest has a good default in the configuration.
+ * Every question also carries its own default, already chosen on screen, so an
+ * owner who just presses Continue still ends up with software that works, and
  * bank.test.ts is what proves it.
  */
 
@@ -54,20 +56,12 @@ const shared = {
   show_if: showIf.optional(),
 };
 
-/*
- * `options_from` exists for one question: how many computers. The ceiling is
- * a licence rule that lives in settings, so the options are built when the
- * question is shown rather than frozen into this file.
- */
-const optionsFrom = z.enum(["max_devices"]);
-
 export const question = z.discriminatedUnion("type", [
   z.object({ ...shared, type: z.literal("yes_no"), default: z.boolean() }),
   z.object({
     ...shared,
     type: z.literal("single_choice"),
-    options: z.array(option).min(2).optional(),
-    options_from: optionsFrom.optional(),
+    options: z.array(option).min(2),
     default: z.union([z.string(), z.number()]),
   }),
   z.object({
@@ -116,9 +110,18 @@ export function isAsked(item: Question, answers: Answers): boolean {
   return earlier === condition.equals;
 }
 
-/** The answer an owner gets by tapping "Je ne sais pas". */
+/** The answer an owner gets by pressing Continue without choosing. */
 export function defaultAnswer(item: Question): Answer {
   return item.default;
+}
+
+/*
+ * The answers with each question's default filled in. A choice left as it was
+ * is still a choice: "Combien de tables ?" follows "Sur place" whether he
+ * tapped it or found it already selected.
+ */
+export function withDefaults(questions: Question[], answers: Answers): Answers {
+  return { ...Object.fromEntries(questions.map((item) => [item.id, item.default])), ...answers };
 }
 
 function write(target: Record<string, unknown>, path: string, value: unknown) {
@@ -152,9 +155,10 @@ export function applyAnswers<T extends Record<string, unknown>>(
   answers: Answers
 ): T {
   const next = structuredClone(configuration);
+  const effective = withDefaults(questions, answers);
 
   for (const item of questions) {
-    if (!isAsked(item, answers)) continue;
+    if (!isAsked(item, effective)) continue;
     const answer = item.id in answers ? answers[item.id] : defaultAnswer(item);
     for (const rule of item.maps_to) {
       write(next as Record<string, unknown>, rule.path, translate(answer, rule));

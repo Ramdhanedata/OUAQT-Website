@@ -3,133 +3,73 @@
   "version": 1,
   "questions": [
     {
-      "id": "ph_expiry",
-      "type": "yes_no",
-      "label": {
-        "fr": "Voulez-vous suivre les dates de péremption ?",
-        "ar": "هل تريد متابعة تواريخ انتهاء الصلاحية؟",
-        "en": "Do you want to keep track of expiry dates?"
-      },
-      "review": true,
-      "default": true,
-      "maps_to": [{ "path": "features.pharmacy.trackExpiry" }]
-    },
-    {
-      "id": "ph_expiry_alert",
-      "type": "single_choice",
-      "label": {
-        "fr": "Combien de temps avant la péremption voulez-vous être prévenu ?",
-        "ar": "قبل كم من الوقت من انتهاء الصلاحية تريد أن تُنبَّه؟",
-        "en": "How long before the expiry date do you want to be warned?"
-      },
-      "review": true,
-      "show_if": { "question": "ph_expiry", "equals": true },
-      "options": [
-        { "id": "1", "label": { "fr": "1 mois", "ar": "شهر واحد", "en": "1 month" } },
-        { "id": "3", "label": { "fr": "3 mois", "ar": "3 أشهر", "en": "3 months" } },
-        { "id": "6", "label": { "fr": "6 mois", "ar": "6 أشهر", "en": "6 months" } }
-      ],
-      "default": "3",
-      "maps_to": [
-        {
-          "path": "features.pharmacy.expiryAlertMonths",
-          "map": { "1": 1, "3": 3, "6": 6 }
-        }
-      ]
-    },
-    {
-      "id": "ph_batch",
-      "type": "yes_no",
-      "label": {
-        "fr": "Notez-vous les numéros de lot ?",
-        "ar": "هل تسجل أرقام التشغيلة؟",
-        "en": "Do you record batch numbers?"
-      },
-      "review": true,
-      "default": true,
-      "maps_to": [{ "path": "features.pharmacy.batchNumbers" }]
-    },
-    {
-      "id": "ph_search",
-      "type": "multi_choice",
-      "label": {
-        "fr": "Comment cherchez-vous un médicament au moment de la vente ?",
-        "ar": "كيف تبحث عن دواء أثناء البيع؟",
-        "en": "How do you look for a medicine during a sale?"
-      },
-      "review": true,
-      "options": [
-        {
-          "id": "name",
-          "label": { "fr": "Par le nom", "ar": "بالاسم", "en": "By name" }
-        },
-        {
-          "id": "barcode",
-          "label": {
-            "fr": "Avec un lecteur de code-barres",
-            "ar": "بقارئ الباركود",
-            "en": "With a barcode scanner"
-          }
-        }
-      ],
-      "default": ["name"],
-      "maps_to": [{ "path": "features.pharmacy.search" }]
-    },
-    {
       "id": "ph_insurance",
       "type": "yes_no",
       "label": {
-        "fr": "Votre pharmacie est-elle conventionnée avec la CNAM, la CNASS ou une autre assurance maladie ?",
-        "ar": "هل صيدليتك معتمدة لدى CNAM أو CNASS أو تأمين صحي آخر؟",
-        "en": "Is your pharmacy approved by CNAM, CNASS or another health insurer?"
+        "fr": "Travaillez-vous avec la CNAM, la CNASS ou une assurance ?",
+        "ar": "هل تتعامل مع CNAM أو CNASS أو تأمين صحي؟",
+        "en": "Do you work with CNAM, CNASS or a health insurer?"
       },
       "help": {
-        "fr": "Si oui, chaque vente sépare ce que paie la caisse et ce que paie le client, et le logiciel tient le compte de ce que chaque caisse vous doit.",
-        "ar": "إذا كان الجواب نعم، يفصل كل بيع بين ما يدفعه الصندوق وما يدفعه الزبون، ويحسب البرنامج ما يدين لك به كل صندوق.",
-        "en": "If so, every sale splits what the fund pays from what the customer pays, and the software keeps count of what each fund owes you."
+        "fr": "Si oui, chaque vente sépare la part de l'assurance et celle du client.",
+        "ar": "إذا نعم، يفصل كل بيع بين حصة التأمين وحصة الزبون.",
+        "en": "If yes, each sale separates what the insurer pays from what the customer pays."
       },
       "review": true,
       "default": false,
-      "maps_to": [{ "path": "features.pharmacy.insurance.enabled" }]
+      "maps_to": [
+        {
+          "path": "features.pharmacy.insurance.enabled"
+        }
+      ]
     },
     {
       "id": "ph_insurance_payers",
       "type": "multi_choice",
       "label": {
-        "fr": "Avec quelles caisses ou assurances ?",
-        "ar": "لدى أي صناديق أو شركات تأمين؟",
-        "en": "With which funds or insurers?"
+        "fr": "Lesquelles ?",
+        "ar": "أيها؟",
+        "en": "Which ones?"
       },
       "review": true,
-      "show_if": { "question": "ph_insurance", "equals": true },
+      "show_if": {
+        "question": "ph_insurance",
+        "equals": true
+      },
       "options": [
         {
           "id": "cnam",
           "label": {
-            "fr": "CNAM, la Caisse nationale d'assurance maladie",
-            "ar": "CNAM، الصندوق الوطني للتأمين الصحي",
-            "en": "CNAM, the National Health Insurance Fund"
+            "fr": "CNAM",
+            "ar": "CNAM",
+            "en": "CNAM"
           }
         },
         {
           "id": "cnass",
           "label": {
-            "fr": "CNASS, la Caisse nationale de solidarité en santé",
-            "ar": "CNASS، الصندوق الوطني للتضامن الصحي",
-            "en": "CNASS, the National Health Solidarity Fund"
+            "fr": "CNASS",
+            "ar": "CNASS",
+            "en": "CNASS"
           }
         },
         {
           "id": "other",
           "label": {
-            "fr": "Une autre assurance ou une mutuelle",
-            "ar": "شركة تأمين أخرى أو تعاضدية",
-            "en": "Another insurer or a mutual"
+            "fr": "Une autre assurance",
+            "ar": "تأمين آخر",
+            "en": "Another insurer"
           }
         }
       ],
-      "default": ["cnam"],
-      "maps_to": [{ "path": "features.pharmacy.insurance.payers" }]
+      "default": [
+        "cnam"
+      ],
+      "maps_to": [
+        {
+          "path": "features.pharmacy.insurance.payers"
+        }
+      ]
     }
   ]
 }

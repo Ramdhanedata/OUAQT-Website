@@ -35,7 +35,7 @@ reads every migration and fails the build if a place to put them appears.
 | `builder/db/server.ts` | The visitor's connection and the staff one. Server only |
 | `builder/db/settings.ts` | Prices, trial length and open packs, read and cached |
 | `app-ui/` | Screens shared with the desktop app. No Next, Supabase or browser storage imports |
-| `builder/ui/step-business.tsx` | Step 1: business type, languages, name, receipt details, logo |
+| `builder/ui/step-business.tsx` | Step 1: business type and name, with the Arabic name, receipt details and logo behind one line |
 | `builder/draft/store.ts` | Answers, on the device and on the server |
 | `builder/logo/` | Cropping, resizing and thresholding the owner's logo, in his browser |
 | `builder/packs/*.json` | The question banks. Data, not code |
@@ -163,13 +163,21 @@ follow a redirect then. **After any change to the desktop app's screens, run
 
 A pack's questions live in `builder/packs/<pack>/questions.v*.json`, validated
 by `bank.ts` at import and again by `bank.test.ts`. Adding a question is
-editing a file. Every question carries its own default, because every question
-offers "Je ne sais pas", and a test walks every bank to prove a silent owner
-still ends up with software that works.
+editing a file. Only what changes how the software works for that owner is
+asked, three questions at most for a trade, and a test holds that line: a
+setting that can have a good default gets one in `app-ui/config.ts` instead.
+Every question opens on its own default, already chosen, and a test walks every
+bank to prove an owner who only presses Continue still ends up with software
+that works.
 
 `maps_to` says where an answer lands in the configuration. A test resolves
 every one of those paths against the real schema, because a path with a typo
 writes a field nobody reads and the answer disappears without an error.
+
+The interview no longer offers "Expliquer avec mes mots" (2026-11-05): it sat
+under every question and drew the eye from the answer. An owner whose case does
+not fit has "Aide sur WhatsApp" on every step. `/api/builder/interpret` is still
+there, and what follows describes it for the day it comes back.
 
 The AI is optional and narrow. It reads one question, the owner's sentence and
 the switches set so far, and proposes a patch. `patch.ts` then decides: every

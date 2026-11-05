@@ -9,7 +9,7 @@ import shopJson from "./shop/questions.v1.json";
 import transportJson from "./transport/questions.v1.json";
 import washJson from "./wash/questions.v1.json";
 import warehouseJson from "./warehouse/questions.v1.json";
-import { applyAnswers, questionBank, type Answers, type Question, type QuestionBank } from "./bank";
+import { applyAnswers, questionBank, withDefaults, type Answers, type Question, type QuestionBank } from "./bank";
 
 /*
  * The question banks, loaded and checked.
@@ -65,7 +65,8 @@ export function patchedAfterAnswer(
 ): { common?: unknown; features?: unknown } {
   const question = interviewFor(pack).find((one) => one.id === id);
   if (!question) return patched;
-  const next = applyAnswers({ common: patched.common ?? {}, features: patched.features ?? {} } as Record<string, unknown>, [question], interview);
+  /* Whether this one applies can hang on an earlier question, so the others' defaults count too. */
+  const next = applyAnswers({ common: patched.common ?? {}, features: patched.features ?? {} } as Record<string, unknown>, [question], withDefaults(interviewFor(pack), interview));
   return { common: next.common, features: next.features };
 }
 

@@ -10,15 +10,15 @@ import { ChoiceButton, Field, Fieldset, TextInput } from "./fields";
 import { Button } from "@/components/ui/button";
 
 /*
- * Step 1: what the shop is called and what it sells.
+ * Step 1: what the shop is and what it is called.
  *
- * Five short screens on a phone, the same five stacked in one column on a
- * computer. Nothing here is technical and nothing is required except the
- * name, because the name is the thing that makes the receipt in the preview
- * his.
+ * Two short screens on a phone, stacked in one column on a computer. Only the
+ * name is required, because the name is the thing that makes the receipt in
+ * the preview his. The rest (the Arabic name, the phone, the address, the
+ * logo) waits behind one line, and stays out of the way until he opens it.
  */
 
-export const BUSINESS_SCREENS = 4;
+export const BUSINESS_SCREENS = 2;
 
 type Props = {
   copy: BuilderCopy;
@@ -36,7 +36,7 @@ type Props = {
 
 export function StepBusiness(props: Props) {
   const { wide, screen } = props;
-  const parts = [PackChoice, BusinessName, ReceiptDetails, LogoStep];
+  const parts = [PackChoice, NameAndDetails];
 
   if (wide) {
     return (
@@ -80,6 +80,34 @@ function PackChoice({ copy, enabledPacks, answers, update, onLead, codeEntry }: 
   );
 }
 
+function NameAndDetails(props: Props) {
+  const { copy, answers } = props;
+  /* Open from the start for an owner who has already filled any of it. */
+  const [open, setOpen] = useState(
+    Boolean(answers.nameArabic || answers.phone || answers.address || answers.logo)
+  );
+
+  return (
+    <div className="space-y-6">
+      <BusinessName {...props} />
+      {open ? (
+        <div className="space-y-6 border-t border-border pt-6">
+          <ReceiptDetails {...props} />
+          <LogoStep {...props} />
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="min-h-[48px] text-start text-base text-muted-foreground underline decoration-border underline-offset-4"
+        >
+          {copy.receiptDetails.more}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function BusinessName({ copy, answers, update, showNameError }: Props) {
   const missing = showNameError && !(answers.nameLatin ?? "").trim();
 
@@ -98,13 +126,6 @@ function BusinessName({ copy, answers, update, showNameError }: Props) {
           onChange={(value) => update({ nameLatin: value })}
         />
       </Field>
-      <Field label={copy.name.arabic} help={copy.name.arabicHelp}>
-        <TextInput
-          dir="rtl"
-          value={answers.nameArabic ?? ""}
-          onChange={(value) => update({ nameArabic: value })}
-        />
-      </Field>
     </div>
   );
 }
@@ -112,10 +133,13 @@ function BusinessName({ copy, answers, update, showNameError }: Props) {
 function ReceiptDetails({ copy, answers, update }: Props) {
   return (
     <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-foreground">
-        {copy.receiptDetails.heading}
-      </h2>
-      <p className="text-base text-muted-foreground">{copy.receiptDetails.help}</p>
+      <Field label={copy.name.arabic} help={copy.name.arabicHelp}>
+        <TextInput
+          dir="rtl"
+          value={answers.nameArabic ?? ""}
+          onChange={(value) => update({ nameArabic: value })}
+        />
+      </Field>
       <Field label={copy.receiptDetails.phone}>
         <TextInput
           dir="ltr"
@@ -162,8 +186,8 @@ function LogoStep({ copy, answers, update }: Props) {
   }
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-foreground">{copy.logo.heading}</h2>
+    <div className="space-y-4">
+      <h3 className="text-base font-medium text-foreground">{copy.logo.heading}</h3>
       <p className="text-base leading-relaxed text-muted-foreground">
         {copy.logo.help}
       </p>

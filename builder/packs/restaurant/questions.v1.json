@@ -6,7 +6,7 @@
       "id": "rs_service",
       "type": "multi_choice",
       "label": {
-        "fr": "Comment servez-vous vos clients ?",
+        "fr": "Comment servez-vous vos clients ?",
         "ar": "كيف تخدم زبائنك؟",
         "en": "How do you serve your customers?"
       },
@@ -17,7 +17,7 @@
           "label": {
             "fr": "Sur place",
             "ar": "في المحل",
-            "en": "In the room"
+            "en": "Eat in"
           }
         },
         {
@@ -51,7 +51,7 @@
       "id": "rs_tables",
       "type": "number",
       "label": {
-        "fr": "Combien de tables avez-vous ?",
+        "fr": "Combien de tables avez-vous ?",
         "ar": "كم طاولة لديك؟",
         "en": "How many tables do you have?"
       },
@@ -66,77 +66,6 @@
       "maps_to": [
         {
           "path": "features.restaurant.tables"
-        }
-      ]
-    },
-    {
-      "id": "rs_open_orders",
-      "type": "yes_no",
-      "label": {
-        "fr": "Vos clients commandent-ils plusieurs fois pendant le repas ?",
-        "ar": "هل يطلب زبائنك أكثر من مرة أثناء الوجبة؟",
-        "en": "Do your customers order more than once during the meal?"
-      },
-      "help": {
-        "fr": "La table commande, recommande, puis paie une seule fois à la fin.",
-        "ar": "تطلب الطاولة، ثم تطلب مجدداً، ثم تدفع مرة واحدة في النهاية.",
-        "en": "The table orders, orders again, then pays once at the end."
-      },
-      "review": true,
-      "default": true,
-      "maps_to": [
-        {
-          "path": "features.restaurant.openOrders"
-        }
-      ]
-    },
-    {
-      "id": "rs_kitchen",
-      "type": "single_choice",
-      "label": {
-        "fr": "Comment la cuisine reçoit-elle les commandes ?",
-        "ar": "كيف يستلم المطبخ الطلبات؟",
-        "en": "How does the kitchen get the orders?"
-      },
-      "review": true,
-      "options": [
-        {
-          "id": "printed",
-          "label": {
-            "fr": "Sur un ticket imprimé",
-            "ar": "على تذكرة مطبوعة",
-            "en": "On a printed ticket"
-          }
-        },
-        {
-          "id": "spoken",
-          "label": {
-            "fr": "À l'oral",
-            "ar": "شفهياً",
-            "en": "Spoken"
-          }
-        }
-      ],
-      "default": "printed",
-      "maps_to": [
-        {
-          "path": "features.restaurant.kitchen"
-        }
-      ]
-    },
-    {
-      "id": "rs_options",
-      "type": "yes_no",
-      "label": {
-        "fr": "Vos plats ont-ils des options ou suppléments ?",
-        "ar": "هل لأطباقك خيارات أو إضافات؟",
-        "en": "Do your dishes have options or extras?"
-      },
-      "review": true,
-      "default": false,
-      "maps_to": [
-        {
-          "path": "features.restaurant.options"
         }
       ]
     }

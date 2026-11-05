@@ -3,86 +3,64 @@
   "version": 1,
   "questions": [
     {
-      "id": "wh_locations",
-      "type": "number",
-      "label": {
-        "fr": "Combien de lieux de stockage avez-vous ?",
-        "ar": "كم مكان تخزين لديك؟",
-        "en": "How many storage places do you have?"
-      },
-      "review": true,
-      "min": 1,
-      "max": 20,
-      "default": 1,
-      "maps_to": [{ "path": "features.warehouse.locations" }]
-    },
-    {
-      "id": "wh_in",
-      "type": "yes_no",
-      "label": {
-        "fr": "Voulez-vous enregistrer chaque entrée de marchandise par fournisseur ?",
-        "ar": "هل تريد تسجيل كل إدخال بضاعة حسب المورّد؟",
-        "en": "Do you want to record every delivery by supplier?"
-      },
-      "review": true,
-      "default": true,
-      "maps_to": [{ "path": "features.warehouse.recordEntries" }]
-    },
-    {
       "id": "wh_out",
       "type": "multi_choice",
       "label": {
-        "fr": "Où partent les marchandises qui sortent ?",
-        "ar": "إلى أين تذهب البضائع الخارجة؟",
-        "en": "Where do the goods going out end up?"
+        "fr": "Où partent vos marchandises ?",
+        "ar": "إلى أين تذهب بضائعك؟",
+        "en": "Where do your goods go?"
       },
       "review": true,
       "options": [
         {
           "id": "customers",
-          "label": { "fr": "Des clients", "ar": "زبائن", "en": "Customers" }
+          "label": {
+            "fr": "Chez des clients",
+            "ar": "إلى زبائن",
+            "en": "To customers"
+          }
         },
         {
           "id": "my_shops",
-          "label": { "fr": "Mes magasins", "ar": "محلاتي", "en": "My own shops" }
+          "label": {
+            "fr": "Dans mes magasins",
+            "ar": "إلى محلاتي",
+            "en": "To my shops"
+          }
         },
         {
           "id": "sites",
-          "label": { "fr": "Des chantiers", "ar": "أوراش", "en": "Building sites" }
+          "label": {
+            "fr": "Sur des chantiers",
+            "ar": "إلى أوراش",
+            "en": "To work sites"
+          }
         }
       ],
-      "default": ["customers"],
-      "maps_to": [{ "path": "features.warehouse.destinations" }]
-    },
-    {
-      "id": "wh_units",
-      "type": "multi_choice",
-      "label": {
-        "fr": "Dans quelles unités comptez-vous ?",
-        "ar": "بأي وحدات تحسب؟",
-        "en": "What units do you count in?"
-      },
-      "review": true,
-      "options": [
-        { "id": "piece", "label": { "fr": "Pièce", "ar": "حبة", "en": "Piece" } },
-        { "id": "case", "label": { "fr": "Carton", "ar": "كرتون", "en": "Case" } },
-        { "id": "kilo", "label": { "fr": "Kilo", "ar": "كيلو", "en": "Kilo" } },
-        { "id": "litre", "label": { "fr": "Litre", "ar": "لتر", "en": "Litre" } }
+      "default": [
+        "customers"
       ],
-      "default": ["piece", "case"],
-      "maps_to": [{ "path": "features.warehouse.units" }]
+      "maps_to": [
+        {
+          "path": "features.warehouse.destinations"
+        }
+      ]
     },
     {
       "id": "wh_sales",
       "type": "yes_no",
       "label": {
-        "fr": "Vendez-vous aussi directement depuis le dépôt ?",
-        "ar": "هل تبيع أيضاً مباشرة من المستودع؟",
-        "en": "Do you also sell straight from the warehouse?"
+        "fr": "Vendez-vous aussi depuis le dépôt ?",
+        "ar": "هل تبيع أيضاً من المستودع؟",
+        "en": "Do you also sell from the warehouse?"
       },
       "review": true,
       "default": false,
-      "maps_to": [{ "path": "features.warehouse.sellsDirect" }]
+      "maps_to": [
+        {
+          "path": "features.warehouse.sellsDirect"
+        }
+      ]
     }
   ]
 }

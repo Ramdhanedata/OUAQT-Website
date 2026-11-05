@@ -7,7 +7,7 @@ import {
   defaultConfiguration,
   packs,
 } from "@/app-ui/config";
-import { applyAnswers, common, interviewFor, isAsked, packBank, patchedAfterAnswer } from "./index";
+import { applyAnswers, common, interviewFor, isAsked, packBank, patchedAfterAnswer, withDefaults } from "./index";
 import type { Answers, Question } from "./bank";
 
 /*
@@ -106,38 +106,55 @@ describe("an owner who answers nothing", () => {
     expect(parsed.success, JSON.stringify(parsed.error?.issues)).toBe(true);
   });
 
-  it("is not asked about a credit limit when he sells nothing on credit", () => {
-    const limit = common.questions.find((q) => q.id === "c_credit_limit")!;
-    expect(isAsked(limit, { c_credit: false })).toBe(false);
-    expect(isAsked(limit, { c_credit: true })).toBe(true);
+  it("is asked how many tables only when he serves at tables", () => {
+    const tables = packBank("restaurant")!.questions.find((q) => q.id === "rs_tables")!;
+    expect(isAsked(tables, { rs_service: ["takeaway"] })).toBe(false);
+    expect(isAsked(tables, { rs_service: ["dine_in", "takeaway"] })).toBe(true);
+  });
+});
+
+describe("the interview", () => {
+  it.each(packs)("%s asks three questions at most", (pack) => {
+    expect(interviewFor(pack).length).toBeLessThanOrEqual(3);
+  });
+
+  it("asks a follow-up when its question was left as it opened", () => {
+    const questions = interviewFor("restaurant");
+    const asked = questions.filter((q) => isAsked(q, withDefaults(questions, {})));
+    expect(asked.map((q) => q.id)).toContain("rs_tables");
+  });
+
+  it("keeps the answer to that follow-up", () => {
+    const base = { ...defaultConfiguration("restaurant", "fr"), business: { nameLatin: "Test" } };
+    const filled = applyAnswers(base, interviewFor("restaurant"), { rs_tables: 24 });
+    expect(filled.features.restaurant?.tables).toBe(24);
   });
 });
 
 describe("a single answer", () => {
   it("turns the owner's words into the right shape", () => {
-    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
-    const filled = applyAnswers(base, interviewFor("pharmacy"), {
-      ph_expiry: true,
-      ph_expiry_alert: "6",
-      c_receipt: "none",
-      ph_search: ["name", "barcode"],
+    const base = { ...defaultConfiguration("restaurant", "fr"), business: { nameLatin: "Test" } };
+    const filled = applyAnswers(base, interviewFor("restaurant"), {
+      rs_service: ["dine_in", "delivery"],
+      rs_tables: 6,
+      c_credit: false,
     });
 
-    expect(filled.features.pharmacy?.expiryAlertMonths).toBe(6);
-    expect(filled.common.printedReceipt).toBe(false);
-    expect(filled.features.pharmacy?.search).toEqual(["name", "barcode"]);
+    expect(filled.features.restaurant?.service).toEqual(["dine_in", "delivery"]);
+    expect(filled.features.restaurant?.tables).toBe(6);
+    expect(filled.common.credit.enabled).toBe(false);
     expect(configurationSchema.safeParse(filled).success).toBe(true);
   });
 
   it("leaves a skipped question's field alone", () => {
-    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
-    const filled = applyAnswers(base, interviewFor("pharmacy"), {
-      ph_expiry: false,
-      ph_expiry_alert: "6",
+    const base = { ...defaultConfiguration("restaurant", "fr"), business: { nameLatin: "Test" } };
+    const filled = applyAnswers(base, interviewFor("restaurant"), {
+      rs_service: ["takeaway"],
+      rs_tables: 30,
     });
-    // The alert question is not asked, so the months keep the default rather
+    // The tables question is not asked, so the number keeps the default rather
     // than quietly recording a preference the owner never expressed.
-    expect(filled.features.pharmacy?.expiryAlertMonths).toBe(3);
+    expect(filled.features.restaurant?.tables).toBe(10);
   });
 
   it("keeps the till as it was for a pharmacy that is not conventionnée", () => {
@@ -194,15 +211,15 @@ describe("a single answer", () => {
 describe("an answer given after the AI read a sentence", () => {
   it("still reaches the software", () => {
     const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
-    /* The AI read "je fais des remises" on c_discount: its result is the whole configuration of that moment. */
-    const snapshot = { common: { ...base.common, discounts: true }, features: base.features };
+    /* The AI read a sentence earlier: its result is the whole configuration of that moment. */
+    const snapshot = { common: { ...base.common, lowStockAlert: false }, features: base.features };
     /* Then he answered the insurance question with the buttons. */
     const interview = { ph_insurance: true };
     const next = patchedAfterAnswer(snapshot, "pharmacy", "ph_insurance", interview);
     const features = next.features as typeof base.features;
     expect(features.pharmacy?.insurance?.enabled).toBe(true);
     /* And what the AI set is kept. */
-    expect((next.common as typeof base.common).discounts).toBe(true);
+    expect((next.common as typeof base.common).lowStockAlert).toBe(false);
   });
 
   it("leaves it alone for a question of another trade", () => {

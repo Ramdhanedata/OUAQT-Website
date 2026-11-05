@@ -7,14 +7,13 @@ export const en: BuilderCopy = {
   landing: {
     title: "Build the software for your shop",
     intro:
-      "Answer a few questions about your shop. You leave with your software, ready to install on a computer or to open on a phone.",
-    duration: "Under 5 minutes",
+      "Choose your business, answer two or three questions, and your software is ready on a computer or a phone.",
+    duration: "About 2 minutes",
     noAccount: "No account needed to start",
     steps: [
-      "Your shop, your name and your logo",
-      "A few questions about how you work",
-      "Your products and staff, if you have them to hand",
-      "Your serial number and the download",
+      "Your business and its name",
+      "Two or three questions",
+      "Your software, ready to open",
     ],
     start: "Start",
     resume: "Pick up where you left off",
@@ -37,15 +36,15 @@ export const en: BuilderCopy = {
 
   steps: {
     business: "Your shop",
-    questions: "Questions",
-    products: "Products and staff",
+    questions: "A few questions",
+    products: "Your products (optional)",
     serial: "Your software",
   },
 
   thanks: {
     title: "Thank you for choosing OUAQT",
-    body: "Thank you for your trust. Install your software on your computer by following the installation guide, or open it on your phone. We wish you a great experience.",
-    bodyNoShop: "Thank you for your trust. Install your software on your computer by following the installation guide, or open it on your phone. We wish you a great experience.",
+    body: "Open your software on your phone, or install it on your computer. All the best!",
+    bodyNoShop: "Open your software on your phone, or install it on your computer. All the best!",
     names: {
       pharmacy: "OUAQT Pharmacy",
       bakery: "OUAQT Bakery",
@@ -64,14 +63,14 @@ export const en: BuilderCopy = {
     pharmacy: "Pharmacy",
     bakery: "Bakery",
     restaurant: "Restaurant or cafe",
-    warehouse: "Warehouse and stock",
+    warehouse: "Warehouse",
     shop: "Shop or grocery",
     hotel: "Hotel or guest house",
-    transport: "Passenger and parcel transport",
-    wash: "Car or upholstery wash",
-    general: "Any other business: sales, stock and reports",
+    transport: "Transport",
+    wash: "Wash (cars, upholstery, carpets)",
+    general: "Another business",
     soon: "Coming soon",
-    other: "My business is not on this list",
+    other: "My business is not on the list",
   },
 
   lead: {
@@ -88,30 +87,29 @@ export const en: BuilderCopy = {
 
 
   name: {
-    heading: "Your business name",
-    latin: "In Latin letters",
-    latinHelp: "This is the name at the top of the receipt.",
-    arabic: "In Arabic, if you want",
-    arabicHelp: "It goes under the first name on the receipt.",
+    heading: "What is your business called?",
+    latin: "Business name",
+    latinHelp: "In Latin letters. It appears at the top of your receipts.",
+    arabic: "Name in Arabic",
+    arabicHelp: "It appears under the first name.",
     required: "Write your business name to continue.",
   },
 
   receiptDetails: {
-    heading: "What appears on the receipt",
-    help: "Both are optional. You can change them later.",
-    phone: "Your phone",
-    address: "Your address",
+    more: "Add an Arabic name, a phone, an address or a logo",
+    phone: "Phone",
+    address: "Address",
   },
 
   logo: {
-    heading: "Your logo",
-    help: "Optional. Take a photo or choose a file. It stays on your phone; only the prepared image is sent.",
+    heading: "Logo",
+    help: "Take a photo of it or choose an image.",
     choose: "Choose an image",
     replace: "Change the image",
     remove: "Remove the logo",
     working: "Preparing your logo",
-    colour: "On the screen",
-    mono: "On the printed receipt",
+    colour: "On screen",
+    mono: "On the receipt",
     errorType: "Choose a PNG, JPG or SVG image.",
     errorUnreadable: "This image could not be read. Try another one.",
     errorTooBig: "This image is too heavy even after preparing. Try another one.",
@@ -121,7 +119,7 @@ export const en: BuilderCopy = {
     live: "Live",
     expand: "Enlarge",
     shrink: "Make smaller",
-    hint: "This is your software itself: tap the products and buttons, everything works. The products and figures are examples.",
+    hint: "This is your real software: try the buttons. The products and figures are examples.",
     updated: "Updated: {section}",
     rotate: "Turn your phone sideways to see the screen larger.",
     actualSize: "Actual size",
@@ -137,23 +135,10 @@ export const en: BuilderCopy = {
   },
 
   interview: {
-    dontKnow: "I do not know",
-    explain: "Say it in my own words",
-    explainHelp: "Say it the way you would explain it to a new member of staff.",
-    send: "Send",
-    sending: "One moment",
-    noted: "That is not available yet. We have written it down.",
+    pickAny: "You can choose more than one.",
     yes: "Yes",
     no: "No",
     questionOf: "Question {current} of {total}",
-  },
-
-  summary: {
-    heading: "Check this before you carry on",
-    intro: "Here is what your software will do. You can change any of it later.",
-    edit: "Change",
-    business: "Your business",
-    answers: "Your answers",
   },
 
   products: {
@@ -241,7 +226,7 @@ export const en: BuilderCopy = {
 
   serial: {
     heading: "Your serial number",
-    intro: "Keep it. You will need it to open your software on each of your devices.",
+    intro: "Keep it: it opens your software on each of your devices.",
     copy: "Copy",
     copied: "Copied",
     share: "Share on WhatsApp",
@@ -263,7 +248,7 @@ export const en: BuilderCopy = {
     alsoWindows: "On Windows? Download for Windows",
     termsNote: "By downloading the software, you accept its {terms}.",
     termsLink: "terms of use",
-    keepNumber: "Your serial number. Keep it: it is for another device, a reinstall, or if the software asks for it.",
+    keepNumber: "Your serial number. Keep it: it opens your software on another device or after a reinstall.",
     windowsWarning:
       "Windows may show \"Windows protected your PC\". Click \"More info\", then \"Run anyway\".",
     macWarning: "Open the file, drag OUAQT into Applications, then right-click OUAQT and choose \"Open\".",

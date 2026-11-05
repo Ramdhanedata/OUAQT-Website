@@ -11,14 +11,13 @@ export const fr = {
   landing: {
     title: "Créez le logiciel de votre commerce",
     intro:
-      "Répondez à quelques questions sur votre commerce. Vous repartez avec votre logiciel, prêt à installer sur un ordinateur ou à ouvrir sur un téléphone.",
-    duration: "Moins de 5 minutes",
+      "Choisissez votre commerce, répondez à deux ou trois questions, et votre logiciel est prêt, sur ordinateur ou sur téléphone.",
+    duration: "Environ 2 minutes",
     noAccount: "Pas besoin de compte pour commencer",
     steps: [
-      "Votre commerce, votre nom et votre logo",
-      "Quelques questions sur votre façon de travailler",
-      "Vos produits et vos employés, si vous les avez sous la main",
-      "Votre numéro de série et le téléchargement",
+      "Votre commerce et son nom",
+      "Deux ou trois questions",
+      "Votre logiciel, prêt à ouvrir",
     ],
     start: "Commencer",
     resume: "Reprendre où vous en étiez",
@@ -42,16 +41,16 @@ export const fr = {
 
   steps: {
     business: "Votre commerce",
-    questions: "Questions",
-    products: "Produits et employés",
+    questions: "Quelques questions",
+    products: "Vos produits (facultatif)",
     serial: "Votre logiciel",
   },
 
   /* Where Continue was, once the last step has the serial: the end of the journey. */
   thanks: {
     title: "Merci d'avoir choisi OUAQT",
-    body: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur en suivant le guide d'installation, ou ouvrez-le sur votre téléphone. Nous vous souhaitons une excellente expérience.",
-    bodyNoShop: "Merci de votre confiance. Installez votre logiciel sur votre ordinateur en suivant le guide d'installation, ou ouvrez-le sur votre téléphone. Nous vous souhaitons une excellente expérience.",
+    body: "Ouvrez votre logiciel sur votre téléphone, ou installez-le sur votre ordinateur. Bon travail !",
+    bodyNoShop: "Ouvrez votre logiciel sur votre téléphone, ou installez-le sur votre ordinateur. Bon travail !",
     names: {
       pharmacy: "OUAQT Pharmacie",
       bakery: "OUAQT Boulangerie",
@@ -66,18 +65,18 @@ export const fr = {
   },
 
   packs: {
-    heading: "Quel est votre commerce ?",
+    heading: "Quel est votre commerce ?",
     pharmacy: "Pharmacie",
     bakery: "Boulangerie",
     restaurant: "Restaurant ou café",
-    warehouse: "Dépôt et stock",
+    warehouse: "Dépôt",
     shop: "Boutique ou épicerie",
     hotel: "Hôtel ou auberge",
-    transport: "Transport de voyageurs et de colis",
-    wash: "Lavage de voitures ou de meubles",
-    general: "Autre activité : ventes, stock et rapports",
+    transport: "Transport",
+    wash: "Lavage (voitures, meubles, tapis)",
+    general: "Autre activité",
     soon: "Bientôt disponible",
-    other: "Mon activité n'est pas dans la liste",
+    other: "Mon commerce n'est pas dans la liste",
   },
 
   lead: {
@@ -94,30 +93,29 @@ export const fr = {
 
 
   name: {
-    heading: "Le nom de votre commerce",
-    latin: "En lettres latines",
-    latinHelp: "C'est le nom qui apparaît en haut du reçu.",
-    arabic: "En arabe, si vous voulez",
-    arabicHelp: "Il s'ajoute sous le premier nom, sur le reçu.",
+    heading: "Comment s'appelle votre commerce ?",
+    latin: "Nom du commerce",
+    latinHelp: "En lettres latines. Il s'affiche en haut de vos reçus.",
+    arabic: "Nom en arabe",
+    arabicHelp: "Il s'affiche sous le premier nom.",
     required: "Écrivez le nom de votre commerce pour continuer.",
   },
 
   receiptDetails: {
-    heading: "Ce qui apparaît sur le reçu",
-    help: "Les deux sont facultatifs. Vous pourrez les changer plus tard.",
-    phone: "Votre téléphone",
-    address: "Votre adresse",
+    more: "Ajouter le nom en arabe, le téléphone, l'adresse ou le logo",
+    phone: "Téléphone",
+    address: "Adresse",
   },
 
   logo: {
-    heading: "Votre logo",
-    help: "Facultatif. Prenez-le en photo ou choisissez un fichier. Il reste sur votre téléphone, nous n'envoyons que l'image préparée.",
+    heading: "Logo",
+    help: "Prenez-le en photo ou choisissez une image.",
     choose: "Choisir une image",
     replace: "Changer l'image",
     remove: "Enlever le logo",
     working: "Préparation de votre logo",
-    colour: "Sur l'écran",
-    mono: "Sur le reçu imprimé",
+    colour: "À l'écran",
+    mono: "Sur le reçu",
     errorType: "Choisissez une image PNG, JPG ou SVG.",
     errorUnreadable: "Cette image n'a pas pu être lue. Essayez-en une autre.",
     errorTooBig: "Cette image est trop lourde même après préparation. Essayez-en une autre.",
@@ -127,7 +125,7 @@ export const fr = {
     live: "En direct",
     expand: "Agrandir",
     shrink: "Réduire",
-    hint: "C'est votre logiciel lui-même : touchez les produits et les boutons, tout fonctionne. Les produits et les chiffres sont des exemples.",
+    hint: "C'est votre vrai logiciel : essayez les boutons. Les produits et les chiffres sont des exemples.",
     updated: "Mis à jour : {section}",
     rotate: "Tournez votre téléphone pour voir l'écran en grand.",
     actualSize: "Taille réelle",
@@ -143,23 +141,10 @@ export const fr = {
   },
 
   interview: {
-    dontKnow: "Je ne sais pas",
-    explain: "Expliquer avec mes mots",
-    explainHelp: "Dites-le comme vous l'expliqueriez à un nouvel employé.",
-    send: "Envoyer",
-    sending: "Un instant",
-    noted: "Cette fonction n'est pas encore disponible. Nous l'avons notée.",
+    pickAny: "Vous pouvez en choisir plusieurs.",
     yes: "Oui",
     no: "Non",
     questionOf: "Question {current} sur {total}",
-  },
-
-  summary: {
-    heading: "Vérifiez avant de continuer",
-    intro: "Voici ce que votre logiciel fera. Vous pourrez tout changer plus tard.",
-    edit: "Modifier",
-    business: "Votre commerce",
-    answers: "Vos réponses",
   },
 
   products: {
@@ -247,7 +232,7 @@ export const fr = {
 
   serial: {
     heading: "Votre numéro de série",
-    intro: "Gardez-le. Il vous servira à ouvrir votre logiciel sur chacun de vos appareils.",
+    intro: "Gardez-le : il ouvre votre logiciel sur chacun de vos appareils.",
     copy: "Copier",
     copied: "Copié",
     share: "Partager sur WhatsApp",
@@ -270,7 +255,7 @@ export const fr = {
     alsoWindows: "Vous êtes sur Windows ? Télécharger pour Windows",
     termsNote: "En téléchargeant le logiciel, vous acceptez ses {terms}.",
     termsLink: "conditions d'utilisation",
-    keepNumber: "Votre numéro de série. Gardez-le : il sert pour un autre appareil, une réinstallation, ou si le logiciel vous le demande.",
+    keepNumber: "Votre numéro de série. Gardez-le : il ouvre votre logiciel sur un autre appareil ou après une réinstallation.",
     windowsWarning:
       "Windows peut afficher « Windows a protégé votre ordinateur ». Cliquez sur « Informations complémentaires », puis sur « Exécuter quand même ».",
     macWarning:

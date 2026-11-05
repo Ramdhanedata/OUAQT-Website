@@ -76,7 +76,6 @@ export default async function BuilderPage(props: Props) {
       startPack={startPack}
       askSerial={askSerial}
       supportWhatsapp={settings?.support_whatsapp ?? null}
-      maxDevices={builderTerms(settings).devices}
       installers={
         Object.fromEntries(
           packs.map((pack) => [pack, installersFor(settings, pack)])
