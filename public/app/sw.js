@@ -7,21 +7,21 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-b7d8e2977988";
+const CACHE = "ouaqt-phone-810fff583862";
 const FILES = [
   "./assets/cairo-arabic-BW4_w4rE.woff2",
   "./assets/cairo-latin-Br-HIwGC.woff2",
   "./assets/cairo-latin-ext-BzTkPeNP.woff2",
-  "./assets/index-Br5jRi2N.js",
-  "./assets/main-CC7HMOqP.js",
-  "./assets/main-CIpgl61i.css",
+  "./assets/index-Dr2k1a3d.js",
+  "./assets/main-DZpBWUPG.js",
+  "./assets/main-DedxnIiH.css",
   "./assets/pay-example-DgSWHWNK.webp",
-  "./assets/preload-CaI5hZj0.js",
+  "./assets/preload-DWON94Ot.js",
   "./assets/source-serif-4-latin-ext-iEVfbfSw.woff2",
   "./assets/source-serif-4-latin-l1vr9vou.woff2",
   "./assets/sqlite3-Con_VOcu.wasm",
   "./assets/sqlite3-opfs-async-proxy-Ck-yCayi.js",
-  "./assets/sqlite3-worker1-BXnajhSw.js",
+  "./assets/sqlite3-worker1-DuagxxLX.js",
   "./assets/xlsx-DZ8bO3Pv.js",
   "./icons/bakery-180.png",
   "./icons/bakery-192.png",
