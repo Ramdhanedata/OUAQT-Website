@@ -330,7 +330,7 @@ export const fr = {
     scan: "Scannez ce code avec l'appareil photo de votre téléphone. Votre commerce s'ouvre sans numéro à taper ; sur iPhone, après l'avoir ajouté à l'écran d'accueil.",
     iphone: "Sur iPhone : dans Safari, touchez le bouton Partager, puis « Sur l'écran d'accueil ». Le logiciel s'ouvre ensuite depuis son icône, et jamais dans Safari.",
     android: "Sur Android : dans Chrome, touchez « Installer » ou le menu ⋮, puis « Ajouter à l'écran d'accueil ».",
-    note: "Chaque téléphone et chaque ordinateur compte pour un appareil. Chacun garde ses propres ventes et son propre stock : ce qui est saisi sur l'un n'apparaît pas sur l'autre.",
+    note: "Chaque téléphone et chaque ordinateur compte pour un appareil. Ce qui est saisi sur l'un apparaît sur l'autre dès qu'ils ont internet. Chacun garde sa propre caisse.",
   },
   myAccount: {
     title: "Mon compte",

@@ -479,3 +479,23 @@ test depuis l'administration" and a `trial_granted_test_mode` audit event.
 The cookie is signed by the server and only set from the admin area, so an
 owner cannot obtain one.
 
+
+## Between a shop's devices
+
+`POST /api/sync` is the post box a shop's devices use to see each other's work.
+The device proves itself as at refresh, and sends and collects in one call:
+
+```json
+{ "businessId": "…", "deviceId": "…", "deviceToken": "…", "after": 0, "send": ["sealed base64"] }
+```
+
+```json
+{ "received": [{ "id": 1, "body": "sealed base64" }], "cursor": 1, "more": false, "gap": false }
+```
+
+Each message is sealed on the device (AES-GCM, key by PBKDF2 from the serial and
+the business id), so the server only checks that it looks sealed. `after` is the
+last message the device has written down: anything every other device has read is
+deleted, and nothing stays past 45 days. `gap` tells a device away longer than
+that to ask the others to send everything again. The rules are in
+`builder/sync/relay.ts`, with their tests beside them.

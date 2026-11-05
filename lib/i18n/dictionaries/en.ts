@@ -197,7 +197,7 @@ export const en = {
         },
         {
           q: "On how many devices can I use it, and what happens if a device breaks or is replaced?",
-          a: "Software you build yourself runs on {builderDevices} devices: each computer and each phone counts as one, and each keeps its own data. A project we install covers up to {devices} at the same site. Either way, each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
+          a: "Software you build yourself runs on {builderDevices} devices: each computer and each phone counts as one, and what is entered on one appears on the other. A project we install covers up to {devices} at the same site. Either way, each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
         },
         {
           q: "Where is my data stored?",
@@ -225,7 +225,7 @@ export const en = {
 
   legal: {
     updated: "Last updated",
-    updatedDate: "October 2026",
+    updatedDate: "5 November 2026",
     terms: {
       title: "Licence and terms of use",
       intro:
@@ -252,7 +252,7 @@ export const en = {
       },
       devices: {
         h: "Your devices",
-        b: "Your licence covers {devices} devices. Each computer and each phone counts as one separate device, in any mix: one computer and one phone, two computers or two phones. Each device works on its own and keeps its own data: what is entered on one does not appear on the other. If you change device, you release the old one from your account, up to the number of releases a year shown in your account. Beyond that, write to us and we will do it for you. Reinstalling the software on the same computer does not use up a device.",
+        b: "Your licence covers {devices} devices. Each computer and each phone counts as one separate device, in any mix: one computer and one phone, two computers or two phones. Each device works without internet and keeps all your data. As soon as they have internet, what is entered on one appears on the other. Each keeps its own till. If you change device, you release the old one from your account, up to the number of releases a year shown in your account. Beyond that, write to us and we will do it for you. Reinstalling the software on the same computer does not use up a device.",
       },
       refunds: {
         h: "Refunds",
@@ -267,8 +267,8 @@ export const en = {
         b: "You download the software from this site and install it yourself, following the installation guide shown on the download page. The first time it opens, Windows or macOS may ask you to confirm, because the software is not yet signed by Microsoft or Apple. The guide shows the steps: on Windows, \"More info\" then \"Run anyway\"; on a Mac, System Settings, Privacy & Security, then \"Open Anyway\". This confirmation is asked once, and it changes nothing about how the software works or how your data is kept. If you get stuck, write to us on WhatsApp and we will walk you through it. On an Android phone or an iPhone there is nothing to download: the software opens in the browser from your account, and you add it to your home screen. On an iPhone it opens from the home screen only, so it counts as one device. Clearing this site's data in the browser also erases the business saved on that phone: save a copy regularly from Settings.",
       },
       selfData: {
-        h: "Your data does not reach us",
-        b: "Your sales, your stock, your movements and your customers' accounts stay on your devices. Our servers do not receive them, and no part of the software sends them. What we hold is limited to what it takes to build your software and manage your licence: your account, your answers to the questions, the configuration that comes out of them, your logo, the product list you imported at the start, your serial numbers, your devices and your payments.",
+        h: "Your data stays yours",
+        b: "Your sales, your stock, your movements and your customers' accounts are kept on your devices. When you have several devices, they exchange them over the internet: this data passes through our servers encrypted, with a key derived from your serial number. We do not read it or use it, and it is deleted as soon as your other devices have received it, after 45 days at most. Because we keep your serial numbers, we could technically decrypt it; we do not. Beyond that, what we hold is limited to what it takes to build your software and manage your licence: your account, your answers to the questions, the configuration that comes out of them, your logo, the product list you imported at the start, your serial numbers, your devices and your payments.",
       },
       selfSupport: {
         h: "What the licence includes",
@@ -362,8 +362,8 @@ export const en = {
         b: "To build your software and manage your licence, we keep: the account you open, your answers to the questions, the configuration that comes out of them, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the devices you activate and your payments. When you download the software, we also keep, for a few hours, a scrambled mark of your internet connection (never the address itself) and the system you chose, so the software recognises its download and opens without asking for your number. The mark is erased as soon as it has been used.",
       },
       neverReceived: {
-        h: "What we never receive",
-        b: "Once the software is installed, your sales, your stock, your movements and your customers' accounts stay on your devices. Our servers do not receive them and no part of the software sends them. The product list you import at the start is there to prepare your software; what you sell afterwards never reaches us.",
+        h: "Your sales and your customers",
+        b: "Once the software is installed, your sales, your stock, your movements and your customers' accounts are kept on your devices. When you have several devices, they exchange them over the internet: this data passes through our servers encrypted, with a key derived from your serial number. We do not read it or use it, and it is deleted as soon as your other devices have received it, after 45 days at most. Because we keep your serial numbers, we could technically decrypt it; we do not. The product list you import at the start is there to prepare your software.",
       },
       ai: {
         h: "Artificial intelligence",
@@ -508,7 +508,7 @@ export const en = {
     impactOffline: "No internet",
     impactOfflineLabel: "needed for the everyday work",
     impactData: "Your data",
-    impactDataLabel: "stays on your devices",
+    impactDataLabel: "is kept on your devices",
     impactTrial: "{days} days free",
     impactTrialNoDays: "Free trial",
     impactTrialLabel: "to try everything, with nothing to pay",
@@ -554,7 +554,7 @@ export const en = {
       { title: "Customer credit", body: "Sales on credit and what each customer owes you, without a notebook." },
       { title: "Closing the till", body: "At the end of the day or the shift: what should be in the till, and what is." },
       { title: "Receipts for your trade", body: "The table for a restaurant, the room and dates for a hotel, the seat and departure for a ticket." },
-      { title: "On your phone too", body: "Your software opens on a computer or on a phone, with no app store. Each counts as one device and keeps its own data." },
+      { title: "On your phone too", body: "Your software opens on a computer or on a phone, with no app store. Each counts as one device, and what you do on one appears on the other." },
       { title: "French and Arabic", body: "The software speaks your staff's language, receipts included." },
     ],
 
@@ -594,7 +594,7 @@ export const en = {
     whyHeading: "Made for local small and medium businesses, and for the way they work.",
     why: [
       { title: "No internet needed", body: "The software works on your devices. Internet is only for installing, updating and paying for the licence." },
-      { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts never leave your devices. We never receive them." },
+      { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts are kept on your devices. Between them they travel encrypted, and we do not read them." },
       { title: "Local payment", body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year or every six months. You see the amount before you pay." },
       { title: "A team that answers", body: "A question or a problem: write to us on WhatsApp. We usually answer the same day, in French or Arabic." },
     ],
@@ -630,9 +630,9 @@ export const en = {
     faq1: "Does the software work without internet?",
     faq1Body: "Yes. It installs on the business computer or opens on your phone, and works there. Internet is only for installing, updating and paying.",
     faq2: "Who sees my sales and my customers?",
-    faq2Body: "Only you. Your sales, your stock and your customers' accounts stay on your devices. We never receive them.",
+    faq2Body: "Only you. Your sales, your stock and your customers' accounts are kept on your devices. Between your devices they pass encrypted through our servers, which do not read them and delete them once delivered.",
     faq3: "How many devices can I use it on?",
-    faq3Body: "Two, computers or phones: for example the shop computer and your phone. Each counts as one device, works without internet and keeps its own data: what is entered on one does not appear on the other.",
+    faq3Body: "Two, computers or phones: for example the shop computer and your phone. Each counts as one device and works without internet. As soon as they have internet, what is entered on one appears on the other.",
     faq4: "What happens when the free trial ends?",
     faq4Body: "The software stops and shows the payment window. Your data stays on your device, and you can save a copy of it from that window. As soon as the licence is paid, it opens again by itself.",
     faq5: "What if my trade is not on the list?",

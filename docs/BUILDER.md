@@ -18,10 +18,18 @@ that app, validated against a versioned schema before it is stored. When the AI
 is used it only proposes changes to that configuration, and a rejected proposal
 falls back to the question's default.
 
-The second rule follows from the first: **the server never holds the shop's
-trade**. No sales, stock movements, customer credit, cash closes or backups.
-Those live only on the owner's computers. `builder/db/no-business-data.test.ts`
+The second rule follows from the first: **the server never keeps the shop's
+trade**. No sales, stock movements, customer credit, cash closes or backups as
+records. Those live on the owner's devices. `builder/db/no-business-data.test.ts`
 reads every migration and fails the build if a place to put them appears.
+
+The one thing that passes through (decided by Adel, 2026-11-05) is what a shop's
+devices send each other: sealed on the device with a key from the shop's serial,
+held in `sync_messages` only until the others have it, 45 days at most. See
+`builder/sync/relay.ts`. It works over the internet only for now: with none, each
+device keeps working and catches up later. Direct Wi-Fi between a computer and a
+phone would need a real Android app, because a browser may not reach a computer
+on the local network.
 
 ## Where things live
 

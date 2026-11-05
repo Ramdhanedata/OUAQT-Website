@@ -188,7 +188,7 @@ export const fr: Dictionary = {
         },
         {
           q: "Sur combien d'appareils puis-je l'utiliser, et que se passe-t-il si un appareil tombe en panne ou est remplacé ?",
-          a: "Le logiciel que vous créez vous-même tourne sur {builderDevices} appareils : chaque ordinateur et chaque téléphone compte pour un, et chacun garde ses propres données. Un projet que nous installons couvre {devices} postes au maximum, sur le même site. Dans les deux cas, chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
+          a: "Le logiciel que vous créez vous-même tourne sur {builderDevices} appareils : chaque ordinateur et chaque téléphone compte pour un, et ce qui est saisi sur l'un apparaît sur l'autre. Un projet que nous installons couvre {devices} postes au maximum, sur le même site. Dans les deux cas, chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
         },
         {
           q: "Où sont stockées mes données ?",
@@ -216,7 +216,7 @@ export const fr: Dictionary = {
 
   legal: {
     updated: "Dernière mise à jour",
-    updatedDate: "Octobre 2026",
+    updatedDate: "5 novembre 2026",
     terms: {
       title: "Licence et conditions d'utilisation",
       intro:
@@ -243,7 +243,7 @@ export const fr: Dictionary = {
       },
       devices: {
         h: "Vos appareils",
-        b: "Votre licence couvre {devices} appareils. Chaque ordinateur et chaque téléphone compte pour un appareil distinct, quel que soit le mélange : un ordinateur et un téléphone, deux ordinateurs ou deux téléphones. Chaque appareil fonctionne de son côté et garde ses propres données : ce qui est saisi sur l'un n'apparaît pas sur l'autre. Si vous changez d'appareil, vous libérez l'ancien depuis votre compte, dans la limite d'un nombre de libérations par an indiqué dans votre compte. Au-delà, écrivez-nous et nous le faisons pour vous. Réinstaller le logiciel sur le même ordinateur ne consomme pas d'appareil.",
+        b: "Votre licence couvre {devices} appareils. Chaque ordinateur et chaque téléphone compte pour un appareil distinct, quel que soit le mélange : un ordinateur et un téléphone, deux ordinateurs ou deux téléphones. Chaque appareil fonctionne sans internet et garde toutes vos données. Dès qu'ils ont internet, ce qui est saisi sur l'un apparaît sur l'autre. Chacun garde sa propre caisse. Si vous changez d'appareil, vous libérez l'ancien depuis votre compte, dans la limite d'un nombre de libérations par an indiqué dans votre compte. Au-delà, écrivez-nous et nous le faisons pour vous. Réinstaller le logiciel sur le même ordinateur ne consomme pas d'appareil.",
       },
       refunds: {
         h: "Remboursement",
@@ -258,8 +258,8 @@ export const fr: Dictionary = {
         b: "Vous téléchargez le logiciel sur ce site et vous l'installez vous-même, en suivant le guide d'installation affiché sur la page de téléchargement. À la première ouverture, Windows ou macOS peut vous demander une confirmation, parce que le logiciel n'est pas encore signé par Microsoft ou par Apple. Le guide montre comment faire : sur Windows, « Informations complémentaires » puis « Exécuter quand même » ; sur Mac, Réglages Système, Confidentialité et sécurité, puis « Ouvrir quand même ». Cette confirmation n'est demandée qu'une fois et ne change rien au fonctionnement du logiciel ni à la façon dont vos données sont gardées. Si vous êtes bloqué, écrivez-nous sur WhatsApp et nous vous guidons. Sur un téléphone Android ou un iPhone, il n'y a rien à télécharger : le logiciel s'ouvre dans le navigateur depuis votre compte, et vous l'ajoutez à l'écran d'accueil. Sur iPhone, il s'ouvre uniquement depuis l'écran d'accueil, et compte ainsi pour un seul appareil. Effacer les données de ce site dans le navigateur efface aussi le commerce enregistré sur ce téléphone : enregistrez régulièrement une copie depuis Réglages.",
       },
       selfData: {
-        h: "Vos données ne nous parviennent pas",
-        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos appareils. Nos serveurs ne les reçoivent pas, et aucune partie du logiciel ne les envoie. Ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, vos réponses aux questions, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos appareils et vos paiements.",
+        h: "Vos données restent les vôtres",
+        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients sont gardés sur vos appareils. Quand vous avez plusieurs appareils, ils se les échangent par internet : ces données passent par nos serveurs chiffrées, avec une clé tirée de votre numéro de série. Nous ne les lisons pas, nous ne les utilisons pas, et elles sont effacées dès que vos autres appareils les ont reçues, au plus tard après 45 jours. Comme nous conservons vos numéros de série, nous pourrions techniquement les déchiffrer ; nous ne le faisons pas. Par ailleurs, ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, vos réponses aux questions, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos appareils et vos paiements.",
       },
       selfSupport: {
         h: "Ce que la licence comprend",
@@ -353,8 +353,8 @@ export const fr: Dictionary = {
         b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les appareils que vous activez et vos paiements. Quand vous téléchargez le logiciel, nous gardons aussi, pendant quelques heures, une marque brouillée de votre connexion à internet (jamais l'adresse elle-même) et le système choisi, pour que le logiciel reconnaisse son téléchargement et s'ouvre sans vous demander votre numéro. Cette marque est effacée dès qu'elle a servi.",
       },
       neverReceived: {
-        h: "Ce que nous ne recevons jamais",
-        b: "Une fois le logiciel installé, vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos appareils. Nos serveurs ne les reçoivent pas et aucune partie du logiciel ne les envoie. La liste de produits que vous importez au départ sert à préparer votre logiciel ; ce que vous vendez ensuite ne nous parvient pas.",
+        h: "Vos ventes et vos clients",
+        b: "Une fois le logiciel installé, vos ventes, votre stock, vos mouvements et les comptes de vos clients sont gardés sur vos appareils. Quand vous avez plusieurs appareils, ils se les échangent par internet : ces données passent par nos serveurs chiffrées, avec une clé tirée de votre numéro de série. Nous ne les lisons pas, nous ne les utilisons pas, et elles sont effacées dès que vos autres appareils les ont reçues, au plus tard après 45 jours. Comme nous conservons vos numéros de série, nous pourrions techniquement les déchiffrer ; nous ne le faisons pas. La liste de produits que vous importez au départ sert à préparer votre logiciel.",
       },
       ai: {
         h: "L'intelligence artificielle",
@@ -503,7 +503,7 @@ export const fr: Dictionary = {
     impactOffline: "Sans internet",
     impactOfflineLabel: "pour le travail de tous les jours",
     impactData: "Vos données",
-    impactDataLabel: "restent sur vos appareils",
+    impactDataLabel: "sont gardées sur vos appareils",
     impactTrial: "{days} jours gratuits",
     impactTrialNoDays: "Essai gratuit",
     impactTrialLabel: "pour tout essayer, sans rien payer",
@@ -549,7 +549,7 @@ export const fr: Dictionary = {
       { title: "Le crédit client", body: "Les ventes à crédit et ce que chaque client vous doit, sans cahier." },
       { title: "La clôture de caisse", body: "À la fin de la journée ou du poste : ce qui devait être en caisse, et ce qui y est." },
       { title: "Des reçus à votre métier", body: "La table pour un restaurant, la chambre et les dates pour un hôtel, la place et le départ pour un billet." },
-      { title: "Sur votre téléphone aussi", body: "Votre logiciel s'ouvre sur un ordinateur ou sur un téléphone, sans passer par un store. Chacun compte pour un appareil et garde ses propres données." },
+      { title: "Sur votre téléphone aussi", body: "Votre logiciel s'ouvre sur un ordinateur ou sur un téléphone, sans passer par un store. Chacun compte pour un appareil, et ce que vous faites sur l'un apparaît sur l'autre." },
       { title: "Français et arabe", body: "Le logiciel parle la langue de votre équipe, reçus compris." },
     ],
 
@@ -589,7 +589,7 @@ export const fr: Dictionary = {
     whyHeading: "Pensé pour les PME d'ici, et pour leur façon de travailler.",
     why: [
       { title: "Sans internet", body: "Le logiciel travaille sur vos appareils. Internet ne sert qu'à l'installation, aux mises à jour et au paiement de la licence." },
-      { title: "Vos données restent chez vous", body: "Vos ventes, votre stock et les comptes de vos clients ne quittent pas vos appareils. Nous ne les recevons jamais." },
+      { title: "Vos données restent chez vous", body: "Vos ventes, votre stock et les comptes de vos clients sont gardés sur vos appareils. Entre eux, ils voyagent chiffrés, et nous ne les lisons pas." },
       { title: "Un paiement d'ici", body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an ou tous les six mois. Vous voyez le montant avant de payer." },
       { title: "Une équipe qui répond", body: "Une question, un souci : écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe." },
     ],
@@ -625,9 +625,9 @@ export const fr: Dictionary = {
     faq1: "Le logiciel marche-t-il sans internet ?",
     faq1Body: "Oui. Il s'installe sur l'ordinateur de l'entreprise ou s'ouvre sur votre téléphone, et travaille là. Internet ne sert qu'à l'installation, aux mises à jour et au paiement.",
     faq2: "Qui voit mes ventes et mes clients ?",
-    faq2Body: "Vous seul. Vos ventes, votre stock et les comptes de vos clients restent sur vos appareils. Nous ne les recevons jamais.",
+    faq2Body: "Vous seul. Vos ventes, votre stock et les comptes de vos clients sont gardés sur vos appareils. Entre vos appareils, ils passent chiffrés par nos serveurs, qui ne les lisent pas et les effacent après livraison.",
     faq3: "Sur combien d'appareils puis-je l'utiliser ?",
-    faq3Body: "Deux, ordinateurs ou téléphones : par exemple l'ordinateur de la boutique et votre téléphone. Chacun compte pour un appareil, fonctionne sans internet et garde ses propres données : ce qui est saisi sur l'un n'apparaît pas sur l'autre.",
+    faq3Body: "Deux, ordinateurs ou téléphones : par exemple l'ordinateur de la boutique et votre téléphone. Chacun compte pour un appareil et fonctionne sans internet. Dès qu'ils ont internet, ce qui est saisi sur l'un apparaît sur l'autre.",
     faq4: "Que se passe-t-il à la fin de l'essai gratuit ?",
     faq4Body: "Le logiciel s'arrête et affiche la fenêtre de paiement. Vos données restent sur votre appareil, et vous pouvez en enregistrer une copie depuis cette fenêtre. Dès que la licence est payée, il se rouvre tout seul.",
     faq5: "Et si mon métier n'est pas dans la liste ?",

@@ -320,7 +320,7 @@ export const en: BuilderCopy = {
     scan: "Scan this code with your phone's camera. Your business opens with no number to type; on an iPhone, after adding it to your home screen.",
     iphone: "On iPhone: in Safari, tap the Share button, then \"Add to Home Screen\". The software then opens from its icon, never in Safari.",
     android: "On Android: in Chrome, tap \"Install\" or the ⋮ menu, then \"Add to Home screen\".",
-    note: "Each phone and each computer counts as one device. Each keeps its own sales and its own stock: what is entered on one does not appear on the other.",
+    note: "Each phone and each computer counts as one device. What is entered on one appears on the other as soon as they have internet. Each keeps its own till.",
   },
   myAccount: {
     title: "My account",
