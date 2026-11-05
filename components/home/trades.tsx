@@ -37,27 +37,35 @@ export function Trades({
     <section id="metiers" className="scroll-mt-20 border-t border-border py-20 sm:py-28">
       <Container>
         <FadeIn className="max-w-2xl">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{home.tradesEyebrow}</p>
-          <h2 className="mt-5 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <p className="eyebrow">{home.tradesEyebrow}</p>
+          <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {home.tradesHeading}
           </h2>
-          <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{home.tradesBody}</p>
+          <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">{home.tradesBody}</p>
         </FadeIn>
 
-        <ul className="mt-12 grid gap-x-10 sm:grid-cols-2">
+        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {ordered.map((pack) => {
             const open = enabledPacks.includes(pack);
             const Icon = packIcons[pack];
             return (
-              <li key={pack} className="flex gap-4 border-t border-border py-6">
-                <Icon className="mt-1 h-5 w-5 shrink-0 text-app-gold-ink" strokeWidth={1.75} />
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-lg font-medium text-foreground">
-                    {dict.packLabels[pack]}
-                    {open ? null : <span className="ms-2 text-sm font-normal text-muted-foreground">· {home.tradesSoon}</span>}
-                  </h3>
-                  <p className="mt-1 text-base leading-relaxed text-muted-foreground">{home.tradeLines[pack]}</p>
-                  <div className="mt-2 flex flex-wrap items-center gap-x-5">
+              <li
+                key={pack}
+                className="flex flex-col rounded-3xl border border-border bg-surface p-6 transition-shadow duration-300 hover:shadow-card"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-foreground text-background">
+                    <Icon className="h-5 w-5" strokeWidth={1.75} />
+                  </span>
+                  {open ? null : (
+                    <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">{home.tradesSoon}</span>
+                  )}
+                </div>
+                <div className="mt-5 min-w-0 flex-1">
+                  <h3 className="text-lg font-semibold tracking-tight text-foreground">{dict.packLabels[pack]}</h3>
+                  <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{home.tradeLines[pack]}</p>
+                </div>
+                  <div className="mt-4 flex flex-wrap items-center gap-x-5 border-t border-border pt-2">
                     {open ? (
                       <a
                         href={packHrefs[pack]}
@@ -83,13 +91,12 @@ export function Trades({
                       {home.tradesLearnMore}
                     </a>
                   </div>
-                </div>
               </li>
             );
           })}
         </ul>
 
-        <div className="mt-4 flex flex-col gap-2 border-t border-border pt-6 sm:flex-row sm:items-baseline sm:gap-4">
+        <div className="mt-4 flex flex-col gap-2 rounded-3xl border border-dashed border-foreground/20 p-6 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
           <p className="text-base leading-relaxed text-muted-foreground">
             <span className="font-medium text-foreground">{home.tradesOther}</span>
             {" · "}

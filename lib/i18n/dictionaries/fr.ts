@@ -485,16 +485,15 @@ export const fr: Dictionary = {
 
   builderHome: {
     heroEyebrow: "Logiciels de gestion pour les PME",
-    heroHeading: "Le logiciel de gestion de votre entreprise, prêt en quelques minutes.",
-    heroBody: "OUAQT est une startup qui équipe les petites et moyennes entreprises. Avec le Builder, vous décrivez votre activité et vous repartez avec votre logiciel de caisse, de stock et de rapports, sur vos propres ordinateurs et téléphones.",
+    heroHeading: "Gérez votre entreprise sur ordinateur et sur téléphone.",
+    heroBody: "Avec le Builder, vous décrivez votre activité et vous repartez en quelques minutes avec votre caisse, votre stock et vos rapports. Le même logiciel sur l'ordinateur de la boutique et sur votre téléphone, même sans internet.",
     heroPrimary: "Créer mon logiciel",
     heroSecondary: "Essayer la démo",
     heroReassurance: "Téléphone ou ordinateur · Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
     heroReassuranceNoTrial: "Téléphone ou ordinateur · Sans internet · Vos données restent chez vous",
-    heroShotAlt: "L'écran de caisse d'un café dans un logiciel OUAQT : une commande en cours, son total et le paiement.",
+    heroShotAlt: "L'écran de caisse d'un café dans un logiciel OUAQT, sur ordinateur : une commande en cours, son total et le paiement.",
+    heroPhoneAlt: "Le même café sur un téléphone : la carte en liste, les commandes en attente et les onglets en bas.",
     heroChipReady: "Prêt en moins de 5 minutes",
-    heroStickerTop: "moins de",
-    heroStickerValue: "5 min",
 
     impactMinutes: "Moins de 5 minutes",
     impactMinutesLabel: "pour créer votre logiciel",
@@ -539,6 +538,44 @@ export const fr: Dictionary = {
       wash: "Station de lavage Al Baraka",
       general: "Atelier Nour",
     },
+
+    tourEyebrow: "Comment il travaille",
+    tourHeading: "Une journée de travail, sur l'ordinateur comme sur le téléphone.",
+    tourBody: "Les mêmes écrans, adaptés à chaque appareil. Voici une épicerie, de la première vente à la fin de la journée.",
+    tourSteps: [
+      {
+        title: "Encaissez",
+        body: "Touchez les produits, le ticket se remplit. Espèces, application ou crédit, puis le reçu.",
+        computerAlt: "Une vente en cours sur ordinateur : trois produits dans le ticket et le bouton Encaisser.",
+        phoneAlt: "La même vente sur téléphone : le ticket, son total et le paiement.",
+      },
+      {
+        title: "Suivez le stock",
+        body: "Il baisse à chaque vente, et les produits qui vont manquer sont signalés avant la rupture.",
+        computerAlt: "L'écran du stock sur ordinateur : les produits, leurs quantités et le stock faible signalé.",
+        phoneAlt: "Le stock sur téléphone, avec les produits et le stock faible signalé.",
+      },
+      {
+        title: "Fermez la journée",
+        body: "Le revenu du jour, le nombre de ventes, le plus vendu et chaque mode de paiement. À imprimer ou en PDF.",
+        computerAlt: "La fenêtre de fin de journée sur ordinateur : revenu total, ventes et paiements.",
+        phoneAlt: "La fin de journée sur téléphone, avec l'impression et le PDF.",
+      },
+      {
+        title: "Lisez vos chiffres",
+        body: "Le jour, la semaine ou le mois, les meilleures ventes, et l'export pour Excel.",
+        computerAlt: "Les rapports sur ordinateur : chiffre d'affaires, ventes et les sept derniers jours.",
+        phoneAlt: "Les rapports sur téléphone : les sept derniers jours et les plus vendus.",
+      },
+    ],
+    tourPause: "Mettre en pause",
+    tourPlay: "Lire",
+    tourTogetherHeading: "Deux écrans, un seul commerce.",
+    tourTogether: [
+      { title: "Ce que l'un saisit, l'autre le voit", body: "Une vente faite à la boutique apparaît sur votre téléphone dès que les deux ont internet." },
+      { title: "Chacun travaille sans internet", body: "Sans connexion, chaque appareil continue d'encaisser, puis rattrape l'autre au retour d'internet." },
+      { title: "Sans passer par un store", body: "Sur téléphone, le logiciel s'ouvre depuis un lien et se pose sur l'écran d'accueil." },
+    ],
 
     featuresEyebrow: "Dans chaque logiciel",
     featuresHeading: "Tout ce qu'il faut pour tenir votre entreprise au quotidien.",

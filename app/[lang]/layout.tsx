@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Source_Serif_4, Cairo } from "next/font/google";
+import { Source_Serif_4, Cairo, Geist } from "next/font/google";
 import "../globals.css";
 import { Navbar } from "@/components/navbar";
 import { Footer } from "@/components/footer";
@@ -16,18 +16,26 @@ import { pageMetadata } from "@/lib/seo/page-metadata";
 import { seoKeywords } from "@/lib/seo/keywords";
 
 /*
- * Source Serif 4 stands in for a transitional serif in the style of
- * Copernicus or Tiempos. Those are commercially licensed and cannot be
- * redistributed, so this is the closest freely licensed match: same
- * transitional structure, moderate contrast, and a full variable weight axis.
+ * The site reads in Geist, a clean modern sans with a variable weight axis,
+ * so French and English sit beside the Arabic's Cairo, also a sans.
  *
- * TODO(adel): if you buy a licence for Tiempos or similar, swap this for
- * next/font/local and point it at the woff2 files. Nothing else changes.
+ * Source Serif 4 stays loaded for the one thing that is the app's and not the
+ * site's: the receipt drawn in the builder, which uses the app's own serif.
+ * It is not preloaded, so a page that draws no receipt never fetches it.
+ * To bring the serif back for the whole site, put `font-serif` back on
+ * <body> below: nothing else changes.
  */
+const sans = Geist({
+  subsets: ["latin", "latin-ext"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
 const serif = Source_Serif_4({
   subsets: ["latin", "latin-ext"],
   variable: "--font-serif",
   display: "swap",
+  preload: false,
 });
 
 /*
@@ -178,10 +186,10 @@ export default async function RootLayout(props: Props) {
          properties inherit downward only, so declaring them on <body> left
          var(--font-arabic) empty for any rule targeting <html> and Arabic
          silently fell back to the Latin serif. */
-      className={`${serif.variable} ${arabic.variable}`}
+      className={`${sans.variable} ${serif.variable} ${arabic.variable}`}
     >
       <body
-        className={`${rtl ? "font-arabic" : "font-serif"} antialiased`}
+        className={`${rtl ? "font-arabic" : "font-sans"} antialiased`}
       >
         {/* Marks the page as scripted before anything paints, so the scroll
             reveals only hide content when JavaScript can bring it back. */}

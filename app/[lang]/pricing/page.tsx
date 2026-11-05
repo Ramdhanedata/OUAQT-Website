@@ -50,7 +50,7 @@ export default async function PricingPage(props: Props) {
       <Section className="pb-12 pt-32 sm:pb-16 sm:pt-40">
         <Container>
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            <p className="eyebrow">
               {p.eyebrow}
             </p>
             <h1 className="mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
@@ -73,7 +73,7 @@ export default async function PricingPage(props: Props) {
       <Section className="pb-0 sm:pb-0">
         <Container>
           <FadeIn>
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            <p className="eyebrow">
               {p.customTrack.eyebrow}
             </p>
             <h2 className="mt-4 max-w-3xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">

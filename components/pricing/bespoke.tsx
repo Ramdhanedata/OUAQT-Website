@@ -16,7 +16,7 @@ export function Bespoke({ dict, lang }: { dict: Dictionary; lang: Locale }) {
     <Section className="border-t border-border py-16 sm:py-20">
       <Container>
         <FadeIn className="max-w-2xl">
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow">
             {b.eyebrow}
           </p>
           <h2 className="mt-5 text-balance text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">

@@ -37,8 +37,8 @@ export function BuilderFaq({ dict }: { dict: Dictionary }) {
 
       <Container className="grid gap-10 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-16">
         <div>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{home.faqEyebrow}</p>
-          <h2 className="mt-5 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <p className="eyebrow">{home.faqEyebrow}</p>
+          <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {home.faqHeading}
           </h2>
         </div>

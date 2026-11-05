@@ -5,6 +5,7 @@ import { BuilderHero } from "@/components/home/builder-hero";
 import { BuilderImpact } from "@/components/home/builder-impact";
 import { BuilderProduct } from "@/components/home/builder-product";
 import { CustomPath } from "@/components/home/custom-path";
+import { DeviceTour, type TourCopy } from "@/components/home/device-tour";
 import { Features } from "@/components/home/features";
 import { PricingTeaser } from "@/components/home/pricing-teaser";
 import { Trades } from "@/components/home/trades";
@@ -18,6 +19,13 @@ import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref, packRouteId } from "@/lib/i18n/routes";
 import { softwareApplicationData } from "@/lib/seo/software-application";
+import type { Dictionary } from "@/lib/i18n";
+
+/* The tour's own words, so the whole dictionary does not travel to the browser with it. */
+function tourCopy(dict: Dictionary): TourCopy {
+  const { tourEyebrow, tourHeading, tourBody, tourSteps, tourPause, tourPlay, tourTogetherHeading, tourTogether } = dict.builderHome;
+  return { tourEyebrow, tourHeading, tourBody, tourSteps, tourPause, tourPlay, tourTogetherHeading, tourTogether };
+}
 
 /*
  * The home page of a company with one product and a second trade.
@@ -58,6 +66,7 @@ export default async function Home(props: { params: Promise<{ lang: Locale }> })
       <JsonLd data={softwareApplicationData(params.lang, dict)} />
       <BuilderHero dict={dict} lang={params.lang} trialDays={builderTerms(settings).trialDays} />
       <BuilderImpact dict={dict} trialDays={builderTerms(settings).trialDays} />
+      <DeviceTour home={tourCopy(dict)} lang={params.lang} />
       <BuilderProduct dict={dict} lang={params.lang} demoPacks={enabled.length > 0 ? enabled : [...packs]} />
       <Features dict={dict} />
       <Trades dict={{ builderHome: dict.builderHome, packLabels: dict.packLabels }} enabledPacks={enabled} packHrefs={packHrefs} packPages={packPages} />

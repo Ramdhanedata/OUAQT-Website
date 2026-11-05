@@ -60,9 +60,89 @@ body {
     text-wrap: balance;
   }
 
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
   .container-px {
     @apply px-6 sm:px-8 lg:px-12;
   }
+
+  /* A label above a section heading: small, quiet, in the gold that reads on ivory. */
+  .eyebrow {
+    @apply inline-flex items-center gap-2 text-sm font-medium text-app-gold-ink;
+  }
+
+  /* A soft warm light behind the device pictures. */
+  .glow-gold {
+    background: radial-gradient(closest-side, rgba(201, 169, 97, 0.38), rgba(201, 169, 97, 0.12) 55%, transparent 100%);
+  }
+
+  /* Faint grid lines that fade out, behind the hero. */
+  .grid-fade {
+    background-image:
+      linear-gradient(to right, rgba(10, 10, 10, 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(10, 10, 10, 0.05) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 0%, #000 30%, transparent 75%);
+  }
+}
+
+/*
+ * Arabic letters join, and any letter spacing pulls them apart, so nothing
+ * in Arabic is tracked, whatever class a heading carries.
+ */
+html[lang="ar"] [class*="tracking-"] {
+  letter-spacing: 0;
+}
+
+/* The device tour: the bar that fills while a step is shown, then moves on. */
+@keyframes ouaqt-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.tour-progress {
+  transform-origin: left;
+  animation: ouaqt-progress var(--tour-ms, 6000ms) linear both;
+}
+
+html[dir="rtl"] .tour-progress {
+  transform-origin: right;
+}
+
+.tour-progress[data-paused="true"] {
+  animation-play-state: paused;
+}
+
+/* Between the computer and the phone, a small dot travels both ways: what is saved on one reaches the other. */
+@keyframes ouaqt-travel {
+  0% {
+    left: 0%;
+    opacity: 0;
+  }
+  15%,
+  85% {
+    opacity: 1;
+  }
+  100% {
+    left: 100%;
+    opacity: 0;
+  }
+}
+
+.travel-dot {
+  animation: ouaqt-travel 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+.travel-dot-back {
+  animation: ouaqt-travel 2.8s cubic-bezier(0.45, 0, 0.55, 1) infinite reverse;
+  animation-delay: -1.4s;
 }
 
 /*
@@ -158,7 +238,14 @@ html[lang="ar"] li {
   }
 
   .hero-enter,
-  .page-enter {
+  .page-enter,
+  .travel-dot,
+  .travel-dot-back {
     animation: none;
+  }
+
+  .tour-progress {
+    animation: none;
+    transform: scaleX(1);
   }
 }

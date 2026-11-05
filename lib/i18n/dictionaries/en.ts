@@ -490,16 +490,15 @@ export const en = {
 
   builderHome: {
     heroEyebrow: "Management software for small and medium businesses",
-    heroHeading: "Your business management software, ready in minutes.",
-    heroBody: "OUAQT is a startup that equips small and medium-sized businesses. With the Builder, you describe how your business works and leave with your own till, stock and reporting software, on your own computers and phones.",
+    heroHeading: "Run your business from your computer and your phone.",
+    heroBody: "With the Builder, you describe your business and leave a few minutes later with your till, your stock and your reports. The same software on the shop computer and on your phone, even without internet.",
     heroPrimary: "Build my software",
     heroSecondary: "Try the demo",
     heroReassurance: "Phone or computer · Works without internet · Your data stays with you · {days} day free trial",
     heroReassuranceNoTrial: "Phone or computer · Works without internet · Your data stays with you",
-    heroShotAlt: "A cafe's till screen in OUAQT software: an order in progress, its total and the payment.",
+    heroShotAlt: "A cafe's till screen in OUAQT software on a computer: an order in progress, its total and the payment.",
+    heroPhoneAlt: "The same cafe on a phone: the menu as a list, the orders waiting, and the tabs at the bottom.",
     heroChipReady: "Ready in under 5 minutes",
-    heroStickerTop: "under",
-    heroStickerValue: "5 min",
 
     impactMinutes: "Under 5 minutes",
     impactMinutesLabel: "to build your software",
@@ -544,6 +543,44 @@ export const en = {
       wash: "Al Baraka Wash",
       general: "Nour Workshop",
     },
+
+    tourEyebrow: "How it works",
+    tourHeading: "A working day, on the computer and on the phone.",
+    tourBody: "The same screens, laid out for each device. Here is a grocery, from the first sale to the end of the day.",
+    tourSteps: [
+      {
+        title: "Ring up sales",
+        body: "Tap the products and the ticket fills up. Cash, mobile app or credit, then the receipt.",
+        computerAlt: "A sale in progress on a computer: three products on the ticket and the button to take payment.",
+        phoneAlt: "The same sale on a phone: the ticket, its total and the payment.",
+      },
+      {
+        title: "Keep track of stock",
+        body: "It goes down with every sale, and products about to run out are flagged before they do.",
+        computerAlt: "The stock screen on a computer: the products, their quantities and the low stock flagged.",
+        phoneAlt: "The stock on a phone, with the products and the low stock flagged.",
+      },
+      {
+        title: "Close the day",
+        body: "The day's takings, the number of sales, the best seller and each way of paying. Print it or save a PDF.",
+        computerAlt: "The end of day window on a computer: total takings, sales and payments.",
+        phoneAlt: "The end of day on a phone, with print and PDF.",
+      },
+      {
+        title: "Read your figures",
+        body: "The day, the week or the month, your best sellers, and the export for Excel.",
+        computerAlt: "The reports on a computer: takings, sales and the last seven days.",
+        phoneAlt: "The reports on a phone: the last seven days and the best sellers.",
+      },
+    ],
+    tourPause: "Pause",
+    tourPlay: "Play",
+    tourTogetherHeading: "Two screens, one business.",
+    tourTogether: [
+      { title: "What one enters, the other sees", body: "A sale made in the shop appears on your phone as soon as both are online." },
+      { title: "Each works without internet", body: "With no connection, each device keeps selling, then catches up when the internet is back." },
+      { title: "No app store needed", body: "On a phone, the software opens from a link and sits on your home screen." },
+    ],
 
     featuresEyebrow: "In every piece of software",
     featuresHeading: "Everything you need to run your business day to day.",

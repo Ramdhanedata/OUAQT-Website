@@ -30,7 +30,7 @@ export default async function ProjectsPage(props: Props) {
     <Section className="pt-32 sm:pt-40">
       <Container>
         <FadeIn>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow">
             {dict.projectsPage.eyebrow}
           </p>
           <h1 className="mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">

@@ -8,6 +8,7 @@ import { APP_HEIGHT, APP_WIDTH, CANVAS_HEIGHT, Fit, TITLE_HEIGHT } from "@/build
 import type { Locale } from "@/lib/i18n/config";
 import { cn } from "@/lib/utils";
 import { packIcons } from "@/components/packs/pack-icons";
+import { Laptop, Phone, PHONE_BEZEL_SHARE } from "./devices";
 
 /*
  * The software itself on the home page, for a visitor to try before
@@ -25,10 +26,14 @@ import { packIcons } from "@/components/packs/pack-icons";
 
 const APP_SOURCE = "/app-preview/index.html";
 
-/* The phone's own width and height, so the app lays itself out as it does on one. */
+/*
+ * The phone's own width and height, so the app lays itself out as it does on
+ * one. The frame's edge is a share of its width (see devices.tsx), so the
+ * frame is drawn a little wider for the screen inside to be the phone's.
+ */
 const PHONE_WIDTH = 390;
-const PHONE_HEIGHT = 780;
-const PHONE_BEZEL = 8;
+const PHONE_HEIGHT = 844;
+const PHONE_FRAME_WIDTH = Math.ceil(PHONE_WIDTH / (1 - 2 * PHONE_BEZEL_SHARE));
 
 type View = "computer" | "phone";
 
@@ -146,8 +151,9 @@ export function LiveDemo({
   ];
 
   return (
-    <div className="space-y-5">
-      <div className="inline-flex rounded-full border border-border bg-surface p-1">
+    <div className="space-y-6">
+      <div className="flex justify-center">
+      <div className="inline-flex rounded-full border border-border bg-surface p-1 shadow-card">
         {views.map(({ value, label, Icon }) => (
           <button
             key={value}
@@ -164,8 +170,9 @@ export function LiveDemo({
           </button>
         ))}
       </div>
+      </div>
 
-      <div role="tablist" className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
+      <div role="tablist" className="-mx-6 flex gap-2 overflow-x-auto px-6 pb-1 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0">
         {packs.map((one) => {
           const Icon = packIcons[one];
           const chosen = one === pack;
@@ -190,11 +197,12 @@ export function LiveDemo({
         })}
       </div>
 
-      <div ref={box}>
-        <div className={view === "computer" ? undefined : "hidden"}>
+      <div ref={box} className="pt-4">
+        <div className={view === "computer" ? "mx-auto max-w-5xl px-[4%] sm:px-[5%]" : "hidden"}>
+          <Laptop>
           <Fit mode="width">
             <div
-              className="overflow-hidden rounded-[18px] border-2 border-app-strong bg-app-background shadow-[0_40px_80px_-30px_rgba(10,10,10,0.4)]"
+              className="overflow-hidden bg-app-background"
               style={{ width: APP_WIDTH, height: CANVAS_HEIGHT }}
             >
               <div className="relative flex items-center border-b border-app-line bg-app-hover px-4" style={{ height: TITLE_HEIGHT }}>
@@ -216,18 +224,13 @@ export function LiveDemo({
               </div>
             </div>
           </Fit>
+          </Laptop>
         </div>
 
         <div className={view === "phone" ? undefined : "hidden"}>
-          <div
-            className="mx-auto overflow-hidden rounded-[40px] border-foreground bg-surface shadow-[0_40px_80px_-30px_rgba(10,10,10,0.4)]"
-            style={{ maxWidth: PHONE_WIDTH + 2 * PHONE_BEZEL, borderWidth: PHONE_BEZEL, borderStyle: "solid" }}
-          >
-            {/* A phone's edges, so its round corners cut nothing off the app. */}
-            <div className="flex h-5 items-center justify-center" aria-hidden>
-              <span className="h-1.5 w-14 rounded-full bg-app-strong" />
-            </div>
-            <div className="relative" style={{ height: `min(80vh, ${PHONE_HEIGHT}px)` }}>
+          {/* The frame's strips above and below the screen keep its round corners off the app. */}
+          <Phone className="mx-auto max-w-full" style={{ width: PHONE_FRAME_WIDTH }}>
+            <div className="relative" style={{ height: `min(76vh, ${PHONE_HEIGHT}px)` }}>
               {seen.phone ? (
                 <AppFrame pack={pack} lang={lang} shops={shops} loading={loading} loadingClass="text-base" />
               ) : (
@@ -236,15 +239,12 @@ export function LiveDemo({
                 </div>
               )}
             </div>
-            <div className="flex h-5 items-center justify-center" aria-hidden>
-              <span className="h-1 w-24 rounded-full bg-app-strong" />
-            </div>
-          </div>
+          </Phone>
         </div>
       </div>
 
-      <p className="text-sm text-muted-foreground">{note}</p>
-      {view === "computer" ? <p className="text-sm text-muted-foreground sm:hidden">{phone}</p> : null}
+      <p className="text-center text-sm text-muted-foreground">{note}</p>
+      {view === "computer" ? <p className="text-center text-sm text-muted-foreground sm:hidden">{phone}</p> : null}
     </div>
   );
 }

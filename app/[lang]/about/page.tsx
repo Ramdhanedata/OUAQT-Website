@@ -74,7 +74,7 @@ export default async function AboutPage(props: Props) {
       <Section className="pt-32 sm:pt-40">
         <Container>
           <FadeIn className="max-w-3xl">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            <p className="eyebrow">
               {dict.about.eyebrow}
             </p>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
@@ -168,7 +168,7 @@ export default async function AboutPage(props: Props) {
             </FadeIn>
 
             <FadeIn delay={0.1} className="lg:col-span-2">
-              <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+              <p className="eyebrow">
                 {dict.about.founderEyebrow}
               </p>
               <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">

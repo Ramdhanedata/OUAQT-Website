@@ -62,7 +62,7 @@ export function BuilderPrices({
     <Section className="pt-0 sm:pt-0">
       <Container>
         <FadeIn>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+          <p className="eyebrow">
             {b.eyebrow}
           </p>
           <h2 className="mt-4 max-w-3xl text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">

@@ -95,7 +95,7 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
           <LanguageSwitcher locale={lang} label={dict.nav.language} />
           <Button
             href={builder.href}
-            variant="accent"
+            variant="primary"
             className="whitespace-nowrap text-sm"
           >
             {builder.label}
@@ -135,7 +135,7 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
               <div className="mt-2 px-3">
                 <Button
                   href={builder.href}
-                  variant="accent"
+                  variant="primary"
                   className="w-full justify-center text-sm"
                 >
                   {builder.label}

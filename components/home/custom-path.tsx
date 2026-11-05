@@ -27,8 +27,8 @@ export function CustomPath({ dict, lang }: { dict: Dictionary; lang: Locale }) {
     <section id="sur-mesure" className="scroll-mt-20 border-t border-border py-20 sm:py-28">
       <Container className="grid gap-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16">
         <FadeIn>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{home.customEyebrow}</p>
-          <h2 className="mt-5 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{home.customHeading}</h2>
+          <p className="eyebrow">{home.customEyebrow}</p>
+          <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">{home.customHeading}</h2>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{home.customBody}</p>
 
           <ol className="mt-10 space-y-5">
@@ -61,7 +61,7 @@ export function CustomPath({ dict, lang }: { dict: Dictionary; lang: Locale }) {
         </FadeIn>
 
         <FadeIn delay={0.1} className="lg:pt-14">
-          <div className="rounded-2xl border border-border p-8 sm:p-10">
+          <div className="rounded-3xl border border-border bg-surface p-8 shadow-card sm:p-10">
             <p className="text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">{proof.client}</p>
             <p className="mt-2 text-base text-foreground">{proof.metric}</p>
 

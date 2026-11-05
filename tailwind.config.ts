@@ -64,18 +64,25 @@ const config: Config = {
         },
       },
       fontFamily: {
+        // The site's face for French and English (Geist, see the layout).
+        sans: ["var(--font-sans)", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+        // The app's own serif, kept for the receipt the builder draws.
         serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],
-        // Applied on <html> when the locale is Arabic. Source Serif has no
-        // Arabic glyphs, so without this Arabic falls back to a system font.
-        // Cairo is a sans, so Arabic reads modern while Latin stays serif.
-        arabic: ["var(--font-arabic)", "var(--font-serif)", "serif"],
+        // Applied on <body> when the locale is Arabic. Geist has no Arabic
+        // glyphs, so Cairo carries the Arabic and Geist any Latin inside it.
+        arabic: ["var(--font-arabic)", "var(--font-sans)", "sans-serif"],
       },
       letterSpacing: {
-        // Tailwind's default tracking-tight (-0.025em) is tuned for a
-        // geometric sans and crushes a serif at display sizes. Every heading
-        // already uses tracking-tight, so retuning it here fixes them all at
-        // once rather than editing twenty files.
-        tight: "-0.011em",
+        // A modern sans tightens a little at heading sizes. Every heading
+        // already uses tracking-tight, so tuning it here sets them all.
+        // Arabic is never tracked: see globals.css.
+        tight: "-0.02em",
+        display: "-0.035em",
+      },
+      boxShadow: {
+        // Soft, layered depth for the device frames and raised cards.
+        device: "0 1px 1px rgba(10,10,10,0.04), 0 12px 24px -8px rgba(10,10,10,0.12), 0 50px 100px -40px rgba(10,10,10,0.35)",
+        card: "0 1px 2px rgba(10,10,10,0.04), 0 8px 24px -12px rgba(10,10,10,0.12)",
       },
       maxWidth: {
         container: "1200px",

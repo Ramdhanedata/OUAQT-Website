@@ -36,7 +36,7 @@ export default async function ContactPage(props: Props) {
       <Container>
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-5">
           <FadeIn className="lg:col-span-2">
-            <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">
+            <p className="eyebrow">
               {dict.contact.eyebrow}
             </p>
             <h1 className="mt-6 text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">

@@ -47,15 +47,15 @@ export function PricingTeaser({
     <section id="tarifs" className="scroll-mt-20 border-t border-border py-20 sm:py-28">
       <Container className="grid gap-12 lg:grid-cols-2 lg:items-center lg:gap-16">
         <FadeIn>
-          <p className="text-xs font-medium uppercase tracking-[0.2em] text-accent">{home.pricingEyebrow}</p>
-          <h2 className="mt-5 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
+          <p className="eyebrow">{home.pricingEyebrow}</p>
+          <h2 className="mt-4 text-balance text-3xl font-semibold tracking-tight text-foreground sm:text-5xl">
             {home.pricingHeading}
           </h2>
           <p className="mt-5 text-lg leading-relaxed text-muted-foreground">{home.pricingBody}</p>
         </FadeIn>
 
         <FadeIn delay={0.08}>
-          <div className="rounded-2xl border border-border bg-surface p-7 sm:p-9">
+          <div className="rounded-3xl border border-border bg-surface p-7 shadow-card sm:p-9">
             <div className="flex flex-wrap items-center justify-between gap-3">
               <p className="text-base font-medium text-foreground">{home.pricingAnnual}</p>
               {price?.amount && price.launch && struck !== null ? (
@@ -89,7 +89,7 @@ export function PricingTeaser({
             <ul className="mt-7 space-y-3 border-t border-border pt-7">
               {included.map((line) => (
                 <li key={line} className="flex items-start gap-3 text-base text-foreground">
-                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-accent" />
+                  <Check className="mt-0.5 h-5 w-5 shrink-0 text-app-gold-ink" />
                   {line}
                 </li>
               ))}

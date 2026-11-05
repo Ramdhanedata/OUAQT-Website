@@ -1,27 +1,28 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { GradientMesh } from "@/components/motion/gradient-mesh";
+import { Laptop, Phone } from "@/components/home/devices";
 import { getBuilderCopy } from "@/builder/copy";
 import type { Dictionary } from "@/lib/i18n";
 import { type Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 import { fill } from "@/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, Monitor, Play, Smartphone, Timer } from "lucide-react";
 import type { CSSProperties } from "react";
 
 /* Each line rises a moment after the one above (see .hero-enter in globals.css). */
 const rise = (seconds: number) => ({ "--rise-delay": `${seconds}s` }) as CSSProperties;
 
 /*
- * The first thing anyone sees: who OUAQT is for, what the Builder gives
- * them, and the software itself.
+ * The first thing anyone sees: what the software does, that it runs on a
+ * computer and a phone, and the two side by side.
  *
- * The picture is a real screen of the software, taken from the same build
- * the demo further down runs, in the page's language. The reassurance line
- * names the trial length from settings; when settings cannot be read it
- * says the two things that are true regardless rather than inventing a
- * number of days.
+ * Both pictures are real screens of the software, taken from the same build
+ * the demo further down runs (scripts/product-shots.mjs), in the page's
+ * language: a cafe with an order going on the computer, and the same cafe on
+ * a phone. The reassurance line names the trial length from settings; when
+ * settings cannot be read it says the things that are true regardless rather
+ * than inventing a number of days.
  */
 export function BuilderHero({
   dict,
@@ -36,80 +37,109 @@ export function BuilderHero({
   const reassurance = (trialDays ? fill(home.heroReassurance, { days: trialDays }) : home.heroReassuranceNoTrial).split(" · ");
 
   return (
-    <section className="relative overflow-hidden">
-      <GradientMesh />
-      <Container className="grid items-center gap-14 pb-20 pt-10 sm:pt-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14 lg:pb-24 lg:pt-14">
-        <div>
-          <p className="hero-enter text-sm font-medium text-app-gold-ink">{home.heroEyebrow}</p>
+    <section className="relative isolate overflow-hidden">
+      <div aria-hidden className="absolute inset-0 -z-10">
+        <div className="grid-fade absolute inset-0" />
+        <div className="glow-gold absolute left-1/2 top-[52%] h-[46rem] w-[min(78rem,160vw)] -translate-x-1/2 opacity-80" />
+      </div>
 
-          <h1
-            style={rise(0.06)}
-            className="hero-enter mt-5 text-balance text-4xl font-semibold leading-[1.1] tracking-tight text-foreground sm:text-5xl lg:text-[3.1rem]"
-          >
-            {home.heroHeading}
-          </h1>
+      <Container className="pt-10 text-center sm:pt-16 lg:pt-20">
+        <p
+          className="hero-enter inline-flex items-center gap-2.5 rounded-full border border-border bg-surface/80 py-1.5 pe-4 ps-1.5 text-sm text-foreground shadow-card backdrop-blur"
+        >
+          <span className="inline-flex items-center gap-1 rounded-full bg-foreground px-2.5 py-1 text-background" aria-hidden>
+            <Monitor className="h-3.5 w-3.5" />
+            <Smartphone className="h-3.5 w-3.5" />
+          </span>
+          {home.heroEyebrow}
+        </p>
 
-          <p style={rise(0.12)} className="hero-enter mt-6 max-w-xl text-lg leading-relaxed text-muted-foreground">
-            {home.heroBody}
-          </p>
+        <h1
+          style={rise(0.06)}
+          className="hero-enter mx-auto mt-7 max-w-4xl text-balance text-[2.5rem] font-semibold leading-[1.05] tracking-display text-foreground sm:text-6xl lg:text-[4.6rem]"
+        >
+          {home.heroHeading}
+        </h1>
 
-          <div style={rise(0.2)} className="hero-enter mt-9 flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
-            <Button href={localisedHref(lang, "builder")} variant="accent" className="min-h-[48px] justify-center text-base">
-              {home.heroPrimary}
-              <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-            </Button>
-            <a
-              href="#demo"
-              className="inline-flex min-h-[48px] items-center justify-center text-base text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
-            >
-              {home.heroSecondary}
-            </a>
-          </div>
+        <p style={rise(0.12)} className="hero-enter mx-auto mt-6 max-w-2xl text-pretty text-lg leading-relaxed text-muted-foreground sm:text-xl">
+          {home.heroBody}
+        </p>
 
-          {/*
-            * The owner who built his software on his phone is told to come
-            * here on the shop computer and choose this, in these words: the
-            * builder's own label, so the two never drift apart. It opens the
-            * builder with the box for the number already open.
-            */}
+        <div style={rise(0.2)} className="hero-enter mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+          <Button href={localisedHref(lang, "builder")} variant="primary" className="min-h-[52px] px-7 text-base">
+            {home.heroPrimary}
+            <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+          </Button>
           <a
-            href={`${localisedHref(lang, "builder")}?serial=1`}
-            style={rise(0.24)}
-            className="hero-enter mt-4 flex min-h-[48px] items-center justify-center text-base text-muted-foreground underline sm:inline-flex decoration-border underline-offset-4 transition-colors hover:text-foreground"
+            href="#demo"
+            className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-full border border-border bg-surface/80 px-7 text-base font-medium text-foreground backdrop-blur transition-colors hover:border-foreground/40"
           >
-            {getBuilderCopy(lang).code.have}
+            <Play className="h-4 w-4 fill-current rtl:rotate-180" />
+            {home.heroSecondary}
           </a>
-
-          <p style={rise(0.28)} className="hero-enter mt-8 text-sm text-muted-foreground">
-            {reassurance.join("  ·  ")}
-          </p>
         </div>
 
-        <div style={rise(0.18)} className="hero-enter relative mx-auto w-full max-w-2xl lg:max-w-none">
-          {/* A sticker on the picture's corner: how long it takes, said once and plainly. */}
-          <p
-            aria-label={home.heroChipReady}
-            className="absolute -end-3 -top-6 z-10 flex h-[104px] w-[104px] rotate-[8deg] flex-col items-center justify-center rounded-full bg-accent text-center text-accent-foreground shadow-[0_12px_28px_-14px_rgba(10,10,10,0.45)] ring-4 ring-background rtl:-rotate-[8deg] sm:-end-6 sm:-top-8 sm:h-[116px] sm:w-[116px]"
-          >
-            <span aria-hidden className="text-xs font-medium leading-none">{home.heroStickerTop}</span>
-            <span aria-hidden className="mt-1 text-2xl font-semibold leading-none tracking-tight sm:text-[1.7rem]">{home.heroStickerValue}</span>
-          </p>
-          <div className="overflow-hidden rounded-2xl border border-border bg-app-background shadow-[0_30px_60px_-36px_rgba(10,10,10,0.35)]">
-            <div className="flex h-7 items-center gap-1.5 border-b border-app-line bg-app-hover px-3" aria-hidden>
-              <span className="h-2.5 w-2.5 rounded-full bg-app-strong" />
-              <span className="h-2.5 w-2.5 rounded-full bg-app-strong" />
-              <span className="h-2.5 w-2.5 rounded-full bg-app-strong" />
-            </div>
+        {/*
+          * The owner who built his software on his phone is told to come
+          * here on the shop computer and choose this, in these words: the
+          * builder's own label, so the two never drift apart. It opens the
+          * builder with the box for the number already open.
+          */}
+        <a
+          href={`${localisedHref(lang, "builder")}?serial=1`}
+          style={rise(0.24)}
+          className="hero-enter mt-3 inline-flex min-h-[44px] items-center justify-center text-sm text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
+        >
+          {getBuilderCopy(lang).code.have}
+        </a>
+
+        <ul style={rise(0.28)} className="hero-enter mx-auto mt-5 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
+          {reassurance.map((line) => (
+            <li key={line} className="inline-flex items-center gap-1.5">
+              <Check className="h-4 w-4 text-app-gold-ink" strokeWidth={2.25} />
+              {line}
+            </li>
+          ))}
+        </ul>
+      </Container>
+
+      {/*
+        * The computer and the phone together, the phone resting on the
+        * corner where the app keeps its menu, whose lower part is empty: the
+        * left in French and English, the right in Arabic, as the app itself
+        * is mirrored. So the phone never covers the ticket or its total.
+        */}
+      <Container className="relative mt-14 pb-16 sm:mt-20 sm:pb-24">
+        <div style={rise(0.18)} className="hero-enter relative mx-auto max-w-5xl pb-[4%] ps-[12%] sm:ps-[11%]">
+          <Laptop>
             <Image
-              src={`/images/product/till-${lang}.webp`}
+              src={`/images/product/hero-computer-${lang}.webp`}
               alt={home.heroShotAlt}
               width={1600}
               height={1000}
               priority
-              sizes="(min-width: 1024px) 640px, (min-width: 640px) 90vw, 100vw"
+              sizes="(min-width: 1100px) 880px, 88vw"
               className="block h-auto w-full"
             />
-          </div>
+          </Laptop>
+
+          <Phone className="absolute bottom-0 start-0 w-[30%] max-w-[250px] sm:w-[25%]">
+            <Image
+              src={`/images/product/hero-phone-${lang}.webp`}
+              alt={home.heroPhoneAlt}
+              width={780}
+              height={1688}
+              priority
+              sizes="(min-width: 1100px) 250px, 25vw"
+              className="block h-auto w-full"
+            />
+          </Phone>
+
+          {/* How long it takes, said once and plainly, on the window's top corner. */}
+          <p className="absolute -top-4 end-[4%] inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-card ring-4 ring-background sm:-top-5 sm:text-base">
+            <Timer className="h-4 w-4" />
+            {home.heroChipReady}
+          </p>
         </div>
       </Container>
     </section>
