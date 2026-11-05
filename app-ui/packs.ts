@@ -17,6 +17,7 @@ export const packs = [
   "warehouse",
   "hotel",
   "transport",
+  "wash",
   "general",
 ] as const;
 export type Pack = (typeof packs)[number];
