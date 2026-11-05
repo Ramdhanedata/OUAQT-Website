@@ -502,6 +502,8 @@ export const en = {
 
     impactMinutes: "Under 5 minutes",
     impactMinutesLabel: "to build your software",
+    impactWhere: "Phone or computer",
+    impactWhereLabel: "your software runs on both",
     impactOffline: "No internet",
     impactOfflineLabel: "needed for the everyday work",
     impactData: "Your data",
@@ -524,10 +526,12 @@ export const en = {
 
     demoEyebrow: "Live demo",
     demoHeading: "Try it here. It is the real software.",
-    demoBody: "Pick a trade, ring up a sale, open the stock or the reports. What you see here is what you will install.",
+    demoBody: "Pick a trade, ring up a sale, open the stock or the reports. What you see here is your software, on your computer and on your phone.",
     demoLoading: "Opening the software",
     demoNote: "Sample data, so you can try it without risking anything.",
-    demoPhone: "On a phone this demo shows small. Your own software fits your phone's screen.",
+    demoOnComputer: "On a computer",
+    demoOnPhone: "On a phone",
+    demoPhone: "On a phone, the computer version shows small. Choose \"On a phone\" to try it full size.",
     demoShops: {
       pharmacy: "Central Pharmacy",
       bakery: "Harbour Bakery",

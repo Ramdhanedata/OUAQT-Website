@@ -496,6 +496,8 @@ export const ar: Dictionary = {
 
     impactMinutes: "أقل من 5 دقائق",
     impactMinutesLabel: "لإنشاء برنامجك",
+    impactWhere: "هاتف أو حاسوب",
+    impactWhereLabel: "يعمل برنامجك على الاثنين",
     impactOffline: "بدون إنترنت",
     impactOfflineLabel: "للعمل اليومي",
     impactData: "بياناتك",
@@ -518,10 +520,12 @@ export const ar: Dictionary = {
 
     demoEyebrow: "عرض مباشر",
     demoHeading: "جرّبه هنا. إنه البرنامج الحقيقي.",
-    demoBody: "اختر نشاطاً، وسجّل عملية بيع، وافتح المخزون أو التقارير. ما تراه هنا هو ما ستثبّته.",
+    demoBody: "اختر نشاطاً، وسجّل عملية بيع، وافتح المخزون أو التقارير. ما تراه هنا هو برنامجك، على حاسوبك وعلى هاتفك.",
     demoLoading: "جارٍ فتح البرنامج",
     demoNote: "بيانات للتجربة، لتجرّب دون أي مخاطرة.",
-    demoPhone: "على الهاتف يظهر هذا العرض صغيراً. أما برنامجك أنت فيتلاءم مع شاشة هاتفك.",
+    demoOnComputer: "على الحاسوب",
+    demoOnPhone: "على الهاتف",
+    demoPhone: "على الهاتف تظهر نسخة الحاسوب صغيرة. اختر «على الهاتف» لتجربه بحجمه الكامل.",
     demoShops: {
       pharmacy: "صيدلية المركز",
       bakery: "مخبزة الميناء",
