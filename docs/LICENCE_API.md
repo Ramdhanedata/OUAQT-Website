@@ -238,7 +238,8 @@ as a computer does, with `platform: "phone"`, and counts against the same
 
 - Its fingerprint has only `machine`: a random id the phone keeps, hashed
   the way a computer's parts are. `board` and `disk` are null, which
-  `sameMachine` reads as "not reported", never as a match.
+  `sameMachine` reads as "not reported", never as a match. A phone is known
+  again by that one part, so it has one free trial like a computer.
 - It never asks `nearby`. A phone opens from a link carrying the serial
   after the `#` (`/app/index.html#serial=XXXXXXXX`, from the account page)
   or from the serial typed. `nearby` with `platform: "phone"` answers

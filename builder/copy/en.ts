@@ -7,7 +7,7 @@ export const en: BuilderCopy = {
   landing: {
     title: "Build the software for your shop",
     intro:
-      "Answer a few questions about your shop. You leave with your software, ready to install on the shop computer.",
+      "Answer a few questions about your shop. You leave with your software, ready to install on a computer or to open on a phone.",
     duration: "Under 5 minutes",
     noAccount: "No account needed to start",
     steps: [
@@ -44,8 +44,8 @@ export const en: BuilderCopy = {
 
   thanks: {
     title: "Thank you for choosing OUAQT",
-    body: "Thank you for your trust. Install your software on your computer: it opens straight away once you have followed the steps of the installation guide. We wish you a great experience.",
-    bodyNoShop: "Thank you for your trust. Install your software on your computer: it opens straight away once you have followed the steps of the installation guide. We wish you a great experience.",
+    body: "Thank you for your trust. Install your software on your computer by following the installation guide, or open it on your phone. We wish you a great experience.",
+    bodyNoShop: "Thank you for your trust. Install your software on your computer by following the installation guide, or open it on your phone. We wish you a great experience.",
     names: {
       pharmacy: "OUAQT Pharmacy",
       bakery: "OUAQT Bakery",
@@ -239,7 +239,7 @@ export const en: BuilderCopy = {
 
   serial: {
     heading: "Your serial number",
-    intro: "Keep it. You will need it to install your software on the shop computer.",
+    intro: "Keep it. You will need it to open your software on each of your devices.",
     copy: "Copy",
     copied: "Copied",
     share: "Share on WhatsApp",
@@ -251,7 +251,7 @@ export const en: BuilderCopy = {
     otherMacApple: "Does your Mac have an Apple chip (M1 or newer)? Download that version",
     otherMacIntel: "Does your Mac have an Intel chip? Download that version",
     soon: "The software to install will be available soon. Keep your serial number.",
-    onPhone: "To install it, on the shop computer open {site}, choose “{have}” and type or paste this number.",
+    onPhone: "To install it on a computer too, open {site} on that computer, choose “{have}” and type or paste this number.",
     tutorialWindows: "Watch the Windows installation video",
     tutorialMac: "Watch the Mac installation video",
 
@@ -261,7 +261,7 @@ export const en: BuilderCopy = {
     alsoWindows: "On Windows? Download for Windows",
     termsNote: "By downloading the software, you accept its {terms}.",
     termsLink: "terms of use",
-    keepNumber: "Your serial number. Keep it: it is for a second computer, a reinstall, or if the software asks for it.",
+    keepNumber: "Your serial number. Keep it: it is for another device, a reinstall, or if the software asks for it.",
     windowsWarning:
       "Windows may show \"Windows protected your PC\". Click \"More info\", then \"Run anyway\".",
     macWarning: "Open the file, drag OUAQT into Applications, then right-click OUAQT and choose \"Open\".",
@@ -332,7 +332,7 @@ export const en: BuilderCopy = {
     scan: "Scan this code with your phone's camera. Your business opens straight away, with no number to type.",
     iphone: "On iPhone: in Safari, tap the Share button, then \"Add to Home Screen\".",
     android: "On Android: in Chrome, tap \"Install\" or the ⋮ menu, then \"Add to Home screen\".",
-    note: "The phone counts as one of your devices. Its sales stay on the phone for now: they do not reach the computer yet.",
+    note: "Each phone and each computer counts as one device. Each keeps its own sales and its own stock: what is entered on one does not appear on the other.",
   },
   myAccount: {
     title: "My account",
@@ -342,7 +342,7 @@ export const en: BuilderCopy = {
     signInError: "Wrong number or password.",
     mySoftware: "My software",
     mySubscription: "My subscription",
-    myDevices: "My computers",
+    myDevices: "My devices",
     myRequests: "My requests",
     edit: "Change my software",
     noBusiness: "You have not built your software yet.",
@@ -352,12 +352,12 @@ export const en: BuilderCopy = {
   },
 
   licence: {
-    notStarted: "Your trial will start when you install the software on the shop computer.",
+    notStarted: "Your trial will start the first time the software opens, on a computer or on a phone.",
     trial: {
       one: "Free trial, {count} day left.",
       other: "Free trial, {count} days left.",
     },
-    trialOver: "Your trial has ended. The software is stopped until you pay; everything you recorded stays on your computer. Once you pay, it opens again by itself.",
+    trialOver: "Your trial has ended. The software is stopped until you pay; everything you recorded stays on your device. Once you pay, it opens again by itself.",
     active: "Licence active until {date}.",
     renewalDue: {
       one: "Your licence has ended. You have {count} day before the software becomes read only.",
@@ -433,16 +433,16 @@ export const en: BuilderCopy = {
   },
 
   devices: {
-    none: "No computer yet. Yours appears here as soon as you install the software.",
-    main: "Main computer",
-    secondary: "Second computer",
+    none: "No device yet. Yours appears here as soon as you open the software.",
+    main: "Main device",
+    secondary: "Second device",
     lastSeen: "Seen on {date}",
-    release: "This computer no longer works",
-    confirm: "Free this computer? You will be able to install the software on another one.",
+    release: "This device no longer works",
+    confirm: "Free this device? You will be able to open the software on another one.",
     cancel: "No, keep it",
     releasing: "One moment",
-    released: "Freed. You can install the software on another computer.",
-    tooMany: "You have already freed all the computers allowed this year. Write to us on WhatsApp and we will do it for you.",
+    released: "Freed. You can open the software on another device.",
+    tooMany: "You have already freed all the devices allowed this year. Write to us on WhatsApp and we will do it for you.",
     failed: "Not freed. Try again, or write to us on WhatsApp.",
   },
 

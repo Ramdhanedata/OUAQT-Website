@@ -63,7 +63,12 @@ export function sameMachine(
   if (a.board && a.board === b.board) agree += 1;
   if (a.disk && a.disk === b.disk) agree += 1;
   if (a.machine && a.machine === b.machine) agree += 1;
-  return agree >= partsToMatch;
+  /*
+   * A phone reports one part only, so two phones can never agree on two.
+   * Between readings with fewer parts in common, all of those must agree.
+   */
+  const inCommon = [a.board && b.board, a.disk && b.disk, a.machine && b.machine].filter(Boolean).length;
+  return inCommon > 0 && agree >= Math.min(partsToMatch, inCommon);
 }
 
 /** Digits only, so +222 38 08 72 72 and 38087272 are one number. */

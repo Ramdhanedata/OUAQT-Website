@@ -155,7 +155,7 @@ export default async function StatisticsPage(props: Props) {
             <Pair label={g.production.onlineWeek} value={number.format(data.production.online.week)} />
             <Pair
               label={g.breakdown.systems}
-              value={fill(g.production.systems, { windows: number.format(data.production.platforms.windows), mac: number.format(data.production.platforms.mac) })}
+              value={fill(g.production.systems, { windows: number.format(data.production.platforms.windows), mac: number.format(data.production.platforms.mac), phone: number.format(data.production.platforms.phone) })}
               small
             />
           </dl>

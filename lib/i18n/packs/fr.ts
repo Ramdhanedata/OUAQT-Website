@@ -31,7 +31,7 @@ export const packPagesFr: PackPagesCopy = {
       "Créez le logiciel de votre pharmacie en répondant à quelques questions. Péremption, numéros de lot, vente à la boîte ou à la plaquette, crédit clients. Il fonctionne sans internet.",
     heading: "Le logiciel de votre pharmacie, fait à votre façon de travailler",
     intro:
-      "Vous répondez à quelques questions sur votre pharmacie et vous repartez avec le logiciel qui va avec : la vente à la boîte ou à la plaquette, les dates de péremption, les numéros de lot, et les comptes des clients qui paient plus tard. Il s'installe sur l'ordinateur du comptoir et travaille sans internet.",
+      "Vous répondez à quelques questions sur votre pharmacie et vous repartez avec le logiciel qui va avec : la vente à la boîte ou à la plaquette, les dates de péremption, les numéros de lot, et les comptes des clients qui paient plus tard. Il s'installe sur l'ordinateur du comptoir ou s'ouvre sur votre téléphone, et travaille sans internet.",
     cta: "Créer le logiciel de ma pharmacie",
     does: [
       {
@@ -63,12 +63,12 @@ export const packPagesFr: PackPagesCopy = {
       {
         question: "Et si le courant saute en pleine vente ?",
         answer:
-          "La vente est écrite sur le disque avant que l'écran ne passe à la suivante. Quand l'ordinateur redémarre, elle est là.",
+          "La vente est écrite sur le disque avant que l'écran ne passe à la suivante. Quand l'appareil redémarre, elle est là.",
       },
       {
         question: "Est-ce que mes ventes partent quelque part ?",
         answer:
-          "Non. Vos ventes, votre stock et les comptes de vos clients restent sur vos ordinateurs. Nous ne les recevons jamais.",
+          "Non. Vos ventes, votre stock et les comptes de vos clients restent sur vos appareils. Nous ne les recevons jamais.",
       },
       {
         question: "Je n'ai pas le temps de saisir tous mes produits",
@@ -89,7 +89,7 @@ export const packPagesFr: PackPagesCopy = {
       "Le logiciel de caisse de votre restaurant : les tables, les commandes qui restent ouvertes pendant le repas, le ticket de cuisine et l'addition.",
     heading: "Le logiciel de caisse de votre restaurant",
     intro:
-      "Les tables de votre salle, les commandes qui restent ouvertes pendant que les clients mangent, le ticket qui part en cuisine, et l'addition à la fin. Sur l'ordinateur de la salle, sans internet.",
+      "Les tables de votre salle, les commandes qui restent ouvertes pendant que les clients mangent, le ticket qui part en cuisine, et l'addition à la fin. Sur l'ordinateur de la salle ou sur votre téléphone, sans internet.",
     cta: "Créer le logiciel de mon restaurant",
     does: [
       {
@@ -126,7 +126,7 @@ export const packPagesFr: PackPagesCopy = {
       {
         question: "Est-ce que mes chiffres partent quelque part ?",
         answer:
-          "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+          "Non. Ils restent sur votre appareil. Nous ne les recevons jamais.",
       },
       {
         question: "Combien de tables peut-il tenir ?",
@@ -146,7 +146,7 @@ export const packPagesFr: PackPagesCopy = {
       "Le logiciel de votre boulangerie : la production du jour, les commandes à l'avance avec acompte, la vente au comptoir et le crédit des habitués.",
     heading: "Le logiciel de votre boulangerie",
     intro:
-      "Ce qui est sorti du four ce matin, ce qui a été vendu, ce qui reste, et les commandes que vos clients passent à l'avance. Sur l'ordinateur de la boutique, sans internet.",
+      "Ce qui est sorti du four ce matin, ce qui a été vendu, ce qui reste, et les commandes que vos clients passent à l'avance. Sur l'ordinateur de la boutique ou sur votre téléphone, sans internet.",
     cta: "Créer le logiciel de ma boulangerie",
     does: [
       {
@@ -178,12 +178,12 @@ export const packPagesFr: PackPagesCopy = {
       {
         question: "Et si le courant saute ?",
         answer:
-          "La vente est écrite sur le disque avant que l'écran ne passe à la suivante. Quand l'ordinateur redémarre, elle est là.",
+          "La vente est écrite sur le disque avant que l'écran ne passe à la suivante. Quand l'appareil redémarre, elle est là.",
       },
       {
         question: "Est-ce que mes chiffres partent quelque part ?",
         answer:
-          "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+          "Non. Ils restent sur votre appareil. Nous ne les recevons jamais.",
       },
       {
         question: "Mes prix changent souvent",
@@ -203,7 +203,7 @@ export const packPagesFr: PackPagesCopy = {
       "Le logiciel de votre dépôt : les entrées, les sorties, plusieurs emplacements, et un stock qui se tient tout seul.",
     heading: "Le logiciel de gestion de stock de votre dépôt",
     intro:
-      "Le stock de chaque emplacement se déduit des entrées et des sorties : il n'est jamais un chiffre tapé à la main. Sur votre ordinateur, sans internet.",
+      "Le stock de chaque emplacement se déduit des entrées et des sorties : il n'est jamais un chiffre tapé à la main. Sur votre ordinateur ou votre téléphone, sans internet.",
     cta: "Créer le logiciel de mon dépôt",
     does: [
       {
@@ -235,12 +235,12 @@ export const packPagesFr: PackPagesCopy = {
       {
         question: "Et si le courant saute ?",
         answer:
-          "Le mouvement est écrit sur le disque avant que l'écran ne passe à la suite. Quand l'ordinateur redémarre, il est là.",
+          "Le mouvement est écrit sur le disque avant que l'écran ne passe à la suite. Quand l'appareil redémarre, il est là.",
       },
       {
         question: "Est-ce que mes chiffres partent quelque part ?",
         answer:
-          "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+          "Non. Ils restent sur votre appareil. Nous ne les recevons jamais.",
       },
       {
         question: "Combien de produits peut-il tenir ?",
@@ -259,7 +259,7 @@ export const packPagesFr: PackPagesCopy = {
     title: "Logiciel de caisse boutique et épicerie en Mauritanie | OUAQT",
     description: "Le logiciel de caisse de votre boutique : vente au code-barres ou en cases, stock, crédit des clients, caisse du soir.",
     heading: "Le logiciel de caisse de votre boutique",
-    intro: "Vous scannez ou vous touchez l'article, le client paie, le stock baisse tout seul. Le crédit des habitués et la caisse du soir sont au même endroit. Sur votre ordinateur, sans internet.",
+    intro: "Vous scannez ou vous touchez l'article, le client paie, le stock baisse tout seul. Le crédit des habitués et la caisse du soir sont au même endroit. Sur votre ordinateur ou votre téléphone, sans internet.",
     cta: "Créer le logiciel de ma boutique",
     does: [
       {
@@ -294,7 +294,7 @@ export const packPagesFr: PackPagesCopy = {
       },
       {
         question: "Est-ce que mes chiffres partent quelque part ?",
-        answer: "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+        answer: "Non. Ils restent sur votre appareil. Nous ne les recevons jamais.",
       },
       {
         question: "J'ai déjà ma liste d'articles dans Excel",
@@ -307,7 +307,7 @@ export const packPagesFr: PackPagesCopy = {
     title: "Logiciel de gestion d'hôtel en Mauritanie | OUAQT",
     description: "Le logiciel de votre hôtel : le tableau des chambres, les réservations, l'arrivée et le départ, les extras sur la note.",
     heading: "Le logiciel de gestion de votre hôtel",
-    intro: "Vos chambres sur un seul écran, libres, occupées ou à nettoyer. La réservation, l'arrivée, les extras, et la note au départ. Sur l'ordinateur de la réception, sans internet.",
+    intro: "Vos chambres sur un seul écran, libres, occupées ou à nettoyer. La réservation, l'arrivée, les extras, et la note au départ. Sur l'ordinateur de la réception ou sur votre téléphone, sans internet.",
     cta: "Créer le logiciel de mon hôtel",
     does: [
       {
@@ -342,7 +342,7 @@ export const packPagesFr: PackPagesCopy = {
       },
       {
         question: "Est-ce que les données de mes clients partent quelque part ?",
-        answer: "Non. Elles restent sur votre ordinateur. Nous ne les recevons jamais.",
+        answer: "Non. Elles restent sur votre appareil. Nous ne les recevons jamais.",
       },
       {
         question: "Mon réceptionniste lit l'arabe",
@@ -390,7 +390,7 @@ export const packPagesFr: PackPagesCopy = {
       },
       {
         question: "Est-ce que mes chiffres partent quelque part ?",
-        answer: "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+        answer: "Non. Ils restent sur votre appareil. Nous ne les recevons jamais.",
       },
       {
         question: "Un voyageur annule",
@@ -438,7 +438,7 @@ export const packPagesFr: PackPagesCopy = {
       },
       {
         question: "Est-ce que mes chiffres partent quelque part ?",
-        answer: "Non. Ils restent sur votre ordinateur. Nous ne les recevons jamais.",
+        answer: "Non. Ils restent sur votre appareil. Nous ne les recevons jamais.",
       },
       {
         question: "Et si le courant saute ?",

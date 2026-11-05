@@ -99,7 +99,7 @@ export const packPagesEn: PackPagesCopy = {
       {
         question: "Do my sales go anywhere?",
         answer:
-          "No. Your sales, your stock and your customers' accounts stay on your own computers. We never receive them.",
+          "No. Your sales, your stock and your customers' accounts stay on your own devices. We never receive them.",
       },
       {
         question: "I have no time to type in all my products",
@@ -156,7 +156,7 @@ export const packPagesEn: PackPagesCopy = {
       },
       {
         question: "Do my figures go anywhere?",
-        answer: "No. They stay on your computer. We never receive them.",
+        answer: "No. They stay on your device. We never receive them.",
       },
       {
         question: "How many tables can it hold?",
@@ -212,7 +212,7 @@ export const packPagesEn: PackPagesCopy = {
       },
       {
         question: "Do my figures go anywhere?",
-        answer: "No. They stay on your computer. We never receive them.",
+        answer: "No. They stay on your device. We never receive them.",
       },
       {
         question: "My prices change often",
@@ -232,7 +232,7 @@ export const packPagesEn: PackPagesCopy = {
       "Your warehouse's software: goods in, goods out, several locations, and stock that keeps itself.",
     heading: "Stock management software for your warehouse",
     intro:
-      "What comes in, what goes out, and what is left, location by location. Stock is never a number typed by hand: it comes from the movements. On your computer, with no internet.",
+      "What comes in, what goes out, and what is left, location by location. Stock is never a number typed by hand: it comes from the movements. On your computer or phone, with no internet.",
     cta: "Build my warehouse's software",
     does: [
       {
@@ -268,7 +268,7 @@ export const packPagesEn: PackPagesCopy = {
       },
       {
         question: "Do my figures go anywhere?",
-        answer: "No. They stay on your computer. We never receive them.",
+        answer: "No. They stay on your device. We never receive them.",
       },
       {
         question: "How many products can it hold?",
@@ -287,7 +287,7 @@ export const packPagesEn: PackPagesCopy = {
     title: "Shop and grocery POS software in Mauritania | OUAQT",
     description: "Your shop's till: sell by barcode or tiles, stock, customer credit, the evening count.",
     heading: "Till software for your shop",
-    intro: "You scan or tap the item, the customer pays, and the stock goes down by itself. Your regulars' credit and the evening count are in the same place. On your computer, with no internet.",
+    intro: "You scan or tap the item, the customer pays, and the stock goes down by itself. Your regulars' credit and the evening count are in the same place. On your computer or phone, with no internet.",
     cta: "Build my shop's software",
     does: [
       {
@@ -322,7 +322,7 @@ export const packPagesEn: PackPagesCopy = {
       },
       {
         question: "Do my figures go anywhere?",
-        answer: "No. They stay on your computer. We never receive them.",
+        answer: "No. They stay on your device. We never receive them.",
       },
       {
         question: "My item list is already in Excel",
@@ -335,7 +335,7 @@ export const packPagesEn: PackPagesCopy = {
     title: "Hotel management software in Mauritania | OUAQT",
     description: "Your hotel's software: the room board, bookings, check-in and check-out, extras on the bill.",
     heading: "Management software for your hotel",
-    intro: "Your rooms on one screen, free, occupied or to be cleaned. The booking, the arrival, the extras, and the bill at departure. On the front desk computer, with no internet.",
+    intro: "Your rooms on one screen, free, occupied or to be cleaned. The booking, the arrival, the extras, and the bill at departure. On the front desk computer or your phone, with no internet.",
     cta: "Build my hotel's software",
     does: [
       {
@@ -370,7 +370,7 @@ export const packPagesEn: PackPagesCopy = {
       },
       {
         question: "Does my guests' data go anywhere?",
-        answer: "No. It stays on your computer. We never receive it.",
+        answer: "No. It stays on your device. We never receive it.",
       },
       {
         question: "My receptionist reads Arabic",
@@ -383,7 +383,7 @@ export const packPagesEn: PackPagesCopy = {
     title: "Transport and parcel software in Mauritania | OUAQT",
     description: "Your transport company's software: departures, tickets by seat, parcels with their code, the passenger list.",
     heading: "Software for your transport company",
-    intro: "Today's departures, the seats sold, the parcels received and handed over. Every ticket and every parcel is paid and recorded. On the counter's computer, with no internet.",
+    intro: "Today's departures, the seats sold, the parcels received and handed over. Every ticket and every parcel is paid and recorded. On the counter's computer or your phone, with no internet.",
     cta: "Build my company's software",
     does: [
       {
@@ -418,7 +418,7 @@ export const packPagesEn: PackPagesCopy = {
       },
       {
         question: "Do my figures go anywhere?",
-        answer: "No. They stay on your computer. We never receive them.",
+        answer: "No. They stay on your device. We never receive them.",
       },
       {
         question: "A passenger cancels",
@@ -466,7 +466,7 @@ export const packPagesEn: PackPagesCopy = {
       },
       {
         question: "Do my figures go anywhere?",
-        answer: "No. They stay on your computer. We never receive them.",
+        answer: "No. They stay on your device. We never receive them.",
       },
       {
         question: "What if the power cuts?",

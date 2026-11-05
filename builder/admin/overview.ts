@@ -80,7 +80,7 @@ export type Overview = {
   };
   /* Activated computers by how recently each checked in; the four add up to all of them. */
   presence: Record<Exclude<Presence, "never">, number>;
-  platforms: { windows: number; mac: number };
+  platforms: { windows: number; mac: number; phone: number };
   apps: AppRow[];
   series: { shops: DayCount[]; visitors: DayCount[]; activations: DayCount[] };
   ending: Ending[];
@@ -186,7 +186,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
   }
 
   const presence: Overview["presence"] = { now: 0, today: 0, week: 0, older: 0 };
-  const platforms = { windows: 0, mac: 0 };
+  const platforms = { windows: 0, mac: 0, phone: 0 };
   const onlineShops = new Set<string>();
   for (const device of devices ?? []) {
     const state = presenceOf(device.last_seen, now);
@@ -194,6 +194,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     if (state === "now") onlineShops.add(device.business_id);
     if (device.platform === "mac") platforms.mac += 1;
     else if (device.platform === "windows") platforms.windows += 1;
+    else if (device.platform === "phone") platforms.phone += 1;
   }
 
   const apps: AppRow[] = (devices ?? []).slice(0, 60).map((device) => ({

@@ -72,10 +72,10 @@ export const fr: Dictionary = {
       eyebrow: "Le Builder",
       heading: "Vous le créez vous-même, vous l'installez le jour même",
       intro:
-        "Vous répondez aux questions, vous téléchargez votre logiciel et vous l'installez sur l'ordinateur de la boutique. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
+        "Vous répondez aux questions, vous installez votre logiciel sur l'ordinateur de la boutique ou vous l'ouvrez sur votre téléphone. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
       soon: "Tarif bientôt disponible",
       trial: "Essai gratuit de {days} jours avant de payer quoi que ce soit.",
-      devices: "{devices} postes compris : la caisse et un deuxième ordinateur.",
+      devices: "{devices} appareils compris, ordinateur ou téléphone : par exemple l'ordinateur de la boutique et votre téléphone. Chacun fonctionne de son côté.",
       launchNote:
         "Tarif de lancement, réservé à nos {clients} premiers clients. Votre prix reste ensuite le même pendant {years} ans.",
       launchCondition:
@@ -86,7 +86,7 @@ export const fr: Dictionary = {
       annual: { label: "Licence annuelle", cadence: "Par an" },
       semiannual: { label: "Licence semestrielle", cadence: "Tous les 6 mois" },
       perpetual: { label: "Licence perpétuelle", cadence: "Payée une fois" },
-      extraDevice: { label: "Poste supplémentaire", cadence: "Par an" },
+      extraDevice: { label: "Appareil supplémentaire", cadence: "Par an" },
       setupVisit: {
         label: "Visite d'installation, si vous la voulez",
         cadence: "Payée une fois",
@@ -101,7 +101,7 @@ export const fr: Dictionary = {
     eyebrow: "Tarifs",
     heading: "Le logiciel que vous créez vous-même, et celui que nous construisons.",
     intro:
-      "Le premier se crée en ligne, en quelques questions, et s'installe le jour même. Le second est construit et installé par nous, chez vous. Dans les deux cas le logiciel tourne sur vos propres ordinateurs et n'a pas besoin d'internet pour le travail de tous les jours.",
+      "Le premier se crée en ligne, en quelques questions, et s'installe le jour même. Le second est construit et installé par nous, chez vous. Dans les deux cas le logiciel tourne sur vos propres appareils et n'a pas besoin d'internet pour le travail de tous les jours.",
     freeVisit: "Avant tout engagement, notre première visite pour comprendre votre fonctionnement est gratuite.",
     scope:
       "Ces tarifs sont les mêmes pour tous les logiciels OUAQT prêts à installer.",
@@ -184,15 +184,15 @@ export const fr: Dictionary = {
       items: [
         {
           q: "Le logiciel a-t-il besoin d'une connexion internet ?",
-          a: "Non. Il tourne sur vos propres ordinateurs, et le travail de tous les jours se fait sans connexion.",
+          a: "Non. Il tourne sur vos propres appareils, et le travail de tous les jours se fait sans connexion.",
         },
         {
-          q: "Sur combien d'ordinateurs puis-je l'installer, et que se passe-t-il si une machine tombe en panne ou est remplacée ?",
-          a: "Le logiciel que vous créez vous-même tourne sur {builderDevices} ordinateurs. Un projet que nous installons couvre {devices} postes au maximum, sur le même site. Dans les deux cas, chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
+          q: "Sur combien d'appareils puis-je l'utiliser, et que se passe-t-il si un appareil tombe en panne ou est remplacé ?",
+          a: "Le logiciel que vous créez vous-même tourne sur {builderDevices} appareils : chaque ordinateur et chaque téléphone compte pour un, et chacun garde ses propres données. Un projet que nous installons couvre {devices} postes au maximum, sur le même site. Dans les deux cas, chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
         },
         {
           q: "Où sont stockées mes données ?",
-          a: "Sur vos propres ordinateurs, dans vos locaux. Elles ne partent pas chez nous, et la sauvegarde se fait sur vos propres supports.",
+          a: "Sur vos propres appareils. Elles ne partent pas chez nous, et la sauvegarde se fait sur vos propres supports.",
         },
         {
           q: "Que se passe-t-il si je ne renouvelle pas ?",
@@ -227,11 +227,11 @@ export const fr: Dictionary = {
       },
       trial: {
         h: "L'essai gratuit",
-        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours, avec toutes ses fonctions. L'essai commence la première fois que le logiciel s'ouvre sur votre ordinateur, pas le jour où vous le téléchargez, et chaque ordinateur n'a droit qu'à un seul essai gratuit. À la fin, tant qu'aucune licence n'est payée, le logiciel passe en lecture seule : tout ce que vous avez enregistré reste affiché et vous pouvez toujours en enregistrer une copie, mais aucune nouvelle vente ne peut être saisie. Rien n'est effacé, et tout se rouvre dès que le paiement est confirmé.",
+        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours, avec toutes ses fonctions. L'essai commence la première fois que le logiciel s'ouvre sur l'un de vos appareils, pas le jour où vous le téléchargez, et chaque appareil n'a droit qu'à un seul essai gratuit. Ajouter un appareil au même commerce ne relance pas l'essai. À la fin, tant qu'aucune licence n'est payée, le logiciel passe en lecture seule : tout ce que vous avez enregistré reste affiché et vous pouvez toujours en enregistrer une copie, mais aucune nouvelle vente ne peut être saisie. Rien n'est effacé, et tout se rouvre dès que le paiement est confirmé.",
       },
       selfLicence: {
         h: "Ce que vous achetez",
-        b: "Vous n'achetez pas le logiciel, vous achetez le droit de l'utiliser dans votre entreprise, sur {devices} postes au maximum. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence de six mois fonctionne de la même façon, tous les six mois. La licence perpétuelle se paie une fois et ne se renouvelle pas.",
+        b: "Vous n'achetez pas le logiciel, vous achetez le droit de l'utiliser dans votre entreprise, sur {devices} appareils au maximum, chaque ordinateur et chaque téléphone comptant pour un. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence de six mois fonctionne de la même façon, tous les six mois. La licence perpétuelle se paie une fois et ne se renouvelle pas.",
       },
       payment: {
         h: "Le paiement",
@@ -242,8 +242,8 @@ export const fr: Dictionary = {
         b: "Votre licence ne s'arrête pas le jour de son échéance. Vous disposez de {graceDays} jours pendant lesquels le logiciel continue de fonctionner normalement, avec un rappel quotidien pour payer sur ce site. Passé ce délai, le logiciel passe en lecture seule, comme à la fin d'un essai. Dès que le paiement est confirmé, tout se rouvre immédiatement. Vos données ne sont jamais effacées, quel que soit le retard.",
       },
       devices: {
-        h: "Vos postes",
-        b: "Votre licence couvre {devices} ordinateurs. Si vous changez de machine, vous libérez l'ancienne depuis votre compte, dans la limite d'un nombre de libérations par an indiqué dans votre compte. Au-delà, écrivez-nous et nous le faisons pour vous. Réinstaller le logiciel sur le même ordinateur ne consomme pas de poste.",
+        h: "Vos appareils",
+        b: "Votre licence couvre {devices} appareils. Chaque ordinateur et chaque téléphone compte pour un appareil distinct, quel que soit le mélange : un ordinateur et un téléphone, deux ordinateurs ou deux téléphones. Chaque appareil fonctionne de son côté et garde ses propres données : ce qui est saisi sur l'un n'apparaît pas sur l'autre. Si vous changez d'appareil, vous libérez l'ancien depuis votre compte, dans la limite d'un nombre de libérations par an indiqué dans votre compte. Au-delà, écrivez-nous et nous le faisons pour vous. Réinstaller le logiciel sur le même ordinateur ne consomme pas d'appareil.",
       },
       refunds: {
         h: "Remboursement",
@@ -251,15 +251,15 @@ export const fr: Dictionary = {
       },
       serial: {
         h: "Votre numéro de série",
-        b: "Votre numéro de série est ce qui active votre logiciel. Gardez-le au sein de votre entreprise, comme une clé : toute personne qui l'a peut activer un ordinateur à votre nom, dans la limite de votre licence. Si vous pensez qu'il a circulé, prévenez-nous tout de suite. Nous passons en revue avec vous les ordinateurs activés avec ce numéro et nous libérons ceux que vous ne reconnaissez pas.",
+        b: "Votre numéro de série est ce qui active votre logiciel. Gardez-le au sein de votre entreprise, comme une clé : toute personne qui l'a peut activer un appareil à votre nom, dans la limite de votre licence. Si vous pensez qu'il a circulé, prévenez-nous tout de suite. Nous passons en revue avec vous les appareils activés avec ce numéro et nous libérons ceux que vous ne reconnaissez pas.",
       },
       install: {
-        h: "L'installation sur Windows et sur Mac",
-        b: "Vous téléchargez le logiciel sur ce site et vous l'installez vous-même, en suivant le guide d'installation affiché sur la page de téléchargement. À la première ouverture, Windows ou macOS peut vous demander une confirmation, parce que le logiciel n'est pas encore signé par Microsoft ou par Apple. Le guide montre comment faire : sur Windows, « Informations complémentaires » puis « Exécuter quand même » ; sur Mac, Réglages Système, Confidentialité et sécurité, puis « Ouvrir quand même ». Cette confirmation n'est demandée qu'une fois et ne change rien au fonctionnement du logiciel ni à la façon dont vos données sont gardées. Si vous êtes bloqué, écrivez-nous sur WhatsApp et nous vous guidons.",
+        h: "L'installation sur Windows, sur Mac et sur téléphone",
+        b: "Vous téléchargez le logiciel sur ce site et vous l'installez vous-même, en suivant le guide d'installation affiché sur la page de téléchargement. À la première ouverture, Windows ou macOS peut vous demander une confirmation, parce que le logiciel n'est pas encore signé par Microsoft ou par Apple. Le guide montre comment faire : sur Windows, « Informations complémentaires » puis « Exécuter quand même » ; sur Mac, Réglages Système, Confidentialité et sécurité, puis « Ouvrir quand même ». Cette confirmation n'est demandée qu'une fois et ne change rien au fonctionnement du logiciel ni à la façon dont vos données sont gardées. Si vous êtes bloqué, écrivez-nous sur WhatsApp et nous vous guidons. Sur un téléphone Android ou un iPhone, il n'y a rien à télécharger : le logiciel s'ouvre dans le navigateur depuis votre compte, et vous l'ajoutez à l'écran d'accueil. Effacer les données de ce site dans le navigateur efface aussi le commerce enregistré sur ce téléphone : enregistrez régulièrement une copie depuis Réglages.",
       },
       selfData: {
         h: "Vos données ne nous parviennent pas",
-        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos ordinateurs. Nos serveurs ne les reçoivent pas, et aucune partie du logiciel ne les envoie. Ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, vos réponses aux questions, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos postes et vos paiements.",
+        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos appareils. Nos serveurs ne les reçoivent pas, et aucune partie du logiciel ne les envoie. Ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, vos réponses aux questions, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos appareils et vos paiements.",
       },
       selfSupport: {
         h: "Ce que la licence comprend",
@@ -275,7 +275,7 @@ export const fr: Dictionary = {
         items: [
           "une capture de paiement fausse, retouchée ou correspondant à un autre paiement",
           "le numéro de série ou le logiciel utilisé par une autre entreprise",
-          "une tentative de contourner la licence : reculer l'horloge de l'ordinateur, copier le logiciel sur un ordinateur qu'elle ne couvre pas, ou le modifier",
+          "une tentative de contourner la licence : reculer l'horloge de l'appareil, copier le logiciel sur un appareil qu'elle ne couvre pas, ou le modifier",
           "l'utilisation du logiciel pour une activité interdite par la loi",
         ],
       },
@@ -325,7 +325,7 @@ export const fr: Dictionary = {
       },
       liability: {
         h: "Responsabilité",
-        b: "Nous faisons de notre mieux pour que le logiciel fonctionne sans erreur, et nous corrigeons ce qui ne fonctionne pas comme annoncé. Il reste un outil : les prix, le stock et les informations que vous saisissez, les reçus que vous remettez et les obligations de votre métier (fiscalité, règles sanitaires et, pour une pharmacie, la délivrance et la péremption des médicaments) restent les vôtres. OUAQT ne répond pas des pertes indirectes, comme un manque à gagner, ni des données perdues lors d'une panne d'ordinateur sans sauvegarde. Dans tous les cas, notre responsabilité est limitée à ce que vous nous avez payé pour la licence au cours des douze derniers mois.",
+        b: "Nous faisons de notre mieux pour que le logiciel fonctionne sans erreur, et nous corrigeons ce qui ne fonctionne pas comme annoncé. Il reste un outil : les prix, le stock et les informations que vous saisissez, les reçus que vous remettez et les obligations de votre métier (fiscalité, règles sanitaires et, pour une pharmacie, la délivrance et la péremption des médicaments) restent les vôtres. OUAQT ne répond pas des pertes indirectes, comme un manque à gagner, ni des données perdues lors d'une panne ou de la perte d'un appareil sans sauvegarde. Dans tous les cas, notre responsabilité est limitée à ce que vous nous avez payé pour la licence au cours des douze derniers mois.",
       },
       termsChanges: {
         h: "Modification de ces conditions",
@@ -350,11 +350,11 @@ export const fr: Dictionary = {
       },
       builder: {
         h: "Quand vous créez un logiciel",
-        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les ordinateurs que vous activez et vos paiements. Quand vous téléchargez le logiciel, nous gardons aussi, pendant quelques heures, une marque brouillée de votre connexion à internet (jamais l'adresse elle-même) et le système choisi, pour que le logiciel reconnaisse son téléchargement et s'ouvre sans vous demander votre numéro. Cette marque est effacée dès qu'elle a servi.",
+        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les appareils que vous activez et vos paiements. Quand vous téléchargez le logiciel, nous gardons aussi, pendant quelques heures, une marque brouillée de votre connexion à internet (jamais l'adresse elle-même) et le système choisi, pour que le logiciel reconnaisse son téléchargement et s'ouvre sans vous demander votre numéro. Cette marque est effacée dès qu'elle a servi.",
       },
       neverReceived: {
         h: "Ce que nous ne recevons jamais",
-        b: "Une fois le logiciel installé, vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos ordinateurs. Nos serveurs ne les reçoivent pas et aucune partie du logiciel ne les envoie. La liste de produits que vous importez au départ sert à préparer votre logiciel ; ce que vous vendez ensuite ne nous parvient pas.",
+        b: "Une fois le logiciel installé, vos ventes, votre stock, vos mouvements et les comptes de vos clients restent sur vos appareils. Nos serveurs ne les reçoivent pas et aucune partie du logiciel ne les envoie. La liste de produits que vous importez au départ sert à préparer votre logiciel ; ce que vous vendez ensuite ne nous parvient pas.",
       },
       ai: {
         h: "L'intelligence artificielle",
@@ -365,8 +365,8 @@ export const fr: Dictionary = {
         b: "Vous payez avec Bankily, Masrvi, BimBank, SEDAD ou Click, directement depuis votre téléphone. Nous ne voyons jamais votre code secret. Nous conservons la capture que vous envoyez, ce qui y est relevé (le montant, la date et le numéro de la transaction) et le montant attendu, le temps de confirmer le paiement et de justifier votre licence.",
       },
       fingerprint: {
-        h: "L'empreinte de votre ordinateur",
-        b: "Pour qu'un même ordinateur ne prenne pas un essai gratuit après l'autre, le logiciel calcule une empreinte à partir de votre carte mère, de votre disque système et de l'identifiant de votre système d'exploitation. Il ne nous envoie que des empreintes chiffrées, jamais les numéros eux-mêmes, et nous ne pouvons pas remonter aux numéros à partir de ce que nous recevons. Cela sert à une seule chose : savoir si cette machine a déjà eu un essai. Si vous avez acheté votre ordinateur d'occasion, ou si vous l'avez fait réparer, écrivez-nous et nous vous ouvrons l'essai à la main.",
+        h: "L'empreinte de votre appareil",
+        b: "Pour qu'un même appareil ne prenne pas un essai gratuit après l'autre, le logiciel calcule une empreinte : sur un ordinateur, à partir de votre carte mère, de votre disque système et de l'identifiant de votre système d'exploitation ; sur un téléphone, à partir d'un numéro tiré au hasard et gardé sur ce téléphone. Il ne nous envoie que des empreintes chiffrées, jamais les numéros eux-mêmes, et nous ne pouvons pas remonter aux numéros à partir de ce que nous recevons. Cela sert à une seule chose : savoir si cet appareil a déjà eu un essai. Si vous avez acheté votre appareil d'occasion, ou si vous l'avez fait réparer, écrivez-nous et nous vous ouvrons l'essai à la main.",
       },
       where: {
         h: "Où ces informations sont conservées",
@@ -432,7 +432,7 @@ export const fr: Dictionary = {
     storyBody1:
       "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait le Builder, un créateur de logiciel en ligne : le patron répond à des questions sur sa façon de travailler, et il repart avec son logiciel, prêt à installer, le jour même.",
     storyBody2:
-      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres ordinateurs, sans internet, et ses chiffres ne nous parviennent jamais.",
+      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres appareils, ordinateur ou téléphone, sans internet, et ses chiffres ne nous parviennent jamais.",
     storyBody3:
       "Le Builder est aujourd'hui notre produit principal. Les métiers qu'il ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
     marketHeading: "Les chiffres derrière ce constat.",
@@ -485,7 +485,7 @@ export const fr: Dictionary = {
   builderHome: {
     heroEyebrow: "Logiciels de gestion pour les PME",
     heroHeading: "Le logiciel de gestion de votre entreprise, prêt en quelques minutes.",
-    heroBody: "OUAQT est une startup qui équipe les petites et moyennes entreprises. Avec le Builder, vous décrivez votre activité et vous repartez avec votre logiciel de caisse, de stock et de rapports, installé sur vos propres ordinateurs.",
+    heroBody: "OUAQT est une startup qui équipe les petites et moyennes entreprises. Avec le Builder, vous décrivez votre activité et vous repartez avec votre logiciel de caisse, de stock et de rapports, sur vos propres ordinateurs et téléphones.",
     heroPrimary: "Créer mon logiciel",
     heroSecondary: "Essayer la démo",
     heroReassurance: "Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
@@ -500,7 +500,7 @@ export const fr: Dictionary = {
     impactOffline: "Sans internet",
     impactOfflineLabel: "pour le travail de tous les jours",
     impactData: "Vos données",
-    impactDataLabel: "restent sur vos ordinateurs",
+    impactDataLabel: "restent sur vos appareils",
     impactTrial: "{days} jours gratuits",
     impactTrialNoDays: "Essai gratuit",
     impactTrialLabel: "pour tout essayer, sans rien payer",
@@ -513,7 +513,7 @@ export const fr: Dictionary = {
     builderStep2: "Voyez-le fonctionner",
     builderStep2Body: "Le vrai logiciel tourne à côté des questions et change à chaque réponse. Vous l'essayez avant de le télécharger.",
     builderStep3: "Installez et commencez",
-    builderStep3Body: "Téléchargez-le pour Windows ou Mac, activez-le avec votre numéro de série, et votre essai gratuit commence.",
+    builderStep3Body: "Téléchargez-le pour Windows ou Mac, ou ouvrez-le sur votre téléphone. Votre numéro de série l'active, et votre essai gratuit commence.",
     builderCta: "Créer mon logiciel",
     builderPricing: "Voir les tarifs",
 
@@ -522,7 +522,7 @@ export const fr: Dictionary = {
     demoBody: "Choisissez un métier, encaissez une vente, ouvrez le stock ou les rapports. Ce que vous voyez ici est ce que vous installerez.",
     demoLoading: "Ouverture du logiciel",
     demoNote: "Données d'exemple, pour essayer sans rien risquer.",
-    demoPhone: "Sur un téléphone, la démo s'affiche en petit. Ouvrez cette page sur un ordinateur pour l'essayer vraiment.",
+    demoPhone: "Sur un téléphone, cette démo s'affiche en petit. Votre propre logiciel, lui, s'adapte à l'écran de votre téléphone.",
     demoShops: {
       pharmacy: "Pharmacie du Centre",
       bakery: "Boulangerie du Port",
@@ -543,7 +543,7 @@ export const fr: Dictionary = {
       { title: "Le crédit client", body: "Les ventes à crédit et ce que chaque client vous doit, sans cahier." },
       { title: "La clôture de caisse", body: "À la fin de la journée ou du poste : ce qui devait être en caisse, et ce qui y est." },
       { title: "Des reçus à votre métier", body: "La table pour un restaurant, la chambre et les dates pour un hôtel, la place et le départ pour un billet." },
-      { title: "Deux postes ensemble", body: "La caisse et un deuxième ordinateur travaillent ensemble sur votre réseau, sans internet." },
+      { title: "Sur votre téléphone aussi", body: "Votre logiciel s'ouvre sur un ordinateur ou sur un téléphone, sans passer par un store. Chacun compte pour un appareil et garde ses propres données." },
       { title: "Français et arabe", body: "Le logiciel parle la langue de votre équipe, reçus compris." },
     ],
 
@@ -581,8 +581,8 @@ export const fr: Dictionary = {
     whyEyebrow: "Pourquoi OUAQT",
     whyHeading: "Pensé pour les PME d'ici, et pour leur façon de travailler.",
     why: [
-      { title: "Sans internet", body: "Le logiciel travaille sur vos ordinateurs. Internet ne sert qu'à l'installation, aux mises à jour et au paiement de la licence." },
-      { title: "Vos données restent chez vous", body: "Vos ventes, votre stock et les comptes de vos clients ne quittent pas vos ordinateurs. Nous ne les recevons jamais." },
+      { title: "Sans internet", body: "Le logiciel travaille sur vos appareils. Internet ne sert qu'à l'installation, aux mises à jour et au paiement de la licence." },
+      { title: "Vos données restent chez vous", body: "Vos ventes, votre stock et les comptes de vos clients ne quittent pas vos appareils. Nous ne les recevons jamais." },
       { title: "Un paiement d'ici", body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an ou tous les six mois. Vous voyez le montant avant de payer." },
       { title: "Une équipe qui répond", body: "Une question, un souci : écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe." },
     ],
@@ -596,7 +596,7 @@ export const fr: Dictionary = {
     pricingLaunch: "Tarif de lancement",
     pricingSoon: "Tarif bientôt disponible",
     pricingTrial: "Essai gratuit de {days} jours",
-    pricingDevices: "{devices} postes compris",
+    pricingDevices: "{devices} appareils compris, ordinateur ou téléphone",
     pricingUpdates: "Mises à jour et assistance comprises",
     pricingPayment: "Paiement par application mobile",
     pricingCta: "Voir tous les tarifs",
@@ -616,13 +616,13 @@ export const fr: Dictionary = {
     faqEyebrow: "Questions",
     faqHeading: "Les questions qu'on nous pose",
     faq1: "Le logiciel marche-t-il sans internet ?",
-    faq1Body: "Oui. Il s'installe sur l'ordinateur de l'entreprise et travaille là. Internet ne sert qu'à l'installation, aux mises à jour et au paiement.",
+    faq1Body: "Oui. Il s'installe sur l'ordinateur de l'entreprise ou s'ouvre sur votre téléphone, et travaille là. Internet ne sert qu'à l'installation, aux mises à jour et au paiement.",
     faq2: "Qui voit mes ventes et mes clients ?",
-    faq2Body: "Vous seul. Vos ventes, votre stock et les comptes de vos clients restent sur vos ordinateurs. Nous ne les recevons jamais.",
-    faq3: "Sur combien d'ordinateurs puis-je l'installer ?",
-    faq3Body: "Deux : la caisse et un deuxième poste. Les deux fonctionnent sans internet et se mettent d'accord entre eux sur votre réseau.",
+    faq2Body: "Vous seul. Vos ventes, votre stock et les comptes de vos clients restent sur vos appareils. Nous ne les recevons jamais.",
+    faq3: "Sur combien d'appareils puis-je l'utiliser ?",
+    faq3Body: "Deux, ordinateurs ou téléphones : par exemple l'ordinateur de la boutique et votre téléphone. Chacun compte pour un appareil, fonctionne sans internet et garde ses propres données : ce qui est saisi sur l'un n'apparaît pas sur l'autre.",
     faq4: "Que se passe-t-il à la fin de l'essai gratuit ?",
-    faq4Body: "Le logiciel s'arrête et affiche la fenêtre de paiement. Vos données restent sur votre ordinateur, et vous pouvez en enregistrer une copie depuis cette fenêtre. Dès que la licence est payée, il se rouvre tout seul.",
+    faq4Body: "Le logiciel s'arrête et affiche la fenêtre de paiement. Vos données restent sur votre appareil, et vous pouvez en enregistrer une copie depuis cette fenêtre. Dès que la licence est payée, il se rouvre tout seul.",
     faq5: "Et si mon métier n'est pas dans la liste ?",
     faq5Body: "Dites-le-nous depuis la liste des métiers, avec votre numéro. D'autres métiers arrivent, et si votre besoin est particulier, nous pouvons le construire sur mesure.",
     faq6: "Et si j'ai besoin d'aide ?",

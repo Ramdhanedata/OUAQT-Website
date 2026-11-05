@@ -56,6 +56,16 @@ describe("the same machine, through the things that change on it", () => {
     const blank = { board: null, disk: null, machine: null };
     expect(sameMachine(blank, blank, 2)).toBe(false);
   });
+
+  it("knows a phone again by the one part it reports", () => {
+    const phone = (id: string) => ({ board: null, disk: null, machine: id });
+    expect(sameMachine(phone("p1"), phone("p1"), 2)).toBe(true);
+    expect(sameMachine(phone("p1"), phone("p2"), 2)).toBe(false);
+  });
+
+  it("never takes a phone for a computer", () => {
+    expect(sameMachine({ board: null, disk: null, machine: "p1" }, machine("b1", "d1", "m1"), 2)).toBe(false);
+  });
 });
 
 describe("the same phone, written differently", () => {
