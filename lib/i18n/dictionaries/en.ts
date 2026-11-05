@@ -138,7 +138,7 @@ export const en = {
       "If a renewal is paid late, entering new data is paused until it is paid. Reading and exporting the data you already have is never blocked.",
     contact: "Contact us",
     whatsapp: "WhatsApp",
-    products: "Current pricing covers systems for {pharmacy}, {hotel}, {transport}, {restaurant}, bakeries, as well as workshop and warehouse management systems.",
+    products: "Current pricing covers systems for {pharmacy}, {hotel}, {transport}, {restaurant}, bakeries, wash stations, as well as workshop and warehouse management systems.",
     productNames: {
       pharmacy: "pharmacies",
       hotel: "hotels",
@@ -484,6 +484,7 @@ export const en = {
     shop: "Shop or grocery",
     hotel: "Hotel or guest house",
     transport: "Passenger and parcel transport",
+    wash: "Car or upholstery wash",
     general: "Any other business: sales, stock and reports",
   },
 
@@ -540,6 +541,7 @@ export const en = {
       shop: "Al Amal Grocery",
       hotel: "Dunes Hotel",
       transport: "Sahel Express Travel",
+      wash: "Al Baraka Wash",
       general: "Nour Workshop",
     },
 
@@ -572,6 +574,7 @@ export const en = {
       shop: "Sell by the piece or by weight, barcodes and customer credit.",
       hotel: "Rooms, stays, advances and extras.",
       transport: "Departures, numbered seats, tickets and parcels.",
+      wash: "Cars, upholstery and carpets: the queue, the washers, advances and collections.",
       general: "Products or services, stock and expenses.",
     },
     tradesOther: "My business is not on this list",

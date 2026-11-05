@@ -7,6 +7,7 @@ import pharmacyJson from "./pharmacy/questions.v1.json";
 import restaurantJson from "./restaurant/questions.v1.json";
 import shopJson from "./shop/questions.v1.json";
 import transportJson from "./transport/questions.v1.json";
+import washJson from "./wash/questions.v1.json";
 import warehouseJson from "./warehouse/questions.v1.json";
 import { applyAnswers, questionBank, type Answers, type Question, type QuestionBank } from "./bank";
 
@@ -30,6 +31,7 @@ const raw: Partial<Record<Pack, unknown>> = {
   shop: shopJson,
   hotel: hotelJson,
   transport: transportJson,
+  wash: washJson,
   general: generalJson,
 };
 

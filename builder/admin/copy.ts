@@ -59,6 +59,7 @@ const fr = {
     shop: "Boutique",
     hotel: "Hôtel",
     transport: "Transport",
+    wash: "Lavage",
     general: "Autre activité",
   } as Record<string, string>,
   plans: {
@@ -550,7 +551,7 @@ const en: AdminCopy = {
 
   navGroups: { follow: "Follow-up", setup: "Setup" },
 
-  packs: { pharmacy: "Pharmacy", bakery: "Bakery", restaurant: "Restaurant", warehouse: "Warehouse", shop: "Shop", hotel: "Hotel", transport: "Transport", general: "Other business" },
+  packs: { pharmacy: "Pharmacy", bakery: "Bakery", restaurant: "Restaurant", warehouse: "Warehouse", shop: "Shop", hotel: "Hotel", transport: "Transport", wash: "Wash", general: "Other business" },
   plans: {
     trial: "Trial",
     annual: "Annual",
@@ -1037,7 +1038,7 @@ const ar: AdminCopy = {
 
   navGroups: { follow: "المتابعة", setup: "الإعداد" },
 
-  packs: { pharmacy: "صيدلية", bakery: "مخبزة", restaurant: "مطعم", warehouse: "مستودع", shop: "متجر", hotel: "فندق", transport: "نقل", general: "نشاط آخر" },
+  packs: { pharmacy: "صيدلية", bakery: "مخبزة", restaurant: "مطعم", warehouse: "مستودع", shop: "متجر", hotel: "فندق", transport: "نقل", wash: "غسيل", general: "نشاط آخر" },
   plans: {
     trial: "تجربة",
     annual: "سنوية",

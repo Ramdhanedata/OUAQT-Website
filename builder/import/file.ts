@@ -61,6 +61,10 @@ const examples: Record<Pack, Record<ImportField, string>[]> = {
     { name: "Emballage de colis", price: "100", quantity: "30", barcode: "", expiry: "", batch: "", unit: "", location: "", soldBy: "" },
     { name: "Eau minérale", price: "50", quantity: "48", barcode: "", expiry: "", batch: "", unit: "Bouteille", location: "", soldBy: "" },
   ],
+  wash: [
+    { name: "Lavage complet", price: "300", quantity: "0", barcode: "", expiry: "", batch: "", unit: "", location: "", soldBy: "" },
+    { name: "Tapis, au m²", price: "50", quantity: "0", barcode: "", expiry: "", batch: "", unit: "", location: "", soldBy: "" },
+  ],
   general: [
     { name: "Coupe de cheveux", price: "300", quantity: "0", barcode: "", expiry: "", batch: "", unit: "", location: "", soldBy: "" },
     { name: "Shampooing", price: "250", quantity: "12", barcode: "", expiry: "", batch: "", unit: "Flacon", location: "", soldBy: "" },

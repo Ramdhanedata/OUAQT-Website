@@ -129,7 +129,7 @@ export const fr: Dictionary = {
       "Si le renouvellement est payé en retard, la saisie de nouvelles données est suspendue jusqu'au paiement. La consultation et l'export de vos données ne sont jamais bloqués.",
     contact: "Nous contacter",
     whatsapp: "WhatsApp",
-    products: "Ces tarifs valent pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, les ateliers et les dépôts.",
+    products: "Ces tarifs valent pour {pharmacy}, {hotel}, {transport}, {restaurant}, les boulangeries, les stations de lavage, les ateliers et les dépôts.",
     productNames: {
       pharmacy: "les pharmacies",
       hotel: "les hôtels",
@@ -479,6 +479,7 @@ export const fr: Dictionary = {
     shop: "Boutique ou épicerie",
     hotel: "Hôtel ou auberge",
     transport: "Transport de voyageurs et de colis",
+    wash: "Lavage de voitures ou de meubles",
     general: "Autre activité : ventes, stock et rapports",
   },
 
@@ -535,6 +536,7 @@ export const fr: Dictionary = {
       shop: "Épicerie Al Amal",
       hotel: "Hôtel Les Dunes",
       transport: "Voyages Sahel Express",
+      wash: "Station de lavage Al Baraka",
       general: "Atelier Nour",
     },
 
@@ -567,6 +569,7 @@ export const fr: Dictionary = {
       shop: "Vente à la pièce ou au poids, code-barres et crédit client.",
       hotel: "Chambres, séjours, avances et extras.",
       transport: "Départs, places numérotées, billets et colis.",
+      wash: "Voitures, meubles et tapis : la file d'attente, les laveurs, les avances et les retraits.",
       general: "Produits ou services, stock et dépenses.",
     },
     tradesOther: "Mon activité n'est pas dans la liste",

@@ -21,6 +21,7 @@ export const OPENING: Record<Pack, "open" | "test"> = {
   warehouse: "open",
   hotel: "open",
   transport: "open",
+  wash: "open",
   general: "open",
 };
 

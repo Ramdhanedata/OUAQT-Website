@@ -64,6 +64,11 @@ export const localisedRoutes = {
     en: "transport-company-software",
     ar: "transport-company-software",
   },
+  "pack-wash": {
+    fr: "logiciel-gestion-lavage",
+    en: "car-wash-software",
+    ar: "car-wash-software",
+  },
   "pack-general": {
     fr: "logiciel-gestion-commerce",
     en: "small-business-software",
