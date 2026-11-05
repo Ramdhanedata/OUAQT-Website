@@ -247,6 +247,13 @@ as a computer does, with `platform: "phone"`, and counts against the same
 Applying `0032_phone_devices.sql` is what lets a phone register; before it,
 the database refuses the row and activation answers `502 not_activated`.
 
+On a **preview deployment only**, a phone can also open an invented shop with
+no serial and no database: `/app/index.html#serial=TESTSHOP`, or `TEST` and any
+other trade (`TESTPHARMACY`, `TESTBAKERY`...). The licence lasts 30 days, is
+signed with the preview's test key, and a production build refuses it. See
+`builder/licence/preview-test-shop.ts`. In production these codes answer
+`404 unknown_serial` like any other wrong number.
+
 ## Refresh
 
 ```

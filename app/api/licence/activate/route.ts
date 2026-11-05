@@ -8,6 +8,7 @@ import { hashToken, newDeviceToken } from "@/builder/licence/devices";
 import { issueLicence } from "@/builder/licence/issue";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 import { payHelpFor } from "@/builder/payment/pay-help";
+import { previewTestShop } from "@/builder/licence/preview-test-shop";
 import { serialFor, setupFor } from "@/builder/licence/setup";
 import { claimTrial } from "@/builder/licence/trial-claim";
 import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
@@ -85,6 +86,10 @@ export async function POST(request: Request) {
   if (!signingKeyIsSet()) {
     return NextResponse.json({ error: "no_signing_key" }, { status: 503 });
   }
+
+  /* Trying the phone app on a preview deployment, with no serial and no database. Never in production. */
+  const testShop = await previewTestShop(input.data);
+  if (testShop) return NextResponse.json(testShop);
 
   const supabase = adminClient();
   if (!supabase) return NextResponse.json({ error: "no_database" }, { status: 503 });
