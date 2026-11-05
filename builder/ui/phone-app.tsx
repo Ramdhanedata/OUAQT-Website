@@ -17,7 +17,8 @@ import type { BuilderCopy } from "@/builder/copy";
  */
 
 export function phoneAppLink(serial: string): string {
-  return `${window.location.origin}/app/index.html#serial=${encodeURIComponent(serial)}`;
+  /* The language too: an iPhone shows its first screen before any shop tells it which to speak. */
+  return `${window.location.origin}/app/index.html#serial=${encodeURIComponent(serial)}&lang=${document.documentElement.lang}`;
 }
 
 /* A touch screen as narrow as a phone. Read once, after the page is in the browser. */
