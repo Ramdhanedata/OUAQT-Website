@@ -398,6 +398,53 @@ export const packPagesFr: PackPagesCopy = {
       },
     ],
   },
+  wash: {
+    title: "Logiciel de lavage auto et d'ameublement en Mauritanie | OUAQT",
+    description: "Le logiciel de votre station de lavage : les voitures en attente, les meubles et les tapis déposés, les laveurs, les avances, le reçu et les rapports. Sans internet.",
+    heading: "Le logiciel de votre station de lavage",
+    intro: "Voitures, meubles et tapis, ou les deux : vous choisissez. Chaque lavage est noté, suivi et payé, et vous voyez ce que la journée a rapporté. Sur votre ordinateur ou votre téléphone, sans internet.",
+    cta: "Créer le logiciel de ma station",
+    does: [
+      {
+        title: "Voitures, meubles, ou les deux",
+        body: "Vous choisissez ce que vous lavez, et le logiciel ne montre que ce qui vous sert.",
+      },
+      {
+        title: "La file d'attente",
+        body: "Chaque lavage passe de En attente à En lavage, puis à Prêt. Un coup d'œil suffit.",
+      },
+      {
+        title: "La voiture par sa plaque",
+        body: "L'immatriculation, le type de véhicule et les services choisis, aux prix que vous avez fixés.",
+      },
+      {
+        title: "Les meubles et les tapis à rendre",
+        body: "Le client, son téléphone, les pièces, la date de retour, et un ticket à lui remettre.",
+      },
+      {
+        title: "Les avances",
+        body: "L'avance est notée au dépôt et déduite au retrait. Le client ne paie que le reste.",
+      },
+      {
+        title: "Ce que fait chaque laveur",
+        body: "Les rapports montrent, laveur par laveur, le nombre de lavages et ce qu'ils ont rapporté.",
+      },
+    ],
+    worries: [
+      {
+        question: "Et si le courant saute ?",
+        answer: "Chaque lavage est enregistré tout de suite. Au redémarrage, il est là.",
+      },
+      {
+        question: "Est-ce que mes chiffres partent quelque part ?",
+        answer: "Non. Ils restent sur votre appareil. Nous ne les recevons jamais.",
+      },
+      {
+        question: "Un client ne revient pas chercher son tapis",
+        answer: "Le lavage reste dans la liste, avec sa date et son téléphone pour l'appeler. Son avance reste notée.",
+      },
+    ],
+  },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   general: {
     title: "Logiciel de gestion commerciale en Mauritanie | OUAQT",

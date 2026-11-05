@@ -426,6 +426,53 @@ export const packPagesEn: PackPagesCopy = {
       },
     ],
   },
+  wash: {
+    title: "Car wash and upholstery cleaning software in Mauritania | OUAQT",
+    description: "The software for your wash: cars in the queue, upholstery and carpets left with you, the washers, advances, the receipt and the reports. No internet needed.",
+    heading: "The software for your wash",
+    intro: "Cars, upholstery and carpets, or both: you choose. Every wash is noted, followed and paid, and you see what the day brought in. On your computer or your phone, with no internet.",
+    cta: "Build the software for my wash",
+    does: [
+      {
+        title: "Cars, upholstery, or both",
+        body: "You choose what you wash, and the software only shows what you use.",
+      },
+      {
+        title: "The queue",
+        body: "Each wash goes from Waiting to Washing, then to Ready. One look is enough.",
+      },
+      {
+        title: "The car by its plate",
+        body: "The plate, the type of vehicle and the services chosen, at the prices you set.",
+      },
+      {
+        title: "Upholstery and carpets to return",
+        body: "The customer, their phone, the pieces, the return date, and a ticket to hand them.",
+      },
+      {
+        title: "Advances",
+        body: "The advance is noted when the piece is left and taken off at collection. The customer pays only the rest.",
+      },
+      {
+        title: "What each washer does",
+        body: "The reports show, washer by washer, how many washes they did and what those brought in.",
+      },
+    ],
+    worries: [
+      {
+        question: "What if the power goes?",
+        answer: "Each wash is saved straight away. When the software restarts, it is there.",
+      },
+      {
+        question: "Do my figures go anywhere?",
+        answer: "No. They stay on your device. We never receive them.",
+      },
+      {
+        question: "A customer does not come back for a carpet",
+        answer: "The wash stays on the list, with its date and the phone number to call. The advance stays noted.",
+      },
+    ],
+  },
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   general: {
     title: "Small business software in Mauritania | OUAQT",

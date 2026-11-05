@@ -1,0 +1,89 @@
+{
+  "bank": "wash",
+  "version": 1,
+  "questions": [
+    {
+      "id": "wa_washes",
+      "type": "multi_choice",
+      "label": {
+        "fr": "Que lavez-vous ?",
+        "ar": "ماذا تغسل؟",
+        "en": "What do you wash?"
+      },
+      "help": {
+        "fr": "Choisissez l'un, l'autre, ou les deux.",
+        "ar": "اختر أحدهما أو كليهما.",
+        "en": "Choose one or the other, or both."
+      },
+      "review": true,
+      "options": [
+        {
+          "id": "cars",
+          "label": {
+            "fr": "Des voitures",
+            "ar": "السيارات",
+            "en": "Cars"
+          }
+        },
+        {
+          "id": "upholstery",
+          "label": {
+            "fr": "Des meubles et des tapis",
+            "ar": "المفروشات والسجاد",
+            "en": "Upholstery and carpets"
+          }
+        }
+      ],
+      "default": [
+        "cars",
+        "upholstery"
+      ],
+      "maps_to": [
+        {
+          "path": "features.wash.washes"
+        }
+      ]
+    },
+    {
+      "id": "wa_washers",
+      "type": "yes_no",
+      "label": {
+        "fr": "Voulez-vous noter qui a fait chaque lavage ?",
+        "ar": "هل تريد تسجيل من قام بكل عملية غسيل؟",
+        "en": "Do you want to note who did each wash?"
+      },
+      "help": {
+        "fr": "Les rapports montrent alors ce que chaque laveur a fait.",
+        "ar": "عندها تُظهر التقارير ما قام به كل عامل.",
+        "en": "The reports then show what each washer has done."
+      },
+      "review": true,
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.wash.washers"
+        }
+      ]
+    },
+    {
+      "id": "wa_deposit",
+      "type": "yes_no",
+      "label": {
+        "fr": "Prenez-vous une avance quand un client dépose ses meubles ou ses tapis ?",
+        "ar": "هل تأخذ دفعة مقدمة عندما يترك الزبون مفروشاته أو سجاده؟",
+        "en": "Do you take an advance when a customer leaves upholstery or carpets?"
+      },
+      "review": true,
+      "show_if": {
+        "question": "wa_washes",
+        "includes": "upholstery"
+      },
+      "default": true,
+      "maps_to": [
+        {
+          "path": "features.wash.deposit"
+        }
+      ]
+    }
+  ]
+}

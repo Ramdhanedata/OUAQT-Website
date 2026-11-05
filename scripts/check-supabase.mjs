@@ -44,7 +44,7 @@ async function asVisitor(path) {
  * The public list as 0016 leaves it. enabled_packs is on the policy still but
  * has no row since 0020, where opening a trade moved into the code.
  */
-const TRADES = ["pharmacy", "bakery", "restaurant", "warehouse", "shop", "hotel", "transport", "general"];
+const TRADES = ["pharmacy", "bakery", "restaurant", "warehouse", "shop", "hotel", "transport", "wash", "general"];
 
 const publicKeys = [
   "trial_days",

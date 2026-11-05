@@ -26,6 +26,8 @@ export type Section =
   | "trips"
   | "parcels"
   | "network"
+  | "washes"
+  | "services"
   | "stock"
   | "expenses"
   | "customers"
@@ -56,6 +58,8 @@ export function sectionsFor(configuration: Configuration): Section[] {
           ...((features.transport?.carries ?? []).includes("parcels") ? (["parcels"] as Section[]) : []),
           "network",
         ];
+      case "wash":
+        return ["washes", "services"];
       case "general":
         return [
           "dashboard",
@@ -82,6 +86,7 @@ export function tracksStock(configuration: Configuration): boolean {
     case "restaurant":
     case "hotel":
     case "transport":
+    case "wash":
       return false;
     case "general": {
       const general = configuration.features.general;
@@ -111,7 +116,7 @@ export function focusFor(path: string, configuration: Configuration): Focus | nu
   if (path === "common.cashClose") return pick("cash");
   if (path === "common.devices") return pick("settings");
   if (path === "common.lowStockAlert") return pick("stock");
-  if (path.startsWith("common.")) return pick("sale", "counter", "extras");
+  if (path.startsWith("common.")) return pick("sale", "counter", "extras", "washes");
 
   if (path.startsWith("features.restaurant")) return pick("counter");
 
@@ -127,6 +132,8 @@ export function focusFor(path: string, configuration: Configuration): Focus | nu
 
   if (path === "features.transport.parcelPayer") return pick("parcels");
   if (path.startsWith("features.transport")) return pick("trips");
+
+  if (path.startsWith("features.wash")) return pick("washes");
 
   if (path === "features.general.trackStock") return pick("stock", "menu");
   if (path === "features.general.expenses") return pick("expenses", "dashboard");

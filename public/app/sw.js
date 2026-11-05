@@ -7,16 +7,16 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-2ad7e1246d68";
+const CACHE = "ouaqt-phone-fe3231b3f868";
 const FILES = [
   "./assets/cairo-arabic-BW4_w4rE.woff2",
   "./assets/cairo-latin-Br-HIwGC.woff2",
   "./assets/cairo-latin-ext-BzTkPeNP.woff2",
-  "./assets/index-DP0jHipZ.js",
+  "./assets/index-VCr-F8yq.js",
   "./assets/main-D8QSoOV-.css",
-  "./assets/main-DWmDRZYU.js",
+  "./assets/main-gM8Utg1t.js",
   "./assets/pay-example-DgSWHWNK.webp",
-  "./assets/preload-DYPFX3Sc.js",
+  "./assets/preload-CvaYESia.js",
   "./assets/source-serif-4-latin-ext-iEVfbfSw.woff2",
   "./assets/source-serif-4-latin-l1vr9vou.woff2",
   "./assets/sqlite3-Con_VOcu.wasm",
@@ -50,6 +50,9 @@ const FILES = [
   "./icons/warehouse-180.png",
   "./icons/warehouse-192.png",
   "./icons/warehouse-512.png",
+  "./icons/wash-180.png",
+  "./icons/wash-192.png",
+  "./icons/wash-512.png",
   "./index.html",
   "./manifest-bakery.webmanifest",
   "./manifest-general.webmanifest",
@@ -59,6 +62,7 @@ const FILES = [
   "./manifest-shop.webmanifest",
   "./manifest-transport.webmanifest",
   "./manifest-warehouse.webmanifest",
+  "./manifest-wash.webmanifest",
   "./manifest.webmanifest"
 ];
 

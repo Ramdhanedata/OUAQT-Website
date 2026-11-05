@@ -35,6 +35,7 @@ const SUSPICIOUS_MEDIAN: Record<Pack, number> = {
   shop: 20_000,
   hotel: 100_000,
   transport: 100_000,
+  wash: 30_000,
   general: 50_000,
 };
 /* These are read against prices as written in the file, in whole ouguiyas,

@@ -72,6 +72,9 @@ const publicSettings = z.object({
   installer_url_mac_hotel: z.string(),
   installer_url_windows_transport: z.string(),
   installer_url_mac_transport: z.string(),
+  /* Optional, so the site still reads its settings before 0033 reaches a database. */
+  installer_url_windows_wash: z.string().default(""),
+  installer_url_mac_wash: z.string().default(""),
   installer_url_windows_general: z.string(),
   installer_url_mac_general: z.string(),
 });
