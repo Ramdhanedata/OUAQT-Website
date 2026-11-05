@@ -51,6 +51,7 @@ export const fr = {
     title: "Merci d'avoir choisi OUAQT",
     body: "Ouvrez votre logiciel sur votre téléphone, ou installez-le sur votre ordinateur. Bon travail !",
     bodyNoShop: "Ouvrez votre logiciel sur votre téléphone, ou installez-le sur votre ordinateur. Bon travail !",
+    bodyPhoneOnly: "Ouvrez votre logiciel sur votre téléphone. La version pour ordinateur arrive bientôt.",
     names: {
       pharmacy: "OUAQT Pharmacie",
       bakery: "OUAQT Boulangerie",
@@ -243,7 +244,7 @@ export const fr = {
     macIntel: "Télécharger pour Mac à puce Intel",
     otherMacApple: "Votre Mac a une puce Apple (M1 ou plus récent) ? Télécharger cette version",
     otherMacIntel: "Votre Mac a une puce Intel ? Télécharger cette version",
-    soon: "Le logiciel à installer sera bientôt disponible. Gardez votre numéro de série.",
+    soon: "La version Windows et Mac de ce logiciel arrive bientôt. Vous pouvez déjà l'utiliser sur votre téléphone. Gardez votre numéro de série.",
     onPhone: "Pour l'installer aussi sur un ordinateur, ouvrez {site} sur cet ordinateur, choisissez « {have} » et tapez ou collez ce numéro.",
     tutorialWindows: "Voir la vidéo d'installation sur Windows",
     tutorialMac: "Voir la vidéo d'installation sur Mac",

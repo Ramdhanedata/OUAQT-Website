@@ -465,6 +465,9 @@ function Wizard({
   const named = Boolean((answers.nameLatin ?? "").trim());
 
   const pack = answers.pack ?? enabledPacks[0] ?? "pharmacy";
+  /* A trade whose computer version is not out yet has no file to install: no guide to one, and nothing that promises it. */
+  const canInstall = Boolean(installers[pack]?.windows || installers[pack]?.mac);
+  const showGuide = finished && canInstall;
 
   function goBack() {
     if (lead) return setLead(null);
@@ -685,6 +688,7 @@ function Wizard({
                 copy={copy}
                 pack={pack}
                 shop={(locale === "ar" && answers.nameArabic) || answers.nameLatin || ""}
+                canInstall={canInstall}
               />
             ) : null}
 
@@ -725,12 +729,12 @@ function Wizard({
                 * chosen on the left. The preview stays mounted underneath, so
                 * going back a step finds it as it was.
                 */}
-              {step === total - 1 && currentSerial ? (
+              {showGuide ? (
                 <div className="max-h-[calc(100vh-7rem)] overflow-y-auto rounded-2xl">
                   <GuideForTarget copy={copy} pack={pack} shop={(locale === "ar" && answers.nameArabic) || answers.nameLatin || ""} />
                 </div>
               ) : null}
-              <div className={step === total - 1 && currentSerial ? "hidden" : undefined}>
+              <div className={showGuide ? "hidden" : undefined}>
                 <Preview copy={copy} answers={answers} fallbackLanguage={locale} onExpand={setPreviewLarge} />
               </div>
             </aside>
@@ -764,7 +768,7 @@ function Wizard({
  * Where Continue was, once there is nothing left to continue to: thanks, by
  * the name of the software they are about to install.
  */
-function Thanks({ copy, pack, shop }: { copy: BuilderCopy; pack: Pack; shop: string }) {
+function Thanks({ copy, pack, shop, canInstall }: { copy: BuilderCopy; pack: Pack; shop: string; canInstall: boolean }) {
   const app = copy.thanks.names[pack] ?? copy.thanks.names.general;
   return (
     <div className="mt-8 flex gap-4 rounded-2xl border border-accent/40 bg-accent/10 p-6">
@@ -772,7 +776,7 @@ function Thanks({ copy, pack, shop }: { copy: BuilderCopy; pack: Pack; shop: str
       <div>
         <p className="text-xl font-semibold text-foreground">{fill(copy.thanks.title, { app })}</p>
         <p className="mt-2 text-base leading-relaxed text-muted-foreground">
-          {shop.trim() ? fill(copy.thanks.body, { shop: shop.trim() }) : copy.thanks.bodyNoShop}
+          {!canInstall ? copy.thanks.bodyPhoneOnly : shop.trim() ? fill(copy.thanks.body, { shop: shop.trim() }) : copy.thanks.bodyNoShop}
         </p>
       </div>
     </div>

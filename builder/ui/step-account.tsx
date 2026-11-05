@@ -504,6 +504,12 @@ function PhoneOrSoon({
 
   return (
     <div className="space-y-6">
+      {/* First, not last: an owner on a computer came for a download, and must not have to scroll to learn why there is none. */}
+      {!anyInstaller ? (
+        <div role="status" className="rounded-xl border-2 border-foreground p-5">
+          <p className="text-lg font-medium leading-relaxed text-foreground">{copy.serial.soon}</p>
+        </div>
+      ) : null}
       <div>
         <h2 className="text-xl font-semibold text-foreground">{copy.serial.heading}</h2>
         <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.serial.intro}</p>
@@ -539,16 +545,7 @@ function PhoneOrSoon({
 
       <PhoneApp copy={copy} serial={serial} />
 
-      {!anyInstaller ? (
-        /*
-         * No installer yet, and the owner must not be left wondering where his
-         * software went. This was a grey line, and the first person to reach
-         * step 4 on the preview did not see it.
-         */
-        <div role="status" className="rounded-xl border-2 border-foreground p-5">
-          <p className="text-lg font-medium leading-relaxed text-foreground">{copy.serial.soon}</p>
-        </div>
-      ) : showDownloads ? (
+      {!anyInstaller ? null : showDownloads ? (
         <div className="space-y-5">
           <div className="flex flex-wrap gap-3">
             {installers.windows ? (

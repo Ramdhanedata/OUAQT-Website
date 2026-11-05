@@ -45,6 +45,7 @@ export const en: BuilderCopy = {
     title: "Thank you for choosing OUAQT",
     body: "Open your software on your phone, or install it on your computer. All the best!",
     bodyNoShop: "Open your software on your phone, or install it on your computer. All the best!",
+    bodyPhoneOnly: "Open your software on your phone. The computer version is coming soon.",
     names: {
       pharmacy: "OUAQT Pharmacy",
       bakery: "OUAQT Bakery",
@@ -237,7 +238,7 @@ export const en: BuilderCopy = {
     macIntel: "Download for Mac with Intel chip",
     otherMacApple: "Does your Mac have an Apple chip (M1 or newer)? Download that version",
     otherMacIntel: "Does your Mac have an Intel chip? Download that version",
-    soon: "The software to install will be available soon. Keep your serial number.",
+    soon: "The Windows and Mac version of this software is coming soon. You can already use it on your phone. Keep your serial number.",
     onPhone: "To install it on a computer too, open {site} on that computer, choose “{have}” and type or paste this number.",
     tutorialWindows: "Watch the Windows installation video",
     tutorialMac: "Watch the Mac installation video",
