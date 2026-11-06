@@ -158,7 +158,7 @@ export const en = {
     bespoke: {
       eyebrow: "Bespoke",
       heading: "A system built for your business alone",
-      body: "For a mine, a reconciliation process or transport work that goes beyond the standard system, we build to order and quote on the days of work involved.",
+      body: "For a mine, a large transport company or any work beyond the standard software, we build to order and quote on the days of work involved.",
       maintenance:
         "Annual maintenance is {rate} of the build value, starting in month {month}.",
       cta: "Request a quote",
