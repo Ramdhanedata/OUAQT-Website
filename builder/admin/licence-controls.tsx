@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { fill } from "@/lib/utils";
+import { LICENCE_PLANS } from "@/builder/payment/pricing";
 import type { AdminCopy } from "./copy";
 
 /*
@@ -16,7 +17,8 @@ import type { AdminCopy } from "./copy";
  */
 
 type Mode = "grant" | "setEnd" | "end" | "suspend" | "reactivate";
-const PLANS = ["annual", "semiannual", "quarterly", "perpetual"] as const;
+/* Every length an owner can pay for, a year first, then a licence that does not end. */
+const PLANS = [...LICENCE_PLANS, "perpetual"] as const;
 
 const PRIMARY = "min-h-[44px] rounded-lg bg-foreground px-4 text-[15px] font-medium text-background";
 const QUIET = "min-h-[44px] rounded-lg border border-border bg-surface px-4 text-[15px] text-foreground hover:border-foreground";

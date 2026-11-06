@@ -83,8 +83,18 @@ export const fr: Dictionary = {
       payment: "Paiement par Bankily, Masrvi, BimBank, SEDAD ou Click. Vous voyez le montant avant de payer.",
       cta: "Créer mon logiciel",
       monthly: "soit {amount} par mois",
-      annual: { label: "Licence annuelle", cadence: "Par an" },
-      semiannual: { label: "Licence semestrielle", cadence: "Tous les 6 mois" },
+      licence: {
+        label: "Licence",
+        note: "Payez pour un mois, deux mois, trois, six ou un an : choisissez la durée, le prix suit.",
+        choose: "Pour combien de temps ?",
+      },
+      lengths: {
+        annual: { label: "1 an", cadence: "Par an" },
+        semiannual: { label: "6 mois", cadence: "Tous les 6 mois" },
+        quarterly: { label: "3 mois", cadence: "Tous les 3 mois" },
+        bimonthly: { label: "2 mois", cadence: "Tous les 2 mois" },
+        monthly: { label: "1 mois", cadence: "Chaque mois" },
+      },
       perpetual: { label: "Licence perpétuelle", cadence: "Payée une fois" },
       extraDevice: { label: "Appareil supplémentaire", cadence: "Par an" },
       setupVisit: {
@@ -200,7 +210,7 @@ export const fr: Dictionary = {
         },
         {
           q: "Puis-je payer en plusieurs fois ?",
-          a: "Oui pour l'installation, en deux versements, le premier à la signature et le second à la mise en service. La licence perpétuelle se règle en une fois, et la licence annuelle une fois par an, ou tous les six mois pour le logiciel que vous créez vous-même.",
+          a: "Oui pour l'installation, en deux versements, le premier à la signature et le second à la mise en service. La licence perpétuelle se règle en une fois, et la licence annuelle une fois par an. Le logiciel que vous créez vous-même se paie pour un mois, deux mois, trois, six ou un an, au choix.",
         },
         {
           q: "Quelle est la différence entre une modification et un nouveau module ?",
@@ -216,7 +226,7 @@ export const fr: Dictionary = {
 
   legal: {
     updated: "Dernière mise à jour",
-    updatedDate: "5 novembre 2026",
+    updatedDate: "6 novembre 2026",
     terms: {
       title: "Licence et conditions d'utilisation",
       intro:
@@ -231,11 +241,11 @@ export const fr: Dictionary = {
       },
       selfLicence: {
         h: "Ce que vous achetez",
-        b: "Vous n'achetez pas le logiciel, vous achetez le droit de l'utiliser dans votre entreprise, sur {devices} appareils au maximum, chaque ordinateur et chaque téléphone comptant pour un. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. La licence de six mois fonctionne de la même façon, tous les six mois. La licence perpétuelle se paie une fois et ne se renouvelle pas.",
+        b: "Vous n'achetez pas le logiciel, vous achetez le droit de l'utiliser dans votre entreprise, sur {devices} appareils au maximum, chaque ordinateur et chaque téléphone comptant pour un. La licence annuelle se renouvelle chaque année par tacite reconduction et reste résiliable avant la date de renouvellement. Vous pouvez aussi la payer pour un mois, deux mois, trois ou six mois : elle se renouvelle alors de la même façon, à la fin de chaque durée payée. La licence perpétuelle se paie une fois et ne se renouvelle pas.",
       },
       payment: {
         h: "Le paiement",
-        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous envoyez la capture d'écran de la confirmation avec votre numéro de série. Quand la capture peut être lue et que tout y correspond, le paiement peut être confirmé tout de suite et votre logiciel se rouvre de lui-même. Sinon, nous le vérifions à la main, en général le jour même. Le montant envoyé décide de la durée : à partir du prix de 6 mois, 6 mois ; à partir du prix d'un an, un an. Ce qui dépasse ce prix vous est remboursé sur simple demande, et un montant inférieur au prix le plus bas n'achète rien et vous est remboursé. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
+        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous envoyez la capture d'écran de la confirmation avec votre numéro de série. Quand la capture peut être lue et que tout y correspond, le paiement peut être confirmé tout de suite et votre logiciel se rouvre de lui-même. Sinon, nous le vérifions à la main, en général le jour même. Le montant envoyé décide de la durée : la plus longue dont il atteint le prix, parmi un mois, deux mois, trois, six et un an. Par exemple, un montant compris entre le prix de 6 mois et celui d'un an achète 6 mois. Ce qui dépasse ce prix vous est remboursé sur simple demande, et un montant inférieur au prix le plus bas n'achète rien et vous est remboursé. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
       },
       grace: {
         h: "Si le renouvellement est payé en retard",
@@ -627,7 +637,7 @@ export const fr: Dictionary = {
     why: [
       { title: "Sans internet", body: "Le logiciel travaille sur vos appareils. Internet ne sert qu'à l'installation, aux mises à jour et au paiement de la licence." },
       { title: "Vos données restent chez vous", body: "Vos ventes, votre stock et les comptes de vos clients sont gardés sur vos appareils. Entre eux, ils voyagent chiffrés, et nous ne les lisons pas." },
-      { title: "Un paiement d'ici", body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, une fois par an ou tous les six mois. Vous voyez le montant avant de payer." },
+      { title: "Un paiement d'ici", body: "Par Bankily, Masrvi, BimBank, SEDAD ou Click, pour un mois, deux mois, trois, six ou un an. Vous voyez le montant avant de payer." },
       { title: "Une équipe qui répond", body: "Une question, un souci : écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe." },
     ],
 
@@ -643,6 +653,7 @@ export const fr: Dictionary = {
     pricingDevices: "{devices} appareils compris, ordinateur ou téléphone",
     pricingUpdates: "Mises à jour et assistance comprises",
     pricingPayment: "Paiement par application mobile",
+    pricingLengths: "Payez pour 1, 2, 3 ou 6 mois, ou pour un an",
     pricingCta: "Voir tous les tarifs",
 
     customEyebrow: "Sur mesure",

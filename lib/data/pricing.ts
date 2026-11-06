@@ -88,13 +88,17 @@ export const pricing: PriceBook = {
  * a visitor sees when settings cannot be read or a price in them is empty, so
  * the pricing pages never fall back to "price coming soon" for a price that
  * has in fact been decided. The payment page does not read it.
+ *
+ * One, two and three months have no figure here: the month and two months
+ * have not been decided, and three months is read from settings alone. Null
+ * says "price coming soon" until settings say otherwise.
  */
-const builderList: Record<
-  Exclude<Plan, "quarterly">,
-  { standard: number; launch: number | null }
-> = {
+const builderList: Record<Plan, { standard: number | null; launch: number | null }> = {
   annual: pricing.annualLicence,
   semiannual: { standard: 9_000, launch: 7_500 },
+  quarterly: { standard: null, launch: null },
+  bimonthly: { standard: null, launch: null },
+  monthly: { standard: null, launch: null },
   perpetual: pricing.perpetualLicence,
   extra_device: pricing.extraDevice,
   setup_visit: { standard: 10_000, launch: null },
@@ -122,7 +126,7 @@ export function builderTerms(settings: PublicSettings | null) {
  * like everything priceFor returns.
  */
 export function shownPrice(
-  plan: Exclude<Plan, "quarterly">,
+  plan: Plan,
   settings: PublicSettings | null,
   launchClient: boolean
 ): Price {
@@ -133,8 +137,8 @@ export function shownPrice(
   const amount = launchClient && listed.launch !== null ? listed.launch : listed.standard;
   return {
     plan,
-    amount: toMinor(amount),
-    standard: toMinor(listed.standard),
+    amount: amount === null ? null : toMinor(amount),
+    standard: listed.standard === null ? null : toMinor(listed.standard),
     launch: launchClient && listed.launch !== null,
   };
 }

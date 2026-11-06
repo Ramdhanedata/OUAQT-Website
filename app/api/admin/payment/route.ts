@@ -5,7 +5,7 @@ import { audit } from "@/builder/db/audit";
 import { adminClient } from "@/builder/db/server";
 import { getPublicSettings } from "@/builder/db/settings";
 import { grantLicence, restoreLicence, type LicenceBefore } from "@/builder/payment/grant";
-import { priceFor } from "@/builder/payment/pricing";
+import { isLicencePlan, LICENCE_PLANS, priceFor } from "@/builder/payment/pricing";
 import { toMinor } from "@/app-ui/money";
 import type { CheckFailure, Extracted } from "@/builder/payment/checks";
 import { owedBack } from "@/builder/admin/payment-rules";
@@ -31,10 +31,10 @@ const body = z.object({
   reason: z.string().trim().max(300).optional(),
   /*
    * Confirming, the length the person grants: what the amount on the image
-   * paid for. A payment filed without a plan chosen is filed as what its
-   * amount said, or as a year when nothing could be read.
+   * paid for, a month to a year. A payment filed without a plan chosen is
+   * filed as what its amount said, or as a year when nothing could be read.
    */
-  plan: z.enum(["annual", "semiannual"]).optional(),
+  plan: z.enum(LICENCE_PLANS).optional(),
 });
 
 export async function POST(request: Request) {
@@ -169,7 +169,7 @@ export async function POST(request: Request) {
 
   /* Another length than it was filed as: the payment says so before the licence moves. */
   if (input.data.plan && input.data.plan !== payment.plan) {
-    if (payment.plan !== "annual" && payment.plan !== "semiannual") {
+    if (!isLicencePlan(payment.plan)) {
       return NextResponse.json({ error: "plan_fixed" }, { status: 400 });
     }
     const [settings, { data: business }] = await Promise.all([

@@ -93,8 +93,8 @@ function Payment({
   const [reason, setReason] = useState("");
   const [error, setError] = useState<string | null>(null);
   /*
-   * A year or six months. Filed as what its amount paid for, or as a year
-   * when nothing could be read: the person looking at the image says which.
+   * A month to a year. Filed as what its amount paid for, or as a year when
+   * nothing could be read: the person looking at the image says which.
    */
   const [plan, setPlan] = useState(row.plan);
   const choosing = !review && row.choices.length > 1;

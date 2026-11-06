@@ -4,7 +4,7 @@
  * Adel's rules, 2026-09-25. Three things are read off the screenshot and each
  * must be right: the number the money went to is OUAQT's number on the app
  * he chose, the date is today's, and the amount is exactly the price of the
- * plan he chose (a year or six months). Paying with his serial, he chooses
+ * plan he chose (a month to a year). Paying with his serial, he chooses
  * nothing: the amount must be at least the smallest price, and the longest
  * length it covers is what he bought; anything above that price is owed back
  * to him (2026-10-03). All three right, and nothing used

@@ -12,7 +12,33 @@ import type { PublicSettings } from "@/builder/db/settings";
  * not-a-rule-file: every number below arrives from the settings table.
  */
 
-export type Plan = "annual" | "semiannual" | "quarterly" | "perpetual" | "extra_device" | "setup_visit";
+/*
+ * The lengths a licence can be paid for, longest first, and how many months
+ * each buys. These are what the words mean rather than prices anybody
+ * administers: a year is twelve months. Adel, 2026-11-06: a month, two
+ * months, three, six, or a year, each at its own price from settings.
+ *
+ * Longest first because that is the order they are offered in: the year
+ * leads, and it is what a payment is filed as when its amount cannot say.
+ */
+export const LICENCE_LENGTHS = [
+  { plan: "annual", months: 12 }, // not-a-rule: a year
+  { plan: "semiannual", months: 6 }, // not-a-rule: half a year
+  { plan: "quarterly", months: 3 }, // not-a-rule: a quarter
+  { plan: "bimonthly", months: 2 }, // not-a-rule: two months
+  { plan: "monthly", months: 1 }, // not-a-rule: a month
+] as const;
+
+/** A length of licence time, paid for and renewed. */
+export type LicencePlan = (typeof LICENCE_LENGTHS)[number]["plan"];
+
+export const LICENCE_PLANS = LICENCE_LENGTHS.map((one) => one.plan) as [LicencePlan, ...LicencePlan[]];
+
+export function isLicencePlan(plan: unknown): plan is LicencePlan {
+  return typeof plan === "string" && (LICENCE_PLANS as string[]).includes(plan);
+}
+
+export type Plan = LicencePlan | "perpetual" | "extra_device" | "setup_visit";
 
 export type Price = {
   plan: Plan;
@@ -23,91 +49,72 @@ export type Price = {
   launch: boolean;
 };
 
+/*
+ * Where each price lives in settings: a launch price beside the standard
+ * one. The setup visit has no launch price. Three months had none before
+ * 2026-11-06 either; its launch row starts empty, like the new lengths'.
+ */
+const PRICE_KEYS: Record<Plan, { launch: keyof PublicSettings | null; standard: keyof PublicSettings }> = {
+  annual: { launch: "price_annual_launch_mru", standard: "price_annual_standard_mru" },
+  semiannual: { launch: "price_semiannual_launch_mru", standard: "price_semiannual_standard_mru" },
+  quarterly: { launch: "price_quarterly_launch_mru", standard: "price_quarterly_standard_mru" },
+  bimonthly: { launch: "price_bimonthly_launch_mru", standard: "price_bimonthly_standard_mru" },
+  monthly: { launch: "price_monthly_launch_mru", standard: "price_monthly_standard_mru" },
+  perpetual: { launch: "price_perpetual_launch_mru", standard: "price_perpetual_standard_mru" },
+  extra_device: { launch: "price_extra_device_launch_mru", standard: "price_extra_device_standard_mru" },
+  setup_visit: { launch: null, standard: "price_setup_visit_mru" },
+};
+
+/*
+ * A launch client pays the launch price when there is one, and the standard
+ * price when there is not: an empty launch row is not a free licence. The
+ * price is only called a launch price when it is one.
+ */
 export function priceFor(
   plan: Plan,
   settings: PublicSettings,
   launchClient: boolean
 ): Price {
-  const pair = (launchKey: keyof PublicSettings, standardKey: keyof PublicSettings) => {
-    const standard = settings[standardKey] as number | null;
-    const launch = settings[launchKey] as number | null;
-    return {
-      amount: launchClient ? (launch ?? standard) : standard,
-      standard,
-    };
-  };
-
-  switch (plan) {
-    case "annual": {
-      const { amount, standard } = pair("price_annual_launch_mru", "price_annual_standard_mru");
-      return { plan, amount, standard, launch: launchClient };
-    }
-    case "semiannual": {
-      const { amount, standard } = pair("price_semiannual_launch_mru", "price_semiannual_standard_mru");
-      return { plan, amount, standard, launch: launchClient };
-    }
-    case "quarterly":
-      /* No launch price on the quarterly option: it is the standard one only. */
-      return {
-        plan,
-        amount: settings.price_quarterly_standard_mru,
-        standard: settings.price_quarterly_standard_mru,
-        launch: false,
-      };
-    case "perpetual": {
-      const { amount, standard } = pair("price_perpetual_launch_mru", "price_perpetual_standard_mru");
-      return { plan, amount, standard, launch: launchClient };
-    }
-    case "extra_device": {
-      const { amount, standard } = pair(
-        "price_extra_device_launch_mru",
-        "price_extra_device_standard_mru"
-      );
-      return { plan, amount, standard, launch: launchClient };
-    }
-    case "setup_visit":
-      return {
-        plan,
-        amount: settings.price_setup_visit_mru,
-        standard: settings.price_setup_visit_mru,
-        launch: false,
-      };
-  }
+  const keys = PRICE_KEYS[plan];
+  const standard = (settings[keys.standard] as number | null | undefined) ?? null;
+  const launch = keys.launch ? ((settings[keys.launch] as number | null | undefined) ?? null) : null;
+  const atLaunch = launchClient && launch != null;
+  return { plan, amount: atLaunch ? launch : standard, standard, launch: atLaunch };
 }
 
 /** What an owner thinks in: the yearly price divided by twelve. */
 export { perMonth as monthlyEquivalent } from "@/app-ui/money";
 
-/* How many months a licence plan buys, for what it costs a month. Null where it does not renew. */
-export const MONTHS_OF: Partial<Record<Plan, number>> = {
-  annual: 12, // not-a-rule: a year
-  semiannual: 6, // not-a-rule: half a year
-  quarterly: 3, // not-a-rule: a quarter
-};
+/* How many months a plan buys, for what it costs a month. Null where it does not renew. */
+export function monthsOf(plan: string): number | null {
+  return LICENCE_LENGTHS.find((one) => one.plan === plan)?.months ?? null;
+}
 
 /** A plan's price said per month, rounded to the smallest unit. */
 export function perMonthOf(plan: Plan, amount: number): number | null {
-  const months = MONTHS_OF[plan];
+  const months = monthsOf(plan);
   return months ? Math.round(amount / months) : null;
 }
 
 /*
- * What the payment page offers: a year, and six months, each at its price.
- * A length whose price is not set is not offered.
+ * What the payment page offers: every length whose price is set, longest
+ * first, each at its price. A length whose price is not set is not offered:
+ * a price nobody has decided is how a refund conversation starts.
  */
 export function licenceChoices(settings: PublicSettings, launchClient: boolean): Price[] {
-  return (["annual", "semiannual"] as const)
-    .map((plan) => priceFor(plan, settings, launchClient))
-    .filter((price) => price.amount != null);
+  return LICENCE_PLANS.map((plan) => priceFor(plan, settings, launchClient)).filter(
+    (price) => price.amount != null
+  );
 }
 
 /*
  * Which length an amount paid for, among the ones on offer: the screenshot
- * says how much he sent, and that alone says whether he bought a year or six
- * months (Adel, 2026-10-03). The longest one it covers: between the two
- * prices it is six months, above the year's it is a year, and what was sent
- * beyond that price is his to get back (see refundFor). Below the smallest
- * price it buys nothing, and he is told so.
+ * says how much he sent, and that alone says how long he bought (Adel,
+ * 2026-10-03). The longest one it covers: between the three months' price
+ * and the six months' it is three months, above the year's it is a year,
+ * and what was sent beyond that price is his to get back (see refundFor).
+ * Below the smallest price it buys nothing, and he is told so. Two lengths
+ * at the same price go to the longer, which comes first.
  */
 export function planPaidFor(amount: number | null, prices: Price[]): Price | null {
   if (amount == null) return null;

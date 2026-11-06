@@ -3,7 +3,7 @@ import { z } from "zod";
 import { adminClient, sessionClient } from "@/builder/db/server";
 import { PAYMENT_APPS } from "@/builder/payment/apps";
 import { filePayment } from "@/builder/payment/file";
-import type { Plan } from "@/builder/payment/pricing";
+import { LICENCE_PLANS, type Plan } from "@/builder/payment/pricing";
 
 /*
  * An owner says he has paid.
@@ -26,7 +26,7 @@ const body = z.object({
   /* Where he put it: <his user id>/<something>. Checked, not trusted. */
   path: z.string().min(3).max(300),
   app: z.enum(PAYMENT_APPS),
-  plan: z.enum(["annual", "semiannual", "quarterly", "perpetual", "extra_device", "setup_visit"]),
+  plan: z.enum([...LICENCE_PLANS, "perpetual", "extra_device", "setup_visit"]),
 });
 
 export async function POST(request: Request) {

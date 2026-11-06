@@ -37,6 +37,16 @@ const publicSettings = z.object({
   /* Six months, beside the year. See 0023: missing until it has run, and then simply not offered. */
   price_semiannual_launch_mru: money.default(null),
   price_semiannual_standard_mru: money.default(null),
+  /*
+   * A month, two months, and a launch price for three (0035). Empty until
+   * the admin sets them, and missing before 0035 has run: either way that
+   * length is not offered, and the pricing page says its price is coming.
+   */
+  price_quarterly_launch_mru: money.default(null),
+  price_bimonthly_launch_mru: money.default(null),
+  price_bimonthly_standard_mru: money.default(null),
+  price_monthly_launch_mru: money.default(null),
+  price_monthly_standard_mru: money.default(null),
   price_setup_visit_mru: money,
   price_extra_device_launch_mru: money,
   price_extra_device_standard_mru: money,

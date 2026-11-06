@@ -381,10 +381,11 @@ When the licence ends, the app's window tells the owner how to pay, from
 his phone, in the app he pays with: send the amount to the number, write his
 serial in the payment's note, take a screenshot, and scan the window's code.
 The page it opens (`/payer#SERIAL`) asks for the screenshot and nothing
-else: the amount read off it says whether he paid for a year or six months
-(the longest it covers: between the two prices six months, above the year's
-a year, and the page tells him to ask OUAQT for what he sent beyond that
-price), and the number it went to says which app. Less than the smallest
+else: the amount read off it says how long he paid for, a month, two, three,
+six or a year (the longest it covers: between the six months' price and the
+year's six months, above the year's a year, and the page tells him to ask
+OUAQT for what he sent beyond that price), and the number it went to says
+which app. Less than the smallest
 price buys nothing and is refused. When every check passes the
 licence opens at once, and the app, which asks every few seconds while that
 window is open, says what was bought and opens again.
@@ -397,9 +398,12 @@ read from the same settings as the payment page (`payHelpFor` in
 
 - `payTo`: the apps that have a receiving number, in the page's order, each
   named in Latin and Arabic script. Empty when no number is set.
-- `prices`: what this shop pays for a year and for six months, in minor
-  units, at its own price (launch or standard). A price that is not set is
-  left out, never sent as zero.
+- `prices`: what this shop pays for each length it can buy, longest first,
+  in minor units, at its own price (launch or standard). `plan` is one of
+  `annual` (12 months), `semiannual` (6), `quarterly` (3), `bimonthly` (2)
+  and `monthly` (1), the last three since 2026-11-06. A price that is not
+  set is left out, never sent as zero. An app should skip a plan it does not
+  know rather than fail: new lengths may be added.
 
 Keep the last ones received. An app that has none yet, from a website older
 than these fields, shows the payment page's number and no amount.

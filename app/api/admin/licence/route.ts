@@ -4,6 +4,7 @@ import { adminGate } from "@/builder/admin/guard";
 import { audit } from "@/builder/db/audit";
 import { adminClient } from "@/builder/db/server";
 import { grantLicence } from "@/builder/payment/grant";
+import { LICENCE_PLANS } from "@/builder/payment/pricing";
 
 /*
  * Staff deciding about one shop's licence, from its page in the admin area.
@@ -66,7 +67,7 @@ const body = z.discriminatedUnion("action", [
   z.object({
     action: z.literal("grant"),
     businessId: z.string().uuid(),
-    plan: z.enum(["quarterly", "semiannual", "annual", "perpetual"]),
+    plan: z.enum([...LICENCE_PLANS, "perpetual"]),
     reason: z.string().trim().min(4).max(400),
   }).strict(),
   z.object({ action: z.literal("gift"), businessId: z.string().uuid(), reason: z.string().trim().min(4).max(400) }).strict(),

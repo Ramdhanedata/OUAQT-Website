@@ -240,7 +240,14 @@ const fr = {
     reason: "Raison, gardée dans l'historique",
     days: "Jours",
     plan: "Formule",
-    planNames: { annual: "Annuelle", semiannual: "Semestrielle", perpetual: "Définitive, payée" } as Record<string, string>,
+    planNames: {
+      annual: "Annuelle",
+      semiannual: "Semestrielle",
+      quarterly: "Trimestrielle",
+      bimonthly: "Bimestrielle",
+      monthly: "Mensuelle",
+      perpetual: "Définitive, payée",
+    } as Record<string, string>,
     cancelAction: "Annuler",
     done: "C'est fait. Le logiciel l'appliquera à sa prochaine vérification.",
     errors: {
@@ -492,7 +499,14 @@ const en: GrowthCopy = {
     reason: "Reason, kept in the history",
     days: "Days",
     plan: "Plan",
-    planNames: { annual: "Annual", semiannual: "Six months", perpetual: "Permanent, paid" },
+    planNames: {
+      annual: "Annual",
+      semiannual: "Six months",
+      quarterly: "Three months",
+      bimonthly: "Two months",
+      monthly: "One month",
+      perpetual: "Permanent, paid",
+    },
     cancelAction: "Cancel",
     done: "Done. The software will apply it at its next check.",
     errors: {
@@ -742,7 +756,14 @@ const ar: GrowthCopy = {
     reason: "السبب، يُحفظ في السجل",
     days: "الأيام",
     plan: "الصيغة",
-    planNames: { annual: "سنوية", semiannual: "ستة أشهر", perpetual: "دائمة، مدفوعة" },
+    planNames: {
+      annual: "سنوية",
+      semiannual: "ستة أشهر",
+      quarterly: "ثلاثة أشهر",
+      bimonthly: "شهران",
+      monthly: "شهر واحد",
+      perpetual: "دائمة، مدفوعة",
+    },
     cancelAction: "إلغاء",
     done: "تم. سيطبّقه البرنامج عند فحصه التالي.",
     errors: {

@@ -2,7 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { getPublicSettings } from "@/builder/db/settings";
-import { licenceChoices } from "@/builder/payment/pricing";
+import { isLicencePlan, licenceChoices } from "@/builder/payment/pricing";
 import type { PaymentRow } from "./payments";
 
 /*
@@ -56,11 +56,11 @@ export async function confirmRowsFor(supabase: SupabaseClient, payments: Raw[]):
         launchClient: Boolean(business?.launch_client),
         plan: payment.plan,
         /*
-         * A year or six months, at this shop's prices: the length a person
+         * Every length on offer, at this shop's prices: the length a person
          * grants is the one the amount on the image paid for.
          */
         choices:
-          settings && (payment.plan === "annual" || payment.plan === "semiannual")
+          settings && isLicencePlan(payment.plan)
             ? licenceChoices(settings, Boolean(business?.launch_client)).map((one) => ({ plan: one.plan, amount: one.amount as number }))
             : [],
         app: payment.app,

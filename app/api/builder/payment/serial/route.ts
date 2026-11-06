@@ -6,6 +6,7 @@ import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@
 import { adminClient } from "@/builder/db/server";
 import { PAYMENT_APPS } from "@/builder/payment/apps";
 import { filePayment } from "@/builder/payment/file";
+import { LICENCE_PLANS } from "@/builder/payment/pricing";
 
 /*
  * Paying with nothing but the numéro de série.
@@ -13,8 +14,8 @@ import { filePayment } from "@/builder/payment/file";
  * An owner who built his software from the phone never made an account and
  * never will, so this asks for none: the number says which shop, and the
  * screenshot of the transfer comes with it. He chooses nothing else. The
- * amount on the screenshot says whether he paid for a year or six months
- * (the longest it covers; anything beyond its price is owed back to him),
+ * amount on the screenshot says how long he paid for: a month, two, three,
+ * six or a year (the longest it covers; anything beyond its price is owed back to him),
  * and the number it went to says which app (2026-10-03); a page that still
  * sends a plan and an app is taken at its word. When every check passes the
  * licence opens at once (see file.ts); otherwise a person decides.
@@ -31,7 +32,7 @@ export const maxDuration = 30; // not-a-rule: seconds a request may run
 
 const fields = z.object({
   number: z.string().max(400),
-  plan: z.enum(["annual", "semiannual", "quarterly", "perpetual"]).optional(),
+  plan: z.enum([...LICENCE_PLANS, "perpetual"]).optional(),
   app: z.enum(PAYMENT_APPS).optional(),
 });
 

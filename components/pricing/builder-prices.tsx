@@ -1,5 +1,5 @@
 import { toMajor } from "@/app-ui/money";
-import { perMonthOf, type Plan } from "@/builder/payment/pricing";
+import { LICENCE_PLANS, perMonthOf, type Plan } from "@/builder/payment/pricing";
 import type { LaunchOffer } from "@/builder/payment/launch";
 import type { PublicSettings } from "@/builder/db/settings";
 import { FadeIn } from "@/components/motion/fade-in";
@@ -12,6 +12,7 @@ import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 import { fill } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
+import { LicenceLengths, type LengthOption } from "./licence-lengths";
 
 /*
  * The builder's prices, first on the page, because the software an owner can
@@ -42,10 +43,30 @@ export function BuilderPrices({
   const launchApplies = offer.open !== false;
   const terms = builderTerms(settings);
 
-  const rows: { plan: Exclude<Plan, "quarterly">; label: string; cadence: string; lead?: boolean }[] = [
-    { plan: "annual", label: b.annual.label, cadence: b.annual.cadence, lead: true },
-    /* The two lengths the payment page offers: a year, or six months at half. */
-    { plan: "semiannual", label: b.semiannual.label, cadence: b.semiannual.cadence },
+  /*
+   * The licence first, for each length the payment page offers: a month to a
+   * year, the year shown before he picks (2026-11-06).
+   */
+  const lengths: LengthOption[] = LICENCE_PLANS.map((plan) => {
+    const price = shownPrice(plan, settings, launchApplies);
+    const monthly = price.amount ? perMonthOf(plan, price.amount) : null;
+    return {
+      plan,
+      label: b.lengths[plan].label,
+      cadence: b.lengths[plan].cadence,
+      current: price.amount === null ? null : formatPrice(toMajor(price.amount), lang),
+      struck:
+        price.amount !== null && price.launch && price.standard !== null && price.standard !== price.amount
+          ? formatPrice(toMajor(price.standard), lang)
+          : null,
+      monthly:
+        monthly !== null && monthly !== price.amount
+          ? fill(b.monthly, { amount: formatPrice(toMajor(monthly), lang) })
+          : null,
+    };
+  });
+
+  const rows: { plan: Plan; label: string; cadence: string }[] = [
     { plan: "perpetual", label: b.perpetual.label, cadence: b.perpetual.cadence },
     { plan: "extra_device", label: b.extraDevice.label, cadence: b.extraDevice.cadence },
     { plan: "setup_visit", label: b.setupVisit.label, cadence: b.setupVisit.cadence },
@@ -81,7 +102,17 @@ export function BuilderPrices({
               </div>
             ) : null}
 
-            <dl className="divide-y divide-border">
+            <LicenceLengths
+              options={lengths}
+              label={b.licence.label}
+              note={b.licence.note}
+              choose={b.licence.choose}
+              soon={b.soon}
+              labels={{ standard: p.standardLabel, launch: p.launchLabel }}
+              dir={lang === "ar" ? "rtl" : "ltr"}
+            />
+
+            <dl className="divide-y divide-border border-t border-border">
               {rows.map((row) => {
                 const price = shownPrice(row.plan, settings, launchApplies);
                 const monthly = price?.amount ? perMonthOf(row.plan, price.amount) : null;
@@ -112,7 +143,7 @@ export function BuilderPrices({
                         lang={lang}
                         soon={b.soon}
                         labels={{ standard: p.standardLabel, launch: p.launchLabel }}
-                        size={row.lead ? "lg" : "sm"}
+                        size="sm"
                       />
                     </dd>
                   </div>

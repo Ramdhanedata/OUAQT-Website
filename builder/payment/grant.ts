@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { isLicencePlan, monthsOf } from "./pricing";
 
 /*
  * Turning a confirmed payment into licence time, and taking it back.
@@ -11,19 +12,21 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  */
 
 /*
- * How long each plan buys. These are what the words mean rather than prices
- * anybody administers: an annual licence is a year.
+ * How many months a payment buys: a licence length its own count (1, 2, 3, 6
+ * or 12, see LICENCE_LENGTHS), an extra computer a year, since it runs with
+ * the licence. A perpetual licence and a setup visit add no end date.
  */
-const MONTHS: Record<string, number | null> = {
-  annual: 12, // not-a-rule: a year
-  semiannual: 6, // not-a-rule: half a year
-  quarterly: 3, // not-a-rule: a quarter
-  extra_device: 12, // not-a-rule: runs with the annual licence
-  perpetual: null,
-  setup_visit: null,
-};
+function monthsBought(plan: string): number | null {
+  if (plan === "extra_device") return 12; // not-a-rule: runs with the annual licence
+  return monthsOf(plan);
+}
 
-function addMonths(from: Date, months: number): Date {
+/*
+ * N months on from a date, by the calendar: the 15th to the 15th. A day the
+ * target month does not have rolls into the next one (31 January and a month
+ * is 3 March), so an owner never loses a day he paid for.
+ */
+export function addMonths(from: Date, months: number): Date {
   const out = new Date(from);
   out.setUTCMonth(out.getUTCMonth() + months);
   return out;
@@ -55,7 +58,7 @@ export async function grantLicence(
     .limit(1)
     .maybeSingle();
 
-  const months = MONTHS[payment.plan] ?? null;
+  const months = monthsBought(payment.plan);
 
   /*
    * Time is added to whichever is later: today, or the end he already has.
@@ -66,7 +69,7 @@ export async function grantLicence(
 
   const shape = {
     /* A licence is annual in kind whatever the length paid for; the dates say how long. */
-    plan: payment.plan === "quarterly" || payment.plan === "semiannual" ? "annual" : payment.plan,
+    plan: isLicencePlan(payment.plan) ? "annual" : payment.plan,
     /*
      * A suspension is a person's decision about a breach, and a payment is
      * not an answer to it: the time is bought, the software stays suspended

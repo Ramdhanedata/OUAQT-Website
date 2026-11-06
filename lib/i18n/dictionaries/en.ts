@@ -93,8 +93,18 @@ export const en = {
       payment: "Payment by Bankily, Masrvi, BimBank, SEDAD or Click. You see the amount before you pay.",
       cta: "Build my software",
       monthly: "{amount} a month",
-      annual: { label: "Annual licence", cadence: "Per year" },
-      semiannual: { label: "Six-month licence", cadence: "Every 6 months" },
+      licence: {
+        label: "Licence",
+        note: "Pay for one month, two months, three, six or a year: pick the length and the price follows.",
+        choose: "For how long?",
+      },
+      lengths: {
+        annual: { label: "1 year", cadence: "Per year" },
+        semiannual: { label: "6 months", cadence: "Every 6 months" },
+        quarterly: { label: "3 months", cadence: "Every 3 months" },
+        bimonthly: { label: "2 months", cadence: "Every 2 months" },
+        monthly: { label: "1 month", cadence: "Every month" },
+      },
       perpetual: { label: "Perpetual licence", cadence: "Paid once" },
       extraDevice: { label: "Extra device", cadence: "Per year" },
       setupVisit: {
@@ -209,7 +219,7 @@ export const en = {
         },
         {
           q: "Can I pay in instalments?",
-          a: "Yes for installation, in two payments, the first at signature and the second when the software goes live. The perpetual licence is paid in one go, and the annual licence once a year, or every six months for software you build yourself.",
+          a: "Yes for installation, in two payments, the first at signature and the second when the software goes live. The perpetual licence is paid in one go, and the annual licence once a year. Software you build yourself is paid for one month, two months, three, six or a year, as you choose.",
         },
         {
           q: "What is the difference between a modification and a new module?",
@@ -225,7 +235,7 @@ export const en = {
 
   legal: {
     updated: "Last updated",
-    updatedDate: "5 November 2026",
+    updatedDate: "6 November 2026",
     terms: {
       title: "Licence and terms of use",
       intro:
@@ -240,11 +250,11 @@ export const en = {
       },
       selfLicence: {
         h: "What you are buying",
-        b: "You are not buying the software, you are buying the right to use it in your business, on at most {devices} devices. The annual licence renews each year and can be cancelled before the renewal date. The six-month licence works the same way, every six months. The perpetual licence is paid once and does not renew.",
+        b: "You are not buying the software, you are buying the right to use it in your business, on at most {devices} devices. The annual licence renews each year and can be cancelled before the renewal date. You can also pay for one, two, three or six months: it then renews the same way, at the end of each length paid for. The perpetual licence is paid once and does not renew.",
       },
       payment: {
         h: "Payment",
-        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation with your serial number. When the screenshot can be read and everything on it matches, the payment can be confirmed straight away and your software opens again by itself. Otherwise we check it by hand, usually the same day. The amount sent decides the length: from the 6-month price, 6 months; from the year's price, a year. Anything above that price is refunded to you on request, and an amount below the lowest price buys nothing and is refunded to you. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
+        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation with your serial number. When the screenshot can be read and everything on it matches, the payment can be confirmed straight away and your software opens again by itself. Otherwise we check it by hand, usually the same day. The amount sent decides the length: the longest one whose price it reaches, among one month, two months, three, six and a year. For example, an amount between the 6-month price and the year's price buys 6 months. Anything above that price is refunded to you on request, and an amount below the lowest price buys nothing and is refunded to you. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
       },
       grace: {
         h: "If a renewal is paid late",
@@ -632,7 +642,7 @@ export const en = {
     why: [
       { title: "No internet needed", body: "The software works on your devices. Internet is only for installing, updating and paying for the licence." },
       { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts are kept on your devices. Between them they travel encrypted, and we do not read them." },
-      { title: "Local payment", body: "By Bankily, Masrvi, BimBank, SEDAD or Click, once a year or every six months. You see the amount before you pay." },
+      { title: "Local payment", body: "By Bankily, Masrvi, BimBank, SEDAD or Click, for one month, two months, three, six or a year. You see the amount before you pay." },
       { title: "A team that answers", body: "A question or a problem: write to us on WhatsApp. We usually answer the same day, in French or Arabic." },
     ],
 
@@ -648,6 +658,7 @@ export const en = {
     pricingDevices: "{devices} devices included, computer or phone",
     pricingUpdates: "Updates and support included",
     pricingPayment: "Pay by mobile app",
+    pricingLengths: "Pay for 1, 2, 3 or 6 months, or for a year",
     pricingCta: "See all prices",
 
     customEyebrow: "Custom work",

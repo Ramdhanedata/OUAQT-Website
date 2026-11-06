@@ -56,7 +56,7 @@ export async function filePayment(
     launchClient: boolean;
     /*
      * The plan he chose, or null when he chose none: the amount on the
-     * screenshot then says whether it is a year or six months.
+     * screenshot then says how long, a month to a year.
      */
     plan: Plan | null;
     /* The app he says he paid from, or null: the number the money went to says which. */

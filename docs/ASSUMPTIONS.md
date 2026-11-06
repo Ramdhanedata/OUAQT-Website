@@ -210,6 +210,16 @@ with B0b once the project exists.
   standard is 9 000). Each is its own setting, seeded at half and changed in
   Réglages like any price. The pricing page shows the six-month licence in
   place of the three-month one, which the payment page never offered.
+- **A month, two, three, six or a year (0035, 2026-11-06).** Adel's word:
+  "the user can choose between paying a month, two months, 3 months, 6
+  months or 1 year". Each length has a launch and a standard price in
+  settings. One and two months, and the launch price for three, start
+  empty: nobody has decided them, so those lengths are not offered and the
+  pricing page says their price is coming until Réglages sets them. Three
+  months uses the standard price decided in 0004. The amount on the
+  screenshot still decides the length (the longest it covers); the picker
+  on the payment page only says how much to send. Paying N months adds N
+  calendar months to the later of today and the current end.
 - **Two steps on the payment page:** pay from the chosen app, then send the
   screenshot here. The result is said at once in a box: "Paiement réussi"
   when it was read and matched, "Paiement reçu" when a person will look,

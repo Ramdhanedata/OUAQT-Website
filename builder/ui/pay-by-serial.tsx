@@ -14,7 +14,7 @@ import { PaymentReceived, SendScreenshot, type Sent } from "./pay";
 /*
  * Paying with the numéro de série: the number, then his shop and where its
  * licence stands, then the screenshot of his payment, and nothing to choose:
- * the amount on it says a year or six months (2026-10-03). No account, no
+ * the amount on it says how long, a month to a year (2026-10-03, 2026-11-06). No account, no
  * password, no email: an owner who built his software from the phone has
  * none of those and needs none. Opened from his software's code, the number
  * is already there and the page asks for the screenshot straight away.

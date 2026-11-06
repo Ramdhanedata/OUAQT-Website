@@ -8,7 +8,7 @@ import { appName, type PaymentApp, type PayTo } from "@/builder/payment/apps";
 import { organization } from "@/lib/data/contact";
 import type { CheckFailure, ReadBack } from "@/builder/payment/checks";
 import { ACCEPTED_IMAGES, prepareScreenshot, ScreenshotError } from "@/builder/payment/image";
-import { perMonthOf, type Price } from "@/builder/payment/pricing";
+import { isLicencePlan, perMonthOf, type Price } from "@/builder/payment/pricing";
 import { Button } from "./owner-button";
 import { fill } from "@/lib/utils";
 import { ChoiceButton } from "./fields";
@@ -17,7 +17,7 @@ import { ChoiceButton } from "./fields";
  * Paying, the way it actually happens here: the owner sends the money from
  * the app on his phone, then shows us the confirmation.
  *
- * The amount first, and whether it pays for a year or six months; then which
+ * The amount first, and how long it pays for, a month to a year; then which
  * app he pays from, that app's number large enough to copy without
  * squinting, and two steps: pay, then send the screenshot. He types nothing:
  * the amount, the date and the transaction number are on the screenshot. It
@@ -34,7 +34,7 @@ export function Pay({
 }: {
   copy: BuilderCopy;
   language: AppLanguage;
-  /* A year first, then six months: the lengths he may pay for, with their prices. */
+  /* The lengths he may pay for, a year first, with their prices. */
   prices: Price[];
   /* The apps that have a number to pay to, in the order they are offered. */
   payTo: PayTo[];
@@ -141,7 +141,6 @@ export function Pay({
   }
 
   const monthly = perMonthOf(price.plan, price.amount);
-  const lengthOf = (one: Price) => (one.plan === "semiannual" ? copy.pay.sixMonths : copy.pay.year) as string;
 
   return (
     <div className="space-y-6">
@@ -152,7 +151,7 @@ export function Pay({
         <p className="mt-1 text-2xl font-semibold text-foreground">
           <bdi dir="ltr">{formatMoney(price.amount, language)}</bdi>
         </p>
-        {monthly != null ? (
+        {monthly != null && monthly !== price.amount ? (
           <p className="mt-1 text-base text-muted-foreground">
             {fill(copy.pay.perMonth as string, {
               amount: formatMoney(monthly, language),
@@ -172,7 +171,7 @@ export function Pay({
       {prices.length > 1 ? (
         <div role="group" aria-label={copy.pay.duration as string}>
           <p className="text-base font-medium text-foreground">{copy.pay.duration}</p>
-          <div className="mt-3 grid grid-cols-2 gap-3">
+          <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
             {prices.map((one) => (
               <ChoiceButton
                 key={one.plan}
@@ -183,7 +182,7 @@ export function Pay({
                   setRefused(null);
                 }}
               >
-                {lengthOf(one)}
+                {lengthName(copy, one.plan)}
               </ChoiceButton>
             ))}
           </div>
@@ -318,9 +317,11 @@ export type Sent = {
 /*
  * Sending the screenshot, and nothing else: the page the software's code
  * opens once he has paid from his phone (Adel, 2026-10-03). He chooses no
- * plan and no app. The amount on the screenshot says whether it is a year or
- * six months, and the number it went to says which app. For an owner who
- * has not paid yet, how to, under it, in the same words as the software.
+ * plan and no app. The amount on the screenshot says how long he paid for,
+ * and the number it went to says which app. For an owner who has not paid
+ * yet, how to, under it, in the same words as the software: he picks a
+ * length, a month to a year (2026-11-06), and is told what to send for it.
+ * Picking only says how much to send; the amount still decides.
  */
 export function SendScreenshot({
   copy,
@@ -344,6 +345,8 @@ export function SendScreenshot({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [refused, setRefused] = useState<string[] | null>(null);
+  /* The length he means to pay for, to say how much: the year first. */
+  const [length, setLength] = useState(prices.find((one) => one.amount != null)?.plan ?? null);
 
   useEffect(() => {
     if (!file) return setPreview(null);
@@ -387,15 +390,12 @@ export function SendScreenshot({
     }
   }
 
-  const amounts = anyOf(
-    priced.map((one) =>
-      fill(copy.pay.planAmount as string, {
-        amount: formatMoney(one.amount as number, language),
-        plan: (one.plan === "semiannual" ? copy.pay.sixMonths : copy.pay.year) as string,
-      })
-    ),
-    language
-  );
+  const picked = priced.find((one) => one.plan === length) ?? priced[0];
+  const amount = fill(copy.pay.planAmount as string, {
+    amount: formatMoney(picked.amount as number, language),
+    plan: lengthName(copy, picked.plan),
+  });
+  const pickedMonthly = perMonthOf(picked.plan, picked.amount as number);
 
   return (
     <div className="space-y-6">
@@ -460,9 +460,31 @@ export function SendScreenshot({
 
       <div className="rounded-xl border border-border p-4">
         <p className="text-base font-medium text-foreground">{copy.pay.notPaidTitle}</p>
-        <p className="mt-1 text-base leading-relaxed text-muted-foreground">
+        {priced.length > 1 ? (
+          <div role="group" aria-label={copy.pay.duration as string} className="mt-3">
+            <p className="text-base text-muted-foreground">{copy.pay.duration}</p>
+            <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {priced.map((one) => (
+                <ChoiceButton
+                  key={one.plan}
+                  selected={one.plan === picked.plan}
+                  note={formatMoney(one.amount as number, language)}
+                  onClick={() => setLength(one.plan)}
+                >
+                  {lengthName(copy, one.plan)}
+                </ChoiceButton>
+              ))}
+            </div>
+            {pickedMonthly != null && pickedMonthly !== picked.amount ? (
+              <p className="mt-2 text-base text-muted-foreground">
+                {fill(copy.pay.perMonth as string, { amount: formatMoney(pickedMonthly, language) })}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
           {fill(copy.pay.notPaidBody as string, {
-            amounts,
+            amounts: amount,
             number: [...new Set(payTo.map((one) => one.number))].join(" / "),
             apps: anyOf(payTo.map((one) => appName(one.app, language)), language),
             serial,
@@ -473,6 +495,12 @@ export function SendScreenshot({
   );
 }
 
+/* "6 mois", "1 an": a length as the owner reads it. A year when the server did not say. */
+function lengthName(copy: BuilderCopy, plan: string | null): string {
+  const lengths = copy.pay.lengths as Readonly<Record<string, string>>;
+  return (plan && lengths[plan]) || lengths.annual;
+}
+
 /* "Bankily, Masrvi or Click", the way each language says it. */
 function anyOf(items: string[], language: AppLanguage): string {
   return new Intl.ListFormat(language, { type: "disjunction" }).format(items);
@@ -481,8 +509,8 @@ function anyOf(items: string[], language: AppLanguage): string {
 /*
  * After sending: confirmed already, or with a person; and, when the
  * screenshot was read, what was read off it, so a misreading is seen by the
- * one person who knows what he sent. Confirmed, it says what was bought: a
- * year or six months, and until when.
+ * one person who knows what he sent. Confirmed, it says what was bought (a
+ * month to a year) and until when.
  */
 export function PaymentReceived({
   copy,
@@ -524,11 +552,9 @@ export function PaymentReceived({
         <p className={`font-semibold ${confirmed ? "text-xl text-emerald-700 dark:text-emerald-400" : "text-lg text-foreground"}`}>
           {!confirmed
             ? copy.pay.receivedTitle
-            : plan === "annual"
-              ? copy.pay.successYear
-              : plan === "semiannual"
-                ? copy.pay.successSixMonths
-                : copy.pay.successTitle}
+            : isLicencePlan(plan)
+              ? fill(copy.pay.successFor as string, { plan: lengthName(copy, plan) })
+              : copy.pay.successTitle}
         </p>
         <p className="mt-1 text-base leading-relaxed text-foreground">
           {!confirmed
@@ -587,7 +613,7 @@ function Refund({
     sent: formatMoney(sent, language),
     extra: formatMoney(extra, language),
     price: formatMoney(sent - extra, language),
-    plan: (plan === "semiannual" ? copy.pay.sixMonths : copy.pay.year) as string,
+    plan: lengthName(copy, plan),
     serial: serial ?? "",
     reference: reference ?? "",
   };

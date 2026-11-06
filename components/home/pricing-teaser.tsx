@@ -13,8 +13,8 @@ import { ArrowRight, Check } from "lucide-react";
 
 /*
  * The price, on the home page, now that it has left the top menu: the
- * annual licence and what comes with it, with the full table one click
- * away. Figures come from settings, like the pricing page's; a price nobody
+ * annual licence and what comes with it, the shorter lengths named, with
+ * the full table one click away. Figures come from settings, like the pricing page's; a price nobody
  * has set yet says so instead of showing a zero.
  */
 export function PricingTeaser({
@@ -41,6 +41,7 @@ export function PricingTeaser({
     fill(home.pricingDevices, { devices: terms.devices }),
     home.pricingUpdates,
     home.pricingPayment,
+    home.pricingLengths,
   ].filter((line): line is string => Boolean(line));
 
   return (

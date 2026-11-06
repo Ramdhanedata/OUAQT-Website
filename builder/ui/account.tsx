@@ -51,7 +51,7 @@ export type AccountState =
         role: "main" | "secondary";
         lastSeen: string;
       }[];
-      /* A year, and six months: the lengths he may pay for, with their prices. */
+      /* The lengths he may pay for, a month to a year, with their prices: the year first. */
       prices: Price[];
       payTo: PayTo[];
     };
@@ -330,7 +330,7 @@ function Subscription({
       ) : due && state.prices.length > 0 ? (
         /*
          * The same as the page the software's code opens: the screenshot, and
-         * the amount on it says a year or six months, the rest refunded. One
+         * the amount on it says how long, a month to a year, the rest refunded. One
          * rule wherever he pays (2026-10-03). Choosing the plan and the app is
          * left for an account whose serial cannot be read.
          */
