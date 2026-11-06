@@ -19,8 +19,9 @@ describe("a price on the marketing pages, with no settings", () => {
     expect(shownPrice("setup_visit", null, true).amount).toBe(500000);
   });
 
-  it("invents nothing for three months, which only settings price", () => {
-    expect(shownPrice("quarterly", null, true)).toEqual({ plan: "quarterly", amount: null, standard: null, launch: false });
+  it("shows three months at 3 900, one price, what three single months cost (Adel, 2026-11-06)", () => {
+    expect(shownPrice("quarterly", null, true)).toEqual({ plan: "quarterly", amount: 390000, standard: 390000, launch: false });
+    expect(shownPrice("quarterly", null, true).amount).toBe(3 * (shownPrice("monthly", null, true).amount as number));
   });
 
   it("covers every length a licence is paid for", () => {
