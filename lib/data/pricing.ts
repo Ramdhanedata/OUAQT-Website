@@ -89,19 +89,20 @@ export const pricing: PriceBook = {
  * the pricing pages never fall back to "price coming soon" for a price that
  * has in fact been decided. The payment page does not read it.
  *
- * One, two and three months have no figure here: the month and two months
- * have not been decided, and three months is read from settings alone. Null
- * says "price coming soon" until settings say otherwise.
+ * Three months has no figure here: it is read from settings alone, and null
+ * says "price coming soon" until settings say otherwise. The month (1 300),
+ * two months (2 600), an extra device (3 000, one price) and the setup
+ * visit (5 000) are Adel's figures of 2026-11-06 (migrations 0035, 0036).
  */
 const builderList: Record<Plan, { standard: number | null; launch: number | null }> = {
   annual: pricing.annualLicence,
   semiannual: { standard: 9_000, launch: 7_500 },
   quarterly: { standard: null, launch: null },
-  bimonthly: { standard: null, launch: null },
-  monthly: { standard: null, launch: null },
+  bimonthly: { standard: 2_600, launch: null },
+  monthly: { standard: 1_300, launch: null },
   perpetual: pricing.perpetualLicence,
-  extra_device: pricing.extraDevice,
-  setup_visit: { standard: 10_000, launch: null },
+  extra_device: { standard: 3_000, launch: null },
+  setup_visit: { standard: 5_000, launch: null },
 };
 
 /*

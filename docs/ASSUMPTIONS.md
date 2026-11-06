@@ -218,7 +218,13 @@ with B0b once the project exists.
   a launch client pays the standard price. Three months uses the standard
   price decided in 0004. A length whose standard price is emptied in
   Réglages stops being offered, and the pricing page says its price is
-  coming. The amount on the
+  coming.
+- **An extra device at 3 000 MRU, the visit at 5 000 (0036, 2026-11-06).**
+  Adel's word, one price each: the builder track's extra device was 6 000
+  launch and 8 000 standard, and its launch row is emptied so a launch
+  client pays 3 000 too. The optional installation visit was 10 000.
+  The accompanied track's extra workstation (lib/data/pricing.ts) is a
+  separate figure and was not changed. The amount on the
   screenshot still decides the length (the longest it covers); the picker
   on the payment page only says how much to send. Paying N months adds N
   calendar months to the later of today and the current end.
