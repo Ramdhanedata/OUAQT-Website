@@ -573,7 +573,7 @@ export const fr: Dictionary = {
       },
       {
         title: "Lisez vos chiffres",
-        body: "Le jour, la semaine ou le mois, les meilleures ventes, et l'export pour Excel.",
+        body: "N'importe quel jour, semaine ou mois, comparé à la période d'avant, les meilleures ventes et l'export pour Excel.",
         computerAlt: "Les rapports sur ordinateur : chiffre d'affaires, ventes et les sept derniers jours.",
         phoneAlt: "Les rapports sur téléphone : les sept derniers jours et les plus vendus.",
       },
@@ -592,9 +592,9 @@ export const fr: Dictionary = {
     features: [
       { title: "Une caisse rapide", body: "Encaissez en quelques touches, en espèces ou par application, avec un reçu imprimé." },
       { title: "Le stock à jour", body: "Il baisse à chaque vente et vous prévient avant qu'un produit ne manque." },
-      { title: "Des rapports clairs", body: "Le chiffre du jour, de la semaine et du mois, les meilleures ventes, et l'export pour Excel." },
+      { title: "Des rapports clairs", body: "Chaque jour reste enregistré : revoyez n'importe quel jour passé, comparez les semaines et les mois, et exportez pour Excel." },
       { title: "Le crédit client", body: "Les ventes à crédit et ce que chaque client vous doit, sans cahier." },
-      { title: "La clôture de caisse", body: "À la fin de la journée ou du poste : ce qui devait être en caisse, et ce qui y est." },
+      { title: "La clôture de caisse", body: "Le soir, vous comptez et l'écart s'affiche. Aucun fond de caisse à saisir : la caisse du lendemain s'ouvre toute seule." },
       { title: "Des reçus à votre métier", body: "La table pour un restaurant, la chambre et les dates pour un hôtel, la place et le départ pour un billet." },
       { title: "Sur votre téléphone aussi", body: "Votre logiciel s'ouvre sur un ordinateur ou sur un téléphone, sans passer par un store. Chacun compte pour un appareil, et ce que vous faites sur l'un apparaît sur l'autre." },
       { title: "Français et arabe", body: "Le logiciel parle la langue de votre équipe, reçus compris." },

@@ -578,7 +578,7 @@ export const en = {
       },
       {
         title: "Read your figures",
-        body: "The day, the week or the month, your best sellers, and the export for Excel.",
+        body: "Any day, week or month, set against the one before, your best sellers, and the export for Excel.",
         computerAlt: "The reports on a computer: takings, sales and the last seven days.",
         phoneAlt: "The reports on a phone: the last seven days and the best sellers.",
       },
@@ -597,9 +597,9 @@ export const en = {
     features: [
       { title: "A fast till", body: "Take payment in a few taps, in cash or by mobile app, with a printed receipt." },
       { title: "Stock kept up to date", body: "It goes down with every sale and warns you before a product runs out." },
-      { title: "Clear reports", body: "Today's, this week's and this month's takings, the best sellers, and an export for Excel." },
+      { title: "Clear reports", body: "Every day stays recorded: look back at any past day, compare weeks and months, and export for Excel." },
       { title: "Customer credit", body: "Sales on credit and what each customer owes you, without a notebook." },
-      { title: "Closing the till", body: "At the end of the day or the shift: what should be in the till, and what is." },
+      { title: "Closing the till", body: "At night you count and the difference shows. No float to type: the next day's till opens by itself." },
       { title: "Receipts for your trade", body: "The table for a restaurant, the room and dates for a hotel, the seat and departure for a ticket." },
       { title: "On your phone too", body: "Your software opens on a computer or on a phone, with no app store. Each counts as one device, and what you do on one appears on the other." },
       { title: "French and Arabic", body: "The software speaks your staff's language, receipts included." },
