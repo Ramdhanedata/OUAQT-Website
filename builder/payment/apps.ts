@@ -12,6 +12,10 @@ export const PAYMENT_APPS = ["bankily", "masrvi", "bimbank", "sedad", "click"] a
 
 export type PaymentApp = (typeof PAYMENT_APPS)[number];
 
+export function isPaymentApp(app: unknown): app is PaymentApp {
+  return typeof app === "string" && (PAYMENT_APPS as readonly string[]).includes(app);
+}
+
 /* As each app writes its own name, and as it is said in Arabic. */
 const NAMES: Record<PaymentApp, { latin: string; arabic: string }> = {
   bankily: { latin: "Bankily", arabic: "بنكيلي" },

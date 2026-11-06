@@ -9,6 +9,7 @@ import { serialFor, setupFor } from "@/builder/licence/setup";
 import { followDraft } from "@/builder/config-code/server";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 import { payHelpFor } from "@/builder/payment/pay-help";
+import { readAgain } from "@/builder/payment/read-again";
 
 /*
  * A shop asking whether anything has changed.
@@ -24,6 +25,9 @@ import { payHelpFor } from "@/builder/payment/pay-help";
  * these three fields is refused before it is read. There is no branch in this
  * file that could store trade data, because there is no field to store.
  */
+
+/* A payment's screenshot may be read again on the way (see read-again.ts), and the AI takes its time. */
+export const maxDuration = 30; // not-a-rule: seconds a request may run, as the payment routes
 
 const body = z
   .object({
@@ -70,6 +74,14 @@ export async function POST(request: Request) {
   if (!device.token_hash || device.token_hash !== (await hashToken(input.data.deviceToken))) {
     return NextResponse.json({ error: "wrong_token" }, { status: 403 });
   }
+
+  /*
+   * A payment of his that the AI could not read when he sent it is read
+   * again now, before the licence is looked up, so a payment that matches
+   * reaches him in this very answer. A failure here costs him nothing: the
+   * licence he has is still sent.
+   */
+  await readAgain(supabase, input.data.businessId).catch((error) => console.error("payment: not read again", error));
 
   const [{ data: business }, { data: licence }, settings, secrets] = await Promise.all([
     supabase

@@ -6,9 +6,10 @@ import { audit } from "@/builder/db/audit";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { getPublicSettings } from "@/builder/db/settings";
 import { payToFrom, type PaymentApp } from "./apps";
-import { checkPayment, confirmsAlone, sameNumber, type CheckFailure, type Extracted, type ReadBack } from "./checks";
+import { confirmsAlone, type CheckFailure, type Extracted, type ReadBack } from "./checks";
+import { decidePayment } from "./decide";
 import { grantLicence } from "./grant";
-import { licenceChoices, planPaidFor, priceFor, refundFor, type Plan } from "./pricing";
+import { licenceChoices, priceFor, type Plan } from "./pricing";
 import { readReceipt } from "./read";
 
 /*
@@ -19,7 +20,8 @@ import { readReceipt } from "./read";
  * against what was expected and against receipts already used, and filed.
  * When it was read and everything on it matched, the payment is confirmed at
  * once (0022), and a person looks at it afterwards. Otherwise it waits for a
- * person, as every payment did before.
+ * person, as every payment did before; one that could not be read at all
+ * (the AI busy, or out of time) is read again by itself (see read-again.ts).
  */
 
 /* Confirmed only when the screenshot was read and matched, and the setting allows it. */
@@ -110,33 +112,17 @@ export async function filePayment(
         .maybeSingle()
     : { data: null };
 
-  /*
-   * Which plan, and which app. Chosen, they are what he said. Not chosen, the
-   * amount read says the plan (the longest one it covers, the rest owed back
-   * to him), and the number the money went to says the app. What cannot be
-   * told (nothing read, or less than the smallest price) is filed as the
-   * first on offer, and a person decides; nothing is granted on it by
-   * itself, because the checks below cannot all pass.
-   */
-  const amountRead = extracted?.amountMru != null ? toMinor(extracted.amountMru) : null;
-  const price = offered.length === 1 ? offered[0] : (planPaidFor(amountRead, offered) ?? offered[0]);
-  const payTo =
-    numbers.find((one) => one.app === input.app) ??
-    numbers.find((one) => extracted?.recipient && sameNumber(extracted.recipient, one.number)) ??
-    numbers[0];
-
-  const outcome = checkPayment({
-    expectedAmounts: offered.map((one) => one.amount as number),
-    atLeast: input.plan === null,
-    payToNumber: payTo.number,
-    now: new Date(),
+  /* Which plan and which app, whether every check passed, and what is owed back (see decide.ts). */
+  const { price, payTo, outcome, refundDue } = decidePayment({
+    offered,
+    chosenPlan: input.plan !== null,
+    numbers,
+    app: input.app,
     extracted,
     referenceAlreadyUsed: Boolean(sameReference),
     imageAlreadyUsed: Boolean(sameImage),
+    now: new Date(),
   });
-
-  /* Sent more than the price of what it bought: said to him now, and to staff in the admin area. */
-  const refundDue = input.plan === null && outcome.failures.length === 0 ? refundFor(amountRead, price) : 0;
 
   const { data: payment, error } = await admin
     .from("payments")
