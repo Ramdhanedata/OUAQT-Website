@@ -31,7 +31,8 @@ export function Price({
   size?: keyof typeof sizes;
   className?: string;
 }) {
-  if (!pricing.launchOffer.active) {
+  /* One price, or no launch offer: nothing to strike through. */
+  if (!pricing.launchOffer.active || line.launch === line.standard) {
     return (
       <span
         className={cn(

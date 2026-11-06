@@ -64,7 +64,8 @@ export const pricing: PriceBook = {
   },
   installation: { standard: 30_000, launch: 25_000 },
   annualLicence: { standard: 18_000, launch: 15_000 },
-  extraDevice: { standard: 8_000, launch: 6_000 },
+  /* One price for everyone since 2026-11-06 (Adel), like the builder track's. */
+  extraDevice: { standard: 3_000, launch: 3_000 },
   perpetualLicence: { standard: 110_000, launch: 95_000 },
   devicesIncluded: 3,
   perpetualServiceMonths: 12,

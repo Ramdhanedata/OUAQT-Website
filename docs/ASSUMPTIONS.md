@@ -223,8 +223,8 @@ with B0b once the project exists.
   Adel's word, one price each: the builder track's extra device was 6 000
   launch and 8 000 standard, and its launch row is emptied so a launch
   client pays 3 000 too. The optional installation visit was 10 000.
-  The accompanied track's extra workstation (lib/data/pricing.ts) is a
-  separate figure and was not changed. The amount on the
+  The accompanied track's extra workstation, a figure in lib/data/pricing.ts
+  rather than a setting, went to 3 000 too, one price with nothing struck. The amount on the
   screenshot still decides the length (the longest it covers); the picker
   on the payment page only says how much to send. Paying N months adds N
   calendar months to the later of today and the current end.
