@@ -628,7 +628,7 @@ export const en = {
     tradesError: "Your number did not go through. Try again, or write to us on WhatsApp.",
 
     whyEyebrow: "Why OUAQT",
-    whyHeading: "Made for local small and medium businesses, and for the way they work.",
+    whyHeading: "Made for small and medium businesses, and for the way they work.",
     why: [
       { title: "No internet needed", body: "The software works on your devices. Internet is only for installing, updating and paying for the licence." },
       { title: "Your data stays with you", body: "Your sales, your stock and your customers' accounts are kept on your devices. Between them they travel encrypted, and we do not read them." },

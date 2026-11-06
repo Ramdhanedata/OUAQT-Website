@@ -623,7 +623,7 @@ export const fr: Dictionary = {
     tradesError: "Votre numéro n'est pas parti. Réessayez, ou écrivez-nous sur WhatsApp.",
 
     whyEyebrow: "Pourquoi OUAQT",
-    whyHeading: "Pensé pour les PME d'ici, et pour leur façon de travailler.",
+    whyHeading: "Pensé pour les PME et pour leur façon de travailler.",
     why: [
       { title: "Sans internet", body: "Le logiciel travaille sur vos appareils. Internet ne sert qu'à l'installation, aux mises à jour et au paiement de la licence." },
       { title: "Vos données restent chez vous", body: "Vos ventes, votre stock et les comptes de vos clients sont gardés sur vos appareils. Entre eux, ils voyagent chiffrés, et nous ne les lisons pas." },
