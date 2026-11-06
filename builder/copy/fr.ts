@@ -355,7 +355,7 @@ export const fr = {
       one: "Essai gratuit, {count} jour restant.",
       other: "Essai gratuit, {count} jours restants.",
     },
-    trialOver: "Votre essai est terminé. Le logiciel est arrêté jusqu'au paiement ; tout ce que vous avez enregistré reste sur votre appareil. Dès le paiement, il se rouvre tout seul.",
+    trialOver: "Votre essai est terminé. Le logiciel est en lecture seule jusqu'au paiement : tout ce que vous avez enregistré reste visible sur votre appareil, mais aucune vente ne peut être saisie. Dès le paiement, il se rouvre tout seul.",
     active: "Licence active jusqu'au {date}.",
     renewalDue: {
       one: "Votre licence a pris fin. Il vous reste {count} jour avant que le logiciel passe en lecture seule.",

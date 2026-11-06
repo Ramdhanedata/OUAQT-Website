@@ -44,11 +44,11 @@ function DetailFields({ t, value, onChange }: { t: Words; value: Details; onChan
     <div className="grid gap-4 sm:grid-cols-2">
       <label className="block">
         <span className="text-base font-medium text-foreground">{t.name}</span>
-        <input className={input} value={value.name} maxLength={80} required onChange={set("name")} />
+        <input /* not-a-rule: how long a name may be typed */ className={input} value={value.name} maxLength={80} required onChange={set("name")} />
       </label>
       <label className="block">
         <span className="text-base font-medium text-foreground">{t.phone}</span>
-        <input className={input} dir="ltr" inputMode="tel" value={value.phone} maxLength={30} onChange={set("phone")} />
+        <input /* not-a-rule: how long a phone may be typed */ className={input} dir="ltr" inputMode="tel" value={value.phone} maxLength={30} onChange={set("phone")} />
       </label>
       <label className="block">
         <span className="text-base font-medium text-foreground">{t.percent}</span>
@@ -62,7 +62,7 @@ function DetailFields({ t, value, onChange }: { t: Words; value: Details; onChan
       </label>
       <label className="block sm:col-span-2">
         <span className="text-base font-medium text-foreground">{t.note}</span>
-        <input className={input} value={value.note} maxLength={500} onChange={set("note")} />
+        <input /* not-a-rule: how long a note may be typed */ className={input} value={value.note} maxLength={500} onChange={set("note")} />
       </label>
     </div>
   );
@@ -71,7 +71,7 @@ function DetailFields({ t, value, onChange }: { t: Words; value: Details; onChan
 function detailsBody(value: Details) {
   const percent = amountOf(value.percent || "0");
   const perShop = amountOf(value.perShop || "0");
-  if (!value.name.trim() || Number.isNaN(percent) || percent > 100 || Number.isNaN(perShop)) return null;
+  if (!value.name.trim() || Number.isNaN(percent) || percent > 100 || Number.isNaN(perShop)) return null; // not-a-rule: a share is at most a hundred percent
   return { name: value.name.trim(), phone: value.phone.trim() || undefined, percent, perShop, note: value.note.trim() || undefined };
 }
 
@@ -215,7 +215,7 @@ export function PayoutForm({ t, id }: { t: Words; id: string }) {
         </label>
         <label className="block">
           <span className="text-sm font-medium text-foreground">{t.payoutNote}</span>
-          <input className={input} value={note} maxLength={200} onChange={(event) => setNote(event.target.value)} />
+          <input /* not-a-rule: how long a note may be typed */ className={input} value={note} maxLength={200} onChange={(event) => setNote(event.target.value)} />
         </label>
       </div>
       <button type="submit" disabled={busy || !amount.trim()} className={primary}>

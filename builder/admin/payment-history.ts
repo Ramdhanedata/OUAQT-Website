@@ -233,7 +233,7 @@ export async function loadPaymentActivity(supabase: SupabaseClient, paymentId?: 
       .eq("subject", "licence")
       .eq("action", "activated")
       .eq("detail->>from", paymentId)
-      .limit(5);
+      .limit(5); // not-a-rule: the latest few, for the history
     opened = ((licence ?? []) as Event[]).map((one) => ({ ...one, action: "licence_opened", subject_id: paymentId }));
   }
 

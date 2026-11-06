@@ -116,7 +116,7 @@ export function ActivityChart({
       </div>
       <div className="mt-2 flex justify-between ps-9 text-xs text-muted-foreground" dir="ltr" aria-hidden>
         <span>{shortDay(data[0].day)}</span>
-        <span>{shortDay(data[Math.floor(data.length / 2)].day)}</span>
+        <span>{/* not-a-rule: the middle day of the chart */ shortDay(data[Math.floor(data.length / 2)].day)}</span>
         <span>{shortDay(data[data.length - 1].day)}</span>
       </div>
       {total === 0 ? <p className="mt-3 text-sm text-muted-foreground">{words.chartEmpty}</p> : null}

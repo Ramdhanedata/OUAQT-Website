@@ -106,7 +106,7 @@ const RELATIVE_LOCALE: Record<AdminLanguage, string> = { fr: "fr", en: "en", ar:
 
 /** "il y a 5 minutes", in the reader's language. */
 export function ago(date: Date | string, now: Date, lang: AdminLanguage): string {
-  const seconds = Math.round((new Date(date).getTime() - now.getTime()) / 1000);
+  const seconds = Math.round((new Date(date).getTime() - now.getTime()) / 1000); // not-a-rule: milliseconds in a second
   const format = new Intl.RelativeTimeFormat(RELATIVE_LOCALE[lang], { numeric: "auto" });
   const size = Math.abs(seconds);
   if (size < 60) return format.format(0, "second");
@@ -126,14 +126,14 @@ export type DayCount = { day: string; count: number };
 
 function lastDays(now: Date, days: number): string[] {
   const today = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  return Array.from({ length: days }, (_, index) => new Date(today - (days - 1 - index) * 86_400_000).toISOString().slice(0, 10));
+  return Array.from({ length: days }, (_, index) => new Date(today - (days - 1 - index) * 86_400_000).toISOString().slice(0, 10)); // not-a-rule: a day in milliseconds, and the date part of an ISO time
 }
 
 /** How many things happened each day. */
 export function dailyCounts(dates: string[], now: Date, days: number): DayCount[] {
   const counts = new Map(lastDays(now, days).map((day) => [day, 0]));
   for (const date of dates) {
-    const day = new Date(date).toISOString().slice(0, 10);
+    const day = new Date(date).toISOString().slice(0, 10); // not-a-rule: the date part of an ISO time
     if (counts.has(day)) counts.set(day, (counts.get(day) ?? 0) + 1);
   }
   return [...counts].map(([day, count]) => ({ day, count }));
@@ -179,7 +179,7 @@ export function visitorsSince(visits: { session_hash: string; created_at: string
 
 /** A clean top for a chart's scale: 1, 2 or 5 times a power of ten, at least the largest value. */
 export function niceMax(value: number): number {
-  if (value <= 4) return Math.max(1, Math.ceil(value));
+  if (value <= 4) return Math.max(1, Math.ceil(value)); // not-a-rule: a small count is shown exactly
   const power = 10 ** Math.floor(Math.log10(value));
   for (const step of [1, 2, 5, 10]) if (step * power >= value) return step * power;
   return 10 * power;

@@ -195,7 +195,7 @@ export function ControlPanel({ t, businessId, actions }: { t: Words; businessId:
                 <span className="text-xs text-muted-foreground">{t.reason}</span>
                 <textarea
                   value={reason}
-                  maxLength={400}
+                  /* not-a-rule: how long a reason may be typed */ maxLength={400}
                   rows={2}
                   onChange={(event) => setReason(event.target.value)}
                   className="mt-1 block w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"

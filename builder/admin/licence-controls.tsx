@@ -195,7 +195,7 @@ export function LicenceControls({
               type="text"
               value={reason}
               autoFocus={mode !== "setEnd"}
-              maxLength={400}
+              /* not-a-rule: how long a reason may be typed */ maxLength={400}
               onChange={(event) => setReason(event.target.value)}
               className="mt-2 min-h-[48px] w-full rounded-lg border border-border bg-background px-4 text-base text-foreground outline-none focus:border-foreground"
             />

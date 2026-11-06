@@ -10,7 +10,7 @@ const fr = {
   stats: {
     title: "Statistiques",
     intro: "Tout OUAQT en chiffres. Chaque chiffre est comparé à la période précédente de même durée : la flèche dit s'il monte ou s'il baisse.",
-    periods: { 7: "7 jours", 30: "30 jours", 90: "90 jours", 365: "12 mois" } as Record<number, string>,
+    periods: { 7: "7 jours", 30: "30 jours", 90: "90 jours", 365: "12 mois" } as Record<number, string>, // not-a-rule: the dashboard's own periods, in days
     versus: "Comparé aux {days} jours précédents.",
     before: "{value} la période d'avant",
     trendNew: "nouveau",
@@ -269,7 +269,7 @@ const en: GrowthCopy = {
   stats: {
     title: "Statistics",
     intro: "All of OUAQT in numbers. Every figure is compared with the previous period of the same length: the arrow says whether it is going up or down.",
-    periods: { 7: "7 days", 30: "30 days", 90: "90 days", 365: "12 months" },
+    periods: { 7: "7 days", 30: "30 days", 90: "90 days", 365: "12 months" }, // not-a-rule: the dashboard's own periods, in days
     versus: "Compared with the previous {days} days.",
     before: "{value} the period before",
     trendNew: "new",
@@ -526,7 +526,7 @@ const ar: GrowthCopy = {
   stats: {
     title: "الإحصائيات",
     intro: "كل «وقت» بالأرقام. كل رقم يقارَن بالفترة السابقة من المدة نفسها: يبين السهم إن كان يرتفع أو ينخفض.",
-    periods: { 7: "7 أيام", 30: "30 يوما", 90: "90 يوما", 365: "12 شهرا" },
+    periods: { 7: "7 أيام", 30: "30 يوما", 90: "90 يوما", 365: "12 شهرا" }, // not-a-rule: the dashboard's own periods, in days
     versus: "مقارنة بالأيام الـ{days} السابقة.",
     before: "{value} في الفترة السابقة",
     trendNew: "جديد",

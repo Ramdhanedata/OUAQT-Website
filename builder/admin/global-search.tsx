@@ -114,7 +114,7 @@ export function GlobalSearch({ words, autoFocus }: { words: SearchWords; autoFoc
             setOpen(true);
           }}
           onFocus={() => setOpen(true)}
-          onBlur={() => window.setTimeout(() => setOpen(false), 150)}
+          /* not-a-rule: a click on a result lands before the list closes */ onBlur={() => window.setTimeout(() => setOpen(false), 150)}
           onKeyDown={(event) => {
             if (event.key === "ArrowDown") {
               event.preventDefault();

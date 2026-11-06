@@ -159,7 +159,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
       .from("audit_events")
       .select("id, actor_id, subject, subject_id, action, detail, created_at")
       .order("created_at", { ascending: false })
-      .limit(10),
+      .limit(10), // not-a-rule: the latest few, for the overview
     /* A week of pages shown: enough for "here now", "today" and "these 7 days". */
     supabase
       .from("site_events")
@@ -197,7 +197,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     else if (device.platform === "phone") platforms.phone += 1;
   }
 
-  const apps: AppRow[] = (devices ?? []).slice(0, 60).map((device) => ({
+  const apps: AppRow[] = (devices ?? []).slice(0, 60).map((device) => ({ // not-a-rule: the most devices one overview lists
     deviceId: device.device_id,
     businessId: device.business_id,
     businessName: names.get(device.business_id) ?? "",

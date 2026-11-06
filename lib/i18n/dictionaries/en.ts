@@ -85,7 +85,7 @@ export const en = {
         "You answer the questions, you download your software and you install it on the shop PC. Nobody travels to you, so there is no installation fee to pay: the licence alone is enough.",
       soon: "Price coming soon",
       trial: "Free trial of {days} days before you pay anything.",
-      devices: "{devices} devices included, computer or phone: for example the shop computer and your phone. Each one works on its own.",
+      devices: "{devices} devices included, computer or phone: for example the shop computer and your phone. Each works without internet, and what is entered on one appears on the other.",
       launchNote:
         "Launch price, for our first {clients} clients. Your price then stays the same for {years} years.",
       launchCondition:
@@ -207,11 +207,11 @@ export const en = {
         },
         {
           q: "On how many devices can I use it, and what happens if a device breaks or is replaced?",
-          a: "Software you build yourself runs on {builderDevices} devices: each computer and each phone counts as one, and what is entered on one appears on the other. A project we install covers up to {devices} at the same site. Either way, each extra device is added to the annual licence. If a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}.",
+          a: "Software you build yourself runs on {builderDevices} devices: each computer and each phone counts as one, and what is entered on one appears on the other. If one breaks down, is stolen or is replaced, you release the old one from your account, or write to us, and install the software on the new one. A project we install covers up to {devices} at the same site: if a machine breaks down, is stolen or is replaced, we install the software on the new one at no charge, as long as the total stays within {devices}. Either way, each extra device is added to the licence, by the year.",
         },
         {
           q: "Where is my data stored?",
-          a: "On your own devices. They do not come to us, and backing them up happens on your own media.",
+          a: "On your own devices, and backing them up happens on your own media. When you have two devices, what is entered on one passes through our servers, encrypted, to reach the other, and is then deleted from them: the privacy page explains how.",
         },
         {
           q: "What happens if I do not renew?",
@@ -451,7 +451,7 @@ export const en = {
     storyBody1:
       "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into the Builder, an online software builder: the owner answers questions about the way he works, and leaves with his software, ready to install, the same day.",
     storyBody2:
-      "This is not a template touched up afterwards. It is the same software for everybody, set by his own answers: his products, his languages, his staff, the way he takes money. It runs on his own devices, computer or phone, with no internet, and his figures never reach us.",
+      "This is not a template touched up afterwards. It is the same software for everybody, set by his own answers: his products, his languages, his staff, the way he takes money. It runs on his own devices, computer or phone, with no internet, and his figures stay with him: when they pass from one device to the other, they are encrypted.",
     storyBody3:
       "The Builder is now our main product. The trades it does not cover yet, and the businesses whose work falls outside it, we still build for one at a time, as before.",
     marketHeading: "The numbers behind it.",

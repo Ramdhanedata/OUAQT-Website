@@ -75,7 +75,7 @@ export const fr: Dictionary = {
         "Vous répondez aux questions, vous installez votre logiciel sur l'ordinateur de la boutique ou vous l'ouvrez sur votre téléphone. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
       soon: "Tarif bientôt disponible",
       trial: "Essai gratuit de {days} jours avant de payer quoi que ce soit.",
-      devices: "{devices} appareils compris, ordinateur ou téléphone : par exemple l'ordinateur de la boutique et votre téléphone. Chacun fonctionne de son côté.",
+      devices: "{devices} appareils compris, ordinateur ou téléphone : par exemple l'ordinateur de la boutique et votre téléphone. Chacun fonctionne sans internet, et ce qui est saisi sur l'un apparaît sur l'autre.",
       launchNote:
         "Tarif de lancement, réservé à nos {clients} premiers clients. Votre prix reste ensuite le même pendant {years} ans.",
       launchCondition:
@@ -198,11 +198,11 @@ export const fr: Dictionary = {
         },
         {
           q: "Sur combien d'appareils puis-je l'utiliser, et que se passe-t-il si un appareil tombe en panne ou est remplacé ?",
-          a: "Le logiciel que vous créez vous-même tourne sur {builderDevices} appareils : chaque ordinateur et chaque téléphone compte pour un, et ce qui est saisi sur l'un apparaît sur l'autre. Un projet que nous installons couvre {devices} postes au maximum, sur le même site. Dans les deux cas, chaque poste supplémentaire s'ajoute à la licence annuelle. Si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes.",
+          a: "Le logiciel que vous créez vous-même tourne sur {builderDevices} appareils : chaque ordinateur et chaque téléphone compte pour un, et ce qui est saisi sur l'un apparaît sur l'autre. Si l'un d'eux tombe en panne, est volé ou remplacé, vous libérez l'ancien depuis votre compte, ou vous nous écrivez, et vous installez le logiciel sur le nouveau. Un projet que nous installons couvre {devices} postes au maximum, sur le même site : si une machine tombe en panne, est volée ou remplacée, nous installons le logiciel sur la nouvelle sans frais, tant que le total ne dépasse pas {devices} postes. Dans les deux cas, chaque appareil supplémentaire s'ajoute à la licence, à l'année.",
         },
         {
           q: "Où sont stockées mes données ?",
-          a: "Sur vos propres appareils. Elles ne partent pas chez nous, et la sauvegarde se fait sur vos propres supports.",
+          a: "Sur vos propres appareils, et la sauvegarde se fait sur vos propres supports. Quand vous avez deux appareils, ce qui est saisi sur l'un passe par nos serveurs, chiffré, pour arriver sur l'autre, puis en est effacé : la page Confidentialité explique comment.",
         },
         {
           q: "Que se passe-t-il si je ne renouvelle pas ?",
@@ -442,7 +442,7 @@ export const fr: Dictionary = {
     storyBody1:
       "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait le Builder, un créateur de logiciel en ligne : le patron répond à des questions sur sa façon de travailler, et il repart avec son logiciel, prêt à installer, le jour même.",
     storyBody2:
-      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres appareils, ordinateur ou téléphone, sans internet, et ses chiffres ne nous parviennent jamais.",
+      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres appareils, ordinateur ou téléphone, sans internet, et ses chiffres restent chez lui : quand ils passent d'un appareil à l'autre, c'est chiffré.",
     storyBody3:
       "Le Builder est aujourd'hui notre produit principal. Les métiers qu'il ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
     marketHeading: "Les chiffres derrière ce constat.",

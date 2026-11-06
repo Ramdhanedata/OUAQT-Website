@@ -81,7 +81,7 @@ export function StaffForm({ t }: { t: Words }) {
         </label>
         <label className="block">
           <span className="text-base font-medium text-foreground">{t.name}</span>
-          <input className={input} value={name} maxLength={80} onChange={(event) => setName(event.target.value)} />
+          <input /* not-a-rule: how long a name may be typed */ className={input} value={name} maxLength={80} onChange={(event) => setName(event.target.value)} />
         </label>
         <label className="block">
           <span className="text-base font-medium text-foreground">{t.password}</span>

@@ -45,7 +45,7 @@ export type Payout = { id: string; amount: number; note: string | null; paidAt: 
 export async function repDetail(supabase: SupabaseClient, id: string) {
   const [{ data: rep }, { data: shops }, { data: payouts }] = await Promise.all([
     supabase.from("representatives").select("id, name, phone, code, commission_percent, bonus_per_client, active, note, created_at").eq("id", id).maybeSingle(),
-    supabase.from("businesses").select("id, name_latin, pack, created_at").eq("representative_id", id).order("created_at", { ascending: false }).limit(1000),
+    supabase.from("businesses").select("id, name_latin, pack, created_at").eq("representative_id", id).order("created_at", { ascending: false }).limit(1000), // not-a-rule: more shops than one representative brings
     supabase.from("representative_payouts").select("id, amount, note, paid_at").eq("representative_id", id).order("paid_at", { ascending: false }),
   ]);
   if (!rep) return null;

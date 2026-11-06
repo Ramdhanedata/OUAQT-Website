@@ -345,7 +345,7 @@ export const en: BuilderCopy = {
       one: "Free trial, {count} day left.",
       other: "Free trial, {count} days left.",
     },
-    trialOver: "Your trial has ended. The software is stopped until you pay; everything you recorded stays on your device. Once you pay, it opens again by itself.",
+    trialOver: "Your trial has ended. The software is read-only until you pay: everything you recorded stays visible on your device, but no sale can be entered. Once you pay, it opens again by itself.",
     active: "Licence active until {date}.",
     renewalDue: {
       one: "Your licence has ended. You have {count} day before the software becomes read only.",

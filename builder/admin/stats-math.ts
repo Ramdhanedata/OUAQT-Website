@@ -7,14 +7,14 @@
  * of the same length.
  */
 
-export const PERIODS = [7, 30, 90, 365] as const;
+export const PERIODS = [7, 30, 90, 365] as const; // not-a-rule: the dashboard's own periods, in days
 export type Period = (typeof PERIODS)[number];
 export const DEFAULT_PERIOD: Period = 30;
 
 const DAY = 86_400_000;
 /* Up to this many days the chart shows days; beyond it, weeks. */
 const DAILY_UP_TO = 90; // not-a-rule: a year of days is too many columns to read
-const WEEK_DAYS = 7;
+const WEEK_DAYS = 7; // not-a-rule: a week
 
 export function periodOf(value: string | string[] | undefined): Period {
   const number = Number(Array.isArray(value) ? value[0] : value);
@@ -27,7 +27,7 @@ export function windowOf(now: Date, days: number): Window {
   return {
     from: new Date(now.getTime() - days * DAY),
     to: now,
-    previousFrom: new Date(now.getTime() - 2 * days * DAY),
+    previousFrom: new Date(now.getTime() - 2 * days * DAY), // not-a-rule: the period before, as long again
   };
 }
 
@@ -75,7 +75,7 @@ export type Trend = "up" | "down" | "flat" | "new";
  */
 export function changeOf(current: number, previous: number): { trend: Trend; percent: number | null } {
   if (previous === 0) return current === 0 ? { trend: "flat", percent: null } : { trend: "new", percent: null };
-  const percent = Math.round(((current - previous) / previous) * 100);
+  const percent = Math.round(((current - previous) / previous) * 100); // not-a-rule: a percentage
   return { trend: percent > 0 ? "up" : percent < 0 ? "down" : "flat", percent };
 }
 
@@ -89,7 +89,7 @@ export function bucketsOf(now: Date, days: number): Bucket[] {
   const buckets: Bucket[] = [];
   for (let index = count - 1; index >= 0; index -= 1) {
     const start = today - (index * step + (step - 1)) * DAY;
-    buckets.push({ start: new Date(start).toISOString().slice(0, 10), days: step });
+    buckets.push({ start: new Date(start).toISOString().slice(0, 10), days: step }); // not-a-rule: the date part of an ISO time
   }
   return buckets;
 }
@@ -151,5 +151,5 @@ export function tallyOf(keys: (string | null | undefined)[], none: string): [str
  * share of what their shops paid, and a fixed amount for each shop that paid.
  */
 export function bonusOf(input: { revenue: number; payingShops: number; percent: number; perShop: number }): number {
-  return Math.round((input.revenue * input.percent) / 100) + input.perShop * input.payingShops;
+  return Math.round((input.revenue * input.percent) / 100) + input.perShop * input.payingShops; // not-a-rule: a percentage
 }
