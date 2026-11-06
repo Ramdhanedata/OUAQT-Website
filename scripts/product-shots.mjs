@@ -5,6 +5,7 @@
  *
  *   npm run dev            (in another terminal)
  *   node scripts/product-shots.mjs [http://localhost:3000]
+ *   SHOTS=reports node scripts/product-shots.mjs     (only those shots)
  *
  * Each picture is the app itself with its trade's sample data, driven the
  * way an owner would use it: a ticket with three products, the end of day
@@ -35,9 +36,9 @@ const VIEWS = {
 
 /* The app's own labels for the buttons the walk presses, in each language. */
 const LABELS = {
-  fr: { endOfDay: "Fin de journée", ticketShow: "Voir le ticket" },
-  en: { endOfDay: "End of day", ticketShow: "See the ticket" },
-  ar: { endOfDay: "نهاية اليوم", ticketShow: "عرض التذكرة" },
+  fr: { endOfDay: "Fin de journée", ticketShow: "Voir le ticket", earlier: "Période précédente", history: "Évolution des ventes" },
+  en: { endOfDay: "End of day", ticketShow: "See the ticket", earlier: "Previous period", history: "Sales over time" },
+  ar: { endOfDay: "نهاية اليوم", ticketShow: "عرض التذكرة", earlier: "الفترة السابقة", history: "تطور المبيعات" },
 };
 
 const require = createRequire(import.meta.url);
@@ -138,6 +139,16 @@ async function openApp(view, configuration) {
       await run(`(() => { const b = window.__buttons().find((one) => one.innerText.includes(${JSON.stringify(label)})); if (!b) throw new Error("no button " + ${JSON.stringify(label)}); b.click(); return 1; })()`);
       await sleep(1200);
     },
+    /* A button known by its name alone, such as an arrow with no words on it. */
+    pressNamed: async (label) => {
+      await run(`(() => { const b = window.__buttons().find((one) => one.getAttribute("aria-label") === ${JSON.stringify(label)}); if (!b) throw new Error("no button named " + ${JSON.stringify(label)}); b.click(); return 1; })()`);
+      await sleep(1200);
+    },
+    /* Scrolls the screen's main column until a heading with these words is at the top. */
+    scrollToHeading: async (text) => {
+      await run(`(() => { const d = window.__frame.contentDocument; const h = [...d.querySelectorAll("h2")].find((e) => e.innerText.trim() === ${JSON.stringify(text)}); if (!h) throw new Error("no heading " + ${JSON.stringify(text)}); const boxes = [...d.querySelectorAll("*")].filter((e) => e.scrollHeight > e.clientHeight + 40 && /(auto|scroll)/.test(getComputedStyle(e).overflowY) && e.contains(h)); const box = boxes.sort((a, b) => b.clientHeight - a.clientHeight)[0]; if (box) box.scrollTop += h.getBoundingClientRect().top - box.getBoundingClientRect().top - 16; return 1; })()`);
+      await sleep(600);
+    },
     /* Scrolls the screen's main column, for a phone that shows less of it at once. */
     scroll: async (y) => {
       await run(`(() => { const d = window.__frame.contentDocument; const boxes = [...d.querySelectorAll("*")].filter((e) => e.scrollHeight > e.clientHeight + 40 && /(auto|scroll)/.test(getComputedStyle(e).overflowY)); const box = boxes.sort((a, b) => b.clientHeight - a.clientHeight)[0]; if (box) box.scrollTop = ${y}; return 1; })()`);
@@ -192,16 +203,21 @@ const SHOTS = [
     computer: async (app, labels) => app.press(labels.endOfDay),
     phone: async (app, labels) => app.press(labels.endOfDay),
   },
+  /* Yesterday read against the day before on the computer; on the phone, the days side by side. */
   {
     name: "reports",
     pack: "shop",
-    computer: async (app) => app.section("reports"),
-    phone: async (app) => {
+    computer: async (app, labels) => {
       await app.section("reports");
-      await app.scroll(560);
+      await app.pressNamed(labels.earlier);
+    },
+    phone: async (app, labels) => {
+      await app.section("reports");
+      await app.scrollToHeading(labels.history);
     },
   },
 ];
+const only = (process.env.SHOTS ?? "").split(",").map((name) => name.trim()).filter(Boolean);
 
 const { defaultConfiguration } = await configurations();
 const chrome = await launch();
@@ -209,7 +225,7 @@ fs.mkdirSync(out, { recursive: true });
 try {
   for (const lang of ["fr", "en", "ar"]) {
     const names = shopNames(lang);
-    for (const shot of SHOTS) {
+    for (const shot of SHOTS.filter((one) => only.length === 0 || only.includes(one.name))) {
       const configuration = defaultConfiguration(shot.pack, lang);
       configuration.business = { ...configuration.business, nameLatin: names[shot.pack], nameArabic: lang === "ar" ? names[shot.pack] : undefined };
       for (const view of Object.keys(VIEWS)) {

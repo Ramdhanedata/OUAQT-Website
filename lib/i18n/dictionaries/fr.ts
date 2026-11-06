@@ -574,8 +574,8 @@ export const fr: Dictionary = {
       {
         title: "Lisez vos chiffres",
         body: "N'importe quel jour, semaine ou mois, comparé à la période d'avant, les meilleures ventes et l'export pour Excel.",
-        computerAlt: "Les rapports sur ordinateur : chiffre d'affaires, ventes et les sept derniers jours.",
-        phoneAlt: "Les rapports sur téléphone : les sept derniers jours et les plus vendus.",
+        computerAlt: "Les rapports sur ordinateur : le chiffre d'affaires d'hier comparé à la veille, et les sept jours jusqu'à hier.",
+        phoneAlt: "L'évolution des ventes sur téléphone : chaque jour avec ses ventes, son chiffre d'affaires et son évolution.",
       },
     ],
     tourPause: "Mettre en pause",

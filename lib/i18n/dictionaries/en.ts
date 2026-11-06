@@ -579,8 +579,8 @@ export const en = {
       {
         title: "Read your figures",
         body: "Any day, week or month, set against the one before, your best sellers, and the export for Excel.",
-        computerAlt: "The reports on a computer: takings, sales and the last seven days.",
-        phoneAlt: "The reports on a phone: the last seven days and the best sellers.",
+        computerAlt: "The reports on a computer: yesterday's takings against the day before, and the seven days up to it.",
+        phoneAlt: "Sales over time on a phone: each day with its sales, its takings and its change.",
       },
     ],
     tourPause: "Pause",
