@@ -3,19 +3,17 @@
 -- Decided 2026-11-06 (Adel): an owner chooses how long he pays for, among
 -- one, two, three, six and twelve months. A year and six months already have
 -- their prices (0004, 0023), and three months has its standard price from
--- 0004. What is missing is added here, empty: nobody has decided these
--- amounts yet, and an empty price is how "coming soon" is said. A length
--- with no price is not offered on the payment page, and the pricing page
--- says its price is coming. Each is set from the admin area like any price,
--- in the smallest unit (1 MRU is 100).
---
--- An empty launch price means a launch client pays the standard one.
+-- 0004. Adel set the month at 1 300 MRU and two months at 2 600 MRU the same
+-- day, one price each: there is no launch price for them, nor for three
+-- months, so those rows start empty and a launch client pays the standard
+-- price. Each can be changed from the admin area like any price, in the
+-- smallest unit (1 MRU is 100).
 
 insert into settings (key, value, description) values
   ('price_monthly_launch_mru',     'null', 'One month, at the launch price. Empty: a launch client pays the standard price'),
-  ('price_monthly_standard_mru',   'null', 'One month, at the standard price. Empty: one month is not offered yet'),
+  ('price_monthly_standard_mru',   '130000', 'One month, at the standard price. Empty: one month is not offered'),
   ('price_bimonthly_launch_mru',   'null', 'Two months, at the launch price. Empty: a launch client pays the standard price'),
-  ('price_bimonthly_standard_mru', 'null', 'Two months, at the standard price. Empty: two months are not offered yet'),
+  ('price_bimonthly_standard_mru', '260000', 'Two months, at the standard price. Empty: two months are not offered'),
   ('price_quarterly_launch_mru',   'null', 'Three months, at the launch price. Empty: a launch client pays the standard price')
 on conflict (key) do nothing;
 

@@ -213,10 +213,12 @@ with B0b once the project exists.
 - **A month, two, three, six or a year (0035, 2026-11-06).** Adel's word:
   "the user can choose between paying a month, two months, 3 months, 6
   months or 1 year". Each length has a launch and a standard price in
-  settings. One and two months, and the launch price for three, start
-  empty: nobody has decided them, so those lengths are not offered and the
-  pricing page says their price is coming until Réglages sets them. Three
-  months uses the standard price decided in 0004. The amount on the
+  settings. Adel set one month at 1 300 MRU and two months at 2 600 MRU,
+  one price each, so their launch rows (and three months') start empty and
+  a launch client pays the standard price. Three months uses the standard
+  price decided in 0004. A length whose standard price is emptied in
+  Réglages stops being offered, and the pricing page says its price is
+  coming. The amount on the
   screenshot still decides the length (the longest it covers); the picker
   on the payment page only says how much to send. Paying N months adds N
   calendar months to the later of today and the current end.
