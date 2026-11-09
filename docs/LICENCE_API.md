@@ -204,11 +204,17 @@ registered: all of them end the same way. The app shows the serial screen
 with one plain sentence about what happened and where his serial is. Nobody
 is ever stuck on a screen with no way forward.
 
-### One trial per shop
+### One trial per shop, one per device for each trade
 
 A trial is claimed once, against three marks: the machine, the owner's login
 phone, and the business. A second trial matching any of them is refused with
 `trial_not_available`.
+
+The machine and the phone count per trade (the shop's `pack`, decided
+2026-11-09): a computer that had the restaurant trial may still start the
+pharmacy trial, once, and the same goes for the owner's number. Reinstalling
+the restaurant software on it gets no second trial. The business mark has no
+trade: one shop, one trial, whatever it is rebuilt as.
 
 The fingerprint travels as three salted hashes and never as serial numbers.
 Two of the three agreeing is enough to call it the same machine, so a
@@ -239,7 +245,8 @@ as a computer does, with `platform: "phone"`, and counts against the same
 - Its fingerprint has only `machine`: a random id the phone keeps, hashed
   the way a computer's parts are. `board` and `disk` are null, which
   `sameMachine` reads as "not reported", never as a match. A phone is known
-  again by that one part, so it has one free trial like a computer.
+  again by that one part, so it has one free trial for each trade like a
+  computer.
 - It never asks `nearby`. A phone opens from a link carrying the serial
   after the `#` (`/app/index.html#serial=XXXXXXXX&lang=fr`, from the account page)
   or from the serial typed. `nearby` with `platform: "phone"` answers

@@ -516,8 +516,8 @@ const fr = {
       similar_address: "Adresse très proche",
     } as Record<string, string>,
     refusals: {
-      same_machine: "Même ordinateur qu'un essai précédent",
-      same_phone: "Même numéro de téléphone",
+      same_machine: "Même appareil qu'un essai précédent du même métier",
+      same_phone: "Même numéro de téléphone, même métier",
       same_business: "Ce commerce a déjà eu son essai",
       no_fingerprint: "Le logiciel n'a envoyé aucune empreinte de machine",
     } as Record<string, string>,
@@ -1007,8 +1007,8 @@ const en: AdminCopy = {
       similar_address: "Very similar address",
     },
     refusals: {
-      same_machine: "Same computer as an earlier trial",
-      same_phone: "Same phone number",
+      same_machine: "Same device as an earlier trial of the same trade",
+      same_phone: "Same phone number, same trade",
       same_business: "This shop has already had its trial",
       no_fingerprint: "The software sent no machine fingerprint",
     },
@@ -1492,8 +1492,8 @@ const ar: AdminCopy = {
       similar_address: "عنوان قريب جدا",
     },
     refusals: {
-      same_machine: "الحاسوب نفسه لتجربة سابقة",
-      same_phone: "رقم الهاتف نفسه",
+      same_machine: "الجهاز نفسه لتجربة سابقة في النشاط نفسه",
+      same_phone: "رقم الهاتف نفسه في النشاط نفسه",
       same_business: "حصل هذا المحل على تجربته من قبل",
       no_fingerprint: "لم يرسل البرنامج أي بصمة للجهاز",
     },

@@ -23,6 +23,13 @@ export type Fingerprint = {
 
 export type Claim = {
   businessId: string;
+  /*
+   * The trade the trial was for: pharmacy, restaurant, wash... Each one is
+   * its own software, so each has its own free trial on a device (decided
+   * 2026-11-09). Null only if the shop could not be read, and then it
+   * counts as the same trade, so a gap in the data never hands out a trial.
+   */
+  pack: string | null;
   fingerprint: Fingerprint;
   phone: string | null;
   logoHash: string | null;
@@ -79,12 +86,26 @@ export function samePhone(a: string | null, b: string | null): boolean {
 }
 
 /**
+ * Whether two trials were for the same trade. A device that tried the
+ * restaurant software may still try the pharmacy's, once.
+ */
+export function sameTrade(a: Pick<Claim, "pack">, b: Pick<Claim, "pack">): boolean {
+  if (!a.pack || !b.pack) return true;
+  return a.pack === b.pack;
+}
+
+/**
  * Whether this shop may start a trial, given every trial claimed before.
  *
  * The business check has no setting behind it: a shop gets one trial, and a
  * second device joining the same shop is not a second trial. The other two
  * are rules that can be turned off, because one of them may turn out to hurt
  * more honest owners than it stops dishonest ones.
+ *
+ * Both of those look only at earlier trials of the same trade: one free
+ * trial per device and per phone number for each trade, so an owner whose
+ * restaurant trial ended can still try the pharmacy software on the same
+ * computer, but reinstalling the restaurant one gets no second month.
  */
 export function trialAllowed(
   candidate: Claim,
@@ -104,6 +125,7 @@ export function trialAllowed(
     if (earlier.businessId === candidate.businessId) {
       return { allowed: false, because: "same_business" };
     }
+    if (!sameTrade(candidate, earlier)) continue;
     if (
       rules.onePerFingerprint &&
       hasFingerprint &&
@@ -130,6 +152,9 @@ export type Signal = "same_logo" | "same_products" | "similar_name" | "similar_a
  * names, and a man who opens a second shop is a customer, not a fraud. It is
  * written down so a person can look, which is the only thing that should
  * decide something this easy to get wrong.
+ *
+ * Only earlier trials of the same trade count: the same owner trying a
+ * second trade is allowed, so his own logo coming back is not news.
  */
 export function repeatSignals(
   candidate: Claim,
@@ -140,6 +165,7 @@ export function repeatSignals(
 
   for (const earlier of past) {
     if (earlier.businessId === candidate.businessId) continue;
+    if (!sameTrade(candidate, earlier)) continue;
 
     if (candidate.logoHash && candidate.logoHash === earlier.logoHash) {
       found.add("same_logo");

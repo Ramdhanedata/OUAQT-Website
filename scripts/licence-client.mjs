@@ -348,7 +348,7 @@ console.log("\nTrials\n");
  * working, but not the rule under test.
  */
 let shopCounter = 0;
-async function anotherShop(label, phone = `${stamp}${(shopCounter += 1)}`) {
+async function anotherShop(label, phone = `${stamp}${(shopCounter += 1)}`, pack = "pharmacy") {
   const { data: madeUser } = await admin.auth.admin.createUser({
     email: `${phone}@${process.env.NEXT_PUBLIC_ACCOUNT_EMAIL_DOMAIN ?? "ouaqtcom.vercel.app"}`,
     password: `licence-client-${label}-${stamp}`,
@@ -359,7 +359,7 @@ async function anotherShop(label, phone = `${stamp}${(shopCounter += 1)}`) {
     .insert({
       owner_id: madeUser.user.id,
       name_latin: `Test ${label}`,
-      pack: "pharmacy",
+      pack,
       app_language: "fr",
     })
     .select("id")
@@ -400,6 +400,22 @@ check("the refusal says which rule, not who is to blame",
   onSameMachine.body?.because === "same_machine", String(onSameMachine.body?.because));
 check("and hands over the number to call",
   Boolean(onSameMachine.body?.supportWhatsapp), onSameMachine.body?.supportWhatsapp ?? "");
+
+/*
+ * The same computer and the same owner's number, another trade. Each trade
+ * is its own software, so it has its own free trial on this computer.
+ */
+/* The first owner's digits on a new login, since that address is taken further down. */
+const otherTradeShop = await anotherShop("other-trade", `other-${stamp}`, "restaurant");
+shops.push(otherTradeShop);
+const onOtherTrade = await post("/api/licence/activate", {
+  serial: otherTradeShop.serial,
+  deviceId: `device-other-trade-${stamp}`,
+  platform: "windows",
+  fingerprint: thisPc,
+});
+check("another trade on the same computer gets its own trial", onOtherTrade.status === 200,
+  `status ${onOtherTrade.status}, ${onOtherTrade.body?.because ?? onOtherTrade.body?.error ?? ""}`);
 
 /*
  * A repaired PC. The disk died and was replaced, so one part of three is new.

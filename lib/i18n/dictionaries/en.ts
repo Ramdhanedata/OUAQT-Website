@@ -235,7 +235,7 @@ export const en = {
 
   legal: {
     updated: "Last updated",
-    updatedDate: "6 November 2026",
+    updatedDate: "9 November 2026",
     terms: {
       title: "Licence and terms of use",
       intro:
@@ -246,7 +246,7 @@ export const en = {
       },
       trial: {
         h: "The free trial",
-        b: "Your software can be tried free for {trialDays} days, with every feature. The trial starts the first time the software opens on one of your devices, not the day you download it, and each device has one free trial only. Adding a device to the same business does not restart the trial. At the end, until a licence is paid, the software turns read-only: everything you recorded stays on screen and you can still save a copy of it, but no new sale can be entered. Nothing is erased, and everything opens again as soon as the payment is confirmed.",
+        b: "Your software can be tried free for {trialDays} days, with every feature. The trial starts the first time the software opens on one of your devices, not the day you download it, and each device has one free trial per trade: a device that tried the restaurant software can still try the pharmacy one, but reinstalling the same one does not give a new trial. Adding a device to the same business does not restart the trial. At the end, until a licence is paid, the software turns read-only: everything you recorded stays on screen and you can still save a copy of it, but no new sale can be entered. Nothing is erased, and everything opens again as soon as the payment is confirmed.",
       },
       selfLicence: {
         h: "What you are buying",
@@ -385,7 +385,7 @@ export const en = {
       },
       fingerprint: {
         h: "Your device's fingerprint",
-        b: "So that one device cannot take one free trial after another, the software works out a fingerprint: on a computer, from your motherboard, your system disk and your operating system's own identifier; on a phone, from a random number kept on that phone. It sends us hashed fingerprints only, never the numbers themselves, and we cannot work the numbers back out from what reaches us. It is used for one thing: knowing whether this device has already had a trial. If you bought your computer second-hand, or had it repaired, write to us and we will open the trial by hand.",
+        b: "So that one device cannot take one free trial after another, the software works out a fingerprint: on a computer, from your motherboard, your system disk and your operating system's own identifier; on a phone, from a random number kept on that phone. It sends us hashed fingerprints only, never the numbers themselves, and we cannot work the numbers back out from what reaches us. It is used for one thing: knowing whether this device has already had a trial for this trade. If you bought your computer second-hand, or had it repaired, write to us and we will open the trial by hand.",
       },
       where: {
         h: "Where this is kept",

@@ -10,7 +10,8 @@ import { signingKeyIsSet } from "@/builder/licence/sign";
 import { payHelpFor } from "@/builder/payment/pay-help";
 import { previewTestShop } from "@/builder/licence/preview-test-shop";
 import { serialFor, setupFor } from "@/builder/licence/setup";
-import { claimTrial } from "@/builder/licence/trial-claim";
+import { claimTrial, packOfRow } from "@/builder/licence/trial-claim";
+import { sameTrade } from "@/builder/licence/trial";
 import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
@@ -266,16 +267,18 @@ export async function POST(request: Request) {
     };
 
     /*
-     * This exact computer under another shop is the plainest case of all, and
-     * it does not need a fingerprint to see.
+     * This exact computer under another shop of the same trade is the
+     * plainest case of all, and it does not need a fingerprint to see. Under
+     * a shop of another trade it is no reason at all: each trade has its own
+     * free trial on a device.
      */
-    const { data: seenElsewhere } = await supabase
+    const { data: elsewhere } = await supabase
       .from("devices")
-      .select("business_id")
+      .select("business_id, businesses(pack)")
       .eq("device_id", input.data.deviceId)
       .neq("business_id", business.id)
-      .limit(1)
-      .maybeSingle();
+      .limit(50);
+    const seenElsewhere = (elsewhere ?? []).some((row) => sameTrade({ pack: packOfRow(row) }, { pack: business.pack }));
 
     const outcome = seenElsewhere
       ? ({ kind: "refused", decision: { allowed: false, because: "same_machine" } } as const)

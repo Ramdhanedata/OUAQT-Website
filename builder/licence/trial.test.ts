@@ -3,6 +3,7 @@ import {
   repeatSignals,
   sameMachine,
   samePhone,
+  sameTrade,
   similarity,
   trialAllowed,
   type Claim,
@@ -25,6 +26,7 @@ function machine(board: string, disk: string, id: string): Fingerprint {
 function claim(over: Partial<Claim> = {}): Claim {
   return {
     businessId: "business-1",
+    pack: "pharmacy",
     fingerprint: machine("b1", "d1", "m1"),
     phone: "38087272",
     logoHash: null,
@@ -108,6 +110,51 @@ describe("who may start a trial", () => {
     expect(decision).toEqual({ allowed: false, because: "same_phone" });
   });
 
+  it("refuses the same trade again on that machine, as a reinstall would ask", () => {
+    const reinstalled = claim({ businessId: "business-2", phone: "22233445566" });
+    expect(trialAllowed(reinstalled, [claim({ pack: "restaurant" }), claim()], rules)).toEqual({
+      allowed: false,
+      because: "same_machine",
+    });
+  });
+
+  it("gives the same machine a trial for another trade", () => {
+    const pharmacy = claim({ businessId: "business-2", phone: "22233445566", pack: "pharmacy" });
+    expect(trialAllowed(pharmacy, [claim({ pack: "restaurant" })], rules).allowed).toBe(true);
+  });
+
+  it("gives the same phone number a trial for another trade", () => {
+    const pharmacy = claim({ businessId: "business-2", fingerprint: machine("b9", "d9", "m9") });
+    expect(trialAllowed(pharmacy, [claim({ pack: "restaurant" })], rules).allowed).toBe(true);
+  });
+
+  it("gives a phone a trial for each trade, once", () => {
+    const phone = { board: null, disk: null, machine: "p1" };
+    const restaurant = claim({ fingerprint: phone, pack: "restaurant" });
+    const pharmacy = claim({ businessId: "business-2", fingerprint: phone, phone: "22233445566" });
+    expect(trialAllowed(pharmacy, [restaurant], rules).allowed).toBe(true);
+    expect(trialAllowed(claim({ businessId: "business-3", fingerprint: phone, phone: "22299887766" }), [restaurant, pharmacy], rules)).toEqual({
+      allowed: false,
+      because: "same_machine",
+    });
+  });
+
+  it("still gives one shop one trial when it changes trade", () => {
+    expect(trialAllowed(claim({ pack: "restaurant" }), [claim()], rules)).toEqual({
+      allowed: false,
+      because: "same_business",
+    });
+  });
+
+  it("counts an earlier trial of unknown trade as the same trade", () => {
+    expect(sameTrade({ pack: null }, { pack: "pharmacy" })).toBe(true);
+    const unknown = claim({ pack: null });
+    expect(trialAllowed(claim({ businessId: "business-2", phone: "22233445566" }), [unknown], rules)).toEqual({
+      allowed: false,
+      because: "same_machine",
+    });
+  });
+
   it("refuses an app that sends no fingerprint at all", () => {
     const decision = trialAllowed(
       claim({ fingerprint: { board: null, disk: null, machine: null } }),
@@ -180,6 +227,15 @@ describe("what looks like the same shop twice", () => {
       rules
     );
     expect(signals).toContain("same_products");
+  });
+
+  it("says nothing about the same owner trying another trade", () => {
+    const signals = repeatSignals(
+      claim({ businessId: "business-2", logoHash: "logo-a", pack: "restaurant" }),
+      [claim({ logoHash: "logo-a" })],
+      rules
+    );
+    expect(signals).toEqual([]);
   });
 
   it("notices a name written a little differently", () => {

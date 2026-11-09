@@ -102,15 +102,23 @@ async function logoHashOf(
   }
 }
 
+/* The trade of the shop a row belongs to, read through its business. */
+export function packOfRow(row: { businesses?: unknown }): string | null {
+  const shop = Array.isArray(row.businesses) ? row.businesses[0] : row.businesses;
+  const pack = (shop as { pack?: unknown } | null | undefined)?.pack;
+  return typeof pack === "string" && pack ? pack : null;
+}
+
 async function pastClaims(supabase: SupabaseClient): Promise<Claim[]> {
   const { data } = await supabase
     .from("trial_claims")
     .select(
-      "business_id, fingerprint_board, fingerprint_disk, fingerprint_machine, phone, logo_hash, products_hash, name, address"
+      "business_id, fingerprint_board, fingerprint_disk, fingerprint_machine, phone, logo_hash, products_hash, name, address, businesses(pack)"
     );
 
   return (data ?? []).map((row) => ({
     businessId: row.business_id as string,
+    pack: packOfRow(row),
     fingerprint: {
       board: row.fingerprint_board as string | null,
       disk: row.fingerprint_disk as string | null,
@@ -127,6 +135,7 @@ async function pastClaims(supabase: SupabaseClient): Promise<Claim[]> {
 export type Business = {
   id: string;
   owner_id: string;
+  pack: string;
   name_latin: string;
   receipt_address: string | null;
 };
@@ -177,6 +186,7 @@ export async function claimTrial(
 
   const candidate: Claim = {
     businessId: business.id,
+    pack: business.pack,
     fingerprint,
     phone,
     logoHash,

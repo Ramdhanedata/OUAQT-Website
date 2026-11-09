@@ -226,7 +226,7 @@ export const fr: Dictionary = {
 
   legal: {
     updated: "Dernière mise à jour",
-    updatedDate: "6 novembre 2026",
+    updatedDate: "9 novembre 2026",
     terms: {
       title: "Licence et conditions d'utilisation",
       intro:
@@ -237,7 +237,7 @@ export const fr: Dictionary = {
       },
       trial: {
         h: "L'essai gratuit",
-        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours, avec toutes ses fonctions. L'essai commence la première fois que le logiciel s'ouvre sur l'un de vos appareils, pas le jour où vous le téléchargez, et chaque appareil n'a droit qu'à un seul essai gratuit. Ajouter un appareil au même commerce ne relance pas l'essai. À la fin, tant qu'aucune licence n'est payée, le logiciel passe en lecture seule : tout ce que vous avez enregistré reste affiché et vous pouvez toujours en enregistrer une copie, mais aucune nouvelle vente ne peut être saisie. Rien n'est effacé, et tout se rouvre dès que le paiement est confirmé.",
+        b: "Votre logiciel s'essaie gratuitement pendant {trialDays} jours, avec toutes ses fonctions. L'essai commence la première fois que le logiciel s'ouvre sur l'un de vos appareils, pas le jour où vous le téléchargez, et chaque appareil a droit à un seul essai gratuit par métier : un appareil qui a essayé le logiciel d'un restaurant peut encore essayer celui d'une pharmacie, mais réinstaller le même ne donne pas un nouvel essai. Ajouter un appareil au même commerce ne relance pas l'essai. À la fin, tant qu'aucune licence n'est payée, le logiciel passe en lecture seule : tout ce que vous avez enregistré reste affiché et vous pouvez toujours en enregistrer une copie, mais aucune nouvelle vente ne peut être saisie. Rien n'est effacé, et tout se rouvre dès que le paiement est confirmé.",
       },
       selfLicence: {
         h: "Ce que vous achetez",
@@ -376,7 +376,7 @@ export const fr: Dictionary = {
       },
       fingerprint: {
         h: "L'empreinte de votre appareil",
-        b: "Pour qu'un même appareil ne prenne pas un essai gratuit après l'autre, le logiciel calcule une empreinte : sur un ordinateur, à partir de votre carte mère, de votre disque système et de l'identifiant de votre système d'exploitation ; sur un téléphone, à partir d'un numéro tiré au hasard et gardé sur ce téléphone. Il ne nous envoie que des empreintes chiffrées, jamais les numéros eux-mêmes, et nous ne pouvons pas remonter aux numéros à partir de ce que nous recevons. Cela sert à une seule chose : savoir si cet appareil a déjà eu un essai. Si vous avez acheté votre appareil d'occasion, ou si vous l'avez fait réparer, écrivez-nous et nous vous ouvrons l'essai à la main.",
+        b: "Pour qu'un même appareil ne prenne pas un essai gratuit après l'autre, le logiciel calcule une empreinte : sur un ordinateur, à partir de votre carte mère, de votre disque système et de l'identifiant de votre système d'exploitation ; sur un téléphone, à partir d'un numéro tiré au hasard et gardé sur ce téléphone. Il ne nous envoie que des empreintes chiffrées, jamais les numéros eux-mêmes, et nous ne pouvons pas remonter aux numéros à partir de ce que nous recevons. Cela sert à une seule chose : savoir si cet appareil a déjà eu un essai pour ce métier. Si vous avez acheté votre appareil d'occasion, ou si vous l'avez fait réparer, écrivez-nous et nous vous ouvrons l'essai à la main.",
       },
       where: {
         h: "Où ces informations sont conservées",
