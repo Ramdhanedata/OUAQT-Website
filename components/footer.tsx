@@ -5,7 +5,9 @@ import Link from "next/link";
 import { organization, socialLinks } from "@/lib/data/contact";
 import type { Dictionary } from "@/lib/i18n";
 import { localeHref, type Locale } from "@/lib/i18n/config";
-import { localisedHref } from "@/lib/i18n/routes";
+import { localisedHref, packRouteId } from "@/lib/i18n/routes";
+import { getPackPage } from "@/lib/i18n/packs";
+import { packs } from "@/app-ui/packs";
 import { getBuilderCopy } from "@/builder/copy";
 
 export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
@@ -23,6 +25,17 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
     { href: localeHref(lang, "/contact"), label: dict.nav.contact },
   ];
 
+  /*
+   * Every trade page, named the way an owner searches for it. On every page
+   * of the site, so each trade page is one link from anywhere, for readers
+   * and search engines alike.
+   */
+  const tradeCopy = getPackPage(lang, packs[0]).common;
+  const trades = packs.map((pack) => ({
+    href: localisedHref(lang, packRouteId(pack)),
+    label: tradeCopy.links[pack],
+  }));
+
   const legal = [
     { href: "/terms", label: dict.footer.terms },
     { href: "/privacy", label: dict.footer.privacy },
@@ -30,7 +43,7 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
 
   return (
     <footer className="border-t border-border">
-      <Container className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 lg:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]">
+      <Container className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 lg:grid-cols-[minmax(0,1.3fr)_repeat(4,minmax(0,1fr))]">
         <div className="col-span-2 lg:col-span-1">
           <Logo className="h-6" alt={dict.common.brand} />
           <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted-foreground">
@@ -45,6 +58,19 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
           <p className="text-sm font-medium text-foreground">{dict.footer.product}</p>
           <ul className="mt-4 space-y-3">
             {product.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <p className="text-sm font-medium text-foreground">{tradeCopy.byTrade}</p>
+          <ul className="mt-4 space-y-3">
+            {trades.map((item) => (
               <li key={item.href}>
                 <Link href={item.href} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
                   {item.label}

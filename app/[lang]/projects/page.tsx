@@ -5,7 +5,9 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { ProjectsGrid } from "@/components/projects/projects-grid";
 import { getAllCategories, projects } from "@/lib/data/projects";
 import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n/config";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 
@@ -28,6 +30,7 @@ export default async function ProjectsPage(props: Props) {
 
   return (
     <Section className="pt-32 sm:pt-40">
+      <JsonLd data={breadcrumbData(params.lang, dict, [{ name: dict.nav.projects, path: localeHref(params.lang, "/projects") }])} />
       <Container>
         <FadeIn>
           <p className="eyebrow">

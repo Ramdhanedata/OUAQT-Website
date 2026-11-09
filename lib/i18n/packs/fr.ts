@@ -23,12 +23,24 @@ export const packPagesFr: PackPagesCopy = {
     pricing: "Voir les tarifs",
     otherTrades: "Les autres métiers",
     trial: "Essai gratuit de {days} jours",
+    byTrade: "Logiciel par métier",
+    links: {
+      pharmacy: "Logiciel de pharmacie",
+      shop: "Logiciel de caisse boutique",
+      restaurant: "Logiciel de caisse restaurant",
+      bakery: "Logiciel de boulangerie",
+      warehouse: "Logiciel de gestion de stock",
+      hotel: "Logiciel de gestion d'hôtel",
+      transport: "Logiciel de transport",
+      wash: "Logiciel de lavage auto",
+      general: "Logiciel de gestion commerciale",
+    },
   },
 
   pharmacy: {
     title: "Logiciel de gestion de pharmacie en Mauritanie | OUAQT",
     description:
-      "Créez le logiciel de votre pharmacie en répondant à quelques questions. Péremption, numéros de lot, vente à la boîte ou à la plaquette, crédit clients. Il fonctionne sans internet.",
+      "Le logiciel de gestion de votre pharmacie à Nouakchott : péremption, lots, vente à la boîte ou à la plaquette, crédit clients. Sans internet, essai gratuit.",
     heading: "Le logiciel de votre pharmacie, fait à votre façon de travailler",
     intro:
       "Vous répondez à quelques questions sur votre pharmacie et vous repartez avec le logiciel qui va avec : la vente à la boîte ou à la plaquette, les dates de péremption, les numéros de lot, et les comptes des clients qui paient plus tard. Il s'installe sur l'ordinateur du comptoir ou s'ouvre sur votre téléphone, et travaille sans internet.",
@@ -86,7 +98,7 @@ export const packPagesFr: PackPagesCopy = {
   restaurant: {
     title: "Logiciel de caisse pour restaurant en Mauritanie | OUAQT",
     description:
-      "Le logiciel de caisse de votre restaurant : les tables, les commandes qui restent ouvertes pendant le repas, le ticket de cuisine et l'addition.",
+      "Logiciel de caisse pour restaurant et café en Mauritanie : les tables, les commandes ouvertes pendant le repas, le ticket de cuisine, l'addition. Essai gratuit.",
     heading: "Le logiciel de caisse de votre restaurant",
     intro:
       "Les tables de votre salle, les commandes qui restent ouvertes pendant que les clients mangent, le ticket qui part en cuisine, et l'addition à la fin. Sur l'ordinateur de la salle ou sur votre téléphone, sans internet.",
@@ -143,7 +155,7 @@ export const packPagesFr: PackPagesCopy = {
   bakery: {
     title: "Logiciel de gestion de boulangerie en Mauritanie | OUAQT",
     description:
-      "Le logiciel de votre boulangerie : la production du jour, les commandes à l'avance avec acompte, la vente au comptoir et le crédit des habitués.",
+      "Logiciel de gestion de boulangerie en Mauritanie : la production du jour, les commandes avec acompte, la vente au comptoir, le crédit des habitués. Essai gratuit.",
     heading: "Le logiciel de votre boulangerie",
     intro:
       "Ce qui est sorti du four ce matin, ce qui a été vendu, ce qui reste, et les commandes que vos clients passent à l'avance. Sur l'ordinateur de la boutique ou sur votre téléphone, sans internet.",
@@ -200,7 +212,7 @@ export const packPagesFr: PackPagesCopy = {
   warehouse: {
     title: "Logiciel de gestion de stock en Mauritanie | OUAQT",
     description:
-      "Le logiciel de votre dépôt : les entrées, les sorties, plusieurs emplacements, et un stock qui se tient tout seul.",
+      "Logiciel de gestion de stock en Mauritanie : entrées, sorties, plusieurs emplacements, et un stock qui se tient tout seul. Sans internet, essai gratuit.",
     heading: "Le logiciel de gestion de stock de votre dépôt",
     intro:
       "Le stock de chaque emplacement se déduit des entrées et des sorties : il n'est jamais un chiffre tapé à la main. Sur votre ordinateur ou votre téléphone, sans internet.",
@@ -257,7 +269,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   shop: {
     title: "Logiciel de caisse boutique et épicerie en Mauritanie | OUAQT",
-    description: "Le logiciel de caisse de votre boutique : vente au code-barres ou en cases, stock, crédit des clients, caisse du soir.",
+    description: "Logiciel de caisse pour boutique et épicerie à Nouakchott : code-barres ou cases, stock, crédit des clients, caisse du soir. Sans internet, essai gratuit.",
     heading: "Le logiciel de caisse de votre boutique",
     intro: "Vous scannez ou vous touchez l'article, le client paie, le stock baisse tout seul. Le crédit des habitués et la caisse du soir sont au même endroit. Sur votre ordinateur ou votre téléphone, sans internet.",
     cta: "Créer le logiciel de ma boutique",
@@ -305,7 +317,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   hotel: {
     title: "Logiciel de gestion d'hôtel en Mauritanie | OUAQT",
-    description: "Le logiciel de votre hôtel : le tableau des chambres, les réservations, l'arrivée et le départ, les extras sur la note.",
+    description: "Logiciel de gestion d'hôtel et d'auberge en Mauritanie : le tableau des chambres, les réservations, l'arrivée et le départ, les extras sur la note. Essai gratuit.",
     heading: "Le logiciel de gestion de votre hôtel",
     intro: "Vos chambres sur un seul écran, libres, occupées ou à nettoyer. La réservation, l'arrivée, les extras, et la note au départ. Sur l'ordinateur de la réception ou sur votre téléphone, sans internet.",
     cta: "Créer le logiciel de mon hôtel",
@@ -353,7 +365,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   transport: {
     title: "Logiciel de transport et colis en Mauritanie | OUAQT",
-    description: "Le logiciel de votre compagnie de transport : les départs, les billets par place, les colis avec leur code, la liste des passagers.",
+    description: "Logiciel pour compagnie de transport en Mauritanie : départs, billets par place, colis avec leur code, liste des passagers. Sans internet, essai gratuit.",
     heading: "Le logiciel de votre compagnie de transport",
     intro: "Les départs du jour, les places vendues, les colis reçus et remis. Chaque billet et chaque colis est payé et noté. Sur l'ordinateur du guichet, sans internet.",
     cta: "Créer le logiciel de ma compagnie",
@@ -400,7 +412,7 @@ export const packPagesFr: PackPagesCopy = {
   },
   wash: {
     title: "Logiciel de lavage auto et d'ameublement en Mauritanie | OUAQT",
-    description: "Le logiciel de votre station de lavage : les voitures en attente, les meubles et les tapis déposés, les laveurs, les avances, le reçu et les rapports. Sans internet.",
+    description: "Logiciel de station de lavage en Mauritanie : voitures en attente, meubles et tapis déposés, laveurs, avances, reçu et rapports. Sans internet, essai gratuit.",
     heading: "Le logiciel de votre station de lavage",
     intro: "Voitures, meubles et tapis, ou les deux : vous choisissez. Chaque lavage est noté, suivi et payé, et vous voyez ce que la journée a rapporté. Sur votre ordinateur ou votre téléphone, sans internet.",
     cta: "Créer le logiciel de ma station",
@@ -448,7 +460,7 @@ export const packPagesFr: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   general: {
     title: "Logiciel de gestion commerciale en Mauritanie | OUAQT",
-    description: "Un logiciel simple pour toute activité : les ventes, le stock si vous en avez, les dépenses, et les rapports du jour et du mois.",
+    description: "Logiciel de gestion simple pour toute activité en Mauritanie : ventes, stock si vous en avez, dépenses, rapports du jour et du mois. Essai gratuit.",
     heading: "Ventes, stock et rapports, pour votre activité",
     intro: "Un salon, un atelier, une société de services, un petit commerce : vous vendez, vous notez vos dépenses, et vous voyez ce que la journée et le mois ont rapporté. Vous gardez seulement ce qui vous sert.",
     cta: "Créer le logiciel de mon activité",

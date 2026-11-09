@@ -6,8 +6,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: "*",
       allow: "/",
-      // The contact endpoint has nothing to index, and the admin area is for
-      // OUAQT staff only.
+      // The API has nothing to index, and the admin area is for OUAQT staff
+      // only. The phone app, the account and the payment page stay open to
+      // crawlers on purpose: they say noindex, and a crawler has to read the
+      // page to see it. Blocked here, they could still be listed bare.
       disallow: ["/api/", "/admin"],
     },
     sitemap: `${siteUrl()}/sitemap.xml`,

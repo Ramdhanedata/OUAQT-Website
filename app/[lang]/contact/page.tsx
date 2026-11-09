@@ -10,7 +10,9 @@ import {
   WhatsAppIcon,
 } from "@/components/ui/social-icons";
 import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n/config";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { Mail, MapPin } from "lucide-react";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
@@ -33,6 +35,7 @@ export default async function ContactPage(props: Props) {
 
   return (
     <Section className="pt-32 sm:pt-40">
+      <JsonLd data={breadcrumbData(params.lang, dict, [{ name: dict.nav.contact, path: localeHref(params.lang, "/contact") }])} />
       <Container>
         <div className="grid grid-cols-1 gap-16 lg:grid-cols-5">
           <FadeIn className="lg:col-span-2">

@@ -36,6 +36,14 @@ export type PackPagesCopy = {
     pricing: string;
     otherTrades: string;
     trial: string;
+    /** The footer's column of trade pages, on every page of the site. */
+    byTrade: string;
+    /*
+     * Each trade page named the way an owner would search for it, for the
+     * links between them: "Logiciel de pharmacie" says more to a reader and
+     * to a search engine than "Pharmacie".
+     */
+    links: Record<Pack, string>;
   };
 } & Record<Pack, PackPageCopy>;
 
@@ -54,12 +62,24 @@ export const packPagesEn: PackPagesCopy = {
     pricing: "See the prices",
     otherTrades: "The other trades",
     trial: "Free trial of {days} days",
+    byTrade: "Software by trade",
+    links: {
+      pharmacy: "Pharmacy software",
+      shop: "Shop POS software",
+      restaurant: "Restaurant POS software",
+      bakery: "Bakery software",
+      warehouse: "Stock management software",
+      hotel: "Hotel software",
+      transport: "Transport company software",
+      wash: "Car wash software",
+      general: "Small business software",
+    },
   },
 
   pharmacy: {
     title: "Pharmacy management software in Mauritania | OUAQT",
     description:
-      "Build your pharmacy's software by answering a few questions. Expiry dates, batch numbers, selling by box or by strip, customer credit. It works with no internet.",
+      "Pharmacy management software for Nouakchott and Mauritania: expiry dates, batch numbers, selling by box or by strip, customer credit. Works offline, free trial.",
     heading: "Your pharmacy's software, built around the way you work",
     intro:
       "You answer a few questions about your pharmacy and you leave with the software that fits it: selling by the box or by the strip, expiry dates, batch numbers, and accounts for the customers who pay later. It installs on the counter PC and works with no internet.",
@@ -117,7 +137,7 @@ export const packPagesEn: PackPagesCopy = {
   restaurant: {
     title: "Restaurant POS software in Mauritania | OUAQT",
     description:
-      "Your restaurant's till software: the tables, orders held open while the table eats, the kitchen ticket and the bill at the end.",
+      "Restaurant and café POS software in Mauritania: the tables, orders held open while the table eats, the kitchen ticket and the bill. Works offline, free trial.",
     heading: "The till software for your restaurant",
     intro:
       "The tables in your room, orders that stay open while people eat, the ticket that goes to the kitchen, and the bill at the end. On the PC in the room, with no internet.",
@@ -173,7 +193,7 @@ export const packPagesEn: PackPagesCopy = {
   bakery: {
     title: "Bakery management software in Mauritania | OUAQT",
     description:
-      "Your bakery's software: the day's production, orders placed ahead with a deposit, the counter sale and regulars' credit.",
+      "Bakery management software in Mauritania: the day's production, orders placed ahead with a deposit, the counter sale and regulars' credit. Free trial.",
     heading: "Your bakery's software",
     intro:
       "What came out of the oven this morning, what was sold, what is left, and the orders your customers place ahead. On the shop PC, with no internet.",
@@ -229,7 +249,7 @@ export const packPagesEn: PackPagesCopy = {
   warehouse: {
     title: "Stock management software in Mauritania | OUAQT",
     description:
-      "Your warehouse's software: goods in, goods out, several locations, and stock that keeps itself.",
+      "Stock management software for your warehouse in Mauritania: goods in, goods out, several locations, and stock that keeps itself. Works offline, free trial.",
     heading: "Stock management software for your warehouse",
     intro:
       "What comes in, what goes out, and what is left, location by location. Stock is never a number typed by hand: it comes from the movements. On your computer or phone, with no internet.",
@@ -285,7 +305,7 @@ export const packPagesEn: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   shop: {
     title: "Shop and grocery POS software in Mauritania | OUAQT",
-    description: "Your shop's till: sell by barcode or tiles, stock, customer credit, the evening count.",
+    description: "POS software for shops and grocers in Nouakchott: sell by barcode or tiles, stock, customer credit, the evening count. Works offline, free trial.",
     heading: "Till software for your shop",
     intro: "You scan or tap the item, the customer pays, and the stock goes down by itself. Your regulars' credit and the evening count are in the same place. On your computer or phone, with no internet.",
     cta: "Build my shop's software",
@@ -333,7 +353,7 @@ export const packPagesEn: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   hotel: {
     title: "Hotel management software in Mauritania | OUAQT",
-    description: "Your hotel's software: the room board, bookings, check-in and check-out, extras on the bill.",
+    description: "Hotel and guesthouse management software in Mauritania: the room board, bookings, check-in and check-out, extras on the bill. Works offline, free trial.",
     heading: "Management software for your hotel",
     intro: "Your rooms on one screen, free, occupied or to be cleaned. The booking, the arrival, the extras, and the bill at departure. On the front desk computer or your phone, with no internet.",
     cta: "Build my hotel's software",
@@ -381,7 +401,7 @@ export const packPagesEn: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   transport: {
     title: "Transport and parcel software in Mauritania | OUAQT",
-    description: "Your transport company's software: departures, tickets by seat, parcels with their code, the passenger list.",
+    description: "Software for transport companies in Mauritania: departures, tickets by seat, parcels with their code, the passenger list. Works offline, free trial.",
     heading: "Software for your transport company",
     intro: "Today's departures, the seats sold, the parcels received and handed over. Every ticket and every parcel is paid and recorded. On the counter's computer or your phone, with no internet.",
     cta: "Build my company's software",
@@ -428,7 +448,7 @@ export const packPagesEn: PackPagesCopy = {
   },
   wash: {
     title: "Car wash and upholstery cleaning software in Mauritania | OUAQT",
-    description: "The software for your wash: cars in the queue, upholstery and carpets left with you, the washers, advances, the receipt and the reports. No internet needed.",
+    description: "Car wash and upholstery cleaning software in Mauritania: cars in the queue, carpets left with you, the washers, advances, receipts and reports. Free trial.",
     heading: "The software for your wash",
     intro: "Cars, upholstery and carpets, or both: you choose. Every wash is noted, followed and paid, and you see what the day brought in. On your computer or your phone, with no internet.",
     cta: "Build the software for my wash",
@@ -476,7 +496,7 @@ export const packPagesEn: PackPagesCopy = {
   /* Written 2026-09-23 for the new trade. For Adel's review before it goes live. */
   general: {
     title: "Small business software in Mauritania | OUAQT",
-    description: "Simple software for any business: sales, stock if you have any, expenses, and the day's and month's reports.",
+    description: "Simple business software for any trade in Mauritania: sales, stock if you have any, expenses, and the day's and month's reports. Works offline, free trial.",
     heading: "Sales, stock and reports, for your business",
     intro: "A salon, a workshop, a service company, a small trader: you sell, you note your expenses, and you see what the day and the month brought in. You keep only what you use.",
     cta: "Build my business's software",

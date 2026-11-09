@@ -4,8 +4,8 @@
  */
 export const en = {
   meta: {
-    siteTitle: "OUAQT | Business management and POS software in Mauritania",
-    siteDescription: "Till, stock and management software for shops and small and medium businesses in Mauritania, built online in minutes. Pharmacy, shop, restaurant, hotel. Works without internet.",
+    siteTitle: "POS and business management software in Mauritania | OUAQT",
+    siteDescription: "Till, stock and business management software for shops and SMEs in Mauritania: pharmacy, shop, restaurant, hotel. Built online in 5 minutes, works offline.",
     projectsTitle: "Custom software in Mauritania: 22 systems in daily use | OUAQT",
     projectsDescription: "Mines, pharmacies, hotels, transport, restaurants and schools: the systems we built to order, and what each one changed.",
     aboutTitle: "About OUAQT, a software company in Nouakchott",
@@ -20,7 +20,7 @@ export const en = {
       "What OUAQT does with personal information, on this website and inside the systems we build.",
     pricingTitle: "Business and POS software pricing in Mauritania | OUAQT",
     pricingDescription:
-      "Every OUAQT price in one place: the software you build online, then installation and the annual licence for custom projects.",
+      "OUAQT till and management software prices in ouguiya (MRU): by the month, the quarter or the year, after the free trial. And what custom projects cost.",
     shareAlt: "OUAQT: management software for small and medium businesses, built in minutes with the Builder.",
   },
 

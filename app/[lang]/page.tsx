@@ -63,7 +63,7 @@ export default async function Home(props: { params: Promise<{ lang: Locale }> })
 
   return (
     <>
-      <JsonLd data={softwareApplicationData(params.lang, dict)} />
+      <JsonLd data={softwareApplicationData(params.lang, dict, settings)} />
       <BuilderHero dict={dict} lang={params.lang} trialDays={builderTerms(settings).trialDays} />
       <BuilderImpact dict={dict} trialDays={builderTerms(settings).trialDays} />
       <DeviceTour home={tourCopy(dict)} lang={params.lang} />

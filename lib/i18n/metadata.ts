@@ -1,4 +1,5 @@
-import { locales, type Locale } from "./config";
+import { defaultLocale, locales, type Locale } from "./config";
+import { localisedHref, type LocalisedRouteId } from "./routes";
 
 /**
  * The public origin. Falls back to the Vercel deployment URL so canonical and
@@ -31,11 +32,28 @@ export function siteUrl(): string {
  */
 export function alternatesFor(lang: Locale, path = "/") {
   const clean = path === "/" ? "" : path;
+  return alternatesOf(lang, (l) => `/${l}${clean}`);
+}
+
+/** The same for a page whose address is a different word in each language (the builder, the trade pages). */
+export function localisedAlternatesFor(lang: Locale, id: LocalisedRouteId) {
+  return alternatesOf(lang, (l) => localisedHref(l, id));
+}
+
+/*
+ * One page in three languages: its own address as the canonical, the three
+ * translations, and x-default for a reader whose language is none of them.
+ *
+ * x-default is the French page, the main market's, on every page. It used to
+ * be the bare address on the home page only, but "/" declares /fr (or the
+ * reader's language) as its canonical, and an alternate that is not itself
+ * canonical is one Google may drop with the whole set. The other pages had
+ * none.
+ */
+function alternatesOf(lang: Locale, href: (l: Locale) => string) {
   const languages: Record<string, string> = Object.fromEntries(
-    locales.map((l) => [l, `/${l}${clean}`])
+    locales.map((l) => [l, href(l)])
   );
-  // The bare address picks a language for each visitor, which is what
-  // x-default tells search engines it does.
-  if (path === "/") languages["x-default"] = "/";
-  return { canonical: `/${lang}${clean}`, languages };
+  languages["x-default"] = href(defaultLocale);
+  return { canonical: href(lang), languages };
 }

@@ -48,9 +48,31 @@ const security = [
   { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
 ];
 
+/*
+ * Pages for owners and staff, never for a search result: the phone app, the
+ * app the builder previews, the admin area, and the account and payment pages
+ * (whose slug differs per language, lib/i18n/routes.ts). They already carry a
+ * robots meta tag; saying it in the response too means a crawler sees it even
+ * where the tag is streamed into the body (the payment page renders on every
+ * request) or the file is not a page at all.
+ */
+const noindex = [{ key: "X-Robots-Tag", value: "noindex, nofollow" }];
+
+/*
+ * Crawlers that get each page's <title>, canonical and robots tags inside
+ * <head> before anything else, rather than streamed in after it. Next.js's
+ * own list (next/dist/shared/lib/router/utils/html-bots.js) leaves out
+ * Googlebot itself, which then reads the tags of a page rendered per request
+ * only once it has run the page's JavaScript; the AI search crawlers, which
+ * run none, are added for the same reason.
+ */
+const searchBots =
+  /Googlebot|[\w-]+-Google|Google-[\w-]+|Chrome-Lighthouse|Slurp|DuckDuckBot|baiduspider|yandex|sogou|bitlybot|tumblr|vkShare|quora link preview|redditbot|ia_archiver|Bingbot|BingPreview|applebot|facebookexternalhit|facebookcatalog|Twitterbot|LinkedInBot|Slackbot|Discordbot|WhatsApp|SkypeUriPreview|Yeti|googleweblight|GPTBot|OAI-SearchBot|ChatGPT-User|ClaudeBot|Claude-SearchBot|PerplexityBot|CCBot/i;
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  htmlLimitedBots: searchBots,
   // No need to announce the framework to every visitor.
   poweredByHeader: false,
   // This folder is the project, whatever lockfiles sit higher up on the machine.
@@ -76,6 +98,8 @@ const nextConfig = {
   async headers() {
     return [
       { source: "/:path*", headers: security },
+      { source: "/:area(app|app-preview|admin)/:rest*", headers: noindex },
+      { source: "/:lang(fr|en|ar)/:page(compte|account|payer|pay)/:rest*", headers: noindex },
       {
         // The desktop app built for the builder's preview. Its files are named
         // after their contents, so a new build is a new name and the old one

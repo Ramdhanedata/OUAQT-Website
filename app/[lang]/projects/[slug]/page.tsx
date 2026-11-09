@@ -6,6 +6,8 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { getProjectBySlug, projects } from "@/lib/data/projects";
 import { getDictionary } from "@/lib/i18n";
 import { locales, localeHref, type Locale } from "@/lib/i18n/config";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
 import { ArrowLeft } from "lucide-react";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
@@ -62,6 +64,12 @@ export default async function ProjectDetailPage(props: Props) {
 
   return (
     <>
+      <JsonLd
+        data={breadcrumbData(params.lang, dict, [
+          { name: dict.nav.projects, path: localeHref(params.lang, "/projects") },
+          { name: copy.title, path: localeHref(params.lang, `/projects/${project.slug}`) },
+        ])}
+      />
       {/* Title band. Deliberately does NOT use the screenshot as a full-bleed
           background, because a dense UI screenshot cropped to a letterbox and
           dimmed behind a scrim is unreadable. The screenshot gets its own

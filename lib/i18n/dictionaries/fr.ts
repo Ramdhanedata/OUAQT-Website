@@ -2,8 +2,8 @@ import type { Dictionary } from "./en";
 
 export const fr: Dictionary = {
   meta: {
-    siteTitle: "OUAQT | Logiciel de gestion et de caisse pour PME en Mauritanie",
-    siteDescription: "Logiciel de caisse, de stock et de gestion pour les commerces et PME en Mauritanie, créé en ligne en quelques minutes. Pharmacie, boutique, restaurant, hôtel. Fonctionne sans internet.",
+    siteTitle: "Logiciel de caisse et de gestion en Mauritanie | OUAQT",
+    siteDescription: "Logiciel de caisse et de gestion de stock pour commerces et PME en Mauritanie : pharmacie, boutique, restaurant, hôtel. Créé en ligne en 5 minutes, sans internet.",
     projectsTitle: "Logiciels sur mesure en Mauritanie : 22 systèmes en service | OUAQT",
     projectsDescription: "Mines, pharmacies, hôtels, transport, restaurants et écoles : les systèmes que nous avons construits sur mesure, et ce que chacun a changé.",
     aboutTitle: "À propos d'OUAQT, éditeur de logiciels à Nouakchott",
@@ -18,7 +18,7 @@ export const fr: Dictionary = {
       "Ce qu'OUAQT fait des informations personnelles, sur ce site et dans les systèmes que nous construisons.",
     pricingTitle: "Prix du logiciel de gestion et de caisse en Mauritanie | OUAQT",
     pricingDescription:
-      "Les tarifs OUAQT au même endroit : le logiciel que vous créez en ligne, puis l'installation et la licence annuelle des projets sur mesure.",
+      "Le prix du logiciel de caisse et de gestion OUAQT en ouguiyas (MRU) : au mois, au trimestre ou à l'année, après l'essai gratuit. Et les tarifs du sur mesure.",
     shareAlt: "OUAQT : le logiciel de gestion des PME, créé en quelques minutes avec le Builder.",
   },
 

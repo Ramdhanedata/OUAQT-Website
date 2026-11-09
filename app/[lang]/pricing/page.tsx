@@ -3,6 +3,8 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Faq } from "@/components/home/faq";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
 import { PriceBook } from "@/components/pricing/price-book";
 import { Bespoke } from "@/components/pricing/bespoke";
 import { Perpetual } from "@/components/pricing/perpetual";
@@ -12,7 +14,7 @@ import { getPublicSettings } from "@/builder/db/settings";
 import { getLaunchOffer } from "@/builder/payment/launch";
 import { pricingTerms } from "@/lib/data/pricing";
 import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n/config";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import { fill } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -47,6 +49,7 @@ export default async function PricingPage(props: Props) {
 
   return (
     <>
+      <JsonLd data={breadcrumbData(params.lang, dict, [{ name: dict.nav.pricing, path: localeHref(params.lang, "/pricing") }])} />
       <Section className="pb-12 pt-32 sm:pb-16 sm:pt-40">
         <Container>
           <FadeIn>

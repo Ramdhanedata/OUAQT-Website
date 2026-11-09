@@ -6,6 +6,8 @@ import { FadeIn } from "@/components/motion/fade-in";
 import { founder } from "@/lib/data/founder";
 import { LinkedInIcon } from "@/components/ui/social-icons";
 import { getDictionary } from "@/lib/i18n";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
 import { localeHref, type Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
 import { ArrowRight, Mail, MapPin } from "lucide-react";
@@ -71,6 +73,7 @@ export default async function AboutPage(props: Props) {
 
   return (
     <>
+      <JsonLd data={breadcrumbData(params.lang, dict, [{ name: dict.nav.about, path: localeHref(params.lang, "/about") }])} />
       <Section className="pt-32 sm:pt-40">
         <Container>
           <FadeIn className="max-w-3xl">

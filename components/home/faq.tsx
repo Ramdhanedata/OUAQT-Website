@@ -2,6 +2,7 @@ import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { FadeIn } from "@/components/motion/fade-in";
 import { Plus } from "lucide-react";
+import { JsonLd } from "@/components/seo/json-ld";
 
 type FaqItem = { q: string; a: string };
 
@@ -22,6 +23,18 @@ export function Faq({
 
   return (
     <Section className="border-t border-border">
+      {/* The same questions and answers as below, word for word (builder-faq.tsx says why). */}
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: items.map((item) => ({
+            "@type": "Question",
+            name: item.q,
+            acceptedAnswer: { "@type": "Answer", text: item.a },
+          })),
+        }}
+      />
       <Container>
         <FadeIn className="max-w-2xl">
           <p className="eyebrow">

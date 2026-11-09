@@ -9,6 +9,9 @@ import { cookies } from "next/headers";
 import { getBuilderCopy } from "@/builder/copy";
 import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
+import { localisedAlternatesFor } from "@/lib/i18n/metadata";
 import { localisedHref } from "@/lib/i18n/routes";
 import { locales } from "@/lib/i18n/config";
 import type { Metadata } from "next";
@@ -29,12 +32,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   return pageMetadata(params.lang, dict, {
     title: `${copy.landing.title} | ${dict.common.brand}`,
     description: copy.landing.intro,
-    alternates: {
-      canonical: localisedHref(params.lang, "builder"),
-      languages: Object.fromEntries(
-        locales.map((locale) => [locale, localisedHref(locale, "builder")])
-      ) as Record<Locale, string>,
-    },
+    alternates: localisedAlternatesFor(params.lang, "builder"),
   });
 }
 
@@ -67,10 +65,15 @@ export default async function BuilderPage(props: Props) {
   /* ?serial=1, the way the home page links here for the owner who has his number. With no value, the slug's rewrite drops it. */
   const askSerial = searchParams?.serial !== undefined;
 
+  const dict = getDictionary(params.lang);
+  const copy = getBuilderCopy(params.lang);
+
   return (
+    <>
+    <JsonLd data={breadcrumbData(params.lang, dict, [{ name: copy.nav, path: localisedHref(params.lang, "builder") }])} />
     <Builder
       trialDays={builderTerms(settings).trialDays}
-      copy={getBuilderCopy(params.lang)}
+      copy={copy}
       locale={params.lang}
       enabledPacks={enabled}
       startPack={startPack}
@@ -87,5 +90,6 @@ export default async function BuilderPage(props: Props) {
       }}
       termsHref={`/${params.lang}/terms`}
     />
+    </>
   );
 }

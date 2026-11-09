@@ -1,7 +1,9 @@
 import { pageMetadata } from "@/lib/seo/page-metadata";
 import { LegalPage } from "@/components/legal/legal-page";
 import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n/config";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import type { Metadata } from "next";
 
@@ -23,6 +25,8 @@ export default async function PrivacyPage(props: Props) {
   const p = dict.legal.privacy;
 
   return (
+    <>
+    <JsonLd data={breadcrumbData(params.lang, dict, [{ name: dict.footer.privacy, path: localeHref(params.lang, "/privacy") }])} />
     <LegalPage
       title={p.title}
       intro={p.intro}
@@ -43,5 +47,6 @@ export default async function PrivacyPage(props: Props) {
         p.contact,
       ]}
     />
+    </>
   );
 }

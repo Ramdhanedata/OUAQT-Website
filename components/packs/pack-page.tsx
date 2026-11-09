@@ -1,4 +1,5 @@
-import type { Pack } from "@/app-ui/packs";
+import { packs, type Pack } from "@/app-ui/packs";
+import type { PublicSettings } from "@/builder/db/settings";
 import { PackScreens } from "@/components/packs/screens";
 import { Notify } from "@/components/packs/notify";
 import { JsonLd } from "@/components/seo/json-ld";
@@ -7,19 +8,22 @@ import { Container } from "@/components/ui/container";
 import { FadeIn } from "@/components/motion/fade-in";
 import { getDictionary } from "@/lib/i18n";
 import { localeHref, locales, type Locale } from "@/lib/i18n/config";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
+import { operatingSystems, softwareOffer } from "@/lib/seo/software-application";
 import { siteUrl } from "@/lib/i18n/metadata";
 import { getPackPage } from "@/lib/i18n/packs";
 import { localisedHref, packRouteId } from "@/lib/i18n/routes";
 import { fill } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 /*
  * One trade's landing page.
  *
  * This is where a search drops an owner, so it has to answer the question he
- * typed in the first screen and then let him start. The four pages differ
+ * typed in the first screen and then let him start. The trade pages differ
  * only in their words: the layout, the preview and the structured data are
- * the same, which is why there is one component and four thin routes.
+ * the same, which is why there is one component and a thin route per trade.
  *
  * A trade that is not open yet says so and takes a phone number. It never
  * promises a date, because there is not one.
@@ -29,11 +33,13 @@ export function PackPage({
   pack,
   open,
   trialDays,
+  settings,
 }: {
   lang: Locale;
   pack: Pack;
   open: boolean;
   trialDays: number | null;
+  settings: PublicSettings | null;
 }) {
   const dict = getDictionary(lang);
   const copy = getPackPage(lang, pack);
@@ -50,22 +56,19 @@ export function PackPage({
           "@id": `${base}${localisedHref(lang, packRouteId(pack))}#software`,
           name: `${dict.common.brand} ${label}`,
           applicationCategory: "BusinessApplication",
-          operatingSystem: "Windows",
+          operatingSystem: operatingSystems,
           description: copy.description,
           url: `${base}${localisedHref(lang, packRouteId(pack))}`,
           inLanguage: [...locales],
           publisher: { "@id": `${base}/#business` },
+          // A trade that is not open yet cannot be bought, so it shows no price.
+          ...(open ? softwareOffer(lang, settings) : {}),
         }}
       />
       <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            { "@type": "ListItem", position: 1, name: dict.common.brand, item: `${base}${localeHref(lang, "/")}` },
-            { "@type": "ListItem", position: 2, name: label, item: `${base}${localisedHref(lang, packRouteId(pack))}` },
-          ],
-        }}
+        data={breadcrumbData(lang, dict, [
+          { name: copy.common.links[pack], path: localisedHref(lang, packRouteId(pack)) },
+        ])}
       />
       <JsonLd
         data={{
@@ -200,16 +203,36 @@ export function PackPage({
             >
               {copy.common.pricing}
             </a>
-            {/* eslint-disable-next-line @next/next/no-html-link-for-pages -- the bare address opens in the reader's language (middleware.ts) */}
-            <a
-              href="/"
-              className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
-            >
-              {copy.common.otherTrades}
-            </a>
           </div>
         </Container>
       </section>
+
+      {/*
+        * The other trades, each by name, so an owner who landed on the wrong
+        * one is a tap from his own, and search engines find every trade page
+        * from every other one.
+        */}
+      <nav aria-labelledby="other-trades" className="border-t border-border py-16 sm:py-20">
+        <Container>
+          <h2 id="other-trades" className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+            {copy.common.otherTrades}
+          </h2>
+          <ul className="mt-8 grid gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
+            {packs
+              .filter((other) => other !== pack)
+              .map((other) => (
+                <li key={other}>
+                  <Link
+                    href={localisedHref(lang, packRouteId(other))}
+                    className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
+                  >
+                    {copy.common.links[other]}
+                  </Link>
+                </li>
+              ))}
+          </ul>
+        </Container>
+      </nav>
     </>
   );
 }

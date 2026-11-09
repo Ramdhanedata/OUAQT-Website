@@ -1,7 +1,9 @@
 import { pageMetadata } from "@/lib/seo/page-metadata";
 import { LegalPage } from "@/components/legal/legal-page";
 import { getDictionary } from "@/lib/i18n";
-import type { Locale } from "@/lib/i18n/config";
+import { JsonLd } from "@/components/seo/json-ld";
+import { breadcrumbData } from "@/lib/seo/breadcrumbs";
+import { localeHref, type Locale } from "@/lib/i18n/config";
 import { alternatesFor } from "@/lib/i18n/metadata";
 import { getPublicSettings } from "@/builder/db/settings";
 import { organization } from "@/lib/data/contact";
@@ -48,6 +50,8 @@ export default async function TermsPage(props: Props) {
   const selfServe = { ...values, devices: builder.devices };
 
   return (
+    <>
+    <JsonLd data={breadcrumbData(params.lang, dict, [{ name: dict.footer.terms, path: localeHref(params.lang, "/terms") }])} />
     <LegalPage
       title={t.title}
       intro={t.intro}
@@ -92,5 +96,6 @@ export default async function TermsPage(props: Props) {
         };
       })}
     />
+    </>
   );
 }
