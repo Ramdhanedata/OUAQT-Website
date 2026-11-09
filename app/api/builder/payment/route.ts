@@ -4,6 +4,7 @@ import { adminClient, sessionClient } from "@/builder/db/server";
 import { PAYMENT_APPS } from "@/builder/payment/apps";
 import { filePayment } from "@/builder/payment/file";
 import { LICENCE_PLANS, type Plan } from "@/builder/payment/pricing";
+import { limitPerCaller } from "@/lib/rate-limit";
 
 /*
  * An owner says he has paid.
@@ -29,7 +30,14 @@ const body = z.object({
   plan: z.enum([...LICENCE_PLANS, "perpetual", "extra_device", "setup_visit"]),
 });
 
+/*
+ * Each screenshot is read by the AI, whose day is counted (0026): one account
+ * sending the same picture in a loop would spend everybody's readings.
+ */
+const tooMany = limitPerCaller(10 * 60_000, 12); // not-a-rule: ten minutes, twelve screenshots
+
 export async function POST(request: Request) {
+  if (tooMany(request)) return NextResponse.json({ error: "slow_down" }, { status: 429 });
   const input = body.safeParse(await request.json().catch(() => null));
   if (!input.success) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });
@@ -48,7 +56,9 @@ export async function POST(request: Request) {
   }
 
   /* His folder, or nobody's. A path is a claim until it is checked. */
-  if (!input.data.path.startsWith(`${owner.id}/`)) {
+  /* His own folder, one level down, and nothing that climbs out of it. */
+  const inside = input.data.path.slice(owner.id.length + 1);
+  if (!input.data.path.startsWith(`${owner.id}/`) || !/^[A-Za-z0-9._-]+$/.test(inside) || inside.startsWith(".")) {
     return NextResponse.json({ error: "not_yours" }, { status: 403 });
   }
 

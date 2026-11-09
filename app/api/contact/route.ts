@@ -50,7 +50,7 @@ export async function POST(request: Request) {
   if (!name || !channel) {
     return NextResponse.json({ error: "invalid_input" }, { status: 400 });
   }
-  if (name.length > 200 || contact.length > 320) {
+  if (name.length > 200 || contact.length > 320 || message.length > 5000 || locale.length > 10) {
     return NextResponse.json({ error: "too_long" }, { status: 400 });
   }
 
@@ -71,7 +71,8 @@ export async function POST(request: Request) {
   `;
 
   const sent = await mailOuaqt({
-    subject: `OUAQT enquiry from ${name}`,
+    /* One line: a name carrying line breaks never shapes the mail's headers. */
+    subject: `OUAQT enquiry from ${name.replace(/[\r\n\t]+/g, " ").slice(0, 120)}`,
     html,
     text: `Name: ${name}\n${channel.kind === "email" ? "Email" : "Phone / WhatsApp"}: ${contact}\nLanguage: ${locale}\n\n${message || "(no message)"}`,
     ...(channel.kind === "email" ? { replyTo: channel.value } : {}),

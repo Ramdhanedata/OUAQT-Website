@@ -7,6 +7,7 @@ import { adminClient } from "@/builder/db/server";
 import { PAYMENT_APPS } from "@/builder/payment/apps";
 import { filePayment } from "@/builder/payment/file";
 import { LICENCE_PLANS } from "@/builder/payment/pricing";
+import { limitPerCaller } from "@/lib/rate-limit";
 
 /*
  * Paying with nothing but the numéro de série.
@@ -36,7 +37,17 @@ const fields = z.object({
   app: z.enum(PAYMENT_APPS).optional(),
 });
 
+/* Every screenshot is read by the AI, whose day is counted: a loop would spend it for everyone. */
+const tooMany = limitPerCaller(10 * 60_000, 12); // not-a-rule: ten minutes, twelve screenshots
+
+/* A JPEG starts FF D8 FF whatever the browser says it is. */
+function looksLikeJpeg(bytes: ArrayBuffer): boolean {
+  const head = new Uint8Array(bytes, 0, Math.min(3, bytes.byteLength));
+  return head.length === 3 && head[0] === 0xff && head[1] === 0xd8 && head[2] === 0xff;
+}
+
 export async function POST(request: Request) {
+  if (tooMany(request)) return NextResponse.json({ error: "slow_down" }, { status: 429 });
   const form = await request.formData().catch(() => null);
   if (!form) return NextResponse.json({ error: "invalid" }, { status: 400 });
   const input = fields.safeParse({
@@ -49,6 +60,8 @@ export async function POST(request: Request) {
   if (image.size === 0 || image.size > MAX_BYTES || image.type !== "image/jpeg") {
     return NextResponse.json({ error: "bad_image" }, { status: 400 });
   }
+  const bytes = await image.arrayBuffer();
+  if (!looksLikeJpeg(bytes)) return NextResponse.json({ error: "bad_image" }, { status: 400 });
 
   const admin = adminClient();
   if (!admin) return NextResponse.json({ error: "no_database" }, { status: 503 });
@@ -71,7 +84,6 @@ export async function POST(request: Request) {
   const { data: business } = await admin.from("businesses").select("id, launch_client").eq("id", shop.businessId).single();
   if (!business) return NextResponse.json({ error: "no_business" }, { status: 404 });
 
-  const bytes = await image.arrayBuffer();
   const path = `serial/${business.id}/${crypto.randomUUID()}.jpg`;
   const upload = await admin.storage.from("payments").upload(path, bytes, { contentType: "image/jpeg" });
   if (upload.error) return NextResponse.json({ error: "not_saved" }, { status: 502 });

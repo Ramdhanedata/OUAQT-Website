@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
 
@@ -116,7 +116,18 @@ const filedAs = (chosen: { plan: boolean; app: boolean }): Row => ({
 
 const ended = { id: "licence-1", business_id: "shop", plan: "trial", status: "trial", starts_at: "2026-10-06T09:00:00.000Z", ends_at: "2026-11-05T09:00:00.000Z" };
 
+/*
+ * The day these payments were sent. A licence opened by a payment counts its
+ * months from today, so the clock is held on that day or every expected end
+ * date would move by one each morning.
+ */
+afterEach(() => {
+  vi.useRealTimers();
+});
+
 beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(LATER);
   reading.next = null;
   reading.calls = 0;
   trail.length = 0;

@@ -5,6 +5,7 @@ import { adminClient, sessionClient } from "@/builder/db/server";
 import { createShop, shopInput } from "@/builder/licence/create-shop";
 import { decryptSerial, serialSecretIsSet } from "@/builder/serial/cipher";
 import { carryCredit, creditDraft, REF_COOKIE } from "@/builder/referral";
+import { limitPerCaller } from "@/lib/rate-limit";
 
 /*
  * The end of the interview: a business, a configuration, and the number he
@@ -25,7 +26,11 @@ import { carryCredit, creditDraft, REF_COOKIE } from "@/builder/referral";
  * returns what the first attempt built.
  */
 
+/* A shop is made once; a caller making them in a loop is filling the database. */
+const tooMany = limitPerCaller(10 * 60_000, 10); // not-a-rule: ten minutes, ten attempts
+
 export async function POST(request: Request) {
+  if (tooMany(request)) return NextResponse.json({ error: "slow_down" }, { status: 429 });
   const input = shopInput.safeParse(await request.json().catch(() => null));
   if (!input.success) {
     return NextResponse.json({ error: "invalid" }, { status: 400 });

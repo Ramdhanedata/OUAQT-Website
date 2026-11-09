@@ -10,19 +10,27 @@
  * its own websocket.
  */
 const supabase = process.env.NEXT_PUBLIC_SUPABASE_URL ? new URL(process.env.NEXT_PUBLIC_SUPABASE_URL) : null;
+/*
+ * Vercel's toolbar (vercel.live and its websocket) is for previews: the live
+ * site has no reason to load anything from it, so production does not allow
+ * it at all.
+ */
+const toolbar = process.env.VERCEL_ENV === "production" ? null : { script: " https://vercel.live", img: " https://vercel.live https://vercel.com", font: " https://vercel.live", connect: " https://vercel.live wss://ws-us3.pusher.com", frame: " https://vercel.live" };
 const policy = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://vercel.live",
+  `script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval'${toolbar?.script ?? ""}`,
   "style-src 'self' 'unsafe-inline'",
-  `img-src 'self' data: blob:${supabase ? ` ${supabase.origin}` : ""} https://vercel.live https://vercel.com`,
-  "font-src 'self' data: https://vercel.live",
-  `connect-src 'self'${supabase ? ` ${supabase.origin} wss://${supabase.host}` : ""} https://formsubmit.co https://vercel.live wss://ws-us3.pusher.com`,
+  `img-src 'self' data: blob:${supabase ? ` ${supabase.origin}` : ""}${toolbar?.img ?? ""}`,
+  `font-src 'self' data:${toolbar?.font ?? ""}`,
+  `connect-src 'self'${supabase ? ` ${supabase.origin} wss://${supabase.host}` : ""} https://formsubmit.co${toolbar?.connect ?? ""}`,
   "worker-src 'self' blob:",
-  "frame-src 'self' https://vercel.live",
+  "manifest-src 'self'",
+  `frame-src 'self'${toolbar?.frame ?? ""}`,
   "frame-ancestors 'self'",
   "form-action 'self'",
   "base-uri 'self'",
   "object-src 'none'",
+  "upgrade-insecure-requests",
 ].join("; ");
 
 const security = [
@@ -32,6 +40,12 @@ const security = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
+  /*
+   * A page this site opens, or that opens it, cannot reach into its window:
+   * the owner's session and the phone app's shop live on this origin.
+   */
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
+  { key: "X-Permitted-Cross-Domain-Policies", value: "none" },
 ];
 
 /** @type {import('next').NextConfig} */
