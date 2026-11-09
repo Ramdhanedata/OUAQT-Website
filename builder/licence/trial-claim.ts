@@ -1,9 +1,11 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { PrivateSettings } from "@/builder/db/private-settings";
+import { audit } from "@/builder/db/audit";
+import { getPrivateSettings, type PrivateSettings } from "@/builder/db/private-settings";
 import {
   repeatSignals,
+  tradeChangeAllowed,
   trialAllowed,
   type Claim,
   type Decision,
@@ -109,16 +111,45 @@ export function packOfRow(row: { businesses?: unknown }): string | null {
   return typeof pack === "string" && pack ? pack : null;
 }
 
+/*
+ * The trades a claim covered (0039), or failing that the trade its shop has
+ * now. Empty only when neither can be read, which counts as every trade.
+ */
+export function packsOfRow(row: { packs?: unknown; businesses?: unknown }): string[] {
+  const written = Array.isArray(row.packs) ? row.packs.filter((one): one is string => typeof one === "string" && one !== "") : [];
+  if (written.length > 0) return written;
+  const now = packOfRow(row);
+  return now ? [now] : [];
+}
+
+/*
+ * Every trade a shop is known to have run, from a row that carries
+ * businesses(pack, trial_claims(packs)): what its trials covered and the
+ * trade it has now. Empty only when nothing could be read.
+ */
+export function tradesOfShopRow(row: { businesses?: unknown }): string[] {
+  const shop = Array.isArray(row.businesses) ? row.businesses[0] : row.businesses;
+  const claims = (shop as { trial_claims?: unknown } | null | undefined)?.trial_claims;
+  const covered = Array.isArray(claims) ? claims.flatMap((claim) => packsOfRow(claim as { packs?: unknown })) : [];
+  const now = packOfRow(row);
+  return [...new Set([...covered, ...(now ? [now] : [])])];
+}
+
 async function pastClaims(supabase: SupabaseClient): Promise<Claim[]> {
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("trial_claims")
     .select(
-      "business_id, fingerprint_board, fingerprint_disk, fingerprint_machine, phone, logo_hash, products_hash, name, address, businesses(pack)"
+      "business_id, packs, fingerprint_board, fingerprint_disk, fingerprint_machine, phone, logo_hash, products_hash, name, address, businesses(pack)"
     );
+  /*
+   * Unread is not empty: an empty list would give every device a trial. The
+   * activation fails instead, and the owner tries again a minute later.
+   */
+  if (error) throw new Error(`trial claims not read: ${error.message}`);
 
   return (data ?? []).map((row) => ({
     businessId: row.business_id as string,
-    pack: packOfRow(row),
+    packs: packsOfRow(row),
     fingerprint: {
       board: row.fingerprint_board as string | null,
       disk: row.fingerprint_disk as string | null,
@@ -186,7 +217,7 @@ export async function claimTrial(
 
   const candidate: Claim = {
     businessId: business.id,
-    pack: business.pack,
+    packs: [business.pack],
     fingerprint,
     phone,
     logoHash,
@@ -204,6 +235,7 @@ export async function claimTrial(
 
   await supabase.from("trial_claims").insert({
     business_id: business.id,
+    packs: [business.pack],
     fingerprint_board: fingerprint.board,
     fingerprint_disk: fingerprint.disk,
     fingerprint_machine: fingerprint.machine,
@@ -223,4 +255,117 @@ export async function claimTrial(
   }
 
   return { kind: "granted" };
+}
+
+export type TradeOutcome = "nothing_to_do" | "covered" | "added" | "granted_by_hand" | "ended";
+
+/**
+ * A shop's trade, settled against its free trial. Called each time the shop
+ * follows what its owner changed on the website, with the trade it runs now.
+ *
+ * A trial that is running and has not covered this trade yet is asked
+ * tradeChangeAllowed. Allowed, the trade is added to what the trial covered,
+ * so no other shop on these devices gets a trial of it later. Refused, the
+ * trial ends now and the app shows its end-of-trial window at its next
+ * check, unless staff had already granted this shop a trial by hand. Staff
+ * can still reopen it from the client's page, like any licence.
+ *
+ * Nothing is written until the decision is: a step that fails leaves the
+ * trade uncovered, so the next refresh asks again instead of letting it
+ * through.
+ */
+export async function settleTrade(
+  supabase: SupabaseClient,
+  businessId: string,
+  pack: string
+): Promise<TradeOutcome> {
+  const { data: licence } = await supabase
+    .from("licences")
+    .select("id, plan, starts_at, ends_at")
+    .eq("business_id", businessId)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+  /*
+   * Only a running trial has anything to protect. One not started yet is
+   * claimed under the trade it starts with; one ended or paid for gains
+   * nothing from a change of trade.
+   */
+  const running =
+    licence?.plan === "trial" &&
+    Boolean(licence.starts_at) &&
+    Boolean(licence.ends_at) &&
+    new Date(licence.ends_at as string).getTime() > Date.now();
+  if (!licence || !running) return "nothing_to_do";
+
+  const { data: own, error } = await supabase
+    .from("trial_claims")
+    .select("id, packs, phone, fingerprint_board, fingerprint_disk, fingerprint_machine")
+    .eq("business_id", businessId);
+  if (error || !own || own.length === 0) return "nothing_to_do";
+
+  const covered = [...new Set(own.flatMap((row) => packsOfRow(row)))];
+  if (covered.includes(pack)) return "covered";
+
+  const settings = await getPrivateSettings();
+  if (!settings) return "nothing_to_do";
+
+  const { data: devices } = await supabase
+    .from("devices")
+    .select("fingerprint")
+    .eq("business_id", businessId)
+    .eq("status", "active");
+  const reported = (mark: Fingerprint | null) => Boolean(mark && (mark.board || mark.disk || mark.machine));
+  const fingerprints = [
+    ...own.map((row) => ({
+      board: row.fingerprint_board as string | null,
+      disk: row.fingerprint_disk as string | null,
+      machine: row.fingerprint_machine as string | null,
+    })),
+    ...(devices ?? []).map((device) => device.fingerprint as Fingerprint | null),
+  ].filter((mark): mark is Fingerprint => reported(mark));
+
+  const decision = tradeChangeAllowed(
+    { businessId, pack, fingerprints, phone: (own[0].phone as string | null) ?? null },
+    await pastClaims(supabase),
+    rulesFrom(settings)
+  );
+
+  let outcome: TradeOutcome = "added";
+  if (!decision.allowed) {
+    const { data: override } = await supabase
+      .from("trial_overrides")
+      .select("id")
+      .eq("business_id", businessId)
+      .is("used_at", null)
+      .limit(1)
+      .maybeSingle();
+
+    if (override) {
+      await supabase.from("trial_overrides").update({ used_at: new Date().toISOString() }).eq("id", override.id);
+      outcome = "granted_by_hand";
+    } else {
+      const { error: notEnded } = await supabase
+        .from("licences")
+        .update({ ends_at: new Date().toISOString() })
+        .eq("id", licence.id);
+      if (notEnded) return "nothing_to_do";
+      await audit({
+        actorId: null,
+        subject: "licence",
+        subjectId: licence.id as string,
+        action: "trial_refused",
+        detail: { businessId, because: decision.because, tradeChange: { to: pack, covered } },
+      });
+      outcome = "ended";
+    }
+  }
+
+  for (const row of own) {
+    await supabase
+      .from("trial_claims")
+      .update({ packs: [...new Set([...packsOfRow(row), pack])] })
+      .eq("id", row.id);
+  }
+  return outcome;
 }

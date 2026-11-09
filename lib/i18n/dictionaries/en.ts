@@ -246,7 +246,7 @@ export const en = {
       },
       trial: {
         h: "The free trial",
-        b: "Your software can be tried free for {trialDays} days, with every feature. The trial starts the first time the software opens on one of your devices, not the day you download it, and each device has one free trial per trade: a device that tried the restaurant software can still try the pharmacy one, but reinstalling the same one does not give a new trial. Adding a device to the same business does not restart the trial. At the end, until a licence is paid, the software turns read-only: everything you recorded stays on screen and you can still save a copy of it, but no new sale can be entered. Nothing is erased, and everything opens again as soon as the payment is confirmed.",
+        b: "Your software can be tried free for {trialDays} days, with every feature. The trial starts the first time the software opens on one of your devices, not the day you download it, and each device has one free trial per trade: a device that tried the restaurant software can still try the pharmacy one, but reinstalling the same one does not give a new trial, and switching a business during its trial to a trade already tried on one of its devices ends the trial. Adding a device to the same business does not restart the trial. At the end, until a licence is paid, the software turns read-only: everything you recorded stays on screen and you can still save a copy of it, but no new sale can be entered. Nothing is erased, and everything opens again as soon as the payment is confirmed.",
       },
       selfLicence: {
         h: "What you are buying",

@@ -216,6 +216,16 @@ pharmacy trial, once, and the same goes for the owner's number. Reinstalling
 the restaurant software on it gets no second trial. The business mark has no
 trade: one shop, one trial, whatever it is rebuilt as.
 
+Each claim keeps the trades its trial covered (`trial_claims.packs`, 0039).
+A shop rebuilt on the website as another trade while its trial runs is
+settled on the next follow (`settleTrade`, called from `followAnswers`): if
+none of its devices and not its owner's number tried that trade in another
+shop, the trade is added to the claim and the trial carries on; otherwise
+the trial ends at once, unless staff had granted one by hand, and the
+refusal is written as `trial_refused` with `tradeChange` in its detail. The
+refresh follows the draft before reading the licence, so the new trade and
+the ended trial arrive in the same answer.
+
 The fingerprint travels as three salted hashes and never as serial numbers.
 Two of the three agreeing is enough to call it the same machine, so a
 replaced disk or a reinstalled system does not cost an owner his trial, and

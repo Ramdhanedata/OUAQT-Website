@@ -83,6 +83,14 @@ export async function POST(request: Request) {
    */
   await readAgain(supabase, input.data.businessId).catch((error) => console.error("payment: not read again", error));
 
+  /*
+   * What the owner changed on the website since: his answers, name, logo and
+   * staff. Followed before the licence is read, because a change of trade
+   * can end a free trial (settleTrade), and the new trade and the ended
+   * trial must reach the app in the same answer.
+   */
+  await followDraft(supabase, input.data.businessId);
+
   const [{ data: business }, { data: licence }, settings, secrets] = await Promise.all([
     supabase
       .from("businesses")
@@ -144,8 +152,6 @@ export async function POST(request: Request) {
    * anything that changes a product, a member of staff or a setting writes a
    * new configuration, so one number answers for all three.
    */
-  /* What the owner changed on the website since: his answers, name, logo and staff. */
-  await followDraft(supabase, business.id);
   const setup = await setupFor(supabase, business.id);
   const serial = await serialFor(supabase, business.id);
   const unchanged =

@@ -10,6 +10,7 @@ import { applyAnswers } from "@/builder/packs/bank";
 import { interviewFor } from "@/builder/packs";
 import { decryptSerial, encryptSerial } from "@/builder/serial/cipher";
 import { hashSerial, makeUniqueSerial } from "@/builder/serial/serial";
+import { settleTrade } from "@/builder/licence/trial-claim";
 
 /*
  * A shop, from finished answers: the business, its configuration, its
@@ -197,6 +198,13 @@ export async function followAnswers(
       receipt_address: data.business.address ?? null,
     })
     .eq("id", businessId);
+
+  /*
+   * A free trial covers the trades it ran: rebuilt as a trade its devices or
+   * its owner's number already tried in another shop, the trial ends here.
+   * Asked on every follow, so a step that failed is asked again next time.
+   */
+  await settleTrade(admin, businessId, configuration.data.pack).catch((error) => console.error("trial: trade not settled", error));
 
   const { data: latest } = await admin
     .from("configurations")

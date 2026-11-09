@@ -24,12 +24,14 @@ export type Fingerprint = {
 export type Claim = {
   businessId: string;
   /*
-   * The trade the trial was for: pharmacy, restaurant, wash... Each one is
+   * The trades the trial covered: pharmacy, restaurant, wash... Each one is
    * its own software, so each has its own free trial on a device (decided
-   * 2026-11-09). Null only if the shop could not be read, and then it
-   * counts as the same trade, so a gap in the data never hands out a trial.
+   * 2026-11-09). Usually one; a shop rebuilt as another trade during its
+   * trial has covered both (0039). Empty only if nothing could be read, and
+   * then it counts as every trade, so a gap in the data never hands out a
+   * trial.
    */
-  pack: string | null;
+  packs: string[];
   fingerprint: Fingerprint;
   phone: string | null;
   logoHash: string | null;
@@ -86,12 +88,12 @@ export function samePhone(a: string | null, b: string | null): boolean {
 }
 
 /**
- * Whether two trials were for the same trade. A device that tried the
- * restaurant software may still try the pharmacy's, once.
+ * Whether two trials share a trade. A device that tried the restaurant
+ * software may still try the pharmacy's, once.
  */
-export function sameTrade(a: Pick<Claim, "pack">, b: Pick<Claim, "pack">): boolean {
-  if (!a.pack || !b.pack) return true;
-  return a.pack === b.pack;
+export function sameTrade(a: Pick<Claim, "packs">, b: Pick<Claim, "packs">): boolean {
+  if (a.packs.length === 0 || b.packs.length === 0) return true;
+  return a.packs.some((pack) => b.packs.includes(pack));
 }
 
 /**
@@ -138,6 +140,37 @@ export function trialAllowed(
     }
   }
 
+  return { allowed: true };
+}
+
+/**
+ * A shop in its free trial, rebuilt by its owner as another trade: may the
+ * trial carry on under the new one?
+ *
+ * Only if none of its devices and not its owner's number had a trial of that
+ * trade in another shop. Otherwise the change would be the second month the
+ * rule exists to refuse, reached through the builder instead of a reinstall.
+ * Every device the shop has is asked, since any of them could have been the
+ * one that tried the new trade, and the shop's own earlier trial is not held
+ * against it.
+ */
+export function tradeChangeAllowed(
+  shop: { businessId: string; pack: string; fingerprints: Fingerprint[]; phone: string | null },
+  past: Claim[],
+  rules: TrialRules
+): Decision {
+  const others = past.filter((one) => one.businessId !== shop.businessId);
+  const blank: Fingerprint = { board: null, disk: null, machine: null };
+  const asked = shop.fingerprints.length > 0 ? shop.fingerprints : [blank];
+  for (const fingerprint of asked) {
+    const decision = trialAllowed(
+      { businessId: shop.businessId, packs: [shop.pack], fingerprint, phone: shop.phone, logoHash: null, productsHash: null, name: "", address: null },
+      others,
+      /* The shop already holds a trial: a device sending no fingerprint is no reason to end it. */
+      { ...rules, requireFingerprint: false }
+    );
+    if (!decision.allowed) return decision;
+  }
   return { allowed: true };
 }
 

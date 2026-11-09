@@ -10,7 +10,7 @@ import { signingKeyIsSet } from "@/builder/licence/sign";
 import { payHelpFor } from "@/builder/payment/pay-help";
 import { previewTestShop } from "@/builder/licence/preview-test-shop";
 import { serialFor, setupFor } from "@/builder/licence/setup";
-import { claimTrial, packOfRow } from "@/builder/licence/trial-claim";
+import { claimTrial, tradesOfShopRow } from "@/builder/licence/trial-claim";
 import { sameTrade } from "@/builder/licence/trial";
 import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
@@ -274,11 +274,11 @@ export async function POST(request: Request) {
      */
     const { data: elsewhere } = await supabase
       .from("devices")
-      .select("business_id, businesses(pack)")
+      .select("business_id, businesses(pack, trial_claims(packs))")
       .eq("device_id", input.data.deviceId)
       .neq("business_id", business.id)
       .limit(50);
-    const seenElsewhere = (elsewhere ?? []).some((row) => sameTrade({ pack: packOfRow(row) }, { pack: business.pack }));
+    const seenElsewhere = (elsewhere ?? []).some((row) => sameTrade({ packs: tradesOfShopRow(row) }, { packs: [business.pack] }));
 
     const outcome = seenElsewhere
       ? ({ kind: "refused", decision: { allowed: false, because: "same_machine" } } as const)
