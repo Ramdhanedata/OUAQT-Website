@@ -70,3 +70,31 @@ describe("the phone app page on a test iPhone", () => {
     expect(owner.cookies.get(TESTER_MARK_COOKIE)).toBeUndefined();
   });
 });
+
+describe("the door to the phone app, /app", () => {
+  const door = (path: string, cookie?: string) =>
+    middleware(new NextRequest(`${SITE}${path}`, { headers: { "sec-fetch-mode": "navigate", ...(cookie ? { cookie } : {}) } }));
+
+  it("sends everyone to the app's page, as the old redirect did", () => {
+    for (const path of ["/app", "/app/"]) {
+      const response = door(path);
+      expect(response.status).toBe(307);
+      expect(new URL(response.headers.get("location") ?? "").pathname).toBe("/app/index.html");
+      expect(new URL(response.headers.get("location") ?? "").search).toBe("");
+    }
+  });
+
+  it("hands a test iPhone's Safari its pass on the way, even when Safari keeps the page itself", () => {
+    const response = door("/app", `${TESTER_PASS_COOKIE}=${PASS}`);
+    const to = new URL(response.headers.get("location") ?? "");
+    expect(to.pathname).toBe("/app/index.html");
+    expect(to.searchParams.get("tp")).toBe(PASS);
+  });
+
+  it("keeps a pass the link already carries, and the rest of the address", () => {
+    const response = door(`/app?tp=${PASS}&lang=ar`, `${TESTER_PASS_COOKIE}=${"q".repeat(43)}`);
+    const to = new URL(response.headers.get("location") ?? "");
+    expect(to.searchParams.getAll("tp")).toEqual([PASS]);
+    expect(to.searchParams.get("lang")).toBe("ar");
+  });
+});

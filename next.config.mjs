@@ -84,17 +84,10 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   /*
-   * The phone app (public/app, built in the desktop repository). Its page is
-   * /app/index.html, named in full: the phone keeps that page for when there
-   * is no network, and a redirect cannot be followed then. /app and /app/
-   * send there, keeping the #serial= a link may carry.
+   * The phone app (public/app, built in the desktop repository). /app and
+   * /app/ send to its page, /app/index.html, from middleware.ts (phoneAppDoor),
+   * which also hands a test iPhone its pass on the way.
    */
-  async redirects() {
-    return [
-      { source: "/app", destination: "/app/index.html", permanent: false },
-      { source: "/app/", destination: "/app/index.html", permanent: false },
-    ];
-  },
   async headers() {
     return [
       { source: "/:path*", headers: security },

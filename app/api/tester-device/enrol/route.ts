@@ -53,12 +53,12 @@ export async function GET(request: Request) {
     `${claimed.label || "Cet iPhone"} est un appareil de test.`,
     [
       "Ses boutiques ont toujours leur essai et ne prennent aucune place d'appareil.",
-      "Pour chaque boutique : dans Safari, ouvrez votre compte sur le site et touchez le bouton du logiciel sur téléphone, puis ajoutez-le à l'écran d'accueil. Ou touchez le bouton ci-dessous et tapez le numéro de série dans l'icône.",
+      "Pour chaque boutique : dans Safari, ouvrez ouaqt.com/app (ou le bouton du logiciel sur téléphone dans votre compte, ou le bouton ci-dessous), ajoutez-le à l'écran d'accueil, puis tapez le numéro de série dans l'icône.",
       "Les icônes ajoutées avant ce scan ne sont pas concernées : supprimez-les et ajoutez-les de nouveau.",
       "This iPhone is now an OUAQT test device. Shops added to the home screen from now on are never refused a trial.",
     ],
     200,
-    { href: `/app/index.html?${TESTER_PASS_PARAM}=${encodeURIComponent(claimed.pass)}`, label: "Ouvrir le logiciel sur ce téléphone" }
+    { href: `/app?${TESTER_PASS_PARAM}=${encodeURIComponent(claimed.pass)}`, label: "Ouvrir le logiciel sur ce téléphone" }
   );
   const secure = new URL(request.url).protocol === "https:";
   response.cookies.set(TESTER_PASS_COOKIE, claimed.pass, { httpOnly: true, secure, sameSite: "lax", path: "/", maxAge: PASS_SECONDS });

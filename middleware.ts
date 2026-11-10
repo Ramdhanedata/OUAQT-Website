@@ -54,8 +54,29 @@ function pickLocale(request: NextRequest): string {
 }
 
 export function middleware(request: NextRequest) {
-  if (request.nextUrl.pathname === "/app/index.html") return phoneAppPass(request);
+  const { pathname } = request.nextUrl;
+  if (pathname === "/app" || pathname === "/app/") return phoneAppDoor(request);
+  if (pathname === "/app/index.html") return phoneAppPass(request);
   return testerMark(request, referral(request, route(request)));
+}
+
+/*
+ * /app and /app/ lead to the phone app's page, /app/index.html, named in
+ * full: the phone keeps that page for when there is no network, and a
+ * redirect cannot be followed then. The #serial= a link carries goes along.
+ *
+ * On a test iPhone the pass goes along too, as ?tp=. This door is where that
+ * is sure to happen: /app is outside the part of the site the phone app's
+ * service worker answers, so even a Safari that once opened a shop, and so
+ * keeps the page itself, asks here first (Adel's iPhone, 2026-11-10).
+ */
+function phoneAppDoor(request: NextRequest) {
+  /* A plain address: Next's own would keep the slash of /app/ after index.html. */
+  const url = new URL("/app/index.html", request.url);
+  url.search = request.nextUrl.search;
+  const kept = passCookieOf(request);
+  if (kept && !wellFormedPass(url.searchParams.get(TESTER_PASS_PARAM))) url.searchParams.set(TESTER_PASS_PARAM, kept);
+  return NextResponse.redirect(url, 307);
 }
 
 /*
@@ -161,8 +182,8 @@ function remember(request: NextRequest, response: NextResponse, locale: Locale) 
 export const config = {
   // Skip Next internals, the API, the admin area (which has no language
   // prefix), and anything with a file extension (favicon, images, and so on).
-  // The phone app's page too, for a test iPhone's pass (phoneAppPass).
-  matcher: ["/((?!_next|api|admin|.*\\.).*)", "/app/index.html"],
+  // The phone app's door and page too, for a test iPhone's pass.
+  matcher: ["/((?!_next|api|admin|.*\\.).*)", "/app", "/app/", "/app/index.html"],
 };
 
 /*

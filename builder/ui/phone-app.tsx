@@ -23,8 +23,9 @@ export function phoneAppLink(serial: string, testerPass: string | null = null): 
    * icon added from that page keeps in its address (0040,
    * builder/licence/tester-pass-shared.ts).
    */
+  /* Through /app, which the site answers itself (middleware.ts), not the page a phone may keep. */
   const pass = testerPass ? `?tp=${encodeURIComponent(testerPass)}` : "";
-  return `${window.location.origin}/app/index.html${pass}#serial=${encodeURIComponent(serial)}&lang=${document.documentElement.lang}`;
+  return `${window.location.origin}/app${pass}#serial=${encodeURIComponent(serial)}&lang=${document.documentElement.lang}`;
 }
 
 /* A test iPhone's browser holds a pass: ask for it, only then (the mark is set by the middleware). */
