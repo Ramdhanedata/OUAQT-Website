@@ -10,8 +10,9 @@ import { signingKeyIsSet } from "@/builder/licence/sign";
 import { payHelpFor } from "@/builder/payment/pay-help";
 import { previewTestShop } from "@/builder/licence/preview-test-shop";
 import { serialFor, setupFor } from "@/builder/licence/setup";
-import { claimTrial, tradesOfShopRow } from "@/builder/licence/trial-claim";
-import { sameTrade } from "@/builder/licence/trial";
+import { claimTrial, testerDevices, tradesOfShopRow } from "@/builder/licence/trial-claim";
+import { isTesterDevice, sameTrade } from "@/builder/licence/trial";
+import { holderOf, passOf, rememberInstall } from "@/builder/licence/tester-pass";
 import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
@@ -206,7 +207,21 @@ export async function POST(request: Request) {
   const machine: MachineMark | null = input.data.fingerprint
     ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
     : null;
-  if (machine) {
+  /*
+   * One of OUAQT's own test devices (0040): Adel's Mac and iPhone, installing
+   * shop after shop to try the software as it is built. A computer is known
+   * by its marks; an iPhone by the pass its Safari was given from a QR code
+   * in the admin area, which each shop added to its home screen inherits.
+   * The rules below that guard a free thing (one trial per device and trade,
+   * two devices per shop, a machine that ran a banned shop) do not apply to
+   * it. A shop banned by staff stays banned.
+   */
+  const [testers, holder] = await Promise.all([testerDevices(supabase), holderOf(supabase, passOf(request))]);
+  const parts = secrets.trial_fingerprint_parts_to_match;
+  const tester = Boolean(holder) || isTesterDevice({ deviceId: input.data.deviceId, fingerprint: machine }, testers, parts);
+  if (holder) await rememberInstall(supabase, holder, { deviceId: input.data.deviceId, fingerprint: machine });
+
+  if (machine && !tester) {
     const { data: banned } = await supabase.from("businesses").select("id").not("banned_at", "is", null).limit(1000);
     const bannedIds = (banned ?? []).map((one) => one.id as string);
     if (bannedIds.length) {
@@ -239,8 +254,20 @@ export async function POST(request: Request) {
   const token = newDeviceToken();
   const tokenHash = await hashToken(token);
 
-  /* A full shop is told so now, before anything is decided or written. */
-  if (!already && active.length >= settings.max_devices) {
+  /*
+   * A full shop is told so now, before anything is decided or written. Test
+   * devices take no place: a phone reinstalled for a test comes back as a
+   * new device each time, and must not push the shop's own out.
+   */
+  const counted = active.filter(
+    (device) =>
+      !isTesterDevice(
+        { deviceId: device.device_id as string, fingerprint: (device.fingerprint as MachineMark | null) ?? null },
+        testers,
+        parts
+      )
+  );
+  if (!already && !tester && counted.length >= settings.max_devices) {
     return NextResponse.json(
       { error: "device_limit", maxDevices: settings.max_devices },
       { status: 409 }
@@ -272,17 +299,19 @@ export async function POST(request: Request) {
      * a shop of another trade it is no reason at all: each trade has its own
      * free trial on a device.
      */
-    const { data: elsewhere } = await supabase
-      .from("devices")
-      .select("business_id, businesses(pack, trial_claims(packs))")
-      .eq("device_id", input.data.deviceId)
-      .neq("business_id", business.id)
-      .limit(50);
+    const { data: elsewhere } = tester
+      ? { data: [] }
+      : await supabase
+          .from("devices")
+          .select("business_id, businesses(pack, trial_claims(packs))")
+          .eq("device_id", input.data.deviceId)
+          .neq("business_id", business.id)
+          .limit(50);
     const seenElsewhere = (elsewhere ?? []).some((row) => sameTrade({ packs: tradesOfShopRow(row) }, { packs: [business.pack] }));
 
     const outcome = seenElsewhere
       ? ({ kind: "refused", decision: { allowed: false, because: "same_machine" } } as const)
-      : await claimTrial(supabase, business, fingerprint, secrets, true);
+      : await claimTrial(supabase, business, fingerprint, secrets, true, { tester });
 
     if (outcome.kind === "refused") {
       await audit({
@@ -382,7 +411,7 @@ export async function POST(request: Request) {
       subject: "licence",
       subjectId: current.id,
       action: "trial_started",
-      detail: { deviceId: input.data.deviceId },
+      detail: { deviceId: input.data.deviceId, ...(tester ? { testerDevice: true } : {}) },
     });
   }
 

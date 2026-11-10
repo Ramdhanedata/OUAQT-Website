@@ -10,6 +10,7 @@ import {
   Route,
   Settings,
   SlidersHorizontal,
+  Smartphone,
   Sparkles,
   UserCog,
   Users,
@@ -40,6 +41,7 @@ type Key =
   | "payments"
   | "devices"
   | "trials"
+  | "testers"
   | "requests"
   | "funnel"
   | "codes"
@@ -65,6 +67,7 @@ const groups: { title: "follow" | "setup" | null; items: Item[] }[] = [
     title: "follow",
     items: [
       { href: "/admin/essais", key: "trials", icon: FlaskConical },
+      { href: "/admin/appareils-test", key: "testers", icon: Smartphone },
       { href: "/admin/demandes", key: "requests", icon: Inbox },
       { href: "/admin/parcours", key: "funnel", icon: Route },
     ],

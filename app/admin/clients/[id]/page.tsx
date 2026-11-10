@@ -17,6 +17,9 @@ import { AdminSignIn } from "@/builder/admin/sign-in";
 import { StatusBadge } from "@/builder/admin/status-badge";
 import { phoneKey } from "@/builder/config-code/code";
 import { adminClient } from "@/builder/db/server";
+import { getPrivateSettings } from "@/builder/db/private-settings";
+import { isTesterDevice, type Fingerprint } from "@/builder/licence/trial";
+import { testerDevices } from "@/builder/licence/trial-claim";
 import { PHONE_DOMAIN } from "@/builder/ui/login-domain";
 import { getPublicSettings } from "@/builder/db/settings";
 import { fill } from "@/lib/utils";
@@ -72,7 +75,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
     );
   }
 
-  const [settings, { data: licenceRows }, { data: devices }, { data: payments }, { data: draft }, { data: owner }, { data: reps }] = await Promise.all([
+  const [settings, { data: licenceRows }, { data: devices }, { data: payments }, { data: draft }, { data: owner }, { data: reps }, secrets, testers] = await Promise.all([
     getPublicSettings(),
     supabase
       .from("licences")
@@ -81,7 +84,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
       .order("created_at", { ascending: false }),
     supabase
       .from("devices")
-      .select("business_id, device_id, name, platform, role, status, last_seen")
+      .select("business_id, device_id, name, platform, role, status, last_seen, fingerprint")
       .eq("business_id", business.id)
       .order("last_seen", { ascending: false }),
     supabase
@@ -93,6 +96,8 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
     supabase.from("builder_drafts").select("phone").eq("business_id", business.id).not("phone", "is", null).limit(1).maybeSingle(),
     supabase.auth.admin.getUserById(business.owner_id),
     supabase.from("representatives").select("id, name, code, active").order("name"),
+    getPrivateSettings(),
+    testerDevices(supabase),
   ]);
 
   const now = new Date();
@@ -129,6 +134,11 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
       role: device.role,
       status: device.status,
       lastSeen: device.last_seen,
+      tester: isTesterDevice(
+        { deviceId: device.device_id, fingerprint: (device.fingerprint as Fingerprint | null) ?? null },
+        testers,
+        secrets?.trial_fingerprint_parts_to_match ?? 2 // not-a-rule: the setting's own default, only for showing the mark
+      ),
     }))
   );
 

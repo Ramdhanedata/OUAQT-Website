@@ -80,6 +80,31 @@ export function sameMachine(
   return inCommon > 0 && agree >= Math.min(partsToMatch, inCommon);
 }
 
+/**
+ * One of OUAQT's own test devices (0040): Adel's Mac and iPhone, which
+ * install shop after shop to try the software as it is built. Known by its
+ * fingerprint, its device id, or both.
+ */
+export type TesterDevice = { deviceId: string | null; fingerprint: Fingerprint };
+
+/**
+ * Whether a device is one of the test devices. The same machine rule as a
+ * trial's, so a customer's computer can never pass for one: two of a Mac's
+ * three parts must agree, and a phone's single random number must be the
+ * very one marked.
+ */
+export function isTesterDevice(
+  device: { deviceId: string | null; fingerprint: Fingerprint | null },
+  testers: TesterDevice[],
+  partsToMatch: number
+): boolean {
+  return testers.some(
+    (tester) =>
+      (Boolean(device.deviceId) && device.deviceId === tester.deviceId) ||
+      (device.fingerprint !== null && sameMachine(device.fingerprint, tester.fingerprint, partsToMatch))
+  );
+}
+
 /** Digits only, so +222 38 08 72 72 and 38087272 are one number. */
 export function samePhone(a: string | null, b: string | null): boolean {
   if (!a || !b) return false;

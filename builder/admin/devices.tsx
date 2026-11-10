@@ -7,7 +7,8 @@ import { wordFor, type AdminCopy } from "./copy";
 export type DeviceWords = { t: AdminCopy["devices"]; roles: Record<string, string>; locale: string };
 
 /*
- * The computers a shop has activated, and the button that frees one.
+ * The computers a shop has activated, the button that frees one, and the one
+ * that marks a device as one of OUAQT's own test devices (0040).
  *
  * Staff reach this when an owner has used up his own releases, so the reason
  * is asked for and kept: a release is somebody being let past a rule.
@@ -23,6 +24,8 @@ export type DeviceRow = {
   role: string;
   status: string;
   lastSeen: string;
+  /* One of OUAQT's own test devices: its trials are never refused. */
+  tester: boolean;
 };
 
 export function Devices({ rows, words }: { rows: DeviceRow[]; words: DeviceWords }) {
@@ -66,6 +69,20 @@ function Device({
   const [reason, setReason] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [tester, setTester] = useState(row.tester);
+
+  async function markTester(next: boolean) {
+    setBusy(true);
+    setError(null);
+    const response = await fetch("/api/admin/tester-device", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ businessId: row.businessId, deviceId: row.deviceId, tester: next }),
+    });
+    setBusy(false);
+    if (!response.ok) return setError(words.t.testerNotSaved);
+    setTester(next);
+  }
 
   async function release() {
     if (reason.trim() === "") return setError(words.t.reasonNeeded);
@@ -95,6 +112,11 @@ function Device({
             {" "}
             · {row.name ?? words.t.unnamed} · {row.platform ?? "?"} · {wordFor(words.roles, row.role)}
           </span>
+          {tester ? (
+            <span className="ms-2 rounded-full border border-border px-2 py-0.5 text-sm text-foreground">
+              {words.t.testerBadge}
+            </span>
+          ) : null}
         </span>
         <span className="text-base text-muted-foreground">
           <bdi dir="ltr">{row.deviceCode}</bdi>
@@ -126,6 +148,15 @@ function Device({
           </button>
         </div>
       ) : null}
+
+      <button
+        type="button"
+        disabled={busy}
+        onClick={() => void markTester(!tester)}
+        className="min-h-[40px] text-sm text-muted-foreground underline underline-offset-4 hover:text-foreground"
+      >
+        {tester ? words.t.testerOff : words.t.testerOn}
+      </button>
 
       {error ? <p className="text-base text-destructive">{error}</p> : null}
     </div>

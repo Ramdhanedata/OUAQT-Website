@@ -500,6 +500,42 @@ test depuis l'administration" and a `trial_granted_test_mode` audit event.
 The cookie is signed by the server and only set from the admin area, so an
 owner cannot obtain one.
 
+## OUAQT's own test devices
+
+The override above follows the shop, and only shops built in test mode. A
+test device follows the device: Adel's Mac and iPhone, which install shop
+after shop of the same trade (0040, `tester_devices`). A computer is marked
+from the devices list (Postes, or a client's page: "En faire un appareil de
+test"), which copies the fingerprint and device id it sent; the Mac was added
+directly from the fingerprint it computes. Activation knows it the way the
+trial rules know any machine (two of a computer's three parts, or the same
+device id), or by an iPhone's pass (below), and then:
+
+- the trial starts in every shop it activates, and the claim it writes keeps
+  no fingerprint and no phone number, so a test never refuses a customer
+  later (`trial_started` carries `testerDevice: true`);
+- it takes none of a shop's device places, and is not counted against them
+  once it is there;
+- a shop running on it keeps its trial when rebuilt as another trade;
+- it is not refused for having run a shop staff banned (that shop stays
+  banned).
+
+An iPhone has no lasting marks (each shop on its home screen is a new app
+with a new random number), so it carries a pass. The admin page "Appareils de
+test" makes a QR code holding a one-time code, valid `ENROL_MINUTES` (15). The
+iPhone scans it and opens `GET /api/tester-device/enrol?code=…` in Safari, which
+spends the code and sets the HttpOnly cookie `ouaqt_tester_pass`. Every shop
+added to the home screen afterwards starts with a copy of Safari's cookies
+(WebKit, Safari 17.2 and later), and the phone app calls this same origin, so
+its `POST /api/licence/activate` carries the pass. Each install recognised that
+way is written as its own row (`via` the pass row), so the trade and device
+place rules that read stored devices know it too; removing the iPhone removes
+them. Icons added before the scan have no pass: delete and add them again.
+Only hashes of the code and the pass are stored. Not an IP address: one
+address is shared by everyone on the same connection.
+
+An unreadable list counts as empty, so a failure only ever means today's rules.
+
 
 ## Between a shop's devices
 

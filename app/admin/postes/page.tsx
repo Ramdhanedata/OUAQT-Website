@@ -5,10 +5,15 @@ import { adminWords } from "@/builder/admin/language";
 import { Devices, type DeviceRow } from "@/builder/admin/devices";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { adminClient } from "@/builder/db/server";
+import { getPrivateSettings } from "@/builder/db/private-settings";
+import { isTesterDevice, type Fingerprint } from "@/builder/licence/trial";
+import { testerDevices } from "@/builder/licence/trial-claim";
 
 /*
  * Every computer that has activated, with the code it shows on its own
- * screen, so a person on the phone can be matched to a row here.
+ * screen, so a person on the phone can be matched to a row here. Newest
+ * first, which is also where staff find their own phone or Mac to mark it
+ * as a test device.
  */
 export default async function DevicesPage() {
   const gate = await adminGate();
@@ -18,11 +23,15 @@ export default async function DevicesPage() {
   const supabase = adminClient();
   if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
-  const { data: devices } = await supabase
-    .from("devices")
-    .select("business_id, device_id, name, platform, role, status, last_seen")
-    .order("last_seen", { ascending: false })
-    .limit(100);
+  const [{ data: devices }, secrets, testers] = await Promise.all([
+    supabase
+      .from("devices")
+      .select("business_id, device_id, name, platform, role, status, last_seen, fingerprint")
+      .order("last_seen", { ascending: false })
+      .limit(100),
+    getPrivateSettings(),
+    testerDevices(supabase),
+  ]);
 
   const businessIds = Array.from(new Set((devices ?? []).map((one) => one.business_id)));
   const { data: businesses } = businessIds.length
@@ -42,6 +51,11 @@ export default async function DevicesPage() {
       role: device.role,
       status: device.status,
       lastSeen: device.last_seen,
+      tester: isTesterDevice(
+        { deviceId: device.device_id, fingerprint: (device.fingerprint as Fingerprint | null) ?? null },
+        testers,
+        secrets?.trial_fingerprint_parts_to_match ?? 2 // not-a-rule: the setting's own default, only for showing the mark
+      ),
     }))
   );
 

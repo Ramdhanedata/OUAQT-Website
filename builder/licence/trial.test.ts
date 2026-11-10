@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  isTesterDevice,
   repeatSignals,
   sameMachine,
   samePhone,
@@ -353,5 +354,36 @@ describe("a shop rebuilt as another trade during its trial", () => {
     expect(
       tradeChangeAllowed({ businessId: "business-new", pack: "restaurant", fingerprints: [], phone: restaurantBefore.phone }, [restaurantBefore], rules)
     ).toEqual({ allowed: false, because: "same_phone" });
+  });
+});
+
+describe("isTesterDevice", () => {
+  const mac = machine("board-adel", "disk-adel", "uuid-adel");
+  const phone: Fingerprint = { board: null, disk: null, machine: "phone-adel" };
+  const testers = [
+    { deviceId: null, fingerprint: mac },
+    { deviceId: "iphone-install-1", fingerprint: phone },
+  ];
+
+  it("knows the Mac by two of its three parts, after a reinstall changed one", () => {
+    expect(isTesterDevice({ deviceId: "new-folder", fingerprint: mac }, testers, 2)).toBe(true);
+    expect(isTesterDevice({ deviceId: "new-folder", fingerprint: machine("board-adel", "disk-adel", "reinstalled") }, testers, 2)).toBe(true);
+  });
+
+  it("never takes a customer's computer for the Mac", () => {
+    expect(isTesterDevice({ deviceId: "shop-pc", fingerprint: machine("board-adel", "other-disk", "other-uuid") }, testers, 2)).toBe(false);
+    expect(isTesterDevice({ deviceId: "shop-pc", fingerprint: machine("b", "d", "m") }, testers, 2)).toBe(false);
+  });
+
+  it("knows the iPhone by its own random number or its device id, and no other phone", () => {
+    expect(isTesterDevice({ deviceId: "anything", fingerprint: phone }, testers, 2)).toBe(true);
+    expect(isTesterDevice({ deviceId: "iphone-install-1", fingerprint: null }, testers, 2)).toBe(true);
+    expect(isTesterDevice({ deviceId: "other-phone", fingerprint: { board: null, disk: null, machine: "phone-other" } }, testers, 2)).toBe(false);
+  });
+
+  it("finds nothing with no marks, or with an empty list", () => {
+    expect(isTesterDevice({ deviceId: null, fingerprint: null }, testers, 2)).toBe(false);
+    expect(isTesterDevice({ deviceId: "", fingerprint: { board: null, disk: null, machine: null } }, testers, 2)).toBe(false);
+    expect(isTesterDevice({ deviceId: "iphone-install-1", fingerprint: phone }, [], 2)).toBe(false);
   });
 });

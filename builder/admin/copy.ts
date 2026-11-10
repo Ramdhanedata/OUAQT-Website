@@ -41,6 +41,7 @@ const fr = {
     codes: "Codes",
     funnel: "Parcours",
     trials: "Essais",
+    testers: "Appareils de test",
     requests: "Demandes",
     settings: "Réglages",
     aiCost: "Coût IA",
@@ -167,6 +168,10 @@ const fr = {
     release: "Libérer",
     reasonNeeded: "Dites pourquoi : cela reste écrit.",
     notFreed: "Pas libéré.",
+    testerBadge: "Appareil de test",
+    testerOn: "En faire un appareil de test : essais jamais refusés, aucune place prise",
+    testerOff: "Ce n'est plus un appareil de test",
+    testerNotSaved: "Pas enregistré.",
   },
 
   search: {
@@ -339,6 +344,9 @@ const fr = {
     "payment:refunded": "Remboursement envoyé au propriétaire",
     released_by_owner: "Ordinateur libéré par le propriétaire",
     released_by_staff: "Ordinateur libéré par l'équipe",
+    tester_device_added: "Devenu appareil de test",
+    tester_device_removed: "N'est plus un appareil de test",
+    tester_qr_made: "QR code d'appareil de test créé",
     renewal_code_generated: "Code de renouvellement donné",
     trial_started: "Essai commencé",
     trial_refused: "Essai refusé",
@@ -482,6 +490,31 @@ const fr = {
     tokens: "Jetons",
   },
 
+  testers: {
+    title: "Appareils de test",
+    intro:
+      "Vos propres appareils pour essayer le logiciel. Leurs boutiques ont toujours leur essai, ne prennent aucune place d'appareil et gardent leur essai quand elles changent de métier. Aucun client n'est concerné.",
+    none: "Aucun appareil de test pour l'instant.",
+    unnamed: "Sans nom",
+    computer: "Ordinateur, reconnu par son empreinte",
+    iphone: "iPhone, reconnu par son pass · {count} boutiques installées depuis",
+    device: "Appareil marqué depuis la liste des appareils",
+    pending: "QR code pas encore scanné, valable jusqu'à {time}",
+    added: "ajouté le {date}",
+    remove: "Retirer",
+    notRemoved: "Pas retiré.",
+    qrTitle: "Ajouter un iPhone",
+    qrIntro:
+      "Créez le QR code, scannez-le avec l'appareil photo de l'iPhone et ouvrez le lien dans Safari. Il ne marche qu'une fois, pendant {minutes} minutes. Ensuite, chaque boutique ajoutée à l'écran d'accueil de cet iPhone est un appareil de test (iOS 17.2 ou plus récent).",
+    qrLabel: "Nom de l'appareil",
+    qrDefault: "Mon iPhone",
+    qrMake: "Créer le QR code",
+    qrAlt: "QR code à scanner avec l'iPhone",
+    qrValid: "Valable jusqu'à {time}, une seule fois.",
+    qrNotMade: "Pas créé.",
+    qrOld: "Les icônes déjà sur l'écran d'accueil avant le scan ne sont pas concernées : supprimez-les, puis ajoutez-les de nouveau depuis Safari.",
+  },
+
   trials: {
     title: "Essais",
     intro:
@@ -544,6 +577,7 @@ const en: AdminCopy = {
     codes: "Codes",
     funnel: "Funnel",
     trials: "Trials",
+    testers: "Test devices",
     requests: "Requests",
     settings: "Settings",
     aiCost: "AI cost",
@@ -659,6 +693,10 @@ const en: AdminCopy = {
     release: "Release",
     reasonNeeded: "Say why: it stays on record.",
     notFreed: "Not released.",
+    testerBadge: "Test device",
+    testerOn: "Make it a test device: trials never refused, takes no place",
+    testerOff: "No longer a test device",
+    testerNotSaved: "Not saved.",
   },
 
   search: {
@@ -830,6 +868,9 @@ const en: AdminCopy = {
     "payment:refunded": "Refund sent to the owner",
     released_by_owner: "Computer freed by the owner",
     released_by_staff: "Computer freed by staff",
+    tester_device_added: "Made a test device",
+    tester_device_removed: "No longer a test device",
+    tester_qr_made: "Test device QR code made",
     renewal_code_generated: "Renewal code given",
     trial_started: "Trial started",
     trial_refused: "Trial refused",
@@ -973,6 +1014,31 @@ const en: AdminCopy = {
     tokens: "Tokens",
   },
 
+  testers: {
+    title: "Test devices",
+    intro:
+      "Your own devices for trying the software. Their shops always get their trial, take no device place and keep their trial when they change trade. No customer is affected.",
+    none: "No test device yet.",
+    unnamed: "Unnamed",
+    computer: "Computer, known by its fingerprint",
+    iphone: "iPhone, known by its pass · {count} shops installed since",
+    device: "Device marked from the device list",
+    pending: "QR code not scanned yet, valid until {time}",
+    added: "added {date}",
+    remove: "Remove",
+    notRemoved: "Not removed.",
+    qrTitle: "Add an iPhone",
+    qrIntro:
+      "Make the QR code, scan it with the iPhone's camera and open the link in Safari. It works once, for {minutes} minutes. After that, every shop added to this iPhone's home screen is a test device (iOS 17.2 or later).",
+    qrLabel: "Device name",
+    qrDefault: "My iPhone",
+    qrMake: "Make the QR code",
+    qrAlt: "QR code to scan with the iPhone",
+    qrValid: "Valid until {time}, once.",
+    qrNotMade: "Not made.",
+    qrOld: "Icons already on the home screen before the scan are not covered: delete them, then add them again from Safari.",
+  },
+
   trials: {
     title: "Trials",
     intro:
@@ -1033,6 +1099,7 @@ const ar: AdminCopy = {
     codes: "الرموز",
     funnel: "المسار",
     trials: "التجارب",
+    testers: "أجهزة الاختبار",
     requests: "الطلبات",
     settings: "الإعدادات",
     aiCost: "تكلفة الذكاء الاصطناعي",
@@ -1147,6 +1214,10 @@ const ar: AdminCopy = {
     release: "تحرير",
     reasonNeeded: "اذكر السبب: يبقى مسجلا.",
     notFreed: "لم يحرر.",
+    testerBadge: "جهاز تجريبي",
+    testerOn: "اجعله جهازا تجريبيا: لا ترفض تجاربه ولا يشغل مكانا",
+    testerOff: "لم يعد جهازا تجريبيا",
+    testerNotSaved: "لم يحفظ.",
   },
 
   search: {
@@ -1318,6 +1389,9 @@ const ar: AdminCopy = {
     "payment:refunded": "أُرسل الاسترجاع إلى المالك",
     released_by_owner: "حرر صاحب المحل حاسوبا",
     released_by_staff: "حرر الفريق حاسوبا",
+    tester_device_added: "أصبح جهازا تجريبيا",
+    tester_device_removed: "لم يعد جهازا تجريبيا",
+    tester_qr_made: "أنشئ رمز QR لجهاز اختبار",
     renewal_code_generated: "أعطي رمز تجديد",
     trial_started: "بدأت التجربة",
     trial_refused: "رفضت التجربة",
@@ -1457,6 +1531,31 @@ const ar: AdminCopy = {
     outcome: "النتيجة",
     calls: "الطلبات",
     tokens: "الوحدات",
+  },
+
+  testers: {
+    title: "أجهزة الاختبار",
+    intro:
+      "أجهزتك الخاصة لتجربة البرنامج. متاجرها تحصل دائما على تجربتها، ولا تشغل مكان جهاز، وتحتفظ بتجربتها عند تغيير النشاط. لا يتأثر أي زبون.",
+    none: "لا يوجد جهاز اختبار بعد.",
+    unnamed: "دون اسم",
+    computer: "حاسوب، يعرف ببصمته",
+    iphone: "آيفون، يعرف ببطاقته · {count} متاجر مثبتة منذ ذلك",
+    device: "جهاز معلم من قائمة الأجهزة",
+    pending: "رمز QR لم يمسح بعد، صالح حتى {time}",
+    added: "أضيف في {date}",
+    remove: "إزالة",
+    notRemoved: "لم يزل.",
+    qrTitle: "إضافة آيفون",
+    qrIntro:
+      "أنشئ رمز QR، وامسحه بكاميرا الآيفون، وافتح الرابط في سفاري. يعمل مرة واحدة، لمدة {minutes} دقيقة. بعد ذلك، كل متجر يضاف إلى الشاشة الرئيسية لهذا الآيفون جهاز اختبار (iOS 17.2 أو أحدث).",
+    qrLabel: "اسم الجهاز",
+    qrDefault: "الآيفون الخاص بي",
+    qrMake: "إنشاء رمز QR",
+    qrAlt: "رمز QR للمسح بالآيفون",
+    qrValid: "صالح حتى {time}، مرة واحدة.",
+    qrNotMade: "لم ينشأ.",
+    qrOld: "الأيقونات الموجودة على الشاشة الرئيسية قبل المسح غير مشمولة: احذفها ثم أضفها من جديد من سفاري.",
   },
 
   trials: {

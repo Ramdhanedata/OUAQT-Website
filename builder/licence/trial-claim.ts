@@ -4,12 +4,14 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { audit } from "@/builder/db/audit";
 import { getPrivateSettings, type PrivateSettings } from "@/builder/db/private-settings";
 import {
+  isTesterDevice,
   repeatSignals,
   tradeChangeAllowed,
   trialAllowed,
   type Claim,
   type Decision,
   type Fingerprint,
+  type TesterDevice,
   type TrialRules,
 } from "./trial";
 
@@ -135,6 +137,27 @@ export function tradesOfShopRow(row: { businesses?: unknown }): string[] {
   return [...new Set([...covered, ...(now ? [now] : [])])];
 }
 
+/*
+ * OUAQT's own test devices (0040), the ones staff marked on a client's page.
+ * Unread counts as none: a failed read takes nothing from a customer, it only
+ * makes the next test install wait on the trial rules like anyone's.
+ */
+export async function testerDevices(supabase: SupabaseClient): Promise<TesterDevice[]> {
+  const { data, error } = await supabase
+    .from("tester_devices")
+    .select("device_id, fingerprint_board, fingerprint_disk, fingerprint_machine")
+    .is("removed_at", null);
+  if (error || !data) return [];
+  return data.map((row) => ({
+    deviceId: (row.device_id as string | null) ?? null,
+    fingerprint: {
+      board: (row.fingerprint_board as string | null) ?? null,
+      disk: (row.fingerprint_disk as string | null) ?? null,
+      machine: (row.fingerprint_machine as string | null) ?? null,
+    },
+  }));
+}
+
 async function pastClaims(supabase: SupabaseClient): Promise<Claim[]> {
   const { data, error } = await supabase
     .from("trial_claims")
@@ -175,6 +198,7 @@ export type ClaimOutcome =
   | { kind: "not_a_trial" }
   | { kind: "already_claimed" }
   | { kind: "granted" }
+  | { kind: "granted_tester" }
   | { kind: "refused"; decision: Extract<Decision, { allowed: false }> };
 
 /**
@@ -190,7 +214,8 @@ export async function claimTrial(
   business: Business,
   fingerprint: Fingerprint,
   settings: PrivateSettings,
-  startsTrial: boolean
+  startsTrial: boolean,
+  options: { tester?: boolean } = {}
 ): Promise<ClaimOutcome> {
   if (!startsTrial) return { kind: "not_a_trial" };
 
@@ -198,6 +223,23 @@ export async function claimTrial(
   if (past.some((one) => one.businessId === business.id)) {
     /* This shop's trial, carrying on. A second computer is not a second trial. */
     return { kind: "already_claimed" };
+  }
+
+  /*
+   * One of OUAQT's own test devices, installing yet another shop. Its trial
+   * is never refused, and its claim keeps no marks, neither the device nor
+   * the owner's number: a test leaves nothing behind that could refuse a
+   * customer's trial later, whatever number was typed while testing.
+   */
+  if (options.tester) {
+    await supabase.from("trial_claims").insert({
+      business_id: business.id,
+      packs: [business.pack],
+      name: business.name_latin,
+      address: business.receipt_address,
+      signals: [],
+    });
+    return { kind: "granted_tester" };
   }
 
   /* Someone was refused and we decided otherwise. That decision comes first. */
@@ -312,7 +354,7 @@ export async function settleTrade(
 
   const { data: devices } = await supabase
     .from("devices")
-    .select("fingerprint")
+    .select("device_id, fingerprint")
     .eq("business_id", businessId)
     .eq("status", "active");
   const reported = (mark: Fingerprint | null) => Boolean(mark && (mark.board || mark.disk || mark.machine));
@@ -325,11 +367,23 @@ export async function settleTrade(
     ...(devices ?? []).map((device) => device.fingerprint as Fingerprint | null),
   ].filter((mark): mark is Fingerprint => reported(mark));
 
-  const decision = tradeChangeAllowed(
-    { businessId, pack, fingerprints, phone: (own[0].phone as string | null) ?? null },
-    await pastClaims(supabase),
-    rulesFrom(settings)
-  );
+  /*
+   * A shop running on one of OUAQT's test devices is a test: rebuilding it
+   * as every trade in turn is the point, so its trial carries on.
+   */
+  const testers = await testerDevices(supabase);
+  const parts = settings.trial_fingerprint_parts_to_match;
+  const onTester =
+    fingerprints.some((mark) => isTesterDevice({ deviceId: null, fingerprint: mark }, testers, parts)) ||
+    (devices ?? []).some((device) => isTesterDevice({ deviceId: device.device_id as string, fingerprint: null }, testers, parts));
+
+  const decision: Decision = onTester
+    ? { allowed: true }
+    : tradeChangeAllowed(
+        { businessId, pack, fingerprints, phone: (own[0].phone as string | null) ?? null },
+        await pastClaims(supabase),
+        rulesFrom(settings)
+      );
 
   let outcome: TradeOutcome = "added";
   if (!decision.allowed) {
