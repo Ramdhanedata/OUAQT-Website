@@ -2,6 +2,9 @@ import "server-only";
 
 import { createHash, randomBytes } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { wellFormedPass } from "./tester-pass-shared";
+
+export { PASS_DAYS, PASS_SECONDS, passOf, passCookieOf, TESTER_MARK_COOKIE, TESTER_PASS_COOKIE, TESTER_PASS_PARAM } from "./tester-pass-shared";
 
 /*
  * The pass an iPhone carries as one of OUAQT's test devices (0040).
@@ -14,13 +17,12 @@ import type { SupabaseClient } from "@supabase/supabase-js";
  * request carries the pass, and the pass is what is recognised.
  *
  * The QR code holds a one-time code, not the pass: the code is worth nothing
- * once used or after a few minutes, and the pass itself never appears in an
- * address, a log or a screen. Only hashes of either are stored.
+ * once used or after a few minutes. The pass then travels in the phone app's
+ * own address as well (tester-pass-shared.ts), since an icon does not always
+ * receive Safari's cookies. Only hashes of either are stored.
  */
 
-export const TESTER_PASS_COOKIE = "ouaqt_tester_pass";
 export const ENROL_MINUTES = 15; // not-a-rule: how long a QR code shown in the admin area can be scanned
-export const PASS_DAYS = 400; // not-a-rule: the longest a browser keeps a cookie
 
 const MS_IN_A_MINUTE = 60_000;
 
@@ -33,24 +35,11 @@ export function newSecret(): string {
   return randomBytes(32).toString("base64url");
 }
 
-/** The pass a request carries, from its cookies, or null. */
-export function passOf(request: Request): string | null {
-  const header = request.headers.get("cookie") ?? "";
-  for (const part of header.split(";")) {
-    const [name, ...value] = part.trim().split("=");
-    if (name === TESTER_PASS_COOKIE) {
-      const pass = decodeURIComponent(value.join("="));
-      return /^[A-Za-z0-9_-]{40,60}$/.test(pass) ? pass : null;
-    }
-  }
-  return null;
-}
-
 export type PassHolder = { id: string; label: string };
 
 /** The test device a pass belongs to, if it is still one. */
 export async function holderOf(supabase: SupabaseClient, pass: string | null): Promise<PassHolder | null> {
-  if (!pass) return null;
+  if (!wellFormedPass(pass)) return null;
   const { data, error } = await supabase
     .from("tester_devices")
     .select("id, label")
@@ -116,7 +105,7 @@ export async function claimEnrolment(
   code: string,
   now = new Date()
 ): Promise<{ pass: string; label: string } | null> {
-  if (!/^[A-Za-z0-9_-]{40,60}$/.test(code)) return null;
+  if (!wellFormedPass(code)) return null;
   const { data: row } = await supabase
     .from("tester_devices")
     .select("id, label, enrol_until")

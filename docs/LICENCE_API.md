@@ -531,6 +531,16 @@ its `POST /api/licence/activate` carries the pass. Each install recognised that
 way is written as its own row (`via` the pass row), so the trade and device
 place rules that read stored devices know it too; removing the iPhone removes
 them. Icons added before the scan have no pass: delete and add them again.
+
+On Adel's iPhone (2026-11-10) the icon's activation carried no cookie, so the
+pass also travels in the phone app's address, as `?tp=` (it stays in an icon's
+address the way `#serial=` does): the account page's phone button adds it when
+the readable `ouaqt_tester` mark says the browser holds a pass
+(`GET /api/tester-device/carry` hands it back), the scan page has a button
+with it, and the middleware reopens `/app/index.html` with it for a browser
+holding the cookie (page navigations only, never the service worker's fetch).
+An icon opening with `?tp=` gets the cookie in its own store, and activation
+also reads `tp` from a same-site `/app/` referrer.
 Only hashes of the code and the pass are stored. Not an IP address: one
 address is shared by everyone on the same connection.
 

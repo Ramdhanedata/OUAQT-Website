@@ -204,11 +204,12 @@ function markTester(fingerprint: Row, deviceId: string | null = null) {
   tables.tester_devices.push({ id: crypto.randomUUID(), label: "test", device_id: deviceId, fingerprint_board: fingerprint.board ?? null, fingerprint_disk: fingerprint.disk ?? null, fingerprint_machine: fingerprint.machine ?? null, removed_at: null });
 }
 
-async function activate(serial: string, deviceId: string, fingerprint: Row, platform = "mac", pass: string | null = null) {
+async function activate(serial: string, deviceId: string, fingerprint: Row, platform = "mac", pass: string | null = null, via: "cookie" | "address" = "cookie") {
+  const carried: Record<string, string> = !pass ? {} : via === "cookie" ? { cookie: `theme=dark; ${TESTER_PASS_COOKIE}=${pass}` } : { referer: `http://localhost/app/index.html?tp=${pass}` };
   const response = await POST(
     new Request("http://localhost/api/licence/activate", {
       method: "POST",
-      headers: { "content-type": "application/json", ...(pass ? { cookie: `theme=dark; ${TESTER_PASS_COOKIE}=${pass}` } : {}) },
+      headers: { "content-type": "application/json", ...carried },
       body: JSON.stringify({ serial, deviceId, platform, fingerprint }),
     })
   );
@@ -375,6 +376,14 @@ describe("an iPhone made a test device by scanning a QR code", () => {
     device("A", "home-icon-2", phone(5));
     expect((await activate("TESTSERIALB", "home-icon-2", phone(5), "phone")).status).toBe(403);
     expect((await activate("TESTSERIALB", "home-icon-2", phone(5), "phone", pass)).status).toBe(200);
+  });
+
+  it("is recognised from the icon's address when the icon got no cookie, as on Adel's iPhone", async () => {
+    device("A", "shop-pc", SHOP_PC);
+    const made = await newEnrolment(fakeDb as never, "Mon iPhone", "staff-1");
+    const { pass } = (await claimEnrolment(fakeDb as never, made!.code))!;
+    expect((await activate("TESTSERIALA", "home-icon-4", phone(8), "phone", null)).status).toBe(409);
+    expect((await activate("TESTSERIALA", "home-icon-4", phone(8), "phone", pass, "address")).status).toBe(200);
   });
 
   it("stops working once the iPhone is removed", async () => {

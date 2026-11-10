@@ -16,9 +16,28 @@ import type { BuilderCopy } from "@/builder/copy";
  * works with no internet. How depends on the phone, so both ways are said.
  */
 
-export function phoneAppLink(serial: string): string {
-  /* The language too: an iPhone shows its first screen before any shop tells it which to speak. */
-  return `${window.location.origin}/app/index.html#serial=${encodeURIComponent(serial)}&lang=${document.documentElement.lang}`;
+export function phoneAppLink(serial: string, testerPass: string | null = null): string {
+  /*
+   * The language too: an iPhone shows its first screen before any shop tells
+   * it which to speak. And on one of OUAQT's test iPhones, its pass, which an
+   * icon added from that page keeps in its address (0040,
+   * builder/licence/tester-pass-shared.ts).
+   */
+  const pass = testerPass ? `?tp=${encodeURIComponent(testerPass)}` : "";
+  return `${window.location.origin}/app/index.html${pass}#serial=${encodeURIComponent(serial)}&lang=${document.documentElement.lang}`;
+}
+
+/* A test iPhone's browser holds a pass: ask for it, only then (the mark is set by the middleware). */
+async function testerPassHere(): Promise<string | null> {
+  if (!document.cookie.split(";").some((part) => part.trim().startsWith("ouaqt_tester="))) return null;
+  try {
+    const response = await fetch("/api/tester-device/carry", { cache: "no-store" });
+    if (response.status !== 200) return null;
+    const body = (await response.json()) as { tp?: unknown };
+    return typeof body.tp === "string" ? body.tp : null;
+  } catch {
+    return null;
+  }
 }
 
 /* A touch screen as narrow as a phone. Read once, after the page is in the browser. */
@@ -29,11 +48,15 @@ function onAPhone(): boolean {
 export function PhoneApp({ copy, serial }: { copy: BuilderCopy; serial: string }) {
   const [phone, setPhone] = useState<boolean | null>(null);
   const [code, setCode] = useState<string | null>(null);
+  const [testerPass, setTesterPass] = useState<string | null>(null);
 
   useEffect(() => {
     const here = onAPhone();
     setPhone(here);
-    if (here) return;
+    if (here) {
+      void testerPassHere().then(setTesterPass);
+      return;
+    }
     void QRCode.toDataURL(phoneAppLink(serial), { margin: 1, width: 240, errorCorrectionLevel: "M" })
       .then(setCode)
       .catch(() => setCode(null));
@@ -46,7 +69,7 @@ export function PhoneApp({ copy, serial }: { copy: BuilderCopy; serial: string }
 
       {phone === true ? (
         <a
-          href={phoneAppLink(serial)}
+          href={phoneAppLink(serial, testerPass)}
           className="inline-flex min-h-[52px] items-center rounded-lg bg-foreground px-6 text-base font-semibold text-background"
         >
           {copy.phoneApp.open}

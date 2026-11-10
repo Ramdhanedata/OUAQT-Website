@@ -9,6 +9,14 @@ import {
 } from "@/lib/i18n/config";
 import { localisedHref, localisedRoutes, routeIdForSlug } from "@/lib/i18n/routes";
 import { REF_COOKIE, REF_COOKIE_DAYS, repCodeOf } from "@/builder/referral";
+import {
+  passCookieOf,
+  PASS_SECONDS,
+  TESTER_MARK_COOKIE,
+  TESTER_PASS_COOKIE,
+  TESTER_PASS_PARAM,
+  wellFormedPass,
+} from "@/builder/licence/tester-pass-shared";
 
 /*
  * Every page lives under a locale prefix (/en, /fr, /ar), except the front
@@ -46,7 +54,62 @@ function pickLocale(request: NextRequest): string {
 }
 
 export function middleware(request: NextRequest) {
-  return referral(request, route(request));
+  if (request.nextUrl.pathname === "/app/index.html") return phoneAppPass(request);
+  return testerMark(request, referral(request, route(request)));
+}
+
+/*
+ * One of OUAQT's test iPhones opening the phone app (0040, and
+ * builder/licence/tester-pass-shared.ts for why the pass travels in the
+ * address). With ?tp= in the address, this is a home-screen icon opening for
+ * the first time: its own store keeps the pass from now on. Without it, in a
+ * browser that holds the pass, the page is opened again with it, so the icon
+ * added from here keeps it in its address. Only for the page being opened,
+ * never for the service worker fetching its copy, which must not be sent
+ * elsewhere.
+ */
+function phoneAppPass(request: NextRequest) {
+  const carried = request.nextUrl.searchParams.get(TESTER_PASS_PARAM);
+  const kept = passCookieOf(request);
+
+  if (wellFormedPass(carried)) {
+    const response = NextResponse.next();
+    if (kept !== carried) {
+      response.cookies.set(TESTER_PASS_COOKIE, carried, {
+        path: "/",
+        maxAge: PASS_SECONDS,
+        sameSite: "lax",
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+      });
+    }
+    return response;
+  }
+
+  const opening = request.method === "GET" && request.headers.get("sec-fetch-mode") === "navigate";
+  if (kept && opening) {
+    const url = request.nextUrl.clone();
+    url.searchParams.set(TESTER_PASS_PARAM, kept);
+    return NextResponse.redirect(url, 307);
+  }
+  return NextResponse.next();
+}
+
+/*
+ * A browser holding a test pass is told so in a cookie its pages can read,
+ * so the account page knows to put the pass in the phone app's link. The
+ * pass itself stays out of the page's reach.
+ */
+function testerMark(request: NextRequest, response: NextResponse) {
+  if (passCookieOf(request) && !request.cookies.get(TESTER_MARK_COOKIE)) {
+    response.cookies.set(TESTER_MARK_COOKIE, "1", {
+      path: "/",
+      maxAge: PASS_SECONDS,
+      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+    });
+  }
+  return response;
 }
 
 function route(request: NextRequest) {
@@ -98,7 +161,8 @@ function remember(request: NextRequest, response: NextResponse, locale: Locale) 
 export const config = {
   // Skip Next internals, the API, the admin area (which has no language
   // prefix), and anything with a file extension (favicon, images, and so on).
-  matcher: ["/((?!_next|api|admin|.*\\.).*)"],
+  // The phone app's page too, for a test iPhone's pass (phoneAppPass).
+  matcher: ["/((?!_next|api|admin|.*\\.).*)", "/app/index.html"],
 };
 
 /*
