@@ -4,10 +4,11 @@ import { notFound } from "next/navigation";
 import { formatMoney } from "@/app-ui";
 import { wordFor } from "@/builder/admin/copy";
 import { growthCopy } from "@/builder/admin/copy-growth";
+import { panelCopy } from "@/builder/admin/copy-panel";
 import { adminGate } from "@/builder/admin/guard";
 import { adminWords } from "@/builder/admin/language";
 import { AdminNav } from "@/builder/admin/nav";
-import { CopyLink, PayoutForm, RepActiveButton, RepEditForm } from "@/builder/admin/rep-forms";
+import { CopyLink, PayoutForm, RepActiveButton, RepEditForm, RepRemoveButton } from "@/builder/admin/rep-forms";
 import { repDetail, repLink, repQrSvg, ruleWords } from "@/builder/admin/reps";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { loadStats } from "@/builder/admin/stats";
@@ -197,9 +198,16 @@ export default async function RepresentativePage(props: Props) {
             note: rep.note ?? "",
           }}
         />
-        <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-border pt-5">
-          <RepActiveButton t={r} id={rep.id} active={rep.active} />
-          <p className="max-w-md text-sm text-muted-foreground">{r.activeHint}</p>
+        {/* On the list: taken off it. Off the list: put back, with what they earned as it was. */}
+        <div className="mt-6 flex flex-wrap items-start gap-4 border-t border-border pt-5">
+          {rep.active ? (
+            <RepRemoveButton t={r} w={panelCopy[lang].reps} id={rep.id} name={rep.name} backTo="/admin/commerciaux" />
+          ) : (
+            <>
+              <RepActiveButton t={r} id={rep.id} active={rep.active} />
+              <p className="max-w-md text-sm text-muted-foreground">{r.activeHint}</p>
+            </>
+          )}
         </div>
       </section>
     </>

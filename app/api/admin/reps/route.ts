@@ -10,7 +10,10 @@ import { newRepCode } from "@/builder/referral";
  *
  *   create  a new representative, with a code of their own made here
  *   update  their name, phone, bonus and note
- *   active  deactivate or reactivate: never deleted, so what they earned stays
+ *   active  deactivate or reactivate
+ *   remove  takes a representative off the list: deleted when nothing hangs
+ *           on them, kept and deactivated when a shop, a serial given or a
+ *           payment made to them does, so what they earned stays readable
  *   payout  records money handed to them, so what is owed is earned minus paid
  *   assign  credits a shop to a representative by hand, or to nobody
  *
@@ -31,6 +34,7 @@ const body = z.discriminatedUnion("action", [
   z.object({ action: z.literal("create"), ...details }).strict(),
   z.object({ action: z.literal("update"), id: z.string().uuid(), ...details }).strict(),
   z.object({ action: z.literal("active"), id: z.string().uuid(), active: z.boolean() }).strict(),
+  z.object({ action: z.literal("remove"), id: z.string().uuid() }).strict(),
   z.object({ action: z.literal("payout"), id: z.string().uuid(), amount: money.positive(), note: z.string().trim().max(200).optional() }).strict(),
   z.object({ action: z.literal("assign"), businessId: z.string().uuid(), id: z.string().uuid().nullable() }).strict(),
 ]);
@@ -93,6 +97,32 @@ export async function POST(request: Request) {
     if (!saved) return NextResponse.json({ error: "not_found" }, { status: 404 });
     await audit({ actorId, subject: "representative", subjectId: data.id, action: data.active ? "reactivated" : "deactivated" });
     return NextResponse.json({ ok: true });
+  }
+
+  if (data.action === "remove") {
+    const { data: rep } = await supabase.from("representatives").select("id, name, code").eq("id", data.id).maybeSingle();
+    if (!rep) return NextResponse.json({ error: "not_found" }, { status: 404 });
+    const count = { count: "exact" as const, head: true };
+    const [shops, drafts, payouts] = await Promise.all([
+      supabase.from("businesses").select("id", count).eq("representative_id", data.id),
+      supabase.from("builder_drafts").select("id", count).eq("representative_id", data.id),
+      supabase.from("representative_payouts").select("id", count).eq("representative_id", data.id),
+    ]);
+    /* A count that could not be read is not a zero: the representative is kept. */
+    const unread = Boolean(shops.error || drafts.error || payouts.error);
+    const holds = (shops.count ?? 0) + (drafts.count ?? 0) + (payouts.count ?? 0);
+
+    if (!unread && holds === 0) {
+      const { error } = await supabase.from("representatives").delete().eq("id", data.id);
+      if (error) return NextResponse.json({ error: "not_saved" }, { status: 502 });
+      await audit({ actorId, subject: "representative", subjectId: data.id, action: "deleted", detail: { name: rep.name, code: rep.code } });
+      return NextResponse.json({ ok: true, removed: "deleted" });
+    }
+
+    const { error } = await supabase.from("representatives").update({ active: false }).eq("id", data.id);
+    if (error) return NextResponse.json({ error: "not_saved" }, { status: 502 });
+    await audit({ actorId, subject: "representative", subjectId: data.id, action: "deactivated" });
+    return NextResponse.json({ ok: true, removed: "kept" });
   }
 
   if (data.action === "payout") {

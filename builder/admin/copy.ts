@@ -36,10 +36,9 @@ const fr = {
     stats: "Statistiques",
     payments: "Paiements",
     clients: "Clients",
-    control: "Contrôle",
     devices: "Appareils",
-    codes: "Codes",
-    funnel: "Parcours",
+    codes: "Codes de renouvellement",
+    funnel: "Parcours du Builder",
     trials: "Essais",
     testers: "Appareils de test",
     requests: "Demandes",
@@ -48,8 +47,6 @@ const fr = {
     staff: "Équipe",
     reps: "Commerciaux",
   },
-
-  navGroups: { follow: "Suivi", setup: "Configuration" },
 
   /* The words for values the database stores in English. */
   packs: {
@@ -144,13 +141,10 @@ const fr = {
 
   clients: {
     title: "Clients",
-    search: "Nom du commerce ou numéro de série",
-    searchButton: "Chercher",
     nothingFound: "Rien trouvé.",
     none: "Aucun client pour l'instant.",
     noLicence: "aucune licence",
     launch: "lancement",
-    all: "Tous",
     seen: "vu {ago}",
     neverSeen: "jamais connecté",
     shown: "{shown} sur {total}",
@@ -226,20 +220,6 @@ const fr = {
       expired: "Expirés, en lecture seule",
       suspended: "Suspendus",
     },
-    appsTitle: "Logiciels installés",
-    appsIntro: "Chaque logiciel se signale à son démarrage, puis toutes les 3 heures quand il a internet.",
-    presence: {
-      now: "En ligne, moins de 3 h",
-      today: "Vus dans les 24 h",
-      week: "Vus dans les 7 jours",
-      older: "Inactifs depuis plus de 7 jours",
-    },
-    platforms: "Windows {windows} · Mac {mac} · Téléphone {phone}",
-    activityTitle: "Activité",
-    series: { shops: "Nouveaux clients", visitors: "Visiteurs du créateur", activations: "Ordinateurs activés" },
-    range: { d7: "7 jours", d30: "30 jours" },
-    periodTotal: "sur {days} jours",
-    chartEmpty: "Rien sur cette période.",
     appsListTitle: "Logiciels, du plus récent",
     filters: { now: "En ligne", today: "24 h", week: "7 jours", all: "Tous" },
     noApps: "Aucun logiciel dans cette période.",
@@ -251,14 +231,6 @@ const fr = {
     historyNone: "Rien pour l'instant.",
     automatic: "automatique",
     seeAll: "Tout voir",
-    systemTitle: "Santé du système",
-    signingOk: "Les licences sont signées.",
-    signingMissing: "Clé de signature absente : aucun logiciel ne peut s'activer ni se renouveler.",
-    aiUse: "IA, 24 heures : {used} appels sur {limit}.",
-    aiNear: "IA, 24 heures : {used} appels sur {limit}. Au-delà, une personne lit les phrases et les captures.",
-    autoConfirmOn: "Les paiements dont la capture correspond se confirment seuls.",
-    autoConfirmOff: "Chaque paiement attend une personne.",
-    downloads: "Téléchargements : Windows {windows}/{total} métiers, Mac {mac}/{total}.",
   },
 
   client: {
@@ -367,7 +339,8 @@ const fr = {
     staff_removed: "Membre retiré de l'équipe",
     "representative:created": "Commercial ajouté",
     "representative:updated": "Bonus d'un commercial modifié",
-    "representative:deactivated": "Commercial désactivé",
+    "representative:deactivated": "Commercial retiré de la liste",
+    "representative:deleted": "Commercial supprimé",
     "representative:reactivated": "Commercial réactivé",
     "representative:paid": "Bonus versé à un commercial",
     representative_set: "Commercial attribué à un commerce",
@@ -469,16 +442,9 @@ const fr = {
 
   settings: {
     title: "Réglages",
-    intro:
-      "Les valeurs changent ici, jamais dans le code. Un prix vide veut dire que la page le dit, plutôt que d'inventer un chiffre.",
     testPacks: "Les métiers en test sont fermés aux clients. Ce lien les ouvre dans ce navigateur, pour les essayer.",
     testBuilder: "Tester le créateur",
     leaveTest: "Quitter le mode test",
-    save: "Enregistrer",
-    saved: "Enregistré",
-    notJson: "Ce n'est pas une valeur valide. Un nombre s'écrit 15000, un texte entre guillemets.",
-    wrongKind: "Cette valeur doit rester du même type qu'avant ({was}).",
-    notSaved: "Pas enregistré.",
   },
 
   aiCost: {
@@ -572,10 +538,9 @@ const en: AdminCopy = {
     stats: "Statistics",
     payments: "Payments",
     clients: "Customers",
-    control: "Software control",
     devices: "Computers",
-    codes: "Codes",
-    funnel: "Funnel",
+    codes: "Renewal codes",
+    funnel: "Builder funnel",
     trials: "Trials",
     testers: "Test devices",
     requests: "Requests",
@@ -584,8 +549,6 @@ const en: AdminCopy = {
     staff: "Team",
     reps: "Sales reps",
   },
-
-  navGroups: { follow: "Follow-up", setup: "Setup" },
 
   packs: { pharmacy: "Pharmacy", bakery: "Bakery", restaurant: "Restaurant", warehouse: "Warehouse", shop: "Shop", hotel: "Hotel", transport: "Transport", wash: "Wash", general: "Other business" },
   plans: {
@@ -669,13 +632,10 @@ const en: AdminCopy = {
 
   clients: {
     title: "Customers",
-    search: "Shop name or serial number",
-    searchButton: "Search",
     nothingFound: "Nothing found.",
     none: "No customers yet.",
     noLicence: "no licence",
     launch: "launch",
-    all: "All",
     seen: "seen {ago}",
     neverSeen: "never connected",
     shown: "{shown} of {total}",
@@ -751,20 +711,6 @@ const en: AdminCopy = {
       expired: "Expired, read only",
       suspended: "Suspended",
     },
-    appsTitle: "Installed software",
-    appsIntro: "Each copy checks in when it starts, then every 3 hours while it has internet.",
-    presence: {
-      now: "Online, under 3 h",
-      today: "Seen in the last 24 h",
-      week: "Seen in the last 7 days",
-      older: "Inactive for over 7 days",
-    },
-    platforms: "Windows {windows} · Mac {mac} · Phone {phone}",
-    activityTitle: "Activity",
-    series: { shops: "New customers", visitors: "Builder visitors", activations: "Computers activated" },
-    range: { d7: "7 days", d30: "30 days" },
-    periodTotal: "over {days} days",
-    chartEmpty: "Nothing in this period.",
     appsListTitle: "Software, most recent first",
     filters: { now: "Online", today: "24 h", week: "7 days", all: "All" },
     noApps: "No software in this period.",
@@ -776,14 +722,6 @@ const en: AdminCopy = {
     historyNone: "Nothing yet.",
     automatic: "automatic",
     seeAll: "See all",
-    systemTitle: "System health",
-    signingOk: "Licences are being signed.",
-    signingMissing: "No signing key: no software can activate or renew.",
-    aiUse: "AI, 24 hours: {used} calls of {limit}.",
-    aiNear: "AI, 24 hours: {used} calls of {limit}. Past that, a person reads the sentences and screenshots.",
-    autoConfirmOn: "Payments whose screenshot matches confirm themselves.",
-    autoConfirmOff: "Every payment waits for a person.",
-    downloads: "Downloads: Windows {windows}/{total} trades, Mac {mac}/{total}.",
   },
 
   client: {
@@ -891,7 +829,8 @@ const en: AdminCopy = {
     staff_removed: "Team member removed",
     "representative:created": "Sales representative added",
     "representative:updated": "Representative's bonus changed",
-    "representative:deactivated": "Sales representative deactivated",
+    "representative:deactivated": "Sales representative taken off the list",
+    "representative:deleted": "Sales representative deleted",
     "representative:reactivated": "Sales representative reactivated",
     "representative:paid": "Bonus paid to a representative",
     representative_set: "Representative credited with a shop",
@@ -993,16 +932,9 @@ const en: AdminCopy = {
 
   settings: {
     title: "Settings",
-    intro:
-      "Values change here, never in the code. An empty price means the page says so, rather than inventing a figure.",
     testPacks: "Trades in test are closed to customers. This link opens them in this browser, to try them.",
     testBuilder: "Test the builder",
     leaveTest: "Leave test mode",
-    save: "Save",
-    saved: "Saved",
-    notJson: "That is not a valid value. A number is written 15000, text in quotation marks.",
-    wrongKind: "This value has to stay the same type as before ({was}).",
-    notSaved: "Not saved.",
   },
 
   aiCost: {
@@ -1094,10 +1026,9 @@ const ar: AdminCopy = {
     stats: "الإحصائيات",
     payments: "المدفوعات",
     clients: "الزبائن",
-    control: "التحكم",
     devices: "الأجهزة",
-    codes: "الرموز",
-    funnel: "المسار",
+    codes: "رموز التجديد",
+    funnel: "مسار المنشئ",
     trials: "التجارب",
     testers: "أجهزة الاختبار",
     requests: "الطلبات",
@@ -1106,8 +1037,6 @@ const ar: AdminCopy = {
     staff: "الفريق",
     reps: "المندوبون",
   },
-
-  navGroups: { follow: "المتابعة", setup: "الإعداد" },
 
   packs: { pharmacy: "صيدلية", bakery: "مخبزة", restaurant: "مطعم", warehouse: "مستودع", shop: "متجر", hotel: "فندق", transport: "نقل", wash: "غسيل", general: "نشاط آخر" },
   plans: {
@@ -1190,13 +1119,10 @@ const ar: AdminCopy = {
 
   clients: {
     title: "الزبائن",
-    search: "اسم المحل أو الرقم التسلسلي",
-    searchButton: "بحث",
     nothingFound: "لم يعثر على شيء.",
     none: "لا يوجد زبائن بعد.",
     noLicence: "دون رخصة",
     launch: "سعر الانطلاق",
-    all: "الكل",
     seen: "شوهد {ago}",
     neverSeen: "لم يتصل بعد",
     shown: "{shown} من {total}",
@@ -1272,20 +1198,6 @@ const ar: AdminCopy = {
       expired: "منتهية، للقراءة فقط",
       suspended: "موقوفة",
     },
-    appsTitle: "البرامج المثبتة",
-    appsIntro: "يتصل كل برنامج عند تشغيله، ثم كل 3 ساعات ما دام متصلا بالإنترنت.",
-    presence: {
-      now: "متصل، أقل من 3 ساعات",
-      today: "شوهد في آخر 24 ساعة",
-      week: "شوهد في آخر 7 أيام",
-      older: "غير نشط منذ أكثر من 7 أيام",
-    },
-    platforms: "ويندوز {windows} · ماك {mac} · هاتف {phone}",
-    activityTitle: "النشاط",
-    series: { shops: "زبائن جدد", visitors: "زوار المنشئ", activations: "حواسيب مفعلة" },
-    range: { d7: "7 أيام", d30: "30 يوما" },
-    periodTotal: "خلال {days} يوما",
-    chartEmpty: "لا شيء في هذه الفترة.",
     appsListTitle: "البرامج، الأحدث أولا",
     filters: { now: "متصل", today: "24 ساعة", week: "7 أيام", all: "الكل" },
     noApps: "لا يوجد برنامج في هذه الفترة.",
@@ -1297,14 +1209,6 @@ const ar: AdminCopy = {
     historyNone: "لا شيء بعد.",
     automatic: "تلقائي",
     seeAll: "عرض الكل",
-    systemTitle: "صحة النظام",
-    signingOk: "الرخص توقع.",
-    signingMissing: "مفتاح التوقيع غير موجود: لا يمكن لأي برنامج أن يفعل أو يجدد.",
-    aiUse: "الذكاء الاصطناعي، 24 ساعة: {used} استدعاء من {limit}.",
-    aiNear: "الذكاء الاصطناعي، 24 ساعة: {used} استدعاء من {limit}. بعدها يقرأ شخص الجمل والصور.",
-    autoConfirmOn: "المدفوعات التي تطابق صورتها تتأكد وحدها.",
-    autoConfirmOff: "كل دفعة تنتظر شخصا.",
-    downloads: "التنزيلات: ويندوز {windows}/{total} أنشطة، ماك {mac}/{total}.",
   },
 
   client: {
@@ -1412,7 +1316,8 @@ const ar: AdminCopy = {
     staff_removed: "أزيل عضو من الفريق",
     "representative:created": "أضيف مندوب",
     "representative:updated": "عُدّلت مكافأة مندوب",
-    "representative:deactivated": "أوقف مندوب",
+    "representative:deactivated": "أزيل مندوب من القائمة",
+    "representative:deleted": "حُذف مندوب",
     "representative:reactivated": "أعيد تفعيل مندوب",
     "representative:paid": "دُفعت مكافأة لمندوب",
     representative_set: "نُسب محل إلى مندوب",
@@ -1513,15 +1418,9 @@ const ar: AdminCopy = {
 
   settings: {
     title: "الإعدادات",
-    intro: "تتغير القيم هنا، لا في الشفرة. السعر الفارغ يعني أن الصفحة تقول ذلك، بدل اختراع رقم.",
     testPacks: "المجالات قيد الاختبار مغلقة أمام الزبائن. هذا الرابط يفتحها في هذا المتصفح لتجربتها.",
     testBuilder: "اختبار المنشئ",
     leaveTest: "الخروج من وضع الاختبار",
-    save: "حفظ",
-    saved: "تم الحفظ",
-    notJson: "هذه ليست قيمة صالحة. يكتب الرقم هكذا 15000، والنص بين علامتي تنصيص.",
-    wrongKind: "يجب أن تبقى هذه القيمة من النوع نفسه كما كانت ({was}).",
-    notSaved: "لم يحفظ.",
   },
 
   aiCost: {

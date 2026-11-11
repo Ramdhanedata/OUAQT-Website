@@ -91,6 +91,15 @@ const publicSettings = z.object({
 
 export type PublicSettings = z.infer<typeof publicSettings>;
 
+/*
+ * Whether a set of values still reads as the public settings. The admin's
+ * save asks this before it writes: one value of the wrong shape and every
+ * page loses all its prices at once, since nothing here has a fallback.
+ */
+export function readsAsPublicSettings(values: Record<string, unknown>): boolean {
+  return publicSettings.safeParse(values).success;
+}
+
 const publicKeys = Object.keys(publicSettings.shape);
 
 /*

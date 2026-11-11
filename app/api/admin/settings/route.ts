@@ -3,7 +3,9 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { adminGate } from "@/builder/admin/guard";
 import { audit } from "@/builder/db/audit";
+import { readsAsPrivateSettings } from "@/builder/db/private-settings";
 import { adminClient } from "@/builder/db/server";
+import { readsAsPublicSettings } from "@/builder/db/settings";
 
 /*
  * Changing a setting, which is how a price moves without a deploy.
@@ -15,6 +17,12 @@ import { adminClient } from "@/builder/db/server";
  *
  * A price may become null: that is how "under review" is expressed, and the
  * pages that show prices already know to say so.
+ *
+ * The same kind is not enough, though. The site reads all its settings as
+ * one set and gives up on the whole set when one value does not fit: a trial
+ * length emptied, or set to zero, would take every price off every page. So
+ * the set is read with the new value in place before anything is written,
+ * and a change that would stop it reading is refused.
  */
 
 const body = z.object({
@@ -65,6 +73,17 @@ export async function POST(request: Request) {
       { error: "wrong_kind", was: typeof existing.value },
       { status: 400 }
     );
+  }
+
+  const { data: every } = await supabase.from("settings").select("key, value");
+  if (every) {
+    const before = Object.fromEntries(every.map((row) => [row.key as string, row.value as unknown]));
+    const after = { ...before, [input.data.key]: parsed };
+    /* Only a set that reads today can be broken by this change; one already unreadable is not made worse by it. */
+    const breaks = (reads: (values: Record<string, unknown>) => boolean) => reads(before) && !reads(after);
+    if (breaks(readsAsPublicSettings) || breaks(readsAsPrivateSettings)) {
+      return NextResponse.json({ error: "would_break" }, { status: 400 });
+    }
   }
 
   const { error } = await supabase

@@ -7,8 +7,8 @@ import { CONTROL_GROUPS, controlGroupOf, daysUntil, type ControlGroup } from "./
 import { latestLicences, shopStatus, type LicenceRow } from "./overview-math";
 
 /*
- * Every shop and the state of its software, for the Contrôle page: its
- * licence as the software reads it, how many computers run it and when one
+ * Every shop and the state of its software, for the clients page: its
+ * licence as the software reads it, how many devices run it and when one
  * last checked in, the phone it was built with, and a ban if there is one.
  */
 
@@ -17,6 +17,8 @@ const MANY = 5_000; // not-a-rule: a ceiling on each read, far above today's sho
 export type ControlRow = {
   id: string;
   name: string;
+  nameArabic: string | null;
+  launch: boolean;
   pack: string;
   createdAt: string;
   phone: string | null;
@@ -35,7 +37,7 @@ export type ControlRow = {
 export async function loadControl(supabase: SupabaseClient, now = new Date()): Promise<{ rows: ControlRow[]; counts: Record<ControlGroup, number> }> {
   const [settings, { data: shops }, { data: licenceRows }, { data: devices }, { data: drafts }] = await Promise.all([
     getPublicSettings(),
-    supabase.from("businesses").select("id, name_latin, pack, created_at, banned_at, ban_reason").order("created_at", { ascending: false }).limit(MANY),
+    supabase.from("businesses").select("id, name_latin, name_arabic, launch_client, pack, created_at, banned_at, ban_reason").order("created_at", { ascending: false }).limit(MANY),
     supabase
       .from("licences")
       .select("id, business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift")
@@ -69,6 +71,8 @@ export async function loadControl(supabase: SupabaseClient, now = new Date()): P
     return {
       id: shop.id as string,
       name: shop.name_latin as string,
+      nameArabic: (shop.name_arabic as string | null) ?? null,
+      launch: Boolean(shop.launch_client),
       pack: shop.pack as string,
       createdAt: shop.created_at as string,
       phone: phoneOf.get(shop.id as string) ?? null,

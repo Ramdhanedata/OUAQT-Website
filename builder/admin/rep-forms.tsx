@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { fill } from "@/lib/utils";
 import type { GrowthCopy } from "./copy-growth";
+import type { PanelCopy } from "./copy-panel";
 
 /*
  * The representatives' forms: adding one, their bonus and details, turning
@@ -19,14 +20,14 @@ const input =
 const primary = "min-h-[48px] rounded-lg bg-foreground px-5 text-base font-medium text-background disabled:opacity-50";
 const secondary = "inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-foreground hover:border-foreground/40 disabled:opacity-50";
 
-async function post(body: unknown): Promise<{ ok: boolean; error?: string; code?: string; id?: string }> {
+async function post(body: unknown): Promise<{ ok: boolean; error?: string; code?: string; id?: string; removed?: "deleted" | "kept" }> {
   const response = await fetch("/api/admin/reps", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify(body),
   }).catch(() => null);
   if (!response) return { ok: false, error: "failed" };
-  const answer = (await response.json().catch(() => ({}))) as { error?: string; code?: string; id?: string };
+  const answer = (await response.json().catch(() => ({}))) as { error?: string; code?: string; id?: string; removed?: "deleted" | "kept" };
   return response.ok ? { ok: true, ...answer } : { ok: false, error: answer.error ?? "failed" };
 }
 
@@ -105,10 +106,8 @@ export function RepCreateForm({ t }: { t: Words }) {
         void save();
       }}
     >
-      <div>
-        <h2 className="text-xl font-semibold text-foreground">{t.addTitle}</h2>
-        <p className="mt-1 text-base text-muted-foreground">{t.addIntro}</p>
-      </div>
+      {/* The button that opens this form already says what it is for. */}
+      <p className="text-base text-muted-foreground">{t.addIntro}</p>
       <DetailFields t={t} value={value} onChange={setValue} />
       <button type="submit" disabled={busy || !value.name.trim()} className={primary}>
         {t.add}
@@ -175,6 +174,80 @@ export function RepActiveButton({ t, id, active }: { t: Words; id: string; activ
         {active ? t.deactivate : t.reactivate}
       </button>
       {error ? <p className="mt-2 text-sm text-destructive">{error}</p> : null}
+    </div>
+  );
+}
+
+/*
+ * Taking a representative off the list. The button asks first and says what
+ * will happen, because the server decides between two ends: deleted when
+ * nothing hangs on them, kept among the former ones when something does.
+ * From their own page, a deleted one leaves nothing to show, so the list is
+ * where the reader lands.
+ */
+export function RepRemoveButton({
+  t,
+  w,
+  id,
+  name,
+  backTo,
+}: {
+  t: Words;
+  w: PanelCopy["reps"];
+  id: string;
+  name: string;
+  backTo?: string;
+}) {
+  const router = useRouter();
+  const [asking, setAsking] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState<{ ok: boolean; text: string } | null>(null);
+
+  async function remove() {
+    setBusy(true);
+    setMessage(null);
+    const answer = await post({ action: "remove", id });
+    setBusy(false);
+    if (!answer.ok) return setMessage({ ok: false, text: t.errors[answer.error ?? "failed"] ?? t.errors.failed });
+    setAsking(false);
+    setMessage({ ok: true, text: fill(answer.removed === "deleted" ? w.removedDeleted : w.removedKept, { name }) });
+    if (answer.removed === "deleted" && backTo) router.push(backTo);
+    else router.refresh();
+  }
+
+  return (
+    <div className="min-w-0">
+      {asking ? (
+        <div className="max-w-xl space-y-3 rounded-xl border border-app-danger/40 bg-background p-4">
+          <p className="text-sm font-semibold text-foreground">{fill(w.removeTitle, { name })}</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">{w.removeHint}</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              disabled={busy}
+              onClick={() => void remove()}
+              className="min-h-[44px] rounded-lg bg-app-danger px-4 text-sm font-medium text-white disabled:opacity-50"
+            >
+              {w.removeConfirm}
+            </button>
+            <button type="button" disabled={busy} onClick={() => setAsking(false)} className="min-h-[44px] rounded-lg px-4 text-sm text-muted-foreground hover:text-foreground">
+              {w.cancel}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <button
+          type="button"
+          onClick={() => {
+            setAsking(true);
+            setMessage(null);
+          }}
+          className="inline-flex min-h-[44px] items-center gap-2 rounded-lg border border-app-danger/40 px-4 text-sm font-medium text-app-danger hover:border-app-danger"
+        >
+          {w.remove}
+        </button>
+      )}
+      {message ? <p className={`mt-2 text-sm ${message.ok ? "font-medium text-app-success" : "text-destructive"}`}>{message.text}</p> : null}
     </div>
   );
 }

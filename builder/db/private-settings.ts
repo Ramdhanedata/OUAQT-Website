@@ -51,6 +51,11 @@ const privateSettings = z.object({
 
 export type PrivateSettings = z.infer<typeof privateSettings>;
 
+/* The same question as readsAsPublicSettings, for the values only the server reads. */
+export function readsAsPrivateSettings(values: Record<string, unknown>): boolean {
+  return privateSettings.safeParse(values).success;
+}
+
 const keys = Object.keys(privateSettings.shape);
 
 export async function getPrivateSettings(): Promise<PrivateSettings | null> {

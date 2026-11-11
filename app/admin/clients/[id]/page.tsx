@@ -60,7 +60,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
   const { data: business } = UUID.test(id)
     ? await supabase
         .from("businesses")
-        .select("id, owner_id, name_latin, name_arabic, pack, app_language, receipt_phone, receipt_address, launch_client, created_at, representative_id")
+        .select("id, owner_id, name_latin, name_arabic, pack, app_language, receipt_phone, receipt_address, launch_client, created_at, representative_id, banned_at, ban_reason")
         .eq("id", id)
         .maybeSingle()
     : { data: null };
@@ -185,8 +185,22 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
             {business.launch_client ? ` · ${c.launch}` : ""}
           </p>
         </div>
-        <StatusBadge status={status} label={status ? wordFor(t.statuses, status) : t.clients.noLicence} />
+        <div className="flex flex-wrap items-center gap-2">
+          {/* A ban outranks the licence: said first, with the reason staff wrote. */}
+          {business.banned_at ? (
+            <span className="inline-flex h-7 items-center rounded-full bg-app-danger-soft px-3 text-sm font-medium text-app-danger">
+              {growthCopy[lang].control.badge.banned}
+            </span>
+          ) : null}
+          <StatusBadge status={status} label={status ? wordFor(t.statuses, status) : t.clients.noLicence} />
+        </div>
       </header>
+      {business.banned_at ? (
+        <p className="mt-3 text-sm font-medium text-app-danger">
+          {fill(growthCopy[lang].control.line.banned, { date: date(business.banned_at as string) ?? "" })}
+          {business.ban_reason ? <span className="font-normal text-muted-foreground"> · {business.ban_reason as string}</span> : null}
+        </p>
+      ) : null}
 
       {/* Four figures about this shop, readable from across the room. */}
       <ul className="mt-6 grid grid-cols-2 gap-3 lg:grid-cols-4">

@@ -7,7 +7,7 @@ import type { ControlAction } from "./control-rules";
 import type { GrowthCopy } from "./copy-growth";
 
 /*
- * One shop's controls on the Contrôle page: the actions its state allows,
+ * One shop's controls on the clients page: the actions its state allows,
  * in three groups (give access, end, sanction). Each opens a short form
  * that says what will happen, asks for the reason kept in the history, and
  * a number of days or a plan where one is needed, before anything is sent.
@@ -219,6 +219,8 @@ export function ControlPanel({ t, businessId, actions }: { t: Words; businessId:
           ) : null}
 
           {message ? <p className={`text-sm ${message.ok ? "font-medium text-app-success" : "text-destructive"}`}>{message.text}</p> : null}
+          {/* When the shop's device will know: said where a decision is taken, not above every list. */}
+          <p className="text-xs leading-relaxed text-muted-foreground">{t.timing}</p>
         </div>
       ) : null}
     </div>

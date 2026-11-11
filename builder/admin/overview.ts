@@ -5,9 +5,8 @@ import { packs } from "@/app-ui/packs";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { getPublicSettings, installersFor } from "@/builder/db/settings";
 import { signingKeyIsSet } from "@/builder/licence/sign";
+import { checkDownloads, type DownloadCheck } from "./downloads-check";
 import {
-  dailyCounts,
-  dailyDistinct,
   endingWithin,
   groupOf,
   latestLicences,
@@ -17,7 +16,6 @@ import {
   SITE_LIVE_MINUTES,
   statusGroups,
   visitorsSince,
-  type DayCount,
   type LicenceRow,
   type Presence,
   type StatusGroup,
@@ -27,9 +25,16 @@ import {
  * Everything the overview shows, read in one go on the server.
  *
  * It reads what the server holds and nothing else: shops, licences, when
- * each computer last asked for its licence, payments, the builder's step
+ * each device last asked for its licence, payments, the builder's step
  * events and the trail. A shop's sales are not here because they never leave
- * its computers, and this file is not the place to start collecting them.
+ * its devices, and this file is not the place to start collecting them.
+ *
+ * Beside the counts it says how each service stands, for the board at the
+ * top of the page: when the site, the builder and the software last gave a
+ * sign of life, whether the installers are where the settings say, whether
+ * licences can be signed and paid for, and how long the database took to
+ * answer all of this. And the rules in force, so the price and the trial
+ * length are read without opening the settings.
  *
  * Counts are worked out here from bounded reads rather than in SQL, because
  * a status depends on today's date and on the grace in settings, which is
@@ -41,7 +46,7 @@ const MANY = 5_000; // not-a-rule: a ceiling on each read, far above today's sho
 const DAY = 86_400_000;
 const WEEK = 7 * DAY; // not-a-rule: the overview's "last 7 days"
 export const ENDING_DAYS = 7; // not-a-rule: how far ahead "ending soon" looks
-export const CHART_DAYS = 30; // not-a-rule: the longest range the activity chart offers
+const PAYMENT_NUMBERS = ["bankily_number", "masrvi_number", "bimbank_number", "sedad_number", "click_number"] as const;
 
 export type AppRow = {
   deviceId: string;
@@ -82,14 +87,31 @@ export type Overview = {
   presence: Record<Exclude<Presence, "never">, number>;
   platforms: { windows: number; mac: number; phone: number };
   apps: AppRow[];
-  series: { shops: DayCount[]; visitors: DayCount[]; activations: DayCount[] };
   ending: Ending[];
+  /* The last sign of life from each part, or null when it never gave one. */
+  last: { site: string | null; builder: string | null; app: string | null };
   system: {
     signing: boolean;
     ai: { used: number; limit: number } | null;
     autoConfirm: boolean | null;
-    downloads: { windows: number; mac: number; total: number } | null;
+    /* How many of the payment apps have a number to pay to, and so show to owners. */
+    paymentApps: number | null;
+    /* Trades that have an address to download from, per system. */
+    links: { windows: number; mac: number; total: number } | null;
+    /* Whether a file answers at those addresses, and the version they lead to. */
+    files: DownloadCheck | null;
+    /* How long the database took to answer everything on this page. */
+    ms: number;
   };
+  /* The values owners meet first, as the settings hold them now. Amounts in the smallest unit. */
+  rules: {
+    trialDays: number;
+    annual: number | null;
+    annualLaunch: number | null;
+    monthly: number | null;
+    maxDevices: number;
+    graceDays: number;
+  } | null;
   trail: TrailEntry[];
 };
 
@@ -97,8 +119,8 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
   const since = (ms: number) => new Date(now.getTime() - ms).toISOString();
   const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1)).toISOString();
   const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate())).toISOString();
-  const chartStart = since(CHART_DAYS * DAY);
   const count = { count: "exact" as const, head: true };
+  const asked = Date.now();
 
   const [
     publicSettings,
@@ -112,7 +134,8 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     { count: requestsNew },
     { data: monthPayments },
     { data: builderEvents },
-    { data: activations },
+    { data: lastBuilder },
+    { data: lastVisit },
     { count: aiCalls },
     { data: trail },
     { data: siteVisits },
@@ -140,20 +163,16 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     supabase.from("configuration_code_requests").select("id", count).is("handled_at", null).eq("sent", false),
     supabase.from("feature_requests").select("id", count).eq("status", "new"),
     supabase.from("payments").select("expected_amount").eq("status", "confirmed").gte("created_at", monthStart).limit(MANY),
-    /* A session's steps over the chart's range: enough for "here now", "today" and each day. */
+    /* A day of a session's steps: enough for "here now" and "today". */
     supabase
       .from("builder_events")
       .select("session_hash, event, created_at")
-      .gte("created_at", chartStart)
+      .gte("created_at", since(DAY))
       .order("created_at", { ascending: false })
       .limit(20_000),
-    supabase
-      .from("audit_events")
-      .select("created_at")
-      .eq("subject", "device")
-      .in("action", ["activated", "reactivated"])
-      .gte("created_at", chartStart)
-      .limit(MANY),
+    /* The last sign of life of the builder and of the site, however long ago. */
+    supabase.from("builder_events").select("created_at").order("created_at", { ascending: false }).limit(1),
+    supabase.from("site_events").select("created_at").eq("kind", "visit").order("created_at", { ascending: false }).limit(1),
     supabase.from("ai_calls").select("id", count).gt("created_at", since(DAY)),
     supabase
       .from("audit_events")
@@ -213,16 +232,19 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
   }
   ending.sort((a, b) => a.daysLeft - b.daysLeft);
 
+  /* Everything above has answered: what follows asks other machines, not the database. */
+  const ms = Date.now() - asked;
+
   const events = builderEvents ?? [];
-  const downloads = publicSettings
-    ? packs.reduce(
-        (sum, pack) => {
-          const found = installersFor(publicSettings, pack);
-          return { windows: sum.windows + (found.windows ? 1 : 0), mac: sum.mac + (found.mac ? 1 : 0), total: sum.total + 1 };
-        },
+  const installers = publicSettings ? packs.map((pack) => installersFor(publicSettings, pack)) : null;
+  const links = installers
+    ? installers.reduce(
+        (sum, found) => ({ windows: sum.windows + (found.windows ? 1 : 0), mac: sum.mac + (found.mac ? 1 : 0), total: sum.total + 1 }),
         { windows: 0, mac: 0, total: 0 }
       )
     : null;
+  const addresses = (installers ?? []).flatMap((found) => [found.windows, found.mac, found.macApple]).filter((one): one is string => Boolean(one));
+  const files = addresses.length ? await checkDownloads(addresses).catch(() => null) : null;
 
   return {
     todo: {
@@ -253,18 +275,32 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     presence,
     platforms,
     apps,
-    series: {
-      shops: dailyCounts((businesses ?? []).map((one) => one.created_at as string), now, CHART_DAYS),
-      visitors: dailyDistinct(events.map((one) => ({ key: one.session_hash, at: one.created_at })), now, CHART_DAYS),
-      activations: dailyCounts((activations ?? []).map((one) => one.created_at as string), now, CHART_DAYS),
-    },
     ending,
+    last: {
+      site: (lastVisit?.[0]?.created_at as string | undefined) ?? null,
+      builder: (lastBuilder?.[0]?.created_at as string | undefined) ?? null,
+      /* Devices arrive most recent first. */
+      app: (devices?.[0]?.last_seen as string | undefined) ?? null,
+    },
     system: {
       signing: signingKeyIsSet(),
       ai: privateSettings ? { used: aiCalls ?? 0, limit: privateSettings.ai_calls_per_day } : null,
       autoConfirm: privateSettings ? privateSettings.payment_auto_confirm : null,
-      downloads,
+      paymentApps: privateSettings ? PAYMENT_NUMBERS.filter((key) => privateSettings[key].trim() !== "").length : null,
+      links,
+      files,
+      ms,
     },
+    rules: publicSettings
+      ? {
+          trialDays: publicSettings.trial_days,
+          annual: publicSettings.price_annual_standard_mru,
+          annualLaunch: publicSettings.price_annual_launch_mru,
+          monthly: publicSettings.price_monthly_standard_mru,
+          maxDevices: publicSettings.max_devices,
+          graceDays: publicSettings.renewal_grace_days,
+        }
+      : null,
     trail: await describeTrail(supabase, trail ?? [], names, licenceRows ?? []),
   };
 }
