@@ -15,6 +15,7 @@ import { isTesterDevice, sameTrade } from "@/builder/licence/trial";
 import { holderOf, passOf, rememberInstall } from "@/builder/licence/tester-pass";
 import { claimActivationToken, claimNearbyToken, forgetDownloadsOf, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
+import { appVersionField, cleanAppVersion, withAppVersion } from "@/builder/licence/app-version";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 import { sameMachine, type MachineMark } from "@/app-ui/licence-file";
 import { attemptKeys, openByNumber, recordFailure, shopFor, waitingFor } from "@/builder/config-code/server";
@@ -69,6 +70,8 @@ const body = z
      * trial.
      */
     expectBusinessId: z.string().uuid().optional(),
+    /* The software's own version number (0041), so the admin area sees who runs an old build. */
+    appVersion: appVersionField,
   })
   .strict()
   .refine((value) => [value.serial, value.token, value.nearby].filter(Boolean).length === 1, {
@@ -383,6 +386,8 @@ export async function POST(request: Request) {
   const here: MachineMark | null = input.data.fingerprint
     ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
     : null;
+  /* Only written when the app sent one: an old app leaves the column as it was. */
+  const appVersion = cleanAppVersion(input.data.appVersion);
 
   if (already) {
     /*
@@ -407,20 +412,25 @@ export async function POST(request: Request) {
       await supabase.from("device_releases").insert({ business_id: business.id, device_id: input.data.deviceId, released_by: null });
       await audit({ actorId: null, subject: "device", subjectId: input.data.deviceId, action: "moved", detail: { businessId: business.id } });
     }
-    await supabase
-      .from("devices")
-      .update({ last_seen: new Date().toISOString(), token_hash: tokenHash, ...(here ? { fingerprint: here } : {}) })
-      .eq("id", already.id);
+    await withAppVersion(appVersion, (version) =>
+      supabase
+        .from("devices")
+        .update({ last_seen: new Date().toISOString(), token_hash: tokenHash, ...(here ? { fingerprint: here } : {}), ...version })
+        .eq("id", already.id)
+    );
   } else {
-    const { error } = await supabase.from("devices").insert({
-      business_id: business.id,
-      device_id: input.data.deviceId,
-      name: input.data.deviceName ?? null,
-      platform: input.data.platform,
-      role: active.length === 0 ? "main" : "secondary",
-      token_hash: tokenHash,
-      ...(here ? { fingerprint: here } : {}),
-    });
+    const { error } = await withAppVersion(appVersion, (version) =>
+      supabase.from("devices").insert({
+        business_id: business.id,
+        device_id: input.data.deviceId,
+        name: input.data.deviceName ?? null,
+        platform: input.data.platform,
+        role: active.length === 0 ? "main" : "secondary",
+        token_hash: tokenHash,
+        ...(here ? { fingerprint: here } : {}),
+        ...version,
+      })
+    );
 
     if (error) {
       return NextResponse.json({ error: "not_activated" }, { status: 502 });

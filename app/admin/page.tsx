@@ -130,6 +130,33 @@ export default async function OverviewPage() {
     });
   }
 
+  /*
+   * Which version the shops' computers run. A Mac never updates itself, so
+   * an old build stays in use until somebody installs the new one: amber as
+   * soon as one computer is behind, or too old to say. Phones are left out,
+   * since they run what the site serves.
+   */
+  const { versions } = data;
+  if (versions.total > 0) {
+    const older = versions.versions.filter((one) => one.behind);
+    const list = (rows: typeof older) => rows.map((one) => `${one.version} ×${number.format(one.count)}`).join(", ");
+    const sub = [
+      ...(versions.published && older.length ? [fill(b.versionsOlder, { list: list(older) })] : []),
+      ...(!versions.published && versions.versions.length ? [list(versions.versions)] : []),
+      ...(versions.silent ? [fill(b.versionsSilent, { count: number.format(versions.silent) })] : []),
+    ].join(" · ");
+    cells.push({
+      key: "versions",
+      label: b.versions,
+      value: versions.published
+        ? fill(b.versionsValue, { current: number.format(versions.current), total: number.format(versions.total), version: versions.published })
+        : b.versionsUnknown,
+      sub: sub || undefined,
+      tone: !versions.published ? "neutral" : versions.current < versions.total ? "warn" : "good",
+      href: "/admin/postes",
+    });
+  }
+
   cells.push({ key: "signing", label: b.signing, value: system.signing ? b.signingOk : b.signingMissing, tone: system.signing ? "good" : "bad" });
 
   if (system.paymentApps !== null && system.autoConfirm !== null) {

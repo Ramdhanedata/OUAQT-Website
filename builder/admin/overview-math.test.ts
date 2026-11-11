@@ -10,6 +10,7 @@ import {
   niceMax,
   presenceOf,
   shopStatus,
+  versionTally,
   SITE_LIVE_MINUTES,
   visitorsSince,
   type LicenceRow,
@@ -151,5 +152,37 @@ describe("a chart's scale", () => {
     expect(niceMax(7)).toBe(10);
     expect(niceMax(13)).toBe(20);
     expect(niceMax(420)).toBe(500);
+  });
+});
+
+describe("which version the computers run", () => {
+  const devices = [
+    { platform: "windows", app_version: "0.1.80" },
+    { platform: "mac", app_version: "0.1.76" },
+    { platform: "mac", app_version: "0.1.76" },
+    { platform: "windows", app_version: "0.1.81" },
+    { platform: "windows", app_version: null },
+    { platform: "mac" },
+    { platform: "phone", app_version: "0.1.0-phone" },
+  ];
+
+  it("counts computers on the published version or newer, and lists the older ones", () => {
+    const tally = versionTally(devices, "v0.1.80");
+    expect(tally).toMatchObject({ published: "0.1.80", total: 6, current: 2, silent: 2 });
+    expect(tally.versions).toEqual([
+      { version: "0.1.81", count: 1, behind: false },
+      { version: "0.1.80", count: 1, behind: false },
+      { version: "0.1.76", count: 2, behind: true },
+    ]);
+  });
+
+  it("leaves phones out: they run what the site serves", () => {
+    expect(versionTally([{ platform: "phone", app_version: "0.1.0-phone" }], "v0.1.80").total).toBe(0);
+  });
+
+  it("ranks nobody when the published version is not known", () => {
+    const tally = versionTally(devices, null);
+    expect(tally.current).toBe(0);
+    expect(tally.versions.every((one) => !one.behind)).toBe(true);
   });
 });

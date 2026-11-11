@@ -58,6 +58,11 @@ const fr = {
     database: "Base de données",
     databaseValue: "Répond en {ms} ms",
     databaseSlow: "Lente : {ms} ms pour cette page",
+    versions: "Versions des ordinateurs",
+    versionsValue: "{current} sur {total} en {version}",
+    versionsOlder: "Plus anciennes : {list}",
+    versionsSilent: "Sans numéro de version : {count}",
+    versionsUnknown: "Version publiée inconnue",
   },
 
   rules: {
@@ -231,6 +236,11 @@ const en: PanelCopy = {
     database: "Database",
     databaseValue: "Answers in {ms} ms",
     databaseSlow: "Slow: {ms} ms for this page",
+    versions: "Computer versions",
+    versionsValue: "{current} of {total} on {version}",
+    versionsOlder: "Older: {list}",
+    versionsSilent: "No version number: {count}",
+    versionsUnknown: "Published version unknown",
   },
 
   rules: {
@@ -402,6 +412,11 @@ const ar: PanelCopy = {
     database: "قاعدة البيانات",
     databaseValue: "تجيب في {ms} مللي ثانية",
     databaseSlow: "بطيئة: {ms} مللي ثانية لهذه الصفحة",
+    versions: "إصدارات الحواسيب",
+    versionsValue: "{current} من {total} على {version}",
+    versionsOlder: "إصدارات أقدم: {list}",
+    versionsSilent: "بلا رقم إصدار: {count}",
+    versionsUnknown: "الإصدار المنشور غير معروف",
   },
 
   rules: {

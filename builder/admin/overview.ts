@@ -4,6 +4,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { packs } from "@/app-ui/packs";
 import { getPrivateSettings } from "@/builder/db/private-settings";
 import { getPublicSettings, installersFor } from "@/builder/db/settings";
+import { readWithAppVersion } from "@/builder/licence/app-version";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 import { checkDownloads, type DownloadCheck } from "./downloads-check";
 import {
@@ -15,10 +16,12 @@ import {
   shopStatus,
   SITE_LIVE_MINUTES,
   statusGroups,
+  versionTally,
   visitorsSince,
   type LicenceRow,
   type Presence,
   type StatusGroup,
+  type VersionTally,
 } from "./overview-math";
 
 /*
@@ -86,6 +89,8 @@ export type Overview = {
   /* Activated computers by how recently each checked in; the four add up to all of them. */
   presence: Record<Exclude<Presence, "never">, number>;
   platforms: { windows: number; mac: number; phone: number };
+  /* Which version the computers run against the published one (0041). */
+  versions: VersionTally;
   apps: AppRow[];
   ending: Ending[];
   /* The last sign of life from each part, or null when it never gave one. */
@@ -152,12 +157,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
       .select("id, business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift")
       .order("created_at", { ascending: false })
       .limit(MANY),
-    supabase
-      .from("devices")
-      .select("business_id, device_id, name, platform, last_seen")
-      .eq("status", "active")
-      .order("last_seen", { ascending: false })
-      .limit(MANY),
+    activeDevices(supabase),
     supabase.from("payments").select("id", count).in("status", ["submitted", "pending_confirmation"]),
     supabase.from("payments").select("id", count).eq("status", "confirmed").eq("auto_confirmed", true).is("reviewed_at", null),
     supabase.from("configuration_code_requests").select("id", count).is("handled_at", null).eq("sent", false),
@@ -274,6 +274,7 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
     },
     presence,
     platforms,
+    versions: versionTally(devices ?? [], files?.version ?? null),
     apps,
     ending,
     last: {
@@ -303,6 +304,19 @@ export async function loadOverview(supabase: SupabaseClient, now = new Date()): 
       : null,
     trail: await describeTrail(supabase, trail ?? [], names, licenceRows ?? []),
   };
+}
+
+/* The active devices, with the version each reported (0041) once the database has it. */
+function activeDevices(supabase: SupabaseClient) {
+  return readWithAppVersion("business_id, device_id, name, platform, last_seen", (columns) =>
+    supabase
+      .from("devices")
+      .select(columns)
+      .eq("status", "active")
+      .order("last_seen", { ascending: false })
+      .limit(MANY)
+      .returns<{ business_id: string; device_id: string; name: string | null; platform: string | null; last_seen: string; app_version?: string | null }[]>()
+  );
 }
 
 type TrailRow = { id: number; actor_id: string | null; subject: string; subject_id: string | null; action: string; detail: unknown; created_at: string };

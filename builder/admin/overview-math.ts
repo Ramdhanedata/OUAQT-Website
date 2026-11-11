@@ -1,4 +1,5 @@
 import { daysLeft, statusOf, type LicencePlan, type LicenceRules, type LicenceStatus } from "@/app-ui/licence-status";
+import { cleanAppVersion, compareAppVersions } from "@/builder/licence/app-version";
 import type { AdminLanguage } from "./copy";
 
 /*
@@ -183,4 +184,46 @@ export function niceMax(value: number): number {
   const power = 10 ** Math.floor(Math.log10(value));
   for (const step of [1, 2, 5, 10]) if (step * power >= value) return step * power;
   return 10 * power;
+}
+
+/*
+ * Which version the shops' computers run, against the one the downloads
+ * lead to (0041). Only computers: a phone runs the app the site serves,
+ * which is new for everybody as soon as the site is.
+ *
+ * A computer that says nothing runs a build older than the one that began
+ * to say it, so it counts as behind, apart. One newer than the published
+ * release (a test build) is not behind.
+ */
+export type VersionTally = {
+  /* The release the downloads lead to, or null when the check did not say. */
+  published: string | null;
+  total: number;
+  /* On the published version or newer; 0 when it is not known. */
+  current: number;
+  /* Every version reported, newest first, and whether it is older than the published one. */
+  versions: { version: string; count: number; behind: boolean }[];
+  silent: number;
+};
+
+export function versionTally(
+  devices: { platform: string | null; app_version?: string | null }[],
+  published: string | null
+): VersionTally {
+  const target = cleanAppVersion(published);
+  const counts = new Map<string, number>();
+  let total = 0;
+  let silent = 0;
+  for (const device of devices) {
+    if (device.platform !== "windows" && device.platform !== "mac") continue;
+    total += 1;
+    const version = cleanAppVersion(device.app_version);
+    if (version) counts.set(version, (counts.get(version) ?? 0) + 1);
+    else silent += 1;
+  }
+  const versions = [...counts]
+    .map(([version, count]) => ({ version, count, behind: target !== null && (compareAppVersions(version, target) ?? 0) < 0 }))
+    .sort((a, b) => compareAppVersions(b.version, a.version) ?? 0);
+  const current = target ? versions.filter((one) => !one.behind).reduce((sum, one) => sum + one.count, 0) : 0;
+  return { published: target, total, current, versions, silent };
 }

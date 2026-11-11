@@ -5,7 +5,9 @@ import { adminWords } from "@/builder/admin/language";
 import { Devices, type DeviceRow } from "@/builder/admin/devices";
 import { AdminSignIn } from "@/builder/admin/sign-in";
 import { adminClient } from "@/builder/db/server";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { getPrivateSettings } from "@/builder/db/private-settings";
+import { readWithAppVersion } from "@/builder/licence/app-version";
 import { isTesterDevice, type Fingerprint } from "@/builder/licence/trial";
 import { testerDevices } from "@/builder/licence/trial-claim";
 
@@ -24,11 +26,7 @@ export default async function DevicesPage() {
   if (!supabase) return <p className="text-base">{t.noDatabase}</p>;
 
   const [{ data: devices }, secrets, testers] = await Promise.all([
-    supabase
-      .from("devices")
-      .select("business_id, device_id, name, platform, role, status, last_seen, fingerprint")
-      .order("last_seen", { ascending: false })
-      .limit(100),
+    latestDevices(supabase),
     getPrivateSettings(),
     testerDevices(supabase),
   ]);
@@ -51,6 +49,7 @@ export default async function DevicesPage() {
       role: device.role,
       status: device.status,
       lastSeen: device.last_seen,
+      appVersion: device.app_version ?? null,
       tester: isTesterDevice(
         { deviceId: device.device_id, fingerprint: (device.fingerprint as Fingerprint | null) ?? null },
         testers,
@@ -65,5 +64,24 @@ export default async function DevicesPage() {
       <h1 className="text-2xl font-semibold text-foreground">{t.devices.title}</h1>
       <Devices rows={rows} words={{ t: t.devices, roles: t.roles, locale }} />
     </>
+  );
+}
+
+/* The newest hundred, with the version each reported (0041) once the database has it. */
+type DeviceRead = {
+  business_id: string;
+  device_id: string;
+  name: string | null;
+  platform: string | null;
+  role: string;
+  status: string;
+  last_seen: string;
+  fingerprint: unknown;
+  app_version?: string | null;
+};
+
+function latestDevices(supabase: SupabaseClient) {
+  return readWithAppVersion("business_id, device_id, name, platform, role, status, last_seen, fingerprint", (columns) =>
+    supabase.from("devices").select(columns).order("last_seen", { ascending: false }).limit(100).returns<DeviceRead[]>() // not-a-rule: the newest hundred
   );
 }

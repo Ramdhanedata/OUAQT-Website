@@ -30,6 +30,7 @@ POST /api/licence/activate
   "deviceId":   "a-stable-id",      // the app's own id for this computer
   "deviceName": "Caisse",           // optional, shown to the owner
   "platform":   "windows",          // or "mac", or "phone" (the app in a phone's browser, see below)
+  "appVersion": "0.1.77",           // optional: the software's own version, kept on the device's row (0041)
 
   // The machine, in three salted hashes. Never a serial number.
   "fingerprint": {
@@ -280,7 +281,8 @@ POST /api/licence/refresh
   "businessId":           "uuid, from the licence file",
   "deviceId":             "the same id",
   "deviceToken":          "the one from activation",
-  "configurationVersion": 3        // optional: what the app already holds
+  "configurationVersion": 3,       // optional: what the app already holds
+  "appVersion":           "0.1.77"  // optional: the software's own version, as on activation
 }
 ```
 

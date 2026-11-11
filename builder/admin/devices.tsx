@@ -24,6 +24,8 @@ export type DeviceRow = {
   role: string;
   status: string;
   lastSeen: string;
+  /* The software's version, as the device last reported it (0041); null for an app too old to say. */
+  appVersion: string | null;
   /* One of OUAQT's own test devices: its trials are never refused. */
   tester: boolean;
 };
@@ -110,7 +112,10 @@ function Device({
           {row.businessName}
           <span className="text-muted-foreground">
             {" "}
-            · {row.name ?? words.t.unnamed} · {row.platform ?? "?"} · {wordFor(words.roles, row.role)}
+            · {row.name ?? words.t.unnamed} · {row.platform ?? "?"} · {wordFor(words.roles, row.role)} ·{" "}
+            <span title={words.t.version}>
+              <bdi dir="ltr">{row.appVersion ? `v${row.appVersion}` : "—"}</bdi>
+            </span>
           </span>
           {tester ? (
             <span className="ms-2 rounded-full border border-border px-2 py-0.5 text-sm text-foreground">

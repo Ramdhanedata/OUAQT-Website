@@ -10,6 +10,7 @@ import { followDraft } from "@/builder/config-code/server";
 import { signingKeyIsSet } from "@/builder/licence/sign";
 import { payHelpFor } from "@/builder/payment/pay-help";
 import { readAgain } from "@/builder/payment/read-again";
+import { appVersionField, cleanAppVersion, withAppVersion } from "@/builder/licence/app-version";
 
 /*
  * A shop asking whether anything has changed.
@@ -22,7 +23,7 @@ import { readAgain } from "@/builder/payment/read-again";
  * The schema is strict and it matters here more than anywhere. This endpoint
  * must never become a place where a shop's sales or stock could arrive, by
  * accident or by a later change of mind, so a body carrying anything beyond
- * these three fields is refused before it is read. There is no branch in this
+ * these few fields is refused before it is read. There is no branch in this
  * file that could store trade data, because there is no field to store.
  */
 
@@ -39,6 +40,13 @@ const body = z
      * no field here that could carry a sale, a stock movement or a debt.
      */
     configurationVersion: z.number().int().nonnegative().optional(),
+    /*
+     * The software's own version number (0041), kept on the device's row so
+     * the admin area sees who runs an old build. Only a version number is
+     * stored (builder/licence/app-version.ts), so this is no place for trade
+     * data either.
+     */
+    appVersion: appVersionField,
   })
   .strict();
 
@@ -112,10 +120,12 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "not_available" }, { status: 503 });
   }
 
-  await supabase
-    .from("devices")
-    .update({ last_seen: new Date().toISOString() })
-    .eq("id", device.id);
+  await withAppVersion(cleanAppVersion(input.data.appVersion), (version) =>
+    supabase
+      .from("devices")
+      .update({ last_seen: new Date().toISOString(), ...version })
+      .eq("id", device.id)
+  );
 
   const { data: devices } = await supabase
     .from("devices")

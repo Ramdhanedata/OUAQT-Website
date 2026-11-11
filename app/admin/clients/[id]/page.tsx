@@ -6,6 +6,7 @@ import { deviceCodeFor } from "@/app-ui/codes";
 import { daysLeft, type LicencePlan } from "@/app-ui/licence-status";
 import { wordFor } from "@/builder/admin/copy";
 import { Devices, type DeviceRow } from "@/builder/admin/devices";
+import { readWithAppVersion } from "@/builder/licence/app-version";
 import { adminGate } from "@/builder/admin/guard";
 import { adminWords } from "@/builder/admin/language";
 import { LicenceControls } from "@/builder/admin/licence-controls";
@@ -82,11 +83,16 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
       .select("id, business_id, plan, status, starts_at, ends_at, created_at, grace_days, gift")
       .eq("business_id", business.id)
       .order("created_at", { ascending: false }),
-    supabase
-      .from("devices")
-      .select("business_id, device_id, name, platform, role, status, last_seen, fingerprint")
-      .eq("business_id", business.id)
-      .order("last_seen", { ascending: false }),
+    readWithAppVersion("business_id, device_id, name, platform, role, status, last_seen, fingerprint", (columns) =>
+      supabase
+        .from("devices")
+        .select(columns)
+        .eq("business_id", business.id)
+        .order("last_seen", { ascending: false })
+        .returns<
+          { business_id: string; device_id: string; name: string | null; platform: string | null; role: string; status: string; last_seen: string; fingerprint: unknown; app_version?: string | null }[]
+        >()
+    ),
     supabase
       .from("payments")
       .select("id, plan, expected_amount, status, created_at")
@@ -134,6 +140,7 @@ export default async function ClientPage(props: { params: Promise<{ id: string }
       role: device.role,
       status: device.status,
       lastSeen: device.last_seen,
+      appVersion: device.app_version ?? null,
       tester: isTesterDevice(
         { deviceId: device.device_id, fingerprint: (device.fingerprint as Fingerprint | null) ?? null },
         testers,
