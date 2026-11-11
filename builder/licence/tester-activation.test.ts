@@ -142,6 +142,7 @@ vi.mock("@/builder/licence/activation-token", () => ({
   claimActivationToken: async () => ({ ok: false }),
   claimNearbyToken: async () => ({ ok: false, reason: "none" }),
   forgetPlace: async () => {},
+  forgetDownloadsOf: async () => {},
   placeOfRequest: async () => null,
   releaseActivationToken: async () => {},
 }));

@@ -2,6 +2,7 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { hashToken } from "./devices";
+import { shopDownloaded, type Here } from "./nearby";
 import { addressFrom, placeHash } from "./place";
 
 /*
@@ -68,12 +69,19 @@ export type NearbyClaim =
   | { ok: true; id: string; businessId: string }
   | { ok: false; reason: "none" | "ambiguous" };
 
+/* What the computer asking is already known for, asked only when two shops are waiting (nearby.ts). */
+export type NearbyAsker = {
+  open: string | null;
+  held: (shops: string[]) => Promise<string[]>;
+  newestWins: () => Promise<boolean>;
+};
+
 /*
- * The software, started for the first time, asking whether it was downloaded
- * from where it stands. Only a token made from the same connection, for the
- * same system, in the last few hours, and only when those tokens all belong
- * to one shop: two shops downloaded from one connection, a café's Wi-Fi for
- * one, and neither is guessed at. The software then asks for the serial.
+ * The software asking whether it was downloaded from where it stands. Only a
+ * token made from the same connection, for the same system, in the last few
+ * hours. One shop waiting is that shop. With two, a shop this computer
+ * already runs steps aside for the other one; two shops it has never seen
+ * are not guessed at (a café's Wi-Fi), and the software asks for the serial.
  */
 export async function claimNearbyToken(
   supabase: SupabaseClient,
@@ -81,7 +89,8 @@ export async function claimNearbyToken(
   platform: Platform,
   deviceId: string,
   withinHours: number,
-  now = new Date()
+  now = new Date(),
+  asker: NearbyAsker | null = null
 ): Promise<NearbyClaim> {
   const since = new Date(now.getTime() - withinHours * MS_IN_AN_HOUR).toISOString();
   const { data } = await supabase
@@ -95,14 +104,22 @@ export async function claimNearbyToken(
     .order("created_at", { ascending: false });
 
   const rows = (data ?? []) as { id: string; business_id: string }[];
-  const shops = new Set(rows.map((row) => row.business_id));
-  if (shops.size === 0) return { ok: false, reason: "none" };
-  if (shops.size > 1) return { ok: false, reason: "ambiguous" };
+  const shops = [...new Set(rows.map((row) => row.business_id))];
+  if (shops.length === 0) return { ok: false, reason: "none" };
+
+  let meant: string | "none" | "ambiguous" = shops[0];
+  if (shops.length > 1) {
+    const here: Here = { open: asker?.open ?? null, held: asker ? await asker.held(shops) : [] };
+    meant = shopDownloaded(shops, here, false);
+    if (meant === "ambiguous" && asker && (await asker.newestWins())) meant = shopDownloaded(shops, here, true);
+  }
+  const row = rows.find((one) => one.business_id === meant);
+  if (!row) return { ok: false, reason: "ambiguous" };
 
   const { data: taken } = await supabase
     .from("activation_tokens")
     .update({ used_at: now.toISOString(), used_device: deviceId })
-    .eq("id", rows[0].id)
+    .eq("id", row.id)
     .is("used_at", null)
     .select("id, business_id")
     .maybeSingle();
@@ -115,6 +132,27 @@ export async function claimNearbyToken(
 /* Once spent for good, the mark of where it came from has done its work. */
 export async function forgetPlace(supabase: SupabaseClient, id: string): Promise<void> {
   await supabase.from("activation_tokens").update({ place_hash: null }).eq("id", id);
+}
+
+/*
+ * A shop opened on a computer by its serial or its link, on the connection it
+ * was downloaded from: the download has done its work too. Its mark is taken
+ * off, so it does not stand beside the next shop built on this connection
+ * and make that one a question nobody can answer.
+ */
+export async function forgetDownloadsOf(
+  supabase: SupabaseClient,
+  businessId: string,
+  place: string,
+  platform: Platform
+): Promise<void> {
+  await supabase
+    .from("activation_tokens")
+    .update({ place_hash: null })
+    .eq("business_id", businessId)
+    .eq("place_hash", place)
+    .is("used_at", null)
+    .or(`platform.eq.${platform},platform.is.null`);
 }
 
 export type TokenClaim =

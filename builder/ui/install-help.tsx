@@ -20,5 +20,15 @@ export function InstallHelp({ copy, first }: { copy: BuilderCopy; first: "mac" |
       <p className="mt-1 text-base leading-relaxed text-muted-foreground">{copy.serial.windowsWarning}</p>
     </div>
   );
-  return <div className="space-y-4">{first === "mac" ? [mac, windows] : [windows, mac]}</div>;
+  /*
+   * A computer that has OUAQT already needs no second install: the software
+   * there asks about the shop just downloaded. Said because a Mac owner who
+   * installs again and keeps both ends up with "OUAQT 2", "OUAQT 3".
+   */
+  const already = (
+    <p key="already" className="text-base leading-relaxed text-muted-foreground">
+      {copy.serial.alreadyInstalled}
+    </p>
+  );
+  return <div className="space-y-4">{first === "mac" ? [mac, windows, already] : [windows, mac, already]}</div>;
 }

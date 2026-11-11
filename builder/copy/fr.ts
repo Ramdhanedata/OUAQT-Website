@@ -265,6 +265,8 @@ export const fr = {
       "Si le Mac refuse encore de l'ouvrir : ouvrez Réglages Système, puis Confidentialité et sécurité, et cliquez sur « Ouvrir quand même ».",
     onMac: "Sur Mac",
     onWindows: "Sur Windows",
+    alreadyInstalled:
+      "OUAQT est déjà sur cet ordinateur ? Inutile de l'installer une deuxième fois : cliquez sur Télécharger, puis ouvrez OUAQT. Il vous propose d'ouvrir ce commerce.",
   },
 
   install: {

@@ -256,6 +256,8 @@ export const en: BuilderCopy = {
     macWarningStill: "If the Mac still refuses to open it: open System Settings, then Privacy & Security, and click \"Open Anyway\".",
     onMac: "On a Mac",
     onWindows: "On Windows",
+    alreadyInstalled:
+      "OUAQT is already on this computer? No need to install it a second time: click Download, then open OUAQT. It offers to open this business.",
   },
 
   install: {

@@ -13,7 +13,7 @@ import { serialFor, setupFor } from "@/builder/licence/setup";
 import { claimTrial, testerDevices, tradesOfShopRow } from "@/builder/licence/trial-claim";
 import { isTesterDevice, sameTrade } from "@/builder/licence/trial";
 import { holderOf, passOf, rememberInstall } from "@/builder/licence/tester-pass";
-import { claimActivationToken, claimNearbyToken, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
+import { claimActivationToken, claimNearbyToken, forgetDownloadsOf, forgetPlace, placeOfRequest, releaseActivationToken } from "@/builder/licence/activation-token";
 import { trialEnd } from "@/builder/licence/status";
 import { hashSerial, normaliseSerial } from "@/builder/serial/serial";
 import { sameMachine, type MachineMark } from "@/app-ui/licence-file";
@@ -108,11 +108,36 @@ export async function POST(request: Request) {
   if (input.data.nearby && !computer) {
     return NextResponse.json({ error: "no_nearby" }, { status: 404 });
   } else if (input.data.nearby && computer) {
-    /* Never a guess: one shop downloaded from this connection for this system, or the serial. */
+    /*
+     * Never a guess between strangers: one shop downloaded from this
+     * connection for this system, or the serial. A shop this computer
+     * already runs is no stranger, and steps aside for the one downloaded
+     * after it (builder/licence/nearby.ts).
+     */
     const secrets = await getPrivateSettings();
     const place = await placeOfRequest(request);
     if (!secrets || !place) return NextResponse.json({ error: "no_nearby" }, { status: 404 });
-    const claim = await claimNearbyToken(supabase, place, computer, input.data.deviceId, secrets.activation_nearby_hours);
+    const mark: MachineMark | null = input.data.fingerprint
+      ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
+      : null;
+    const parts = secrets.trial_fingerprint_parts_to_match;
+    const claim = await claimNearbyToken(supabase, place, computer, input.data.deviceId, secrets.activation_nearby_hours, new Date(), {
+      open: input.data.expectBusinessId ?? null,
+      held: async (shops) => {
+        const { data: theirs } = await supabase.from("devices").select("business_id, device_id, fingerprint").in("business_id", shops).eq("status", "active");
+        return (theirs ?? [])
+          .filter((one) => {
+            if (one.device_id === input.data.deviceId) return true;
+            const known = one.fingerprint as MachineMark | null;
+            /* Only parts both report can match: two empty marks are not the same machine. */
+            const shared = known && mark ? (["board", "disk", "machine"] as const).filter((part) => known[part] && mark[part]).length : 0;
+            return shared > 0 && sameMachine(known as MachineMark, mark as MachineMark, parts);
+          })
+          .map((one) => one.business_id as string);
+      },
+      /* OUAQT's own test devices download shop after shop: the last one built is the one meant. */
+      newestWins: async () => isTesterDevice({ deviceId: input.data.deviceId, fingerprint: mark }, await testerDevices(supabase), parts),
+    });
     if (!claim.ok) {
       return NextResponse.json({ error: claim.reason === "ambiguous" ? "nearby_ambiguous" : "no_nearby" }, { status: claim.reason === "ambiguous" ? 409 : 404 });
     }
@@ -481,5 +506,10 @@ export async function POST(request: Request) {
      */
     if (tokenId && !succeeded) await releaseActivationToken(supabase, tokenId);
     if (tokenId && succeeded) await forgetPlace(supabase, tokenId);
+    /* Opened by serial or link on the connection it was downloaded from: that download has done its work too. */
+    if (succeeded && computer && found) {
+      const place = await placeOfRequest(request);
+      if (place) await forgetDownloadsOf(supabase, found.business_id, place, computer);
+    }
   }
 }
