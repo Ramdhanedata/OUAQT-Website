@@ -7,16 +7,16 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-d7a20c9e3203";
+const CACHE = "ouaqt-phone-dceb511fa01f";
 const FILES = [
   "./assets/cairo-arabic-BW4_w4rE.woff2",
   "./assets/cairo-latin-Br-HIwGC.woff2",
   "./assets/cairo-latin-ext-BzTkPeNP.woff2",
-  "./assets/index-DUCioWWE.js",
+  "./assets/index-BDa_FZ9J.js",
   "./assets/main-BNzl55zF.css",
-  "./assets/main-ClpBPTXG.js",
+  "./assets/main-DR-QEAMd.js",
   "./assets/pay-example-DgSWHWNK.webp",
-  "./assets/preload-CQchIP1r.js",
+  "./assets/preload-BzyL6BVE.js",
   "./assets/source-serif-4-latin-ext-iEVfbfSw.woff2",
   "./assets/source-serif-4-latin-l1vr9vou.woff2",
   "./assets/sqlite3-Con_VOcu.wasm",
@@ -66,8 +66,14 @@ const FILES = [
   "./manifest.webmanifest"
 ];
 
+/*
+ * A new version takes over as soon as its files are here, rather than waiting
+ * for every window of the app to close, which on a phone may never happen.
+ * The page already open keeps running as it is; keepFilesOnPhone in
+ * web/phone/main.ts decides when it is reloaded onto the new one.
+ */
 self.addEventListener("install", (event) => {
-  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(FILES)));
+  event.waitUntil(caches.open(CACHE).then((cache) => cache.addAll(FILES)).then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", (event) => {
