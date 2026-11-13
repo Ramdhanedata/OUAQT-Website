@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { formatMoney, type AppLanguage } from "@/app-ui";
+import { type AppLanguage } from "@/app-ui";
 import type { BuilderCopy } from "@/builder/copy";
 import { browserClient } from "@/builder/db/client";
 import { appName, type PaymentApp, type PayTo } from "@/builder/payment/apps";
@@ -149,12 +149,12 @@ export function Pay({
       <div className="rounded-xl border border-border p-4">
         <p className="text-base text-muted-foreground">{copy.pay.amount}</p>
         <p className="mt-1 text-2xl font-semibold text-foreground">
-          <bdi dir="ltr">{formatMoney(price.amount, language)}</bdi>
+          <bdi dir="ltr">{wholeMru(price.amount)}</bdi>
         </p>
         {monthly != null && monthly !== price.amount ? (
           <p className="mt-1 text-base text-muted-foreground">
             {fill(copy.pay.perMonth as string, {
-              amount: formatMoney(monthly, language),
+              amount: wholeMru(monthly),
             })}
           </p>
         ) : null}
@@ -162,7 +162,7 @@ export function Pay({
           <p className="mt-2 text-base text-muted-foreground">
             {copy.pay.wasPrice}{" "}
             <s>
-              <bdi dir="ltr">{formatMoney(price.standard, language)}</bdi>
+              <bdi dir="ltr">{wholeMru(price.standard)}</bdi>
             </s>
           </p>
         ) : null}
@@ -172,11 +172,12 @@ export function Pay({
         <div role="group" aria-label={copy.pay.duration as string}>
           <p className="text-base font-medium text-foreground">{copy.pay.duration}</p>
           <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-3">
-            {prices.map((one) => (
+            {/* Shortest first, the year last, as an owner reads them (Adel asked for it). */}
+            {[...prices].reverse().map((one) => (
               <ChoiceButton
                 key={one.plan}
                 selected={one.plan === plan}
-                note={one.amount != null ? formatMoney(one.amount, language) : undefined}
+                note={one.amount != null ? wholeMru(one.amount) : undefined}
                 onClick={() => {
                   setPlan(one.plan);
                   setRefused(null);
@@ -392,7 +393,7 @@ export function SendScreenshot({
 
   const picked = priced.find((one) => one.plan === length) ?? priced[0];
   const amount = fill(copy.pay.planAmount as string, {
-    amount: formatMoney(picked.amount as number, language),
+    amount: wholeMru(picked.amount as number),
     plan: lengthName(copy, picked.plan),
   });
   const pickedMonthly = perMonthOf(picked.plan, picked.amount as number);
@@ -464,11 +465,12 @@ export function SendScreenshot({
           <div role="group" aria-label={copy.pay.duration as string} className="mt-3">
             <p className="text-base text-muted-foreground">{copy.pay.duration}</p>
             <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {priced.map((one) => (
+              {/* Shortest first, the year last, as an owner reads them (Adel asked for it). */}
+              {[...priced].reverse().map((one) => (
                 <ChoiceButton
                   key={one.plan}
                   selected={one.plan === picked.plan}
-                  note={formatMoney(one.amount as number, language)}
+                  note={wholeMru(one.amount as number)}
                   onClick={() => setLength(one.plan)}
                 >
                   {lengthName(copy, one.plan)}
@@ -477,7 +479,7 @@ export function SendScreenshot({
             </div>
             {pickedMonthly != null && pickedMonthly !== picked.amount ? (
               <p className="mt-2 text-base text-muted-foreground">
-                {fill(copy.pay.perMonth as string, { amount: formatMoney(pickedMonthly, language) })}
+                {fill(copy.pay.perMonth as string, { amount: wholeMru(pickedMonthly) })}
               </p>
             ) : null}
           </div>
@@ -494,6 +496,19 @@ export function SendScreenshot({
       </div>
     </div>
   );
+}
+
+/*
+ * An amount as an owner writes it in his payment app: whole ouguiyas, no
+ * cents, no spaces, "1300 MRU" (Adel, 2026-11-13). Cents, never charged, are
+ * kept only if an amount ever has them.
+ */
+const MINOR_IN_MRU = 100; // not-a-rule: an ouguiya is 100 of the smallest unit
+
+function wholeMru(minor: number): string {
+  const cents = Math.abs(minor % MINOR_IN_MRU);
+  /* Kept left to right inside Arabic text, so it reads "1300 MRU" and never "MRU 1300". */
+  return `\u2066${Math.trunc(minor / MINOR_IN_MRU)}${cents ? `,${String(cents).padStart(2, "0")}` : ""}\u00a0MRU\u2069`;
 }
 
 /* "6 mois", "1 an": a length as the owner reads it. A year when the server did not say. */
@@ -534,7 +549,7 @@ export function PaymentReceived({
   serial?: string | null;
 }) {
   const lines: [string, string][] = [];
-  if (read?.amount != null) lines.push([copy.pay.readAmount as string, formatMoney(read.amount, language)]);
+  if (read?.amount != null) lines.push([copy.pay.readAmount as string, wholeMru(read.amount)]);
   if (read?.date) {
     lines.push([
       copy.pay.readDate as string,
@@ -611,9 +626,9 @@ function Refund({
   reference: string | null;
 }) {
   const words = {
-    sent: formatMoney(sent, language),
-    extra: formatMoney(extra, language),
-    price: formatMoney(sent - extra, language),
+    sent: wholeMru(sent),
+    extra: wholeMru(extra),
+    price: wholeMru(sent - extra),
     plan: lengthName(copy, plan),
     serial: serial ?? "",
     reference: reference ?? "",
@@ -641,7 +656,7 @@ function explain(
   failures: CheckFailure[],
   language: AppLanguage
 ): string[] {
-  const money = (minor: unknown) => formatMoney(Number(minor ?? 0), language).replace(" MRU", "");
+  const money = (minor: unknown) => wholeMru(Number(minor ?? 0)).replace(" MRU", "");
   /* One price, or every price it could have been: "15 000 or 7 500". */
   const amounts = (minor: unknown) => (Array.isArray(minor) ? anyOf(minor.map(money), language) : money(minor));
   const day = (iso: unknown) => new Date(`${String(iso)}T00:00:00Z`).toLocaleDateString(language, { timeZone: "UTC" });

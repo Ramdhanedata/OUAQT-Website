@@ -18,6 +18,9 @@ const payTo = [{ app: "bankily" as const, number: "38087272" }];
 const text = (element: ReturnType<typeof createElement>) =>
   renderToStaticMarkup(element)
     .replace(/<[^>]+>/g, " ")
+    /* The marks that keep an amount left to right in Arabic are not words. */
+    .replace(/[\u2066-\u2069]/g, "")
+    .replace(/\u00a0/g, " ")
     .replace(/&#x27;/g, "'")
     .replace(/&amp;/g, "&")
     .replace(/ | /g, " ")
@@ -34,15 +37,20 @@ const allFive = [
 ];
 
 describe("the screenshot page, for an owner who has not paid yet", () => {
-  it("offers every priced length, each with its amount, the year first", () => {
+  it("offers every priced length, each with its amount, one month first and the year last", () => {
     const shown = text(
       createElement(SendScreenshot, { copy: fr, language: "fr", serial: "BQ46Y7K8", prices: allFive, payTo, onSent: () => {} })
     );
     for (const label of ["1 an", "6 mois", "3 mois", "2 mois", "1 mois"]) expect(shown).toContain(label);
-    for (const amount of ["15 000", "7 500", "4 500", "3 200", "1 700"]) expect(shown).toContain(amount);
+    for (const amount of ["15000 MRU", "7500 MRU", "4500 MRU", "3200 MRU", "1700 MRU"]) expect(shown).toContain(amount);
+    const at = (label: string) => shown.indexOf(label);
+    expect(at("1 mois")).toBeLessThan(at("2 mois"));
+    expect(at("2 mois")).toBeLessThan(at("3 mois"));
+    expect(at("3 mois")).toBeLessThan(at("6 mois"));
+    expect(at("6 mois")).toBeLessThan(at("1 an"));
     expect(shown).toContain("Payer pour");
     /* Until he picks, it says what a year costs. */
-    expect(shown).toMatch(/Envoyez 15 000(,00)? MRU pour 1 an au 38087272/);
+    expect(shown).toMatch(/Envoyez 15000 MRU pour 1 an au 38087272/);
   });
 
   it("leaves out a length nobody has priced", () => {
@@ -66,7 +74,7 @@ describe("the screenshot page, for an owner who has not paid yet", () => {
       createElement(SendScreenshot, { copy: fr, language: "fr", serial: "BQ46Y7K8", prices: [price("annual", 1500000)], payTo, onSent: () => {} })
     );
     expect(shown).not.toContain("Payer pour");
-    expect(shown).toMatch(/Envoyez 15 000(,00)? MRU pour 1 an/);
+    expect(shown).toMatch(/Envoyez 15000 MRU pour 1 an/);
   });
 });
 
