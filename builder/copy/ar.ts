@@ -427,6 +427,7 @@ export const ar: BuilderCopy = {
     uploadHeading: "أرسل صورة شاشة دفعك",
     uploadIntro: "اختر صورة شاشة التأكيد. نتحقق منها فورا: المبلغ يحدد المدة التي دفعت لها.",
     notPaidTitle: "لم تدفع بعد؟",
+    otherApps: "أي من التطبيقات الأخرى",
     notPaidBody: "أرسل {amounts} إلى الرقم {number} عبر {apps}. ثم التقط صورة شاشة التأكيد وأرسلها هنا.",
     planAmount: "{amount} مقابل {plan}",
     failAmountEither: "المبلغ في الصورة هو {found} MRU، ويجب أن يكون بالضبط {expected} MRU.",

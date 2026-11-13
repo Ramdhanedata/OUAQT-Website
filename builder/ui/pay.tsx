@@ -486,7 +486,8 @@ export function SendScreenshot({
           {fill(copy.pay.notPaidBody as string, {
             amounts: amount,
             number: [...new Set(payTo.map((one) => one.number))].join(" / "),
-            apps: anyOf(payTo.map((one) => appName(one.app, language)), language),
+            /* Any app that sends to the number will do: the ones named, then "or any other" (Adel, 2026-11-13). */
+            apps: anyOf([...payTo.map((one) => appName(one.app, language)), copy.pay.otherApps as string], language),
             serial,
           })}
         </p>

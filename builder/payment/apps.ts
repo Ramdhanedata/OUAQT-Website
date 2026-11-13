@@ -8,7 +8,7 @@ import type { AppLanguage } from "@/app-ui";
  * picks: send the amount to the number, take a screenshot, send it here.
  */
 
-export const PAYMENT_APPS = ["bankily", "masrvi", "bimbank", "sedad", "click"] as const;
+export const PAYMENT_APPS = ["bankily", "masrvi", "sedad", "bimbank", "click"] as const;
 
 export type PaymentApp = (typeof PAYMENT_APPS)[number];
 
@@ -20,8 +20,8 @@ export function isPaymentApp(app: unknown): app is PaymentApp {
 const NAMES: Record<PaymentApp, { latin: string; arabic: string }> = {
   bankily: { latin: "Bankily", arabic: "بنكيلي" },
   masrvi: { latin: "Masrvi", arabic: "مصرفي" },
-  bimbank: { latin: "BimBank", arabic: "بيم بنك" },
-  sedad: { latin: "SEDAD", arabic: "سداد" },
+  sedad: { latin: "SEDAD", arabic: "السداد" },
+  bimbank: { latin: "BimBank", arabic: "بيم بانك" },
   click: { latin: "Click", arabic: "كليك" },
 };
 

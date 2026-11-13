@@ -412,6 +412,7 @@ export const en: BuilderCopy = {
     uploadHeading: "Send the screenshot of your payment",
     uploadIntro: "Choose the screenshot of the confirmation. We check it straight away: the amount says how long you paid for.",
     notPaidTitle: "Not paid yet?",
+    otherApps: "any other app",
     notPaidBody: "Send {amounts} to {number} from {apps}. Then take a screenshot of the confirmation and send it here.",
     planAmount: "{amount} for {plan}",
     failAmountEither: "The amount on the screenshot is {found} MRU. It must be exactly {expected} MRU.",

@@ -92,13 +92,14 @@ export const pricing: PriceBook = {
  *
  * The month (1 300), two months (2 600), three months (3 900), an extra
  * device (3 000, one price) and the setup visit (5 000) are Adel's figures of
- * 2026-11-06 (migrations 0035, 0036, 0038).
+ * 2026-11-06 (migrations 0035, 0036, 0038). Two months at 2 300 and three
+ * at 3 500 are the launch prices he set in the admin settings by 2026-11-13.
  */
 const builderList: Record<Plan, { standard: number | null; launch: number | null }> = {
   annual: pricing.annualLicence,
   semiannual: { standard: 9_000, launch: 7_500 },
-  quarterly: { standard: 3_900, launch: null },
-  bimonthly: { standard: 2_600, launch: null },
+  quarterly: { standard: 3_900, launch: 3_500 },
+  bimonthly: { standard: 2_600, launch: 2_300 },
   monthly: { standard: 1_300, launch: null },
   perpetual: pricing.perpetualLicence,
   extra_device: { standard: 3_000, launch: null },

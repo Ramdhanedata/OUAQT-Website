@@ -423,6 +423,7 @@ export const fr = {
     uploadHeading: "Envoyez la capture d'écran de votre paiement",
     uploadIntro: "Choisissez la capture de la confirmation. Nous la vérifions tout de suite : le montant dit pour combien de temps vous avez payé.",
     notPaidTitle: "Pas encore payé ?",
+    otherApps: "toute autre application",
     notPaidBody: "Envoyez {amounts} au {number} depuis {apps}. Puis faites une capture d'écran de la confirmation et envoyez-la ici.",
     planAmount: "{amount} pour {plan}",
     failAmountEither: "Le montant sur la capture est {found} MRU. Il doit être exactement {expected} MRU.",

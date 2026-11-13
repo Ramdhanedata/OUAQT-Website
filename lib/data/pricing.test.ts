@@ -19,9 +19,10 @@ describe("a price on the marketing pages, with no settings", () => {
     expect(shownPrice("setup_visit", null, true).amount).toBe(500000);
   });
 
-  it("shows three months at 3 900, one price, what three single months cost (Adel, 2026-11-06)", () => {
-    expect(shownPrice("quarterly", null, true)).toEqual({ plan: "quarterly", amount: 390000, standard: 390000, launch: false });
-    expect(shownPrice("quarterly", null, true).amount).toBe(3 * (shownPrice("monthly", null, true).amount as number));
+  it("shows three months at 3 500 and two at 2 300 for launch, 3 900 and 2 600 standard (Adel, 2026-11-13)", () => {
+    expect(shownPrice("quarterly", null, true)).toEqual({ plan: "quarterly", amount: 350000, standard: 390000, launch: true });
+    expect(shownPrice("bimonthly", null, true)).toEqual({ plan: "bimonthly", amount: 230000, standard: 260000, launch: true });
+    expect(shownPrice("quarterly", null, false).amount).toBe(390000);
   });
 
   it("covers every length a licence is paid for", () => {
