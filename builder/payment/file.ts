@@ -122,6 +122,7 @@ export async function filePayment(
     referenceAlreadyUsed: Boolean(sameReference),
     imageAlreadyUsed: Boolean(sameImage),
     now: new Date(),
+    maxAgeDays: secrets.payment_max_age_days,
   });
 
   const { data: payment, error } = await admin

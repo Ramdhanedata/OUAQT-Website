@@ -122,6 +122,7 @@ export async function readAgain(admin: SupabaseClient, businessId: string, now =
     referenceAlreadyUsed: Boolean(sameReference),
     imageAlreadyUsed: false,
     now: new Date(payment.created_at),
+    maxAgeDays: secrets.payment_max_age_days,
   });
   const confirms = confirmsAlone(outcome, extracted);
 

@@ -71,6 +71,8 @@ export function sameNumber(a: string, b: string): boolean {
   return left.endsWith(right) || right.endsWith(left);
 }
 
+const DAY_MS = 86_400_000; // not-a-rule: a day in milliseconds
+
 /* Today as the owner's apps write it: Mauritania keeps UTC all year. */
 function today(now: Date): string {
   return now.toISOString().slice(0, 10);
@@ -91,6 +93,11 @@ export function checkPayment(input: {
   /** OUAQT's number on the app he chose. */
   payToNumber: string;
   now: Date;
+  /*
+   * How many days old the screenshot may be (payment_max_age_days): paid late
+   * at night and sent in the morning is still paid. 0 or none: today only.
+   */
+  maxAgeDays?: number;
   extracted: Extracted;
   referenceAlreadyUsed: boolean;
   imageAlreadyUsed: boolean;
@@ -120,9 +127,10 @@ export function checkPayment(input: {
     failures.push({ code: "wrong_recipient", expected: input.payToNumber, found: read.recipient });
   }
 
-  /* Today's date. */
+  /* Today's date, or a day in the last few: never one still to come. */
+  const earliest = today(new Date(input.now.getTime() - Math.max(0, input.maxAgeDays ?? 0) * DAY_MS));
   if (!read.date) failures.push({ code: "date_unread" });
-  else if (read.date !== today(input.now)) failures.push({ code: "wrong_date", expected: today(input.now), found: read.date });
+  else if (read.date > today(input.now) || read.date < earliest) failures.push({ code: "wrong_date", expected: today(input.now), found: read.date });
 
   /* Exactly the price of the plan he chose, or at least the smallest of those on offer. */
   const expected = input.expectedAmounts.length === 1 ? input.expectedAmounts[0] : input.expectedAmounts;

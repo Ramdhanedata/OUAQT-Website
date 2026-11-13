@@ -29,8 +29,9 @@ export function decidePayment(input: {
   extracted: Extracted;
   referenceAlreadyUsed: boolean;
   imageAlreadyUsed: boolean;
-  /* The day the payment was sent: its screenshot must show that day. */
+  /* The day the payment was sent: its screenshot must show that day, or one of the days before it allowed. */
   now: Date;
+  maxAgeDays?: number;
 }): { price: Price; payTo: PayTo; outcome: PaymentDecision; refundDue: number } {
   const { offered, extracted } = input;
   const amountRead = extracted?.amountMru != null ? toMinor(extracted.amountMru) : null;
@@ -45,6 +46,7 @@ export function decidePayment(input: {
     atLeast: !input.chosenPlan,
     payToNumber: payTo.number,
     now: input.now,
+    maxAgeDays: input.maxAgeDays,
     extracted,
     referenceAlreadyUsed: input.referenceAlreadyUsed,
     imageAlreadyUsed: input.imageAlreadyUsed,

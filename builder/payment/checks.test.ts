@@ -63,6 +63,13 @@ describe("the three rules", () => {
     expect(codes(right, { payToNumber: "44000000" })).toEqual(["wrong_recipient"]);
   });
 
+  it("takes a screenshot from the last days allowed, and never one from tomorrow", () => {
+    expect(codes({ ...right, date: "2026-09-24" }, { maxAgeDays: 7 })).toEqual([]);
+    expect(codes({ ...right, date: "2026-09-18" }, { maxAgeDays: 7 })).toEqual([]);
+    expect(codes({ ...right, date: "2026-09-17" }, { maxAgeDays: 7 })).toEqual(["wrong_date"]);
+    expect(codes({ ...right, date: "2026-09-26" }, { maxAgeDays: 7 })).toEqual(["wrong_date"]);
+  });
+
   it("wants today's date", () => {
     expect(codes({ ...right, date: "2026-09-24" })).toEqual(["wrong_date"]);
     expect(codes({ ...right, date: "2026-09-26" })).toEqual(["wrong_date"]);
