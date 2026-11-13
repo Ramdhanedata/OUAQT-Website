@@ -7,15 +7,15 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-12144ba1c716";
+const CACHE = "ouaqt-phone-b091d225636b";
 const FILES = [
   "./assets/cairo-arabic-BW4_w4rE.woff2",
   "./assets/cairo-latin-Br-HIwGC.woff2",
   "./assets/cairo-latin-ext-BzTkPeNP.woff2",
-  "./assets/index-CfjDYWi-.js",
-  "./assets/main-CXM4pOEM.js",
+  "./assets/index-jbdIhjwK.js",
+  "./assets/main-BChlcikM.js",
   "./assets/main-DveZv5en.css",
-  "./assets/preload-2gh-1C1c.js",
+  "./assets/preload-D0GIMl3o.js",
   "./assets/source-serif-4-latin-ext-iEVfbfSw.woff2",
   "./assets/source-serif-4-latin-l1vr9vou.woff2",
   "./assets/sqlite3-Con_VOcu.wasm",
