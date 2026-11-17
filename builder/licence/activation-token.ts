@@ -86,22 +86,25 @@ export type NearbyAsker = {
 export async function claimNearbyToken(
   supabase: SupabaseClient,
   place: string,
-  platform: Platform,
+  /* A phone takes only a mark left for any system: the one its link leaves when it opens in the phone's browser. */
+  platform: Platform | "phone",
   deviceId: string,
   withinHours: number,
   now = new Date(),
   asker: NearbyAsker | null = null
 ): Promise<NearbyClaim> {
   const since = new Date(now.getTime() - withinHours * MS_IN_AN_HOUR).toISOString();
-  const { data } = await supabase
+  const query = supabase
     .from("activation_tokens")
     .select("id, business_id, created_at")
     .eq("place_hash", place)
     .is("used_at", null)
     .gt("expires_at", now.toISOString())
-    .gt("created_at", since)
-    .or(`platform.eq.${platform},platform.is.null`)
-    .order("created_at", { ascending: false });
+    .gt("created_at", since);
+  const { data } = await (platform === "phone" ? query.is("platform", null) : query.or(`platform.eq.${platform},platform.is.null`)).order(
+    "created_at",
+    { ascending: false }
+  );
 
   const rows = (data ?? []) as { id: string; business_id: string }[];
   const shops = [...new Set(rows.map((row) => row.business_id))];

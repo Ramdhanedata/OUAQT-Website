@@ -103,11 +103,14 @@ export async function POST(request: Request) {
   let tokenId: string | null = null;
   let found: { business_id: string } | null = null;
 
-  /* A phone opens from a link with its serial; "downloaded from here" is a computer's question. */
+  /*
+   * "Was I opened from here?", from a computer after its download, or from
+   * an iPhone's home-screen icon, whose storage is not Safari's and so may
+   * not have the link's serial: the link, opened in Safari, left a mark on
+   * this connection for it (2026-11-17, no serial to type).
+   */
   const computer = input.data.platform === "phone" ? null : input.data.platform;
-  if (input.data.nearby && !computer) {
-    return NextResponse.json({ error: "no_nearby" }, { status: 404 });
-  } else if (input.data.nearby && computer) {
+  if (input.data.nearby) {
     /*
      * Never a guess between strangers: one shop downloaded from this
      * connection for this system, or the serial. A shop this computer
@@ -121,7 +124,7 @@ export async function POST(request: Request) {
       ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
       : null;
     const parts = secrets.trial_fingerprint_parts_to_match;
-    const claim = await claimNearbyToken(supabase, place, computer, input.data.deviceId, secrets.activation_nearby_hours, new Date(), {
+    const claim = await claimNearbyToken(supabase, place, computer ?? "phone", input.data.deviceId, secrets.activation_nearby_hours, new Date(), {
       open: input.data.expectBusinessId ?? null,
       held: async (shops) => {
         const { data: theirs } = await supabase.from("devices").select("business_id, device_id, fingerprint").in("business_id", shops).eq("status", "active");
