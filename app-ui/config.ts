@@ -284,11 +284,12 @@ export function coverPayers(configuration: Configuration): InsurancePayer[] {
 }
 
 /*
- * The configuration an owner has when he has answered nothing at all.
+ * The configuration every owner starts from, now that the builder asks him
+ * nothing but his trade and his shop's name (2026-11-17).
  *
- * Every question in the interview offers "Je ne sais pas", so a complete set
- * of defaults has to produce software that works. This is the floor that
- * guarantees it, and a test walks it.
+ * Every feature of his trade is on: the software covers all of it, and he
+ * uses what he needs and leaves the rest alone. A feature that is off here
+ * is one no owner can reach, since nothing in the app turns it on.
  */
 export function defaultConfiguration(
   pack: Pack,
@@ -304,7 +305,8 @@ export function defaultConfiguration(
       devices: 1,
       cashiers: "owner",
       cashClose: "daily",
-      credit: { enabled: true, limitPerCustomer: false },
+      /* A limit per customer is there for whoever wants one: left empty, a customer has none. */
+      credit: { enabled: true, limitPerCustomer: true },
       printedReceipt: true,
       lowStockAlert: true,
       /* Not asked any more: the till keeps a discount one tap away, closed until wanted. */
@@ -332,17 +334,19 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
           /* Not asked any more: a barcode reader works from the first day, and the name always does. */
           search: ["name", "barcode"],
           /*
-           * Not conventionnée until the owner says so: the till then stays
-           * exactly as it was. CNAM is the fund most pharmacies here work
-           * with, so it is the one ticked if he says yes and no more.
+           * Every pharmacy has health cover from the start, with CNAM, CNASS
+           * and any other insurer (Adel, 2026-11-17): nothing is asked in
+           * the builder any more, and a sale is "client seul" until the
+           * cashier picks a fund, so a pharmacy that is not conventionnée
+           * simply never touches it.
            */
-          insurance: { enabled: false, payers: ["cnam"] },
+          insurance: { enabled: true, payers: ["cnam", "cnass", "other"] },
         },
       };
     case "bakery":
       return {
         bakery: {
-          sellBy: ["piece"],
+          sellBy: ["piece", "weight"],
           trackProduction: true,
           preorders: true,
           deposit: true,
@@ -352,7 +356,7 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
     case "restaurant":
       return {
         restaurant: {
-          service: ["dine_in", "takeaway"],
+          service: ["dine_in", "takeaway", "delivery"],
           tables: 10, // not-a-rule: the question's own default
           openOrders: true,
           kitchen: "printed",
@@ -365,13 +369,13 @@ function featureDefaults(pack: Pack): z.infer<typeof packFeatures> {
         warehouse: {
           locations: 1,
           recordEntries: true,
-          destinations: ["customers"],
+          destinations: ["customers", "my_shops", "sites"],
           units: ["piece", "case"],
-          sellsDirect: false,
+          sellsDirect: true,
         },
       };
     case "shop":
-      return { shop: { sellBy: ["piece"], search: ["name", "barcode"], tiles: true } };
+      return { shop: { sellBy: ["piece", "weight"], search: ["name", "barcode"], tiles: true } };
     case "hotel":
       return {
         hotel: {

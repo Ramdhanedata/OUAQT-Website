@@ -39,7 +39,8 @@
       ],
       "default": [
         "dine_in",
-        "takeaway"
+        "takeaway",
+        "delivery"
       ],
       "maps_to": [
         {

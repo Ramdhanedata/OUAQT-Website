@@ -38,7 +38,9 @@
         }
       ],
       "default": [
-        "customers"
+        "customers",
+        "my_shops",
+        "sites"
       ],
       "maps_to": [
         {
@@ -55,7 +57,7 @@
         "en": "Do you also sell from the warehouse?"
       },
       "review": true,
-      "default": false,
+      "default": true,
       "maps_to": [
         {
           "path": "features.warehouse.sellsDirect"

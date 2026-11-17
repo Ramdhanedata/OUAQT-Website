@@ -157,9 +157,16 @@ describe("a single answer", () => {
     expect(filled.features.restaurant?.tables).toBe(10);
   });
 
-  it("keeps the till as it was for a pharmacy that is not conventionnée", () => {
+  it("gives a pharmacy that answered nothing every fund", () => {
     const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
-    const cases: Answers[] = [{}, { ph_insurance: false }, { ph_insurance: false, ph_insurance_payers: ["cnass"] }];
+    const filled = applyAnswers(base, interviewFor("pharmacy"), {});
+    expect(coverPayers(filled)).toEqual(["cnam", "cnass", "other"]);
+    expect(configurationSchema.safeParse(filled).success).toBe(true);
+  });
+
+  it("keeps the till as it was for a pharmacy that said no, back when the builder asked", () => {
+    const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
+    const cases: Answers[] = [{ ph_insurance: false }, { ph_insurance: false, ph_insurance_payers: ["cnass"] }];
     for (const answers of cases) {
       const filled = applyAnswers(base, interviewFor("pharmacy"), answers);
       expect(coverPayers(filled), JSON.stringify(answers)).toEqual([]);
@@ -181,10 +188,10 @@ describe("a single answer", () => {
     expect(configurationSchema.safeParse(filled).success).toBe(true);
   });
 
-  it("takes CNAM when he says yes and then does not know which fund", () => {
+  it("takes every fund when he says yes and names none", () => {
     const base = { ...defaultConfiguration("pharmacy", "fr"), business: { nameLatin: "Test" } };
     const filled = applyAnswers(base, interviewFor("pharmacy"), { ph_insurance: true });
-    expect(coverPayers(filled)).toEqual(["cnam"]);
+    expect(coverPayers(filled)).toEqual(["cnam", "cnass", "other"]);
   });
 
   it("only asks which funds once he has said yes", () => {

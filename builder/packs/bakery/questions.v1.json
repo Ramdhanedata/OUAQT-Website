@@ -30,7 +30,8 @@
         }
       ],
       "default": [
-        "piece"
+        "piece",
+        "weight"
       ],
       "maps_to": [
         {

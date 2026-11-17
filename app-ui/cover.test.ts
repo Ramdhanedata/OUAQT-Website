@@ -73,8 +73,10 @@ describe("which funds the till offers", () => {
     expect(parsed.success).toBe(false);
   });
 
-  it("starts every new pharmacy not conventionnée", () => {
-    expect(defaultConfiguration("pharmacy", "fr").features.pharmacy?.insurance?.enabled).toBe(false);
+  it("gives every new pharmacy CNAM, CNASS and any other insurer, to use or to leave alone", () => {
+    const fresh = defaultConfiguration("pharmacy", "fr");
+    expect(fresh.features.pharmacy?.insurance?.enabled).toBe(true);
+    expect(coverPayers({ ...fresh, business: { nameLatin: "Test" } })).toEqual(["cnam", "cnass", "other"]);
   });
 });
 

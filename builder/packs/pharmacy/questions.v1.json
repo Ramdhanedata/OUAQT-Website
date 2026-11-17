@@ -16,7 +16,7 @@
         "en": "If yes, each sale separates what the insurer pays from what the customer pays."
       },
       "review": true,
-      "default": false,
+      "default": true,
       "maps_to": [
         {
           "path": "features.pharmacy.insurance.enabled"
@@ -63,7 +63,9 @@
         }
       ],
       "default": [
-        "cnam"
+        "cnam",
+        "cnass",
+        "other"
       ],
       "maps_to": [
         {

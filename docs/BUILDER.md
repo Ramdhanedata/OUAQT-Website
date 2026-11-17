@@ -1,7 +1,8 @@
 # OUAQT App Builder
 
-A business owner answers questions about his shop and leaves with management
-software ready to install on the shop computer, plus a serial number. This
+A business owner chooses his trade, writes his shop's name (and, if he likes,
+its phone, address and logo) and leaves with management software ready to
+install on the shop computer or to open on his phone, plus a serial number. This
 document is for whoever picks the work up next.
 
 Status: **B5**. An owner can build his software, import the spreadsheet he
@@ -168,6 +169,20 @@ follow a redirect then. **After any change to the desktop app's screens, run
 `npm run build:phone` there too, and commit `public/app` here.**
 
 ## Questions and the AI
+
+**No question is asked any more (2026-11-17).** The builder is two steps: the
+shop (trade, name, phone, address, logo), then the software. Every shop is
+made from its trade's defaults, which are the `default` of each question in
+the files below; `createShop` still reads them through `interviewFor`, so the
+banks stay, and changing what a trade starts with is changing a default there.
+A draft from before that date keeps the answers it holds. The defaults turn
+every feature of a trade on (Adel, 2026-11-17: the software covers everything
+and the owner uses what he needs): credit with a limit per customer for whoever
+sets one; a pharmacy with CNAM, CNASS and any other insurer; a restaurant on
+the spot, takeaway and delivery; a warehouse sending to customers, its own
+shops and sites, and selling directly; a shop and a bakery by the piece and by
+weight. `featureDefaults` in `app-ui/config.ts` says the same. The one count
+nobody is asked is a restaurant's tables, which starts at ten.
 
 A pack's questions live in `builder/packs/<pack>/questions.v*.json`, validated
 by `bank.ts` at import and again by `bank.test.ts`. Adding a question is
