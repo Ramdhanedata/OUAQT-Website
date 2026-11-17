@@ -2,7 +2,6 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Laptop, Phone } from "@/components/home/devices";
-import { getBuilderCopy } from "@/builder/copy";
 import type { Dictionary } from "@/lib/i18n";
 import { type Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
@@ -78,20 +77,6 @@ export function BuilderHero({
             {home.heroSecondary}
           </a>
         </div>
-
-        {/*
-          * The owner who built his software on his phone is told to come
-          * here on the shop computer and choose this, in these words: the
-          * builder's own label, so the two never drift apart. It opens the
-          * builder with the box for the number already open.
-          */}
-        <a
-          href={`${localisedHref(lang, "builder")}?serial=1`}
-          style={rise(0.24)}
-          className="hero-enter mt-3 inline-flex min-h-[44px] items-center justify-center text-sm text-muted-foreground underline decoration-border underline-offset-4 transition-colors hover:text-foreground"
-        >
-          {getBuilderCopy(lang).code.have}
-        </a>
 
         <ul style={rise(0.28)} className="hero-enter mx-auto mt-5 flex max-w-3xl flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           {reassurance.map((line) => (

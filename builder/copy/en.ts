@@ -133,7 +133,7 @@ export const en: BuilderCopy = {
 
   account: {
     heading: "Create your account",
-    intro: "So you can find your software and your serial number from any phone.",
+    intro: "So you can find your software from any phone.",
     phone: "Your phone number",
     password: "Your password",
     passwordHelp: "At least eight characters.",
@@ -161,7 +161,7 @@ export const en: BuilderCopy = {
     macIntel: "Download for Mac with Intel chip",
     otherMacApple: "Does your Mac have an Apple chip (M1 or newer)? Download that version",
     otherMacIntel: "Does your Mac have an Intel chip? Download that version",
-    soon: "The Windows and Mac version of this software is coming soon. You can already use it on your phone. Keep your serial number.",
+    soon: "The Windows and Mac version of this software is coming soon. You can already use it on your phone.",
     onPhone: "To install it on a computer too, open {site} on that computer, choose “{have}” and type or paste this number.",
     tutorialWindows: "Watch the Windows installation video",
     tutorialMac: "Watch the Mac installation video",
@@ -392,9 +392,25 @@ export const en: BuilderCopy = {
 
   payBySerial: {
     title: "Pay my subscription",
-    heading: "Pay with your serial number",
-    intro: "Type your software's serial number. No account needed.",
-    link: "Pay with my serial number",
+    heading: "Pay my subscription",
+    intro: "Open your software and tap “Pay”: this page opens on your shop, nothing to type.",
+    link: "Pay my subscription",
+    fromApp: "To pay, open your software and tap “Pay”: this page then opens on your shop, with nothing to type. Need help? Write to us on WhatsApp.",
+  },
+
+  /* His software on another device: a link he sends himself, with the number inside it, never shown (2026-11-17). */
+  otherDevice: {
+    heading: "On another device",
+    body: "Send yourself this link and open it on the other computer or phone: your software opens there, with nothing to type.",
+    share: "Send on WhatsApp",
+    copy: "Copy the link",
+    copied: "Link copied",
+    message: "My OUAQT software: {url}",
+  },
+
+  link: {
+    unknown: "This link leads to no software. Build yours in a minute, or write to us on WhatsApp.",
+    expired: "This link has not been used for thirty days and has expired. Build your software again, or write to us on WhatsApp.",
   },
 
 };

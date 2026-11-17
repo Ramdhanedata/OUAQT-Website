@@ -242,7 +242,7 @@ export const en = {
         "These terms cover two different things. Part one is about the software you build yourself on this site. Part two is about the projects we build and install at your premises. Part three applies to both.",
       selfServePart: {
         h: "Part one: the software you build online",
-        b: "This part applies as soon as you build software on this site and receive a serial number.",
+        b: "This part applies as soon as you build software on this site.",
       },
       trial: {
         h: "The free trial",
@@ -254,7 +254,7 @@ export const en = {
       },
       payment: {
         h: "Payment",
-        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation with your serial number. When the screenshot can be read and everything on it matches, the payment can be confirmed straight away and your software opens again by itself. Otherwise we check it by hand, usually the same day. The amount sent decides the length: the longest one whose price it reaches, among one month, two months, three, six and a year. For example, an amount between the 6-month price and the year's price buys 6 months. Anything above that price is refunded to you on request, and an amount below the lowest price buys nothing and is refunded to you. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
+        b: "Payment is made from Bankily, Masrvi, BimBank, SEDAD or Click, to the number shown on this site. You send the screenshot of the confirmation from your software, which links it to your shop itself. When the screenshot can be read and everything on it matches, the payment can be confirmed straight away and your software opens again by itself. Otherwise we check it by hand, usually the same day. The amount sent decides the length: the longest one whose price it reaches, among one month, two months, three, six and a year. For example, an amount between the 6-month price and the year's price buys 6 months. Anything above that price is refunded to you on request, and an amount below the lowest price buys nothing and is refunded to you. If you are one of our first {clients} clients, the launch price applied when you signed up stays yours for {years} years, even if our prices change in the meantime.",
       },
       grace: {
         h: "If a renewal is paid late",
@@ -269,8 +269,8 @@ export const en = {
         b: "The free trial is there so you can check, before paying anything, that the software suits your business. A confirmed licence is therefore not refunded, in full or in part, including when you stop using it before it ends. Two exceptions: a payment sent twice or by mistake for the same period, and an amount above the price due. In both cases, write to us within 30 days and we send the difference back to the number it came from.",
       },
       serial: {
-        h: "Your serial number",
-        b: "Your serial number is what activates your software. Keep it within your business, the way you would a key: anyone who has it can activate a device in your name, within the limit of your licence. If you think it has got out, tell us at once. We go through the devices activated on it with you and release the ones you do not recognise.",
+        h: "Your software's link",
+        b: "Your software's link opens your shop on a new device. Keep it within your business, the way you would a key: anyone who has it can open your shop on a device, within the limit of your licence. If you think it has got out, tell us at once. We go through your shop's devices with you and release the ones you do not recognise.",
       },
       install: {
         h: "Installing on Windows and Mac",
@@ -293,7 +293,7 @@ export const en = {
         b: "We may suspend a licence that does not respect these terms. A suspended licence turns the software read-only, as at the end of a trial: everything already recorded stays visible and nothing is erased. We tell you why, on WhatsApp or by phone, and lift the suspension as soon as the situation is put right. A serious or repeated breach can end the licence, with no refund. Grounds for suspension include:",
         items: [
           "a payment screenshot that is false, altered or belongs to another payment",
-          "the serial number or the software being used by another business",
+          "the link or the software being used by another business",
           "an attempt to get round the licence: winding back the device's clock, copying the software onto a device it does not cover, or modifying it",
           "using the software for an activity the law forbids",
         ],
@@ -530,7 +530,7 @@ export const en = {
     builderStep2: "Watch it work",
     builderStep2Body: "The real software runs beside the form, in your name, while you type. You try it before you download it.",
     builderStep3: "Install and start",
-    builderStep3Body: "Download it for Windows or Mac, or open it on your phone. Your serial number activates it, and your free trial begins.",
+    builderStep3Body: "Download it for Windows or Mac, or open it on your phone. It opens straight on your shop, and your free trial begins.",
     builderCta: "Build my software",
     builderPricing: "See the prices",
 

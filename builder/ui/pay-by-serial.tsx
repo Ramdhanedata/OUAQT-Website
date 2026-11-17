@@ -7,7 +7,6 @@ import type { PayTo } from "@/builder/payment/apps";
 import type { Price } from "@/builder/payment/pricing";
 import type { Locale } from "@/lib/i18n/config";
 import { fill } from "@/lib/utils";
-import { Field } from "./fields";
 import { licenceLine, owes, type LicenceShown } from "./licence-line";
 import { PaymentReceived, SendScreenshot, type Sent } from "./pay";
 
@@ -34,13 +33,11 @@ type Lookup = {
 const COMPLETE = /^[A-Z0-9]{8}$/;
 
 export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale }) {
-  const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
   const [problem, setProblem] = useState<"unknown" | "expired" | "failed" | null>(null);
   const [wait, setWait] = useState(0);
   const [found, setFound] = useState<Lookup | null>(null);
   const [sent, setSent] = useState<Sent | null>(null);
-  const tried = useRef("");
   const result = useRef<HTMLDivElement>(null);
 
   /* Sent from a phone, the answer comes back below where he pressed: it is brought into view. */
@@ -63,8 +60,6 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
     const given = formatAsTyped(decodeURIComponent(window.location.hash.slice(1)));
     if (!COMPLETE.test(given)) return;
     window.history.replaceState(null, "", window.location.pathname + window.location.search);
-    setValue(given);
-    tried.current = given;
     void look(given);
     // Once, when the page opens.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,7 +97,7 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
       <div className="space-y-6">
         <div>
           <p className="text-base font-medium text-foreground">
-            {[name, trade].filter(Boolean).join(" · ")} <bdi dir="ltr" className="text-muted-foreground">{found.serial}</bdi>
+            {[name, trade].filter(Boolean).join(" · ")}
           </p>
           {/* Paid just now, the line that said it had stopped would say the opposite of the answer below. */}
           {sent?.confirmed ? null : (
@@ -137,40 +132,20 @@ export function PayBySerial({ copy, lang }: { copy: BuilderCopy; lang: Locale })
   }
 
   return (
+    /*
+     * Nothing to type (2026-11-17): the software's "Payer" opens this page on
+     * its own shop. Reached any other way, the page says where to find it.
+     */
     <div className="space-y-3">
-      <Field label={copy.code.label}>
-        <input
-          type="text"
-          dir="ltr"
-          value={value}
-          autoFocus
-          spellCheck={false}
-          autoComplete="off"
-          autoCapitalize="characters"
-          placeholder={copy.code.placeholder}
-          disabled={wait > 0}
-          onChange={(event) => {
-            const next = formatAsTyped(event.target.value);
-            setValue(next);
-            /* A whole number is looked up by itself, once per entry. */
-            if (COMPLETE.test(next) && next !== tried.current) {
-              tried.current = next;
-              void look(next);
-            }
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") void look(value);
-          }}
-          className="min-h-[48px] w-full rounded-lg border border-border bg-background px-4 text-lg tracking-wider text-foreground outline-none focus:border-foreground disabled:opacity-50"
-        />
-      </Field>
       {busy ? <p className="text-base text-muted-foreground" role="status">{copy.code.opening}</p> : null}
       {wait > 0 ? <p className="text-base text-muted-foreground" role="status">{fill(copy.code.wait, { seconds: wait })}</p> : null}
       {problem ? (
         <p className="text-base text-foreground" role="alert">
-          {problem === "unknown" ? copy.code.unknown : problem === "expired" ? copy.code.expired : copy.code.failed}
+          {problem === "unknown" ? copy.link.unknown : problem === "expired" ? copy.link.expired : copy.code.failed}
         </p>
-      ) : null}
+      ) : busy ? null : (
+        <p className="text-lg leading-relaxed text-foreground">{copy.payBySerial.fromApp}</p>
+      )}
     </div>
   );
 }

@@ -14,7 +14,7 @@ import { record } from "@/builder/events";
 import dynamic from "next/dynamic";
 import { LeadForm } from "./lead-form";
 import { BUSINESS_SCREENS, DETAILS_SCREEN, NAME_FIELD, StepBusiness } from "./step-business";
-import { CodeEntry, forgetOpened, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
+import { forgetOpened, numberFromLink, openFromLink, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
 import { localisedHref } from "@/lib/i18n/routes";
 import { InstallGuide } from "./install-guide";
 import { InstallTargetProvider, useInstallTarget } from "./install-target";
@@ -72,7 +72,6 @@ export function Builder({
   locale,
   enabledPacks,
   startPack,
-  askSerial,
   supportWhatsapp,
   installers,
   tutorials,
@@ -83,8 +82,6 @@ export function Builder({
   locale: Locale;
   enabledPacks: Pack[];
   startPack: Pack | null;
-  /* Sent from the home page's "I already have my serial number": the field is open. */
-  askSerial: boolean;
   supportWhatsapp: string | null;
   installers: Record<Pack, { windows: string | null; mac: string | null }>;
   tutorials: { windows: string | null; mac: string | null };
@@ -123,8 +120,22 @@ export function Builder({
     setStep(0);
   };
 
-  /* Under the trades, a quiet line; already open for the owner the home page sent here to type his number. */
-  const codeEntry = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} startOpen={askSerial} />;
+  /*
+   * His own link, opened on another computer or phone: straight to his
+   * shop's download, with the number it carries never shown. While it is
+   * looked up the page says so; a link that leads nowhere says that instead.
+   */
+  const [linkState, setLinkState] = useState<"none" | "opening" | "unknown" | "expired" | "failed">("none");
+  useEffect(() => {
+    const number = numberFromLink();
+    if (!number) return;
+    setLinkState("opening");
+    void openFromLink(number, locale).then((answer) => {
+      if (answer !== "opened") setLinkState(answer);
+    });
+    // Once, when the page opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
@@ -169,6 +180,34 @@ export function Builder({
       </a>
     </p>
   ) : null;
+
+  if (linkState !== "none") {
+    const whatsapp = supportWhatsapp ? `https://wa.me/${supportWhatsapp}` : organization.whatsappUrl;
+    return (
+      <div lang={locale}>
+        <Container className="max-w-3xl py-16 wizard:py-24">
+          {linkState === "opening" ? (
+            <p role="status" className="text-lg text-muted-foreground">{copy.code.preparing}</p>
+          ) : (
+            <div role="alert" className="space-y-6">
+              <p className="text-lg leading-relaxed text-foreground">
+                {linkState === "expired" ? copy.link.expired : linkState === "unknown" ? copy.link.unknown : copy.code.downloadFailed}
+              </p>
+              <div className="flex flex-wrap gap-3">
+                <Button type="button" variant="accent" onClick={() => setLinkState("none")} className="min-h-[48px] text-base">
+                  {copy.code.another}
+                </Button>
+                <Button href={whatsapp} variant="outline" className="min-h-[48px] text-base">
+                  <MessageCircle className="h-4 w-4" />
+                  {copy.shell.help}
+                </Button>
+              </div>
+            </div>
+          )}
+        </Container>
+      </div>
+    );
+  }
 
   if (opened?.pack) {
     const whatsapp = supportWhatsapp ? `https://wa.me/${supportWhatsapp}` : organization.whatsappUrl;
@@ -240,7 +279,6 @@ export function Builder({
 
   return (
     <Wizard
-      codeEntry={codeEntry}
       flush={draft.flush}
       copy={copy}
       locale={locale}
@@ -249,8 +287,7 @@ export function Builder({
       offline={offline}
       enabledPacks={enabledPacks}
       /* His trade came with the link: a phone opens on the shop's details, the trades one Retour away. */
-      startOnDetails={Boolean(startPack && enabledPacks.includes(startPack)) && !askSerial}
-      codeFirst={askSerial}
+      startOnDetails={Boolean(startPack && enabledPacks.includes(startPack))}
       supportWhatsapp={supportWhatsapp}
       installers={installers}
       tutorials={tutorials}
@@ -278,7 +315,6 @@ function useWide(): boolean {
 }
 
 function Wizard({
-  codeEntry,
   flush,
   copy,
   locale,
@@ -287,7 +323,6 @@ function Wizard({
   offline,
   enabledPacks,
   startOnDetails,
-  codeFirst,
   supportWhatsapp,
   installers,
   tutorials,
@@ -304,7 +339,6 @@ function Wizard({
   offline: boolean;
   enabledPacks: Pack[];
   startOnDetails: boolean;
-  codeFirst: boolean;
   supportWhatsapp: string | null;
   installers: Record<Pack, { windows: string | null; mac: string | null }>;
   tutorials: { windows: string | null; mac: string | null };
@@ -313,7 +347,6 @@ function Wizard({
   update: (patch: DraftAnswers) => void;
   saveState: SaveState;
   onStep: (step: number) => void;
-  codeEntry: React.ReactNode;
   flush: () => Promise<void>;
 }) {
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -473,8 +506,6 @@ function Wizard({
       onChangePack={() => setScreen(0)}
       showNameError={nameError}
       showPackError={packError}
-      codeEntry={codeEntry}
-      codeFirst={codeFirst}
     />
   ) : (
     <StepAccount

@@ -62,8 +62,6 @@ export default async function BuilderPage(props: Props) {
   const asked = searchParams?.pack;
   const startPack = enabled.find((name) => name === asked) ?? null;
 
-  /* ?serial=1, the way the home page links here for the owner who has his number. With no value, the slug's rewrite drops it. */
-  const askSerial = searchParams?.serial !== undefined;
 
   const dict = getDictionary(params.lang);
   const copy = getBuilderCopy(params.lang);
@@ -77,7 +75,6 @@ export default async function BuilderPage(props: Props) {
       locale={params.lang}
       enabledPacks={enabled}
       startPack={startPack}
-      askSerial={askSerial}
       supportWhatsapp={settings?.support_whatsapp ?? null}
       installers={
         Object.fromEntries(

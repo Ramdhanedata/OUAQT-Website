@@ -139,7 +139,7 @@ export const fr = {
 
   account: {
     heading: "Créez votre compte",
-    intro: "Pour retrouver votre logiciel et votre numéro de série depuis n'importe quel téléphone.",
+    intro: "Pour retrouver votre logiciel depuis n'importe quel téléphone.",
     phone: "Votre numéro de téléphone",
     password: "Votre mot de passe",
     passwordHelp: "Au moins huit caractères.",
@@ -167,7 +167,7 @@ export const fr = {
     macIntel: "Télécharger pour Mac à puce Intel",
     otherMacApple: "Votre Mac a une puce Apple (M1 ou plus récent) ? Télécharger cette version",
     otherMacIntel: "Votre Mac a une puce Intel ? Télécharger cette version",
-    soon: "La version Windows et Mac de ce logiciel arrive bientôt. Vous pouvez déjà l'utiliser sur votre téléphone. Gardez votre numéro de série.",
+    soon: "La version Windows et Mac de ce logiciel arrive bientôt. Vous pouvez déjà l'utiliser sur votre téléphone.",
     onPhone: "Pour l'installer aussi sur un ordinateur, ouvrez {site} sur cet ordinateur, choisissez « {have} » et tapez ou collez ce numéro.",
     tutorialWindows: "Voir la vidéo d'installation sur Windows",
     tutorialMac: "Voir la vidéo d'installation sur Mac",
@@ -409,9 +409,25 @@ export const fr = {
   /* Paying with the numéro de série, for an owner who never made an account. */
   payBySerial: {
     title: "Payer mon abonnement",
-    heading: "Payer avec votre numéro de série",
-    intro: "Tapez le numéro de série de votre logiciel. Aucun compte n'est nécessaire.",
-    link: "Payer avec mon numéro de série",
+    heading: "Payer mon abonnement",
+    intro: "Ouvrez votre logiciel et touchez « Payer » : cette page s'ouvre sur votre commerce, rien à taper.",
+    link: "Payer mon abonnement",
+    fromApp: "Pour payer, ouvrez votre logiciel et touchez « Payer » : cette page s'ouvre alors sur votre commerce, sans rien à taper. Besoin d'aide ? Écrivez-nous sur WhatsApp.",
+  },
+
+  /* His software on another device: a link he sends himself, with the number inside it, never shown (2026-11-17). */
+  otherDevice: {
+    heading: "Sur un autre appareil",
+    body: "Envoyez-vous ce lien et ouvrez-le sur l'autre ordinateur ou téléphone : votre logiciel s'y ouvre, sans rien taper.",
+    share: "Envoyer sur WhatsApp",
+    copy: "Copier le lien",
+    copied: "Lien copié",
+    message: "Mon logiciel OUAQT : {url}",
+  },
+
+  link: {
+    unknown: "Ce lien ne mène à aucun logiciel. Créez le vôtre en une minute, ou écrivez-nous sur WhatsApp.",
+    expired: "Ce lien n'a pas servi depuis trente jours et a expiré. Créez à nouveau votre logiciel, ou écrivez-nous sur WhatsApp.",
   },
 
 } as const;

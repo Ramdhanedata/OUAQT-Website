@@ -233,7 +233,7 @@ export const fr: Dictionary = {
         "Ces conditions couvrent deux choses différentes. La première partie concerne le logiciel que vous créez vous-même sur ce site. La deuxième concerne les projets que nous construisons et installons chez vous. La troisième vaut dans les deux cas.",
       selfServePart: {
         h: "Première partie : le logiciel que vous créez en ligne",
-        b: "Cette partie s'applique dès que vous créez un logiciel sur ce site et recevez un numéro de série.",
+        b: "Cette partie s'applique dès que vous créez un logiciel sur ce site.",
       },
       trial: {
         h: "L'essai gratuit",
@@ -245,7 +245,7 @@ export const fr: Dictionary = {
       },
       payment: {
         h: "Le paiement",
-        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous envoyez la capture d'écran de la confirmation avec votre numéro de série. Quand la capture peut être lue et que tout y correspond, le paiement peut être confirmé tout de suite et votre logiciel se rouvre de lui-même. Sinon, nous le vérifions à la main, en général le jour même. Le montant envoyé décide de la durée : la plus longue dont il atteint le prix, parmi un mois, deux mois, trois, six et un an. Par exemple, un montant compris entre le prix de 6 mois et celui d'un an achète 6 mois. Ce qui dépasse ce prix vous est remboursé sur simple demande, et un montant inférieur au prix le plus bas n'achète rien et vous est remboursé. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
+        b: "Le paiement se fait depuis Bankily, Masrvi, BimBank, SEDAD ou Click, au numéro indiqué sur ce site. Vous envoyez la capture d'écran de la confirmation depuis votre logiciel, qui la relie lui-même à votre commerce. Quand la capture peut être lue et que tout y correspond, le paiement peut être confirmé tout de suite et votre logiciel se rouvre de lui-même. Sinon, nous le vérifions à la main, en général le jour même. Le montant envoyé décide de la durée : la plus longue dont il atteint le prix, parmi un mois, deux mois, trois, six et un an. Par exemple, un montant compris entre le prix de 6 mois et celui d'un an achète 6 mois. Ce qui dépasse ce prix vous est remboursé sur simple demande, et un montant inférieur au prix le plus bas n'achète rien et vous est remboursé. Si vous faites partie de nos {clients} premiers clients, le tarif de lancement appliqué à votre inscription reste le vôtre pendant {years} ans, même si nos tarifs changent entre-temps.",
       },
       grace: {
         h: "Si le renouvellement est payé en retard",
@@ -260,8 +260,8 @@ export const fr: Dictionary = {
         b: "L'essai gratuit est là pour que vous vérifiiez, avant de payer quoi que ce soit, que le logiciel convient à votre commerce. Une licence confirmée n'est donc pas remboursée, ni en tout ni en partie, y compris si vous cessez de l'utiliser avant son terme. Deux exceptions : un paiement envoyé deux fois ou par erreur pour la même période, et un montant supérieur au prix dû. Dans ces deux cas, écrivez-nous dans les 30 jours et nous renvoyons la différence au numéro d'où elle est venue.",
       },
       serial: {
-        h: "Votre numéro de série",
-        b: "Votre numéro de série est ce qui active votre logiciel. Gardez-le au sein de votre entreprise, comme une clé : toute personne qui l'a peut activer un appareil à votre nom, dans la limite de votre licence. Si vous pensez qu'il a circulé, prévenez-nous tout de suite. Nous passons en revue avec vous les appareils activés avec ce numéro et nous libérons ceux que vous ne reconnaissez pas.",
+        h: "Le lien de votre logiciel",
+        b: "Le lien de votre logiciel ouvre votre commerce sur un nouvel appareil. Gardez-le au sein de votre entreprise, comme une clé : toute personne qui l'a peut ouvrir votre commerce sur un appareil, dans la limite de votre licence. Si vous pensez qu'il a circulé, prévenez-nous tout de suite. Nous passons en revue avec vous les appareils de votre commerce et nous libérons ceux que vous ne reconnaissez pas.",
       },
       install: {
         h: "L'installation sur Windows, sur Mac et sur téléphone",
@@ -284,7 +284,7 @@ export const fr: Dictionary = {
         b: "Nous pouvons suspendre une licence qui ne respecte pas ces conditions. Une licence suspendue fait passer le logiciel en lecture seule, comme à la fin d'un essai : tout ce qui est déjà enregistré reste visible et rien n'est effacé. Nous vous en donnons la raison, sur WhatsApp ou par téléphone, et nous levons la suspension dès que la situation est corrigée. Un manquement grave ou répété peut mettre fin à la licence, sans remboursement. Sont notamment des motifs de suspension :",
         items: [
           "une capture de paiement fausse, retouchée ou correspondant à un autre paiement",
-          "le numéro de série ou le logiciel utilisé par une autre entreprise",
+          "le lien ou le logiciel utilisé par une autre entreprise",
           "une tentative de contourner la licence : reculer l'horloge de l'appareil, copier le logiciel sur un appareil qu'elle ne couvre pas, ou le modifier",
           "l'utilisation du logiciel pour une activité interdite par la loi",
         ],
@@ -525,7 +525,7 @@ export const fr: Dictionary = {
     builderStep2: "Voyez-le fonctionner",
     builderStep2Body: "Le vrai logiciel tourne à côté, à votre nom, pendant que vous écrivez. Vous l'essayez avant de le télécharger.",
     builderStep3: "Installez et commencez",
-    builderStep3Body: "Téléchargez-le pour Windows ou Mac, ou ouvrez-le sur votre téléphone. Votre numéro de série l'active, et votre essai gratuit commence.",
+    builderStep3Body: "Téléchargez-le pour Windows ou Mac, ou ouvrez-le sur votre téléphone. Il s'ouvre directement sur votre commerce, et votre essai gratuit commence.",
     builderCta: "Créer mon logiciel",
     builderPricing: "Voir les tarifs",
 

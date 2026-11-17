@@ -7,7 +7,7 @@ import { Button } from "./owner-button";
 import { Container } from "@/components/ui/container";
 import type { Locale } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
-import { CodeEntry, forgetOpened } from "./config-code";
+import { OtherDevice } from "./other-device";
 import type { LicenceStatus } from "@/builder/licence/status";
 import type { PayTo } from "@/builder/payment/apps";
 import type { Price } from "@/builder/payment/pricing";
@@ -76,29 +76,14 @@ export function AccountArea({
           {state.kind === "signed_out" ? (
             <>
               <SignIn copy={copy} />
-              {/*
-                * The owner who configured on his phone and never made an
-                * account comes here looking for his download, or to pay. His
-                * numéro de série is what leads to both.
-                */}
-              <div className="mt-10 space-y-2 border-t border-border pt-6">
-                <CodeEntry
-                  copy={copy}
-                  locale={lang}
-                  supportWhatsapp={null}
-                  onRestart={() => {
-                    forgetOpened();
-                    window.location.href = localisedHref(lang, "builder");
-                  }}
-                />
-                <div>
-                  <a
-                    href={localisedHref(lang, "pay")}
-                    className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
-                  >
-                    {copy.payBySerial.link}
-                  </a>
-                </div>
+              {/* Paying needs no account: the software's own "Payer" opens the page on his shop. */}
+              <div className="mt-10 border-t border-border pt-6">
+                <a
+                  href={localisedHref(lang, "pay")}
+                  className="inline-flex min-h-[48px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+                >
+                  {copy.payBySerial.link}
+                </a>
               </div>
             </>
           ) : state.kind === "no_business" ? (
@@ -192,7 +177,6 @@ function SignedIn({
   lang: Locale;
   state: Extract<AccountState, { kind: "signed_in" }>;
 }) {
-  const [copied, setCopied] = useState(false);
 
   return (
     <div className="space-y-12">
@@ -201,27 +185,6 @@ function SignedIn({
           {copy.myAccount.mySoftware}
         </h2>
         <p className="text-base text-foreground">{state.businessName}</p>
-
-        {state.serial ? (
-          <div className="space-y-3">
-            <p
-              dir="ltr"
-              className="rounded-xl border border-border bg-muted/40 py-5 text-center font-mono text-2xl font-semibold tracking-[0.2em] text-foreground"
-            >
-              {state.serial}
-            </p>
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => {
-                void navigator.clipboard?.writeText(state.serial ?? "");
-                setCopied(true);
-              }}
-            >
-              {copied ? copy.serial.copied : copy.serial.copy}
-            </Button>
-          </div>
-        ) : null}
 
         <div className="flex flex-wrap gap-3">
           {state.installers.windows ? (
@@ -262,6 +225,7 @@ function SignedIn({
       </section>
 
       {state.serial ? <PhoneApp copy={copy} serial={state.serial} /> : null}
+      {state.serial ? <OtherDevice copy={copy} serial={state.serial} language={lang} /> : null}
 
       <Subscription copy={copy} lang={lang} state={state} />
       <MyDevices copy={copy} lang={lang} devices={state.devices} />

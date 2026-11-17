@@ -12,14 +12,13 @@ import { browserClient } from "@/builder/db/client";
 import type { DraftAnswers } from "@/builder/draft/store";
 import type { ImportedProduct } from "@/builder/import/parse";
 import { Button } from "./owner-button";
-import { fill } from "@/lib/utils";
-import { localisedHref } from "@/lib/i18n/routes";
 import { Field, TextInput } from "./fields";
 
 /* Names a draft may still carry from when the builder asked for the staff. */
 type StaffMember = { name: string; role: "manager" | "cashier" };
 import { InstallHelp } from "./install-help";
 import { PhoneApp } from "./phone-app";
+import { OtherDevice } from "./other-device";
 import { countDownload } from "@/lib/site-count";
 import { Download } from "lucide-react";
 
@@ -413,17 +412,9 @@ export function SerialPanel({
           <InstallGuide copy={copy} target={target} chip={chip} pack={pack} shop={shop} compact />
         </div>
 
-        <div className="rounded-xl border border-border p-4">
-          <p className="text-base leading-relaxed text-muted-foreground">{copy.serial.keepNumber}</p>
-          <p
-            dir="ltr"
-            className="mt-2 font-mono text-xl font-semibold tracking-[0.15em] text-foreground"
-          >
-            {serial}
-          </p>
-        </div>
-
         <PhoneApp copy={copy} serial={serial} />
+
+        <OtherDevice copy={copy} serial={serial} language={language} />
 
         <Tutorials copy={copy} tutorials={tutorials} />
       </div>
@@ -487,18 +478,6 @@ function PhoneOrSoon({
   onPhone: boolean;
   onDownload?: () => void;
 }) {
-  const [copied, setCopied] = useState(false);
-  /*
-   * The site as he would type it on the shop computer: www.ouaqt.com, where
-   * "I already have my serial number" sits under the first button. The link
-   * he shares to himself goes one step further, to the box for the number.
-   */
-  const site = typeof window === "undefined" ? "" : window.location.host;
-  const origin = typeof window === "undefined" ? "" : window.location.origin;
-  const share = `https://wa.me/?text=${encodeURIComponent(
-    fill(copy.serial.shareMessage as string, { serial, url: `${origin}${localisedHref(language, "builder")}?serial=1` })
-  )}`;
-  const [before, after = ""] = fill(copy.serial.onPhone as string, { have: copy.code.have }).split("{site}");
   const anyInstaller = Boolean(installers.windows || installers.mac);
 
   return (
@@ -509,42 +488,7 @@ function PhoneOrSoon({
           <p className="text-lg font-medium leading-relaxed text-foreground">{copy.serial.soon}</p>
         </div>
       ) : null}
-      {onPhone ? <PhoneApp copy={copy} serial={serial} lead /> : null}
-
-      <div className={onPhone ? "border-t border-border pt-6" : undefined}>
-        <h2 className="text-xl font-semibold text-foreground">{copy.serial.heading}</h2>
-        <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.serial.intro}</p>
-      </div>
-
-      <p
-        dir="ltr"
-        className="rounded-xl border border-border bg-muted/40 py-6 text-center font-mono text-3xl font-semibold tracking-[0.2em] text-foreground"
-      >
-        {serial}
-      </p>
-
-      <div className="flex flex-wrap gap-3">
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => {
-            void navigator.clipboard?.writeText(serial);
-            setCopied(true);
-          }}
-        >
-          {copied ? copy.serial.copied : copy.serial.copy}
-        </Button>
-        <a
-          href={share}
-          target="_blank"
-          rel="noreferrer"
-          className="inline-flex min-h-[48px] items-center rounded-full border border-border px-5 text-base text-foreground"
-        >
-          {copy.serial.share}
-        </a>
-      </div>
-
-      {onPhone ? null : <PhoneApp copy={copy} serial={serial} />}
+      <PhoneApp copy={copy} serial={serial} lead={onPhone} />
 
       {!anyInstaller ? null : showDownloads ? (
         <div className="space-y-5">
@@ -589,17 +533,10 @@ function PhoneOrSoon({
           <TermsNote copy={copy} language={language} />
           <InstallHelp copy={copy} first="windows" />
         </div>
-      ) : (
-        <div className="rounded-xl border border-border p-5">
-          <p className="text-base leading-relaxed text-foreground">
-            {before}
-            <bdi dir="ltr" className="font-semibold">
-              {site}
-            </bdi>
-            {after}
-          </p>
-        </div>
-      )}
+      ) : null}
+
+      {/* On a phone, the way to the shop's computer: the same link, sent to himself. */}
+      <OtherDevice copy={copy} serial={serial} language={language} />
 
       <Tutorials copy={copy} tutorials={tutorials} />
     </div>

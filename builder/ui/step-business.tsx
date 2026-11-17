@@ -43,10 +43,6 @@ type Props = {
   onChangePack: () => void;
   showNameError: boolean;
   showPackError: boolean;
-  /* "J'ai déjà mon numéro de série", quiet, under the trades. */
-  codeEntry?: React.ReactNode;
-  /* He came to type his number: its box is the first thing on the screen, the trades after it. */
-  codeFirst?: boolean;
 };
 
 export function StepBusiness(props: Props) {
@@ -67,11 +63,10 @@ export function StepBusiness(props: Props) {
   return <Part {...props} />;
 }
 
-function PackChoice({ copy, enabledPacks, answers, update, onLead, onPicked, showPackError, codeEntry, codeFirst }: Props) {
+function PackChoice({ copy, enabledPacks, answers, update, onLead, onPicked, showPackError }: Props) {
   const missing = showPackError && !answers.pack;
   return (
     <>
-      {codeFirst && codeEntry ? <div className="mb-8 border-b border-border pb-8">{codeEntry}</div> : null}
       <fieldset>
         <legend className="text-xl font-semibold text-foreground">{copy.packs.heading}</legend>
         {missing ? <p className="mt-2 text-base text-destructive">{copy.packs.required}</p> : null}
@@ -126,7 +121,6 @@ function PackChoice({ copy, enabledPacks, answers, update, onLead, onPicked, sho
         >
           {copy.packs.other}
         </button>
-        {codeFirst ? null : codeEntry}
       </div>
     </>
   );
