@@ -118,7 +118,7 @@ export async function POST(request: Request) {
      * after it (builder/licence/nearby.ts).
      */
     const secrets = await getPrivateSettings();
-    const place = await placeOfRequest(request);
+    const place = await placeOfRequest(request, computer ? "any" : "phone");
     if (!secrets || !place) return NextResponse.json({ error: "no_nearby" }, { status: 404 });
     const mark: MachineMark | null = input.data.fingerprint
       ? { board: input.data.fingerprint.board ?? null, disk: input.data.fingerprint.disk ?? null, machine: input.data.fingerprint.machine ?? null }
@@ -138,8 +138,13 @@ export async function POST(request: Request) {
           })
           .map((one) => one.business_id as string);
       },
-      /* OUAQT's own test devices download shop after shop: the last one built is the one meant. */
-      newestWins: async () => isTesterDevice({ deviceId: input.data.deviceId, fingerprint: mark }, await testerDevices(supabase), parts),
+      /*
+       * OUAQT's own test devices download shop after shop: the last one built
+       * is the one meant. So does a phone: its marks are only ever its own
+       * links opened in its own browser, and the last one opened is the one
+       * the owner has just come back from.
+       */
+      newestWins: async () => !computer || isTesterDevice({ deviceId: input.data.deviceId, fingerprint: mark }, await testerDevices(supabase), parts),
     });
     if (!claim.ok) {
       return NextResponse.json({ error: claim.reason === "ambiguous" ? "nearby_ambiguous" : "no_nearby" }, { status: claim.reason === "ambiguous" ? 409 : 404 });

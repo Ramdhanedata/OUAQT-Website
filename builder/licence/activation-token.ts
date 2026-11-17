@@ -26,8 +26,8 @@ function newToken(): string {
 export type Platform = "windows" | "mac";
 
 /* Where the request that makes a token came from, as its mark. Null without a secret or an address. */
-export async function placeOfRequest(request: Request): Promise<string | null> {
-  return placeHash(addressFrom(request.headers), (process.env.LICENCE_SIGNING_KEY ?? "").trim());
+export async function placeOfRequest(request: Request, kind: "any" | "phone" = "any"): Promise<string | null> {
+  return placeHash(addressFrom(request.headers), (process.env.LICENCE_SIGNING_KEY ?? "").trim(), kind);
 }
 
 /**
@@ -41,16 +41,30 @@ export async function mintActivationToken(
   businessId: string,
   lifetimeHours: number,
   now = new Date(),
-  place: { hash: string | null; platform: Platform | null } = { hash: null, platform: null }
+  place: { hash: string | null; platform: Platform | null; keepOthers?: boolean } = { hash: null, platform: null }
 ): Promise<{ token: string; expiresAt: string } | null> {
+  /* A phone's mark is only ever taken by that phone's icon: it leaves a computer's waiting download alone. */
+  if (!place.keepOthers) await expireOlder(supabase, businessId, now, place.platform);
+  return insertToken(supabase, businessId, lifetimeHours, now, place);
+}
+
+async function expireOlder(supabase: SupabaseClient, businessId: string, now: Date, platform: Platform | null): Promise<void> {
   const older = supabase
     .from("activation_tokens")
     .update({ expires_at: now.toISOString(), place_hash: null })
     .eq("business_id", businessId)
     .is("used_at", null)
     .gt("expires_at", now.toISOString());
-  await (place.platform ? older.or(`platform.eq.${place.platform},platform.is.null`) : older);
+  await (platform ? older.or(`platform.eq.${platform},platform.is.null`) : older);
+}
 
+async function insertToken(
+  supabase: SupabaseClient,
+  businessId: string,
+  lifetimeHours: number,
+  now: Date,
+  place: { hash: string | null; platform: Platform | null }
+): Promise<{ token: string; expiresAt: string } | null> {
   const token = newToken();
   const expiresAt = new Date(now.getTime() + lifetimeHours * MS_IN_AN_HOUR).toISOString();
 

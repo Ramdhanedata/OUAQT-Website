@@ -42,12 +42,19 @@ export function networkOf(address: string): string | null {
 }
 
 /* The mark itself. Null when there is no address or no secret to mark it with. */
-export async function placeHash(address: string | null, secret: string): Promise<string | null> {
+export async function placeHash(address: string | null, secret: string, kind: "any" | "phone" = "any"): Promise<string | null> {
   if (!address || !secret) return null;
   const network = networkOf(address);
   if (!network) return null;
+  /*
+   * A phone's mark is its own: left by its link opened in the phone's
+   * browser, taken by its home-screen icon. A computer never sees it, and
+   * the phone never sees a computer's download (Adel's iPhone, 2026-11-17,
+   * was offered his Mac's downloads and refused to guess).
+   */
+  const marked = kind === "phone" ? `${network}|phone` : network;
   const encoder = new TextEncoder();
   const key = await crypto.subtle.importKey("raw", encoder.encode(`ouaqt-place:${secret}`), { name: "HMAC", hash: "SHA-256" }, false, ["sign"]);
-  const mark = await crypto.subtle.sign("HMAC", key, encoder.encode(network));
+  const mark = await crypto.subtle.sign("HMAC", key, encoder.encode(marked));
   return Buffer.from(mark).toString("hex");
 }

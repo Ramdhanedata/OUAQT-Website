@@ -36,4 +36,13 @@ describe("where a download came from", () => {
     expect(await placeHash("41.188.10.7", "")).toBeNull();
     expect(await placeHash("41.188.10.7", "other")).not.toBe(c);
   });
+
+  it("keeps a phone's mark apart from a computer's on the same connection", async () => {
+    const computer = await placeHash("41.188.10.7", "secret");
+    const phone = await placeHash("41.188.10.7", "secret", "phone");
+    expect(phone).toMatch(/^[0-9a-f]{64}$/);
+    expect(phone).not.toBe(computer);
+    /* The same phone, its Safari page and its icon, on one connection: one mark. */
+    expect(await placeHash("41.188.10.9", "secret", "phone")).toBe(phone === null ? null : await placeHash("41.188.10.9", "secret", "phone"));
+  });
 });

@@ -26,6 +26,8 @@ const body = z
   .object({
     number: z.string().max(400),
     products: z.array(product).max(10_000).default([]),
+    /* Sent by the phone app's page in Safari: the mark is for this phone's home-screen icon, not for a computer. */
+    forPhone: z.boolean().optional(),
   })
   .strict();
 
@@ -58,8 +60,9 @@ export async function POST(request: Request) {
   /* Opened on the computer that downloads: its connection is where the software will start. */
   const minted = secrets
     ? await mintActivationToken(admin, shop.businessId, secrets.activation_token_hours, new Date(), {
-        hash: await placeOfRequest(request),
+        hash: await placeOfRequest(request, input.data.forPhone ? "phone" : "any"),
         platform: null,
+        keepOthers: input.data.forPhone === true,
       })
     : null;
 
