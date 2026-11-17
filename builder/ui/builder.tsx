@@ -5,47 +5,44 @@ import { Container } from "@/components/ui/container";
 import { organization } from "@/lib/data/contact";
 import type { Locale } from "@/lib/i18n/config";
 import { cn, fill } from "@/lib/utils";
-import { ArrowLeft, ArrowRight, HeartHandshake, MessageCircle, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, Eye, HeartHandshake, MessageCircle, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Pack } from "@/app-ui/packs";
 import type { BuilderCopy } from "@/builder/copy";
 import { useDraft, type DraftAnswers, type SaveState } from "@/builder/draft/store";
-import { patchedAfterAnswer } from "@/builder/packs";
 import { record } from "@/builder/events";
 import dynamic from "next/dynamic";
-import type { ImportedProduct } from "@/builder/import/parse";
 import { LeadForm } from "./lead-form";
-import { BUSINESS_SCREENS, StepBusiness } from "./step-business";
+import { BUSINESS_SCREENS, DETAILS_SCREEN, NAME_FIELD, StepBusiness } from "./step-business";
 import { CodeEntry, forgetOpened, readOpened, SWITCHED_FLAG, type Opened } from "./config-code";
 import { localisedHref } from "@/lib/i18n/routes";
 import { InstallGuide } from "./install-guide";
 import { InstallTargetProvider, useInstallTarget } from "./install-target";
 
-const STEP_KEYS = ["business", "questions", "products", "serial"] as const;
-/* What the owner counts: his shop, the questions, his software. "products" is only the way back when a serial could not be issued, and it reads as the third. */
-const SHOWN_STEPS = 3;
-const shownStep = (step: number) => Math.min(step, SHOWN_STEPS - 1);
+/*
+ * Two steps, and the owner fills in only the first: his shop (its trade, its
+ * name, what goes on its receipts), then his software, ready to download or
+ * to open on his phone. The questions each trade used to ask are gone (Adel,
+ * 2026-11-17): every shop starts from its trade's usual settings.
+ */
+const STEP_KEYS = ["business", "serial"] as const;
+const LAST_STEP = STEP_KEYS.length - 1;
+/*
+ * What the admin's funnel counts the last step as. It was the fourth step
+ * when the questions and the products sat before it, and keeping its number
+ * keeps the old counts and the new ones on the same line.
+ */
+const SERIAL_EVENT = 3; // not-a-rule: a step's place in the funnel table
 
 /*
  * The preview carries the app screens, the receipt and the schema with it.
- * None of that is needed to read the first question, and on a slow phone it
- * would be the difference between answering and giving up, so it is fetched
- * separately once the questions are on screen.
+ * None of that is needed to choose a trade, and on a slow phone it would be
+ * the difference between starting and giving up, so it is fetched separately
+ * once the first screen is up.
  */
 const Preview = dynamic(() => import("./preview").then((m) => m.Preview), {
   ssr: false,
 });
-
-/* Step 2 brings the question banks and the schema with it. See step-two.tsx. */
-const StepTwo = dynamic(() => import("./step-two").then((m) => m.StepTwo), {
-  ssr: false,
-});
-
-/* Step 3 brings the spreadsheet reader, which is the heaviest thing here. */
-const StepProducts = dynamic(
-  () => import("./step-products").then((m) => m.StepProducts),
-  { ssr: false }
-);
 
 const StepAccount = dynamic(
   () => import("./step-account").then((m) => m.StepAccount),
@@ -61,16 +58,14 @@ const LANGUAGE_NAMES: Record<Locale, string> = { fr: "Français", ar: "العر�
 const WIDE = "(min-width: 900px)"; // not-a-rule: a layout breakpoint
 
 /*
- * The builder shell: the landing, then the steps.
+ * The builder shell: it opens straight on the first step, with no page of
+ * its own to read first. Every link on the site that leads here has already
+ * said what it is.
  *
  * Two layouts, chosen by width alone, never by sniffing the device. Below
- * 900px the owner sees one question at a time with a fixed bar at the bottom.
- * From 900px the questions sit beside a live preview of his own software,
- * which takes the larger share of the width and stays in view while he
- * scrolls through the questions.
- *
- * Step 1 is built. Steps 2 to 4 say so plainly and offer WhatsApp, rather
- * than showing an empty frame.
+ * 900px the owner sees one screen at a time with a fixed bar at the bottom.
+ * From 900px the form sits beside a live preview of his own software, which
+ * takes the larger share of the width and stays in view while he scrolls.
  */
 export function Builder({
   copy,
@@ -96,7 +91,7 @@ export function Builder({
   termsHref: string;
   trialDays: number | null;
 }) {
-  const [step, setStep] = useState<number | null>(null);
+  const [step, setStep] = useState(0);
   const [offline, setOffline] = useState(false);
   const draft = useDraft(locale);
 
@@ -122,17 +117,14 @@ export function Builder({
     }
   }, []);
 
-  /* An expired code: the questions again, started on purpose, never silently. */
+  /* An expired code: the first step again, started on purpose, never silently. */
   const startOver = () => {
     forgetOpened();
     setStep(0);
   };
 
-  const codeEntry = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} />;
-  /* On the first page, the same entry as a button beside "Commencer", where a returning owner looks first. */
-  const codeButton = (
-    <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} asButton startOpen={askSerial} />
-  );
+  /* Under the trades, a quiet line; already open for the owner the home page sent here to type his number. */
+  const codeEntry = <CodeEntry copy={copy} locale={locale} supportWhatsapp={supportWhatsapp} onRestart={startOver} startOpen={askSerial} />;
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
@@ -144,8 +136,6 @@ export function Builder({
       window.removeEventListener("offline", update);
     };
   }, []);
-
-  const started = Object.keys(draft.answers).length > 0;
 
   /*
    * The home page and each trade's page send the owner here with his trade
@@ -184,7 +174,7 @@ export function Builder({
     const whatsapp = supportWhatsapp ? `https://wa.me/${supportWhatsapp}` : organization.whatsappUrl;
     const stepName = copy.steps.serial as string;
     const help = `${whatsapp}?text=${encodeURIComponent(
-      fill(copy.shell.helpMessage as string, { step: SHOWN_STEPS, name: stepName })
+      fill(copy.shell.helpMessage as string, { step: STEP_KEYS.length, name: stepName })
     )}`;
     const name = (locale === "ar" && opened.nameArabic) || opened.nameLatin;
     /*
@@ -202,7 +192,7 @@ export function Builder({
             </p>
           ) : null}
           {switchedNote}
-          <Progress copy={copy} step={SHOWN_STEPS - 1} total={SHOWN_STEPS} stepName={stepName} />
+          <Progress copy={copy} step={LAST_STEP} total={STEP_KEYS.length} stepName={stepName} />
           <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
             <ResumeDownload
               copy={copy}
@@ -220,7 +210,7 @@ export function Builder({
           {/*
             * This browser remembers the shop whose number was typed here, and
             * would show its download every time. Another trade starts from the
-            * questions, never from that shop.
+            * first step, never from that shop.
             */}
           <button
             type="button"
@@ -248,17 +238,6 @@ export function Builder({
     );
   }
 
-  if (step === null) {
-    return (
-      <Landing
-        copy={copy}
-        canResume={started && draft.restored}
-        onStart={() => setStep(0)}
-        codeEntry={codeButton}
-      />
-    );
-  }
-
   return (
     <Wizard
       codeEntry={codeEntry}
@@ -269,6 +248,9 @@ export function Builder({
       stepName={copy.steps[STEP_KEYS[step]] as string}
       offline={offline}
       enabledPacks={enabledPacks}
+      /* His trade came with the link: a phone opens on the shop's details, the trades one Retour away. */
+      startOnDetails={Boolean(startPack && enabledPacks.includes(startPack)) && !askSerial}
+      codeFirst={askSerial}
       supportWhatsapp={supportWhatsapp}
       installers={installers}
       tutorials={tutorials}
@@ -276,61 +258,8 @@ export function Builder({
       answers={draft.answers}
       update={draft.update}
       saveState={draft.state}
-      onLeave={() => setStep(null)}
       onStep={setStep}
     />
-  );
-}
-
-function Landing({
-  copy,
-  canResume,
-  onStart,
-  codeEntry,
-}: {
-  copy: BuilderCopy;
-  canResume: boolean;
-  onStart: () => void;
-  codeEntry: React.ReactNode;
-}) {
-  return (
-    <section className="py-20 sm:py-28">
-      <Container className="max-w-2xl">
-        <h1 className="text-balance text-4xl font-semibold tracking-tight text-foreground sm:text-5xl">
-          {copy.landing.title}
-        </h1>
-        <p className="mt-6 text-balance text-lg leading-relaxed text-muted-foreground">
-          {copy.landing.intro}
-        </p>
-        <p className="mt-4 text-base text-muted-foreground">
-          {copy.landing.duration} · {copy.landing.noAccount}
-        </p>
-
-        <ol className="mt-10 space-y-4">
-          {(copy.landing.steps as readonly string[]).map((label, index) => (
-            <li key={label} className="flex gap-4">
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border text-base text-muted-foreground">
-                {index + 1}
-              </span>
-              <span className="pt-1 text-base leading-relaxed text-foreground">
-                {label}
-              </span>
-            </li>
-          ))}
-        </ol>
-
-        {/*
-          * Starting, or coming back with a number: two buttons side by side,
-          * so the owner who already has his serial sees his way in at once.
-          */}
-        <div className="mt-10 flex flex-wrap items-start gap-3">
-          <Button type="button" variant="accent" onClick={onStart} className="min-h-[48px] text-base">
-            {canResume ? copy.landing.resume : copy.landing.start}
-          </Button>
-          {codeEntry}
-        </div>
-      </Container>
-    </section>
   );
 }
 
@@ -357,6 +286,8 @@ function Wizard({
   stepName,
   offline,
   enabledPacks,
+  startOnDetails,
+  codeFirst,
   supportWhatsapp,
   installers,
   tutorials,
@@ -364,7 +295,6 @@ function Wizard({
   answers,
   update,
   saveState,
-  onLeave,
   onStep,
 }: {
   copy: BuilderCopy;
@@ -373,6 +303,8 @@ function Wizard({
   stepName: string;
   offline: boolean;
   enabledPacks: Pack[];
+  startOnDetails: boolean;
+  codeFirst: boolean;
   supportWhatsapp: string | null;
   installers: Record<Pack, { windows: string | null; mac: string | null }>;
   tutorials: { windows: string | null; mac: string | null };
@@ -380,20 +312,18 @@ function Wizard({
   answers: DraftAnswers;
   update: (patch: DraftAnswers) => void;
   saveState: SaveState;
-  onLeave: () => void;
   onStep: (step: number) => void;
   codeEntry: React.ReactNode;
   flush: () => Promise<void>;
 }) {
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLarge, setPreviewLarge] = useState(false);
-  /*
-   * The numéro de série, given once, when the questions end. It opens the
-   * last step.
-   */
+  /* The numéro de série, given once, when the first step ends. It opens the last one. */
   const [issued, setIssued] = useState<{ serial: string } | null>(null);
-  /* While the code is being fetched the screen holds still, and taps wait. */
+  /* While the number is being fetched the button says so, and taps wait. */
   const [issuing, setIssuing] = useState(false);
+  /* The number could not be given: said by the button, which tries again. */
+  const [issueFailed, setIssueFailed] = useState(false);
 
   async function issue(): Promise<boolean> {
     try {
@@ -415,130 +345,108 @@ function Wizard({
       return false;
     }
   }
-  const [screen, setScreen] = useState(0);
+  const [screen, setScreen] = useState(startOnDetails ? DETAILS_SCREEN : 0);
   const [lead, setLead] = useState<{ pack: Pack | null } | null>(null);
   const [nameError, setNameError] = useState(false);
-  /* Step 2 reports how many questions it has, since that depends on the answers. */
-  const [interviewScreens, setInterviewScreens] = useState(1);
-  /*
-   * The product list is held here rather than in the draft. Ten thousand rows
-   * do not belong in a browser's storage, and they are written to the
-   * database the moment there is an account to attach them to.
-   */
-  const [keptProducts, setKeptProducts] = useState<ImportedProduct[] | null>(null);
+  const [packError, setPackError] = useState(false);
   const [serial, setSerial] = useState<string | null>(null);
   const wide = useWide();
 
   /*
-   * A new step opens at its own top. The button that brought him here sat at
-   * the bottom of the last one, and left where it was the page would open on
-   * the fifth question with the first four above the fold, unseen.
+   * A new screen opens at its own top. The button that brought him here sat
+   * at the bottom of the last one, and left where it was the page would open
+   * halfway down, with what he has to read above the fold, unseen.
    */
   useEffect(() => {
     window.scrollTo({ top: 0 });
   }, [step, screen]);
 
-  /* The last step's code, fetched while he answers, so a slow phone network never shows it an empty box. */
+  /* The last step's code, fetched while he fills the first, so a slow phone network never shows it an empty box. */
   useEffect(() => {
     void import("./step-account");
   }, []);
 
   /* Which step he reached, so we can see where owners stop. */
   useEffect(() => {
-    record("reached", step, answers.pack);
+    record("reached", step === LAST_STEP ? SERIAL_EVENT : step, answers.pack);
   }, [step, answers.pack]);
 
-  const total = STEP_KEYS.length;
   /* The number this owner has now: the one issued as the last step opened, or one he opened. */
   const currentSerial = serial ?? issued?.serial ?? null;
   /* The journey's end: the last step, with a serial issued now or brought back from an earlier visit. */
-  const finished = step === total - 1 && Boolean(currentSerial) && !lead;
+  const finished = step === LAST_STEP && Boolean(currentSerial) && !lead;
   const whatsapp = supportWhatsapp
     ? `https://wa.me/${supportWhatsapp}`
     : organization.whatsappUrl;
   const help = `${whatsapp}?text=${encodeURIComponent(
-    fill(copy.shell.helpMessage as string, { step: shownStep(step) + 1, name: stepName })
+    fill(copy.shell.helpMessage as string, { step: step + 1, name: stepName })
   )}`;
 
-  /* The name is the one answer step 1 cannot finish without. */
-  const NAME_SCREEN = 1; // not-a-rule: which of the two screens asks the name
   const named = Boolean((answers.nameLatin ?? "").trim());
+  const chosen = Boolean(answers.pack && enabledPacks.includes(answers.pack));
 
   const pack = answers.pack ?? enabledPacks[0] ?? "pharmacy";
   /* A trade whose computer version is not out yet has no file to install: no guide to one, and nothing that promises it. */
   const canInstall = Boolean(installers[pack]?.windows || installers[pack]?.mac);
   const showGuide = finished && canInstall;
 
+  /* On a phone the trades are the first screen, and there is nothing before them to go back to. */
+  const canGoBack = Boolean(lead) || step > 0 || (!wide && screen > 0);
+  /* The press that makes the software: the whole form on a computer, its second screen on a phone. */
+  const lastPress = step === 0 && (wide || screen >= BUSINESS_SCREENS - 1);
+
   function goBack() {
     if (lead) return setLead(null);
     if (!wide && screen > 0) return setScreen(screen - 1);
-    if (step === 0) return onLeave();
-    setScreen(0);
+    if (step === 0) return;
+    setScreen(BUSINESS_SCREENS - 1);
     onStep(step - 1);
   }
 
-  /*
-   * The numéro de série, once, as the last step opens, so it is the last
-   * thing he sees. If it cannot be issued (no network, no database), the last
-   * step offers the account form instead and nothing blocks him.
-   */
-  function finish() {
-    setScreen(0);
-    if (issued) return onStep(total - 1);
-    setIssuing(true);
-    void issue().then(() => {
-      setIssuing(false);
-      onStep(total - 1);
-    });
-  }
-
   function goNext() {
-    if (issuing) return;
-    if (step === 1) {
-      if (!wide && screen < interviewScreens - 1) return setScreen(screen + 1);
-      /*
-       * The questions done, straight to the serial and the download, on a
-       * computer and on a phone alike (Adel, 2026-11-05). His products are
-       * imported in the software itself, from Stock, when he has the file to
-       * hand. Step 3 only opens if the serial could not be issued, as the way
-       * back to trying again.
-       */
-      setScreen(0);
-      if (issued) return onStep(total - 1);
-      setIssuing(true);
-      void issue().then((ok) => {
-        setIssuing(false);
-        onStep(ok ? total - 1 : 2);
-      });
+    if (issuing || step !== 0) return;
+
+    /* The trade first: without one there is no software to make, and nobody is handed a pharmacy by default. */
+    if (!chosen) {
+      setPackError(true);
+      if (!wide) setScreen(0);
+      else window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
-    if (step === 2) return finish();
-    if (step !== 0) return onStep(Math.min(step + 1, total - 1));
+    setPackError(false);
 
-    const leavingName = wide || screen >= NAME_SCREEN;
-    if (leavingName && !named) {
+    if (!wide && screen < DETAILS_SCREEN) return setScreen(screen + 1);
+
+    /* The name is the one thing this step cannot finish without. */
+    if (!named) {
       setNameError(true);
-      if (!wide) setScreen(NAME_SCREEN);
+      /* The field may be a screen above the button: the cursor goes to it, and the page follows. */
+      document.getElementById(NAME_FIELD)?.focus();
       return;
     }
     setNameError(false);
 
-    if (!wide && screen < BUSINESS_SCREENS - 1) return setScreen(screen + 1);
-    setScreen(0);
-    onStep(1);
+    /*
+     * Straight to the serial and the download, on a computer and on a phone
+     * alike. His products are imported in the software itself, from Stock,
+     * when he has the file to hand. A number that cannot be given (no
+     * network, most often) is said by the button, which tries again; if it
+     * still cannot, the last step offers the account form instead and nothing
+     * blocks him.
+     */
+    if (issued) return onStep(LAST_STEP);
+    setIssuing(true);
+    void issue().then((ok) => {
+      setIssuing(false);
+      if (ok || issueFailed) {
+        setIssueFailed(false);
+        return onStep(LAST_STEP);
+      }
+      setIssueFailed(true);
+    });
   }
 
-  function answerQuestion(id: string, answer: unknown) {
-    const interview = { ...(answers.interview ?? {}), [id]: answer as never };
-    /*
-     * What the AI made of an earlier sentence is kept whole, common and
-     * features, and it is laid over the answers when the shop is made. An
-     * answer given after it has to reach it too, or the software he gets
-     * forgets every question he answered after that sentence.
-     */
-    const patched = answers.patched ? patchedAfterAnswer(answers.patched, pack, id, interview) : undefined;
-    update(patched ? { interview, patched } : { interview });
-  }
+  const nextLabel = issuing ? copy.code.preparing : lastPress ? copy.shell.finish : copy.shell.next;
 
   const questionsPane = lead ? (
     <LeadForm
@@ -557,30 +465,16 @@ function Wizard({
       update={update}
       screen={screen}
       wide={wide}
-      onLead={(chosen) => setLead({ pack: chosen })}
+      onLead={(picked) => setLead({ pack: picked })}
+      onPicked={() => {
+        setPackError(false);
+        if (!wide) setScreen(DETAILS_SCREEN);
+      }}
+      onChangePack={() => setScreen(0)}
       showNameError={nameError}
+      showPackError={packError}
       codeEntry={codeEntry}
-    />
-  ) : step === 1 ? (
-    <StepTwo
-      copy={copy}
-      language={locale}
-      pack={pack}
-      answers={answers}
-      onAnswer={answerQuestion}
-      onCount={setInterviewScreens}
-      screen={screen}
-      wide={wide}
-    />
-  ) : step === 2 ? (
-    <StepProducts
-      copy={copy}
-      language={locale}
-      pack={pack}
-      kept={keptProducts}
-      onKeep={setKeptProducts}
-      staff={answers.staff ?? []}
-      onStaff={(next) => update({ staff: next })}
+      codeFirst={codeFirst}
     />
   ) : (
     <StepAccount
@@ -588,20 +482,27 @@ function Wizard({
       language={locale}
       pack={pack}
       answers={answers}
-      products={keptProducts ?? []}
+      products={[]}
       staff={answers.staff ?? []}
       termsHref={termsHref}
       installers={installers}
       tutorials={tutorials}
-      /* The number issued after the questions is enough to download: no account needed first. */
+      /* The number issued as the first step ended is enough to download: no account needed first. */
       serial={currentSerial}
       onSerial={setSerial}
     />
   );
 
+  const failedNote =
+    issueFailed && step === 0 && !lead ? (
+      <p role="alert" className="text-base leading-relaxed text-destructive">
+        {copy.code.downloadFailed}
+      </p>
+    ) : null;
+
   return (
     <InstallTargetProvider>
-    <div className="pb-28 wizard:pb-0" lang={locale}>
+    <div className="pb-24 wizard:pb-0" lang={locale}>
       {/*
         * Wider than the site's other pages: the preview is a laptop screen,
         * and every pixel it gets back is a bigger, more readable copy of the
@@ -616,14 +517,53 @@ function Wizard({
 
         <div className="grid gap-10 wizard:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] wizard:gap-10 xl:grid-cols-[minmax(0,34rem)_minmax(0,1fr)] xl:gap-12">
           <div>
-            <Progress copy={copy} step={shownStep(step)} total={SHOWN_STEPS} stepName={stepName} />
+            <Progress copy={copy} step={step} total={STEP_KEYS.length} stepName={stepName} />
 
             <div className="mt-8 rounded-2xl border border-border bg-surface p-6 sm:p-8">
               {questionsPane}
             </div>
 
-            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
-              <SaveNote copy={copy} state={saveState} />
+            {/* From 900px the two actions sit right under the form, before anything else. */}
+            <div
+              className={cn(
+                "mt-6 hidden flex-col gap-3 wizard:flex",
+                (lead || step !== 0) && "wizard:hidden"
+              )}
+            >
+              <div className="flex items-center gap-3">
+                {canGoBack ? (
+                  <Button type="button" variant="outline" onClick={goBack} className="min-h-[52px] text-base">
+                    <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+                    {copy.shell.back}
+                  </Button>
+                ) : null}
+                <Button
+                  type="button"
+                  variant="accent"
+                  onClick={goNext}
+                  disabled={issuing}
+                  className="min-h-[52px] flex-1 text-base font-semibold disabled:opacity-70"
+                >
+                  {nextLabel}
+                  {issuing ? null : <ArrowRight className="h-4 w-4 rtl:rotate-180" />}
+                </Button>
+              </div>
+              {failedNote}
+              <p className="text-base text-muted-foreground">{copy.shell.reassure}</p>
+            </div>
+
+            <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-1">
+              {/* On a phone the preview is one tap away, on its own screen; beside the form there is no room for it. */}
+              {step === 0 && !lead ? (
+                <button
+                  type="button"
+                  onClick={() => setPreviewOpen(true)}
+                  className="inline-flex min-h-[48px] items-center gap-2 text-base font-medium text-foreground underline decoration-border underline-offset-4 wizard:hidden"
+                >
+                  <Eye className="h-4 w-4 text-accent" />
+                  {copy.shell.preview}
+                </button>
+              ) : null}
               <a
                 href={help}
                 target="_blank"
@@ -633,55 +573,56 @@ function Wizard({
                 <MessageCircle className="h-4 w-4 text-accent" />
                 {copy.shell.help}
               </a>
+              <SaveNote copy={copy} state={saveState} />
             </div>
 
             {/*
               * Phone: one fixed bar, thumb height, always reachable.
               *
               * It steps aside for the "not on this list" form, which carries
-              * its own send and back. Two Continue buttons on one screen, one
-              * of which skips the form, is how an owner loses his answer.
+              * its own send and back, and for the last step: once the
+              * software is there, nothing is left to continue to, and a
+              * thank-you takes its place.
               */}
             <div
               className={cn(
                 "fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur wizard:hidden",
-                /*
-                 * The last step keeps Retour until the serial exists: until
-                 * then he may still want to fix a product or a name. Once it
-                 * is issued, here or on an earlier visit, there is nothing
-                 * after it to continue to: a thank-you takes their place.
-                 */
-                (lead || finished) && "hidden"
+                (lead || step !== 0) && "hidden"
               )}
             >
               <Container className="py-3">
-                <button
-                  type="button"
-                  onClick={() => setPreviewOpen(true)}
-                  className="mb-2 h-12 w-full rounded-full border border-border text-base text-muted-foreground"
-                >
-                  {copy.shell.preview}
-                </button>
+                {failedNote ? <div className="mb-2">{failedNote}</div> : null}
                 <div className="flex items-center gap-3">
-                  <button
-                    type="button"
-                    onClick={goBack}
-                    className="flex h-12 shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-border px-5 text-base font-medium text-foreground"
-                  >
-                    <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
-                    {copy.shell.back}
-                  </button>
+                  {canGoBack ? (
+                    <button
+                      type="button"
+                      onClick={goBack}
+                      className="flex h-[52px] shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-border px-5 text-base font-medium text-foreground"
+                    >
+                      <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+                      {copy.shell.back}
+                    </button>
+                  ) : null}
                   <button
                     type="button"
                     onClick={goNext}
-                    className="flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 text-base font-medium text-accent-foreground"
+                    disabled={issuing}
+                    className="flex h-[52px] flex-1 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-accent px-6 text-base font-semibold text-accent-foreground disabled:opacity-70"
                   >
-                    {copy.shell.next}
-                    <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                    {nextLabel}
+                    {issuing ? null : <ArrowRight className="h-4 w-4 rtl:rotate-180" />}
                   </button>
                 </div>
               </Container>
             </div>
+
+            {/* The account form, shown only when no number could be given, keeps a way back to the shop's details. */}
+            {step === LAST_STEP && !finished && !lead ? (
+              <Button type="button" variant="outline" onClick={goBack} className="mt-6 min-h-[48px] text-base">
+                <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
+                {copy.shell.back}
+              </Button>
+            ) : null}
 
             {finished ? (
               <Thanks
@@ -691,23 +632,6 @@ function Wizard({
                 canInstall={canInstall}
               />
             ) : null}
-
-            {/* From 900px the same two actions sit under the question. */}
-            <div
-              className={cn(
-                "mt-8 hidden items-center gap-3 wizard:flex",
-                (lead || finished) && "wizard:hidden"
-              )}
-            >
-              <Button type="button" variant="outline" onClick={goBack} className="min-h-[48px] text-base">
-                <ArrowLeft className="h-4 w-4 rtl:rotate-180" />
-                {copy.shell.back}
-              </Button>
-              <Button type="button" variant="accent" onClick={goNext} className="min-h-[48px] text-base">
-                {copy.shell.next}
-                <ArrowRight className="h-4 w-4 rtl:rotate-180" />
-              </Button>
-            </div>
           </div>
 
           {/*

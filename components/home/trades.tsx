@@ -44,14 +44,20 @@ export function Trades({
           <p className="mt-5 text-pretty text-lg leading-relaxed text-muted-foreground">{home.tradesBody}</p>
         </FadeIn>
 
-        <ul className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {/*
+          * Two to a row on a phone, each one short: this list is the way in,
+          * and nine full cards stacked were three screens of scrolling
+          * before the software itself was seen. The line about each trade
+          * comes back from 640px, where there is room to read it.
+          */}
+        <ul data-hides-sticky-cta className="mt-10 grid grid-cols-2 gap-3 sm:mt-12 sm:gap-4 lg:grid-cols-3">
           {ordered.map((pack) => {
             const open = enabledPacks.includes(pack);
             const Icon = packIcons[pack];
             return (
               <li
                 key={pack}
-                className="flex flex-col rounded-3xl border border-border bg-surface p-6 transition-shadow duration-300 hover:shadow-card"
+                className="flex flex-col rounded-2xl border border-border bg-surface p-4 transition-shadow duration-300 hover:shadow-card sm:rounded-3xl sm:p-6"
               >
                 <div className="flex items-start justify-between gap-3">
                   <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-foreground text-background">
@@ -61,11 +67,11 @@ export function Trades({
                     <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">{home.tradesSoon}</span>
                   )}
                 </div>
-                <div className="mt-5 min-w-0 flex-1">
-                  <h3 className="text-lg font-semibold tracking-tight text-foreground">{dict.packLabels[pack]}</h3>
-                  <p className="mt-1.5 text-base leading-relaxed text-muted-foreground">{home.tradeLines[pack]}</p>
+                <div className="mt-3 min-w-0 flex-1 sm:mt-5">
+                  <h3 className="text-base font-semibold leading-snug tracking-tight text-foreground sm:text-lg">{dict.packLabels[pack]}</h3>
+                  <p className="mt-1.5 hidden text-base leading-relaxed text-muted-foreground sm:block">{home.tradeLines[pack]}</p>
                 </div>
-                  <div className="mt-4 flex flex-wrap items-center gap-x-5 border-t border-border pt-2">
+                  <div className="mt-2 flex flex-col items-start border-t border-border pt-1 sm:mt-4 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-5 sm:pt-2">
                     {open ? (
                       <a
                         href={packHrefs[pack]}

@@ -4,39 +4,32 @@ import type { BuilderCopy } from "./fr";
 export const ar: BuilderCopy = {
   nav: "أنشئ برنامجك",
 
+  /* The page's title and description, for a search engine and a shared link. The page itself opens on the first step. */
   landing: {
     title: "أنشئ برنامج متجرك",
     intro:
-      "اختر نوع نشاطك، وأجب عن سؤالين أو ثلاثة، فيصبح برنامجك جاهزاً على الحاسوب أو الهاتف.",
-    duration: "دقيقتان تقريباً",
-    noAccount: "لا حاجة إلى حساب للبدء",
-    steps: [
-      "نشاطك واسمه",
-      "سؤالان أو ثلاثة",
-      "برنامجك جاهز للفتح",
-    ],
-    start: "ابدأ",
-    resume: "تابع من حيث توقفت",
+      "اختر نوع نشاطك، واكتب اسم محلك، فيصبح برنامجك جاهزاً على الحاسوب أو الهاتف.",
   },
 
   shell: {
     stepOf: "الخطوة {current} من {total}",
     back: "رجوع",
     next: "متابعة",
+    /* The press that ends the first step: the same words as the site's own button. */
+    finish: "أنشئ برنامجي",
+    reassure: "دقيقة واحدة تكفي. لا حاجة إلى حساب.",
     preview: "شاهد برنامجك",
     previewTitle: "برنامجك",
     previewEmpty: "سيظهر هنا إيصالك وشاشة البيع بمجرد أن تجيب.",
     close: "إغلاق",
     help: "مساعدة على واتساب",
     helpMessage: "مرحباً، أحتاج مساعدة في الخطوة {step} ({name}).",
-    saved: "أجوبتك محفوظة",
-    offline: "لا يوجد اتصال. ستُرسل أجوبتك فور عودة الشبكة.",
+    saved: "تم الحفظ",
+    offline: "لا يوجد اتصال. سيُرسل ما تكتبه فور عودة الشبكة.",
   },
 
   steps: {
     business: "متجرك",
-    questions: "بضعة أسئلة",
-    products: "منتجاتك (اختياري)",
     serial: "برنامجك",
   },
 
@@ -60,6 +53,8 @@ export const ar: BuilderCopy = {
 
   packs: {
     heading: "ما نوع نشاطك التجاري؟",
+    required: "اختر نوع نشاطك للمتابعة.",
+    change: "تغيير",
     pharmacy: "صيدلية",
     bakery: "مخبزة",
     restaurant: "مطعم أو مقهى",
@@ -88,15 +83,13 @@ export const ar: BuilderCopy = {
 
   name: {
     heading: "ما اسم محلك؟",
+    intro: "ما تكتبه هنا يظهر على وصولاتك. الاسم وحده إلزامي.",
     latin: "اسم المحل",
-    latinHelp: "بالحروف اللاتينية. يظهر أعلى وصولاتك.",
     arabic: "الاسم بالعربية",
-    arabicHelp: "يظهر تحت الاسم الأول.",
     required: "اكتب اسم محلك للمتابعة.",
   },
 
   receiptDetails: {
-    more: "أضف الاسم بالعربية أو الهاتف أو العنوان أو الشعار",
     phone: "الهاتف",
     address: "العنوان",
   },
@@ -131,89 +124,11 @@ export const ar: BuilderCopy = {
     saving: "جاري الحفظ",
     saved: "تم الحفظ",
     failed: "لم يُحفظ بعد. نحاول من جديد.",
-    unavailable: "تبقى إجاباتك على هذا الجهاز حالياً.",
+    unavailable: "يبقى ما تكتبه على هذا الجهاز حالياً.",
   },
 
-  interview: {
-    pickAny: "يمكنك اختيار أكثر من واحد.",
-    yes: "نعم",
-    no: "لا",
-    questionOf: "سؤال {current} من {total}",
-  },
 
-  products: {
-    heading: "منتجاتك",
-    help: "اختياري. يمكنك إضافتها لاحقاً داخل البرنامج.",
-    template: "حمّل النموذج",
-    choose: "اختر ملفي",
-    reading: "جاري قراءة ملفك",
-    ready: {
-      zero: "لا منتجات جاهزة.",
-      one: "منتج واحد جاهز.",
-      two: "منتجان جاهزان.",
-      few: "{count} منتجات جاهزة.",
-      many: "{count} منتجاً جاهزاً.",
-      other: "{count} منتج جاهز.",
-    },
-    toFix: {
-      zero: "لا أسطر بحاجة إلى تصحيح.",
-      one: "سطر واحد بحاجة إلى تصحيح.",
-      two: "سطران بحاجة إلى تصحيح.",
-      few: "{count} أسطر بحاجة إلى تصحيح.",
-      many: "{count} سطراً بحاجة إلى تصحيح.",
-      other: "{count} سطر بحاجة إلى تصحيح.",
-    },
-    problem: "السطر {row}: {what} راجع عمود {column}.",
-    missingName: "الاسم ناقص.",
-    missingPrice: "السعر ناقص.",
-    badPrice: "تعذرت قراءة السعر.",
-    badQuantity: "تعذرت قراءة الكمية.",
-    badExpiry: "تعذرت قراءة تاريخ الانتهاء.",
-    missingColumns: "لم نجد عمودي الاسم والسعر. استعمل النموذج، أو غيّر أسماء أعمدتك.",
-    truncated: "قرأنا أول 10000 سطر فقط.",
-    keep: "احتفظ بهذه المنتجات",
-    skip: "تخطّ هذه الخطوة",
-    zeroPrice: "السعر صفر.",
-    negativePrice: "السعر سالب.",
-    pastExpiry: "السطر {row}: تاريخ الانتهاء مضى ({found}). راجعه، أو استورده كما هو.",
-    headerFound: "وجدنا أعمدتك في السطر {row}.",
-    totalsSkipped: "تم تجاهل {count} سطر مجموع.",
-    totalsSkippedOther: "تم تجاهل {count} أسطر مجموع.",
-    whichSheet: "أي ورقة تحتوي منتجاتك؟",
-    sheetRows: "{count} سطر",
-    whichColumn: "أي عمود يحتوي {what}؟",
-    columnName: "اسم المنتج",
-    columnPrice: "السعر",
-    columnQuantity: "الكمية",
-    columnExpiry: "تاريخ الانتهاء",
-    columnBatch: "رقم التشغيلة",
-    noColumn: "لا شيء",
-    preview: "هذه أول خمسة منتجات كما ستُستورد.",
-    confirm: "صحيح، استورد",
-    currencyQuestion: "هل أسعارك بالأوقية الجديدة (MRU) أم بالأوقية القديمة؟",
-    currencyNew: "أوقية جديدة (MRU)",
-    currencyOld: "أوقية قديمة",
-    currencyCheck: "بالأوقية القديمة، تصبح هذه الأسعار:",
-    duplicates: "هذه المنتجات مكررة.",
-    keepFirst: "احتفظ بواحد فقط",
-    keepAll: "هما منتجان مختلفان",
-    mergeQuantities: "اجمع الكميات",
-    fixRow: "تصحيح",
-    unreadable: "تعذرت قراءة هذا الملف. أرسل ملف إكسل أو CSV، لا صورة ولا PDF، وبدون كلمة سر. يمكنك أيضاً البدء من نموذجنا.",
-    another: "اختر ملفاً آخر",
-  },
 
-  staff: {
-    heading: "موظفوك",
-    help: "اختياري. يُختار رمز كل واحد لاحقاً داخل البرنامج.",
-    name: "الاسم",
-    role: "الوظيفة",
-    manager: "مسؤول",
-    cashier: "أمين صندوق",
-    add: "إضافة",
-    remove: "حذف",
-    empty: "لا أحد حتى الآن.",
-  },
 
   account: {
     heading: "أنشئ حسابك",
@@ -251,9 +166,10 @@ export const ar: BuilderCopy = {
     tutorialMac: "شاهد فيديو التثبيت على ماك",
 
     pcHeading: "برنامجك جاهز",
+    pcIntro: "حمّله، ثبّته، افتحه: يفتح مباشرة على محلك. لا شيء تكتبه.",
     downloadInstall: "تنزيل وتثبيت",
-    alsoMac: "هل تستعمل ماك؟ تنزيل لماك",
-    alsoWindows: "هل تستعمل ويندوز؟ تنزيل لويندوز",
+    alsoMac: "للماك؟ تنزيل لماك",
+    alsoWindows: "لحاسوب ويندوز؟ تنزيل لويندوز",
     termsNote: "بتنزيل البرنامج، فإنك توافق على {terms}.",
     termsLink: "شروط الاستعمال",
     keepNumber: "رقمك التسلسلي. احتفظ به: يفتح برنامجك على جهاز آخر أو بعد إعادة التثبيت.",
@@ -268,12 +184,6 @@ export const ar: BuilderCopy = {
   },
 
   install: {
-    question: "على أي حاسوب ستثبت برنامجك؟",
-    windows: "ويندوز",
-    windowsHint: "حاسوب مكتبي أو محمول",
-    mac: "ماك",
-    macHint: "iMac أو MacBook أو Mac mini",
-    detected: "هذا الحاسوب",
     downloadWindows: "تحميل لويندوز",
     downloadMac: "تحميل لماك",
     guideWindows: "التثبيت على ويندوز",
@@ -325,6 +235,8 @@ export const ar: BuilderCopy = {
   phoneApp: {
     heading: "على هاتفك",
     intro: "يعمل برنامجك أيضا على هاتف أندرويد أو آيفون، دون تنزيل أي شيء من المتجر. يلزم الإنترنت مرة واحدة فقط لفتحه، ثم يعمل بدونه.",
+    /* On a phone, where opening it is the page's main action. */
+    leadIntro: "يفتح على محلك، دون تنزيل أي شيء من متجر التطبيقات. يحتاج إلى الإنترنت مرة واحدة فقط، لفتحه. ثم يعمل بدونه.",
     open: "افتح على هذا الهاتف",
     scan: "امسح هذا الرمز بكاميرا هاتفك. يفتح متجرك دون كتابة أي رقم؛ وعلى الآيفون بعد إضافته إلى الشاشة الرئيسية.",
     iphone: "على آيفون: في سفاري، اضغط زر المشاركة، ثم «إضافة إلى الشاشة الرئيسية». ثم يفتح البرنامج من أيقونته، ولا يفتح في سفاري أبدا.",
@@ -492,8 +404,4 @@ export const ar: BuilderCopy = {
     link: "الدفع برقمي التسلسلي",
   },
 
-  placeholder: {
-    title: "هذه الخطوة قادمة قريباً",
-    body: "نحضّر أسئلة هذه الخطوة. عد بعد بضعة أيام، أو راسلنا على واتساب.",
-  },
 };

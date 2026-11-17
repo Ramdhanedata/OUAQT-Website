@@ -72,7 +72,7 @@ export const fr: Dictionary = {
       eyebrow: "Le Builder",
       heading: "Vous le créez vous-même, vous l'installez le jour même",
       intro:
-        "Vous répondez aux questions, vous installez votre logiciel sur l'ordinateur de la boutique ou vous l'ouvrez sur votre téléphone. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
+        "Vous choisissez votre commerce, vous écrivez son nom, puis vous installez votre logiciel sur l'ordinateur de la boutique ou vous l'ouvrez sur votre téléphone. Personne ne se déplace, donc il n'y a pas de frais d'installation à payer : la licence seule suffit.",
       soon: "Tarif bientôt disponible",
       trial: "Essai gratuit de {days} jours avant de payer quoi que ce soit.",
       devices: "{devices} appareils compris, ordinateur ou téléphone : par exemple l'ordinateur de la boutique et votre téléphone. Chacun fonctionne sans internet, et ce qui est saisi sur l'un apparaît sur l'autre.",
@@ -111,7 +111,7 @@ export const fr: Dictionary = {
     eyebrow: "Tarifs",
     heading: "Le logiciel que vous créez vous-même, et celui que nous construisons.",
     intro:
-      "Le premier se crée en ligne, en quelques questions, et s'installe le jour même. Le second est construit et installé par nous, chez vous. Dans les deux cas le logiciel tourne sur vos propres appareils et n'a pas besoin d'internet pour le travail de tous les jours.",
+      "Le premier se crée en ligne, en une minute, et s'installe le jour même. Le second est construit et installé par nous, chez vous. Dans les deux cas le logiciel tourne sur vos propres appareils et n'a pas besoin d'internet pour le travail de tous les jours.",
     freeVisit: "Avant tout engagement, notre première visite pour comprendre votre fonctionnement est gratuite.",
     scope:
       "Ces tarifs sont les mêmes pour tous les logiciels OUAQT prêts à installer.",
@@ -269,7 +269,7 @@ export const fr: Dictionary = {
       },
       selfData: {
         h: "Vos données restent les vôtres",
-        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients sont gardés sur vos appareils. Quand vous avez plusieurs appareils, ils se les échangent par internet : ces données passent par nos serveurs chiffrées, avec une clé tirée de votre numéro de série. Nous ne les lisons pas, nous ne les utilisons pas, et elles sont effacées dès que vos autres appareils les ont reçues, au plus tard après 45 jours. Comme nous conservons vos numéros de série, nous pourrions techniquement les déchiffrer ; nous ne le faisons pas. Par ailleurs, ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, vos réponses aux questions, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos appareils et vos paiements.",
+        b: "Vos ventes, votre stock, vos mouvements et les comptes de vos clients sont gardés sur vos appareils. Quand vous avez plusieurs appareils, ils se les échangent par internet : ces données passent par nos serveurs chiffrées, avec une clé tirée de votre numéro de série. Nous ne les lisons pas, nous ne les utilisons pas, et elles sont effacées dès que vos autres appareils les ont reçues, au plus tard après 45 jours. Comme nous conservons vos numéros de série, nous pourrions techniquement les déchiffrer ; nous ne le faisons pas. Par ailleurs, ce que nous détenons se limite à ce qu'il faut pour créer votre logiciel et gérer votre licence : votre compte, le métier que vous avez choisi, la configuration qui en sort, votre logo, la liste de produits que vous avez importée au départ, vos numéros de série, vos appareils et vos paiements.",
       },
       selfSupport: {
         h: "Ce que la licence comprend",
@@ -277,7 +277,7 @@ export const fr: Dictionary = {
       },
       selfChanges: {
         h: "Ce que la licence ne comprend pas",
-        b: "Un métier que le Builder ne couvre pas encore, ou une façon de travailler que ses questions ne prévoient pas, relève d'un projet sur mesure et fait l'objet d'un devis séparé.",
+        b: "Un métier que le Builder ne couvre pas encore, ou une façon de travailler que ses logiciels ne prévoient pas, relève d'un projet sur mesure et fait l'objet d'un devis séparé.",
       },
       suspension: {
         h: "La suspension d'une licence",
@@ -360,7 +360,7 @@ export const fr: Dictionary = {
       },
       builder: {
         h: "Quand vous créez un logiciel",
-        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, vos réponses aux questions, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les appareils que vous activez et vos paiements. Quand vous téléchargez le logiciel, nous gardons aussi, pendant quelques heures, une marque brouillée de votre connexion à internet (jamais l'adresse elle-même) et le système choisi, pour que le logiciel reconnaisse son téléchargement et s'ouvre sans vous demander votre numéro. Cette marque est effacée dès qu'elle a servi.",
+        b: "Pour fabriquer votre logiciel et gérer votre licence, nous conservons : le compte que vous ouvrez, le métier que vous choisissez, la configuration qui en résulte, le nom et les coordonnées de votre commerce tels qu'ils apparaîtront sur vos reçus, votre logo, la liste de produits que vous importez au départ, les noms de vos employés si vous les saisissez, vos numéros de série, les appareils que vous activez et vos paiements. Quand vous téléchargez le logiciel, nous gardons aussi, pendant quelques heures, une marque brouillée de votre connexion à internet (jamais l'adresse elle-même) et le système choisi, pour que le logiciel reconnaisse son téléchargement et s'ouvre sans vous demander votre numéro. Cette marque est effacée dès qu'elle a servi.",
       },
       neverReceived: {
         h: "Vos ventes et vos clients",
@@ -418,7 +418,7 @@ export const fr: Dictionary = {
     tools: "Ce qu'il contient",
     screenshotAlt: "capture d'écran du produit",
     /* Shown only on the case studies whose trade the builder covers. */
-    builderNote: "Ce genre de logiciel se crée maintenant en ligne, en répondant à quelques questions.",
+    builderNote: "Ce genre de logiciel se crée maintenant en ligne, en une minute.",
     builderNoteLink: "Voir le logiciel pour ce métier",
   },
 
@@ -440,9 +440,9 @@ export const fr: Dictionary = {
       "Et à chaque fois, la même découverte. Personne ne comprenait le problème mieux que le patron lui-même. Notre travail n'était pas de lui apprendre son métier, c'était de traduire ce qu'il savait déjà en un logiciel qui lui ressemble.",
     storyHeading: "Ce que nous avons fait de ce constat",
     storyBody1:
-      "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait le Builder, un créateur de logiciel en ligne : le patron répond à des questions sur sa façon de travailler, et il repart avec son logiciel, prêt à installer, le jour même.",
+      "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait le Builder, un créateur de logiciel en ligne : le patron choisit son métier, écrit le nom de son commerce, et il repart avec son logiciel, prêt à installer, le jour même.",
     storyBody2:
-      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé par ses réponses à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres appareils, ordinateur ou téléphone, sans internet, et ses chiffres restent chez lui : quand ils passent d'un appareil à l'autre, c'est chiffré.",
+      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé pour son métier à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres appareils, ordinateur ou téléphone, sans internet, et ses chiffres restent chez lui : quand ils passent d'un appareil à l'autre, c'est chiffré.",
     storyBody3:
       "Le Builder est aujourd'hui notre produit principal. Les métiers qu'il ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
     marketHeading: "Les chiffres derrière ce constat.",
@@ -496,7 +496,7 @@ export const fr: Dictionary = {
   builderHome: {
     heroEyebrow: "Logiciels de gestion pour les PME",
     heroHeading: "Gérez votre entreprise sur ordinateur et sur téléphone.",
-    heroBody: "Avec le Builder, vous décrivez votre activité et vous repartez en quelques minutes avec votre caisse, votre stock et vos rapports. Le même logiciel sur l'ordinateur de la boutique et sur votre téléphone, même sans internet.",
+    heroBody: "Avec le Builder, vous choisissez votre commerce et vous repartez en quelques minutes avec votre caisse, votre stock et vos rapports. Le même logiciel sur l'ordinateur de la boutique et sur votre téléphone, même sans internet.",
     heroPrimary: "Créer mon logiciel",
     heroSecondary: "Essayer la démo",
     heroReassurance: "Téléphone ou ordinateur · Sans internet · Vos données restent chez vous · Essai gratuit {days} jours",
@@ -518,12 +518,12 @@ export const fr: Dictionary = {
     impactTrialLabel: "pour tout essayer, sans rien payer",
 
     builderEyebrow: "Le Builder",
-    builderHeading: "Le Builder construit votre logiciel à partir de vos réponses.",
+    builderHeading: "Le Builder construit le logiciel de votre métier, à votre nom.",
     builderBody: "C'est le cœur d'OUAQT. Au lieu d'un logiciel générique qu'il faut apprendre, le Builder assemble le vôtre : vos produits, vos prix, votre façon d'encaisser, votre équipe et vos reçus.",
-    builderStep1: "Décrivez votre activité",
-    builderStep1Body: "Ce que vous vendez, comment vous encaissez, qui tient la caisse. Des questions simples, en français ou en arabe.",
+    builderStep1: "Choisissez votre commerce",
+    builderStep1Body: "Pharmacie, boutique, restaurant, hôtel… Puis son nom, son téléphone, son adresse et son logo, pour vos reçus. C'est tout.",
     builderStep2: "Voyez-le fonctionner",
-    builderStep2Body: "Le vrai logiciel tourne à côté des questions et change à chaque réponse. Vous l'essayez avant de le télécharger.",
+    builderStep2Body: "Le vrai logiciel tourne à côté, à votre nom, pendant que vous écrivez. Vous l'essayez avant de le télécharger.",
     builderStep3: "Installez et commencez",
     builderStep3Body: "Téléchargez-le pour Windows ou Mac, ou ouvrez-le sur votre téléphone. Votre numéro de série l'active, et votre essai gratuit commence.",
     builderCta: "Créer mon logiciel",
@@ -602,7 +602,7 @@ export const fr: Dictionary = {
 
     tradesEyebrow: "Métiers",
     tradesHeading: "Un logiciel pour chaque métier",
-    tradesBody: "Chaque métier a ses écrans, ses questions et ses reçus. Choisissez le vôtre pour commencer.",
+    tradesBody: "Chaque métier a ses écrans, ses mots et ses reçus. Choisissez le vôtre pour commencer.",
     tradesOpen: "Disponible",
     tradesSoon: "Bientôt disponible",
     tradesStart: "Commencer",
@@ -684,7 +684,7 @@ export const fr: Dictionary = {
     faq6Body: "Écrivez-nous sur WhatsApp. Nous répondons en général le jour même, en français ou en arabe.",
 
     ctaHeading: "Équipez votre entreprise dès aujourd'hui.",
-    ctaBody: "Quelques minutes de questions, et votre logiciel est prêt à installer. Pour un projet sur mesure, parlons-en d'abord.",
+    ctaBody: "Votre commerce, son nom, et votre logiciel est prêt à installer. Pour un projet sur mesure, parlons-en d'abord.",
     ctaButton: "Créer mon logiciel",
     ctaTalk: "Parler à l'équipe",
     ctaWhatsapp: "Écrire sur WhatsApp",
@@ -762,7 +762,7 @@ export const fr: Dictionary = {
     },
     "pharmacy-pos": {
       metaTitle: "Logiciel de pharmacie : registres remplis tout seuls",
-      metaDescription: "Une caisse de pharmacie qui remplit les registres de médicaments à la place du personnel. Le même logiciel se crée maintenant en ligne, en quelques questions.",
+      metaDescription: "Une caisse de pharmacie qui remplit les registres de médicaments à la place du personnel. Le même logiciel se crée maintenant en ligne, en une minute.",
       title: "Caisse & registres de pharmacie",
       summary: "Une caisse de pharmacie qui remplit toute seule les registres de médicaments, pour que le personnel arrête de les retaper.",
       description: "Tenir les registres de médicaments, c'était des heures de la même saisie chaque jour. Le système les remplit maintenant à partir de l'historique de la pharmacie, et le personnel ne s'occupe plus que des cas particuliers.",

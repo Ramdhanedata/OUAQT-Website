@@ -39,12 +39,15 @@ export function Field({
 }
 
 export function TextInput({
+  id,
   value,
   onChange,
   dir,
   inputMode,
   autoComplete,
 }: {
+  /* For the one field a button may need to send the owner back to. */
+  id?: string;
   value: string;
   onChange: (value: string) => void;
   dir?: "ltr" | "rtl";
@@ -53,6 +56,7 @@ export function TextInput({
 }) {
   return (
     <input
+      id={id}
       type="text"
       dir={dir}
       inputMode={inputMode}

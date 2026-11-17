@@ -65,7 +65,7 @@ export function BuilderHero({
           {home.heroBody}
         </p>
 
-        <div style={rise(0.2)} className="hero-enter mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
+        <div data-hides-sticky-cta style={rise(0.2)} className="hero-enter mt-9 flex flex-col items-stretch justify-center gap-3 sm:flex-row sm:items-center">
           <Button href={localisedHref(lang, "builder")} variant="primary" className="min-h-[52px] px-7 text-base">
             {home.heroPrimary}
             <ArrowRight className="h-4 w-4 rtl:rotate-180" />

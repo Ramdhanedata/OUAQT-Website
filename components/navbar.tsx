@@ -42,6 +42,8 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
     { href: "/contact", label: dict.nav.contact },
   ];
 
+  const onBuilder = pathname === builder.href;
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     onScroll();
@@ -93,13 +95,16 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
 
         <div className="hidden items-center gap-3 lg:flex">
           <LanguageSwitcher locale={lang} label={dict.nav.language} />
-          <Button
-            href={builder.href}
-            variant="primary"
-            className="whitespace-nowrap text-sm"
-          >
-            {builder.label}
-          </Button>
+          {/* Not on the builder itself: its own button says the same words, and two of them is one too many. */}
+          {onBuilder ? null : (
+            <Button
+              href={builder.href}
+              variant="primary"
+              className="whitespace-nowrap text-sm"
+            >
+              {builder.label}
+            </Button>
+          )}
         </div>
 
         <div className="flex items-center gap-2 lg:hidden">
@@ -132,15 +137,17 @@ export function Navbar({ dict, lang }: { dict: Pick<Dictionary, "nav" | "common"
                   {link.label}
                 </Link>
               ))}
-              <div className="mt-2 px-3">
-                <Button
-                  href={builder.href}
-                  variant="primary"
-                  className="w-full justify-center text-sm"
-                >
-                  {builder.label}
-                </Button>
-              </div>
+              {onBuilder ? null : (
+                <div className="mt-2 px-3">
+                  <Button
+                    href={builder.href}
+                    variant="primary"
+                    className="w-full justify-center text-sm"
+                  >
+                    {builder.label}
+                  </Button>
+                </div>
+              )}
           </Container>
         </MobileMenu>
       )}

@@ -8,25 +8,20 @@
 export const fr = {
   nav: "Créer mon logiciel",
 
+  /* The page's title and description, for a search engine and a shared link. The page itself opens on the first step. */
   landing: {
     title: "Créez le logiciel de votre commerce",
     intro:
-      "Choisissez votre commerce, répondez à deux ou trois questions, et votre logiciel est prêt, sur ordinateur ou sur téléphone.",
-    duration: "Environ 2 minutes",
-    noAccount: "Pas besoin de compte pour commencer",
-    steps: [
-      "Votre commerce et son nom",
-      "Deux ou trois questions",
-      "Votre logiciel, prêt à ouvrir",
-    ],
-    start: "Commencer",
-    resume: "Reprendre où vous en étiez",
+      "Choisissez votre commerce, écrivez son nom, et votre logiciel est prêt, sur ordinateur ou sur téléphone.",
   },
 
   shell: {
     stepOf: "Étape {current} sur {total}",
     back: "Retour",
     next: "Continuer",
+    /* The press that ends the first step: the same words as the site's own button. */
+    finish: "Créer mon logiciel",
+    reassure: "Une minute suffit. Pas besoin de compte.",
     preview: "Voir mon logiciel",
     previewTitle: "Votre logiciel",
     previewEmpty:
@@ -34,15 +29,13 @@ export const fr = {
     close: "Fermer",
     help: "Aide sur WhatsApp",
     helpMessage: "Bonjour, j'ai besoin d'aide à l'étape {step} ({name}).",
-    saved: "Vos réponses sont enregistrées",
+    saved: "C'est enregistré",
     offline:
-      "Hors connexion, vos réponses seront envoyées dès le retour du réseau.",
+      "Hors connexion. Ce que vous écrivez sera envoyé dès le retour du réseau.",
   },
 
   steps: {
     business: "Votre commerce",
-    questions: "Quelques questions",
-    products: "Vos produits (facultatif)",
     serial: "Votre logiciel",
   },
 
@@ -67,6 +60,8 @@ export const fr = {
 
   packs: {
     heading: "Quel est votre commerce ?",
+    required: "Choisissez votre commerce pour continuer.",
+    change: "Changer",
     pharmacy: "Pharmacie",
     bakery: "Boulangerie",
     restaurant: "Restaurant ou café",
@@ -95,15 +90,13 @@ export const fr = {
 
   name: {
     heading: "Comment s'appelle votre commerce ?",
+    intro: "Ce que vous écrivez ici s'affiche sur vos reçus. Seul le nom est obligatoire.",
     latin: "Nom du commerce",
-    latinHelp: "En lettres latines. Il s'affiche en haut de vos reçus.",
     arabic: "Nom en arabe",
-    arabicHelp: "Il s'affiche sous le premier nom.",
     required: "Écrivez le nom de votre commerce pour continuer.",
   },
 
   receiptDetails: {
-    more: "Ajouter le nom en arabe, le téléphone, l'adresse ou le logo",
     phone: "Téléphone",
     address: "Adresse",
   },
@@ -138,81 +131,11 @@ export const fr = {
     saving: "Enregistrement",
     saved: "Enregistré",
     failed: "Pas encore enregistré. Nous réessayons.",
-    unavailable: "Vos réponses restent sur cet appareil pour le moment.",
+    unavailable: "Ce que vous écrivez reste sur cet appareil pour le moment.",
   },
 
-  interview: {
-    pickAny: "Vous pouvez en choisir plusieurs.",
-    yes: "Oui",
-    no: "Non",
-    questionOf: "Question {current} sur {total}",
-  },
 
-  products: {
-    heading: "Vos produits",
-    help: "Facultatif. Vous pourrez les ajouter plus tard dans le logiciel.",
-    template: "Télécharger le modèle",
-    choose: "Choisir mon fichier",
-    reading: "Lecture de votre fichier",
-    ready: {
-      one: "{count} produit prêt.",
-      other: "{count} produits prêts.",
-    },
-    toFix: {
-      one: "{count} ligne à corriger.",
-      other: "{count} lignes à corriger.",
-    },
-    problem: "Ligne {row} : {what} Vérifiez la colonne {column}.",
-    missingName: "nom manquant.",
-    missingPrice: "prix manquant.",
-    badPrice: "prix illisible.",
-    badQuantity: "quantité illisible.",
-    badExpiry: "date de péremption illisible.",
-    missingColumns: "Nous n'avons pas trouvé les colonnes du nom et du prix. Utilisez le modèle, ou renommez vos colonnes.",
-    truncated: "Seules les 10 000 premières lignes ont été lues.",
-    keep: "Garder ces produits",
-    skip: "Passer cette étape",
-    zeroPrice: "prix à zéro.",
-    negativePrice: "prix négatif.",
-    pastExpiry: "Ligne {row} : la date de péremption est déjà passée ({found}). Vérifiez, ou importez quand même.",
-    headerFound: "Nous avons trouvé vos colonnes à la ligne {row}.",
-    totalsSkipped: "{count} ligne de total ignorée.",
-    totalsSkippedOther: "{count} lignes de total ignorées.",
-    whichSheet: "Quelle feuille contient vos produits ?",
-    sheetRows: "{count} lignes",
-    whichColumn: "Quelle colonne contient {what} ?",
-    columnName: "le nom du produit",
-    columnPrice: "le prix",
-    columnQuantity: "la quantité",
-    columnExpiry: "la date de péremption",
-    columnBatch: "le numéro de lot",
-    noColumn: "Aucune",
-    preview: "Voici vos cinq premiers produits, tels qu'ils seront importés.",
-    confirm: "C'est bon, importer",
-    currencyQuestion: "Vos prix sont-ils en nouvelles ouguiyas (MRU) ou en anciennes ouguiyas ?",
-    currencyNew: "Nouvelles ouguiyas (MRU)",
-    currencyOld: "Anciennes ouguiyas",
-    currencyCheck: "En anciennes ouguiyas, ces prix deviennent :",
-    duplicates: "Ces produits apparaissent deux fois.",
-    keepFirst: "Garder un seul",
-    keepAll: "Ce sont deux produits différents",
-    mergeQuantities: "Additionner les quantités",
-    fixRow: "Corriger",
-    unreadable: "Nous n'avons pas pu lire ce fichier. Envoyez un fichier Excel ou CSV, pas une photo ni un PDF, et sans mot de passe. Vous pouvez aussi partir de notre modèle.",
-    another: "Choisir un autre fichier",
-  },
 
-  staff: {
-    heading: "Vos employés",
-    help: "Facultatif. Le code de chacun se choisit plus tard, dans le logiciel.",
-    name: "Nom",
-    role: "Rôle",
-    manager: "Gérant",
-    cashier: "Caissier",
-    add: "Ajouter",
-    remove: "Enlever",
-    empty: "Personne pour l'instant.",
-  },
 
   account: {
     heading: "Créez votre compte",
@@ -251,9 +174,10 @@ export const fr = {
 
     /* On the shop PC itself: install, then open, and never type the serial. */
     pcHeading: "Votre logiciel est prêt",
+    pcIntro: "Téléchargez-le, installez-le, ouvrez-le : il s'ouvre directement sur votre commerce. Rien à taper.",
     downloadInstall: "Télécharger et installer",
-    alsoMac: "Vous êtes sur Mac ? Télécharger pour Mac",
-    alsoWindows: "Vous êtes sur Windows ? Télécharger pour Windows",
+    alsoMac: "C'est pour un Mac ? Télécharger pour Mac",
+    alsoWindows: "C'est pour un ordinateur Windows ? Télécharger pour Windows",
     termsNote: "En téléchargeant le logiciel, vous acceptez ses {terms}.",
     termsLink: "conditions d'utilisation",
     keepNumber: "Votre numéro de série. Gardez-le : il ouvre votre logiciel sur un autre appareil ou après une réinstallation.",
@@ -270,12 +194,6 @@ export const fr = {
   },
 
   install: {
-    question: "Sur quel ordinateur allez-vous installer votre logiciel ?",
-    windows: "Windows",
-    windowsHint: "Ordinateur de bureau ou portable",
-    mac: "Mac",
-    macHint: "iMac, MacBook ou Mac mini",
-    detected: "Cet ordinateur",
     downloadWindows: "Télécharger pour Windows",
     downloadMac: "Télécharger pour Mac",
     guideWindows: "Installer sur Windows",
@@ -328,6 +246,8 @@ export const fr = {
   phoneApp: {
     heading: "Sur votre téléphone",
     intro: "Votre logiciel marche aussi sur un téléphone Android ou un iPhone, sans rien télécharger depuis un store. Il faut internet une seule fois, pour l'ouvrir. Ensuite il marche sans.",
+    /* On a phone, where opening it is the page's main action. */
+    leadIntro: "Il s'ouvre sur votre commerce, sans rien télécharger depuis un store. Il faut internet une seule fois, pour l'ouvrir. Ensuite il marche sans.",
     open: "Ouvrir sur ce téléphone",
     scan: "Scannez ce code avec l'appareil photo de votre téléphone. Votre commerce s'ouvre sans numéro à taper ; sur iPhone, après l'avoir ajouté à l'écran d'accueil.",
     iphone: "Sur iPhone : dans Safari, touchez le bouton Partager, puis « Sur l'écran d'accueil ». Le logiciel s'ouvre ensuite depuis son icône, et jamais dans Safari.",
@@ -454,7 +374,7 @@ export const fr = {
 
   /*
    * The owner's one number, his numéro de série: given on the phone when the
-   * questions end, typed on the shop computer to download the software, and
+   * first step ends, typed on the shop computer to download the software, and
    * typed into the software to activate it.
    */
   code: {
@@ -494,10 +414,6 @@ export const fr = {
     link: "Payer avec mon numéro de série",
   },
 
-  placeholder: {
-    title: "Cette étape arrive bientôt",
-    body: "Nous préparons les questions de cette étape. Revenez dans quelques jours, ou écrivez-nous sur WhatsApp.",
-  },
 } as const;
 
 /*

@@ -4,6 +4,7 @@ import { PackScreens } from "@/components/packs/screens";
 import { Notify } from "@/components/packs/notify";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
+import { StickyCta } from "@/components/sticky-cta";
 import { Container } from "@/components/ui/container";
 import { FadeIn } from "@/components/motion/fade-in";
 import { getDictionary } from "@/lib/i18n";
@@ -95,7 +96,7 @@ export function PackPage({
 
             {open ? (
               <>
-                <div className="mt-10">
+                <div data-hides-sticky-cta className="mt-10">
                   <Button
                     href={href}
                     variant="accent"
@@ -185,7 +186,7 @@ export function PackPage({
               <p className="mt-4 text-base leading-relaxed text-muted-foreground">
                 {copy.common.closingBody}
               </p>
-              <div className="mt-8">
+              <div data-hides-sticky-cta className="mt-8">
                 <Button href={href} variant="accent" className="min-h-[48px] text-base">
                   {copy.cta}
                   <ArrowRight className="size-4 rtl:rotate-180" aria-hidden />
@@ -233,6 +234,7 @@ export function PackPage({
           </ul>
         </Container>
       </nav>
+      {open ? <StickyCta href={href} label={copy.cta} /> : null}
     </>
   );
 }

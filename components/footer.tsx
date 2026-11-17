@@ -42,7 +42,7 @@ export function Footer({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   ];
 
   return (
-    <footer className="border-t border-border">
+    <footer data-hides-sticky-cta className="border-t border-border">
       <Container className="grid grid-cols-2 gap-x-8 gap-y-12 py-16 lg:grid-cols-[minmax(0,1.3fr)_repeat(4,minmax(0,1fr))]">
         <div className="col-span-2 lg:col-span-1">
           <Logo className="h-6" alt={dict.common.brand} />

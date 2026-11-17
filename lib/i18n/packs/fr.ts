@@ -13,11 +13,11 @@ export const packPagesFr: PackPagesCopy = {
     doesHeading: "Ce que le logiciel fait",
     previewHeading: "Les écrans, avant de décider",
     previewBody:
-      "Ils changent à chaque réponse, et le reçu porte votre nom dès que vous le tapez.",
+      "Ce sont les écrans tels qu'ils sortiront chez vous, et le reçu porte votre nom dès que vous le tapez.",
     worriesHeading: "Ce qu'on nous demande",
-    closingHeading: "Commencez par la première question",
+    closingHeading: "Commencez par le nom de votre commerce",
     closingBody:
-      "Il faut moins de cinq minutes, et le logiciel prend forme à chaque réponse.",
+      "Une minute suffit : vous écrivez son nom, et votre logiciel est prêt.",
     soonHeading: "Ce métier n'est pas encore ouvert",
     soonBody: "Laissez votre numéro, nous vous prévenons le jour où il l'est.",
     pricing: "Voir les tarifs",
@@ -43,7 +43,7 @@ export const packPagesFr: PackPagesCopy = {
       "Le logiciel de gestion de votre pharmacie à Nouakchott : péremption, lots, vente à la boîte ou à la plaquette, crédit clients. Sans internet, essai gratuit.",
     heading: "Le logiciel de votre pharmacie, fait à votre façon de travailler",
     intro:
-      "Vous répondez à quelques questions sur votre pharmacie et vous repartez avec le logiciel qui va avec : la vente à la boîte ou à la plaquette, les dates de péremption, les numéros de lot, et les comptes des clients qui paient plus tard. Il s'installe sur l'ordinateur du comptoir ou s'ouvre sur votre téléphone, et travaille sans internet.",
+      "Vous écrivez le nom de votre pharmacie et vous repartez avec le logiciel qui va avec : la vente à la boîte ou à la plaquette, les dates de péremption, les numéros de lot, et les comptes des clients qui paient plus tard. Il s'installe sur l'ordinateur du comptoir ou s'ouvre sur votre téléphone, et travaille sans internet.",
     cta: "Créer le logiciel de ma pharmacie",
     does: [
       {
@@ -493,7 +493,7 @@ export const packPagesFr: PackPagesCopy = {
     worries: [
       {
         question: "Mon activité n'est dans aucune liste",
-        answer: "C'est pour elle. Vous répondez à quelques questions et le logiciel se règle sur vos réponses.",
+        answer: "C'est pour elle : vous écrivez son nom, et vous repartez avec un logiciel pour vendre, encaisser et suivre vos clients.",
       },
       {
         question: "Est-ce que mes chiffres partent quelque part ?",

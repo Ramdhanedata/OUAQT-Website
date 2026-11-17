@@ -12,20 +12,23 @@ import { browserClient } from "@/builder/db/client";
 import type { DraftAnswers } from "@/builder/draft/store";
 import type { ImportedProduct } from "@/builder/import/parse";
 import { Button } from "./owner-button";
-import { cn, fill } from "@/lib/utils";
+import { fill } from "@/lib/utils";
 import { localisedHref } from "@/lib/i18n/routes";
 import { Field, TextInput } from "./fields";
-import type { StaffMember } from "./step-products";
+
+/* Names a draft may still carry from when the builder asked for the staff. */
+type StaffMember = { name: string; role: "manager" | "cashier" };
 import { InstallHelp } from "./install-help";
 import { PhoneApp } from "./phone-app";
 import { countDownload } from "@/lib/site-count";
+import { Download } from "lucide-react";
 
 /*
- * Step 4: an account, then the number that makes it his.
+ * The last step: his software, and, only when no number could be given, an
+ * account first.
  *
- * He has been answering questions for a few minutes by now, so this
- * asks for the least that will let him come back: a phone number and a
- * password. No code by SMS, because that means an SMS provider, a cost per
+ * The account asks for the least that will let him come back: a phone number
+ * and a password. No code by SMS, because that means an SMS provider, a cost per
  * message, and an owner stuck at a checkpoint with no signal.
  *
  * The phone number becomes the login. Supabase wants an address, so the
@@ -341,7 +344,7 @@ export function SerialPanel({
 }) {
   const [machine, setMachine] = useState<Machine>("other");
   useEffect(() => setMachine(machineOf()), []);
-  const { target, detected, chip, choose } = useInstallTarget();
+  const { target, chip, choose } = useInstallTarget();
 
   const anyInstaller = Boolean(installers.windows || installers.mac);
   const appleFile = installers.macApple ?? installers.mac;
@@ -351,67 +354,59 @@ export function SerialPanel({
   const href = target === "windows" ? installers.windows : macFile;
 
   if (machine !== "phone" && anyInstaller) {
+    /* The other system's file, for the owner who builds here and installs on the shop's computer. */
+    const other = target === "windows" ? "mac" : "windows";
+    const otherHref = other === "windows" ? installers.windows : appleFile;
+    const downloaded = (platform: "windows" | "mac") => {
+      registerDownload(platform, pack);
+      if (makeShop) makeShopFrom(serial, makeShop.products);
+    };
+
     return (
       <div className="space-y-6">
-        <h2 className="text-xl font-semibold text-foreground">{copy.serial.pcHeading}</h2>
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight text-foreground">{copy.serial.pcHeading}</h2>
+          <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.serial.pcIntro}</p>
+        </div>
 
-        <fieldset>
-          <legend className="text-base font-medium text-foreground">{copy.install.question}</legend>
-          <div className="mt-3 grid grid-cols-2 gap-3">
-            {(
-              [
-                ["windows", copy.install.windows, copy.install.windowsHint, Boolean(installers.windows)],
-                ["mac", copy.install.mac, copy.install.macHint, Boolean(appleFile)],
-              ] as const
-            )
-              .filter(([, , , available]) => available)
-              .map(([value, name, hint]) => (
-                <button
-                  key={value}
-                  type="button"
-                  aria-pressed={target === value}
-                  onClick={() => choose(value)}
-                  className={cn(
-                    "flex min-h-[88px] flex-col items-start gap-1 rounded-xl border-2 p-3 text-start transition-colors",
-                    target === value ? "border-foreground bg-surface" : "border-border hover:border-foreground/40"
-                  )}
-                >
-                  <span className="text-base font-semibold text-foreground">{name}</span>
-                  <span className="text-sm leading-snug text-muted-foreground">{hint}</span>
-                  {detected === value ? (
-                    <span className="mt-1 rounded-full bg-accent/20 px-2 py-0.5 text-xs font-medium text-foreground">
-                      {copy.install.detected}
-                    </span>
-                  ) : null}
-                </button>
-              ))}
-          </div>
-        </fieldset>
-
+        {/*
+          * One button, for the computer he is on: nothing to choose first.
+          * The other system is one line below, and choosing it moves the
+          * install guide with it.
+          */}
         {href ? (
           <a
             href={href}
-            onClick={() => {
-              registerDownload(target, pack);
-              if (makeShop) makeShopFrom(serial, makeShop.products);
-            }}
-            className="flex min-h-[56px] w-full items-center justify-center rounded-lg bg-accent px-5 text-lg font-semibold text-accent-foreground"
+            onClick={() => downloaded(target)}
+            className="flex min-h-[60px] w-full items-center justify-center gap-2 rounded-full bg-accent px-6 text-lg font-semibold text-accent-foreground"
           >
+            <Download className="h-5 w-5" />
             {target === "windows" ? copy.install.downloadWindows : copy.install.downloadMac}
           </a>
         ) : null}
-        {target === "mac" && otherMac ? (
-          <a
-            href={otherMac}
-            onClick={() => {
-              registerDownload("mac", pack);
-              if (makeShop) makeShopFrom(serial, makeShop.products);
-            }}
-            className="-mt-3 block text-sm text-muted-foreground underline underline-offset-4"
-          >
-            {copy.serial.otherMacIntel}
-          </a>
-        ) : null}
+        <div className="-mt-2 space-y-1">
+          {otherHref ? (
+            <a
+              href={otherHref}
+              onClick={() => {
+                choose(other);
+                downloaded(other);
+              }}
+              className="flex min-h-[44px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+            >
+              {other === "mac" ? copy.serial.alsoMac : copy.serial.alsoWindows}
+            </a>
+          ) : null}
+          {target === "mac" && otherMac ? (
+            <a
+              href={otherMac}
+              onClick={() => downloaded("mac")}
+              className="flex min-h-[44px] items-center text-base text-muted-foreground underline decoration-border underline-offset-4 hover:text-foreground"
+            >
+              {copy.serial.otherMacIntel}
+            </a>
+          ) : null}
+        </div>
         {href ? <TermsNote copy={copy} language={language} /> : null}
 
         <div className={guideAlways ? undefined : "wizard:hidden"}>
@@ -443,6 +438,7 @@ export function SerialPanel({
       installers={installers}
       tutorials={tutorials}
       showDownloads={machine === "other"}
+      onPhone={machine === "phone"}
       onDownload={makeShop ? () => makeShopFrom(serial, makeShop.products) : undefined}
     />
   );
@@ -478,6 +474,7 @@ function PhoneOrSoon({
   installers,
   tutorials,
   showDownloads,
+  onPhone,
   onDownload,
 }: {
   copy: BuilderCopy;
@@ -486,6 +483,8 @@ function PhoneOrSoon({
   installers: Installers;
   tutorials: Tutorials;
   showDownloads: boolean;
+  /* A phone: its own app first, one tap away, and the computer after. */
+  onPhone: boolean;
   onDownload?: () => void;
 }) {
   const [copied, setCopied] = useState(false);
@@ -510,7 +509,9 @@ function PhoneOrSoon({
           <p className="text-lg font-medium leading-relaxed text-foreground">{copy.serial.soon}</p>
         </div>
       ) : null}
-      <div>
+      {onPhone ? <PhoneApp copy={copy} serial={serial} lead /> : null}
+
+      <div className={onPhone ? "border-t border-border pt-6" : undefined}>
         <h2 className="text-xl font-semibold text-foreground">{copy.serial.heading}</h2>
         <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.serial.intro}</p>
       </div>
@@ -537,13 +538,13 @@ function PhoneOrSoon({
           href={share}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex min-h-[48px] items-center rounded-lg border border-border px-4 text-base text-foreground"
+          className="inline-flex min-h-[48px] items-center rounded-full border border-border px-5 text-base text-foreground"
         >
           {copy.serial.share}
         </a>
       </div>
 
-      <PhoneApp copy={copy} serial={serial} />
+      {onPhone ? null : <PhoneApp copy={copy} serial={serial} />}
 
       {!anyInstaller ? null : showDownloads ? (
         <div className="space-y-5">
@@ -589,8 +590,8 @@ function PhoneOrSoon({
           <InstallHelp copy={copy} first="windows" />
         </div>
       ) : (
-        <div className="rounded-xl border-2 border-foreground p-5">
-          <p className="text-lg leading-relaxed text-foreground">
+        <div className="rounded-xl border border-border p-5">
+          <p className="text-base leading-relaxed text-foreground">
             {before}
             <bdi dir="ltr" className="font-semibold">
               {site}

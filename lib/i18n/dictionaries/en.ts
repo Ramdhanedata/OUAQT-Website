@@ -82,7 +82,7 @@ export const en = {
       eyebrow: "The Builder",
       heading: "You build it yourself, you install it the same day",
       intro:
-        "You answer the questions, you download your software and you install it on the shop PC. Nobody travels to you, so there is no installation fee to pay: the licence alone is enough.",
+        "You choose your business, you write its name, you download your software and you install it on the shop PC. Nobody travels to you, so there is no installation fee to pay: the licence alone is enough.",
       soon: "Price coming soon",
       trial: "Free trial of {days} days before you pay anything.",
       devices: "{devices} devices included, computer or phone: for example the shop computer and your phone. Each works without internet, and what is entered on one appears on the other.",
@@ -121,7 +121,7 @@ export const en = {
     eyebrow: "Pricing",
     heading: "The software you build yourself, and the software we build for you.",
     intro:
-      "The first is built online, in a few questions, and installed the same day. The second we build and install at your site. Either way the software runs on your own devices and needs no internet connection for daily work.",
+      "The first is built online, in a minute, and installed the same day. The second we build and install at your site. Either way the software runs on your own devices and needs no internet connection for daily work.",
     freeVisit: "Before anything is agreed, our first visit to understand how you work is free.",
     scope: "These prices are the same for every ready-to-install OUAQT product.",
     launchScope:
@@ -278,7 +278,7 @@ export const en = {
       },
       selfData: {
         h: "Your data stays yours",
-        b: "Your sales, your stock, your movements and your customers' accounts are kept on your devices. When you have several devices, they exchange them over the internet: this data passes through our servers encrypted, with a key derived from your serial number. We do not read it or use it, and it is deleted as soon as your other devices have received it, after 45 days at most. Because we keep your serial numbers, we could technically decrypt it; we do not. Beyond that, what we hold is limited to what it takes to build your software and manage your licence: your account, your answers to the questions, the configuration that comes out of them, your logo, the product list you imported at the start, your serial numbers, your devices and your payments.",
+        b: "Your sales, your stock, your movements and your customers' accounts are kept on your devices. When you have several devices, they exchange them over the internet: this data passes through our servers encrypted, with a key derived from your serial number. We do not read it or use it, and it is deleted as soon as your other devices have received it, after 45 days at most. Because we keep your serial numbers, we could technically decrypt it; we do not. Beyond that, what we hold is limited to what it takes to build your software and manage your licence: your account, the trade you chose, the configuration that comes out of it, your logo, the product list you imported at the start, your serial numbers, your devices and your payments.",
       },
       selfSupport: {
         h: "What the licence includes",
@@ -286,7 +286,7 @@ export const en = {
       },
       selfChanges: {
         h: "What the licence does not include",
-        b: "A trade the Builder does not cover yet, or a way of working its questions do not provide for, is a bespoke project and is quoted separately.",
+        b: "A trade the Builder does not cover yet, or a way of working its software does not provide for, is a bespoke project and is quoted separately.",
       },
       suspension: {
         h: "Suspension of a licence",
@@ -369,7 +369,7 @@ export const en = {
       },
       builder: {
         h: "When you build software",
-        b: "To build your software and manage your licence, we keep: the account you open, your answers to the questions, the configuration that comes out of them, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the devices you activate and your payments. When you download the software, we also keep, for a few hours, a scrambled mark of your internet connection (never the address itself) and the system you chose, so the software recognises its download and opens without asking for your number. The mark is erased as soon as it has been used.",
+        b: "To build your software and manage your licence, we keep: the account you open, the trade you choose, the configuration that comes out of it, your business name and details as they will appear on your receipts, your logo, the product list you import at the start, your staff names if you enter them, your serial numbers, the devices you activate and your payments. When you download the software, we also keep, for a few hours, a scrambled mark of your internet connection (never the address itself) and the system you chose, so the software recognises its download and opens without asking for your number. The mark is erased as soon as it has been used.",
       },
       neverReceived: {
         h: "Your sales and your customers",
@@ -427,7 +427,7 @@ export const en = {
     tools: "What's in it",
     screenshotAlt: "product screenshot",
     /* Shown only on the case studies whose trade the builder covers. */
-    builderNote: "Software like this is now built online, by answering a few questions.",
+    builderNote: "Software like this is now built online, in a minute.",
     builderNoteLink: "See the software for this trade",
   },
 
@@ -449,9 +449,9 @@ export const en = {
       "And every time, the same discovery. Nobody understood the problem better than the owner himself. Our job was never to teach him his trade, it was to turn what he already knew into software that looked like him.",
     storyHeading: "What we did about it",
     storyBody1:
-      "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into the Builder, an online software builder: the owner answers questions about the way he works, and leaves with his software, ready to install, the same day.",
+      "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into the Builder, an online software builder: the owner chooses his trade, writes his shop's name, and leaves with his software, ready to install, the same day.",
     storyBody2:
-      "This is not a template touched up afterwards. It is the same software for everybody, set by his own answers: his products, his languages, his staff, the way he takes money. It runs on his own devices, computer or phone, with no internet, and his figures stay with him: when they pass from one device to the other, they are encrypted.",
+      "This is not a template touched up afterwards. It is the same software for everybody, set for his own trade: his products, his languages, his staff, the way he takes money. It runs on his own devices, computer or phone, with no internet, and his figures stay with him: when they pass from one device to the other, they are encrypted.",
     storyBody3:
       "The Builder is now our main product. The trades it does not cover yet, and the businesses whose work falls outside it, we still build for one at a time, as before.",
     marketHeading: "The numbers behind it.",
@@ -501,7 +501,7 @@ export const en = {
   builderHome: {
     heroEyebrow: "Management software for small and medium businesses",
     heroHeading: "Run your business from your computer and your phone.",
-    heroBody: "With the Builder, you describe your business and leave a few minutes later with your till, your stock and your reports. The same software on the shop computer and on your phone, even without internet.",
+    heroBody: "With the Builder, you choose your business and leave a few minutes later with your till, your stock and your reports. The same software on the shop computer and on your phone, even without internet.",
     heroPrimary: "Build my software",
     heroSecondary: "Try the demo",
     heroReassurance: "Phone or computer · Works without internet · Your data stays with you · {days} day free trial",
@@ -523,12 +523,12 @@ export const en = {
     impactTrialLabel: "to try everything, with nothing to pay",
 
     builderEyebrow: "The Builder",
-    builderHeading: "The Builder makes your software from your answers.",
+    builderHeading: "The Builder makes the software for your trade, in your name.",
     builderBody: "It is the heart of OUAQT. Instead of generic software you have to learn, the Builder puts together yours: your products, your prices, how you take payment, your staff and your receipts.",
-    builderStep1: "Describe your business",
-    builderStep1Body: "What you sell, how you take payment, who works the till. Simple questions, in French, Arabic or English.",
+    builderStep1: "Choose your business",
+    builderStep1Body: "Pharmacy, shop, restaurant, hotel… Then its name, phone, address and logo, for your receipts. That is all.",
     builderStep2: "Watch it work",
-    builderStep2Body: "The real software runs beside the questions and changes with every answer. You try it before you download it.",
+    builderStep2Body: "The real software runs beside the form, in your name, while you type. You try it before you download it.",
     builderStep3: "Install and start",
     builderStep3Body: "Download it for Windows or Mac, or open it on your phone. Your serial number activates it, and your free trial begins.",
     builderCta: "Build my software",
@@ -607,7 +607,7 @@ export const en = {
 
     tradesEyebrow: "Trades",
     tradesHeading: "Software for every trade",
-    tradesBody: "Each trade has its own screens, questions and receipts. Pick yours to start.",
+    tradesBody: "Each trade has its own screens, words and receipts. Pick yours to start.",
     tradesOpen: "Available",
     tradesSoon: "Coming soon",
     tradesStart: "Start",
@@ -689,7 +689,7 @@ export const en = {
     faq6Body: "Write to us on WhatsApp. We usually answer the same day, in French or Arabic.",
 
     ctaHeading: "Equip your business today.",
-    ctaBody: "A few minutes of questions and your software is ready to install. For a custom project, let us talk first.",
+    ctaBody: "Your business, its name, and your software is ready to install. For a custom project, let us talk first.",
     ctaButton: "Build my software",
     ctaTalk: "Talk to the team",
     ctaWhatsapp: "Write on WhatsApp",
@@ -771,7 +771,7 @@ export const en = {
     },
     "pharmacy-pos": {
       metaTitle: "Pharmacy software: registers that fill themselves",
-      metaDescription: "A pharmacy till that fills the medicine registers instead of the staff. The same software can now be built online, from a few questions.",
+      metaDescription: "A pharmacy till that fills the medicine registers instead of the staff. The same software can now be built online, in a minute.",
       title: "Pharmacy Till & Medicine Records",
       summary: "A pharmacy till that fills in medicine records by itself, so staff stop retyping them.",
       description: "Keeping medicine records meant hours of the same typing every day. Now the system fills them in from the pharmacy's own history, and staff only deal with the unusual cases.",

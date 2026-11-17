@@ -11,6 +11,8 @@ import { PricingTeaser } from "@/components/home/pricing-teaser";
 import { Trades } from "@/components/home/trades";
 import { Why } from "@/components/home/why";
 import { JsonLd } from "@/components/seo/json-ld";
+import { StickyCta } from "@/components/sticky-cta";
+import { getBuilderCopy } from "@/builder/copy";
 import { builderTerms } from "@/lib/data/pricing";
 import { getPublicSettings } from "@/builder/db/settings";
 import { getLaunchOffer } from "@/builder/payment/launch";
@@ -30,9 +32,9 @@ function tourCopy(dict: Dictionary): TourCopy {
 /*
  * The home page of a company with one product and a second trade.
  *
- * The Builder first, because it is the product: what it is, the software
- * itself running, what it does, which trades it serves, why a small business
- * can trust it and what it costs. Then the custom work, set apart as the
+ * The Builder first, because it is the product: what it is, which trades it
+ * serves (each one a way straight in), the software itself running, what it
+ * does, why a small business can trust it and what it costs. Then the custom work, set apart as the
  * second offer, and the questions people ask.
  *
  * Which trades are open and how long the trial runs are read from settings,
@@ -49,7 +51,7 @@ export default async function Home(props: { params: Promise<{ lang: Locale }> })
 
   /*
    * An open trade goes straight into the builder with the trade already
-   * chosen: one tap from the home page to the first question. Its own page,
+   * chosen: one tap from the home page to the shop's name. Its own page,
    * which is what a search finds, sits beside it as a second link for the
    * owner who wants to read before he starts.
    */
@@ -66,15 +68,21 @@ export default async function Home(props: { params: Promise<{ lang: Locale }> })
       <JsonLd data={softwareApplicationData(params.lang, dict, settings)} />
       <BuilderHero dict={dict} lang={params.lang} trialDays={builderTerms(settings).trialDays} />
       <BuilderImpact dict={dict} trialDays={builderTerms(settings).trialDays} />
+      {/*
+        * The trades straight after the promise: choosing one is the builder's
+        * first step, so the home page takes it. One tap here, the shop's name
+        * there, and the software is ready.
+        */}
+      <Trades dict={{ builderHome: dict.builderHome, packLabels: dict.packLabels }} enabledPacks={enabled} packHrefs={packHrefs} packPages={packPages} />
       <DeviceTour home={tourCopy(dict)} lang={params.lang} />
       <BuilderProduct dict={dict} lang={params.lang} demoPacks={enabled.length > 0 ? enabled : [...packs]} />
       <Features dict={dict} />
-      <Trades dict={{ builderHome: dict.builderHome, packLabels: dict.packLabels }} enabledPacks={enabled} packHrefs={packHrefs} packPages={packPages} />
       <Why dict={dict} />
       <PricingTeaser dict={dict} lang={params.lang} settings={settings} offer={offer} />
       <CustomPath dict={dict} lang={params.lang} />
       <BuilderFaq dict={dict} />
       <BuilderCta dict={dict} lang={params.lang} />
+      <StickyCta href={builder} label={getBuilderCopy(params.lang).nav} />
     </>
   );
 }

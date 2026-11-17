@@ -54,9 +54,9 @@ export const packPagesEn: PackPagesCopy = {
     previewBody:
       "These are the screens as they will come out at your place. The receipt carries your own name as soon as you type it.",
     worriesHeading: "What owners ask us",
-    closingHeading: "Start with the first question",
+    closingHeading: "Start with your business name",
     closingBody:
-      "It takes under five minutes, and you watch the result settle as you answer.",
+      "A minute is enough: you write its name, and your software is ready.",
     soonHeading: "This trade is not open yet",
     soonBody: "Leave your number and we will tell you the day it is.",
     pricing: "See the prices",
@@ -82,7 +82,7 @@ export const packPagesEn: PackPagesCopy = {
       "Pharmacy management software for Nouakchott and Mauritania: expiry dates, batch numbers, selling by box or by strip, customer credit. Works offline, free trial.",
     heading: "Your pharmacy's software, built around the way you work",
     intro:
-      "You answer a few questions about your pharmacy and you leave with the software that fits it: selling by the box or by the strip, expiry dates, batch numbers, and accounts for the customers who pay later. It installs on the counter PC and works with no internet.",
+      "You write your pharmacy's name and you leave with the software that fits it: selling by the box or by the strip, expiry dates, batch numbers, and accounts for the customers who pay later. It installs on the counter PC and works with no internet.",
     cta: "Build my pharmacy's software",
     does: [
       {
@@ -529,7 +529,7 @@ export const packPagesEn: PackPagesCopy = {
     worries: [
       {
         question: "My business is on no list",
-        answer: "This is for it. You answer a few questions and the software sets itself to your answers.",
+        answer: "This is for it: you write its name, and you leave with software to sell, take payment and follow your customers.",
       },
       {
         question: "Do my figures go anywhere?",

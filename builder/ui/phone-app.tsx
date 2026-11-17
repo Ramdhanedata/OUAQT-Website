@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { BuilderCopy } from "@/builder/copy";
+import { Smartphone } from "lucide-react";
 
 /*
  * The owner's software on his phone, from his account.
@@ -46,15 +47,28 @@ function onAPhone(): boolean {
   return window.matchMedia("(pointer: coarse) and (max-width: 820px)").matches;
 }
 
-export function PhoneApp({ copy, serial }: { copy: BuilderCopy; serial: string }) {
+export function PhoneApp({
+  copy,
+  serial,
+  lead = false,
+}: {
+  copy: BuilderCopy;
+  serial: string;
+  /* On a phone this is the page's main action: the software is ready, and one press opens it. */
+  lead?: boolean;
+}) {
   const [phone, setPhone] = useState<boolean | null>(null);
   const [code, setCode] = useState<string | null>(null);
   const [testerPass, setTesterPass] = useState<string | null>(null);
+  /* Which phone this is, when it says: it is told how to keep the app on its own home screen, not the other's. */
+  const [kind, setKind] = useState<"iphone" | "android" | null>(null);
 
   useEffect(() => {
     const here = onAPhone();
     setPhone(here);
     if (here) {
+      const agent = navigator.userAgent;
+      setKind(/iPhone|iPad|iPod/i.test(agent) ? "iphone" : /Android/i.test(agent) ? "android" : null);
       void testerPassHere().then(setTesterPass);
       return;
     }
@@ -65,14 +79,23 @@ export function PhoneApp({ copy, serial }: { copy: BuilderCopy; serial: string }
 
   return (
     <section className="space-y-4">
-      <h2 className="text-xl font-semibold text-foreground">{copy.phoneApp.heading}</h2>
-      <p className="text-base leading-relaxed text-muted-foreground">{copy.phoneApp.intro}</p>
+      {lead ? (
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground">{copy.serial.pcHeading}</h2>
+      ) : (
+        <h2 className="text-xl font-semibold text-foreground">{copy.phoneApp.heading}</h2>
+      )}
 
+      {/* What to press comes before what to read. */}
       {phone === true ? (
         <a
           href={phoneAppLink(serial, testerPass)}
-          className="inline-flex min-h-[52px] items-center rounded-lg bg-foreground px-6 text-base font-semibold text-background"
+          className={
+            lead
+              ? "flex min-h-[60px] w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-accent px-4 text-base font-semibold text-accent-foreground sm:text-lg"
+              : "inline-flex min-h-[52px] items-center gap-2 rounded-full bg-foreground px-6 text-base font-semibold text-background"
+          }
         >
+          <Smartphone className="h-5 w-5" />
           {copy.phoneApp.open}
         </a>
       ) : phone === false && code ? (
@@ -83,9 +106,10 @@ export function PhoneApp({ copy, serial }: { copy: BuilderCopy; serial: string }
         </div>
       ) : null}
 
+      <p className="text-base leading-relaxed text-muted-foreground">{lead ? copy.phoneApp.leadIntro : copy.phoneApp.intro}</p>
       <ul className="space-y-2 text-base leading-relaxed text-foreground">
-        <li>{copy.phoneApp.iphone}</li>
-        <li>{copy.phoneApp.android}</li>
+        {kind === "android" ? null : <li>{copy.phoneApp.iphone}</li>}
+        {kind === "iphone" ? null : <li>{copy.phoneApp.android}</li>}
       </ul>
       <p className="text-base leading-relaxed text-muted-foreground">{copy.phoneApp.note}</p>
     </section>

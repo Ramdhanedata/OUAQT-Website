@@ -11,7 +11,7 @@ export function BuilderCta({ dict, lang }: { dict: Dictionary; lang: Locale }) {
   const home = dict.builderHome;
 
   return (
-    <section className="py-16 sm:py-24">
+    <section data-hides-sticky-cta className="py-16 sm:py-24">
       <Container>
         <div className="relative isolate overflow-hidden rounded-[2rem] bg-foreground px-6 py-16 text-center text-background sm:px-12 sm:py-20">
           <div aria-hidden className="glow-gold absolute left-1/2 top-full -z-10 h-[34rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 opacity-70" />

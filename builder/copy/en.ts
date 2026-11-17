@@ -4,25 +4,20 @@ import type { BuilderCopy } from "./fr";
 export const en: BuilderCopy = {
   nav: "Build my software",
 
+  /* The page's title and description, for a search engine and a shared link. The page itself opens on the first step. */
   landing: {
     title: "Build the software for your shop",
     intro:
-      "Choose your business, answer two or three questions, and your software is ready on a computer or a phone.",
-    duration: "About 2 minutes",
-    noAccount: "No account needed to start",
-    steps: [
-      "Your business and its name",
-      "Two or three questions",
-      "Your software, ready to open",
-    ],
-    start: "Start",
-    resume: "Pick up where you left off",
+      "Choose your business, write its name, and your software is ready on a computer or a phone.",
   },
 
   shell: {
     stepOf: "Step {current} of {total}",
     back: "Back",
     next: "Continue",
+    /* The press that ends the first step: the same words as the site's own button. */
+    finish: "Build my software",
+    reassure: "It takes about a minute. No account needed.",
     preview: "See my software",
     previewTitle: "Your software",
     previewEmpty:
@@ -30,14 +25,12 @@ export const en: BuilderCopy = {
     close: "Close",
     help: "Help on WhatsApp",
     helpMessage: "Hello, I need help at step {step} ({name}).",
-    saved: "Your answers are saved",
-    offline: "Offline. Your answers will be sent when the network is back.",
+    saved: "Saved",
+    offline: "Offline. What you write will be sent when the network is back.",
   },
 
   steps: {
     business: "Your shop",
-    questions: "A few questions",
-    products: "Your products (optional)",
     serial: "Your software",
   },
 
@@ -61,6 +54,8 @@ export const en: BuilderCopy = {
 
   packs: {
     heading: "What kind of business do you run?",
+    required: "Choose your business to continue.",
+    change: "Change",
     pharmacy: "Pharmacy",
     bakery: "Bakery",
     restaurant: "Restaurant or cafe",
@@ -89,15 +84,13 @@ export const en: BuilderCopy = {
 
   name: {
     heading: "What is your business called?",
+    intro: "What you write here appears on your receipts. Only the name is required.",
     latin: "Business name",
-    latinHelp: "In Latin letters. It appears at the top of your receipts.",
     arabic: "Name in Arabic",
-    arabicHelp: "It appears under the first name.",
     required: "Write your business name to continue.",
   },
 
   receiptDetails: {
-    more: "Add an Arabic name, a phone, an address or a logo",
     phone: "Phone",
     address: "Address",
   },
@@ -132,81 +125,11 @@ export const en: BuilderCopy = {
     saving: "Saving",
     saved: "Saved",
     failed: "Not saved yet. We are trying again.",
-    unavailable: "Your answers are staying on this device for now.",
+    unavailable: "What you write is staying on this device for now.",
   },
 
-  interview: {
-    pickAny: "You can choose more than one.",
-    yes: "Yes",
-    no: "No",
-    questionOf: "Question {current} of {total}",
-  },
 
-  products: {
-    heading: "Your products",
-    help: "Optional. You can add them later in the software.",
-    template: "Download the template",
-    choose: "Choose my file",
-    reading: "Reading your file",
-    ready: {
-      one: "{count} product ready.",
-      other: "{count} products ready.",
-    },
-    toFix: {
-      one: "{count} row to fix.",
-      other: "{count} rows to fix.",
-    },
-    problem: "Row {row}: {what} Check the {column} column.",
-    missingName: "name missing.",
-    missingPrice: "price missing.",
-    badPrice: "price could not be read.",
-    badQuantity: "quantity could not be read.",
-    badExpiry: "expiry date could not be read.",
-    missingColumns: "We could not find the name and price columns. Use the template, or rename your columns.",
-    truncated: "Only the first 10,000 rows were read.",
-    keep: "Keep these products",
-    skip: "Skip this step",
-    zeroPrice: "price is zero.",
-    negativePrice: "price is negative.",
-    pastExpiry: "Row {row}: the expiry date has already passed ({found}). Check it, or import anyway.",
-    headerFound: "We found your columns on row {row}.",
-    totalsSkipped: "{count} total row skipped.",
-    totalsSkippedOther: "{count} total rows skipped.",
-    whichSheet: "Which sheet holds your products?",
-    sheetRows: "{count} rows",
-    whichColumn: "Which column holds {what}?",
-    columnName: "the product name",
-    columnPrice: "the price",
-    columnQuantity: "the quantity",
-    columnExpiry: "the expiry date",
-    columnBatch: "the batch number",
-    noColumn: "None",
-    preview: "Here are your first five products, as they will be imported.",
-    confirm: "Looks right, import",
-    currencyQuestion: "Are your prices in new ouguiyas (MRU) or old ouguiyas?",
-    currencyNew: "New ouguiyas (MRU)",
-    currencyOld: "Old ouguiyas",
-    currencyCheck: "In old ouguiyas, these prices become:",
-    duplicates: "These products appear twice.",
-    keepFirst: "Keep only one",
-    keepAll: "They are two different products",
-    mergeQuantities: "Add the quantities together",
-    fixRow: "Fix",
-    unreadable: "We could not read that file. Send an Excel or CSV file, not a photo or a PDF, and without a password. You can also start from our template.",
-    another: "Choose another file",
-  },
 
-  staff: {
-    heading: "Your staff",
-    help: "Optional. Each person's code is chosen later, in the software.",
-    name: "Name",
-    role: "Role",
-    manager: "Manager",
-    cashier: "Cashier",
-    add: "Add",
-    remove: "Remove",
-    empty: "Nobody yet.",
-  },
 
   account: {
     heading: "Create your account",
@@ -244,9 +167,10 @@ export const en: BuilderCopy = {
     tutorialMac: "Watch the Mac installation video",
 
     pcHeading: "Your software is ready",
+    pcIntro: "Download it, install it, open it: it opens straight on your shop. Nothing to type.",
     downloadInstall: "Download and install",
-    alsoMac: "On a Mac? Download for Mac",
-    alsoWindows: "On Windows? Download for Windows",
+    alsoMac: "For a Mac? Download for Mac",
+    alsoWindows: "For a Windows computer? Download for Windows",
     termsNote: "By downloading the software, you accept its {terms}.",
     termsLink: "terms of use",
     keepNumber: "Your serial number. Keep it: it opens your software on another device or after a reinstall.",
@@ -261,12 +185,6 @@ export const en: BuilderCopy = {
   },
 
   install: {
-    question: "Which computer will you install your software on?",
-    windows: "Windows",
-    windowsHint: "Desktop or laptop",
-    mac: "Mac",
-    macHint: "iMac, MacBook or Mac mini",
-    detected: "This computer",
     downloadWindows: "Download for Windows",
     downloadMac: "Download for Mac",
     guideWindows: "Installing on Windows",
@@ -318,6 +236,8 @@ export const en: BuilderCopy = {
   phoneApp: {
     heading: "On your phone",
     intro: "Your software also runs on an Android phone or an iPhone, with nothing to download from a store. It needs internet once, to open it. After that it works without.",
+    /* On a phone, where opening it is the page's main action. */
+    leadIntro: "It opens on your shop, with nothing to download from a store. It needs the internet once, to open. After that it works without.",
     open: "Open on this phone",
     scan: "Scan this code with your phone's camera. Your business opens with no number to type; on an iPhone, after adding it to your home screen.",
     iphone: "On iPhone: in Safari, tap the Share button, then \"Add to Home Screen\". The software then opens from its icon, never in Safari.",
@@ -477,8 +397,4 @@ export const en: BuilderCopy = {
     link: "Pay with my serial number",
   },
 
-  placeholder: {
-    title: "This step is coming soon",
-    body: "We are preparing the questions for this step. Come back in a few days, or write to us on WhatsApp.",
-  },
 };
