@@ -12,6 +12,7 @@ import { getDictionary } from "@/lib/i18n";
 import type { Locale } from "@/lib/i18n/config";
 import { locales } from "@/lib/i18n/config";
 import { localisedHref } from "@/lib/i18n/routes";
+import { cleanAppVersion, readWithAppVersion } from "@/builder/licence/app-version";
 
 type Props = { params: Promise<{ lang: Locale }> };
 
@@ -99,12 +100,15 @@ export default async function AccountPage(props: Props) {
         .order("created_at", { ascending: false })
         .limit(1)
         .maybeSingle(),
-      supabase
-        .from("devices")
-        .select("device_id, name, role, status, last_seen")
-        .eq("business_id", business.id)
-        .eq("status", "active")
-        .order("first_seen"),
+      readWithAppVersion("device_id, name, role, platform, first_seen, last_seen", (columns) =>
+        supabase
+          .from("devices")
+          .select(columns)
+          .eq("business_id", business.id)
+          .eq("status", "active")
+          .order("first_seen")
+          .returns<OwnDevice[]>()
+      ),
       getPublicSettings(),
       getPrivateSettings(),
     ]);
@@ -157,7 +161,10 @@ export default async function AccountPage(props: Props) {
           deviceId: device.device_id,
           name: device.name,
           role: device.role === "main" ? ("main" as const) : ("secondary" as const),
+          platform: device.platform === "windows" || device.platform === "mac" || device.platform === "phone" ? device.platform : null,
+          firstSeen: device.first_seen,
           lastSeen: device.last_seen,
+          appVersion: cleanAppVersion(device.app_version ?? null),
         })),
         prices: settings ? licenceChoices(settings, business.launch_client) : [],
         payTo: secrets ? payToFrom(secrets) : [],
@@ -166,3 +173,14 @@ export default async function AccountPage(props: Props) {
     />
   );
 }
+
+/* One of the shop's devices, with the version it last reported (0041) once the database has it. */
+type OwnDevice = {
+  device_id: string;
+  name: string | null;
+  role: string;
+  platform: string | null;
+  first_seen: string;
+  last_seen: string;
+  app_version?: string | null;
+};

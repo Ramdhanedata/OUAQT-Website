@@ -49,7 +49,12 @@ export type AccountState =
         deviceId: string;
         name: string | null;
         role: "main" | "secondary";
+        platform: "windows" | "mac" | "phone" | null;
+        /** When it was first opened, to the minute: two phones added the same day still differ. */
+        firstSeen: string;
         lastSeen: string;
+        /** The version it last said it runs, or null for an app too old to say. */
+        appVersion: string | null;
       }[];
       /* The lengths he may pay for, a month to a year, with their prices: the year first. */
       prices: Price[];
@@ -314,7 +319,7 @@ function Subscription({
   );
 }
 
-function MyDevices({
+export function MyDevices({
   copy,
   lang,
   devices,
@@ -364,14 +369,22 @@ function MyDevices({
             <li key={device.deviceId} className="space-y-2 py-3">
               <p className="text-base text-foreground">
                 {device.name ??
-                  (device.role === "main" ? copy.devices.main : copy.devices.secondary)}
-                <span className="text-muted-foreground">
-                  {" "}
-                  ·{" "}
-                  {fill(copy.devices.lastSeen as string, {
-                    date: new Date(device.lastSeen).toLocaleDateString(lang),
-                  })}
-                </span>
+                  (device.platform
+                    ? copy.devices.kinds[device.platform]
+                    : device.role === "main"
+                      ? copy.devices.main
+                      : copy.devices.secondary)}
+                {device.appVersion ? (
+                  <span className="text-muted-foreground">
+                    {" "}
+                    · {fill(copy.devices.version as string, { version: device.appVersion.replace(/-phone$/, "") })}
+                  </span>
+                ) : null}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                {fill(copy.devices.added as string, { when: whenOf(device.firstSeen, lang) })}
+                {" · "}
+                {fill(copy.devices.lastSeen as string, { date: whenOf(device.lastSeen, lang) })}
               </p>
 
               {done[device.deviceId] ? (
@@ -429,4 +442,14 @@ function SignOut({ copy }: { copy: BuilderCopy }) {
       {copy.myAccount.signOut}
     </Button>
   );
+}
+
+/*
+ * A day and a time to the minute, in the owner's language: "18/11/2026 08:41".
+ * In Nouakchott's time, so the server and the browser draw the same thing.
+ */
+const SHOP_TIME_ZONE = "Africa/Nouakchott"; // not-a-rule: where OUAQT's shops are
+function whenOf(at: string, lang: Locale): string {
+  const date = new Date(at);
+  return `${date.toLocaleDateString(lang, { timeZone: SHOP_TIME_ZONE })} ${date.toLocaleTimeString(lang, { hour: "2-digit", minute: "2-digit", timeZone: SHOP_TIME_ZONE })}`;
 }
