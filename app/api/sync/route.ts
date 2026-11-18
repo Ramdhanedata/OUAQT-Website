@@ -71,7 +71,7 @@ export async function POST(request: Request) {
   try {
     const answer = await relay(storeFrom(supabase), input.data, await hashToken(input.data.deviceToken));
     if (!answer.ok) return NextResponse.json({ error: answer.error }, { status: answer.status });
-    return NextResponse.json({ received: answer.received, cursor: answer.cursor, more: answer.more, gap: answer.gap });
+    return NextResponse.json({ received: answer.received, cursor: answer.cursor, more: answer.more, gap: answer.gap, devices: answer.devices });
   } catch (error) {
     console.error("the post box between devices failed", error);
     return NextResponse.json({ error: "not_available" }, { status: 503 });

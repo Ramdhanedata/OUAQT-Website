@@ -131,6 +131,23 @@ describe("the post box between a shop's devices", () => {
   });
 });
 
+describe("the shop's devices, for sharing out receipt numbers", () => {
+  it("lists every active device, sorted, the same for each of them", async () => {
+    const { store, devices } = makeStore(["telephone-1", "computer-1", "computer-2"]);
+    devices[2].status = "released";
+    const fromPhone = await relay(store, call({ deviceId: "telephone-1" }), "ok", NOW);
+    const fromComputer = await relay(store, call({ deviceId: "computer-1" }), "ok", NOW);
+    expect(fromPhone.ok && fromPhone.devices).toEqual(["computer-1", "telephone-1"]);
+    expect(fromComputer.ok && fromComputer.devices).toEqual(["computer-1", "telephone-1"]);
+  });
+
+  it("lists only itself for a shop with one device", async () => {
+    const { store } = makeStore(["computer-1"]);
+    const answer = await relay(store, call({ deviceId: "computer-1" }), "ok", NOW);
+    expect(answer.ok && answer.devices).toEqual(["computer-1"]);
+  });
+});
+
 describe("what the post box accepts", () => {
   const good = { businessId: SHOP, deviceId: "computer-1", deviceToken: "t".repeat(40), after: 0, send: [sealed(1)] };
 

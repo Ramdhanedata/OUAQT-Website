@@ -58,7 +58,15 @@ export type RelayStore = {
 };
 
 export type RelayAnswer =
-  | { ok: true; received: { id: number; body: string }[]; cursor: number; more: boolean; gap: boolean }
+  | {
+      ok: true;
+      received: { id: number; body: string }[];
+      cursor: number;
+      more: boolean;
+      gap: boolean;
+      /** The shop's active devices, sorted: each app takes its own share of receipt numbers from its place here. */
+      devices: string[];
+    }
   | { ok: false; status: 403 | 404 | 429; error: string };
 
 export async function relay(
@@ -114,5 +122,6 @@ export async function relay(
     cursor,
     more: found.length > RECEIVE_MAX,
     gap,
+    devices: readers.map((one) => one.device_id).sort(),
   };
 }
