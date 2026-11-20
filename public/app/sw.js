@@ -7,7 +7,7 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-5b7a6addb7ed";
+const CACHE = "ouaqt-phone-c7d52f9d318b";
 const FILES = [
   "./assets/cairo-arabic-BW4_w4rE.woff2",
   "./assets/cairo-latin-Br-HIwGC.woff2",
@@ -24,13 +24,29 @@ const FILES = [
   "./assets/ibm-plex-sans-arabic-latin-ext-500-Ck_W4G78.woff2",
   "./assets/ibm-plex-sans-arabic-latin-ext-600-DjDAeNQD.woff2",
   "./assets/ibm-plex-sans-arabic-latin-ext-700-BSbyEp0V.woff2",
-  "./assets/index-OX1h_sjo.js",
-  "./assets/main-BpVZVGu_.css",
-  "./assets/main-Ci0z0g4Q.js",
-  "./assets/preload-CyQc06vI.js",
+  "./assets/index-Dz2k1NYu.js",
+  "./assets/jetbrains-mono-latin-400-V6pRDFza.woff2",
+  "./assets/jetbrains-mono-latin-600-C8RAYTDA.woff2",
+  "./assets/jetbrains-mono-latin-700-BYuf6tUa.woff2",
+  "./assets/jetbrains-mono-latin-ext-400-Bc8Ftmh3.woff2",
+  "./assets/jetbrains-mono-latin-ext-600-BfB_LPfz.woff2",
+  "./assets/jetbrains-mono-latin-ext-700-CZipNAKV.woff2",
+  "./assets/main-CRQD9sbr.css",
+  "./assets/main-CbOekfTb.js",
+  "./assets/plus-jakarta-sans-latin-400-Dhut76fR.woff2",
+  "./assets/plus-jakarta-sans-latin-500-Bf-nb4oT.woff2",
+  "./assets/plus-jakarta-sans-latin-600-DLTa1BUW.woff2",
+  "./assets/plus-jakarta-sans-latin-700-CfpNZvy6.woff2",
+  "./assets/plus-jakarta-sans-latin-ext-400-D127hM_v.woff2",
+  "./assets/plus-jakarta-sans-latin-ext-500-9VZagAe1.woff2",
+  "./assets/plus-jakarta-sans-latin-ext-600-DQgPU_Cg.woff2",
+  "./assets/plus-jakarta-sans-latin-ext-700-BajbvANd.woff2",
+  "./assets/preload-Bxsrl6zM.js",
   "./assets/sqlite3-Con_VOcu.wasm",
   "./assets/sqlite3-opfs-async-proxy-Ck-yCayi.js",
   "./assets/sqlite3-worker1-BXnajhSw.js",
+  "./assets/unbounded-latin-700-CaoNriVp.woff2",
+  "./assets/unbounded-latin-ext-700-BLzWLLjG.woff2",
   "./assets/xlsx-DZ8bO3Pv.js",
   "./icons/bakery-180.png",
   "./icons/bakery-192.png",
