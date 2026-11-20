@@ -7,17 +7,27 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-24e0571f5eb5";
+const CACHE = "ouaqt-phone-5b7a6addb7ed";
 const FILES = [
   "./assets/cairo-arabic-BW4_w4rE.woff2",
   "./assets/cairo-latin-Br-HIwGC.woff2",
   "./assets/cairo-latin-ext-BzTkPeNP.woff2",
-  "./assets/index-BDj8oPdq.js",
-  "./assets/main-Bnrvn-lD.css",
-  "./assets/main-Djriw9IL.js",
-  "./assets/preload-D33yq0QK.js",
-  "./assets/source-serif-4-latin-ext-iEVfbfSw.woff2",
-  "./assets/source-serif-4-latin-l1vr9vou.woff2",
+  "./assets/ibm-plex-sans-arabic-arabic-400-CyU-ddYS.woff2",
+  "./assets/ibm-plex-sans-arabic-arabic-500-C4MQITzh.woff2",
+  "./assets/ibm-plex-sans-arabic-arabic-600-0pRdybE_.woff2",
+  "./assets/ibm-plex-sans-arabic-arabic-700-DrtBj6UE.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-400-Bo5KPYvw.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-500-Cd6jVIg7.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-600-KrqB56Mw.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-700-BzSf6GNr.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-ext-400-BpLfq-63.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-ext-500-Ck_W4G78.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-ext-600-DjDAeNQD.woff2",
+  "./assets/ibm-plex-sans-arabic-latin-ext-700-BSbyEp0V.woff2",
+  "./assets/index-OX1h_sjo.js",
+  "./assets/main-BpVZVGu_.css",
+  "./assets/main-Ci0z0g4Q.js",
+  "./assets/preload-CyQc06vI.js",
   "./assets/sqlite3-Con_VOcu.wasm",
   "./assets/sqlite3-opfs-async-proxy-Ck-yCayi.js",
   "./assets/sqlite3-worker1-BXnajhSw.js",
