@@ -7,7 +7,7 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-e98a80fcd5d6";
+const CACHE = "ouaqt-phone-24e6a36cabbc";
 const FILES = [
   "./assets/cairo-arabic-BW4_w4rE.woff2",
   "./assets/cairo-latin-Br-HIwGC.woff2",
@@ -24,7 +24,7 @@ const FILES = [
   "./assets/ibm-plex-sans-arabic-latin-ext-500-Ck_W4G78.woff2",
   "./assets/ibm-plex-sans-arabic-latin-ext-600-DjDAeNQD.woff2",
   "./assets/ibm-plex-sans-arabic-latin-ext-700-BSbyEp0V.woff2",
-  "./assets/index-C4bQW9iy.js",
+  "./assets/index-C0SnRLML.js",
   "./assets/jetbrains-mono-latin-400-V6pRDFza.woff2",
   "./assets/jetbrains-mono-latin-600-C8RAYTDA.woff2",
   "./assets/jetbrains-mono-latin-700-BYuf6tUa.woff2",
@@ -32,7 +32,7 @@ const FILES = [
   "./assets/jetbrains-mono-latin-ext-600-BfB_LPfz.woff2",
   "./assets/jetbrains-mono-latin-ext-700-CZipNAKV.woff2",
   "./assets/main-BsHoNU3s.css",
-  "./assets/main-DqGFDdpe.js",
+  "./assets/main-D7qhjbC1.js",
   "./assets/plus-jakarta-sans-latin-400-Dhut76fR.woff2",
   "./assets/plus-jakarta-sans-latin-500-Bf-nb4oT.woff2",
   "./assets/plus-jakarta-sans-latin-600-DLTa1BUW.woff2",
@@ -41,7 +41,7 @@ const FILES = [
   "./assets/plus-jakarta-sans-latin-ext-500-9VZagAe1.woff2",
   "./assets/plus-jakarta-sans-latin-ext-600-DQgPU_Cg.woff2",
   "./assets/plus-jakarta-sans-latin-ext-700-BajbvANd.woff2",
-  "./assets/preload-B_QQeHkh.js",
+  "./assets/preload-DwIQF0jH.js",
   "./assets/sqlite3-Con_VOcu.wasm",
   "./assets/sqlite3-opfs-async-proxy-Ck-yCayi.js",
   "./assets/sqlite3-worker1-BXnajhSw.js",
