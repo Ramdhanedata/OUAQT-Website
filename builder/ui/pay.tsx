@@ -5,6 +5,7 @@ import { type AppLanguage } from "@/app-ui";
 import type { BuilderCopy } from "@/builder/copy";
 import { browserClient } from "@/builder/db/client";
 import { appName, type PaymentApp, type PayTo } from "@/builder/payment/apps";
+import { AppLogo, AppLogos } from "@/builder/ui/app-logos";
 import { organization } from "@/lib/data/contact";
 import type { CheckFailure, ReadBack } from "@/builder/payment/checks";
 import { ACCEPTED_IMAGES, prepareScreenshot, ScreenshotError } from "@/builder/payment/image";
@@ -204,6 +205,7 @@ export function Pay({
                   setError(null);
                 }}
               >
+                <AppLogo app={one.app} />
                 {appName(one.app, language)}
               </ChoiceButton>
             ))}
@@ -493,6 +495,7 @@ export function SendScreenshot({
             serial,
           })}
         </p>
+        <AppLogos label={copy.pay.appsLogos as string} />
       </div>
     </div>
   );
