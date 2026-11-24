@@ -6,7 +6,7 @@ export const en = {
   meta: {
     siteTitle: "POS and business management software in Mauritania | OUAQT",
     siteDescription: "Till, stock and business management software for shops and SMEs in Mauritania: pharmacy, shop, restaurant, hotel. Built online in 5 minutes, works offline.",
-    projectsTitle: "Custom software in Mauritania: 22 systems in daily use | OUAQT",
+    projectsTitle: "Custom software in Mauritania: 122 systems in daily use | OUAQT",
     projectsDescription: "Mines, pharmacies, hotels, transport, restaurants and schools: the systems we built to order, and what each one changed.",
     aboutTitle: "About OUAQT, a software company in Nouakchott",
     aboutDescription: "OUAQT is a startup that equips small and medium-sized businesses with management software: the online Builder, and custom projects. Founded by Elboumby Aumar Ramdhane.",
@@ -67,7 +67,7 @@ export const en = {
 
   projectsPage: {
     eyebrow: "Custom work",
-    heading: "22 systems built to order, in use every day.",
+    heading: "122 systems built to order, in use every day.",
     body: "Before the Builder there were these projects, and there still are. Each one starts with a visit: we learn how the business runs, bring its old records across, and set the software up for that client alone. Mines, pharmacies, hotels, transport, restaurants and schools: here is a selection.",
     all: "All",
   },
@@ -478,7 +478,7 @@ export const en = {
         detail: "Chosen from the regional group, then invited to give the keynote at the Knowledge Summit in Dubai the same year.",
       },
       sectors: {
-        title: "22 systems in use across six sectors",
+        title: "122 systems in use across six sectors",
         detail: "Mining, pharmacy, hotels, transport, food service and education, each system set up for its client alone.",
       },
     },

@@ -4,7 +4,7 @@ export const fr: Dictionary = {
   meta: {
     siteTitle: "Logiciel de caisse et de gestion en Mauritanie | OUAQT",
     siteDescription: "Logiciel de caisse et de gestion de stock pour commerces et PME en Mauritanie : pharmacie, boutique, restaurant, hôtel. Créé en ligne en 5 minutes, sans internet.",
-    projectsTitle: "Logiciels sur mesure en Mauritanie : 22 systèmes en service | OUAQT",
+    projectsTitle: "Logiciels sur mesure en Mauritanie : 122 systèmes en service | OUAQT",
     projectsDescription: "Mines, pharmacies, hôtels, transport, restaurants et écoles : les systèmes que nous avons construits sur mesure, et ce que chacun a changé.",
     aboutTitle: "À propos d'OUAQT, éditeur de logiciels à Nouakchott",
     aboutDescription: "OUAQT est une startup qui équipe les PME d'un logiciel de gestion : le Builder en ligne, et des projets sur mesure. Fondée par Elboumby Aumar Ramdhane.",
@@ -61,7 +61,7 @@ export const fr: Dictionary = {
 
   projectsPage: {
     eyebrow: "Réalisations sur mesure",
-    heading: "22 systèmes construits sur mesure, utilisés chaque jour.",
+    heading: "122 systèmes construits sur mesure, utilisés chaque jour.",
     body: "Avant le Builder, il y a eu ces projets, et il y en a encore. Chacun commence par une visite : nous apprenons comment l'entreprise fonctionne, nous reprenons ses anciens registres, et nous installons le logiciel pour ce client seul. Mines, pharmacies, hôtels, transport, restaurants et écoles : en voici une sélection.",
     all: "Tous",
   },
@@ -469,7 +469,7 @@ export const fr: Dictionary = {
         detail: "Sélectionné dans la cohorte régionale, puis invité comme conférencier principal au Knowledge Summit de Dubaï la même année.",
       },
       sectors: {
-        title: "22 systèmes en service dans six secteurs",
+        title: "122 systèmes en service dans six secteurs",
         detail: "Mines, pharmacie, hôtellerie, transport, restauration et éducation, chaque système installé pour son client seul.",
       },
     },
