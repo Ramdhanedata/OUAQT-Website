@@ -44,10 +44,12 @@ export function BuilderPrices({
   const terms = builderTerms(settings);
 
   /*
-   * The licence first, for each length the payment page offers: a month to a
-   * year, the year shown before he picks (2026-11-06).
+   * The licence first, for each length the payment page offers, shortest
+   * first and the year last, as the payment page shows them (Adel,
+   * 2026-11-24). The year is still the one shown before he picks
+   * (2026-11-06).
    */
-  const lengths: LengthOption[] = LICENCE_PLANS.map((plan) => {
+  const lengths: LengthOption[] = [...LICENCE_PLANS].reverse().map((plan) => {
     const price = shownPrice(plan, settings, launchApplies);
     const monthly = price.amount ? perMonthOf(plan, price.amount) : null;
     return {
@@ -104,6 +106,7 @@ export function BuilderPrices({
 
             <LicenceLengths
               options={lengths}
+              start="annual"
               label={b.licence.label}
               note={b.licence.note}
               choose={b.licence.choose}

@@ -36,9 +36,12 @@ export function LicenceLengths({
   soon,
   labels,
   dir,
+  start,
 }: {
-  /* Longest first: the year is what is shown before anything is picked. */
+  /* In the order they are offered: a month first, the year last. */
   options: LengthOption[];
+  /* The length shown before anything is picked; the first when left out. */
+  start?: string;
   label: string;
   note: string;
   choose: string;
@@ -46,7 +49,7 @@ export function LicenceLengths({
   labels: { standard: string; launch: string };
   dir: "ltr" | "rtl";
 }) {
-  const [picked, setPicked] = useState(options[0]?.plan ?? null);
+  const [picked, setPicked] = useState(options.find((one) => one.plan === start)?.plan ?? options[0]?.plan ?? null);
 
   return (
     <div className="px-6 py-6 sm:px-8">
