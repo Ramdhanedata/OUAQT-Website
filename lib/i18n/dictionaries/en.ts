@@ -505,6 +505,8 @@ export const en = {
     youthHeading: "For young people and entrepreneurs",
     youthBody1:
       "A young person opening a shop or a pharmacy should not have to choose between a paper notebook and software they cannot afford. The Builder was made with them in mind. There is a free trial before any payment, the price is the same for a small shop as for a large one, and the software is ready on the day they open.",
+    youthFree:
+      "As part of our contribution to social and economic development, OUAQT gives student projects and small entrepreneurs on a limited income free annual subscriptions and programmes, along with other kinds of help, so they can organise their work and grow their ventures. To ask for this support, write to us and tell us about your project.",
     youthBody2:
       "We also believe the next generation of Mauritanian businesses will be run by people at ease with technology. Our founder volunteers with the Global Youth Development Forum, giving free weekly courses in programming and AI literacy to young Mauritanians. We would like to see many more young people in the country building software of their own.",
     whyHeading: "Why businesses choose OUAQT",
@@ -536,7 +538,7 @@ export const en = {
     founderEyebrow: "The founder",
     founderRole: "Founder & Solutions Engineer / Forward Deployed Engineer",
     founderBio1:
-      "Elboumby Aumar Ramdhane is the founder of OUAQT. He studied computer and electronic engineering at ISGA in Marrakesh and is completing a degree in computer science at the University of the People. Before OUAQT he worked in data analysis, including at SNIM, one of Mauritania's largest industrial companies, and then moved into product management and AI product engineering.",
+      "Elboumby Aumar Ramdhane is the founder of OUAQT, where he works as solutions engineer and forward-deployed engineer. He takes what an owner describes and turns it into a working system, then builds and installs it on site, next to the people who will use it every day.",
     founderBio2:
       "He works in Arabic, French and English and spends much of his time on site with the teams who use OUAQT's systems. At one client, a reconciliation that used to take four hours a day now takes 25 minutes.",
     founderQuote:

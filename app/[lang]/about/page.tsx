@@ -183,6 +183,9 @@ export default async function AboutPage(props: Props) {
           <FadeIn className="max-w-3xl">
             <h2 className={h2}>{about.youthHeading}</h2>
             <p className="mt-8 leading-relaxed text-muted-foreground">{about.youthBody1}</p>
+            <p className="mt-6 rounded-2xl border border-accent/40 bg-accent/5 p-6 leading-relaxed text-foreground">
+              {about.youthFree}
+            </p>
             <p className="mt-6 leading-relaxed text-muted-foreground">{about.youthBody2}</p>
           </FadeIn>
         </Container>

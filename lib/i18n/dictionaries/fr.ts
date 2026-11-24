@@ -496,6 +496,8 @@ export const fr: Dictionary = {
     youthHeading: "Pour les jeunes et les entrepreneurs",
     youthBody1:
       "Un jeune qui ouvre une boutique ou une pharmacie ne devrait pas avoir à choisir entre un cahier et un logiciel hors de prix. Le Builder a été pensé pour lui. L'essai est gratuit avant tout paiement, le prix est le même pour un petit commerce que pour un grand, et le logiciel est prêt le jour de l'ouverture.",
+    youthFree:
+      "Dans le cadre de sa contribution au développement social et économique, OUAQT offre aux projets étudiants et aux petits entrepreneurs aux revenus modestes des abonnements et des programmes annuels entièrement gratuits, ainsi que d'autres formes d'aide, pour les aider à organiser leur activité et à la faire avancer. Pour en bénéficier, écrivez-nous en présentant votre projet.",
     youthBody2:
       "Nous pensons aussi que la prochaine génération d'entreprises mauritaniennes sera dirigée par des gens à l'aise avec la technologie. Notre fondateur donne bénévolement, avec le Global Youth Development Forum, des cours hebdomadaires gratuits de programmation et d'initiation à l'IA aux jeunes Mauritaniens. Nous aimerions voir beaucoup plus de jeunes du pays construire leurs propres logiciels.",
     whyHeading: "Pourquoi choisir OUAQT",
@@ -527,7 +529,7 @@ export const fr: Dictionary = {
     founderEyebrow: "Le fondateur",
     founderRole: "Fondateur & ingénieur solutions / ingénieur terrain",
     founderBio1:
-      "Elboumby Aumar Ramdhane est le fondateur d'OUAQT. Il a étudié le génie informatique et électronique à l'ISGA de Marrakech et termine une licence en informatique à l'University of the People. Avant OUAQT, il a travaillé dans l'analyse de données, notamment à la SNIM, l'une des plus grandes entreprises industrielles de Mauritanie, puis dans la gestion de produit et l'ingénierie de produits d'IA.",
+      "Elboumby Aumar Ramdhane est le fondateur d'OUAQT, où il occupe le rôle d'ingénieur solutions et d'ingénieur terrain (forward-deployed engineer). Il part de ce que décrit le patron, en fait un système qui fonctionne, puis le construit et l'installe sur place, à côté des personnes qui s'en serviront tous les jours.",
     founderBio2:
       "Il travaille en arabe, en français et en anglais, et passe une grande partie de son temps sur place avec les équipes qui utilisent les systèmes d'OUAQT. Chez un client, un rapprochement qui prenait quatre heures par jour se fait aujourd'hui en 25 minutes.",
     founderQuote:
