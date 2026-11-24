@@ -19,10 +19,5 @@ export const founder = {
   email: "adelramdhane1@gmail.com",
   linkedin: "https://www.linkedin.com/in/ramdhane-mohamed-ahmed-90653a1a1/",
 
-  /*
-   * The photo is picked up automatically. Save it as any of
-   *   public/images/founder.jpg | .jpeg | .png | .webp
-   * and the About page uses it on the next build. No code change needed.
-   * See findFounderPhoto() in app/[lang]/about/page.tsx.
-   */
+  // No photo on the About page: it was taken off on purpose (Nov 2026).
 };

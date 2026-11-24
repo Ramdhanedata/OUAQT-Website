@@ -8,8 +8,8 @@ export const en = {
     siteDescription: "Till, stock and business management software for shops and SMEs in Mauritania: pharmacy, shop, restaurant, hotel. Built online in 5 minutes, works offline.",
     projectsTitle: "Custom software in Mauritania: 122 systems in daily use | OUAQT",
     projectsDescription: "Mines, pharmacies, hotels, transport, restaurants and schools: the systems we built to order, and what each one changed.",
-    aboutTitle: "About OUAQT, a software company in Nouakchott",
-    aboutDescription: "OUAQT is a startup that equips small and medium-sized businesses with management software: the online Builder, and custom projects. Founded by Elboumby Aumar Ramdhane.",
+    aboutTitle: "About OUAQT: business management software made in Nouakchott, Mauritania",
+    aboutDescription: "OUAQT makes management software for SMEs in Mauritania: the online Builder and custom systems that work offline. Our mission, values and founder.",
     contactTitle: "Contact: business software in Nouakchott | OUAQT",
     contactDescription: "A question about the Builder, a demo or a custom project: write to us. We usually reply within one business day, by email or on WhatsApp.",
     termsTitle: "Licence and terms of use | OUAQT",
@@ -443,31 +443,109 @@ export const en = {
 
   about: {
     eyebrow: "About OUAQT",
-    heading: "A startup that equips small and medium businesses with software made to measure.",
-    body1:
-      "We built bespoke systems one client at a time: mining, pharmacies, hotels, transport, restaurants, schools. Every time, the same scene. A solid business, a team that knows what it is doing, and the most important work of the day resting on paper, spreadsheets and WhatsApp groups.",
-    body2:
-      "And every time, the same discovery. Nobody understood the problem better than the owner himself. Our job was never to teach him his trade, it was to turn what he already knew into software that looked like him.",
-    storyHeading: "What we did about it",
-    storyBody1:
-      "Bespoke software takes weeks and costs money. Most of the businesses that need it can neither wait nor pay. So we took what we had learned at each client and turned it into the Builder, an online software builder: the owner chooses his trade, writes his shop's name, and leaves with his software, ready to install, the same day.",
-    storyBody2:
-      "This is not a template touched up afterwards. It is the same software for everybody, set for his own trade: his products, his languages, his staff, the way he takes money. It runs on his own devices, computer or phone, with no internet, and his figures stay with him: when they pass from one device to the other, they are encrypted.",
-    storyBody3:
-      "The Builder is now our main product. The trades it does not cover yet, and the businesses whose work falls outside it, we still build for one at a time, as before.",
+    heading: "Management software for the businesses that keep Mauritania running.",
+    intro1:
+      "OUAQT is a software company based in Nouakchott. We make management software for small and medium-sized businesses: sales, stock, billing, staff, and the reports an owner reads at the end of the day. Pharmacies, shops, restaurants, hotels and transport companies rely on it for their daily work.",
+    intro2:
+      "We work in two ways. Most owners build their own software on our website with the Builder, in a few minutes. Companies whose work needs something more specific get a system built and installed for them by our team.",
+    offerHeading: "What we provide",
+    offer: {
+      builder: {
+        title: "The Builder",
+        detail: "Pick your trade, type your business name and add your logo. Your software is ready to install the same day, on a computer or a phone, set up for your products, your staff and your languages.",
+      },
+      custom: {
+        title: "Custom systems",
+        detail: "For mining, logistics, NGOs and any work the Builder does not cover yet. We come on site, learn how the business runs, bring its old records across and deliver a system made for that client alone.",
+      },
+      offline: {
+        title: "Software that works without internet",
+        detail: "Everything runs on your own devices. A dropped connection never stops a sale, and your business figures stay with you.",
+      },
+      support: {
+        title: "Setup, training and support",
+        detail: "We help you install it, train your staff, and stay reachable on WhatsApp afterwards, in Arabic, French or English.",
+      },
+    },
+    missionEyebrow: "Our mission",
+    missionHeading: "A stronger economy starts with businesses that are well run.",
+    missionBody1:
+      "Our objective is to make the economy of Mauritania, and of Africa more widely, more resilient. We work where our effect is most direct: trade and services, the shops, pharmacies, transporters and service companies people depend on every day. When these businesses keep accurate records and serve their customers faster, they become more competitive and better able to absorb a hard year.",
+    missionBody2:
+      "We see our work as one part of a larger effort to grow emerging economies in Mauritania, in West Africa and across the continent. It follows the priorities of the Mauritanian state and the programmes of regional and international organisations that support small businesses as they move to digital tools.",
     marketHeading: "The numbers behind it.",
     stat1: "of Mauritania's GDP runs through the informal sector",
     stat2: "of the workforce is in informal employment",
     stat3: "The Investment Code now names support for small and medium businesses as a priority",
     marketNote: "The World Bank and IFC are funding small businesses across the region to get finance and digital tools. OUAQT works on the digital side of that same problem.",
-    founderEyebrow: "Founder",
+    hultNote: "OUAQT is registered in the EF Hult Prize 2027 Global Competition, the international startup competition for students building companies with social impact.",
+    valuesHeading: "What we value",
+    values: {
+      owner: {
+        title: "The owner knows the business best",
+        detail: "Nobody understands a business better than the person who runs it. Our software follows the way they already work, and we listen before we build anything.",
+      },
+      data: {
+        title: "Your data belongs to you",
+        detail: "Records stay on the owner's own devices. When they move from one device to another they are encrypted, and we make no use of them.",
+      },
+      simple: {
+        title: "Simple enough for anyone",
+        detail: "Many of the people using our software had barely touched a computer before. We design every screen with them in mind and take out whatever they do not need.",
+      },
+      honest: {
+        title: "Clear prices and honest promises",
+        detail: "One price list, published on this site in ouguiya. Before anyone pays, we tell them what the software does and what it does not do.",
+      },
+      local: {
+        title: "Made here, for here",
+        detail: "We work in Arabic, French and English, and for the way business is done in Mauritania: cash and mobile payments, shops without a steady connection, teams sharing a single computer.",
+      },
+    },
+    youthHeading: "For young people and entrepreneurs",
+    youthBody1:
+      "A young person opening a shop or a pharmacy should not have to choose between a paper notebook and software they cannot afford. The Builder was made with them in mind. There is a free trial before any payment, the price is the same for a small shop as for a large one, and the software is ready on the day they open.",
+    youthBody2:
+      "We also believe the next generation of Mauritanian businesses will be run by people at ease with technology. Our founder volunteers with the Global Youth Development Forum, giving free weekly courses in programming and AI literacy to young Mauritanians. We would like to see many more young people in the country building software of their own.",
+    whyHeading: "Why businesses choose OUAQT",
+    why: {
+      proven: {
+        title: "122 systems in daily use",
+        detail: "Across mining, pharmacy, hotels, transport, food service and education, each one built around the way its client works.",
+      },
+      offline: {
+        title: "It keeps working when the internet doesn't",
+        detail: "Sales, stock and reports run on your own devices, with or without a connection.",
+      },
+      languages: {
+        title: "Arabic, French and English",
+        detail: "The software and our support are available in all three languages.",
+      },
+      nearby: {
+        title: "A team in Nouakchott",
+        detail: "Reachable on WhatsApp, and for a custom project the first visit is free.",
+      },
+      price: {
+        title: "Prices you can see",
+        detail: "Every price is published on this site in ouguiya, with a free trial before you pay anything.",
+      },
+    },
+    ctaHeading: "What slows your business down?",
+    ctaBody: "If part of your day still depends on a spreadsheet nobody trusts, that is usually where we start.",
+    ctaButton: "Talk to us",
+    founderEyebrow: "The founder",
     founderRole: "Founder & Solutions Engineer / Forward Deployed Engineer",
-    founderBio1: "I started OUAQT because I kept meeting capable teams who lost hours every day to work their software should have done for them. Counting stock, copying figures between files, checking the same numbers twice. The tools they'd paid for didn't match how they actually worked, so people made up the difference by hand.",
-    founderBio2: "I come from data analytics and software engineering, and I build on site with the people who'll use the system. I stay from the first conversation until nobody opens the old spreadsheet. For one client, a reconciliation that took four hours a day now takes 25 minutes. We've gone on to build systems for teams in mining, pharmacy, hospitality, transport, food service and education across Mauritania.",
+    founderBio1:
+      "Elboumby Aumar Ramdhane is the founder of OUAQT. He studied computer and electronic engineering at ISGA in Marrakesh and is completing a degree in computer science at the University of the People. Before OUAQT he worked in data analysis, including at SNIM, one of Mauritania's largest industrial companies, and then moved into product management and AI product engineering.",
+    founderBio2:
+      "He works in Arabic, French and English and spends much of his time on site with the teams who use OUAQT's systems. At one client, a reconciliation that used to take four hours a day now takes 25 minutes.",
+    founderQuote:
+      "I started OUAQT because I kept meeting capable teams who lost hours every day to work their software should have done for them. Counting stock, copying figures between files, checking the same numbers twice. I wanted business owners here to have tools that fit the way they actually work, at a price a small shop can pay.",
+    founderContact: "Contact the founder",
     credentials: {
       analytics: {
-        title: "Data analytics at Deloitte and MyAiPathways",
-        detail: "Consulting and product work on how organisations collect their data and put it to use.",
+        title: "Data analysis at MyAiPathways",
+        detail: "Product and data work on how organisations collect their data and put it to use.",
       },
       snim: {
         title: "Process automation at SNIM",
@@ -477,14 +555,11 @@ export const en = {
         title: "UNDP Knowledge Future Skills Academy winner, 2025",
         detail: "Chosen from the regional group, then invited to give the keynote at the Knowledge Summit in Dubai the same year.",
       },
-      sectors: {
-        title: "122 systems in use across six sectors",
-        detail: "Mining, pharmacy, hotels, transport, food service and education, each system set up for its client alone.",
+      mckinsey: {
+        title: "McKinsey.org Forward Program, 2025",
+        detail: "McKinsey.org's programme in problem solving, digital skills and leadership for early-career professionals.",
       },
     },
-    ctaHeading: "What slows your business down?",
-    ctaBody: "If part of your day still depends on a spreadsheet nobody trusts, that is usually where we start.",
-    ctaButton: "Talk to us",
   },
 
   packLabels: {

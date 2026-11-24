@@ -6,8 +6,8 @@ export const fr: Dictionary = {
     siteDescription: "Logiciel de caisse et de gestion de stock pour commerces et PME en Mauritanie : pharmacie, boutique, restaurant, hôtel. Créé en ligne en 5 minutes, sans internet.",
     projectsTitle: "Logiciels sur mesure en Mauritanie : 122 systèmes en service | OUAQT",
     projectsDescription: "Mines, pharmacies, hôtels, transport, restaurants et écoles : les systèmes que nous avons construits sur mesure, et ce que chacun a changé.",
-    aboutTitle: "À propos d'OUAQT, éditeur de logiciels à Nouakchott",
-    aboutDescription: "OUAQT est une startup qui équipe les PME d'un logiciel de gestion : le Builder en ligne, et des projets sur mesure. Fondée par Elboumby Aumar Ramdhane.",
+    aboutTitle: "À propos d'OUAQT : logiciels de gestion conçus à Nouakchott, Mauritanie",
+    aboutDescription: "OUAQT conçoit des logiciels de gestion pour les PME en Mauritanie : le Builder en ligne et des systèmes sur mesure qui marchent hors ligne. Mission, valeurs, fondateur.",
     contactTitle: "Contact : logiciel de gestion à Nouakchott | OUAQT",
     contactDescription: "Une question sur le Builder, une démonstration ou un projet sur mesure : écrivez-nous. Réponse en général sous un jour ouvré, par e-mail ou sur WhatsApp.",
     termsTitle: "Licence et conditions d'utilisation | OUAQT",
@@ -434,31 +434,109 @@ export const fr: Dictionary = {
 
   about: {
     eyebrow: "À propos d'OUAQT",
-    heading: "Une startup qui équipe les PME d'un logiciel à leur mesure.",
-    body1:
-      "Nous avons construit des systèmes sur mesure, un client à la fois : mines, pharmacies, hôtels, transport, restaurants, écoles. À chaque fois la même scène. Une entreprise solide, une équipe qui sait ce qu'elle fait, et le travail le plus important posé sur du papier, des tableurs et des groupes WhatsApp.",
-    body2:
-      "Et à chaque fois, la même découverte. Personne ne comprenait le problème mieux que le patron lui-même. Notre travail n'était pas de lui apprendre son métier, c'était de traduire ce qu'il savait déjà en un logiciel qui lui ressemble.",
-    storyHeading: "Ce que nous avons fait de ce constat",
-    storyBody1:
-      "Un logiciel sur mesure demande des semaines et coûte cher. La plupart des commerces qui en auraient besoin ne peuvent ni attendre ni payer. Alors nous avons pris ce que nous avions appris chez chaque client et nous en avons fait le Builder, un créateur de logiciel en ligne : le patron choisit son métier, écrit le nom de son commerce, et il repart avec son logiciel, prêt à installer, le jour même.",
-    storyBody2:
-      "Ce n'est pas un modèle qu'on retouche après coup. C'est le même logiciel pour tout le monde, réglé pour son métier à lui : ses produits, ses langues, ses employés, sa façon d'encaisser. Il tourne sur ses propres appareils, ordinateur ou téléphone, sans internet, et ses chiffres restent chez lui : quand ils passent d'un appareil à l'autre, c'est chiffré.",
-    storyBody3:
-      "Le Builder est aujourd'hui notre produit principal. Les métiers qu'il ne couvre pas encore, et les entreprises dont le travail sort du cadre, nous continuons à les construire sur mesure, comme avant.",
+    heading: "Des logiciels de gestion pour les entreprises qui font tourner la Mauritanie.",
+    intro1:
+      "OUAQT est une entreprise de logiciels basée à Nouakchott. Nous concevons des logiciels de gestion pour les petites et moyennes entreprises : ventes, stock, facturation, personnel, et les rapports que le patron consulte en fin de journée. Des pharmacies, des boutiques, des restaurants, des hôtels et des sociétés de transport s'en servent au quotidien.",
+    intro2:
+      "Nous travaillons de deux façons. La plupart des patrons créent eux-mêmes leur logiciel sur notre site avec le Builder, en quelques minutes. Les entreprises dont l'activité demande quelque chose de plus particulier reçoivent un système construit et installé pour elles par notre équipe.",
+    offerHeading: "Ce que nous proposons",
+    offer: {
+      builder: {
+        title: "Le Builder",
+        detail: "Choisissez votre métier, saisissez le nom de votre commerce et ajoutez votre logo. Votre logiciel est prêt à installer le jour même, sur ordinateur ou sur téléphone, réglé pour vos produits, vos employés et vos langues.",
+      },
+      custom: {
+        title: "Systèmes sur mesure",
+        detail: "Pour les mines, la logistique, les ONG et tout ce que le Builder ne couvre pas encore. Nous venons sur place, nous apprenons comment l'entreprise fonctionne, nous reprenons ses anciens registres et nous livrons un système fait pour ce client seul.",
+      },
+      offline: {
+        title: "Un logiciel qui marche sans internet",
+        detail: "Tout tourne sur vos propres appareils. Une connexion qui saute n'empêche jamais une vente, et les chiffres de votre commerce restent chez vous.",
+      },
+      support: {
+        title: "Installation, formation et suivi",
+        detail: "Nous vous aidons à l'installer, nous formons votre équipe, puis nous restons joignables sur WhatsApp, en arabe, en français ou en anglais.",
+      },
+    },
+    missionEyebrow: "Notre mission",
+    missionHeading: "Une économie plus solide commence par des entreprises bien gérées.",
+    missionBody1:
+      "Notre objectif est de rendre l'économie de la Mauritanie, et plus largement celle de l'Afrique, plus résiliente. Nous agissons là où notre effet est le plus direct : le commerce et les services, ces boutiques, pharmacies, transporteurs et prestataires dont chacun dépend tous les jours. Quand ces entreprises tiennent des comptes justes et servent leurs clients plus vite, elles gagnent en compétitivité et traversent mieux une année difficile.",
+    missionBody2:
+      "Nous voyons notre travail comme une part d'un effort plus large pour développer les économies émergentes, en Mauritanie, en Afrique de l'Ouest et sur tout le continent. Il s'inscrit dans les priorités de l'État mauritanien et dans les programmes des organisations régionales et internationales qui accompagnent les petites entreprises vers les outils numériques.",
     marketHeading: "Les chiffres derrière ce constat.",
     stat1: "du PIB mauritanien passe par le secteur informel",
     stat2: "de la population active occupe un emploi informel",
     stat3: "Le Code des investissements donne désormais la priorité aux PME",
     marketNote: "La Banque mondiale et la SFI financent l'accès des petites entreprises de la région au crédit et aux outils numériques. OUAQT travaille sur le versant numérique de ce même problème.",
-    founderEyebrow: "Fondateur",
+    hultNote: "OUAQT est inscrite au EF Hult Prize 2027 Global Competition, la compétition internationale de startups pour les étudiants qui construisent des entreprises à impact social.",
+    valuesHeading: "Ce qui compte pour nous",
+    values: {
+      owner: {
+        title: "Le patron connaît son entreprise mieux que personne",
+        detail: "Personne ne comprend une entreprise mieux que celui qui la dirige. Nos logiciels suivent sa façon de travailler, et nous écoutons avant de construire quoi que ce soit.",
+      },
+      data: {
+        title: "Vos données vous appartiennent",
+        detail: "Les registres restent sur les appareils du patron. Quand ils passent d'un appareil à l'autre, ils sont chiffrés, et nous n'en faisons aucun usage.",
+      },
+      simple: {
+        title: "Simple pour tout le monde",
+        detail: "Beaucoup de ceux qui utilisent nos logiciels n'avaient presque jamais touché un ordinateur. Nous concevons chaque écran en pensant à eux et nous retirons ce dont ils n'ont pas besoin.",
+      },
+      honest: {
+        title: "Des prix clairs, des promesses tenues",
+        detail: "Une seule grille tarifaire, publiée sur ce site en ouguiyas. Avant tout paiement, nous disons au client ce que le logiciel fait et ce qu'il ne fait pas.",
+      },
+      local: {
+        title: "Conçu ici, pour ici",
+        detail: "Nous travaillons en arabe, en français et en anglais, pour la façon dont on fait des affaires en Mauritanie : espèces et paiement mobile, boutiques sans connexion stable, équipes qui partagent un seul ordinateur.",
+      },
+    },
+    youthHeading: "Pour les jeunes et les entrepreneurs",
+    youthBody1:
+      "Un jeune qui ouvre une boutique ou une pharmacie ne devrait pas avoir à choisir entre un cahier et un logiciel hors de prix. Le Builder a été pensé pour lui. L'essai est gratuit avant tout paiement, le prix est le même pour un petit commerce que pour un grand, et le logiciel est prêt le jour de l'ouverture.",
+    youthBody2:
+      "Nous pensons aussi que la prochaine génération d'entreprises mauritaniennes sera dirigée par des gens à l'aise avec la technologie. Notre fondateur donne bénévolement, avec le Global Youth Development Forum, des cours hebdomadaires gratuits de programmation et d'initiation à l'IA aux jeunes Mauritaniens. Nous aimerions voir beaucoup plus de jeunes du pays construire leurs propres logiciels.",
+    whyHeading: "Pourquoi choisir OUAQT",
+    why: {
+      proven: {
+        title: "122 systèmes en service",
+        detail: "Dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation, chacun construit autour de la façon de travailler de son client.",
+      },
+      offline: {
+        title: "Il continue de marcher quand internet s'arrête",
+        detail: "Ventes, stock et rapports tournent sur vos appareils, avec ou sans connexion.",
+      },
+      languages: {
+        title: "Arabe, français et anglais",
+        detail: "Le logiciel et notre assistance existent dans les trois langues.",
+      },
+      nearby: {
+        title: "Une équipe à Nouakchott",
+        detail: "Joignable sur WhatsApp, et pour un projet sur mesure, la première visite est gratuite.",
+      },
+      price: {
+        title: "Des prix affichés",
+        detail: "Tous nos prix sont publiés sur ce site en ouguiyas, avec un essai gratuit avant de payer quoi que ce soit.",
+      },
+    },
+    ctaHeading: "Qu'est-ce qui ralentit votre entreprise ?",
+    ctaBody: "Si une partie de votre journée dépend encore d'un tableur dont personne n'est sûr, c'est en général par là que nous commençons.",
+    ctaButton: "Parlons-en",
+    founderEyebrow: "Le fondateur",
     founderRole: "Fondateur & ingénieur solutions / ingénieur terrain",
-    founderBio1: "J'ai lancé OUAQT parce que je rencontrais sans cesse des équipes compétentes qui perdaient des heures chaque jour sur un travail que leurs logiciels auraient dû faire à leur place. Compter le stock, recopier des chiffres d'un fichier à l'autre, vérifier deux fois les mêmes nombres. Les outils qu'elles avaient payés ne correspondaient pas à leur façon de travailler, alors les gens comblaient l'écart à la main.",
-    founderBio2: "Je viens de l'analyse de données et du développement logiciel, et je construis sur place, avec les personnes qui vont utiliser le système. Je reste de la première conversation jusqu'au jour où plus personne n'ouvre l'ancien tableur. Chez un client, un rapprochement qui prenait quatre heures par jour se fait aujourd'hui en 25 minutes. Depuis, nous avons construit des systèmes pour des équipes dans les mines, la pharmacie, l'hôtellerie, le transport, la restauration et l'éducation, partout en Mauritanie.",
+    founderBio1:
+      "Elboumby Aumar Ramdhane est le fondateur d'OUAQT. Il a étudié le génie informatique et électronique à l'ISGA de Marrakech et termine une licence en informatique à l'University of the People. Avant OUAQT, il a travaillé dans l'analyse de données, notamment à la SNIM, l'une des plus grandes entreprises industrielles de Mauritanie, puis dans la gestion de produit et l'ingénierie de produits d'IA.",
+    founderBio2:
+      "Il travaille en arabe, en français et en anglais, et passe une grande partie de son temps sur place avec les équipes qui utilisent les systèmes d'OUAQT. Chez un client, un rapprochement qui prenait quatre heures par jour se fait aujourd'hui en 25 minutes.",
+    founderQuote:
+      "J'ai lancé OUAQT parce que je rencontrais sans cesse des équipes compétentes qui perdaient des heures chaque jour sur un travail que leurs logiciels auraient dû faire à leur place. Compter le stock, recopier des chiffres d'un fichier à l'autre, vérifier deux fois les mêmes nombres. Je voulais que les patrons d'ici aient des outils qui collent à leur façon de travailler, à un prix qu'une petite boutique peut payer.",
+    founderContact: "Contacter le fondateur",
     credentials: {
       analytics: {
-        title: "Analyse de données chez Deloitte et MyAiPathways",
-        detail: "Conseil et travail produit sur la façon dont les organisations collectent leurs données et s'en servent.",
+        title: "Analyse de données chez MyAiPathways",
+        detail: "Travail produit et données sur la façon dont les organisations collectent leurs données et s'en servent.",
       },
       snim: {
         title: "Automatisation des processus à la SNIM",
@@ -468,14 +546,11 @@ export const fr: Dictionary = {
         title: "Lauréat de la Knowledge Future Skills Academy du PNUD, 2025",
         detail: "Sélectionné dans la cohorte régionale, puis invité comme conférencier principal au Knowledge Summit de Dubaï la même année.",
       },
-      sectors: {
-        title: "122 systèmes en service dans six secteurs",
-        detail: "Mines, pharmacie, hôtellerie, transport, restauration et éducation, chaque système installé pour son client seul.",
+      mckinsey: {
+        title: "McKinsey.org Forward Program, 2025",
+        detail: "Le programme de McKinsey.org en résolution de problèmes, compétences numériques et leadership pour les jeunes professionnels.",
       },
     },
-    ctaHeading: "Qu'est-ce qui ralentit votre entreprise ?",
-    ctaBody: "Si une partie de votre journée dépend encore d'un tableur dont personne n'est sûr, c'est en général par là que nous commençons.",
-    ctaButton: "Parlons-en",
   },
 
   /*

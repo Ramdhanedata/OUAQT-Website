@@ -158,7 +158,7 @@ export default async function RootLayout(props: Props) {
       "Transport management",
       "Workshop and warehouse management",
     ],
-    founder: { "@type": "Person", name: founder.name },
+    founder: { "@type": "Person", "@id": `${base}/#founder`, name: founder.name, sameAs: [founder.linkedin] },
     sameAs: [organization.linkedin],
   };
 
