@@ -92,6 +92,7 @@ export const en = {
         "The launch price applies to our first {clients} clients. After that, the standard price applies.",
       payment: "Payment by Bankily, Masrvi, BimBank, SEDAD or Click. You see the amount before you pay.",
       cta: "Build my software",
+      pay: "Already have your software? Pay my subscription",
       monthly: "{amount} a month",
       licence: {
         label: "Licence",

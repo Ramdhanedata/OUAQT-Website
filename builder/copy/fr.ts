@@ -414,9 +414,10 @@ export const fr = {
   payBySerial: {
     title: "Payer mon abonnement",
     heading: "Payer mon abonnement",
-    intro: "Ouvrez votre logiciel et touchez « Payer » : cette page s'ouvre sur votre commerce, rien à taper.",
+    intro: "Tapez votre numéro de série, choisissez la durée et envoyez la capture de votre paiement : votre logiciel se rouvre de lui-même dès que le paiement est vérifié.",
     link: "Payer mon abonnement",
-    fromApp: "Pour payer, ouvrez votre logiciel et touchez « Payer » : cette page s'ouvre alors sur votre commerce, sans rien à taper. Besoin d'aide ? Écrivez-nous sur WhatsApp.",
+    where: "Il est dans votre logiciel : Réglages, tout en bas, sous « Licence ».",
+    unknown: "Numéro introuvable. Vérifiez-le dans votre logiciel, Réglages, sous « Licence », ou écrivez-nous sur WhatsApp.",
   },
 
   /* His software on another device: a link he sends himself, with the number inside it, never shown (2026-11-17). */

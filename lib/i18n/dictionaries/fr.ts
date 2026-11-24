@@ -82,6 +82,7 @@ export const fr: Dictionary = {
         "Le tarif de lancement s'applique à nos {clients} premiers clients. Au-delà, c'est le tarif standard.",
       payment: "Paiement par Bankily, Masrvi, BimBank, SEDAD ou Click. Vous voyez le montant avant de payer.",
       cta: "Créer mon logiciel",
+      pay: "Déjà votre logiciel ? Payer mon abonnement",
       monthly: "soit {amount} par mois",
       licence: {
         label: "Licence",

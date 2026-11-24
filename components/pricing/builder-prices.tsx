@@ -165,7 +165,8 @@ export function BuilderPrices({
                 {b.payment}
               </p>
 
-              <div className="mt-6">
+              {/* Two ways on: build one, or pay for the one he has with its serial (Adel, 2026-11-24). */}
+              <div className="mt-6 flex flex-wrap gap-3">
                 <Button
                   href={localisedHref(lang, "builder")}
                   variant="accent"
@@ -173,6 +174,9 @@ export function BuilderPrices({
                 >
                   {b.cta}
                   <ArrowRight className="h-4 w-4 rtl:rotate-180" />
+                </Button>
+                <Button href={localisedHref(lang, "pay")} variant="outline" className="justify-center">
+                  {b.pay}
                 </Button>
               </div>
             </div>

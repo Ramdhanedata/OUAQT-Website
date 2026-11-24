@@ -397,9 +397,10 @@ export const en: BuilderCopy = {
   payBySerial: {
     title: "Pay my subscription",
     heading: "Pay my subscription",
-    intro: "Open your software and tap “Pay”: this page opens on your shop, nothing to type.",
+    intro: "Type your serial number, choose how long and send the screenshot of your payment: your software opens again by itself as soon as the payment is checked.",
     link: "Pay my subscription",
-    fromApp: "To pay, open your software and tap “Pay”: this page then opens on your shop, with nothing to type. Need help? Write to us on WhatsApp.",
+    where: "It is in your software: Settings, at the very bottom, under “Licence”.",
+    unknown: "Number not found. Check it in your software, Settings, under “Licence”, or write to us on WhatsApp.",
   },
 
   /* His software on another device: a link he sends himself, with the number inside it, never shown (2026-11-17). */

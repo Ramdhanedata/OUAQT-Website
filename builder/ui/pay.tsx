@@ -402,6 +402,44 @@ export function SendScreenshot({
 
   return (
     <div className="space-y-6">
+      {/* How long and where to send it come first, then the screenshot (Adel, 2026-11-24). */}
+      <div className="rounded-xl border border-border p-4">
+        <p className="text-base font-medium text-foreground">{copy.pay.notPaidTitle}</p>
+        {priced.length > 1 ? (
+          <div role="group" aria-label={copy.pay.duration as string} className="mt-3">
+            <p className="text-base text-muted-foreground">{copy.pay.duration}</p>
+            <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
+              {/* Shortest first, the year last, as an owner reads them (Adel asked for it). */}
+              {[...priced].reverse().map((one) => (
+                <ChoiceButton
+                  key={one.plan}
+                  selected={one.plan === picked.plan}
+                  note={wholeMru(one.amount as number)}
+                  onClick={() => setLength(one.plan)}
+                >
+                  {lengthName(copy, one.plan)}
+                </ChoiceButton>
+              ))}
+            </div>
+            {pickedMonthly != null && pickedMonthly !== picked.amount ? (
+              <p className="mt-2 text-base text-muted-foreground">
+                {fill(copy.pay.perMonth as string, { amount: wholeMru(pickedMonthly) })}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
+        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
+          {fill(copy.pay.notPaidBody as string, {
+            amounts: amount,
+            number: [...new Set(payTo.map((one) => one.number))].join(" / "),
+            /* Any app that sends to the number will do: the ones named, then "or any other" (Adel, 2026-11-13). */
+            apps: anyOf([...payTo.map((one) => appName(one.app, language)), copy.pay.otherApps as string], language),
+            serial,
+          })}
+        </p>
+        <AppLogos label={copy.pay.appsLogos as string} />
+      </div>
+
       <div>
         <h2 className="text-xl font-semibold text-foreground">{copy.pay.uploadHeading}</h2>
         <p className="mt-2 text-base leading-relaxed text-muted-foreground">{copy.pay.uploadIntro}</p>
@@ -461,42 +499,6 @@ export function SendScreenshot({
         </div>
       ) : null}
 
-      <div className="rounded-xl border border-border p-4">
-        <p className="text-base font-medium text-foreground">{copy.pay.notPaidTitle}</p>
-        {priced.length > 1 ? (
-          <div role="group" aria-label={copy.pay.duration as string} className="mt-3">
-            <p className="text-base text-muted-foreground">{copy.pay.duration}</p>
-            <div className="mt-2 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {/* Shortest first, the year last, as an owner reads them (Adel asked for it). */}
-              {[...priced].reverse().map((one) => (
-                <ChoiceButton
-                  key={one.plan}
-                  selected={one.plan === picked.plan}
-                  note={wholeMru(one.amount as number)}
-                  onClick={() => setLength(one.plan)}
-                >
-                  {lengthName(copy, one.plan)}
-                </ChoiceButton>
-              ))}
-            </div>
-            {pickedMonthly != null && pickedMonthly !== picked.amount ? (
-              <p className="mt-2 text-base text-muted-foreground">
-                {fill(copy.pay.perMonth as string, { amount: wholeMru(pickedMonthly) })}
-              </p>
-            ) : null}
-          </div>
-        ) : null}
-        <p className="mt-3 text-base leading-relaxed text-muted-foreground">
-          {fill(copy.pay.notPaidBody as string, {
-            amounts: amount,
-            number: [...new Set(payTo.map((one) => one.number))].join(" / "),
-            /* Any app that sends to the number will do: the ones named, then "or any other" (Adel, 2026-11-13). */
-            apps: anyOf([...payTo.map((one) => appName(one.app, language)), copy.pay.otherApps as string], language),
-            serial,
-          })}
-        </p>
-        <AppLogos label={copy.pay.appsLogos as string} />
-      </div>
     </div>
   );
 }
