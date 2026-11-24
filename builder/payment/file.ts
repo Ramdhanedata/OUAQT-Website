@@ -61,6 +61,8 @@ export async function filePayment(
      * screenshot then says how long, a month to a year.
      */
     plan: Plan | null;
+    /* The length he had picked on the page: used only when the amount on the screenshot cannot say. */
+    picked?: Plan | null;
     /* The app he says he paid from, or null: the number the money went to says which. */
     app: PaymentApp | null;
     /* Where the screenshot already is, in the payments bucket. */
@@ -116,6 +118,7 @@ export async function filePayment(
   const { price, payTo, outcome, refundDue } = decidePayment({
     offered,
     chosenPlan: input.plan !== null,
+    fallback: input.picked ?? null,
     numbers,
     app: input.app,
     extracted,

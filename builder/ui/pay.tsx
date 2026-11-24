@@ -374,6 +374,8 @@ export function SendScreenshot({
     try {
       const form = new FormData();
       form.set("number", serial);
+      /* What he picked above: the amount on the screenshot still decides when it can be read. */
+      form.set("picked", picked.plan);
       form.set("image", await prepareScreenshot(file), "screenshot.jpg");
       const response = await fetch("/api/builder/payment/serial", { method: "POST", body: form });
       const body = await response.json().catch(() => null);
@@ -402,7 +404,7 @@ export function SendScreenshot({
 
   return (
     <div className="space-y-6">
-      {/* How long and where to send it come first, then the screenshot (Adel, 2026-11-24). */}
+      {/* How long and where to send it come first, then the screenshot, as Adel asked. */}
       <div className="rounded-xl border border-border p-4">
         <p className="text-base font-medium text-foreground">{copy.pay.notPaidTitle}</p>
         {priced.length > 1 ? (

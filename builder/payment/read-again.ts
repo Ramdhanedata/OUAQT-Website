@@ -116,6 +116,8 @@ export async function readAgain(admin: SupabaseClient, businessId: string, now =
   const { price, payTo, outcome, refundDue } = decidePayment({
     offered,
     chosenPlan,
+    /* Filed as the length he picked when nothing could be read: still the answer if nothing can be now. */
+    fallback: isLicencePlan(payment.plan) ? payment.plan : null,
     numbers,
     app: chosenApp && isPaymentApp(payment.app) ? payment.app : null,
     extracted,

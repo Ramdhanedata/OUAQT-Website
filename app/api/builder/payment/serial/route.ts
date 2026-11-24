@@ -35,6 +35,8 @@ const fields = z.object({
   number: z.string().max(400),
   plan: z.enum([...LICENCE_PLANS, "perpetual"]).optional(),
   app: z.enum(PAYMENT_APPS).optional(),
+  /* The length shown picked on the page: only for when the amount cannot be read (Adel, 2026-11-24). */
+  picked: z.enum(LICENCE_PLANS).optional(),
 });
 
 /* Every screenshot is read by the AI, whose day is counted: a loop would spend it for everyone. */
@@ -54,6 +56,7 @@ export async function POST(request: Request) {
     number: form.get("number"),
     plan: form.get("plan") ?? undefined,
     app: form.get("app") ?? undefined,
+    picked: form.get("picked") ?? undefined,
   });
   const image = form.get("image");
   if (!input.success || !(image instanceof Blob)) return NextResponse.json({ error: "invalid" }, { status: 400 });
@@ -92,6 +95,7 @@ export async function POST(request: Request) {
     businessId: business.id,
     launchClient: business.launch_client,
     plan: input.data.plan ?? null,
+    picked: input.data.picked ?? null,
     path,
     bytes,
     app: input.data.app ?? null,
