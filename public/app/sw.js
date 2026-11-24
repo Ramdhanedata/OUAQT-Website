@@ -7,7 +7,7 @@
  * website or fail, and it never stores anything of the shop: the shop's data
  * is in the page's own storage, not in this cache.
  */
-const CACHE = "ouaqt-phone-edca1a516461";
+const CACHE = "ouaqt-phone-5c455e71ded3";
 const FILES = [
   "./assets/amanty-DtkRMlN5.webp",
   "./assets/bankily-B9uNP2u_.webp",
@@ -30,15 +30,15 @@ const FILES = [
   "./assets/ibm-plex-sans-arabic-latin-ext-500-Ck_W4G78.woff2",
   "./assets/ibm-plex-sans-arabic-latin-ext-600-DjDAeNQD.woff2",
   "./assets/ibm-plex-sans-arabic-latin-ext-700-BSbyEp0V.woff2",
-  "./assets/index-B7TmY9XH.js",
+  "./assets/index-BynOQHWR.js",
   "./assets/jetbrains-mono-latin-400-V6pRDFza.woff2",
   "./assets/jetbrains-mono-latin-600-C8RAYTDA.woff2",
   "./assets/jetbrains-mono-latin-700-BYuf6tUa.woff2",
   "./assets/jetbrains-mono-latin-ext-400-Bc8Ftmh3.woff2",
   "./assets/jetbrains-mono-latin-ext-600-BfB_LPfz.woff2",
   "./assets/jetbrains-mono-latin-ext-700-CZipNAKV.woff2",
-  "./assets/main--KFdENXJ.js",
   "./assets/main-BsHoNU3s.css",
+  "./assets/main-DuTmZaVW.js",
   "./assets/masrvi-Eaxo79PS.webp",
   "./assets/plus-jakarta-sans-latin-400-Dhut76fR.woff2",
   "./assets/plus-jakarta-sans-latin-500-Bf-nb4oT.woff2",
@@ -48,7 +48,7 @@ const FILES = [
   "./assets/plus-jakarta-sans-latin-ext-500-9VZagAe1.woff2",
   "./assets/plus-jakarta-sans-latin-ext-600-DQgPU_Cg.woff2",
   "./assets/plus-jakarta-sans-latin-ext-700-BajbvANd.woff2",
-  "./assets/preload-ClC13Av4.js",
+  "./assets/preload-9NqNk-MP.js",
   "./assets/sedad-rX9IfEah.webp",
   "./assets/sqlite3-Con_VOcu.wasm",
   "./assets/sqlite3-opfs-async-proxy-Ck-yCayi.js",
